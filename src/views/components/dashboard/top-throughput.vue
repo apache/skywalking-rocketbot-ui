@@ -1,0 +1,36 @@
+<template>
+<rk-panel class="rk-application-throughput" title="Application Throughput">
+  <div class="mb15" v-for="i in fiveData" :key="i.key">
+    <div>
+      <span class="r sm">{{i.value}} calls/ m</span>
+      <div class="ell mb5" style="max-width: 160px;">{{i.label}}</div>
+    </div>
+    <RkProgress :precent="i.value/maxValue*100"/>
+  </div>
+</rk-panel>
+</template>
+
+<script lang="ts">
+import Vue from 'vue';
+import { State } from 'vuex-class';
+import { Component } from 'vue-property-decorator';
+
+@Component({})
+export default class RkChartBox extends Vue {
+  @State('dashboard') stateDashboard;
+  get fiveData() {
+    return [...this.stateDashboard.applicationThroughput].splice(0, 5);
+  }
+  get maxValue() {
+    const temp:Number[] = this.fiveData.map(i => i.value);
+    return Math.max.apply(null, temp);
+  }
+}
+</script>
+<style lang="scss">
+.rk-application-throughput{
+  .rk-progress-inner{
+    background-color:#bf99f8 !important;
+  }
+}
+</style>
