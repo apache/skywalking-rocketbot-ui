@@ -4,9 +4,7 @@
     <aside class="rk-sidebox" :style="show?`width:${width};right:0`:`width:${width};right:-${width}`">
       <h3 class="rk-sidebox-title">{{this.title}}
         <div class="r rk-sidebox-close" @click="handleHide">
-          <svg class="icon">
-            <use xlink:href="#icon_close"></use>
-          </svg>
+          <ion-icon name="close"></ion-icon>
         </div>
       </h3>
       <slot/>
@@ -49,9 +47,9 @@ export default {
   transition:right .3s;
   position: fixed;
   right: 0;
-  top: 40px;
+  top: 52px;
   bottom: 0;
-  z-index: 200;
+  z-index: 999999999;
   padding: 25px 20px 20px;
   background-color: #fff;
   border: solid 1px #ccd1d9;

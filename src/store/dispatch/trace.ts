@@ -14,9 +14,9 @@ export const getTraces = (params: any): void => {
   } else {
     step = 'MONTH';
   }
-  const temp = params;
+  const temp = JSON.parse(JSON.stringify(params));
   temp.date = { start: params.time[0], end: params.time[1], step };
-  if (temp.applicationId !== 'ALL') temp.data.applicationId = temp.applicationId;
+  if (temp.data.applicationId === 'ALL') delete temp.data.applicationId;
   if (temp.maxTraceDuration !== '') temp.data.maxTraceDuration = temp.maxTraceDuration;
   if (temp.minTraceDuration !== '') temp.data.minTraceDuration = temp.minTraceDuration;
   if (temp.operationName !== '') temp.data.operationName = temp.operationName;

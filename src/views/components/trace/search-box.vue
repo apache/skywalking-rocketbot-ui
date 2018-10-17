@@ -3,7 +3,7 @@
   <div class="rk-trace-search-box container">
     <div class="item">
       <div class="mb5 label">Application</div>
-      <select class="app" style="color:#fff;background: 0; border: 0; outline: none;" v-model="option.applicationId">
+      <select class="app" style="color:#fff;background: 0; border: 0; outline: none;" v-model="option.data.applicationId">
         <option value="ALL">All</option>
         <option :value="i.key" v-for="i in stateOptions.applications" :key="i.key">{{i.label}}</option>
       </select>
@@ -56,10 +56,12 @@ export default class SearchBox extends Vue {
   @State('trace') stateTrace;
   option = {
     time: [],
+    data: {
+      applicationId: 'ALL',
+    },
     maxTraceDuration: '',
     minTraceDuration: '',
     operationName: '',
-    applicationId: 'ALL',
     traceId: '',
     traceState: 'ALL',
     queryOrder: 'BY_START_TIME',

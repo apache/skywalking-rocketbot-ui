@@ -1,21 +1,52 @@
-# rocketbot
+Rocketbot
+===============
 
-> A Vue.js project
+The UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking).
 
-## Build Setup
+## Development
 
-``` bash
-# install dependencies
-npm install
+The app was built with [vue typescript](https://github.com/vuejs/vue).
 
-# serve with hot reload at localhost:8080
-npm run dev
+### Getting codes
 
-# build for production with minification
-npm run build
+Fork, then clone the `incubator-skywalking-ui` repo and change directory into it.
 
-# build for production and view the bundle analyzer report
-npm run build --report
+```
+git clone https://github.com/apache/incubator-skywalking-ui.git
+cd incubator-skywalking-ui
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+Install dependencies via `npm`:
+
+```
+npm install
+```
+
+### Running the application
+
+
+The default collector query address is `http://localhost:8080`.
+
+#### Commands
+
+| Command                 | Description                                                 |
+| ----------------------- | ----------------------------------------------------------- |
+| `npm start`             | Starts development server with hot reloading.      |
+| `npm run host` | Starts development servers other can link             |
+| `npm run lint`          | Lint the project (tslint)                        |
+| `npm run build`         | Runs production build. Outputs files to `/dist`.            |
+
+## Build
+
+Running build will output all the static files to the `./dist` folder:
+
+```
+npm install
+npm run build
+```
+
+[ci-img]: https://travis-ci.org/apache/incubator-skywalking-ui.svg?branch=master
+[ci]: https://travis-ci.org/apache/incubator-skywalking-ui
+[gitter-img]: https://badges.gitter.im/openskywalking/Lobby.svg
+[gitter]: https://gitter.im/openskywalking/Lobby
+

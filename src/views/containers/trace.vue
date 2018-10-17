@@ -41,6 +41,9 @@ export default class Trace extends Vue {
   get stateTraceMax() {
     return this.stateTrace.traces.map(i => i.duration).reduce((pre, cur) => Math.max(pre, cur));
   }
+  created() {
+    this.$store.dispatch('options/GET_APPLICATIONS');
+  }
 }
 </script>
 
@@ -75,10 +78,10 @@ export default class Trace extends Vue {
     &:before{
       display: inline-block;
       content: '';
-      background-color:#48df75;
+      background-color:#22c36a;
       width:10px;
       height:10px;
-      margin-left: 15px;
+      margin-left: 10px;
       margin-right: 15px;
       border-radius: 5px;
     }

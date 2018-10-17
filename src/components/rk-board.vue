@@ -15,7 +15,7 @@
     <select class="grey mr15" style="background: 0; border: 0; outline: none;">
       <option v-for="i in stateOptions.servers" :key="i.key" value="1">{{i.pid+'@'+i.ipv4[0]}}</option>
     </select>
-    <button class="rk-board-inspector">inspector</button>
+    <button class="rk-board-inspector" @click="$emit('showServer')">inspector</button>
   </div>
 </template>
 
