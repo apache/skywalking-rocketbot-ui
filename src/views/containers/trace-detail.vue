@@ -6,7 +6,7 @@
       <option v-for="i in this.$route.query.traces.split('&')" :key="i" :value='i'>{{i}}</option>
     </select>
   </div>
-  <div style="width:100%">
+  <div>
     <TraceChart :data='stateTrace.spans' :traceId='traceId'/>
   </div>
 </div>

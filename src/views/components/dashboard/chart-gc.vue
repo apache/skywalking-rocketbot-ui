@@ -1,6 +1,10 @@
 <template>
   <rk-panel title="GC ms">
-    <RkEcharts height="220px" :option="throughputConfig"/>
+    <RkEcharts height="200px" :option="throughputConfig"/>
+    <div class="tc">
+      <span class="sm mr10"><span class="grey mr10">Young GC</span>{{young}}</span>
+      <span class="sm"><span class="grey mr10">Old GC</span>{{old}}</span>
+    </div>
   </rk-panel>
 </template>
 
@@ -14,9 +18,17 @@ export default class Gc extends Vue {
   @State('dashboard') stateDashboard;
   @State('global') stateGlobal;
   @Getter('durationTime') durationTime;
+  get young() {
+    if (!this.stateDashboard.gc.youngGCCount) return 0;
+    return this.stateDashboard.gc.youngGCCount.length ? this.stateDashboard.gc.youngGCCount.reduce((num, item) => num + item) : 0;
+  }
+  get old() {
+    if (!this.stateDashboard.gc.oldGCCount) return 0;
+    return this.stateDashboard.gc.oldGCCount.length ? this.stateDashboard.gc.oldGCCount.reduce((num, item) => num + item) : 0;
+  }
   get throughputConfig() {
     return {
-      color: ['#75a8ff', '#F44336'],
+      color: ['#75a8ff', '#f7b32b'],
       tooltip: {
         trigger: 'axis',
       },
@@ -33,7 +45,7 @@ export default class Gc extends Vue {
         top: 50,
         left: 0,
         right: 18,
-        bottom: 30,
+        bottom: 10,
         containLabel: true,
       },
       xAxis: {
@@ -42,6 +54,7 @@ export default class Gc extends Vue {
           lineStyle: { color: 'rgba(0,0,0,.1)' },
           alignWithLabel: true,
         },
+        splitLine: { show: false },
         axisLine: { lineStyle: { color: 'rgba(0,0,0,.1)' } },
         axisLabel: { color: '#333', fontSize: '11' },
       },

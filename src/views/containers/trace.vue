@@ -10,14 +10,16 @@
           <th>Start</th>
           <th>TraceId</th>
           <th>Duration</th>
+          <th>&nbsp;</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="i in stateTrace.traces" :key="i.key">
-          <td :class="i.isError? 'error' : 'success'">{{i.operationNames[0]}}</td>
+          <td style="width:350px;max-width:350px;" class="ell" :class="i.isError? 'error' : 'success'">{{i.operationNames[0]}}</td>
           <td class="grey">{{parseInt(i.start) | dateformat}}</td>
           <td><a class="rk-trace-btn" @click="$router.push({ path:'/trace/link', query:{traces:i.traceIds.join('&')}})">link</a></td>
-          <td><rk-progress :precent="i.duration/stateTraceMax*100" class="mr15"/></td>
+          <td>{{i.duration}} ms</td>
+          <td style="width:150px"><rk-progress :precent="i.duration/stateTraceMax*100" class="mr15"/></td>
         </tr>
       </tbody>
     </table>

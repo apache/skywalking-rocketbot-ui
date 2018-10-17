@@ -294,6 +294,9 @@ export default {
     border-radius: 2px;
     overflow: hidden;
   }
+  .node-name {
+    cursor: move;
+  }
   .link {
     stroke-linecap: round;
     fill:rgba(255, 255, 255, 0);

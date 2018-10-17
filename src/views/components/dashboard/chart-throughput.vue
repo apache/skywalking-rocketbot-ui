@@ -42,6 +42,7 @@ export default class Throughput extends Vue {
           lineStyle: { color: 'rgba(0,0,0,.1)' },
           alignWithLabel: true,
         },
+        splitLine: { show: false },
         axisLine: { lineStyle: { color: 'rgba(0,0,0,.1)' } },
         axisLabel: { color: '#333', fontSize: '11' },
       },

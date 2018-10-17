@@ -3,7 +3,7 @@
     <div class="rk-sidebox-backdrop" v-show="show" @click="handleHide"></div>
     <aside class="rk-sidebox" :style="show?`width:${width};right:0`:`width:${width};right:-${width}`">
       <div class="clear">
-        <h5 class="rk-sidebox-title l mr10">{{this.title}}</h5>
+        <h5 class="rk-sidebox-title l mr15">{{this.title}}</h5>
         <div class="r rk-sidebox-close" @click="handleHide">
           <ion-icon name="close"></ion-icon>
         </div>

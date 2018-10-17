@@ -33,7 +33,7 @@ interface Memory {
 }
 interface Gc {
   oldGCTime: Number[];
-  oldGCount: Number[];
+  oldGCCount: Number[];
   youngGCCount: Number[];
   youngGCTime: Number[];
 }
@@ -63,7 +63,7 @@ const initState: State = {
   cpu: [],
   gc: {
     oldGCTime: [],
-    oldGCount: [],
+    oldGCCount: [],
     youngGCCount: [],
     youngGCTime: [],
   },

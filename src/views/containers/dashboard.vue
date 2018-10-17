@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import echarts from 'echarts';
+import echarts from 'echarts/lib/echarts';
 import { State } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
 import ChartThroughput from '../components/dashboard/chart-throughput.vue';

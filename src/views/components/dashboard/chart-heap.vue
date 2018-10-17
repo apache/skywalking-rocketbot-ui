@@ -16,7 +16,7 @@ export default class Heap extends Vue {
   @Getter('durationTime') durationTime;
   get throughputConfig() {
     return {
-      color: ['#75a8ff', '#F44336'],
+      color: ['#75a8ff', '#f7b32b'],
       tooltip: {
         trigger: 'axis',
       },
@@ -42,6 +42,7 @@ export default class Heap extends Vue {
           lineStyle: { color: 'rgba(0,0,0,.1)' },
           alignWithLabel: true,
         },
+        splitLine: { show: false },
         axisLine: { lineStyle: { color: 'rgba(0,0,0,.1)' } },
         axisLabel: { color: '#333', fontSize: '11' },
       },
