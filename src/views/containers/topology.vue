@@ -1,6 +1,6 @@
 <template>
   <div class="topology">
-    <TopoChart :datas="stateTopo" refs="topo"/>
+    <TopoChart :datas="stateTopo"/>
   </div>
 </template>
 
@@ -8,13 +8,11 @@
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
 import { State } from 'vuex-class';
-import { getTopo } from '@/store/dispatch/topo.ts';
 import TopoChart from '../components/topology/topo.vue';
 
 @Component({ components: { TopoChart } })
 export default class Topology extends Vue {
   @State('topo') stateTopo;
-  getTopo = getTopo;
 }
 </script>
 

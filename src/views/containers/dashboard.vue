@@ -1,6 +1,6 @@
 <template>
 <div>
-  <RkBoard :stateOptions="stateOptions"/>
+  <RkBoard :stateOptions="stateOptions" @showServer="show = true"/>
   <div class="rk-dashboard">
     <div class="flex">
       <NumBox class="mr10" title="Avg Throughput" :content="throughput.toFixed(2)" unit="cpm"/>
@@ -16,6 +16,11 @@
       <TopThroughput class="mr10"/><SlowService class="mr10"/><TopSlow/>
     </div>
   </div>
+  <rk-sidebox title="Server" :show.sync='show'>
+      <!-- <ChartThroughput class="l mr10"/>
+      <ChartResponse class="l mr10"/>
+      <ChartSla class="l"/> -->
+  </rk-sidebox>
 </div>
 </template>
 
@@ -48,6 +53,7 @@ export default class Dashboard extends Vue {
   @State('dashboard') stateDashboard;
   @State('options') stateOptions;
   @State('global') stateGlobal;
+  show = false;
   get throughput() {
     if (!this.stateDashboard.throughput.length) return 0;
     return this.stateDashboard.throughput.reduce((prev, curr) => prev + curr) / this.stateDashboard.throughput.length;

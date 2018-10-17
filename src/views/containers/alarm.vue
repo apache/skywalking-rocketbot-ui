@@ -11,7 +11,7 @@
         <tr><th>&nbsp;</th><th>Start</th><th>Title</th><th>Type</th><th>Content</th></tr>
       </thead>
       <tbody>
-         <tr v-for="i in stateAlarm.alarmList" :key="i.key">
+         <tr v-for="(i, index) in stateAlarm.alarmList" :key="index">
           <td><ion-icon name="information-circle" class="rk-alarm-icon"></ion-icon></td>
           <td class="grey ell">{{i.startTime}}</td>
           <td>{{i.title}}</td>
@@ -67,7 +67,7 @@ export default class Alarm extends Vue {
   text-align: left;
   .rk-alarm-icon{
     font-size:19px;
-    color:#ff9800;
+    color:#f7b32b;
     line-height:1px;
     display:block;
     margin: 0 auto;

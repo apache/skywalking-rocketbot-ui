@@ -239,7 +239,7 @@ export default {
     },
     resize() {
       this.svg.attr('width', this.$refs.topo.offsetWidth);
-      this.svg.attr('height', document.body.clientHeight - 185);
+      this.svg.attr('height', document.body.clientHeight - 64);
     },
     tick() {
       this.line
@@ -249,7 +249,7 @@ export default {
           diagonal
         );
       this.linkText.attr('transform',d =>`translate(${(d.source.x + d.target.x) / 2},${(d.source.y + d.target.y) / 2})`);
-      this.node.attr('transform', d => `translate(${d.x - 15},${d.y - 20})`);
+      this.node.attr('transform', d => `translate(${d.x - d.name.length * 4 - 20},${d.y - 20})`);
     },
     getZoomBehavior(g) {
       return d3

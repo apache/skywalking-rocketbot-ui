@@ -12,19 +12,12 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       "/api":{
-        target: "http://106.75.237.45:8080/",
-        changeOrigin: true,
-        pathRewrite:  (path) => {
-          return "/api"
-        }
-      },
-      "/graphql":{
-        target: "http://106.75.237.45:8080/",
+        target: "http://106.75.237.45:12800/",
         changeOrigin: true,
         pathRewrite:  (path) => {
           return "/graphql"
         }
-      }
+      },
     },
 
     // Various Dev Server settings
