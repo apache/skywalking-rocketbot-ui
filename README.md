@@ -3,6 +3,11 @@ Rocketbot
 
 The UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking).
 
+<img src="https://daoweb-resource.daocloud.io/logo/daocloud-logo-gray-account.svg" alt="Sample"  width="150" height="50">
+
+
+Powered By [DaoCloud Labs](https://github.com/DaoCloud-Labs)
+
 [Demo](http://rocketbot.daocloud.io/)
 
 ## Development
