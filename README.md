@@ -9,11 +9,11 @@ The app was built with [vue typescript](https://github.com/vuejs/vue).
 
 ### Getting codes
 
-Fork, then clone the `incubator-skywalking-ui` repo and change directory into it.
+Fork, then clone the `rocketbot` repo and change directory into it.
 
 ```
-git clone https://github.com/apache/incubator-skywalking-ui.git
-cd incubator-skywalking-ui
+git clone https://github.com/TinyAllen/rocketbot.git
+cd rocketbot
 ```
 
 Install dependencies via `npm`:
@@ -50,3 +50,23 @@ npm run build
 [gitter-img]: https://badges.gitter.im/openskywalking/Lobby.svg
 [gitter]: https://gitter.im/openskywalking/Lobby
 
+## Docker Image Build
+
+
+```
+npm install
+
+npm run build
+
+docker build -t rocketbot .
+```
+### Running the docker image
+
+```
+docker run -p 8080:80 -d -e SKYWALKING_URL=http://106.75.237.45:12800 rocketbot
+```
+
+`SKYWALKING_URL` is the address of your backend.
+
+
+The default frontend address is `http://localhost:8080`.
