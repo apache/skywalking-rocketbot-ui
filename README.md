@@ -3,6 +3,13 @@ Rocketbot
 
 The UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking).
 
+<img src="https://daoweb-resource.daocloud.io/logo/daocloud-logo-gray-account.svg" alt="Sample"  width="150" height="50">
+
+
+Powered By [DaoCloud Labs](https://github.com/DaoCloud-Labs)
+
+[Demo](http://rocketbot.daocloud.io/)
+
 ## Development
 
 The app was built with [vue typescript](https://github.com/vuejs/vue).
@@ -63,7 +70,7 @@ docker build -t rocketbot .
 ### Running the docker image
 
 ```
-docker run -p 8080:80 -d -e SKYWALKING_URL=http://106.75.237.45:12800 rocketbot
+docker run -p 8080:80 -d -e SKYWALKING_URL=http://localhost:12800 rocketbot
 ```
 
 `SKYWALKING_URL` is the address of your backend.

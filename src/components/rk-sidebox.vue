@@ -2,11 +2,13 @@
   <div>
     <div class="rk-sidebox-backdrop" v-show="show" @click="handleHide"></div>
     <aside class="rk-sidebox" :style="show?`width:${width};right:0`:`width:${width};right:-${width}`">
-      <h3 class="rk-sidebox-title">{{this.title}}
+      <div class="clear">
+        <h5 class="rk-sidebox-title l mr10">{{this.title}}</h5>
         <div class="r rk-sidebox-close" @click="handleHide">
           <ion-icon name="close"></ion-icon>
         </div>
-      </h3>
+        <div class="mb10">{{this.notice}}</div>
+      </div>
       <slot/>
     </aside>
   </div>
@@ -17,6 +19,9 @@ export default {
   props: {
     show: {},
     title: {
+      default: '',
+    },
+    notice: {
       default: '',
     },
     width: {
@@ -55,8 +60,7 @@ export default {
   border: solid 1px #ccd1d9;
 }
 .rk-sidebox-title {
-  font-size: 18px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   line-height: 20px;
   &::before{
     content:"";

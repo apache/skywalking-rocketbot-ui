@@ -17,6 +17,7 @@ export const SET_SERVER = 'SET_SERVER';
 export const SET_SERVICE_INFO = 'GET_SERVICE_INFO';
 export const SET_APPLICATION_INFO = 'SET_APPLICATION_INFO';
 export const SET_SERVER_INFO = 'SET_SERVER_INFO';
+export const SET_SERVER_DETAIL = 'SET_SERVER_DETAIL';
 // alarm
 export const SET_ALARM = 'SET_ALARM';
 export const SET_ALARM_TOTAL = 'SET_ALARM_TOTAL';

@@ -12,7 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       "/api":{
-        target: "http://106.75.237.45:12800/",
+        target: "http://192.168.2.96:12800/",
+        // target: "http://106.75.237.45:12800/",
         changeOrigin: true,
         pathRewrite:  (path) => {
           return "/graphql"
