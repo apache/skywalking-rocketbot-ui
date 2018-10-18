@@ -31,6 +31,8 @@ interface ServApp {
   service:Option;
 }
 export const serviceAppChange = (servApp:ServApp) => {
+  store.dispatch('options/GET_SERVICES', servApp.app.key);
+  store.dispatch('options/GET_SERVERS', servApp.app.key);
   store.commit('options/SET_APPLICATION', servApp.app);
   store.commit('options/SET_SERVICE', servApp.service);
   store.dispatch('dashboard/GET_SERVICE_INFO', {

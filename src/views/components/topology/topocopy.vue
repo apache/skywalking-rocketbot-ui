@@ -5,43 +5,10 @@
 </template>
 <script lang="js">
 import * as d3 from 'd3';
+// d => `M${d.source.x} ${d.source.y} L ${d.target.x} ${d.target.y}`
+const diagonal = d3.linkHorizontal().x(d => d.x).y(d => d.y);
 /* eslint-disable */
 /* tslint:disable */
-const diagonal = d3.linkHorizontal().source(d => {
-  d.sx = d.source.x;
-  d.sy = d.source.y;
-  if (d.source.x > d.target.x) {
-    return [d.source.x, d.source.y];
-  }
-    d.sx = d.source.x + (d.source.name.length * 8 + 55);
-  return [d.source.x + (d.source.name.length * 8 + 55), d.source.y];
-}).target(d => {
-  d.tx = d.target.x;
-  d.ty = d.target.y;
-  if (d.source.x < d.target.x) {
-    return [d.target.x, d.target.y];
-  }
-  d.tx = d.target.x + (d.target.name.length * 8 + 55);
-  return [d.target.x + (d.target.name.length * 8 + 55), d.target.y];
-});
-const diagonalvertical = d3.linkVertical().source(d => {
-  d.sx = d.source.x;
-  d.sy = d.source.y;
-  if (d.source.x > d.target.x) {
-    return [d.source.x, d.source.y];
-  }
-  d.sx = d.source.x + (d.source.name.length * 8 + 55);
-  return [d.source.x + (d.source.name.length * 8 + 55), d.source.y];
-}).target(d => {
-  d.tx = d.target.x;
-  d.ty = d.target.y;
-  if (d.source.x < d.target.x) {
-    return [d.target.x, d.target.y];
-  }
-  d.tx = d.target.x + (d.target.name.length * 8 + 55);
-  return [d.target.x + (d.target.name.length * 8 + 55), d.target.y];
-});
-
 export default {
   props: {
     datas: {
@@ -161,7 +128,7 @@ export default {
       this.graph = this.svg.append('g').attr('class', 'graph');
       this.svg.call(this.getZoomBehavior(this.graph));
       this.svg.on('click', (d, i) => {
-        this.$emit('setCurrentApp', {});
+        // this.$store.commit('skywalking/setCurrentNode', []);
       });
       this.defs = this.graph.append('defs');
       this.arrowMarker = this.defs
@@ -171,13 +138,15 @@ export default {
         .attr('markerWidth', '12')
         .attr('markerHeight', '12')
         .attr('viewBox', '0 0 12 12')
-        .attr('refX', '12')
+        .attr('refX', '44.5')
         .attr('refY', '6')
         .attr('orient', 'auto');
       const arrow_path = 'M2,2 L10,6 L2,10 L6,6 L2,2';
-        this.glink = this.graph.append('g').selectAll('.link');
+
+      this.arrowMarker.append('path').attr('d', arrow_path).attr('fill', 'rgb(250, 200, 50)');
+      this.glink = this.graph.append('g').selectAll('.link');
       this.link = this.glink.data(this.datas.calls).enter().append('g');
-      this.line = this.link.append('path').attr('stroke-linecap', 'round').attr('class', 'link').attr("marker-end","url(#arrow)");
+      this.line = this.link.append('path').attr('stroke-linecap', 'round').attr('class', 'link');
       this.linkText = this.link.append('g');
       this.linkText
         .append('rect')
@@ -187,7 +156,7 @@ export default {
         .attr('height', 20)
         .attr('x', -10)
         .attr('y', -10)
-        .attr('fill', '#333337');
+        .attr('fill', '#303640');
       this.linkText
         .append('text')
         .attr('font-size', 10)
@@ -195,7 +164,6 @@ export default {
         .attr('text-anchor', 'middle')
         .attr('y', 3)
         .text(d => d.cpm);
-      this.arrowMarker.append('path').attr('d', arrow_path).attr('fill', 'rgb(230, 170, 20)');
       this.gnode = this.graph.append('g').selectAll('.node');
       const that = this;
       this.node = this.gnode.data(this.datas.nodes)
@@ -217,9 +185,10 @@ export default {
           delete copyD.vy;
           delete copyD.fx;
           delete copyD.fy;
-          delete copyD.id;
-          delete copyD.index;
-          that.$emit('setCurrentApp', copyD);
+          delete copyD.numOfServer;
+          delete copyD.numOfServerAlarm;
+          delete copyD.numOfServiceAlarm;
+          // that.$store.commit('skywalking/setCurrentNode', copyD);
         });
       this.node
         .append('rect')
@@ -251,6 +220,7 @@ export default {
       this.node
         .append('text')
         .attr('class', 'node-name')
+        // .attr('text-anchor', 'middle')
         .attr('x', 38)
         .attr('font-size', 13)
         .attr('y', 21)
@@ -280,18 +250,10 @@ export default {
         .attr('stroke-width', 1)
         .attr(
           'd',
-          d => {
-            if(Math.abs(d.source.x - d.target.x)>400 || Math.abs(d.source.y - d.target.y) < 100) return diagonal(d);
-            if(Math.abs(d.source.x - d.target.x)<400 || Math.abs(d.source.y - d.target.y) > 100) return diagonalvertical(d);
-            return diagonal(d);
-          }
+          diagonal
         );
-      this.linkText.attr('transform',d => {
-        let tagx = 1
-        // if(d.sx < d.tx) tagx = -tagx;
-        return `translate(${d.sx - (d.sx-d.tx)/2}, ${d.sy - (d.sy-d.ty)/2})`
-      });
-      this.node.attr('transform', d => `translate(${d.x},${d.y - 20})`);
+      this.linkText.attr('transform',d =>`translate(${(d.source.x + d.target.x) / 2},${(d.source.y + d.target.y) / 2})`);
+      this.node.attr('transform', d => `translate(${d.x - d.name.length * 4 - 20},${d.y - 20})`);
     },
     getZoomBehavior(g) {
       return d3

@@ -87,26 +87,29 @@ export default {
       for (let i in segmentGroup) {
         this.segmentId.push(segmentGroup[i])
       }
-      trace({label:`TraceID: ${this.traceId}`, children: this.segmentId},this.$el.offsetWidth, this.data);
+      trace({label:`TraceID: ${this.traceId}`, children: this.segmentId},this.$el.offsetWidth, this.data,this);
     },
   }
 };
 </script>
 <style lang="scss">
-.node .group {
+.trace-node .group {
   cursor: pointer;
-  // fill: #0023c1;
   fill-opacity: 0;
-  /* stroke: #fff; */
-  /* stroke-width: 0.9px; */
 }
-
-.node text {
+.trace-node-container{
+  fill: rgba(0, 0, 0, 0);
+  cursor: pointer;
+  &:hover{
+    fill: rgba(226, 230, 246, .5)
+  }
+}
+.trace-node text {
   font: 12.5px sans-serif;
   pointer-events: none;
 }
 .domain{display: none;}
-.link {
+.trace-link {
   fill: none;
   stroke: #d3d3d6;
   stroke-width: 1px;
