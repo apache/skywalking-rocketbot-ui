@@ -46,6 +46,10 @@ const mutations = {
   [types.SET_SPAN](state: State, data:Span[]) {
     state.spans = data;
   },
+  [types.CLEAR_TRACE](state: State) {
+    state.traces = [];
+    state.spans = [];
+  },
 };
 
 // actions
@@ -61,6 +65,9 @@ const actions: ActionTree<State, any> = {
     return  getTraceSpans(params).then((res) => {
       context.commit(types.SET_SPAN, res.data.data.queryTrace.spans);
     });
+  },
+  CLEAR_TRACE(context: { commit: Commit; state: State, rootState: any }) {
+    context.commit(types.CLEAR_TRACE);
   },
 };
 

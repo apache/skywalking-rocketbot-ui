@@ -44,11 +44,15 @@ export default class Trace extends Vue {
   @State('global') stateGlobal;
   @State('trace') stateTrace;
   @Action('options/GET_APPLICATIONS') GET_APPLICATIONS;
+  @Action('trace/CLEAR_TRACE') CLEAR_TRACE;
   get stateTraceMax() {
     return this.stateTrace.traces.map(i => i.duration).reduce((pre, cur) => Math.max(pre, cur));
   }
   created() {
     this.GET_APPLICATIONS();
+  }
+  beforeDestroy() {
+    this.CLEAR_TRACE();
   }
 }
 </script>

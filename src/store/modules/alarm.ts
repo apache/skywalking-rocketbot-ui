@@ -37,6 +37,9 @@ const mutations = {
   [types.SET_ALARM_TOTAL](state: State, total:Number) {
     state.total = total;
   },
+  [types.CLEAR_ALARM](state: State) {
+    state.alarmList = [];
+  },
 };
 
 // actions
@@ -47,6 +50,9 @@ const actions: ActionTree<State, any> = {
       context.commit(types.SET_ALARM, res.data.data.alarmList.items);
       context.commit(types.SET_ALARM_TOTAL, res.data.data.alarmList.total);
     });
+  },
+  CLEAR_ALARM(context: { commit: Commit; state: State, rootState: any }) {
+    context.commit(types.CLEAR_ALARM);
   },
 };
 

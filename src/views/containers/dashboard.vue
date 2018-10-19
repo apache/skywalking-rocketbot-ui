@@ -36,7 +36,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import echarts from 'echarts/lib/echarts';
-import { State } from 'vuex-class';
+import { State, Action } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
 import ChartThroughput from '../components/dashboard/chart-throughput.vue';
 import ChartResponse from '../components/dashboard/chart-response.vue';
@@ -70,6 +70,7 @@ export default class Dashboard extends Vue {
   @State('dashboard') stateDashboard;
   @State('options') stateOptions;
   @State('global') stateGlobal;
+  @Action('dashboard/CLEAR_DASHBOARD') CLEAR_DASHBOARD;
   show = false;
   get throughput() {
     if (!this.stateDashboard.throughput.length) return 0;
@@ -97,6 +98,9 @@ export default class Dashboard extends Vue {
   mounted() {
     this.$store.dispatch('SET_EVENTS', [this.getDataReload]);
     echarts.connect(this.stateGlobal.chartStack);
+  }
+  beforeDestroy() {
+    this.CLEAR_DASHBOARD();
   }
   getDataReload() {
     this.$store.dispatch('dashboard/GET_APPLICATION_INFO');

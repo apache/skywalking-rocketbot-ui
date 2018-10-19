@@ -52,7 +52,7 @@ const initState: State = {
     numOfApplication: 0,
     numOfCache: 0,
     numOfDatabase: 0,
-    numOfMQ: 1,
+    numOfMQ: 0,
     numOfService: 0,
   },
 };
@@ -71,6 +71,14 @@ const mutations = {
   },
   [types.SET_TOPO_CURRENT](state: State, data: Option) {
     state.current = data;
+  },
+  [types.CLEAR_TOPO](state: State) {
+    state.calls = [];
+    state.nodes = [];
+    state.current = {
+      key: 'default',
+      label: 'default',
+    };
   },
 };
 
@@ -93,6 +101,9 @@ const actions: ActionTree<State, any> = {
     return getClusterBrief(context.rootState.global.duration).then((res) => {
       context.commit(types.SET_CLUSTER, res.data.data.getClusterBrief);
     });
+  },
+  CLEAR_TOPO(context: { commit: Commit; state: State, rootState: any }) {
+    context.commit(types.CLEAR_TOPO);
   },
 };
 
