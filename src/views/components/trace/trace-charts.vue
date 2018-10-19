@@ -72,6 +72,7 @@ export default {
           let index = currentSegment.findIndex(i => i.spanId === s.parentSpanId);
           if(index !== -1){
             currentSegment[index].children.push(s);
+            currentSegment[index].children.sort((a, b) => a.spanId - b.spanId );
           }
         })
         segmentGroup[id] = currentSegment[currentSegment.length-1]

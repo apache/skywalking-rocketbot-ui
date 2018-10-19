@@ -9,11 +9,11 @@
     </div>
     <ion-icon name="arrow-forward" class="grey mr10"></ion-icon>
     <select v-if='stateOptions.currentService' :value="stateOptions.currentService.key" @change="serviceChange($event)" class="mr15" style="color:#fafafa;background: 0; border: 0; outline: none;">
-      <option v-for="i in stateOptions.services" :key="i.key" :value="i.key">{{i.label}}</option>
+      <option style="background-color: #2f333c;" v-for="i in stateOptions.services" :key="i.key" :value="i.key">{{i.label}}</option>
     </select>
     <span class="grey mr10">|</span>
     <select  v-if='stateOptions.currentServer' :value="stateOptions.currentServer.key" @change="serverChange($event)" class="grey mr15" style="background: 0; border: 0; outline: none;">
-      <option v-for="i in stateOptions.servers" :key="i.key" :value="i.key">{{i.pid+'@'+i.ipv4[0]}}</option>
+      <option style="background-color: #2f333c;" v-for="i in stateOptions.servers" :key="i.key" :value="i.key">{{i.pid+'@'+i.ipv4[0]}}</option>
     </select>
     <button class="rk-board-inspector" @click="$emit('showServer')">inspector</button>
   </div>
