@@ -127,6 +127,7 @@ const trace = (data,width,row,vm) => {
   }
 
   function click(d) {
+    if (!d.data.type) return;
     // if (d.children) {
     //   d._children = d.children;
     //   d.children = null;

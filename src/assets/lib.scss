@@ -49,3 +49,9 @@
   word-break: break-all;
   word-wrap: break-word;
 }
+.link-hover{
+  transition: color .3s;
+  &:hover{
+    color: #3880ff;
+  }
+}

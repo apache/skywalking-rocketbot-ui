@@ -29,3 +29,5 @@ export const SET_SPAN = 'SET_SPAN';
 
 // topo
 export const SET_TOPO = 'SET_TOPO';
+export const SET_TOPO_CURRENT = 'SET_TOPO_CURRENT';
+export const SET_CLUSTER = 'SET_CLUSTER';

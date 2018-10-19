@@ -18,7 +18,7 @@
         </div>
         <RkToolTime :show.sync="show" :propsTime="time"/>
       </div>
-      <div class="rk-nav-auto flex-c"><ion-icon name="refresh" class="mr5"></ion-icon>auto</div>
+      <div class="rk-nav-auto cp flex-c" @click="$store.dispatch('RUN_EVENTS')"><ion-icon name="refresh" class="mr5"></ion-icon>reload</div>
     </div>
   </header>
 </template>

@@ -3,7 +3,7 @@
   <div class="mb15" v-for="i in fiveData" :key="i.key">
     <div>
       <span class="r sm">{{i.value}} ms</span>
-      <div class="ell mb5 cp" style="max-width: 160px;" @click="changeService(i)">{{i.service.label}}</div>
+      <div class="ell mb5 cp link-hover" style="max-width: 160px;" @click="changeService(i)">{{i.service.label}}</div>
     </div>
     <RkProgress :precent="i.value/maxValue*100"/>
   </div>

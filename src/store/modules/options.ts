@@ -53,7 +53,7 @@ const actions: ActionTree<State, any> = {
   GET_APPLICATIONS(context: { commit: Commit; state: State, rootState: any }) {
     return getApps(context.rootState.global.duration).then((res) => {
       context.commit(types.SET_APPLICATIONS, res.data.data.applications);
-      context.commit(types.SET_APPLICATION, res.data.data.applications[0]);
+      // context.commit(types.SET_APPLICATION, res.data.data.applications[0]);
     });
   },
   GET_SERVICES(context: { commit: Commit; state: State }, applicationId: String) {

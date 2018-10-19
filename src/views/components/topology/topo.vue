@@ -139,13 +139,11 @@ export default {
       .append('svg')
       .attr('width', this.width)
       .attr('height', this.height);
-    this.$store.dispatch('SET_EVENTS', [this.getTopo]);
-    this.getTopo();
+  },
+  watch: {
+    'datas.nodes': 'draw',
   },
   methods: {
-    getTopo() {
-      this.$store.dispatch('topo/GET_TOPO').then(() => { this.draw(); });
-    },
     draw() {
       this.svg.select('.graph').remove();
       this.force = d3
@@ -161,7 +159,7 @@ export default {
       this.graph = this.svg.append('g').attr('class', 'graph');
       this.svg.call(this.getZoomBehavior(this.graph));
       this.svg.on('click', (d, i) => {
-        this.$emit('setCurrentApp', {});
+        this.$emit('setCurrentApp', {name: '', id: ''});
       });
       this.defs = this.graph.append('defs');
       this.arrowMarker = this.defs
@@ -175,7 +173,7 @@ export default {
         .attr('refY', '6')
         .attr('orient', 'auto');
       const arrow_path = 'M2,2 L10,6 L2,10 L6,6 L2,2';
-        this.glink = this.graph.append('g').selectAll('.link');
+      this.glink = this.graph.append('g').selectAll('.link');
       this.link = this.glink.data(this.datas.calls).enter().append('g');
       this.line = this.link.append('path').attr('stroke-linecap', 'round').attr('class', 'link').attr("marker-end","url(#arrow)");
       this.linkText = this.link.append('g');
@@ -187,7 +185,7 @@ export default {
         .attr('height', 20)
         .attr('x', -10)
         .attr('y', -10)
-        .attr('fill', '#333337');
+        .attr('fill', '#30313b');
       this.linkText
         .append('text')
         .attr('font-size', 10)
@@ -217,7 +215,6 @@ export default {
           delete copyD.vy;
           delete copyD.fx;
           delete copyD.fy;
-          delete copyD.id;
           delete copyD.index;
           that.$emit('setCurrentApp', copyD);
         });

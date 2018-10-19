@@ -18,6 +18,10 @@
   </div>
   <rk-sidebox title="Server" :notice="`${stateOptions.currentServer? stateOptions.currentServer.host: ''} ～ ${stateOptions.currentServer? stateOptions.currentServer.pid:''}@${stateOptions.currentServer? stateOptions.currentServer.ipv4[0]: ''}`" :show.sync='show'>
     <div class="flex">
+      <NumBox class="mr10" title="Server Avg Throughput" :content="serverThroughput.toFixed(2)" unit="cpm"/>
+      <NumBox class="mr10" title="Server Avg Response Time" :content="serverResponseTime.toFixed(2)" unit="ms"/>
+    </div>
+    <div class="flex">
       <ChartHeap class="mr10"/>
       <ChartNonHeap/>
     </div>
@@ -71,9 +75,17 @@ export default class Dashboard extends Vue {
     if (!this.stateDashboard.throughput.length) return 0;
     return this.stateDashboard.throughput.reduce((prev, curr) => prev + curr) / this.stateDashboard.throughput.length;
   }
+  get serverThroughput() {
+    if (!this.stateDashboard.serverThroughput.length) return 0;
+    return this.stateDashboard.serverThroughput.reduce((prev, curr) => prev + curr) / this.stateDashboard.serverThroughput.length;
+  }
   get responseTime() {
     if (!this.stateDashboard.responseTime.length) return 0;
     return this.stateDashboard.responseTime.reduce((prev, curr) => prev + curr) / this.stateDashboard.responseTime.length;
+  }
+  get serverResponseTime() {
+    if (!this.stateDashboard.serverResponseTime.length) return 0;
+    return this.stateDashboard.serverResponseTime.reduce((prev, curr) => prev + curr) / this.stateDashboard.serverResponseTime.length;
   }
   get sla() {
     if (!this.stateDashboard.sla.length) return 0;
@@ -108,6 +120,9 @@ export default class Dashboard extends Vue {
   }
   getData() {
     this.$store.dispatch('options/GET_APPLICATIONS').then(() => {
+      if (!this.stateOptions.currentServer.key) {
+        this.$store.commit('options/SET_APPLICATION', this.stateOptions.applications[0]);
+      }
       this.$store.dispatch('dashboard/GET_APPLICATION_INFO');
       this.$store.dispatch('options/GET_SERVICES', this.stateOptions.currentApplication.key)
         .then(() => {
