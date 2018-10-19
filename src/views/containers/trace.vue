@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { State } from 'vuex-class';
+import { State, Action } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
 import SearchBox from '../components/trace/search-box.vue';
 import ChartTrace from '../components/trace/chart-scatter.vue';
@@ -40,11 +40,12 @@ import ChartTrace from '../components/trace/chart-scatter.vue';
 export default class Trace extends Vue {
   @State('global') stateGlobal;
   @State('trace') stateTrace;
+  @Action('options/GET_APPLICATIONS') GET_APPLICATIONS;
   get stateTraceMax() {
     return this.stateTrace.traces.map(i => i.duration).reduce((pre, cur) => Math.max(pre, cur));
   }
   created() {
-    this.$store.dispatch('options/GET_APPLICATIONS');
+    this.GET_APPLICATIONS();
   }
 }
 </script>

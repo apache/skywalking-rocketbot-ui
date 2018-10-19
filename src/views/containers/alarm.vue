@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { State } from 'vuex-class';
+import { State, Action } from 'vuex-class';
 import { Component, Watch } from 'vue-property-decorator';
 import { getAlarm } from '@/store/dispatch/alarm.ts';
 import AlarmItem from '../components/alarm/alarm-item.vue';
@@ -38,6 +38,7 @@ import AlarmNav from '../components/alarm/alarm-nav.vue';
 })
 export default class Alarm extends Vue {
   @State('alarm') stateAlarm;
+  @Action('SET_EVENTS') SET_EVENTS;
   page:Number = 1;
   type:String = 'APPLICATION';
   @Watch('type')
@@ -46,7 +47,7 @@ export default class Alarm extends Vue {
   }
   beforeMount() {
     this.getAlarm();
-    this.$store.dispatch('SET_EVENTS', [this.getAlarm]);
+    this.SET_EVENTS([this.getAlarm]);
   }
   getAlarm() {
     getAlarm({ type: this.type, paging: this.page });

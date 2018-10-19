@@ -18,8 +18,8 @@
   </div>
   <rk-sidebox title="Server" :notice="`${stateOptions.currentServer? stateOptions.currentServer.host: ''} ～ ${stateOptions.currentServer? stateOptions.currentServer.pid:''}@${stateOptions.currentServer? stateOptions.currentServer.ipv4[0]: ''}`" :show.sync='show'>
     <div class="flex">
-      <NumBox class="mr10" title="Server Avg Throughput" :content="serverThroughput.toFixed(2)" unit="cpm"/>
-      <NumBox class="mr10" title="Server Avg Response Time" :content="serverResponseTime.toFixed(2)" unit="ms"/>
+      <NumBox class="mr10" title="Application Avg Throughput" :content="serverThroughput.toFixed(2)" unit="cpm"/>
+      <NumBox class="mr10" title="Application Avg Response Time" :content="serverResponseTime.toFixed(2)" unit="ms"/>
     </div>
     <div class="flex">
       <ChartHeap class="mr10"/>

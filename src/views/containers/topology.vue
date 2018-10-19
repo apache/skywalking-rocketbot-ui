@@ -27,7 +27,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import { State } from 'vuex-class';
+import { State, Action } from 'vuex-class';
 import TopoTool from '@/components/rk-tool-topology.vue';
 import { getTopo } from '@/store/dispatch/topo.ts';
 import TopoChart from '../components/topology/topo.vue';
@@ -36,13 +36,17 @@ export default class Topology extends Vue {
   @State('options') stateOptions;
   @State('topo') stateTopo;
   @State('global') stateGlobal;
+  @Action('SET_EVENTS') SET_EVENTS;
+  @Action('options/GET_APPLICATIONS') GET_APPLICATIONS;
+  @Action('topo/GET_CLUSTER') GET_CLUSTER;
+  @Action('options/SET_APPLICATION') SET_APPLICATION;
   current = {
     id: '',
     name: '',
   };
   show = false;
   beforeMount() {
-    this.$store.dispatch('SET_EVENTS', [this.getCluster, getTopo]);
+    this.SET_EVENTS([this.getCluster, getTopo]);
     getTopo();
     this.getCluster();
   }
@@ -50,8 +54,8 @@ export default class Topology extends Vue {
     this.current = i;
   }
   getCluster() {
-    this.$store.dispatch('options/GET_APPLICATIONS');
-    this.$store.dispatch('topo/GET_CLUSTER');
+    this.GET_APPLICATIONS();
+    this.GET_CLUSTER();
   }
   routerGo() {
     this.$store.commit('options/SET_APPLICATION', { key: this.current.id, label: this.current.name });
@@ -75,24 +79,26 @@ export default class Topology extends Vue {
   width: 300px;
   border-radius: 6px;
   color: #e3e3e3;
-  background-color: rgba(75, 78, 85, 0.6)
+  background-color: rgba(75, 78, 85, 0.6);
+  box-shadow: 0 3px 10px -2px rgba(0, 0, 0, .1);
 }
 .topology-setting-btn {
   cursor: pointer;
   position:absolute;
   top:80px;
-  left:30px;
+  right:345px;
   height: 36px;
   width: 36px;
   text-align: center;
   line-height: 42px;
   color: #fff;
   font-size:18px;
-  background-color: #3880ff;
-  border-radius: 50%;
+  background-color: rgba(75, 78, 85, 0.6);
+  border-radius: 6px;
   transition: background-color .3s;
+  box-shadow: 0 3px 10px -2px rgba(0, 0, 0, .1);
   &:hover{
-    background-color: #6493f0;
+    background-color: #3880ff;
   }
 }
 </style>

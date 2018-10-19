@@ -77,3 +77,16 @@ docker run -p 8080:80 -d -e SKYWALKING_URL=http://localhost:12800 rocketbot
 
 
 The default frontend address is `http://localhost:8080`.
+
+## Nginx config
+
+### Reserve proxy
+
+```
+  location /api {
+    rewrite ^/(.*) /graphql break;
+    proxy_pass SKYWALKING_URL;
+  }
+```
+
+**Important**: If you want to deploy the application by yourself，**you need to rewirte the URL path into ```/graphql``` before reserve proxy**.
