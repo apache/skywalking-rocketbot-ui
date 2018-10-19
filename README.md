@@ -89,3 +89,21 @@ The default frontend address is `http://localhost:8080`.
 ```
 
 **Important**: If you want to deploy the application by yourself，**you need to rewirte the URL path into ```/graphql``` before reserve proxy**.
+
+# Contributing to RocketBot
+
+Firstly, thanks for your interest in contributing! I hope that this will be a
+pleasant first experience for you, and that you will return to continue
+contributing.
+
+## How to contribute?
+
+Most of the contributions that we receive are code contributions, but you can
+also contribute to the documentation or simply report solid bugs
+for us to fix.
+
+## How to report a bug?
+
+* **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/TinyAllen/rocketbot/issues).
+
+* If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/TinyAllen/rocketbot/issues/new). Be sure to include a **title and clear description**, as much relevant information as possible, and a **code sample** or an **executable test case** demonstrating the expected behavior that is not occurring.
