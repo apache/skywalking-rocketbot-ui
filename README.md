@@ -1,18 +1,31 @@
-Rocketbot
-===============
+<p align="center"><img src="document/assets/logo.png"  width="250"></p>
+<h1 align="center"></h1>
 
-The UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking).
+<p align="center">
+<a><img src="https://img.shields.io/badge/version-0.9.0-blue.svg?longCache=true&style=popout-square"></a>
+<a href="https://github.com/TinyAllen/rocketbot/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?longCache=true&style=popout-square"></a>
+<a href="https://github.com/TinyAllen/rocketbot/blob/master/LICENSE"><img src="https://img.shields.io/badge/support by-Daocloud Lab-brightgreen.svg?longCache=true&style=popout-square"></a>
+<a><img src="https://img.shields.io/badge/base-Skywalking-red.svg?longCache=true&style=popout-square"></a>
+</p>
 
-<img src="https://daoweb-resource.daocloud.io/logo/daocloud-logo-gray-account.svg" alt="Sample"  width="150" height="50">
+## Introduction
+RocketBot is an MIT-licensed open source project. 
+It‘s UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking). This project is supported By [DaoCloud Labs](https://github.com/DaoCloud-Labs).
 
+![](document/assets/demo1.png)
 
-Supported By [DaoCloud Labs](https://github.com/DaoCloud-Labs)
+![](document/assets/demo2.png)
 
-[Demo](http://rocketbot.daocloud.io/)
+![](document/assets/demo3.png)
+
+**[Demo](http://rocketbot.daocloud.io/)**
+
+**[Docs](https://github.com/TinyAllen/rocketbot/blob/master/Document.md
+)**
 
 ## Development
 
-The app was built with [vue typescript](https://github.com/vuejs/vue).
+ The app was built with [vue + typescript](https://github.com/vuejs/vue).
 
 ### Getting codes
 
@@ -90,3 +103,31 @@ The default frontend address is `http://localhost:8080`.
 ```
 
 **Important**: If you want to deploy the application by yourself，**you need to rewirte the URL path into ```/graphql``` before reserve proxy**.
+
+## Contributing to RocketBot
+
+Firstly, thanks for your interest in contributing! I hope that this will be a
+pleasant first experience for you, and that you will return to continue
+contributing.
+
+### How to contribute?
+
+Most of the contributions that we receive are code contributions, but you can
+also contribute to the documentation or simply report solid bugs
+for us to fix.
+
+### How to report a bug?
+
+* **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/TinyAllen/rocketbot/issues).
+
+* If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/TinyAllen/rocketbot/issues/new). Be sure to include a **title and clear description**, as much relevant information as possible, and a **code sample** or an **executable test case** demonstrating the expected behavior that is not occurring.
+
+## Support
+
+<img src="https://daoweb-resource.daocloud.io/logo/daocloud-logo-gray-account.svg" alt="Sample"  width="130">
+
+Supported by [DaoCloud Labs](https://github.com/DaoCloud-Labs).
+
+## License
+
+Copyright © 2018, [Allen Wang](https://github.com/TinyAllen). Released under the [MIT](http://opensource.org/licenses/MIT) License.
