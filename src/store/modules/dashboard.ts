@@ -106,6 +106,29 @@ const mutations = {
     state.memory.maxNoHeap = data.memory.maxNoheap.map(i => (i / 1024 / 1024).toFixed(2));
     state.memory.noHeap = data.memory.noheap.map(i => (i / 1024 / 1024).toFixed(2));
   },
+  [types.CLEAR_DASHBOARD](state: State) {
+    state.throughput = [];
+    state.responseTime = [];
+    state.sla = [];
+    state.slowTrace = [];
+    state.slowService = [];
+    state.applicationThroughput = [];
+    state.cpu = [];
+    state.gc = {
+      oldGCTime: [],
+      oldGCCount: [],
+      youngGCCount: [],
+      youngGCTime: [],
+    };
+    state.memory = {
+      heap: [],
+      maxHeap: [],
+      maxNoHeap: [],
+      noHeap: [],
+    },
+    state.serverResponseTime = [];
+    state.serverThroughput = [];
+  },
 };
 
 // actions
@@ -132,6 +155,9 @@ const actions: ActionTree<State, any> = {
     return getServerDetail(context.rootState.global.duration, serverId).then((res) => {
       context.commit(types.SET_SERVER_DETAIL, res.data.data);
     });
+  },
+  CLEAR_DASHBOARD(context: { commit: Commit; state: State, rootState: any }) {
+    context.commit(types.CLEAR_DASHBOARD);
   },
 };
 

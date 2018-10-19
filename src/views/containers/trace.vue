@@ -15,7 +15,10 @@
       </thead>
       <tbody>
         <tr v-for="i in stateTrace.traces" :key="i.key">
-          <td style="width:350px;max-width:350px;" class="ell" :class="i.isError? 'error' : 'success'">{{i.operationNames[0]}}</td>
+          <td style="width:350px;max-width:350px;" class="ell" :class="i.isError? 'error' : 'success'"><span v-tooltip="{
+        content: i.operationNames[0],
+        trigger: 'hover',
+      }">{{i.operationNames[0]}}</span></td>
           <td class="grey">{{parseInt(i.start) | dateformat}}</td>
           <td><a class="rk-trace-btn" @click="$router.push({ path:'/trace/link', query:{traces:i.traceIds.join('&')}})">link</a></td>
           <td>{{i.duration}} ms</td>
@@ -41,11 +44,15 @@ export default class Trace extends Vue {
   @State('global') stateGlobal;
   @State('trace') stateTrace;
   @Action('options/GET_APPLICATIONS') GET_APPLICATIONS;
+  @Action('trace/CLEAR_TRACE') CLEAR_TRACE;
   get stateTraceMax() {
     return this.stateTrace.traces.map(i => i.duration).reduce((pre, cur) => Math.max(pre, cur));
   }
   created() {
     this.GET_APPLICATIONS();
+  }
+  beforeDestroy() {
+    this.CLEAR_TRACE();
   }
 }
 </script>

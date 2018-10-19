@@ -12,7 +12,9 @@ import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/scatter';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/tooltip';
+import { VTooltip } from 'v-tooltip';
 
+Vue.directive('tooltip', VTooltip);
 Vue.filter('dateformat', (
   dataStr,
   pattern = 'YYYY-MM-DD HH:mm:ss') => moment(dataStr).format(pattern));

@@ -5,7 +5,7 @@
       <div class="rk-trace-box mb15">
         <span class="mr15" style="font-weight:600;">TraceId:</span>
         <select class="mr15" v-model="traceId" style="color:#fafafa;background: 0; border: 0; outline: none;">
-          <option v-for="i in this.$route.query.traces.split('&')" :key="i" :value='i'>{{i}}</option>
+          <option style="background: #2f333c;" v-for="i in this.$route.query.traces.split('&')" :key="i" :value='i'>{{i}}</option>
         </select>
       </div>
       <TraceChart :data='stateTrace.spans' :traceId='traceId' @show="showBoard"/>
@@ -27,7 +27,7 @@
 import Vue from 'vue';
 import { getSpans } from '@/store/dispatch/trace.ts';
 import { Component, Watch } from 'vue-property-decorator';
-import { State } from 'vuex-class';
+import { State, Action } from 'vuex-class';
 import TraceChart from '../components/trace/trace-charts.vue';
 
 @Component({
@@ -35,6 +35,7 @@ import TraceChart from '../components/trace/trace-charts.vue';
 })
 export default class Trace extends Vue {
   @State('trace') stateTrace;
+  @Action('trace/CLEAR_TRACE') CLEAR_TRACE;
   traceId = '';
   show = false;
   currentSpan = {};
@@ -46,9 +47,11 @@ export default class Trace extends Vue {
     this.show = true;
     this.currentSpan = d.data;
   }
+  beforeDestroy() {
+    this.CLEAR_TRACE();
+  }
   created() {
     this.traceId = this.$route.query.traces.split('&')[0];
-    // getSpans(this.traceId);
   }
 }
 </script>

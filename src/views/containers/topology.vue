@@ -39,6 +39,7 @@ export default class Topology extends Vue {
   @Action('SET_EVENTS') SET_EVENTS;
   @Action('options/GET_APPLICATIONS') GET_APPLICATIONS;
   @Action('topo/GET_CLUSTER') GET_CLUSTER;
+  @Action('topo/CLEAR_TOPO') CLEAR_TOPO;
   @Action('options/SET_APPLICATION') SET_APPLICATION;
   current = {
     id: '',
@@ -49,6 +50,9 @@ export default class Topology extends Vue {
     this.SET_EVENTS([this.getCluster, getTopo]);
     getTopo();
     this.getCluster();
+  }
+  beforeDestroy() {
+    this.CLEAR_TOPO();
   }
   setCurrentApp(i) {
     this.current = i;

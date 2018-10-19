@@ -39,6 +39,7 @@ import AlarmNav from '../components/alarm/alarm-nav.vue';
 export default class Alarm extends Vue {
   @State('alarm') stateAlarm;
   @Action('SET_EVENTS') SET_EVENTS;
+  @Action('alarm/CLEAR_ALARM') CLEAR_ALARM;
   page:Number = 1;
   type:String = 'APPLICATION';
   @Watch('type')
@@ -48,6 +49,9 @@ export default class Alarm extends Vue {
   beforeMount() {
     this.getAlarm();
     this.SET_EVENTS([this.getAlarm]);
+  }
+  beforeDestroy() {
+    this.CLEAR_ALARM();
   }
   getAlarm() {
     getAlarm({ type: this.type, paging: this.page });

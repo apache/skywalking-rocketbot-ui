@@ -5,7 +5,7 @@
       <div class="mb5 label">Application</div>
       <select class="app" style="color:#fff;background: 0; border: 0; outline: none;" v-model="option.data.applicationId">
         <option value="ALL">All</option>
-        <option :value="i.key" v-for="i in stateOptions.applications" :key="i.key">{{i.label}}</option>
+        <option style="background-color: #25292f;" :value="i.key" v-for="i in stateOptions.applications" :key="i.key">{{i.label}}</option>
       </select>
     </div>
     <div class="item">
