@@ -5,8 +5,7 @@ The UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking).
 
 <img src="https://daoweb-resource.daocloud.io/logo/daocloud-logo-gray-account.svg" alt="Sample"  width="150" height="50">
 
-
-Powered By [DaoCloud Labs](https://github.com/DaoCloud-Labs)
+Supported By [DaoCloud Labs](https://github.com/DaoCloud-Labs)
 
 [Demo](http://rocketbot.daocloud.io/)
 
@@ -77,3 +76,16 @@ docker run -p 8080:80 -d -e SKYWALKING_URL=http://localhost:12800 rocketbot
 
 
 The default frontend address is `http://localhost:8080`.
+
+## Nginx config
+
+### Reserve proxy
+
+```
+  location /api {
+    rewrite ^/(.*) /graphql break;
+    proxy_pass SKYWALKING_URL;
+  }
+```
+
+**Important**: If you want to deploy the application by yourself，**you need to rewirte the URL path into ```/graphql``` before reserve proxy**.

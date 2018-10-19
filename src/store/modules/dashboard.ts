@@ -1,5 +1,5 @@
 import { Commit, ActionTree } from 'vuex';
-import { getServiceInfo, getApplicationInfo, getServerInfo } from '@/api/dashboard';
+import { getServiceInfo, getApplicationInfo, getServerInfo, getServerDetail } from '@/api/dashboard';
 import * as types from '../mutation-types';
 
 interface SlowTrace {
@@ -33,7 +33,7 @@ interface Memory {
 }
 interface Gc {
   oldGCTime: Number[];
-  oldGCount: Number[];
+  oldGCCount: Number[];
   youngGCCount: Number[];
   youngGCTime: Number[];
 }
@@ -63,7 +63,7 @@ const initState: State = {
   cpu: [],
   gc: {
     oldGCTime: [],
-    oldGCount: [],
+    oldGCCount: [],
     youngGCCount: [],
     youngGCTime: [],
   },
@@ -95,11 +95,16 @@ const mutations = {
     state.applicationThroughput = data.applicationThroughput;
   },
   [types.SET_SERVER_INFO](state: State, data: any) {
-    // state.cpu = data.cpu.cost;
-    // state.gc = data.gc;
-    // state.memory = data.memory;
     state.serverResponseTime = data.serverResponseTime.trendList;
     state.serverThroughput = data.serverThroughput.trendList;
+  },
+  [types.SET_SERVER_DETAIL](state: State, data: any) {
+    state.cpu = data.cpu.cost;
+    state.gc = data.gc;
+    state.memory.heap = data.memory.heap.map(i => (i / 1024 / 1024).toFixed(2));
+    state.memory.maxHeap = data.memory.maxHeap.map(i => (i / 1024 / 1024).toFixed(2));
+    state.memory.maxNoHeap = data.memory.maxNoheap.map(i => (i / 1024 / 1024).toFixed(2));
+    state.memory.noHeap = data.memory.noheap.map(i => (i / 1024 / 1024).toFixed(2));
   },
 };
 
@@ -121,6 +126,11 @@ const actions: ActionTree<State, any> = {
   GET_SERVER_INFO(context: { commit: Commit; state: State, rootState: any }, serverId) {
     return getServerInfo(context.rootState.global.duration, serverId).then((res) => {
       context.commit(types.SET_SERVER_INFO, res.data.data);
+    });
+  },
+  GET_SERVER_DETAIL(context: { commit: Commit; state: State, rootState: any }, serverId) {
+    return getServerDetail(context.rootState.global.duration, serverId).then((res) => {
+      context.commit(types.SET_SERVER_DETAIL, res.data.data);
     });
   },
 };

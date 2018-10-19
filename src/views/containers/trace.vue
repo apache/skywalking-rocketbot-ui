@@ -10,14 +10,16 @@
           <th>Start</th>
           <th>TraceId</th>
           <th>Duration</th>
+          <th>&nbsp;</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="i in stateTrace.traces" :key="i.key">
-          <td :class="i.isError? 'error' : 'success'">{{i.operationNames[0]}}</td>
+          <td style="width:350px;max-width:350px;" class="ell" :class="i.isError? 'error' : 'success'">{{i.operationNames[0]}}</td>
           <td class="grey">{{parseInt(i.start) | dateformat}}</td>
           <td><a class="rk-trace-btn" @click="$router.push({ path:'/trace/link', query:{traces:i.traceIds.join('&')}})">link</a></td>
-          <td><rk-progress :precent="i.duration/stateTraceMax*100" class="mr15"/></td>
+          <td>{{i.duration}} ms</td>
+          <td style="width:150px"><rk-progress :precent="i.duration/stateTraceMax*100" class="mr15"/></td>
         </tr>
       </tbody>
     </table>
@@ -27,7 +29,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { State } from 'vuex-class';
+import { State, Action } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
 import SearchBox from '../components/trace/search-box.vue';
 import ChartTrace from '../components/trace/chart-scatter.vue';
@@ -38,11 +40,12 @@ import ChartTrace from '../components/trace/chart-scatter.vue';
 export default class Trace extends Vue {
   @State('global') stateGlobal;
   @State('trace') stateTrace;
+  @Action('options/GET_APPLICATIONS') GET_APPLICATIONS;
   get stateTraceMax() {
     return this.stateTrace.traces.map(i => i.duration).reduce((pre, cur) => Math.max(pre, cur));
   }
   created() {
-    this.$store.dispatch('options/GET_APPLICATIONS');
+    this.GET_APPLICATIONS();
   }
 }
 </script>

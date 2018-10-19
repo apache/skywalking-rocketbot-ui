@@ -1,5 +1,5 @@
 <template>
-  <rk-panel title="Throughput">
+  <rk-panel title="NonHeap MB">
     <RkEcharts height="220px" :option="throughputConfig"/>
   </rk-panel>
 </template>
@@ -10,18 +10,18 @@ import { State, Getter } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
 
 @Component({})
-export default class Throughput extends Vue {
+export default class NonHeap extends Vue {
   @State('dashboard') stateDashboard;
   @State('global') stateGlobal;
   @Getter('durationTime') durationTime;
   get throughputConfig() {
     return {
-      color: ['#75a8ff', '#F44336'],
+      color: ['#75a8ff', '#f7b32b'],
       tooltip: {
         trigger: 'axis',
       },
       legend: {
-        data: ['server', 'service'],
+        data: ['free', 'value'],
         icon: 'circle',
         top: 10,
         left: 10,
@@ -55,15 +55,15 @@ export default class Throughput extends Vue {
       },
       series: [
         {
-          data: this.stateDashboard.throughput.map((i, index) => [this.durationTime[index], i]),
-          name: 'server',
+          data: this.stateDashboard.memory.noHeap.map((i, index) => [this.durationTime[index], i]),
+          name: 'free',
           type: 'line',
           symbol: 'none',
           // smooth: 'true',
         },
         {
-          data: this.stateDashboard.serverThroughput.map((i, index) => [this.durationTime[index], i]),
-          name: 'service',
+          data: this.stateDashboard.memory.maxNoHeap.map((i, index) => [this.durationTime[index], i]),
+          name: 'value',
           type: 'line',
           symbol: 'none',
           // smooth: 'true',

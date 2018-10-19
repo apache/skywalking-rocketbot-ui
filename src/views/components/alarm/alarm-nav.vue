@@ -22,7 +22,7 @@ export default class Nav extends Vue {
 }
 .rk-alarm-nav-i{
   display: inline-block;
-  height: 40px;
+  height: 41px;
   cursor: pointer;
   margin-right: 20px;
   line-height: 39px;

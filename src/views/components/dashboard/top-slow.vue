@@ -3,7 +3,7 @@
   <div class="mb15" v-for="i in stateDashboard.slowTrace" :key="i.key">
     <div>
       <span class="r sm">{{i.duration}} ms</span>
-      <div class="blue cp ell mb5" style="max-width: 160px;">{{i.operationNames[0]}}</div>
+      <div class="blue cp ell mb5" style="max-width: 160px;" @click="$router.push({ path:'/trace/link', query:{traces:i.traceIds.join('&')}})">{{i.operationNames[0]}}</div>
     </div>
     <RkProgress :precent="i.duration/maxDuration*100"/>
   </div>

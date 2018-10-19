@@ -1,6 +1,10 @@
 <template>
-  <rk-panel title="Throughput">
-    <RkEcharts height="220px" :option="throughputConfig"/>
+  <rk-panel title="GC ms">
+    <RkEcharts height="200px" :option="throughputConfig"/>
+    <div class="tc">
+      <span class="sm mr10"><span class="grey mr10">Young GC</span>{{young}}</span>
+      <span class="sm"><span class="grey mr10">Old GC</span>{{old}}</span>
+    </div>
   </rk-panel>
 </template>
 
@@ -10,18 +14,26 @@ import { State, Getter } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
 
 @Component({})
-export default class Throughput extends Vue {
+export default class Gc extends Vue {
   @State('dashboard') stateDashboard;
   @State('global') stateGlobal;
   @Getter('durationTime') durationTime;
+  get young() {
+    if (!this.stateDashboard.gc.youngGCCount) return 0;
+    return this.stateDashboard.gc.youngGCCount.length ? this.stateDashboard.gc.youngGCCount.reduce((num, item) => num + item) : 0;
+  }
+  get old() {
+    if (!this.stateDashboard.gc.oldGCCount) return 0;
+    return this.stateDashboard.gc.oldGCCount.length ? this.stateDashboard.gc.oldGCCount.reduce((num, item) => num + item) : 0;
+  }
   get throughputConfig() {
     return {
-      color: ['#75a8ff', '#F44336'],
+      color: ['#75a8ff', '#f7b32b'],
       tooltip: {
         trigger: 'axis',
       },
       legend: {
-        data: ['server', 'service'],
+        data: ['Young GC Time', 'Old GC Time'],
         icon: 'circle',
         top: 10,
         left: 10,
@@ -33,7 +45,7 @@ export default class Throughput extends Vue {
         top: 50,
         left: 0,
         right: 18,
-        bottom: 30,
+        bottom: 10,
         containLabel: true,
       },
       xAxis: {
@@ -55,15 +67,15 @@ export default class Throughput extends Vue {
       },
       series: [
         {
-          data: this.stateDashboard.throughput.map((i, index) => [this.durationTime[index], i]),
-          name: 'server',
+          data: this.stateDashboard.gc.youngGCTime.map((i, index) => [this.durationTime[index], i]),
+          name: 'Young GC Time',
           type: 'line',
           symbol: 'none',
           // smooth: 'true',
         },
         {
-          data: this.stateDashboard.serverThroughput.map((i, index) => [this.durationTime[index], i]),
-          name: 'service',
+          data: this.stateDashboard.gc.oldGCTime.map((i, index) => [this.durationTime[index], i]),
+          name: 'Old GC Time',
           type: 'line',
           symbol: 'none',
           // smooth: 'true',

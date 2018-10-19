@@ -2,9 +2,13 @@
 <span class="micro-page">
   <span class="dao-btn-group">
     <button class="rk-page-btn mr5" @click="pre"
-    :disabled="this.current == 1">&lt;</button>
+    :disabled="this.current == 1">
+      <ion-icon name="arrow-dropleft"></ion-icon>
+    </button>
     <button class="rk-page-btn" @click="next"
-    :disabled="total=== 0 || this.current == Math.ceil(this.total / this.currentSize)">&gt;</button>
+    :disabled="total=== 0 || this.current == Math.ceil(this.total / this.currentSize)">
+      <ion-icon name="arrow-dropright"></ion-icon>
+    </button>
   </span><span class="micro-page-info"><span v-if="total">{{currentPage===1?1:((currentPage-1)*currentSize+1)}} -
     {{last}}</span> Totol {{total}} {{name}}</span>
 </span>
@@ -90,7 +94,9 @@ export default {
   border: 0;
   color: #fff;
   outline: none;
-  padding: 5px .7em;
+  padding: 5px .5em;
+  height: 23px;
+  vertical-align: bottom;
   -webkit-transition: background-color .3s;
   transition: background-color .3s;
   &:hover {

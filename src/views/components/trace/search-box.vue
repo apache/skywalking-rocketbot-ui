@@ -94,6 +94,7 @@ export default class SearchBox extends Vue {
   }
   .label{
     font-weight: 600;
+    margin-right: 5px;
   }
   .rk-trace-input{
     background: 0;
@@ -101,6 +102,7 @@ export default class SearchBox extends Vue {
     outline: none;
     padding-bottom: 3px;
     border-bottom: 1px solid rgba(34, 34, 34, 0.3);
+    transition: border-color .3s;
     &:focus{
       border-color: #6fa4ff;
     }
@@ -128,7 +130,8 @@ export default class SearchBox extends Vue {
     border: 0;
     outline: none;
     padding-bottom: 3px;
-    border-bottom: 1px solid rgba(250,250,255,.5);
+    border-bottom: 1px solid rgba(235,235,245,.4);
+    transition: border-color .3s;
     &:focus{
       border-color: #6fa4ff;
     }

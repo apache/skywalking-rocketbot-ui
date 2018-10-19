@@ -17,6 +17,7 @@ export const SET_SERVER = 'SET_SERVER';
 export const SET_SERVICE_INFO = 'GET_SERVICE_INFO';
 export const SET_APPLICATION_INFO = 'SET_APPLICATION_INFO';
 export const SET_SERVER_INFO = 'SET_SERVER_INFO';
+export const SET_SERVER_DETAIL = 'SET_SERVER_DETAIL';
 // alarm
 export const SET_ALARM = 'SET_ALARM';
 export const SET_ALARM_TOTAL = 'SET_ALARM_TOTAL';
@@ -28,3 +29,5 @@ export const SET_SPAN = 'SET_SPAN';
 
 // topo
 export const SET_TOPO = 'SET_TOPO';
+export const SET_TOPO_CURRENT = 'SET_TOPO_CURRENT';
+export const SET_CLUSTER = 'SET_CLUSTER';
