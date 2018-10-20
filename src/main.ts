@@ -31,6 +31,6 @@ export default new Vue({
 
 try {
   if (window.console && window.console.log) {
-    console.log('%c Rocketbot v0.1.0 %c Powered By Daocloud Lab %c', 'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff', 'background:#3880ff ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff', 'background:transparent');
+    console.log('%c Rocketbot v0.9.0 %c Powered By Daocloud Lab %c', 'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff', 'background:#3880ff ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff', 'background:transparent');
   }
 } catch (e) {}
