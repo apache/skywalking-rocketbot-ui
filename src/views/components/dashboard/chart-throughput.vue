@@ -55,14 +55,14 @@ export default class Throughput extends Vue {
       },
       series: [
         {
-          data: this.stateDashboard.throughput.map((i, index) => [this.durationTime[index], i]),
+          data: this.stateDashboard.serverThroughput.map((i, index) => [this.durationTime[index], i]),
           name: 'server',
           type: 'line',
           symbol: 'none',
           // smooth: 'true',
         },
         {
-          data: this.stateDashboard.serverThroughput.map((i, index) => [this.durationTime[index], i]),
+          data: this.stateDashboard.throughput.map((i, index) => [this.durationTime[index], i]),
           name: 'service',
           type: 'line',
           symbol: 'none',
