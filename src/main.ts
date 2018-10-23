@@ -10,10 +10,9 @@ import components from './components';
 import iview from './components/iview';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/chart/bar';
-import 'echarts/lib/chart/scatter';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/tooltip';
-import 'iview/dist/styles/iview.css';
+import '@/assets/styles/iview.css';
 
 Vue.filter('dateformat', (
   dataStr,
