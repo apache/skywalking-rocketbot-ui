@@ -15,14 +15,15 @@
       </thead>
       <tbody>
         <tr v-for="i in stateTrace.traces" :key="i.key">
-          <td style="width:350px;max-width:350px;" class="ell" :class="i.isError? 'error' : 'success'"><span v-tooltip="{
-        content: i.operationNames[0],
-        trigger: 'hover',
-      }">{{i.operationNames[0]}}</span></td>
-          <td class="grey">{{parseInt(i.start) | dateformat}}</td>
+          <td style="width:400px">
+            <Tooltip max-width="400" :content="i.operationNames[0]" placement="top" style="max-width:400px" class="ell">
+              <span :class="i.isError? 'error' : 'success'">{{i.operationNames[0]}}</span>
+            </Tooltip>
+          </td>
+          <td class="grey" style="min-width:250px">{{parseInt(i.start) | dateformat}}</td>
           <td><a class="rk-trace-btn" @click="$router.push({ path:'/trace/link', query:{traces:i.traceIds.join('&')}})">link</a></td>
           <td>{{i.duration}} ms</td>
-          <td style="width:150px"><rk-progress :precent="i.duration/stateTraceMax*100" class="mr15"/></td>
+          <td style="min-width:180px"><rk-progress :precent="i.duration/stateTraceMax*100" class="mr15"/></td>
         </tr>
       </tbody>
     </table>
@@ -68,6 +69,7 @@ export default class Trace extends Vue {
   padding: 3px .7em;
   transition: background-color .3s;
   &:hover{
+    color: #fff;
     background-color: #6296ff;
   }
 }

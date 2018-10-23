@@ -11,9 +11,9 @@
   </div>
   <div class="micro-panel-board" :style="`height:${this.height}%`">
     <header class="micro-panel-header">
-      <ion-icon class="icon" name="close" @click="()=>{this.height=0;this.$emit('update:show', false)}"></ion-icon>
-      <ion-icon name="expand" class="icon" @click="()=>{this.height=100;}"></ion-icon>
-      <ion-icon name="contract" class="icon" @click="()=>{this.height=38.2;}"></ion-icon>
+      <Icon class="icon" type="md-close"  @click="()=>{this.height=0;this.$emit('update:show', false)}"/>
+      <Icon class="icon" type="md-expand"  @click="()=>{this.height=100;}"/>
+      <Icon class="icon" type="md-contract"  @click="()=>{this.height=38.2;}"/>
     </header>
     <div class="micro-panel-warpper">
       <div class="micro-panel-inner">

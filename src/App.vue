@@ -25,7 +25,6 @@ export default class App extends Vue {
 
 <style lang='scss'>
 @import './assets/lib.scss';
-@import './assets/normalize.css';
 @import './assets/style.scss';
 
 html,body,#app{

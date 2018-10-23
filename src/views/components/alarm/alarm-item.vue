@@ -3,7 +3,7 @@
     <div class="icon"><ion-icon name="information-circle-outline"></ion-icon></div>
     <div class="content">
       <div>192.168.2.96:8761应用 成功率告警</div>
-      <div class="type">Type: <span class="blue">LOW_SUCCESS_RATE</span></div>
+      <div class="sm">Type: <span class="blue">LOW_SUCCESS_RATE</span></div>
     </div>
   </div>
 </template>
@@ -23,9 +23,6 @@ export default class RkAlarmItem extends Vue {
   background-color: #f6f7fb;
   display: flex;
   margin-bottom: 5px;
-  .type{
-    font-size: 12px;
-  }
   .content{
     padding: 5px 15px;
   }

@@ -3,10 +3,11 @@
   <div class="mb15" v-for="i in stateDashboard.slowTrace" :key="i.key">
     <div>
       <span class="r sm">{{i.duration}} ms</span>
-      <div class="blue cp ell mb5" style="max-width: 150px;" @click="$router.push({ path:'/trace/link', query:{traces:i.traceIds.join('&')}})"><span v-tooltip="{
-        content: i.operationNames[0],
-        trigger: 'hover',
-      }">{{i.operationNames[0]}}</span></div>
+      <div class="blue cp mb5" @click="$router.push({ path:'/trace/link', query:{traces:i.traceIds.join('&')}})">
+        <Tooltip :content="i.operationNames[0]" placement="top" class="ell" style="max-width: 160px;">
+          <span>{{i.operationNames[0]}}</span>
+        </Tooltip>
+      </div>
     </div>
     <RkProgress :precent="i.duration/maxDuration*100"/>
   </div>

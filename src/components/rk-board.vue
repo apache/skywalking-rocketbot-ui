@@ -2,12 +2,12 @@
   <div class="rk-board container">
     <div v-clickout="() => this.show = false">
       <div class="flex-c cp" @click="show = true">
-        <span class="rk-board-app mr5">{{stateOptions.currentApplication.label}}</span>
-        <ion-icon name="link" class="mr10" size="small"></ion-icon>
+        <h3 class="mb0 mr5">{{stateOptions.currentApplication.label}}</h3>
+        <Icon type="md-link" class="mr10" :size="18"/>
       </div>
       <RkToolDashboard :stateOptions="stateOptions" :show.sync="show"/>
     </div>
-    <ion-icon name="arrow-forward" class="grey mr10"></ion-icon>
+    <Icon type="ios-arrow-forward" class="grey mr10"/>
     <select v-if='stateOptions.currentService' :value="stateOptions.currentService.key" @change="serviceChange($event)" class="mr15" style="color:#fafafa;background: 0; border: 0; outline: none;">
       <option style="background-color: #2f333c;" v-for="i in stateOptions.services" :key="i.key" :value="i.key">{{i.label}}</option>
     </select>
@@ -45,15 +45,11 @@ export default class RkBoard extends Vue {
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  padding-top: 20px;
-  padding-bottom:  20px;
+  padding-top: 25px;
+  padding-bottom:  25px;
   color: #fafafa;
   // background-color: #f6f7fb;
   background-color: #2f333c;
-}
-.rk-board-app{
-  font-size: 18px;
-  font-weight: 600;
 }
 .rk-board-service{
   font-weight: 600;
@@ -65,7 +61,7 @@ export default class RkBoard extends Vue {
   border: 0;
   color: #fff;
   outline: none;
-  padding: 4px .7em;
+  padding: 2px .7em;
   transition: background-color .3s;
   &:hover{
     background-color: #5286f0;

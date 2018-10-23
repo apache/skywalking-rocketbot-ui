@@ -42,7 +42,6 @@ export default class Nav extends Vue {
   height: 41px;
   margin-right: 20px;
   line-height: 39px;
-  font-size: 13px;
   font-weight: 600;
   border-bottom: 2px;
   border-bottom-style: solid;

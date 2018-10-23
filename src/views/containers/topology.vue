@@ -14,10 +14,10 @@
     </div>
     <div v-clickout="() => this.show = false">
       <div class="topology-setting-btn" @click="show = true">
-        <ion-icon name="settings"></ion-icon>
+        <Icon type="md-settings" style="vertical-align: initial;"/>
       </div>
-      <div @click="routerGo" class="topology-setting-btn" v-if="this.current.avgResponseTime | this.current.cpm | this.current.sla" style="top:135px">
-        <ion-icon name="cube"></ion-icon>
+      <div @click="routerGo" class="topology-setting-btn" v-if="this.current.avgResponseTime | this.current.cpm | this.current.sla" style="top:75px">
+        <Icon type="md-cube" style="vertical-align: initial;"/>
       </div>
       <TopoTool :stateTopo="stateTopo" :stateOptions="stateOptions" :show.sync="show" :propsTime="stateGlobal.duration"/>
     </div>
@@ -71,13 +71,14 @@ export default class Topology extends Vue {
 <style lang="scss">
 .topology{
   background-color: #2e303a;
+  position: relative;
 }
 .topology > svg {
   display: block;
 }
 .topology-board{
   position: absolute;
-  top: 75px;
+  top: 25px;
   right: 30px;
   padding: 10px 15px 0;
   width: 300px;
@@ -89,7 +90,7 @@ export default class Topology extends Vue {
 .topology-setting-btn {
   cursor: pointer;
   position:absolute;
-  top:80px;
+  top:25px;
   right:345px;
   height: 36px;
   width: 36px;

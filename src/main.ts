@@ -7,20 +7,22 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import components from './components';
+import iview from './components/iview';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/scatter';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/tooltip';
-import { VTooltip } from 'v-tooltip';
+import 'iview/dist/styles/iview.css';
 
-Vue.directive('tooltip', VTooltip);
 Vue.filter('dateformat', (
   dataStr,
   pattern = 'YYYY-MM-DD HH:mm:ss') => moment(dataStr).format(pattern));
 Vue.config.productionTip = false;
 Vue.directive('clickout', clickout);
 Vue.use(components);
+Vue.use(iview);
+
 /* eslint-disable no-new */
 export default new Vue({
   el: '#app',
