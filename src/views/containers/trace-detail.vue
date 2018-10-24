@@ -49,6 +49,13 @@ export default class Trace extends Vue {
   onIdChanged(): void {
     getSpans(this.traceId);
   }
+  back() {
+    if (window.history.length <= 2) {
+      this.$router.push('/');
+    } else {
+      this.$router.go(-1);
+    }
+  }
   handleSearch() {
     getSpans(this.copy);
   }
