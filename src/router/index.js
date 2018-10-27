@@ -4,7 +4,7 @@ import Dashboard from '@/views/containers/dashboard.vue';
 import Topology from '@/views/containers/topology.vue';
 import Trace from '@/views/containers/trace.vue';
 import Alarm from '@/views/containers/alarm.vue';
-import AlarmDetail from '@/views/containers/trace-detail.vue';
+import TraceDetail from '@/views/containers/trace-detail.vue';
 
 Vue.use(Router);
 
@@ -29,8 +29,8 @@ export default new Router({
     },
     {
       path: '/trace/link',
-      name: 'alarmDetail',
-      component: AlarmDetail,
+      name: 'traceDetail',
+      component: TraceDetail,
     },
     {
       path: '/alarm',

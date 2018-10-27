@@ -1,6 +1,6 @@
 <template>
-  <rk-panel title="CPU %">
-    <RkEcharts height="220px" :option="throughputConfig"/>
+  <rk-panel title="Calls HeatMap">
+    <RkEcharts height="220px" :option="responseConfig"/>
   </rk-panel>
 </template>
 
@@ -10,18 +10,26 @@ import { State, Getter } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
 
 @Component({})
-export default class CPU extends Vue {
+export default class Response extends Vue {
   @State('dashboard') stateDashboard;
-  @State('global') stateGlobal;
   @Getter('durationTime') durationTime;
-  get throughputConfig() {
+  get responseConfig() {
     return {
       color: ['#75a8ff', '#F44336'],
       tooltip: {
         trigger: 'axis',
       },
+      legend: {
+        data: ['server', 'service'],
+        icon: 'circle',
+        top: 0,
+        left: 10,
+        itemGap: 15,
+        itemWidth: 15,
+        itemHeight: 12,
+      },
       grid: {
-        top: 20,
+        top: 50,
         left: 0,
         right: 18,
         bottom: 30,
@@ -46,8 +54,15 @@ export default class CPU extends Vue {
       },
       series: [
         {
-          data: this.stateDashboard.cpu.map((i, index) => [this.durationTime[index], i]),
-          name: 'cpu',
+          data: this.stateDashboard.responseTime.map((i, index) => [this.durationTime[index], i]),
+          name: 'server',
+          type: 'line',
+          symbol: 'none',
+          // smooth: 'true',
+        },
+        {
+          data: this.stateDashboard.serverResponseTime.map((i, index) => [this.durationTime[index], i]),
+          name: 'service',
           type: 'line',
           symbol: 'none',
           // smooth: 'true',

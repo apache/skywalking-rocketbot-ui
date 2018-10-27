@@ -18,7 +18,6 @@ export default class RkChartBox extends Vue {
 </script>
 <style lang="scss">
 .rk-num-box{
-  border-left: 3px solid #ecf0f6;
   padding-left: 10px;
   width: 100%;
   .unit{
