@@ -22,13 +22,12 @@ export default class Nav extends Vue {
 }
 .rk-alarm-nav-i{
   display: inline-block;
-  height: 41px;
+  height: 40px;
   cursor: pointer;
   margin-right: 20px;
   line-height: 39px;
-  font-size: 13px;
   font-weight: 600;
-  border-bottom: 2px;
+  border-bottom: 1px;
   border-bottom-style: solid;
   color: rgba(61, 68, 79, .6);
   border-color: rgba(0, 0, 0, 0);

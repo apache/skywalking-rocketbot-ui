@@ -28,7 +28,7 @@ export default class Sla extends Vue {
         left: 10,
       },
       grid: {
-        top: 25,
+        top: 15,
         left: 0,
         right: 18,
         bottom: 30,

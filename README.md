@@ -128,6 +128,15 @@ for us to fix.
 
 Supported by [DaoCloud Labs](https://github.com/DaoCloud-Labs).
 
+## Contact
+
+#### 微信群 & 作者微信
+<p>
+  <img width="160" src="https://user-images.githubusercontent.com/19775780/47297011-87d8fe80-d646-11e8-8a1a-796bae5080f3.jpeg"/>
+  <img width="160" src="https://user-images.githubusercontent.com/19775780/47297000-814a8700-d646-11e8-8ff6-c2748555ceca.jpeg"/>
+</p>
+
+
 ## License
 
 Copyright © 2018, [Allen Wang](https://github.com/TinyAllen). Released under the [MIT](http://opensource.org/licenses/MIT) License.

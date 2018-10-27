@@ -3,9 +3,9 @@
     <div class="rk-sidebox-backdrop" v-show="show" @click="handleHide"></div>
     <aside class="rk-sidebox" :style="show?`width:${width};right:0`:`width:${width};right:-${width}`">
       <div class="clear">
-        <h5 class="rk-sidebox-title l mr15">{{this.title}}</h5>
+        <h3 class="rk-sidebox-title l mr15">{{this.title}}</h3>
         <div class="r rk-sidebox-close" @click="handleHide">
-          <ion-icon name="close"></ion-icon>
+          <Icon type="md-close"/>
         </div>
         <div class="mb10">{{this.notice}}</div>
       </div>
@@ -67,8 +67,8 @@ export default {
     display: block;
     float: left;
     width:3px;
-    height: 18px;
-    margin-top: 1px;
+    height: 14px;
+    margin-top: 3px;
     background-color: #595f69;
     margin-right:8px;
   }
@@ -77,7 +77,6 @@ export default {
   cursor: pointer;
   color: #217ef2;
   .close-btn{
-    font-size:14px;
     font-weight: normal;
   }
 }

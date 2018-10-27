@@ -3,10 +3,14 @@
   <RkDrawer :show.sync="show">
     <div slot="outer" class="micro-panel-outer">
       <div class="rk-trace-box mb15">
+        <Icon class="rk-trace-back" type="ios-arrow-back" @click="back"/>
         <span class="mr15" style="font-weight:600;">TraceId:</span>
-        <select class="mr15" v-model="traceId" style="color:#fafafa;background: 0; border: 0; outline: none;">
+        <input type="text" class="rk-trace-input mr15" v-model="copy" v-if="switchType">
+        <button class="rk-trace-change mr15" v-if="switchType" @click="handleSearch">Search</button>
+        <select v-else class="mr15" v-model="traceId" style="color:#fafafa;background: 0; border: 0; outline: none;">
           <option style="background: #2f333c;" v-for="i in this.$route.query.traces.split('&')" :key="i" :value='i'>{{i}}</option>
         </select>
+        <Icon type="md-swap" size="18" class="rk-trace-switch" :class="{'change':switchType}" @click="switchChange"/>
       </div>
       <TraceChart :data='stateTrace.spans' :traceId='traceId' @show="showBoard"/>
     </div>
@@ -37,11 +41,27 @@ export default class Trace extends Vue {
   @State('trace') stateTrace;
   @Action('trace/CLEAR_TRACE') CLEAR_TRACE;
   traceId = '';
+  copy = '';
   show = false;
+  switchType = false;
   currentSpan = {};
   @Watch('traceId', { deep: true })
   onIdChanged(): void {
     getSpans(this.traceId);
+  }
+  back() {
+    if (window.history.length <= 2) {
+      this.$router.push('/');
+    } else {
+      this.$router.go(-1);
+    }
+  }
+  handleSearch() {
+    getSpans(this.copy);
+  }
+  switchChange() {
+    if (this.switchType) getSpans(this.traceId);
+    this.switchType = !this.switchType;
   }
   showBoard(d) {
     this.show = true;
@@ -64,8 +84,59 @@ export default class Trace extends Vue {
     background-color: #2f333c;
     color: #fff;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    .rk-trace-input{
+    background: 0;
+    border: 0;
+    color: #fff;
+    outline: none;
+    padding-bottom: 3px;
+    border-bottom: 1px solid rgba(235, 235, 245, 0.3);
+    transition: border-color .3s;
+    &:focus{
+      border-color: #6fa4ff;
+    }
+  }
+}
+.rk-trace-change{
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: #4477dd;
+  border: 0;
+  color: #fff;
+  outline: none;
+  padding: 2px .7em;
+  transition: background-color .3s;
+  &:hover{
+    background-color: #5286f0;
+  }
+}
+.rk-trace-back{
+  padding: 3px;
+  background-color: rgba(255, 255, 255, 0.07);
+  font-size: 21px;
+  border-radius: 6px;
+  transition: background-color .3s;
+  margin-right: 25px;
+  cursor: pointer;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+  &:hover{
+    background-color: #4477dd;
+  }
 }
 .rk-trace-detail{
   padding: 15px;
+}
+
+.rk-trace-switch{
+  cursor: pointer;
+  padding: 4px;
+  color: #7a7a7a;
+  transition: color .3s,transform .3s;
+  &:hover{
+    color: #fff;
+  }
+  &.change{
+    transform: rotate(180deg);
+  }
 }
 </style>

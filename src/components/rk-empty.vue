@@ -32,7 +32,6 @@ export default {
   line-height: 40px;
 }
 .empty-state-text {
-  font-size: 14px;
   font-weight: 400;
   line-height: 24px;
 }

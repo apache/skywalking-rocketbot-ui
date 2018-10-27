@@ -14,11 +14,11 @@
       <div v-clickout="() => this.show = false">
         <div class="flex-c cp" @click="show = !show;">
           <span class="mr5 sm">{{time.start | dateformat}} ~ {{time.end | dateformat}}</span>
-          <ion-icon :name="show?'arrow-dropup':'arrow-dropdown'" size="small" class="mr10"></ion-icon>
+          <Icon :type="show?'md-arrow-dropup':'md-arrow-dropdown'" class="mr10"/>
         </div>
         <RkToolTime :show.sync="show" :propsTime="time"/>
       </div>
-      <div class="rk-nav-auto cp flex-c" @click="$store.dispatch('RUN_EVENTS')"><ion-icon name="refresh" class="mr5"></ion-icon>reload</div>
+      <div class="rk-nav-auto cp flex-c" @click="$store.dispatch('RUN_EVENTS')"><Icon type="md-refresh" class="mr5"/>reload</div>
     </div>
   </header>
 </template>
@@ -46,7 +46,7 @@ export default class Header extends Vue {
   align-items: center;
   padding: 10px 30px;
   background-color: #252a2f;
-  color: #eaeaea;
+  color: #e8e8e8;
   width: 100%;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,.06);
   .logo{
@@ -61,9 +61,9 @@ export default class Header extends Vue {
 }
 .rk-nav-link{
   margin-right: 20px;
-  padding: 6px 10px;
+  padding: 5px 10px;
   border-radius: 6px;
-  color: #eaeaea;
+  color: #e8e8e8;
   opacity: .8;
   will-change: opacity, background-color;
   transition: opacity .3s, background-color .3s;

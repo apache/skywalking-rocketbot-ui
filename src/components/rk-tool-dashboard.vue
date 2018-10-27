@@ -1,6 +1,6 @@
 <template>
   <rk-toolbar :style="`transform: translate(-50%, ${show?0:150}%);`">
-    <ion-icon @click="$emit('update:show', false);" name="close" size="small" class="r cp"></ion-icon>
+    <Icon class="r cp" type="md-close" @click="$emit('update:show', false);"/>
     <div class="rk-tool-dashboard">
       <div class="flex-c">
         <div class="long mr10">

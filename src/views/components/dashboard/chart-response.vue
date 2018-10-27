@@ -22,7 +22,7 @@ export default class Response extends Vue {
       legend: {
         data: ['server', 'service'],
         icon: 'circle',
-        top: 10,
+        top: 0,
         left: 10,
         itemGap: 15,
         itemWidth: 15,

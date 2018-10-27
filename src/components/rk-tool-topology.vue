@@ -1,6 +1,6 @@
 <template>
   <rk-toolbar :style="`transform: translate(-50%, ${show?0:150}%);`">
-    <ion-icon @click="$emit('update:show', false);" name="close" size="small" class="r cp"></ion-icon>
+    <Icon class="r cp" type="md-close" @click="$emit('update:show', false);"/>
     <div class="flex">
       <div class="mr15 long">
         <h6 class="mt0 mb10" style="margin-left: 7px;">Application</h6>
@@ -77,6 +77,7 @@ export default class RkToolTime extends Vue {
   opacity: .8;
   transition: background-color .3s, opacity .3s;
   cursor: pointer;
+  color: #e8e8e8;
   &:hover{
     opacity: 1;
     background-color: rgba(255, 255, 255, 0.08);

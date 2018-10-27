@@ -148,7 +148,7 @@ export default {
       this.svg.select('.graph').remove();
       this.force = d3
         .forceSimulation(this.datas.nodes)
-        .force('collide', d3.forceCollide().radius(() => 85))
+        .force('collide', d3.forceCollide().radius(() => 90))
         .force('yPos', d3.forceY().strength(1))
         .force('xPos', d3.forceX().strength(1))
         .force('charge', d3.forceManyBody().strength(-500))
@@ -169,13 +169,13 @@ export default {
         .attr('markerWidth', '12')
         .attr('markerHeight', '12')
         .attr('viewBox', '0 0 12 12')
-        .attr('refX', '12')
+        .attr('refX', '11')
         .attr('refY', '6')
         .attr('orient', 'auto');
       const arrow_path = 'M2,2 L10,6 L2,10 L6,6 L2,2';
       this.glink = this.graph.append('g').selectAll('.link');
       this.link = this.glink.data(this.datas.calls).enter().append('g');
-      this.line = this.link.append('path').attr('stroke-linecap', 'round').attr('class', 'link').attr("marker-end","url(#arrow)");
+      this.line = this.link.append('path').attr('class', 'link').attr("marker-end","url(#arrow)");
       this.linkText = this.link.append('g');
       this.linkText
         .append('rect')
@@ -185,7 +185,7 @@ export default {
         .attr('height', 20)
         .attr('x', -10)
         .attr('y', -10)
-        .attr('fill', '#30313b');
+        .attr('fill', '#2e303a');
       this.linkText
         .append('text')
         .attr('font-size', 10)
@@ -278,8 +278,8 @@ export default {
         .attr(
           'd',
           d => {
-            if(Math.abs(d.source.x - d.target.x)>400 || Math.abs(d.source.y - d.target.y) < 100) return diagonal(d);
-            if(Math.abs(d.source.x - d.target.x)<400 || Math.abs(d.source.y - d.target.y) > 100) return diagonalvertical(d);
+            if(Math.abs(d.sx-d.tx) > Math.abs(d.sy-d.ty)) return diagonal(d);
+            if(Math.abs(d.sx-d.tx) < Math.abs(d.sy-d.ty)) return diagonalvertical(d);
             return diagonal(d);
           }
         );
@@ -340,6 +340,16 @@ export default {
     stroke-linecap: round;
     fill:rgba(255, 255, 255, 0);
     stroke: rgba(255, 199, 31, 0.5);
+    stroke-dasharray: 30 3;
+    animation: dash 6s linear infinite;
+  }
+@keyframes dash {
+    from {
+      stroke-dashoffset: 330;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
   }
   .link2 {
     stroke: rgb(80, 80, 80);
@@ -377,7 +387,7 @@ export default {
   }
   .node {
     cursor: move;
-    fill: rgba(75, 78, 85, 0.9);
+    fill: #3e414b;
   }
   .node-active {
     .node {

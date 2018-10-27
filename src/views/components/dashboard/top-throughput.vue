@@ -3,10 +3,11 @@
   <div class="mb15" v-for="i in fiveData" :key="i.key">
     <div>
       <span class="r sm">{{i.value}} calls/ m</span>
-      <div class="ell mb5 cp link-hover" style="max-width: 160px;" @click="appChange(i)"><span v-tooltip="{
-        content: i.label,
-        trigger: 'hover',
-      }">{{i.label}}</span></div>
+      <div class="mb5 cp link-hover" @click="appChange(i)">
+        <Tooltip :content="i.label" placement="top" class="ell" style="max-width: 160px;">
+          <span>{{i.label}}</span>
+        </Tooltip>
+      </div>
     </div>
     <RkProgress :precent="i.value/maxValue*100"/>
   </div>

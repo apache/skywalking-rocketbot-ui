@@ -12,7 +12,9 @@
       </thead>
       <tbody>
          <tr v-for="(i, index) in stateAlarm.alarmList" :key="index">
-          <td><ion-icon name="information-circle" class="rk-alarm-icon"></ion-icon></td>
+          <td>
+            <Icon type="md-alert" class="rk-alarm-icon"/>
+          </td>
           <td class="grey ell">{{i.startTime}}</td>
           <td>{{i.title}}</td>
           <td>{{i.causeType}}</td>
@@ -30,11 +32,10 @@ import Vue from 'vue';
 import { State, Action } from 'vuex-class';
 import { Component, Watch } from 'vue-property-decorator';
 import { getAlarm } from '@/store/dispatch/alarm.ts';
-import AlarmItem from '../components/alarm/alarm-item.vue';
 import AlarmNav from '../components/alarm/alarm-nav.vue';
 
 @Component({
-  components: { AlarmItem, AlarmNav },
+  components: { AlarmNav },
 })
 export default class Alarm extends Vue {
   @State('alarm') stateAlarm;
