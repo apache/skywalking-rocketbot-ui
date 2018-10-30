@@ -18,7 +18,7 @@
         </div>
         <RkToolTime :show.sync="show" :propsTime="time"/>
       </div>
-      <div class="rk-nav-auto cp flex-c" @click="$store.dispatch('RUN_EVENTS')"><Icon type="md-refresh" class="mr5"/>reload</div>
+      <div class="rk-nav-auto cp flex-c" @click="reload"><Icon type="md-refresh" class="mr5"/>reload</div>
     </div>
   </header>
 </template>
@@ -34,6 +34,16 @@ import RkToolTime from '@/components/rk-tool-time.vue';
 export default class Header extends Vue {
   show = false;
   @Prop() time: any;
+  reload() {
+    const gap = this.time.end.getTime() - this.time.start.getTime();
+    const newEnd = new Date();
+    const newStart = new Date(newEnd.getTime() - gap);
+    this.$store.dispatch('SET_DURATION', {
+      end: newEnd,
+      start: newStart,
+      step: this.time.step,
+    });
+  }
 }
 </script>
 
