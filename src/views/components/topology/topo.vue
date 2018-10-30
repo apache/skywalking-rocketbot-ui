@@ -10,14 +10,28 @@ import * as d3 from 'd3';
 const diagonal = d3.linkHorizontal().source(d => {
   d.sx = d.source.x;
   d.sy = d.source.y;
+  if (Math.abs(d.source.x - d.target.x) < 40){
+    return [d.source.x, d.source.y];
+  }
+  if (Math.abs(d.source.x + (d.source.name.length * 8 + 55) - d.target.x - (d.target.name.length * 8 + 55)) < 40){
+    d.sx = d.source.x + (d.source.name.length * 8 + 55);
+    return [d.source.x + (d.source.name.length * 8 + 55), d.source.y];
+  }
   if (d.source.x > d.target.x) {
     return [d.source.x, d.source.y];
   }
-    d.sx = d.source.x + (d.source.name.length * 8 + 55);
+  d.sx = d.source.x + (d.source.name.length * 8 + 55);
   return [d.source.x + (d.source.name.length * 8 + 55), d.source.y];
 }).target(d => {
   d.tx = d.target.x;
   d.ty = d.target.y;
+  if (Math.abs(d.source.x - d.target.x) < 40){
+    return [d.target.x, d.target.y];
+  }
+  if (Math.abs(d.source.x + (d.source.name.length * 8 + 55) - d.target.x - (d.target.name.length * 8 + 55)) < 40){
+     d.tx = d.target.x + (d.target.name.length * 8 + 55);
+    return [d.target.x + (d.target.name.length * 8 + 55), d.target.y];
+  }
   if (d.source.x < d.target.x) {
     return [d.target.x, d.target.y];
   }
@@ -27,6 +41,13 @@ const diagonal = d3.linkHorizontal().source(d => {
 const diagonalvertical = d3.linkVertical().source(d => {
   d.sx = d.source.x;
   d.sy = d.source.y;
+  if (Math.abs(d.source.x - d.target.x) < 40){
+    return [d.source.x, d.source.y];
+  }
+  if (Math.abs(d.source.x + (d.source.name.length * 8 + 55) - d.target.x - (d.target.name.length * 8 + 55)) < 40){
+    d.sx = d.source.x + (d.source.name.length * 8 + 55);
+    return [d.source.x + (d.source.name.length * 8 + 55), d.source.y];
+  }
   if (d.source.x > d.target.x) {
     return [d.source.x, d.source.y];
   }
@@ -35,6 +56,13 @@ const diagonalvertical = d3.linkVertical().source(d => {
 }).target(d => {
   d.tx = d.target.x;
   d.ty = d.target.y;
+    if (Math.abs(d.source.x - d.target.x) < 40){
+    return [d.target.x, d.target.y];
+  }
+  if (Math.abs(d.source.x + (d.source.name.length * 8 + 55) - d.target.x - (d.target.name.length * 8 + 55)) < 40){
+    d.tx = d.target.x + (d.target.name.length * 8 + 55);
+    return [d.target.x + (d.target.name.length * 8 + 55), d.target.y];
+  }
   if (d.source.x < d.target.x) {
     return [d.target.x, d.target.y];
   }
