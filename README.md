@@ -83,10 +83,10 @@ docker build -t rocketbot .
 ### Running the docker image
 
 ```
-docker run -p 8080:80 -d -e SKYWALKING_URL=http://localhost:12800 rocketbot
+docker run -p 8080:80 -d -e skywalking_collector=127.0.0.1:1234,127.0.0.1:1235 rocketbot
 ```
 
-`SKYWALKING_URL` is the address of your backend.
+`skywalking_collector` is the address of your backend, multiple IP is changed by comma.
 
 
 The default frontend address is `http://localhost:8080`.
@@ -132,7 +132,7 @@ Supported by [DaoCloud Labs](https://github.com/DaoCloud-Labs).
 
 #### 微信群 & 作者微信
 <p>
-  <img width="160" src="https://user-images.githubusercontent.com/19775780/47297011-87d8fe80-d646-11e8-8a1a-796bae5080f3.jpeg"/>
+  <img width="160" src="https://user-images.githubusercontent.com/19775780/47762068-03e1df00-dcf6-11e8-9315-cc17b28383e7.jpeg"/>
   <img width="160" src="https://user-images.githubusercontent.com/19775780/47297000-814a8700-d646-11e8-8ff6-c2748555ceca.jpeg"/>
 </p>
 
