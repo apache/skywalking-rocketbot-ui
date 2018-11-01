@@ -85,7 +85,6 @@ export default {
         })
         // if(segmentGroup[id].refs.length !==0 ) delete segmentGroup[id];
       })
-      console.log(segmentGroup);
       for (let i in segmentGroup) {
         if(segmentGroup[i].refs.length ===0 )
         this.segmentId.push(segmentGroup[i]);
