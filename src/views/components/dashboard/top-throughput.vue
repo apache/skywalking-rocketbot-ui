@@ -4,7 +4,7 @@
     <div>
       <span class="r sm">{{i.value}} calls/ m</span>
       <div class="mb5 cp link-hover" @click="appChange(i)">
-        <Tooltip :content="i.label" placement="top" class="ell" style="max-width: 160px;">
+        <Tooltip :content="i.label" max-width="200" placement="top" class="ell" style="max-width: 200px;">
           <span>{{i.label}}</span>
         </Tooltip>
       </div>

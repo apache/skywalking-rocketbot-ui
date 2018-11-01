@@ -16,11 +16,20 @@
     </div>
     <div slot="inner" class="micro-panel-inner">
       <div class="rk-trace-detail">
+        <h4 class="mb10">Tags.</h4>
+        <div class="mb15"><span class="mr15">Label:</span><span>{{this.currentSpan.label}}</span></div>
         <div class="half mb15"><span class="two-fifth">Span Type:</span><span class="three-fifth">{{this.currentSpan.type}}</span></div>
         <div class="half mb15"><span class="two-fifth">Component:</span><span class="three-fifth">{{this.currentSpan.component}}</span></div>
         <div class="half mb15"><span class="two-fifth">Peer:</span><span class="three-fifth">{{this.currentSpan.peer||'No Peer'}}</span></div>
         <div class="half mb15"><span class="two-fifth">Error:</span><span class="three-fifth">{{this.currentSpan.isError}}</span></div>
         <div class="half mb15" v-for="i in this.currentSpan.tags" :key="i.key"><span class="two-fifth">{{i.key}}:</span><span class="three-fifth">{{i.value}}</span></div>
+        <h4 class="mb10" v-if="this.currentSpan.logs" v-show="this.currentSpan.logs.length">Logs.</h4>
+        <div v-for="(i, index) in this.currentSpan.logs" :key="index">
+          <div class="mb5 sm">Time: <span class="grey">{{i.time | dateformat}}</span></div>
+          <div class="mb15" v-for="(_i, _index) in i.data" :key="_index">
+           <span class="one-fifth">{{_i.key}}:</span><span class="four-fifth">{{_i.value}}</span>
+          </div>
+        </div>
       </div>
     </div>
   </RkDrawer>

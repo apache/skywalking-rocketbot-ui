@@ -83,10 +83,12 @@ export default {
             this.traverseTree(segmentGroup[ref.parentSegmentId],ref.parentSpanId,ref.parentSegmentId,segmentGroup[id])
           };
         })
-        if(segmentGroup[id].refs.length !==0 ) delete segmentGroup[id];
+        // if(segmentGroup[id].refs.length !==0 ) delete segmentGroup[id];
       })
+      console.log(segmentGroup);
       for (let i in segmentGroup) {
-        this.segmentId.push(segmentGroup[i])
+        if(segmentGroup[i].refs.length ===0 )
+        this.segmentId.push(segmentGroup[i]);
       }
       trace({label:`TraceID: ${this.traceId}`, children: this.segmentId},this.$el.offsetWidth, this.data,this);
     },

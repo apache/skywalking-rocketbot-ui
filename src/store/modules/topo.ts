@@ -1,6 +1,7 @@
 import { Commit, ActionTree } from 'vuex';
 import { getTopo, getTopoApp, getClusterBrief } from '@/api/topo';
 import * as types from '../mutation-types';
+import Axios from 'axios';
 interface Option {
   key: String;
   label: String;
@@ -13,7 +14,7 @@ interface Call {
   source: String;
   target: String;
 }
-interface Node{
+interface Node {
   apdex: Number;
   avgResponseTime: Number;
   cpm: Number;
@@ -26,7 +27,7 @@ interface Node{
   sla: Number;
   type: String;
 }
-interface Cluster{
+interface Cluster {
   numOfApplication: Number;
   numOfService: Number;
   numOfDatabase: Number;
@@ -37,14 +38,14 @@ interface Cluster{
 export interface State {
   calls: Call[];
   nodes: Node[];
-  cluster : Cluster;
-  current : Option;
+  cluster: Cluster;
+  current: Option;
 }
 
 const initState: State = {
   calls: [],
   nodes: [],
-  current : {
+  current: {
     key: 'default',
     label: 'default',
   },
@@ -84,25 +85,35 @@ const mutations = {
 
 // actions
 const actions: ActionTree<State, any> = {
-  SET_TOPO_CURRENT(context: { commit: Commit; state: State, rootState: any }, data: Option) {
+  SET_TOPO_CURRENT(
+    context: { commit: Commit; state: State; rootState: any },
+    data: Option,
+  ) {
     context.commit(types.SET_TOPO_CURRENT, data);
   },
-  GET_TOPO(context: { commit: Commit; state: State, rootState: any }) {
+  GET_TOPO(context: { commit: Commit; state: State; rootState: any }) {
     return getTopo(context.rootState.global.duration).then((res) => {
       context.commit(types.SET_TOPO, res.data.data.getClusterTopology);
     });
+    // context.commit(types.SET_TOPO, data.data.getClusterTopology);
   },
-  GET_TOPO_APPLICATION(context: { commit: Commit; state: State, rootState: any }, applicationId:String) {
-    return getTopoApp({ duration: context.rootState.global.duration, applicationId }).then((res) => {
+  GET_TOPO_APPLICATION(
+    context: { commit: Commit; state: State; rootState: any },
+    applicationId: String,
+  ) {
+    return getTopoApp({
+      duration: context.rootState.global.duration,
+      applicationId,
+    }).then((res) => {
       context.commit(types.SET_TOPO, res.data.data.getApplicationTopology);
     });
   },
-  GET_CLUSTER(context: { commit: Commit; state: State, rootState: any }) {
+  GET_CLUSTER(context: { commit: Commit; state: State; rootState: any }) {
     return getClusterBrief(context.rootState.global.duration).then((res) => {
       context.commit(types.SET_CLUSTER, res.data.data.getClusterBrief);
     });
   },
-  CLEAR_TOPO(context: { commit: Commit; state: State, rootState: any }) {
+  CLEAR_TOPO(context: { commit: Commit; state: State; rootState: any }) {
     context.commit(types.CLEAR_TOPO);
   },
 };

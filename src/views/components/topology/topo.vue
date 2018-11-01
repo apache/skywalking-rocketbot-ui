@@ -173,6 +173,13 @@ export default {
   },
   methods: {
     draw() {
+      const codeId = this.datas.nodes.map(i => i.id);
+      for (let i = 0; i < this.datas.calls.length; i += 1) {
+        const element = this.datas.calls[i];
+        if(codeId.indexOf(element.target) === -1 ) {
+          this.datas.calls[i].target = this.datas.calls[i].source;
+        }
+      }
       this.svg.select('.graph').remove();
       this.force = d3
         .forceSimulation(this.datas.nodes)
@@ -188,6 +195,10 @@ export default {
       this.svg.call(this.getZoomBehavior(this.graph));
       this.svg.on('click', (d, i) => {
         this.$emit('setCurrentApp', {name: '', id: ''});
+        this.toggleNode(this.node, d, false);
+        this.toggleLine(this.line, d, false);
+        // this.toggleMarker(marker, currNode, true);
+        this.toggleLineText(this.linkText, d, false);
       });
       this.defs = this.graph.append('defs');
       this.arrowMarker = this.defs
@@ -203,7 +214,9 @@ export default {
       const arrow_path = 'M2,2 L10,6 L2,10 L6,6 L2,2';
       this.glink = this.graph.append('g').selectAll('.link');
       this.link = this.glink.data(this.datas.calls).enter().append('g');
-      this.line = this.link.append('path').attr('class', 'link').attr("marker-end","url(#arrow)");
+      this.line = this.link.append('path').attr('class', 'link')
+      .attr('stroke-dasharray', d => d.cpm ? '30 3': '0')
+      .attr('stroke', d => d.cpm ? 'rgba(255, 199, 31, 0.4)' : 'rgba(199, 199, 210, 0.3)').attr("marker-end","url(#arrow)");
       this.linkText = this.link.append('g');
       this.linkText
         .append('rect')
@@ -245,6 +258,10 @@ export default {
           delete copyD.fy;
           delete copyD.index;
           that.$emit('setCurrentApp', copyD);
+          that.toggleNode(that.node, d, true);
+          that.toggleLine(that.line, d, true);
+          // this.toggleMarker(marker, currNode, true);
+          that.toggleLineText(that.linkText, d, true);
         });
       this.node
         .append('rect')
@@ -296,6 +313,65 @@ export default {
         }
       });
     },
+    isLinkNode(currNode, node) {
+    if (currNode.id === node.id) {
+        return true;
+    }
+    return this.datas.calls.filter(i => 
+      (i.source.id === currNode.id || i.target.id === currNode.id) &&
+      (i.source.id === node.id || i.target.id === node.id)
+    ).length;
+  },
+    toggleNode(nodeCircle, currNode, isHover) {
+    if (isHover) {
+        // 提升节点层级 
+      nodeCircle.sort((a, b) => a.id === currNode.id ? 1 : -1);
+      nodeCircle
+          .style('opacity', .1)
+          .filter(node => this.isLinkNode(currNode, node))
+          .style('opacity', 1);
+    } else {
+        nodeCircle.style('opacity', 1);
+    }
+},
+toggleLine(linkLine, currNode, isHover) {
+  if (isHover) {
+    linkLine
+      .style('opacity', .05)
+      .style('animation', 'none')
+      .filter(link => this.isLinkLine(currNode, link))
+      .style('opacity', 1)
+      .style('animation', 'dash 6s linear infinite');
+      // .classed('link-active', true);
+    } else {
+      linkLine
+        .style('opacity', 1)
+        .style('animation', 'dash 6s linear infinite');
+        // .classed('link-active', false);
+    }
+  },
+isLinkLine(node, link) {
+    return link.source.id == node.id || link.target.id == node.id;
+},
+toggleLineText(lineText, currNode, isHover) {
+  if (isHover) {
+    lineText
+      .style('fill-opacity', link => this.isLinkLine(currNode, link) ? 1.0 : 0.0);
+      } else {
+      lineText
+      .style('fill-opacity', '1.0');
+    }
+  },
+    toggleMarker(marker, currNode, isHover) {
+      if (isHover) {
+        marker.filter(link => this.isLinkLine(currNode, link))
+          .style('transform', 'scale(1.5)');
+      } else {
+        marker
+          .attr('refX', nodeConf.radius.Company)
+          .style('transform', 'scale(1)');
+      }
+    },
     resize() {
       this.svg.attr('width', this.$refs.topo.offsetWidth);
       this.svg.attr('height', document.body.clientHeight - 64);
@@ -313,7 +389,6 @@ export default {
         );
       this.linkText.attr('transform',d => {
         let tagx = 1
-        // if(d.sx < d.tx) tagx = -tagx;
         return `translate(${d.sx - (d.sx-d.tx)/2}, ${d.sy - (d.sy-d.ty)/2})`
       });
       this.node.attr('transform', d => `translate(${d.x},${d.y - 20})`);
@@ -332,7 +407,6 @@ export default {
         });
     },
     dragstart(d) {
-      // console.log(this.node)
       this.node._groups[0].forEach(d => {
         d.__data__.fx = d.__data__.x;
         d.__data__.fy = d.__data__.y;
@@ -367,8 +441,6 @@ export default {
   .link {
     stroke-linecap: round;
     fill:rgba(255, 255, 255, 0);
-    stroke: rgba(255, 199, 31, 0.5);
-    stroke-dasharray: 30 3;
     animation: dash 6s linear infinite;
   }
 @keyframes dash {
@@ -381,9 +453,9 @@ export default {
   }
   .link2 {
     stroke: rgb(80, 80, 80);
-    stroke-dasharray: 200 20;
-    stroke-dashoffset: 0;
-    animation: dash 1.5s linear infinite;
+    // stroke-dasharray: 200 20;
+    // stroke-dashoffset: 0;
+    // animation: dash 1.5s linear infinite;
   }
   @keyframes dash {
     from {
