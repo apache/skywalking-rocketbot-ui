@@ -10,12 +10,12 @@
           <div class="sm grey mb5">Password</div>
           <input @keyup.enter="login" @input="error = false;" class="rk-login-input mb20"  :class="{'rk-login-red':error}" v-model="accountInfo.password" type="password">
           <button class="rk-login-btn cp" @click="login">Login</button>
-          <p class="grey sm">Copyright © 2018, Created by <a class="rk-login-link" href="https://github.com/TinyAllen">Allen Wang</a> and Supported by <a class="rk-login-link">DaoCloud Labs</a>.</p>
+          <p class="grey sm">Copyright © 2018, Created by <a class="rk-login-link" target="_blank" href="https://github.com/TinyAllen">Allen Wang</a> and Supported by <a class="rk-login-link"  target="_blank" href="https://github.com/DaoCloud-Labs">DaoCloud Labs</a>.</p>
       </div>
     </div>
   </div>
   <div class="rk-login-r">
-    <img src="../../assets/img/rocket.svg" class="rocket">
+    <img src="../../assets/img/logo.svg" class="rocket">
   </div>
 </div>
 </template>
@@ -81,12 +81,12 @@ export default class Login extends Vue {
 }
 .rocket{
   position: absolute;
-  width: 280px;
-  height: 280px;
-  top: 50%;
+  width: 180px;
+  height: 180px;
+  top: 45%;
   left: 50%;
-  margin-top: -140px;
-  margin-left: -140px;
+  margin-top: -90px;
+  margin-left: -90px;
 }
 .rk-login-form{
   max-width: 360px;
@@ -107,18 +107,21 @@ export default class Login extends Vue {
   width: 100%;
   background-color: #252a2f;
   background-image: url('../../assets/img/login-bg.svg');
-  // background-position: center;
   background-size: 100%;
 }
 .rk-login-btn{
-  background-color: #252a2f;
-  color:#e4e7ed;
+  background-color: #0580ff;
+  color:#fff;
   outline: none;
   border: 0;
   border-radius: 6px;
   padding: 8px 2em;
   width: 100%;
   margin-bottom: 25px;
+  transition: background-color .3s;
+  &:hover{
+    background-color: #3198ff;
+  }
 }
 .rk-login-red{
   border-color: #f76363;
