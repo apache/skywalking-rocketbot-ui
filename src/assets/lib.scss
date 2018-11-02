@@ -30,8 +30,8 @@
 .mb10{margin-bottom:10px;}
 .mb15{margin-bottom:15px;}
 .mb20{margin-bottom:20px;}
-.half{box-sizing: border-box;display:inline-block;width: 50%;padding-right: 20px;vertical-align: top;}
-
+.half{word-break: break-all;word-wrap: break-word;box-sizing: border-box;display:inline-block;width: 50%;padding-right: 20px;vertical-align: top;}
+.trans{transition:all .3s;}
 .two-fifth{
   box-sizing: border-box;
   display:inline-block;
@@ -45,6 +45,24 @@
   box-sizing: border-box;
   display:inline-block;
   width: 60%;
+  padding-right: 20px;
+  vertical-align: top;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+.one-fifth{
+  box-sizing: border-box;
+  display:inline-block;
+  width: 20%;
+  padding-right: 20px;
+  vertical-align: top;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+.four-fifth{
+  box-sizing: border-box;
+  display:inline-block;
+  width: 80%;
   padding-right: 20px;
   vertical-align: top;
   word-break: break-all;

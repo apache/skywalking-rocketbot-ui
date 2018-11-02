@@ -3,20 +3,23 @@
     <TopoChart :datas="stateTopo" @setCurrentApp="setCurrentApp"/>
     <div class="topology-select">
     </div>
-    <div class="topology-board" v-if="this.current.id">
+    <div class="topology-board" v-if="this.current.id" v-show="open">
       <div class="mb10" v-for="(value,key) in current" :key="key"><span class="half">{{key}}:</span><span class="half">{{value}}</span></div>
     </div>
-    <div class="topology-board" v-else>
+    <div class="topology-board" v-else  v-show="open">
       <div class="mb10"><span class="half">Application</span><span class="half">{{stateTopo.cluster.numOfApplication}}</span></div>
       <div class="mb10"><span class="half">DB & Cache</span><span class="half">{{stateTopo.cluster.numOfDatabase + stateTopo.cluster.numOfCache}}</span></div>
       <div class="mb10"><span class="half">Service</span><span class="half">{{stateTopo.cluster.numOfService}}</span></div>
       <div class="mb10"><span class="half">MQ</span><span class="half">{{stateTopo.cluster.numOfMQ}}</span></div>
     </div>
-    <div v-clickout="() => this.show = false">
-      <div class="topology-setting-btn" @click="show = true">
+    <div v-clickout="() => this.show = false" >
+      <div class="topology-setting-btn" @click="open = !open" :style="`right:${open?345:25}px`">
+        <Icon :type="open?'ios-arrow-forward':'ios-arrow-back'" style="vertical-align: initial;"/>
+      </div>
+      <div class="topology-setting-btn" @click="show = true" style="top:75px" :style="`right:${open?345:25}px`">
         <Icon type="md-settings" style="vertical-align: initial;"/>
       </div>
-      <div @click="routerGo" class="topology-setting-btn" v-if="this.current.avgResponseTime | this.current.cpm | this.current.sla" style="top:75px">
+      <div @click="routerGo" class="topology-setting-btn" :style="`right:${open?345:25}px`" v-if="this.current.avgResponseTime | this.current.cpm | this.current.sla" style="top:125px">
         <Icon type="md-cube" style="vertical-align: initial;"/>
       </div>
       <TopoTool :stateTopo="stateTopo" :stateOptions="stateOptions" :show.sync="show" :propsTime="stateGlobal.duration"/>
@@ -45,6 +48,7 @@ export default class Topology extends Vue {
     id: '',
     name: '',
   };
+  open = true;
   show = false;
   beforeMount() {
     this.SET_EVENTS([this.getCluster, getTopo]);
@@ -91,7 +95,6 @@ export default class Topology extends Vue {
   cursor: pointer;
   position:absolute;
   top:25px;
-  right:345px;
   height: 36px;
   width: 36px;
   text-align: center;

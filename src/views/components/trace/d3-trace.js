@@ -5,6 +5,8 @@ const type = {
   Http: '#72a5fd',
   Database: '#ff6732',
   Unknown: '#ffc107',
+  Cache: '#00bcd4',
+  RPCFramework: '#ee4395',
 };
 const trace = (data,width,row,vm) => {
   d3.select('svg').remove();
@@ -61,8 +63,8 @@ const trace = (data,width,row,vm) => {
     nodeEnter.append('text').attr('dy', 2).attr('dx', 12)
       .style('fill', d => d.data.isError? '#f1483f' : '')
       .text(d => d.data.isError? 'x' : '');
-    nodeEnter.append('text').style('fill', d => type[d.data.layer]).style('stroke', d => type[d.data.layer]).style('stroke-width', '0.8').style('font-size', '11px').attr('dy', 2)
-      .attr('dx', d => d.data.label.length > 50 ? 320 : 40 + d.data.label.length * 6.9)
+    nodeEnter.append('text').style('fill', d => type[d.data.layer]).style('stroke', d => type[d.data.layer]).style('stroke-width', '0.6').style('font-size', '11px').attr('dy', 2)
+      .attr('dx', d => d.data.label.length > 50 ? 320 : 45 + d.data.label.length * 6.9)
       .text(d => d.data.layer);
     nodeEnter.append('text').attr('dy', 20).attr('dx', 30).style('fill', '#acacac').style('font-size', '11px')
       .text(d => `${d.data.applicationCode? d.data.applicationCode : ''} ${d.data.component? `> ${d.data.component}` : ''}`);

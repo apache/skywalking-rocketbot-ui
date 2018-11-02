@@ -4,7 +4,7 @@
     <div>
       <span class="r sm">{{i.value}} ms</span>
       <div class="mb5 cp link-hover" @click="changeService(i)" >
-        <Tooltip :content="i.service.label" placement="top" class="ell" style="max-width: 160px;">
+        <Tooltip :content="i.service.label" max-width="200"  placement="top" class="ell" style="max-width: 200px;">
           <span>{{i.service.label}}</span>
         </Tooltip>
       </div>
