@@ -18,7 +18,7 @@ It‘s UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking
 
 ![](document/assets/demo3.png)
 
-**[Demo](http://rocketbot.daocloud.io/)**
+**[Demo](http://106.75.216.40:8080/)**
 
 **[Docs](https://github.com/TinyAllen/rocketbot/blob/master/Document.md
 )**
