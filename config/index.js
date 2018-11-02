@@ -11,6 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+      "/api/login":{
+        // target: "http://192.168.2.96:12800/",
+        target: "http://106.75.237.45:8080/",
+        changeOrigin: true,
+      },
       "/api":{
         // target: "http://192.168.2.96:12800/",
         target: "http://106.75.237.45:12800/",

@@ -18,7 +18,13 @@
         </div>
         <RkToolTime :show.sync="show" :propsTime="time"/>
       </div>
-      <div class="rk-nav-auto cp flex-c" @click="reload"><Icon type="md-refresh" class="mr5"/>reload</div>
+      <div class="rk-nav-auto cp flex-c mr10" @click="reload"><Icon type="md-refresh" class="mr5"/>reload</div>
+      <Dropdown trigger="click" placement="bottom-end">
+        <div class="rk-nav-logout cp"><Icon type="md-power" /></div>
+        <DropdownMenu slot="list">
+          <li class="ivu-dropdown-item" @click="logout">Logout</li>
+        </DropdownMenu>
+      </Dropdown>
     </div>
   </header>
 </template>
@@ -34,6 +40,10 @@ import RkToolTime from '@/components/rk-tool-time.vue';
 export default class Header extends Vue {
   show = false;
   @Prop() time: any;
+  logout() {
+    window.localStorage.setItem('skywalking-authority', 'guest');
+    this.$router.push('/login');
+  }
   reload() {
     const gap = this.time.end.getTime() - this.time.start.getTime();
     const newEnd = new Date();
@@ -88,5 +98,15 @@ export default class Header extends Vue {
   padding: 1px 6px;
   background-color: rgba(255,255,255,.07);
   box-shadow: 0 3px 6px 0 rgba(0,0,0,.1), 0 1px 3px 0 rgba(0,0,0,.08);
+}
+.rk-nav-logout{
+  border-radius: 50%;
+  padding:2px 5px;
+  background-color: rgba(255,255,255,.07);
+  box-shadow: 0 3px 6px 0 rgba(0,0,0,.1), 0 1px 3px 0 rgba(0,0,0,.08);
+  transition: color .3s;
+  &:hover{
+    color:rgb(226, 64, 36);
+  }
 }
 </style>
