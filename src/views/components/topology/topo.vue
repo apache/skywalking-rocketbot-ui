@@ -327,7 +327,7 @@ export default {
         // 提升节点层级 
       nodeCircle.sort((a, b) => a.id === currNode.id ? 1 : -1);
       nodeCircle
-          .style('opacity', .1)
+          .style('opacity', .2)
           .filter(node => this.isLinkNode(currNode, node))
           .style('opacity', 1);
     } else {
