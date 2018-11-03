@@ -74,7 +74,7 @@ export default class Topology extends Vue {
 
 <style lang="scss">
 .topology{
-  background-color: #2e303a;
+  background-color: rgb(37, 42, 47);
   position: relative;
 }
 .topology > svg {

@@ -15,7 +15,9 @@
     </div>
   </div>
   <div class="rk-login-r">
+    <div class="rk-img-wrapper">
     <img src="../../assets/img/logo.svg" class="rocket">
+    </div>
   </div>
 </div>
 </template>
@@ -57,6 +59,13 @@ export default class Login extends Vue {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
   }
 }
+.rk-img-wrapper{
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/img/login-bg.svg');
+  animation: spin 60s linear infinite;
+  background-size: 100%;
+}
 .rk-login-link{
   color: #252a2f;
   &:hover{
@@ -83,7 +92,7 @@ export default class Login extends Vue {
   position: absolute;
   width: 180px;
   height: 180px;
-  top: 45%;
+  top: 50%;
   left: 50%;
   margin-top: -90px;
   margin-left: -90px;
@@ -106,9 +115,16 @@ export default class Login extends Vue {
   height: 100%;
   width: 100%;
   background-color: #252a2f;
-  background-image: url('../../assets/img/login-bg.svg');
-  background-size: 100%;
+  overflow: hidden;
 }
+            @keyframes spin {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(360deg);
+                }
+            }
 .rk-login-btn{
   background-color: #0580ff;
   color:#fff;

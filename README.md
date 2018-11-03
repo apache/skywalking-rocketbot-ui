@@ -2,7 +2,7 @@
 <h1 align="center"></h1>
 
 <p align="center">
-<a><img src="https://img.shields.io/badge/version-0.9.0-blue.svg?longCache=true&style=popout-square"></a>
+<a><img src="https://img.shields.io/badge/version-1.0.0-blue.svg?longCache=true&style=popout-square"></a>
 <a href="https://github.com/TinyAllen/rocketbot/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?longCache=true&style=popout-square"></a>
 <a href="https://github.com/TinyAllen/rocketbot/blob/master/LICENSE"><img src="https://img.shields.io/badge/support by-Daocloud Lab-brightgreen.svg?longCache=true&style=popout-square"></a>
 <a><img src="https://img.shields.io/badge/base-Skywalking-red.svg?longCache=true&style=popout-square"></a>
@@ -87,7 +87,7 @@ docker build -t rocketbot .
 ### Running the docker image
 
 ```
-docker run -p 8080:80 -d -e SKYWALKING_URL=127.0.0.1:1234,127.0.0.1:1235 rocketbot
+docker run -p 8080:80 -d -e SKYWALKING_URL=127.0.0.1:1234,127.0.0.1:1235 SKYWALKING_COMMON=127.0.0.1:8080,127.0.0.1:80801 rocketbot
 ```
 
 `SKYWALKING_URL` is the address of your backend, multiple IP is changed by comma.

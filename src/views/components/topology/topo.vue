@@ -114,6 +114,7 @@ export default {
       DUBBO_PROVIDER: require('./assets/DUBBO_PROVIDER.png'),
       DUBBO_PROVIDER_GROUP: require('./assets/DUBBO_PROVIDER_GROUP.png'),
       ServiceComb: require('./assets/ORACLE_GROUP.png'),
+      ORACLE: require('./assets/ORACLE.png'),
       NG: require('./assets/ng.png'),
       NBASE: require('./assets/NBASE.png'),
       NBASE_T: require('./assets/NBASE_T.png'),
@@ -226,7 +227,7 @@ export default {
         .attr('height', 20)
         .attr('x', -10)
         .attr('y', -10)
-        .attr('fill', '#2e303a');
+        .attr('fill', '#252a2f');
       this.linkText
         .append('text')
         .attr('font-size', 10)
