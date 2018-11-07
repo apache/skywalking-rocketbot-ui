@@ -1,5 +1,5 @@
 <template>
-  <rk-panel title="Service Response Time">
+  <rk-panel title="Endpoint Response Time">
     <RkEcharts height="200px" :option="responseConfig"/>
   </rk-panel>
 </template>
@@ -10,9 +10,11 @@ import { State, Getter } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
 
 @Component({})
-export default class ResponseServer extends Vue {
-  @State('dashboard') stateDashboard;
-  @Getter('durationTime') durationTime;
+export default class Response extends Vue {
+  @State('dashboard')
+  stateDashboard;
+  @Getter('durationTime')
+  durationTime;
   get responseConfig() {
     return {
       color: [
@@ -66,18 +68,20 @@ export default class ResponseServer extends Vue {
       },
       series: [
         {
-          data: this.stateDashboard.serverResponseTime.map((i, index) => [this.durationTime[index], i]),
+          data: this.stateDashboard.responseTime.map((i, index) => [this.durationTime[index], i]),
           name: 'avg',
           type: 'line',
           symbol: 'none',
-          // smooth: 'true',
+          // lineStyle: {
+          //   type: 'dotted',
+          // },
         },
         {
-          data: this.stateDashboard.p.p50.map((i, index) => [
+          data: this.stateDashboard.endpointP.p50.map((i, index) => [
             this.durationTime[index],
             i,
           ]),
-          name: this.stateDashboard.p.p50.length ? 'p50' : null,
+          name: this.stateDashboard.endpointP.p50.length ? 'p50' : null,
           type: 'line',
           symbol: 'none',
           lineStyle: {
@@ -85,11 +89,11 @@ export default class ResponseServer extends Vue {
           },
         },
         {
-          data: this.stateDashboard.p.p75.map((i, index) => [
+          data: this.stateDashboard.endpointP.p75.map((i, index) => [
             this.durationTime[index],
             i,
           ]),
-          name: this.stateDashboard.p.p75.length ? 'p75' : null,
+          name: this.stateDashboard.endpointP.p75.length ? 'p75' : null,
           type: 'line',
           symbol: 'none',
           lineStyle: {
@@ -97,11 +101,11 @@ export default class ResponseServer extends Vue {
           },
         },
         {
-          data: this.stateDashboard.p.p90.map((i, index) => [
+          data: this.stateDashboard.endpointP.p90.map((i, index) => [
             this.durationTime[index],
             i,
           ]),
-          name: this.stateDashboard.p.p90.length ? 'p90' : null,
+          name: this.stateDashboard.endpointP.p90.length ? 'p90' : null,
           type: 'line',
           symbol: 'none',
           lineStyle: {
@@ -109,11 +113,11 @@ export default class ResponseServer extends Vue {
           },
         },
         {
-          data: this.stateDashboard.p.p95.map((i, index) => [
+          data: this.stateDashboard.endpointP.p95.map((i, index) => [
             this.durationTime[index],
             i,
           ]),
-          name: this.stateDashboard.p.p95.length ? 'p95' : null,
+          name: this.stateDashboard.endpointP.p95.length ? 'p95' : null,
           type: 'line',
           symbol: 'none',
           lineStyle: {
@@ -121,11 +125,11 @@ export default class ResponseServer extends Vue {
           },
         },
         {
-          data: this.stateDashboard.p.p99.map((i, index) => [
+          data: this.stateDashboard.endpointP.p99.map((i, index) => [
             this.durationTime[index],
             i,
           ]),
-          name: this.stateDashboard.p.p99.length ? 'p99' : null,
+          name: this.stateDashboard.endpointP.p99.length ? 'p99' : null,
           type: 'line',
           symbol: 'none',
           lineStyle: {

@@ -2,7 +2,7 @@
 <h1 align="center"></h1>
 
 <p align="center">
-<a><img src="https://img.shields.io/badge/version-1.0.0-blue.svg?longCache=true&style=popout-square"></a>
+<a><img src="https://img.shields.io/badge/version-1.0.1-blue.svg?longCache=true&style=popout-square"></a>
 <a href="https://github.com/TinyAllen/rocketbot/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?longCache=true&style=popout-square"></a>
 <a href="https://github.com/TinyAllen/rocketbot/blob/master/LICENSE"><img src="https://img.shields.io/badge/support by-Daocloud Lab-brightgreen.svg?longCache=true&style=popout-square"></a>
 <a><img src="https://img.shields.io/badge/base-Skywalking-red.svg?longCache=true&style=popout-square"></a>
@@ -13,10 +13,13 @@
 
 ## Screenshots
 **Dashboard**
+
 ![](document/assets/demo1.png)
 **Topology**
+
 ![](document/assets/demo2.png)
 **Trace**
+
 ![](document/assets/demo3.png)
 
 ## Live Demo

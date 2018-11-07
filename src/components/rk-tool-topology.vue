@@ -3,7 +3,7 @@
     <Icon class="r cp" type="md-close" @click="$emit('update:show', false);"/>
     <div class="flex">
       <div class="mr15 long">
-        <h6 class="mt0 mb10" style="margin-left: 7px;">Application</h6>
+        <h6 class="mt0 mb10" style="margin-left: 7px;">Service</h6>
         <select :value="stateTopo.current" style="background: 0;border: 0;color: #efefef;outline: none;width: 100%;" @change="appChange($event)">
           <option  style="background-color: #25292f;" :value="{ key: 'default',label: 'default' }">All</option>
           <option v-for="i in stateOptions.applications" :key="i.key" :value="i" >{{i.label}}</option>

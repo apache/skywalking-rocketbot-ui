@@ -15,6 +15,7 @@
     </div>
   </div>
   <div class="rk-login-r">
+    <!-- <iframe src="http://graphql.cn/" frameborder="0" style="width:100%;height:100%;overflow:hidden"></iframe> -->
     <div class="rk-img-wrapper">
     <img src="../../assets/img/logo.svg" class="rocket">
     </div>
@@ -24,8 +25,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { login } from '@/api/index.ts';
+import { login } from '@/api/login.ts';
+import dateCook from '@/utils/dateCook.ts';
 import { Component } from 'vue-property-decorator';
+import Axios from 'axios';
 
 interface Account{
   userName: String;
@@ -39,14 +42,40 @@ export default class Login extends Vue {
     password: '',
   };
   error = false;
+  getCheckGq(duration) {
+    this.error = this.error;
+    return {
+      variables: {
+        duration,
+      },
+      query:
+      `query ServiceOption($duration: Duration!) {
+        applications: getAllServices(duration: $duration) {
+          key: id
+          label: name
+        }
+      }`,
+    };
+  }
   login() {
-    login(this.accountInfo).then((res) => {
-      window.localStorage.setItem('skywalking-authority', res.data.currentAuthority);
-      if (res.data.status === 'error') {
-        this.error = true;
-        return;
+    Axios.post('/api/check', this.getCheckGq(dateCook({
+      start: new Date(new Date().getTime() - (15 * 60 * 1000)),
+      end: new Date(),
+      step: 'MINUTE',
+    }))).then((check) => {
+      if (check.data.data) {
+        window.localStorage.setItem('version', '6');
+      } else {
+        window.localStorage.setItem('version', '5');
       }
-      this.$router.push('/');
+      login(this.accountInfo).then((res) => {
+        window.localStorage.setItem('skywalking-authority', res.data.currentAuthority);
+        if (res.data.status === 'error') {
+          this.error = true;
+          return;
+        }
+        this.$router.push('/');
+      });
     });
   }
 }
@@ -90,12 +119,12 @@ export default class Login extends Vue {
 }
 .rocket{
   position: absolute;
-  width: 180px;
-  height: 180px;
+  width: 140px;
+  height: 140px;
   top: 50%;
   left: 50%;
-  margin-top: -90px;
-  margin-left: -90px;
+  margin-top: -70px;
+  margin-left: -70px;
 }
 .rk-login-form{
   max-width: 360px;

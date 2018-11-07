@@ -55,7 +55,7 @@ const mutations = {
 const actions: ActionTree<State, any> = {
   GET_TRACES(
     context: { commit: Commit; state: State; rootState: any },
-    params: String,
+    params: any,
   ) {
     return getTraces(params).then((res) => {
       context.commit(types.SET_TRACE, res.data.data.queryBasicTraces.traces);

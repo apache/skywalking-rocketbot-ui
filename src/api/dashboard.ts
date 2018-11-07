@@ -4,6 +4,25 @@ import { Duration } from '@/store/interfaces/options';
 import dateCook from '@/utils/dateCook';
 
 const tag = '/api';
+// 获取服务器信息
+const searchAppGq = (endpointId:String) => (
+{
+  variables: {
+    endpointId,
+  },
+  query: `query Info($endpointId: ID!) {
+    endpointInfo: getEndpointInfo(endpointId: $endpointId) {
+      key: id
+      label: name
+      serviceId
+      serviceName
+    }
+  }`,
+});
+export const searchApp = (
+    endpointId: String,
+  ): AxiosPromise<any> =>
+    axios.post(`${tag}/searchApp`, searchAppGq(endpointId));
 
 // 获取服务器详细信息
 const getServerDetailGq = (duration: Duration, serverId:String) => (
@@ -12,7 +31,83 @@ const getServerDetailGq = (duration: Duration, serverId:String) => (
     duration,
     serverId,
   },
-  query:`query Application($serverId: ID!, $duration: Duration!) {
+  query: window.localStorage.getItem('version') === '6' ?
+  `query ServiceInstance($serverId: ID!, $duration: Duration!) {
+    cpu: getLinearIntValues(metric: {
+      name: "instance_jvm_cpu"
+      id: $serverId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    youngGCCount: getLinearIntValues(metric: {
+      name: "instance_jvm_young_gc_count"
+      id: $serverId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    oldGCCount: getLinearIntValues(metric: {
+      name: "instance_jvm_old_gc_count"
+      id: $serverId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    youngGCTime: getLinearIntValues(metric: {
+      name: "instance_jvm_young_gc_time"
+      id: $serverId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    oldGCTime: getLinearIntValues(metric: {
+      name: "instance_jvm_old_gc_time"
+      id: $serverId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    heap: getLinearIntValues(metric: {
+      name: "instance_jvm_memory_heap"
+      id: $serverId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    maxHeap: getLinearIntValues(metric: {
+      name: "instance_jvm_memory_heap_max"
+      id: $serverId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    noheap: getLinearIntValues(metric: {
+      name: "instance_jvm_memory_noheap"
+      id: $serverId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    maxNoheap: getLinearIntValues(metric: {
+      name: "instance_jvm_memory_noheap_max"
+      id: $serverId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+  }`
+  :
+  `query Application($serverId: ID!, $duration: Duration!) {
     cpu:getCPUTrend(serverId: $serverId, duration: $duration) {
       cost
     }
@@ -43,12 +138,32 @@ const getServerInfoGq = (duration: Duration, serverId:String) => (
     duration,
     serverId,
   },
-  query:`query Application($serverId: ID!, $duration: Duration!) {
+  query: window.localStorage.getItem('version') === '6' ?
+  `query ServiceInstance($serverId: ID!, $duration: Duration!) {
+    serverResponseTime: getLinearIntValues(metric: {
+      name: "service_instance_resp_time"
+      id: $serverId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    serverThroughput: getLinearIntValues(metric: {
+      name: "service_instance_cpm"
+      id: $serverId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+  }`
+  :
+  `query Application($serverId: ID!, $duration: Duration!) {
     serverResponseTime:getServerResponseTimeTrend(serverId: $serverId, duration: $duration) {
-      trendList
+      values: trendList
     }
     serverThroughput:getServerThroughputTrend(serverId: $serverId, duration: $duration) {
-      trendList
+      values: trendList
     }
   }`,
 });
@@ -64,7 +179,66 @@ const getApplicationInfoGq = (duration: Duration) => (
   variables: {
     duration,
   },
-  query: `query Dashboard($duration: Duration!) {
+  query: window.localStorage.getItem('version') === '6' ?
+  `query Dashboard($duration: Duration!) {
+    slowService: getAllEndpointTopN(
+      duration: $duration,
+      name: "endpoint_avg",
+      topN: 10,
+      order: DES
+    ) {
+      key: id
+      label: name
+      value
+    }
+    applicationThroughput: getServiceTopN(
+      duration: $duration,
+      name: "service_cpm",
+      topN: 10,
+      order: DES
+    ) {
+      key: id
+      label: name
+      value
+    }
+    getP99: getLinearIntValues(metric: {
+      name: "all_p99"
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP95: getLinearIntValues(metric: {
+      name: "all_p95"
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP90: getLinearIntValues(metric: {
+      name: "all_p90"
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP75: getLinearIntValues(metric: {
+      name: "all_p75"
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP50: getLinearIntValues(metric: {
+      name: "all_p50"
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+  }`
+  :
+  `query Dashboard($duration: Duration!) {
     slowService: getTopNSlowService(duration: $duration, topN: 10) {
       service {
         key: id
@@ -87,30 +261,117 @@ export const getApplicationInfo = (
   axios.post(`${tag}/applicationinfo`, getApplicationInfoGq(dateCook(duration)));
 
 // 获取服务下信息
-const getServiceInfoGq = (duration: Duration, applicationId: String, service: Option) => (
+const getEndpointInfoGq = (duration: Duration, applicationId: String, endpoint: Option) => (
 {
   variables: {
-    serviceId: service ? service.key : '',
+    serviceId: endpoint ? endpoint.key : '',
     duration,
     traceCondition: {
       applicationId,
-      operationName: service ? service.label : '',
+      operationName: endpoint ? endpoint.label : '',
       queryDuration: duration,
       traceState: 'ALL',
       queryOrder: 'BY_DURATION',
-      paging: { pageNum:1, pageSize:5, needTotal: false },
+      paging: { pageNum:1, pageSize:10, needTotal: false },
+    },
+    traceConditionNew:  {
+      endpointId:  endpoint ? endpoint.key : '',
+      endpointName: endpoint ? endpoint.label : '',
+      paging: { pageNum: 1, pageSize: 10, needTotal: false },
+      queryDuration: duration,
+      queryOrder: 'BY_DURATION',
+      traceState: 'ALL',
     },
   },
-  query: `query Service(
+  query: window.localStorage.getItem('version') === '6' ?
+  `query Endpoint($serviceId: ID!, $duration: Duration!, $traceConditionNew: TraceQueryCondition!) {
+    responseTime: getLinearIntValues(metric: {
+      name: "endpoint_avg"
+      id: $serviceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    throughput: getLinearIntValues(metric: {
+      name: "endpoint_cpm"
+      id: $serviceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    sla: getLinearIntValues(metric: {
+      name: "endpoint_sla"
+      id: $serviceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    slowTrace:queryBasicTraces(condition: $traceConditionNew) {
+      traces {
+        key: segmentId
+        operationNames: endpointNames
+        duration
+        start
+        isError
+        traceIds
+      }
+      total
+    }
+    getP99: getLinearIntValues(metric: {
+      name: "endpoint_p99"
+      id: $serviceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP95: getLinearIntValues(metric: {
+      name: "endpoint_p95"
+      id: $serviceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP90: getLinearIntValues(metric: {
+      name: "endpoint_p90"
+      id: $serviceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP75: getLinearIntValues(metric: {
+      name: "endpoint_p75"
+      id: $serviceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP50: getLinearIntValues(metric: {
+      name: "endpoint_p50"
+      id: $serviceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+  }`
+  :
+  `query Service(
     $serviceId: ID!, $duration: Duration!, $traceCondition: TraceQueryCondition!) {
     responseTime:getServiceResponseTimeTrend(serviceId: $serviceId, duration: $duration) {
-      trendList
+      values: trendList
     }
     throughput:getServiceThroughputTrend(serviceId: $serviceId, duration: $duration) {
-      trendList
+      values: trendList
     }
     sla:getServiceSLATrend(serviceId: $serviceId, duration: $duration) {
-      trendList
+      values: trendList
     }
     slowTrace:queryBasicTraces(condition: $traceCondition) {
       traces {
@@ -123,31 +384,11 @@ const getServiceInfoGq = (duration: Duration, applicationId: String, service: Op
       }
       total
     }
-    getServiceTopology(serviceId: $serviceId, duration: $duration) {
-      nodes {
-        id
-        name
-        type
-        ... on ServiceNode {
-          sla
-          calls
-          numOfServiceAlarm
-        }
-      }
-      calls {
-        source
-        target
-        isAlert
-        callType
-        cpm
-        avgResponseTime
-      }
-    }
   }`,
 });
-export const getServiceInfo = (
+export const getEndpointInfo = (
   duration: Duration,
   applicationId: String,
-  service: Option,
+  endpoint: Option,
 ): AxiosPromise<any> =>
-  axios.post(`${tag}/serviceinfo`, getServiceInfoGq(dateCook(duration), applicationId, service));
+  axios.post(`${tag}/endpointinfo`, getEndpointInfoGq(dateCook(duration), applicationId, endpoint));

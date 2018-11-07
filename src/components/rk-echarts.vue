@@ -10,6 +10,7 @@ import { Action } from 'vuex-class';
 @Component({})
 export default class RkEcharts extends Vue {
   @Prop() option: Object;
+  @Prop({ type: Boolean, default: false }) uncombine: Boolean;
   @Prop({ type: String, default: '400px' }) height: String;
   @Prop({ type: String, default: '100%' }) width: String;
   @Action('SET_CHARTS') SET_CHARTS;
@@ -18,7 +19,9 @@ export default class RkEcharts extends Vue {
   mounted(): void {
     this.drawEcharts();
     window.addEventListener('resize', this.myChart.resize);
-    this.SET_CHARTS(this.myChart);
+    if (!this.uncombine) {
+      this.SET_CHARTS(this.myChart);
+    }
   }
   beforeDestroy(): void {
     window.removeEventListener('resize', this.myChart.resize);
