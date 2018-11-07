@@ -9,57 +9,70 @@ const getAppsGq = (duration: Duration) => (
   variables: {
     duration,
   },
-  query:
-  `
-  query applications($duration: Duration!) {
-    applications: getAllApplication(duration: $duration) {
+  query: window.localStorage.getItem('version') === '6' ?
+  `query ServiceOption($duration: Duration!) {
+    applications: getAllServices(duration: $duration) {
       key: id
       label: name
     }
-  }
-  `,
-});
-export const getApps = (params: Duration): AxiosPromise<any> => {
-  return axios.post(`${tag}/applications`, getAppsGq(dateCook(params)));
-};
-
-// 获取服务
-const getServicesGq = (applicationId: String) => (
-{
-  variables:{
-    applicationId,
-    keyword: '',
-  },
-  query:`query SearchService($applicationId: ID!, $keyword: String!) {
-    services: searchService(applicationId: $applicationId, keyword: $keyword, topN: 10) {
+  }`
+  :
+  `query applications($duration: Duration!) {
+    applications: getAllApplication(duration: $duration) {
       key: id
       label: name
     }
   }`,
 });
-export const getServices = params => axios.post(`${tag}/services`, getServicesGq(params));
 
-// 获取应用下信息
+export const getApps = (params: Duration): AxiosPromise<any> => {
+  return axios.post(`${tag}/applications`, getAppsGq(dateCook(params)));
+};
+// 获取端点
+const getEndpointsGq = (applicationId: String) => (
+{
+  variables:{
+    applicationId,
+    keyword: '',
+  },
+  query: window.localStorage.getItem('version') === '6' ?
+  `query SearchEndpoint($applicationId: ID!, $keyword: String!) {
+    endpoints: searchEndpoint(serviceId: $applicationId, keyword: $keyword, limit: 10) {
+      key: id
+      label: name
+    }
+  }`
+  :
+  `query SearchService($applicationId: ID!, $keyword: String!) {
+    endpoints: searchService(applicationId: $applicationId, keyword: $keyword, topN: 10) {
+      key: id
+      label: name
+    }
+  }`,
+});
+export const getEndpoints = params => axios.post(`${tag}/endpoints`, getEndpointsGq(params));
+
+// 获取服务器
 const getServersGq = (duration: Duration, applicationId: String) => (
 {
   variables: {
     duration,
     applicationId,
   },
-  query:`query Application($applicationId: ID!, $duration: Duration!) {
-    slowService: getSlowService(
-      applicationId: $applicationId,
-      duration: $duration,
-      topN: 10) {
-      service {
-        key: id
-        label: name
-        applicationId
-        applicationName
+  query: window.localStorage.getItem('version') === '6' ?
+  `query Service($applicationId: ID!, $duration: Duration!) {
+    servers:  getServiceInstances(duration: $duration, serviceId: $applicationId) {
+      key: id
+      name
+      attributes {
+        name
+        value
       }
-      value: avgResponseTime
     }
-    server: getServerThroughput(
+  }`
+  :
+  `query Application($applicationId: ID!, $duration: Duration!) {
+    servers: getServerThroughput(
       applicationId: $applicationId,
       duration: $duration,
       topN: 999999) {
@@ -69,33 +82,6 @@ const getServersGq = (duration: Duration, applicationId: String) => (
       pid
       ipv4
       value: cpm
-    }
-    applicationTopology: getApplicationTopology(
-      applicationId: $applicationId,
-      duration: $duration) {
-      nodes {
-        id
-        name
-        type
-        ... on ApplicationNode {
-          sla
-          cpm
-          avgResponseTime
-          apdex
-          isAlarm
-          numOfServer
-          numOfServerAlarm
-          numOfServiceAlarm
-        }
-      }
-      calls {
-        source
-        target
-        isAlert
-        callType
-        cpm
-        avgResponseTime
-      }
     }
   }`,
 });

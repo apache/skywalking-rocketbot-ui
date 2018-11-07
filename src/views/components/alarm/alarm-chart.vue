@@ -1,7 +1,7 @@
 <template>
-  <rk-panel title="SLA">
-    <RkEcharts height="200px" :option="slaConfig"/>
-  </rk-panel>
+<div class="rk-alarm-search-box container">
+  <RkEcharts height="60px" :option="slaConfig"/>
+</div>
 </template>
 
 <script lang="ts">
@@ -13,9 +13,6 @@ import { Component } from 'vue-property-decorator';
 export default class Sla extends Vue {
   @State('dashboard') stateDashboard;
   @Getter('durationTime') durationTime;
-  get sla() {
-    return this.stateDashboard.sla.map(i => (10000 - i) / 100);
-  }
   get slaConfig() {
     return {
       color: ['#75a8ff'],
@@ -31,29 +28,26 @@ export default class Sla extends Vue {
         top: 15,
         left: 0,
         right: 18,
-        bottom: 20,
+        bottom: 10,
         containLabel: true,
       },
       xAxis: {
         type: 'time',
-        axisTick: {
-          lineStyle: { color: 'rgba(0,0,0,.1)' },
-          alignWithLabel: true,
-        },
+        axisTick: { show: false },
         splitLine: { show: false },
-        axisLine: { lineStyle: { color: 'rgba(0,0,0,.1)' } },
-        axisLabel: { color: '#333', fontSize: '11' },
+        axisLine: { lineStyle: { color: 'rgba(255,255,255,.1)' } },
+        axisLabel: { show: false },
       },
       yAxis: {
         type: 'value',
         axisLine: { show: false },
         axisTick: { show: false },
-        splitLine: { lineStyle: { color: 'rgba(0,0,0,.1)' } },
-        axisLabel: { color: '#333', fontSize: '11' },
+        splitLine: { show: false },
+        axisLabel: { show: false },
       },
       series: [
         {
-          data: this.sla.map((i, index) => [this.durationTime[index], 100 - i]),
+          data: [1, 2, 3, 4, 1, 1, 2,1, 2, 3, 4, 1, 1, 2,1, 2, 3, 4, 1, 1, 2,1, 2, 3, 4, 1, 1, 2,1, 2, 3, 4, 1, 1, 2].map((i, index) => [this.durationTime[index], 100 - i]),
           type: 'bar',
           itemStyle: {
             normal: {
@@ -66,3 +60,11 @@ export default class Sla extends Vue {
   }
 }
 </script>
+<style lang="scss">
+.rk-alarm-search-box{
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: #333840;
+}
+</style>
+

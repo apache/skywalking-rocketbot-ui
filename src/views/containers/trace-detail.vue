@@ -17,7 +17,7 @@
     <div slot="inner" class="micro-panel-inner">
       <div class="rk-trace-detail">
         <h4 class="mb10">Tags.</h4>
-        <div class="mb15"><span class="mr10">Label:</span><span>{{this.currentSpan.label}}</span></div>
+        <div class="mb15"><span class="mr10">Endpoint:</span><span>{{this.currentSpan.label}}</span></div>
         <div class="half mb15"><span class="two-fifth">Span Type:</span><span class="three-fifth">{{this.currentSpan.type}}</span></div>
         <div class="half mb15"><span class="two-fifth">Component:</span><span class="three-fifth">{{this.currentSpan.component}}</span></div>
         <div class="half mb15"><span class="two-fifth">Peer:</span><span class="three-fifth">{{this.currentSpan.peer||'No Peer'}}</span></div>
@@ -90,7 +90,7 @@ export default class Trace extends Vue {
     padding: 15px 30px;
     display: flex;
     align-items: center;
-    background-color: #2f333c;
+    background-color: #333840;
     color: #fff;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     .rk-trace-input{

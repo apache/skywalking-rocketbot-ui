@@ -288,7 +288,7 @@ body {
     'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
   font-size: 13px;
   line-height: 1.5;
-  color: #515a6e;
+  color: #313a4e;
   background-color: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -4574,6 +4574,19 @@ samp {
   cursor: pointer;
   -webkit-transition: background 0.2s ease-in-out;
   transition: background 0.2s ease-in-out;
+}
+.ivu-select-dropdown{
+width: inherit;
+max-height: 200px;
+overflow: auto;
+margin: 5px 0;
+padding: 5px 0;
+background-color: #fff;
+box-sizing: border-box;
+border-radius: 4px;
+box-shadow: 0 1px 6px rgba(0,0,0,.2);
+position: absolute;
+z-index: 900;
 }
 .ivu-dropdown-item:hover {
   background: #f3f3f3;

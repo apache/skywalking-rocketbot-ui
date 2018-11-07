@@ -2,32 +2,43 @@
 <h1 align="center"></h1>
 
 <p align="center">
-<a><img src="https://img.shields.io/badge/version-0.9.0-blue.svg?longCache=true&style=popout-square"></a>
+<a><img src="https://img.shields.io/badge/version-1.0.1-blue.svg?longCache=true&style=popout-square"></a>
 <a href="https://github.com/TinyAllen/rocketbot/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?longCache=true&style=popout-square"></a>
 <a href="https://github.com/TinyAllen/rocketbot/blob/master/LICENSE"><img src="https://img.shields.io/badge/support by-Daocloud Lab-brightgreen.svg?longCache=true&style=popout-square"></a>
 <a><img src="https://img.shields.io/badge/base-Skywalking-red.svg?longCache=true&style=popout-square"></a>
 </p>
 
 ## Introduction
-RocketBot is an MIT-licensed open source project. 
-It‘s UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking). This project is supported By [DaoCloud Labs](https://github.com/DaoCloud-Labs).
+**RocketBot**: A modern and awesome UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking). This project is supported By [DaoCloud Labs](https://github.com/DaoCloud-Labs).
+
+## Screenshots
+**Dashboard**
 
 ![](document/assets/demo1.png)
+**Topology**
 
 ![](document/assets/demo2.png)
+**Trace**
 
 ![](document/assets/demo3.png)
 
-**[Demo](http://106.75.216.40:8080/)**
+## Live Demo
+**[Demo](http://rocketbot.daocloud.io/)**
 
-**[Docs](https://github.com/TinyAllen/rocketbot/blob/master/Document.md
+| Username        | Password           | 
+| ------------- |:-------------:| 
+| admin     | admin | 
+
+## Document
+
+Please read **[Docs](https://github.com/TinyAllen/rocketbot/blob/master/Document.md
 )**
 
 ## Development
 
  The app was built with [vue + typescript](https://github.com/vuejs/vue).
 
-### Getting codes
+### Prepare
 
 Fork, then clone the `rocketbot` repo and change directory into it.
 
@@ -42,10 +53,9 @@ Install dependencies via `npm`:
 npm install
 ```
 
-### Running the application
+### Run
 
-
-The default collector query address is `http://localhost:8080`.
+The default collector query endpoint is `http://localhost:8080`.
 
 #### Commands
 
@@ -70,26 +80,23 @@ npm run build
 [gitter-img]: https://badges.gitter.im/openskywalking/Lobby.svg
 [gitter]: https://gitter.im/openskywalking/Lobby
 
-## Docker Image Build
-
+## Docker Build
 
 ```
 npm install
-
 npm run build
-
 docker build -t rocketbot .
 ```
 ### Running the docker image
 
 ```
-docker run -p 8080:80 -d -e SKYWALKING_URL=127.0.0.1:1234,127.0.0.1:1235 rocketbot
+docker run -p 8080:80 -d -e SKYWALKING_URL=127.0.0.1:1234,127.0.0.1:1235 SKYWALKING_COMMON=127.0.0.1:8080,127.0.0.1:80801 rocketbot
 ```
 
 `SKYWALKING_URL` is the address of your backend, multiple IP is changed by comma.
 
 
-The default frontend address is `http://localhost:8080`.
+The default UI address is `http://localhost:8080`.
 
 ## Nginx config
 
@@ -106,15 +113,12 @@ The default frontend address is `http://localhost:8080`.
 
 ## Contributing to RocketBot
 
-Firstly, thanks for your interest in contributing! I hope that this will be a
-pleasant first experience for you, and that you will return to continue
-contributing.
+Thanks for your interest and hope it will be a
+pleasant experience.
 
 ### How to contribute?
 
-Most of the contributions that we receive are code contributions, but you can
-also contribute to the documentation or simply report solid bugs
-for us to fix.
+Most of the contributions received are code contributions, and documentation, bugs, requirements are also welcomed.
 
 ### How to report a bug?
 
@@ -130,7 +134,7 @@ Supported by [DaoCloud Labs](https://github.com/DaoCloud-Labs).
 
 ## Contact
 
-#### 微信群 & 作者微信
+#### WeChat
 <p>
   <img width="160" src="https://user-images.githubusercontent.com/19775780/47762068-03e1df00-dcf6-11e8-9315-cc17b28383e7.jpeg"/>
   <img width="160" src="https://user-images.githubusercontent.com/19775780/47297000-814a8700-d646-11e8-8ff6-c2748555ceca.jpeg"/>
@@ -139,12 +143,16 @@ Supported by [DaoCloud Labs](https://github.com/DaoCloud-Labs).
 
 ## License
 
-Copyright © 2018, [Allen Wang](https://github.com/TinyAllen). Released under the [MIT](http://opensource.org/licenses/MIT) License.
+Copyright © 2018, [Allen Wang](https://github.com/TinyAllen). 
+Released under the [MIT](http://opensource.org/licenses/MIT) License.
 
 ## Who Uses Rocketbot?
 按照登记顺序排序，更多接入公司，欢迎在 [https://github.com/TinyAllen/rocketbot/issues/15](https://github.com/TinyAllen/rocketbot/issues/15) 登记（仅供开源用户参考）
 <p>
-<img src="https://daoweb-resource.daocloud.io/logo/daocloud-logo-gray-account.svg" height="40px">
-<img src="http://springcloud.cn/default/img/logo.png" height="40px">
-<img src="https://user-images.githubusercontent.com/19775780/47834441-7c21d080-ddda-11e8-9e3a-67c43ab074bf.png" height="40px"  >
+
+<img src="https://daoweb-resource.daocloud.io/logo/daocloud-logo-gray-account.svg" height="40px">&nbsp;&nbsp;
+<img src="http://springcloud.cn/default/img/logo.png" height="40px">&nbsp;&nbsp;
+<img src="https://user-images.githubusercontent.com/19775780/47834441-7c21d080-ddda-11e8-9e3a-67c43ab074bf.png" height="40px"  >&nbsp;&nbsp;
+<img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=4229681157,1554083661&fm=58&s=51B3A8720790BF80CCC2538703007088&bpow=121&bpoh=75" height="40px">&nbsp;&nbsp;
+
 </p>

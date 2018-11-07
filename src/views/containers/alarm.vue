@@ -1,9 +1,10 @@
 <template>
 <div>
+  <!-- <AlarmChart/> -->
   <alarm-nav>
-    <a class="rk-alarm-nav-i" @click="type='APPLICATION'" :class="{'active':type === 'APPLICATION'}">Application</a>
-    <a class="rk-alarm-nav-i" @click="type='SERVER'" :class="{'active':type === 'SERVER'}">Server</a>
-    <a class="rk-alarm-nav-i" @click="type='SERVICE'" :class="{'active':type === 'SERVICE'}">Service</a>
+    <a class="rk-alarm-nav-i" @click="type='APPLICATION'" :class="{'active':type === 'APPLICATION'}">Service</a>
+    <a class="rk-alarm-nav-i" @click="type='SERVER'" :class="{'active':type === 'SERVER'}">ServiceInstance</a>
+    <a class="rk-alarm-nav-i" @click="type='SERVICE'" :class="{'active':type === 'SERVICE'}">Endpoint</a>
   </alarm-nav>
   <div class="rk-alarm">
     <table class="rk-alarm-table">

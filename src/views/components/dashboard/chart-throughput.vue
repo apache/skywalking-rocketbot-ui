@@ -1,6 +1,6 @@
 <template>
   <rk-panel title="Throughput">
-    <RkEcharts height="220px" :option="throughputConfig"/>
+    <RkEcharts height="200px" :option="throughputConfig"/>
   </rk-panel>
 </template>
 
@@ -16,12 +16,11 @@ export default class Throughput extends Vue {
   @Getter('durationTime') durationTime;
   get throughputConfig() {
     return {
-      color: ['#75a8ff', '#F44336'],
+      color: ['#75a8ff', '#ff6464'],
       tooltip: {
         trigger: 'axis',
       },
       legend: {
-        data: ['server', 'service'],
         icon: 'circle',
         top: 0,
         left: 10,
@@ -30,10 +29,10 @@ export default class Throughput extends Vue {
         itemHeight: 12,
       },
       grid: {
-        top: 50,
+        top: 40,
         left: 0,
         right: 18,
-        bottom: 30,
+        bottom: 20,
         containLabel: true,
       },
       xAxis: {
@@ -56,14 +55,14 @@ export default class Throughput extends Vue {
       series: [
         {
           data: this.stateDashboard.serverThroughput.map((i, index) => [this.durationTime[index], i]),
-          name: 'server',
+          name: 'avg service',
           type: 'line',
           symbol: 'none',
           // smooth: 'true',
         },
         {
           data: this.stateDashboard.throughput.map((i, index) => [this.durationTime[index], i]),
-          name: 'service',
+          name: 'avg endpoint',
           type: 'line',
           symbol: 'none',
           // smooth: 'true',

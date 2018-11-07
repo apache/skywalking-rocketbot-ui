@@ -22,6 +22,7 @@ export default class RkToolbar extends Vue {
   bottom: 30px;
   width: 100%;
   max-width: 900px;
+  z-index: 10;
   transform: translate(-50%, 150%);
   padding: 0 15px;
   will-change: transform;

@@ -21,7 +21,7 @@
             </Tooltip>
           </td>
           <td class="grey" style="min-width:250px">{{parseInt(i.start) | dateformat}}</td>
-          <td><a class="rk-trace-btn" @click="$router.push({ path:'/trace/link', query:{traces:i.traceIds.join('&')}})">link</a></td>
+          <td><a v-if="i.traceIds" class="rk-trace-btn" @click="$router.push({ path:'/trace/link', query:{traces:i.traceIds.join('&')}})">link</a></td>
           <td>{{i.duration}} ms</td>
           <td style="min-width:180px"><rk-progress :precent="i.duration/stateTraceMax*100" class="mr15"/></td>
         </tr>

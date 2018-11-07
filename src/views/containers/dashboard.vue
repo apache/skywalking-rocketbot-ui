@@ -3,23 +3,28 @@
   <RkBoard :stateOptions="stateOptions" @showServer="getServerDetail"/>
   <div class="rk-dashboard">
     <div class="flex">
-      <NumBox class="mr10" title="Avg Throughput" :content="throughput.toFixed(2)" unit="cpm"/>
-      <NumBox class="mr10" title="Avg Response Time" :content="responseTime.toFixed(2)" unit="ms"/>
+      <NumBox class="mr10" title="Endpoint Avg Response Time" :content="responseTime.toFixed(2)" unit="ms"/>
+      <NumBox class="mr10" title="Endpoint Avg Throughput" :content="throughput.toFixed(2)" unit="cpm"/>
       <NumBox title="Avg SLA" :content="(sla/100).toFixed(2)" unit="%"/>
     </div>
     <div class="child-one-third clear">
+      <ChartResponseP class="l mr10"/>
       <ChartThroughput class="l mr10"/>
-      <ChartResponse class="l mr10"/>
       <ChartSla class="l"/>
     </div>
+    <div class="child-one-third clear">
+      <ChartResponse class="l mr10"/>
+      <TopThroughput class="l mr10"/>
+      <SlowService class="l"/>
+    </div>
     <div class="flex">
-      <TopThroughput class="mr10"/><SlowService class="mr10"/><TopSlow/>
+      <TopSlow/>
     </div>
   </div>
-  <rk-sidebox title="Server" :notice="`${stateOptions.currentServer? stateOptions.currentServer.host: ''} ～ ${stateOptions.currentServer? stateOptions.currentServer.pid:''}@${stateOptions.currentServer? stateOptions.currentServer.ipv4[0]: ''}`" :show.sync='show'>
+  <rk-sidebox title="Server" :notice="`${stateOptions.currentServer? stateOptions.currentServer.name: ''}`" :show.sync='show'>
     <div class="flex">
-      <NumBox class="mr10" title="Application Avg Throughput" :content="serverThroughput.toFixed(2)" unit="cpm"/>
-      <NumBox class="mr10" title="Application Avg Response Time" :content="serverResponseTime.toFixed(2)" unit="ms"/>
+      <NumBox class="mr10" title="Service Avg Throughput" :content="serverThroughput.toFixed(2)" unit="cpm"/>
+      <NumBox class="mr10" title="Service Avg Response Time" :content="serverResponseTime.toFixed(2)" unit="ms"/>
     </div>
     <div class="flex">
       <ChartHeap class="mr10"/>
@@ -40,6 +45,7 @@ import { State, Action } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
 import ChartThroughput from '../components/dashboard/chart-throughput.vue';
 import ChartResponse from '../components/dashboard/chart-response.vue';
+import ChartResponseP from '../components/dashboard/chart-response-p.vue';
 import ChartSla from '../components/dashboard/chart-sla.vue';
 import ChartHeap from '../components/dashboard/chart-heap.vue';
 import ChartNonHeap from '../components/dashboard/chart-nonheap.vue';
@@ -55,6 +61,7 @@ import TopSlow from '../components/dashboard/top-slow.vue';
     NumBox,
     ChartThroughput,
     ChartResponse,
+    ChartResponseP,
     ChartSla,
     TopSlow,
     SlowService,
@@ -104,11 +111,11 @@ export default class Dashboard extends Vue {
   }
   getDataReload() {
     this.$store.dispatch('dashboard/GET_APPLICATION_INFO');
-    this.$store.dispatch('options/GET_SERVICES', this.stateOptions.currentApplication.key)
+    this.$store.dispatch('options/GET_ENDPOINTS', this.stateOptions.currentApplication.key)
       .then(() => {
-        this.$store.dispatch('dashboard/GET_SERVICE_INFO', {
+        this.$store.dispatch('dashboard/GET_ENDPOINT_INFO', {
           applicationId: this.stateOptions.currentApplication.key,
-          service: this.stateOptions.currentService,
+          endpoint: this.stateOptions.currentEndpoint,
         });
       });
     this.$store.dispatch('options/GET_SERVERS', this.stateOptions.currentApplication.key)
@@ -128,11 +135,11 @@ export default class Dashboard extends Vue {
         this.$store.commit('options/SET_APPLICATION', this.stateOptions.applications[0]);
       }
       this.$store.dispatch('dashboard/GET_APPLICATION_INFO');
-      this.$store.dispatch('options/GET_SERVICES', this.stateOptions.currentApplication.key)
+      this.$store.dispatch('options/GET_ENDPOINTS', this.stateOptions.currentApplication.key)
         .then(() => {
-          this.$store.dispatch('dashboard/GET_SERVICE_INFO', {
+          this.$store.dispatch('dashboard/GET_ENDPOINT_INFO', {
             applicationId: this.stateOptions.currentApplication.key,
-            service: this.stateOptions.currentService,
+            endpoint: this.stateOptions.currentEndpoint,
           });
         });
       this.$store.dispatch('options/GET_SERVERS', this.stateOptions.currentApplication.key)

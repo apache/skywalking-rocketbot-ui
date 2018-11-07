@@ -114,6 +114,7 @@ export default {
       DUBBO_PROVIDER: require('./assets/DUBBO_PROVIDER.png'),
       DUBBO_PROVIDER_GROUP: require('./assets/DUBBO_PROVIDER_GROUP.png'),
       ServiceComb: require('./assets/ORACLE_GROUP.png'),
+      ORACLE: require('./assets/ORACLE.png'),
       NG: require('./assets/ng.png'),
       NBASE: require('./assets/NBASE.png'),
       NBASE_T: require('./assets/NBASE_T.png'),
@@ -211,7 +212,7 @@ export default {
         .attr('refX', '11')
         .attr('refY', '6')
         .attr('orient', 'auto');
-      const arrow_path = 'M2,2 L10,6 L2,10 L6,6 L2,2';
+      const arrow_path = 'M2,2 L10,6 L2,10 L5,6 L2,2';
       this.glink = this.graph.append('g').selectAll('.link');
       this.link = this.glink.data(this.datas.calls).enter().append('g');
       this.line = this.link.append('path').attr('class', 'link')
@@ -226,7 +227,7 @@ export default {
         .attr('height', 20)
         .attr('x', -10)
         .attr('y', -10)
-        .attr('fill', '#2e303a');
+        .attr('fill', '#31363d');
       this.linkText
         .append('text')
         .attr('font-size', 10)
@@ -234,7 +235,7 @@ export default {
         .attr('text-anchor', 'middle')
         .attr('y', 3)
         .text(d => d.cpm);
-      this.arrowMarker.append('path').attr('d', arrow_path).attr('fill', 'rgb(230, 170, 20)');
+      this.arrowMarker.append('path').attr('d', arrow_path).attr('fill', 'rgba(230, 170, 20,.8)');
       this.gnode = this.graph.append('g').selectAll('.node');
       const that = this;
       this.node = this.gnode.data(this.datas.nodes)
@@ -265,7 +266,16 @@ export default {
         });
       this.node
         .append('rect')
-        .attr('class', d => (d.type === 'out' ? 'out' : 'node'))
+        .attr('class', d => {
+          if(d.sla){
+            if(d.sla < 100) {
+              return 'node-error';
+            } else if (d.sla > 100 && d.sla < 10000) {
+              return 'node-error';
+            }
+          }
+          return 'node';
+        })
         .attr('rx', 17)
         .attr('ry', 17)
         .attr('width', d => d.name.length * 8 + 55)
@@ -286,9 +296,12 @@ export default {
         .attr('y', 21)
         .attr('font-weight', 600)
         .text(d => {
-          if(!d.sla || d.sla === 100) return;
-          const rate = 100 - d.sla;
-          return rate + '%' })
+          if (!d.sla) return;
+          const temp = d.sla > 100 ? d.sla/100 : d.sla;
+          if(temp === 100) return;
+          const rate = 100 - temp;
+          return rate.toFixed(1) + '%' 
+        })
         .attr('fill', 'rgb(240, 84, 20)');
       this.node
         .append('text')
@@ -487,7 +500,13 @@ toggleLineText(lineText, currNode, isHover) {
   }
   .node {
     cursor: move;
-    fill: #3e414b;
+    fill: rgba(75, 78, 85, 0.6);
+  }
+  .node-error {
+    cursor: move;
+    fill: rgba(75, 78, 85, 0.6);
+    stroke-width: 2;
+    stroke: rgba(226, 61, 61, 0.6);
   }
   .node-active {
     .node {

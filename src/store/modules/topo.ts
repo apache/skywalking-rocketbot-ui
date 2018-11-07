@@ -92,6 +92,7 @@ const actions: ActionTree<State, any> = {
     context.commit(types.SET_TOPO_CURRENT, data);
   },
   GET_TOPO(context: { commit: Commit; state: State; rootState: any }) {
+    // getTopo(context.rootState.global.duration);
     return getTopo(context.rootState.global.duration).then((res) => {
       context.commit(types.SET_TOPO, res.data.data.getClusterTopology);
     });
@@ -105,7 +106,7 @@ const actions: ActionTree<State, any> = {
       duration: context.rootState.global.duration,
       applicationId,
     }).then((res) => {
-      context.commit(types.SET_TOPO, res.data.data.getApplicationTopology);
+      context.commit(types.SET_TOPO, res.data.data.getClusterTopology);
     });
   },
   GET_CLUSTER(context: { commit: Commit; state: State; rootState: any }) {

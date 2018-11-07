@@ -1,8 +1,6 @@
 <template>
 <div class="rk-alarm-search-box container">
-  <RkProgress class="long mb5" :precent="70"/>
-  <span style="font-size:12px;">2018-09-20 17:48:47</span>
-  <span class="r" style="font-size:12px;">2018-09-20 18:03:47</span>
+
 </div>
 </template>
 

@@ -1,5 +1,5 @@
 import { Commit, ActionTree } from 'vuex';
-import { getServiceInfo, getApplicationInfo, getServerInfo, getServerDetail } from '@/api/dashboard';
+import { getEndpointInfo, getApplicationInfo, getServerInfo, getServerDetail } from '@/api/dashboard';
 import * as types from '../mutation-types';
 
 interface SlowTrace {
@@ -10,14 +10,14 @@ interface SlowTrace {
   traceIds: String[];
   operationNames: String[];
 }
-interface Service{
+interface Endpoint{
   key: String;
   applicationName: String;
   applicationOd: String;
   label: String;
 }
 interface SlowService {
-  service: Service;
+  endpoint: Endpoint;
   value: Number;
 }
 interface ApplicationThroughput {
@@ -37,14 +37,22 @@ interface Gc {
   youngGCCount: Number[];
   youngGCTime: Number[];
 }
+interface P {
+  p99: Number[];
+  p95: Number[];
+  p90: Number[];
+  p75: Number[];
+  p50: Number[];
+}
 export interface State {
   throughput: Number[];
   responseTime: Number[];
-  sla: Number[];
+  p: P;
+  endpointP: P;
   slowTrace: SlowTrace[];
   slowService: SlowService[];
   applicationThroughput: ApplicationThroughput[];
-
+  sla: Number[];
   cpu: Number[];
   gc: Gc;
   memory: Memory;
@@ -55,6 +63,20 @@ export interface State {
 const initState: State = {
   throughput: [],
   responseTime: [],
+  p: {
+    p99: [],
+    p95: [],
+    p90: [],
+    p75: [],
+    p50: [],
+  },
+  endpointP: {
+    p99: [],
+    p95: [],
+    p90: [],
+    p75: [],
+    p50: [],
+  },
   sla: [],
   slowTrace:[],
   slowService:[],
@@ -84,27 +106,58 @@ const getters = {
 
 // mutations
 const mutations = {
-  [types.SET_SERVICE_INFO](state: State, data: any) {
-    state.throughput = data.throughput.trendList;
-    state.responseTime = data.responseTime.trendList;
-    state.sla = data.sla.trendList;
-    state.slowTrace = data.slowTrace.traces;
+  [types.SET_ENDPOINT_INFO](state: State, data: any) {
+    state.throughput = data.data.throughput.values.map((i) => {
+      if (i.value) return i.value;
+      return i;
+    });
+    state.responseTime = data.data.responseTime.values.map((i) => {
+      if (i.value) return i.value;
+      return i;
+    });
+    state.sla = data.data.sla.values.map((i) => {
+      if (i.value) return i.value;
+      return i;
+    });
+    state.slowTrace = data.data.slowTrace.traces;
+    state.endpointP = data.p;
   },
   [types.SET_APPLICATION_INFO](state: State, data: any) {
-    state.slowService = data.slowService;
-    state.applicationThroughput = data.applicationThroughput;
+    state.slowService = data.data.slowService;
+    state.applicationThroughput = data.data.applicationThroughput;
+    state.p = data.p;
   },
   [types.SET_SERVER_INFO](state: State, data: any) {
-    state.serverResponseTime = data.serverResponseTime.trendList;
-    state.serverThroughput = data.serverThroughput.trendList;
+    state.serverResponseTime = data.serverResponseTime.values.map((i) => {
+      if (i.value) return i.value;
+      return i;
+    });
+    state.serverThroughput = data.serverThroughput.values.map((i) => {
+      if (i.value) return i.value;
+      return i;
+    });
   },
   [types.SET_SERVER_DETAIL](state: State, data: any) {
-    state.cpu = data.cpu.cost;
-    state.gc = data.gc;
-    state.memory.heap = data.memory.heap.map(i => (i / 1024 / 1024).toFixed(2));
-    state.memory.maxHeap = data.memory.maxHeap.map(i => (i / 1024 / 1024).toFixed(2));
-    state.memory.maxNoHeap = data.memory.maxNoheap.map(i => (i / 1024 / 1024).toFixed(2));
-    state.memory.noHeap = data.memory.noheap.map(i => (i / 1024 / 1024).toFixed(2));
+    if (data.cpu.values) {
+      state.cpu = data.cpu.values.map(i => i.value);
+      state.gc = {
+        oldGCTime: data.oldGCTime.values.map(i => i.value),
+        oldGCCount:data.oldGCCount.values.map(i => i.value),
+        youngGCCount: data.youngGCCount.values.map(i => i.value),
+        youngGCTime: data.youngGCTime.values.map(i => i.value),
+      };
+      state.memory.heap = data.heap.values.map(i => (i.value / 1024 / 1024).toFixed(2));
+      state.memory.maxHeap = data.maxHeap.values.map(i => (i.value / 1024 / 1024).toFixed(2));
+      state.memory.maxNoHeap = data.maxNoheap.values.map(i => (i.value / 1024 / 1024).toFixed(2));
+      state.memory.noHeap = data.noheap.values.map(i => (i.value / 1024 / 1024).toFixed(2));
+    } else {
+      state.cpu = data.cpu.cost;
+      state.gc = data.gc;
+      state.memory.heap = data.memory.heap.map(i => (i / 1024 / 1024).toFixed(2));
+      state.memory.maxHeap = data.memory.maxHeap.map(i => (i / 1024 / 1024).toFixed(2));
+      state.memory.maxNoHeap = data.memory.maxNoheap.map(i => (i / 1024 / 1024).toFixed(2));
+      state.memory.noHeap = data.memory.noheap.map(i => (i / 1024 / 1024).toFixed(2));
+    }
   },
   [types.CLEAR_DASHBOARD](state: State) {
     state.throughput = [];
@@ -112,7 +165,16 @@ const mutations = {
     state.sla = [];
     state.slowTrace = [];
     state.slowService = [];
-    state.applicationThroughput = [];
+    state.p.p99 = [];
+    state.p.p95 = [];
+    state.p.p90 = [];
+    state.p.p75 = [];
+    state.p.p50 = [];
+    state.endpointP.p99 = [];
+    state.endpointP.p95 = [];
+    state.endpointP.p90 = [];
+    state.endpointP.p75 = [];
+    state.endpointP.p50 = [];
     state.cpu = [];
     state.gc = {
       oldGCTime: [],
@@ -135,15 +197,57 @@ const mutations = {
 const actions: ActionTree<State, any> = {
   GET_APPLICATION_INFO(context: { commit: Commit; state: State, rootState: any }) {
     return getApplicationInfo(context.rootState.global.duration).then((res) => {
-      context.commit(types.SET_APPLICATION_INFO, res.data.data);
+      let p = {
+        p99: [],
+        p95: [],
+        p90: [],
+        p75: [],
+        p50: [],
+      };
+      if (res.data.data.getP99) {
+        p = {
+          p99: res.data.data.getP99.values.map(i => i.value),
+          p95: res.data.data.getP95.values.map(i => i.value),
+          p90: res.data.data.getP90.values.map(i => i.value),
+          p75: res.data.data.getP75.values.map(i => i.value),
+          p50: res.data.data.getP50.values.map(i => i.value),
+        };
+      }
+      context.commit(types.SET_APPLICATION_INFO, { data:res.data.data, p });
     }).catch(() => {
-      context.commit(types.SET_APPLICATION_INFO, { slowService: [], applicationThroughput: [] });
+      context.commit(types.SET_APPLICATION_INFO, { data:{
+        slowService: [],
+        applicationThroughput: [],
+      }, p: {
+        p99: [],
+        p95: [],
+        p90: [],
+        p75: [],
+        p50: [],
+      },
+      });
     });
   },
-  GET_SERVICE_INFO(context: { commit: Commit; state: State, rootState: any }, params:any) {
-    const { applicationId, service } = params;
-    return getServiceInfo(context.rootState.global.duration, applicationId, service).then((res) => {
-      context.commit(types.SET_SERVICE_INFO, res.data.data);
+  GET_ENDPOINT_INFO(context: { commit: Commit; state: State, rootState: any }, params:any) {
+    const { applicationId, endpoint } = params;
+    return getEndpointInfo(context.rootState.global.duration, applicationId, endpoint).then((res) => {
+      let p = {
+        p99: [],
+        p95: [],
+        p90: [],
+        p75: [],
+        p50: [],
+      };
+      if (res.data.data.getP99) {
+        p = {
+          p99: res.data.data.getP99.values.map(i => i.value),
+          p95: res.data.data.getP95.values.map(i => i.value),
+          p90: res.data.data.getP90.values.map(i => i.value),
+          p75: res.data.data.getP75.values.map(i => i.value),
+          p50: res.data.data.getP50.values.map(i => i.value),
+        };
+      }
+      context.commit(types.SET_ENDPOINT_INFO, { data:res.data.data, p });
     });
   },
   GET_SERVER_INFO(context: { commit: Commit; state: State, rootState: any }, serverId) {

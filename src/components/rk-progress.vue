@@ -1,6 +1,6 @@
 <template>
 <div class="rk-progress">
-  <div class="rk-progress-inner" :style="`width:${precent}%`"></div>
+  <div class="rk-progress-inner" :style="`width:${precent}%;background-color: ${color};`"></div>
 </div>
 </template>
 
@@ -14,6 +14,10 @@ export default class RkChartBox extends Vue {
     type: Number,
     default: 0,
   }) precent: Number;
+  @Prop({
+    type: String,
+    default: '#72a5fd',
+  }) color: String;
 }
 </script>
 <style lang="scss" scoped>
@@ -25,6 +29,5 @@ export default class RkChartBox extends Vue {
 .rk-progress-inner{
   height: 100%;;
   border-radius: 2px;
-  background-color: #72a5fd;
 }
 </style>

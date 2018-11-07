@@ -1,15 +1,16 @@
 <template>
 <rk-panel title="Slow Trace">
-  <div class="mb15" v-for="i in stateDashboard.slowTrace" :key="i.key">
+  <div class="rk-slow-trace-item mb15" v-for="i in stateDashboard.slowTrace" :key="i.key">
     <div>
       <span class="r sm">{{i.duration}} ms</span>
-      <div class="blue cp mb5" @click="$router.push({ path:'/trace/link', query:{traces:i.traceIds.join('&')}})">
+      <span class="r sm grey mr15">{{parseInt(i.start) | dateformat}}</span>
+      <div class="mb5">
         <Tooltip :content="`${moment(parseInt(i.start)).format('YYYY-MM-DD HH:mm:ss')}\n${i.operationNames[0]}`" placement="top" max-width="200" class="ell" style="max-width: 200px;">
-          <span>{{i.operationNames[0]}}</span>
+          <span class="link-hover cp" @click="$router.push({ path:'/trace/link', query:{traces:i.traceIds.join('&')}})">{{i.operationNames[0]}}</span>
         </Tooltip>
       </div>
     </div>
-    <RkProgress :precent="i.duration/maxDuration*100"/>
+    <RkProgress :precent="i.duration/maxDuration*100"  :color="i.isError?'#ff6464':'#72a5fd'"/>
   </div>
 </rk-panel>
 </template>
@@ -31,4 +32,9 @@ export default class RkChartBox extends Vue {
 }
 </script>
 <style lang="scss">
+.rk-slow-trace-item{
+  width: 50%;
+  float: left;
+  padding: 0 10px;
+}
 </style>

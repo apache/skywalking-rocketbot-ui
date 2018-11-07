@@ -6,11 +6,11 @@ import { Option, Server } from '@/store/modules/options.ts';
 
 export const appChange = (application:Option): void => {
   store.commit('options/SET_APPLICATION', application);
-  store.dispatch('options/GET_SERVICES', store.state.options.currentApplication.key)
+  store.dispatch('options/GET_ENDPOINTS', store.state.options.currentApplication.key)
     .then(() => {
-      store.dispatch('dashboard/GET_SERVICE_INFO', {
+      store.dispatch('dashboard/GET_ENDPOINT_INFO', {
         applicationId: store.state.options.currentApplication.key,
-        service: store.state.options.currentService,
+        endpoint: store.state.options.currentEndpoint,
       });
     });
   store.dispatch('options/GET_SERVERS', store.state.options.currentApplication.key)
@@ -19,25 +19,25 @@ export const appChange = (application:Option): void => {
     });
 };
 
-export const serviceChange = (service:Option) => {
-  store.commit('options/SET_SERVICE', service);
-  store.dispatch('dashboard/GET_SERVICE_INFO', {
+export const endpointChange = (endpoint:Option) => {
+  store.commit('options/SET_ENDPOINT', endpoint);
+  store.dispatch('dashboard/GET_ENDPOINT_INFO', {
     applicationId: store.state.options.currentApplication.key,
-    service: store.state.options.currentService,
+    endpoint: store.state.options.currentEndpoint,
   });
 };
 interface ServApp {
   app:Option;
-  service:Option;
+  endpoint:Option;
 }
 export const serviceAppChange = (servApp:ServApp) => {
-  store.dispatch('options/GET_SERVICES', servApp.app.key);
+  store.dispatch('options/GET_ENDPOINTS', servApp.app.key);
   store.dispatch('options/GET_SERVERS', servApp.app.key);
   store.commit('options/SET_APPLICATION', servApp.app);
-  store.commit('options/SET_SERVICE', servApp.service);
-  store.dispatch('dashboard/GET_SERVICE_INFO', {
+  store.commit('options/SET_ENDPOINT', servApp.endpoint);
+  store.dispatch('dashboard/GET_ENDPOINT_INFO', {
     applicationId: store.state.options.currentApplication.key,
-    service: store.state.options.currentService,
+    endpoint: store.state.options.currentEndpoint,
   });
 };
 

@@ -8,12 +8,12 @@
       <RkToolDashboard :stateOptions="stateOptions" :show.sync="show"/>
     </div>
     <Icon type="ios-arrow-forward" class="grey mr10"/>
-    <select v-if='stateOptions.currentService' :value="stateOptions.currentService.key" @change="serviceChange($event)" class="mr15" style="color:#fafafa;background: 0; border: 0; outline: none;">
-      <option style="background-color: #2f333c;" v-for="i in stateOptions.services" :key="i.key" :value="i.key">{{i.label}}</option>
+    <select v-if='stateOptions.currentEndpoint' :value="stateOptions.currentEndpoint.key" @change="endpointChange($event)" class="mr15" style="color:#fafafa;background: 0; border: 0; outline: none;">
+      <option style="background-color: #2f333c;" v-for="i in stateOptions.endpoints" :key="i.key" :value="i.key">{{i.label}}</option>
     </select>
     <span class="grey mr10">|</span>
     <select  v-if='stateOptions.currentServer' :value="stateOptions.currentServer.key" @change="serverChange($event)" class="grey mr15" style="background: 0; border: 0; outline: none;">
-      <option style="background-color: #2f333c;" v-for="i in stateOptions.servers" :key="i.key" :value="i.key">{{i.pid+'@'+i.ipv4[0]}}</option>
+      <option style="background-color: #2f333c;" v-for="i in stateOptions.servers" :key="i.key" :value="i.key">{{i.name}}</option>
     </select>
     <button class="rk-board-inspector" @click="$emit('showServer')">inspector</button>
   </div>
@@ -24,7 +24,7 @@ import Vue from 'vue';
 import { State } from '@/store/modules/options.ts';
 import { Component, Prop } from 'vue-property-decorator';
 import RkToolDashboard from '@/components/rk-tool-dashboard.vue';
-import { serviceChange, serverChange } from '@/store/dispatch/dashboard.ts';
+import { endpointChange, serverChange } from '@/store/dispatch/dashboard.ts';
 
 @Component({
   components: { RkToolDashboard },
@@ -32,8 +32,8 @@ import { serviceChange, serverChange } from '@/store/dispatch/dashboard.ts';
 export default class RkBoard extends Vue {
   @Prop() stateOptions: State;
   show:Boolean = false;
-  serviceChange(e) {
-    serviceChange(this.stateOptions.services[e.target.selectedIndex]);
+  endpointChange(e) {
+    endpointChange(this.stateOptions.endpoints[e.target.selectedIndex]);
   }
   serverChange(e) {
     serverChange(this.stateOptions.servers[e.target.selectedIndex]);
@@ -45,11 +45,11 @@ export default class RkBoard extends Vue {
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  padding-top: 25px;
-  padding-bottom:  25px;
+  padding-top: 20px;
+  padding-bottom:  20px;
   color: #fafafa;
   // background-color: #f6f7fb;
-  background-color: #2f333c;
+  background-color: #333840;
 }
 .rk-board-service{
   font-weight: 600;
