@@ -10,14 +10,20 @@
           <th>Start</th>
           <th>TraceId</th>
           <th>Duration</th>
+          <th>&nbsp;</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="i in stateTrace.traces" :key="i.key">
-          <td :class="i.isError? 'error' : 'success'">{{i.operationNames[0]}}</td>
-          <td class="grey">{{parseInt(i.start) | dateformat}}</td>
+          <td style="width:400px">
+            <Tooltip max-width="400" :content="i.operationNames[0]" placement="top" style="max-width:400px" class="ell">
+              <span :class="i.isError? 'error' : 'success'">{{i.operationNames[0]}}</span>
+            </Tooltip>
+          </td>
+          <td class="grey" style="min-width:250px">{{parseInt(i.start) | dateformat}}</td>
           <td><a class="rk-trace-btn" @click="$router.push({ path:'/trace/link', query:{traces:i.traceIds.join('&')}})">link</a></td>
-          <td><rk-progress :precent="i.duration/stateTraceMax*100" class="mr15"/></td>
+          <td>{{i.duration}} ms</td>
+          <td style="min-width:180px"><rk-progress :precent="i.duration/stateTraceMax*100" class="mr15"/></td>
         </tr>
       </tbody>
     </table>
@@ -27,7 +33,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { State } from 'vuex-class';
+import { State, Action } from 'vuex-class';
 import { Component } from 'vue-property-decorator';
 import SearchBox from '../components/trace/search-box.vue';
 import ChartTrace from '../components/trace/chart-scatter.vue';
@@ -38,8 +44,16 @@ import ChartTrace from '../components/trace/chart-scatter.vue';
 export default class Trace extends Vue {
   @State('global') stateGlobal;
   @State('trace') stateTrace;
+  @Action('options/GET_APPLICATIONS') GET_APPLICATIONS;
+  @Action('trace/CLEAR_TRACE') CLEAR_TRACE;
   get stateTraceMax() {
     return this.stateTrace.traces.map(i => i.duration).reduce((pre, cur) => Math.max(pre, cur));
+  }
+  created() {
+    this.GET_APPLICATIONS();
+  }
+  beforeDestroy() {
+    this.CLEAR_TRACE();
   }
 }
 </script>
@@ -55,6 +69,7 @@ export default class Trace extends Vue {
   padding: 3px .7em;
   transition: background-color .3s;
   &:hover{
+    color: #fff;
     background-color: #6296ff;
   }
 }
@@ -75,10 +90,9 @@ export default class Trace extends Vue {
     &:before{
       display: inline-block;
       content: '';
-      background-color:#48df75;
+      background-color:#22c36a;
       width:10px;
       height:10px;
-      margin-left: 15px;
       margin-right: 15px;
       border-radius: 5px;
     }

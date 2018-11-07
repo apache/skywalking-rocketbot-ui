@@ -12,7 +12,8 @@
 .dib{display: inline-block;}
 .auto{margin-right: auto;margin-left: auto;}
 .grey{color: #9ba3af;}
-.sm{font-size: .7rem;}
+.sm{font-size: 12px;}
+.n{font-weight: 400;}
 .blue{color:#3880ff;}
 .red{color:#f1483f;}
 .green{color:#3880ff;}
@@ -29,3 +30,47 @@
 .mb10{margin-bottom:10px;}
 .mb15{margin-bottom:15px;}
 .mb20{margin-bottom:20px;}
+.half{word-break: break-all;word-wrap: break-word;box-sizing: border-box;display:inline-block;width: 50%;padding-right: 20px;vertical-align: top;}
+.trans{transition:all .3s;}
+.two-fifth{
+  box-sizing: border-box;
+  display:inline-block;
+  width: 40%;
+  padding-right: 20px;
+  vertical-align: top;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+.three-fifth{
+  box-sizing: border-box;
+  display:inline-block;
+  width: 60%;
+  padding-right: 20px;
+  vertical-align: top;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+.one-fifth{
+  box-sizing: border-box;
+  display:inline-block;
+  width: 20%;
+  padding-right: 20px;
+  vertical-align: top;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+.four-fifth{
+  box-sizing: border-box;
+  display:inline-block;
+  width: 80%;
+  padding-right: 20px;
+  vertical-align: top;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+.link-hover{
+  transition: color .3s;
+  &:hover{
+    color: #3880ff;
+  }
+}

@@ -11,8 +11,10 @@
         <tr><th>&nbsp;</th><th>Start</th><th>Title</th><th>Type</th><th>Content</th></tr>
       </thead>
       <tbody>
-         <tr v-for="i in stateAlarm.alarmList" :key="i.key">
-          <td><ion-icon name="information-circle" class="rk-alarm-icon"></ion-icon></td>
+         <tr v-for="(i, index) in stateAlarm.alarmList" :key="index">
+          <td>
+            <Icon type="md-alert" class="rk-alarm-icon"/>
+          </td>
           <td class="grey ell">{{i.startTime}}</td>
           <td>{{i.title}}</td>
           <td>{{i.causeType}}</td>
@@ -27,17 +29,18 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { State } from 'vuex-class';
+import { State, Action } from 'vuex-class';
 import { Component, Watch } from 'vue-property-decorator';
 import { getAlarm } from '@/store/dispatch/alarm.ts';
-import AlarmItem from '../components/alarm/alarm-item.vue';
 import AlarmNav from '../components/alarm/alarm-nav.vue';
 
 @Component({
-  components: { AlarmItem, AlarmNav },
+  components: { AlarmNav },
 })
 export default class Alarm extends Vue {
   @State('alarm') stateAlarm;
+  @Action('SET_EVENTS') SET_EVENTS;
+  @Action('alarm/CLEAR_ALARM') CLEAR_ALARM;
   page:Number = 1;
   type:String = 'APPLICATION';
   @Watch('type')
@@ -46,7 +49,10 @@ export default class Alarm extends Vue {
   }
   beforeMount() {
     this.getAlarm();
-    this.$store.dispatch('SET_EVENTS', [this.getAlarm]);
+    this.SET_EVENTS([this.getAlarm]);
+  }
+  beforeDestroy() {
+    this.CLEAR_ALARM();
   }
   getAlarm() {
     getAlarm({ type: this.type, paging: this.page });
@@ -67,7 +73,7 @@ export default class Alarm extends Vue {
   text-align: left;
   .rk-alarm-icon{
     font-size:19px;
-    color:#ff9800;
+    color:#f7b32b;
     line-height:1px;
     display:block;
     margin: 0 auto;

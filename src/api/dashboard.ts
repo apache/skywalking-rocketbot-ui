@@ -5,36 +5,38 @@ import dateCook from '@/utils/dateCook';
 
 const tag = '/api';
 
-// 获取服务器信息
-const getServerInfoGq2 = (duration: String, serverId:String) =>
-  `{
-    "variables":{
-      "duration":${duration},
-      "serverId":"${serverId}"
-    },"query":"query Application($serverId: ID!, $duration: Duration!) {
-      serverResponseTime:getServerResponseTimeTrend(serverId: $serverId, duration: $duration) {
-        trendList
-      }
-      serverThroughput:getServerThroughputTrend(serverId: $serverId, duration: $duration) {
-        trendList
-      }
-      cpu:getCPUTrend(serverId: $serverId, duration: $duration) {
-        cost
-      }
-      gc:getGCTrend(serverId: $serverId, duration: $duration) {
-        youngGCCount
-        oldGCount
-        youngGCTime
-        oldGCTime
-      }
-      memory:getMemoryTrend(serverId: $serverId, duration: $duration) {
-        heap
-        maxHeap
-        noheap
-        maxNoheap
-      }
+// 获取服务器详细信息
+const getServerDetailGq = (duration: Duration, serverId:String) => (
+{
+  variables: {
+    duration,
+    serverId,
+  },
+  query:`query Application($serverId: ID!, $duration: Duration!) {
+    cpu:getCPUTrend(serverId: $serverId, duration: $duration) {
+      cost
     }
-  "}`;
+    gc:getGCTrend(serverId: $serverId, duration: $duration) {
+      youngGCCount
+      oldGCount
+      youngGCTime
+      oldGCTime
+    }
+    memory:getMemoryTrend(serverId: $serverId, duration: $duration) {
+      heap
+      maxHeap
+      noheap
+      maxNoheap
+    }
+  }`,
+});
+export const getServerDetail = (
+    duration: Duration,
+    serverId: String,
+  ): AxiosPromise<any> =>
+    axios.post(`${tag}/serverinfo`, getServerDetailGq(dateCook(duration), serverId));
+
+// 获取服务器信息
 const getServerInfoGq = (duration: Duration, serverId:String) => (
 {
   variables: {
@@ -88,11 +90,11 @@ export const getApplicationInfo = (
 const getServiceInfoGq = (duration: Duration, applicationId: String, service: Option) => (
 {
   variables: {
-    serviceId: service.key,
+    serviceId: service ? service.key : '',
     duration,
     traceCondition: {
       applicationId,
-      operationName: service.label,
+      operationName: service ? service.label : '',
       queryDuration: duration,
       traceState: 'ALL',
       queryOrder: 'BY_DURATION',

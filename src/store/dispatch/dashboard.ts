@@ -26,6 +26,20 @@ export const serviceChange = (service:Option) => {
     service: store.state.options.currentService,
   });
 };
+interface ServApp {
+  app:Option;
+  service:Option;
+}
+export const serviceAppChange = (servApp:ServApp) => {
+  store.dispatch('options/GET_SERVICES', servApp.app.key);
+  store.dispatch('options/GET_SERVERS', servApp.app.key);
+  store.commit('options/SET_APPLICATION', servApp.app);
+  store.commit('options/SET_SERVICE', servApp.service);
+  store.dispatch('dashboard/GET_SERVICE_INFO', {
+    applicationId: store.state.options.currentApplication.key,
+    service: store.state.options.currentService,
+  });
+};
 
 export const serverChange = (server: Server) => {
   store.commit('options/SET_SERVER', server);

@@ -1,12 +1,12 @@
 <template>
   <rk-toolbar :style="`transform: translate(-50%, ${show?0:150}%);`">
-    <ion-icon @click="$emit('update:show', false);" name="close" size="small" class="r cp"></ion-icon>
+    <Icon class="r cp" type="md-close" @click="$emit('update:show', false);"/>
     <div class="rk-tool-dashboard">
       <div class="flex-c">
         <div class="long mr10">
           <h6 class="mt0 mb10" style="margin-left: 7px;">Application</h6>
           <select style="background: 0;border: 0;color: #efefef;outline: none;width: 100%;" @change="appChange($event)">
-            <option v-for="i in stateOptions.applications" :key="i.key" :value="i" >{{i.label}}</option>
+            <option style="background-color: #25292f;" v-for="i in stateOptions.applications" :key="i.key" :value="i" >{{i.label}}</option>
           </select>
         </div>
         <div class="long mr10">
@@ -17,7 +17,7 @@
             color: #efefef;
             outline: none;
             width: 100%;" @change="serviceChange($event)">
-            <option v-for="i in stateOptions.services" :key="i.key" :value="i">{{i.label}}</option>
+            <option style="background-color: #25292f;" v-for="i in stateOptions.services" :key="i.key" :value="i">{{i.label}}</option>
           </select>
         </div>
         <div class="long">
@@ -28,7 +28,7 @@
             color: #efefef;
             outline: none;
             width: 100%;"  @change="serverChange($event)">
-            <option v-for="i in stateOptions.servers" :key="i.key" :value="i">{{i.pid+'@'+i.ipv4[0]}}</option>
+            <option  style="background-color: #25292f;" v-for="i in stateOptions.servers" :key="i.key" :value="i">{{i.pid+'@'+i.ipv4[0]}}</option>
           </select>
         </div>
       </div>

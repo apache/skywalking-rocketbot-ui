@@ -5,14 +5,10 @@ const type = {
   Http: '#72a5fd',
   Database: '#ff6732',
   Unknown: '#ffc107',
+  Cache: '#00bcd4',
+  RPCFramework: '#ee4395',
 };
-function getList(data){
-  // if (data.length === 0) return [];
-  const a = data.map(i => i.applicationCode);
-  return Array.from(new Set(a));
-}
-
-const trace = (data,width,row) => {
+const trace = (data,width,row,vm) => {
   d3.select('svg').remove();
   let i = 0,
   root;
@@ -55,17 +51,20 @@ const trace = (data,width,row) => {
       n.y = n.depth * 20;
     });
 
-    const node = svg.selectAll('.node').data(nodes, d => d.id || (d.id = ++i));
+    const node = svg.selectAll('.trace-node').data(nodes, d => d.id || (d.id = ++i));
 
-    const nodeEnter = node.enter().append('g').attr('class', 'node')
+    const nodeEnter = node.enter().append('g').attr('class', 'trace-node')
       .attr('transform',d => 'translate(' + source.y0 + ',' + source.x0 + ')')
       .style('opacity', 0);
 
-    nodeEnter.append('rect').attr('y', -10).attr('height', 48).attr('width', '100%').attr('fill-opacity', '0').style('fill', '#fff').on('click', click);
+    nodeEnter.append('rect').attr('class', 'trace-node-container').attr('rx',4).attr('ry',4).attr('y', -18).attr('height', 48).attr('width', '100%').on('click', click);
     nodeEnter.append('text').attr('dy', 2).attr('dx', 25)
       .text(d => d.data.label.length > 45 ? `${d.data.label.slice(0, 45)}...` : `${d.data.label}`);
-    nodeEnter.append('text').style('fill', d => type[d.data.layer]).style('stroke', d => type[d.data.layer]).style('stroke-width', '0.8').style('font-size', '11px').attr('dy', 2)
-      .attr('dx', d => d.data.label.length > 50 ? 320 : 40 + d.data.label.length * 6.9)
+    nodeEnter.append('text').attr('dy', 2).attr('dx', 12)
+      .style('fill', d => d.data.isError? '#f1483f' : '')
+      .text(d => d.data.isError? 'x' : '');
+    nodeEnter.append('text').style('fill', d => type[d.data.layer]).style('stroke', d => type[d.data.layer]).style('stroke-width', '0.6').style('font-size', '11px').attr('dy', 2)
+      .attr('dx', d => d.data.label.length > 50 ? 320 : 45 + d.data.label.length * 6.9)
       .text(d => d.data.layer);
     nodeEnter.append('text').attr('dy', 20).attr('dx', 30).style('fill', '#acacac').style('font-size', '11px')
       .text(d => `${d.data.applicationCode? d.data.applicationCode : ''} ${d.data.component? `> ${d.data.component}` : ''}`);
@@ -78,14 +77,19 @@ const trace = (data,width,row) => {
       .attr('x', d => ( !d.data.endTime || !d.data.startTime) ? 0: width*0.618-margin.right-margin.left-margin.right - d.y + xScale(d.data.startTime-min))
       .attr('y', -3)
       .style('fill', d => `${sequentialScale(list.indexOf(d.data.applicationCode))}`);
-
+    nodeEnter.append('text')
+      .style('font-size', '10px')
+      .style('fill', '#888')
+      .attr('x', d => ( !d.data.endTime || !d.data.startTime) ? 0: width*0.618-margin.right-margin.left-margin.right - d.y + xScale(d.data.startTime-min))
+      .attr('y', 15)  
+      .text(d =>
+        d.data.endTime ? `${d.data.endTime - d.data.startTime} ms` : '');
     nodeEnter.transition().duration(400).attr('transform', d => 'translate(' + d.y + ',' + d.x + ')').style('opacity', 1);
 
     node.transition().duration(400)
       .attr('transform', d =>  'translate(' + d.y + ',' + d.x + ')')
       .style('opacity', 1)
-      .select('rect')
-      .style('fill', '#fff');
+      .select('rect');
 
     node
       .exit()
@@ -97,11 +101,11 @@ const trace = (data,width,row) => {
       .style('opacity', 0)
       .remove();
     // Update the links…
-    var link = svg.selectAll('.link').data(root.links(), function(d) {
+    var link = svg.selectAll('.trace-link').data(root.links(), function(d) {
       return d.target.id;
     });
 
-    link.enter().insert('path', 'g').attr('class', 'link')
+    link.enter().insert('path', 'g').attr('class', 'trace-link')
       .attr('d', d => {
         const o = { x: source.x0, y: source.y0 };
         return diagonal({ source: o, target: o });
@@ -125,14 +129,16 @@ const trace = (data,width,row) => {
   }
 
   function click(d) {
-    if (d.children) {
-      d._children = d.children;
-      d.children = null;
-    } else {
-      d.children = d._children;
-      d._children = null;
-    }
-    update(d);
+    if (!d.data.type) return;
+    // if (d.children) {
+    //   d._children = d.children;
+    //   d.children = null;
+    // } else {
+    //   d.children = d._children;
+    //   d._children = null;
+    // }
+    // update(d);
+    vm.$emit('show', d);
   }
 };
 export default trace;

@@ -9,9 +9,10 @@ import RkEcharts from './rk-echarts.vue';
 import RkToolbar from './rk-toolbar.vue';
 import RkEmpty from './rk-empty.vue';
 import RkPage from './rk-page.vue';
+import RkDrawer from './rk-drawer.vue';
 
 const components: Object = {
-  RkEmpty, RkPanel, RkHeader, RkNav, RkBoard, RkDate, RkProgress, RkSidebox, RkEcharts, RkToolbar, RkPage,
+  RkDrawer, RkEmpty, RkPanel, RkHeader, RkNav, RkBoard, RkDate, RkProgress, RkSidebox, RkEcharts, RkToolbar, RkPage,
 };
 const componentsName: string[] = Object.keys(components);
 

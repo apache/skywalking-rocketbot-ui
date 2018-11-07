@@ -25,7 +25,6 @@ export default class RkPanel extends Vue {
 .rk-box-title{
   padding: 5px 15px;
   border-radius: 4px;
-  font-size: 13px;
   background-color: #ecf0f6;
   color: rgba(10, 10, 10, .6);
 }

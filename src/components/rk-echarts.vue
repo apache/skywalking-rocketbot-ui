@@ -5,8 +5,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
-import echarts from 'echarts';
-
+import echarts from 'echarts/lib/echarts';
 import { Action } from 'vuex-class';
 @Component({})
 export default class RkEcharts extends Vue {
@@ -38,7 +37,7 @@ export default class RkEcharts extends Vue {
     }
   }
   drawEcharts(): void {
-    this.myChart = echarts.init(<any> this.$el, '');
+    this.myChart = echarts.init(<any>this.$el, '');
     this.myChart.setOption(this.option);
   }
 }

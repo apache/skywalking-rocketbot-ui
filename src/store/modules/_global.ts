@@ -1,5 +1,4 @@
 import { Commit, ActionTree } from 'vuex';
-import moment from 'dayjs';
 import { Duration } from '@/store/interfaces/options';
 import * as types from '../mutation-types';
 
@@ -77,7 +76,10 @@ const mutations = {
 const actions: ActionTree<State, any> = {
   SET_DURATION(context: { commit: Commit }, data: Duration) {
     context.commit(types.SET_DURATION, data);
-    context.commit(types.RUN_EVENTS, data);
+    context.commit(types.RUN_EVENTS);
+  },
+  RUN_EVENTS(context: { commit: Commit }) {
+    context.commit(types.RUN_EVENTS);
   },
   SET_EVENTS(context: { commit: Commit }, data: any[]) {
     context.commit(types.CLEAR_EVENTS);

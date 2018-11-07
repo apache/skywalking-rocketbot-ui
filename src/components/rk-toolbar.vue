@@ -22,6 +22,7 @@ export default class RkToolbar extends Vue {
   bottom: 30px;
   width: 100%;
   max-width: 900px;
+  z-index: 10;
   transform: translate(-50%, 150%);
   padding: 0 15px;
   will-change: transform;
@@ -30,8 +31,8 @@ export default class RkToolbar extends Vue {
 .rk-toolbar-inner{
   padding: 15px 30px;
   border-radius: 6px;
-  background-color: #252a2f;
+  background-color: #25292f;
   color: #efefef;
-  box-shadow:  0 3px 10px -2px #000000;
+  box-shadow:  0 3px 10px -2px rgba(0, 0, 0,.6);
 }
 </style>

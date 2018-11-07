@@ -22,7 +22,7 @@ export default class Response extends Vue {
       legend: {
         data: ['server', 'service'],
         icon: 'circle',
-        top: 10,
+        top: 0,
         left: 10,
         itemGap: 15,
         itemWidth: 15,
@@ -41,6 +41,7 @@ export default class Response extends Vue {
           lineStyle: { color: 'rgba(0,0,0,.1)' },
           alignWithLabel: true,
         },
+        splitLine: { show: false },
         axisLine: { lineStyle: { color: 'rgba(0,0,0,.1)' } },
         axisLabel: { color: '#333', fontSize: '11' },
       },

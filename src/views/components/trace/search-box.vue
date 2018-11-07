@@ -3,14 +3,14 @@
   <div class="rk-trace-search-box container">
     <div class="item">
       <div class="mb5 label">Application</div>
-      <select class="app" style="color:#fff;background: 0; border: 0; outline: none;" v-model="option.applicationId">
-        <option value="ALL">All</option>
-        <option :value="i.key" v-for="i in stateOptions.applications" :key="i.key">{{i.label}}</option>
+      <select class="app" style="color:#fff;background: 0; border: 0; outline: none;" v-model="option.data.applicationId">
+        <option style="background-color: #25292f;" value="ALL">All</option>
+        <option style="background-color: #25292f;" :value="i.key" v-for="i in stateOptions.applications" :key="i.key">{{i.label}}</option>
       </select>
     </div>
     <div class="item">
       <div class="mb5 label">Operate</div>
-      <input class="rk-trace-input" type="text">
+      <input class="rk-trace-input" type="text" v-model="option.operationName">
     </div>
     <div class="item">
       <div class="mb5 label">TraceID</div>
@@ -56,10 +56,12 @@ export default class SearchBox extends Vue {
   @State('trace') stateTrace;
   option = {
     time: [],
+    data: {
+      applicationId: 'ALL',
+    },
     maxTraceDuration: '',
     minTraceDuration: '',
     operationName: '',
-    applicationId: 'ALL',
     traceId: '',
     traceState: 'ALL',
     queryOrder: 'BY_START_TIME',
@@ -82,23 +84,24 @@ export default class SearchBox extends Vue {
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  padding-top: 15px;
-  padding-bottom:  15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   background-color: #f6f7fb;
   border-bottom:1px solid rgba(0,0,0,.03);
-  font-size: 13px;
   .item{
     margin-right: 30px;
   }
   .label{
     font-weight: 600;
+    margin-right: 5px;
   }
   .rk-trace-input{
     background: 0;
     border: 0;
     outline: none;
     padding-bottom: 3px;
-    border-bottom: 1px solid rgba(34, 34, 34, 0.3);
+    border-bottom: 1px solid rgba(34, 34, 34, 0.2);
+    transition: border-color .3s;
     &:focus{
       border-color: #6fa4ff;
     }
@@ -118,7 +121,6 @@ export default class SearchBox extends Vue {
   }
   .label{
     font-weight: 600;
-    font-size: 13px;
   }
   .rk-trace-input{
     color: #e8e8e8;
@@ -126,9 +128,10 @@ export default class SearchBox extends Vue {
     border: 0;
     outline: none;
     padding-bottom: 3px;
-    border-bottom: 1px solid rgba(250,250,255,.5);
+    border-bottom: 1px solid rgba(235,235,245,.3);
+    transition: border-color .3s;
     &:focus{
-      border-color: #6fa4ff;
+      border-color: #5487ed;
     }
   }
 }

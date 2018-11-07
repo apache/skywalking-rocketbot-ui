@@ -28,7 +28,7 @@ export default class Sla extends Vue {
         left: 10,
       },
       grid: {
-        top: 25,
+        top: 15,
         left: 0,
         right: 18,
         bottom: 30,
@@ -40,6 +40,7 @@ export default class Sla extends Vue {
           lineStyle: { color: 'rgba(0,0,0,.1)' },
           alignWithLabel: true,
         },
+        splitLine: { show: false },
         axisLine: { lineStyle: { color: 'rgba(0,0,0,.1)' } },
         axisLabel: { color: '#333', fontSize: '11' },
       },

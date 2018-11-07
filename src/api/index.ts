@@ -3,6 +3,15 @@ import { Duration } from '@/store/interfaces/options';
 import dateCook from '@/utils/dateCook';
 const tag = '/api';
 
+interface Login{
+  userName: String;
+  password: String;
+}
+
+export const login = (params:Login): AxiosPromise<any> => {
+  return axios.post(`${tag}/login/account`, params);
+};
+
 // 获取应用
 const getAppsGq = (duration: Duration) => (
 {

@@ -14,11 +14,17 @@
       <div v-clickout="() => this.show = false">
         <div class="flex-c cp" @click="show = !show;">
           <span class="mr5 sm">{{time.start | dateformat}} ~ {{time.end | dateformat}}</span>
-          <ion-icon :name="show?'arrow-dropup':'arrow-dropdown'" size="small" class="mr10"></ion-icon>
+          <Icon :type="show?'md-arrow-dropup':'md-arrow-dropdown'" class="mr10"/>
         </div>
         <RkToolTime :show.sync="show" :propsTime="time"/>
       </div>
-      <div class="rk-nav-auto flex-c"><ion-icon name="refresh" class="mr5"></ion-icon>auto</div>
+      <div class="rk-nav-auto cp flex-c mr10" @click="reload"><Icon type="md-refresh" class="mr5"/>reload</div>
+      <Dropdown trigger="click" placement="bottom-end">
+        <div class="rk-nav-logout cp"><Icon type="md-power" /></div>
+        <DropdownMenu slot="list">
+          <li class="ivu-dropdown-item" @click="logout">Logout</li>
+        </DropdownMenu>
+      </Dropdown>
     </div>
   </header>
 </template>
@@ -34,6 +40,20 @@ import RkToolTime from '@/components/rk-tool-time.vue';
 export default class Header extends Vue {
   show = false;
   @Prop() time: any;
+  logout() {
+    window.localStorage.setItem('skywalking-authority', 'guest');
+    this.$router.push('/login');
+  }
+  reload() {
+    const gap = this.time.end.getTime() - this.time.start.getTime();
+    const newEnd = new Date();
+    const newStart = new Date(newEnd.getTime() - gap);
+    this.$store.dispatch('SET_DURATION', {
+      end: newEnd,
+      start: newStart,
+      step: this.time.step,
+    });
+  }
 }
 </script>
 
@@ -46,7 +66,7 @@ export default class Header extends Vue {
   align-items: center;
   padding: 10px 30px;
   background-color: #252a2f;
-  color: #eaeaea;
+  color: #e8e8e8;
   width: 100%;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,.06);
   .logo{
@@ -61,9 +81,9 @@ export default class Header extends Vue {
 }
 .rk-nav-link{
   margin-right: 20px;
-  padding: 6px 10px;
+  padding: 5px 10px;
   border-radius: 6px;
-  color: #eaeaea;
+  color: #e8e8e8;
   opacity: .8;
   will-change: opacity, background-color;
   transition: opacity .3s, background-color .3s;
@@ -78,5 +98,15 @@ export default class Header extends Vue {
   padding: 1px 6px;
   background-color: rgba(255,255,255,.07);
   box-shadow: 0 3px 6px 0 rgba(0,0,0,.1), 0 1px 3px 0 rgba(0,0,0,.08);
+}
+.rk-nav-logout{
+  border-radius: 50%;
+  padding:2px 5px;
+  background-color: rgba(255,255,255,.07);
+  box-shadow: 0 3px 6px 0 rgba(0,0,0,.1), 0 1px 3px 0 rgba(0,0,0,.08);
+  transition: color .3s;
+  &:hover{
+    color:rgb(226, 64, 36);
+  }
 }
 </style>
