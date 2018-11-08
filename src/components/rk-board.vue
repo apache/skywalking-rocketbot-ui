@@ -2,12 +2,12 @@
   <div class="rk-board container">
     <div v-clickout="() => this.show = false">
       <div class="flex-c cp" @click="show = true">
-        <h3 class="mb0 mr5">{{stateOptions.currentApplication.label}}</h3>
+        <h2 class="mb0 mr5">{{stateOptions.currentApplication.label}}</h2>
         <Icon type="md-link" class="mr10" :size="18"/>
       </div>
       <RkToolDashboard :stateOptions="stateOptions" :show.sync="show"/>
     </div>
-    <Icon type="ios-arrow-forward" class="grey mr10"/>
+    <Icon type="ios-arrow-forward" :size="18" class="grey mr10"/>
     <select v-if='stateOptions.currentEndpoint' :value="stateOptions.currentEndpoint.key" @change="endpointChange($event)" class="mr15" style="color:#fafafa;background: 0; border: 0; outline: none;">
       <option style="background-color: #2f333c;" v-for="i in stateOptions.endpoints" :key="i.key" :value="i.key">{{i.label}}</option>
     </select>

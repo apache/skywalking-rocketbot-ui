@@ -16,8 +16,10 @@
             border: 0;
             color: #efefef;
             outline: none;
-            width: 100%;" @change="endpointChange($event)">
-            <option style="background-color: #25292f;" v-for="i in stateOptions.endpoints" :key="i.key" :value="i">{{i.label}}</option>
+            width: 100%;"
+            :value="stateOptions.currentEndpoint? stateOptions.currentEndpoint.key: ''"
+            @change="endpointChange($event)">
+            <option style="background-color: #25292f;" v-for="i in stateOptions.endpoints" :key="i.key" :value="i.key">{{i.label}}</option>
           </select>
         </div>
         <div class="long">

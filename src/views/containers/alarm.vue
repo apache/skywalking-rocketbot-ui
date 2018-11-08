@@ -64,6 +64,7 @@ export default class Alarm extends Vue {
 <style lang="scss">
 .rk-alarm{
   padding: 15px 20px;
+  overflow: auto;
 }
 .rk-alarm-box{
   width: 100%;

@@ -287,7 +287,12 @@ export default {
         .attr('style', 'cursor: move;')
         .attr('x', 10)
         .attr('y', 7)
-        .attr('xlink:href',d => this[d.type.toUpperCase().replace('-','')]);
+        .attr('xlink:href',d => {
+          if( !d.type || d.type === 'N/A') {
+            return this['UNKNOWN_CLOUD']
+          }
+          return this[d.type.toUpperCase().replace('-','')];
+        });
       this.node
         .append('text')
         .attr('font-size', 10)

@@ -59,7 +59,7 @@ const actions: ActionTree<State, any> = {
   GET_ENDPOINTS(context: { commit: Commit; state: State }, applicationId: String) {
     return getEndpoints(applicationId).then((res) => {
       context.commit(types.SET_ENDPOINTS, res.data.data.endpoints);
-      context.commit(types.SET_ENDPOINT, res.data.data.endpoints[0]);
+      // context.commit(types.SET_ENDPOINT, res.data.data.endpoints[0]);
     });
   },
   GET_SERVERS(context: { commit: Commit; state: State, rootState: any }, applicationId: String) {
@@ -70,7 +70,7 @@ const actions: ActionTree<State, any> = {
         }
       });
       context.commit(types.SET_SERVERS, res.data.data.servers);
-      context.commit(types.SET_SERVER, res.data.data.servers[0]);
+      // context.commit(types.SET_SERVER, res.data.data.servers[0]);
     });
   },
 };

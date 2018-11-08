@@ -1,5 +1,5 @@
 <template>
-<div class="rk-login flex">
+<div class="rk-login flex" style="flex-direction: row;">
   <div class="rk-login-l">
     <div class="rk-login-form-wrapper">
       <div class="rk-login-form">
@@ -97,7 +97,7 @@ export default class Login extends Vue {
   width: 100%;
   height: 100%;
   background-image: url('../../assets/img/login-bg.svg');
-  animation: spin 80s linear infinite;
+  animation: spin 100s linear infinite;
   background-size: 100%;
   background-position: center;
 }

@@ -56,7 +56,14 @@ export default class Topology extends Vue {
   open = true;
   show = false;
   get typeGroup() {
-    const arr = this.stateTopo.nodes;
+    const arr = this.stateTopo.nodes.map((i) => {
+      if (!i.type || i.type === 'N/A') {
+        const temp = i;
+        temp.type = 'Unknown';
+        return temp;
+      }
+      return i;
+    });
     const map = {};
     const dest = [];
     for (let i = 0; i < arr.length; i += 1) {
