@@ -71,7 +71,7 @@ const actions: ActionTree<State, any> = {
   ) {
     context.commit(types.SET_SPAN, []);
     return getTraceSpans(params).then((res) => {
-      // context.commit(types.SET_SPAN, span.data.queryTrace.spans);
+      // context.commit(types.SET_SPAN, data.data.queryTrace.spans);
       context.commit(types.SET_SPAN, res.data.data.queryTrace.spans);
     });
   },

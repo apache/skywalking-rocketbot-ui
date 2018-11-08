@@ -19,6 +19,9 @@ export default class CPU extends Vue {
       color: ['#75a8ff', '#F44336'],
       tooltip: {
         trigger: 'axis',
+        textStyle: {
+          fontSize: 13,
+        },
       },
       grid: {
         top: 20,

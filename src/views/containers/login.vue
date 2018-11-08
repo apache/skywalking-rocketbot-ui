@@ -15,7 +15,6 @@
     </div>
   </div>
   <div class="rk-login-r">
-    <!-- <iframe src="http://graphql.cn/" frameborder="0" style="width:100%;height:100%;overflow:hidden"></iframe> -->
     <div class="rk-img-wrapper">
     <img src="../../assets/img/logo.svg" class="rocket">
     </div>
@@ -25,7 +24,6 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { login } from '@/api/login.ts';
 import dateCook from '@/utils/dateCook.ts';
 import { Component } from 'vue-property-decorator';
 import Axios from 'axios';
@@ -68,15 +66,22 @@ export default class Login extends Vue {
       } else {
         window.localStorage.setItem('version', '5');
       }
-      login(this.accountInfo).then((res) => {
-        window.localStorage.setItem('skywalking-authority', res.data.currentAuthority);
-        if (res.data.status === 'error') {
-          this.error = true;
-          return;
-        }
-        this.$router.push('/');
-      });
+      // ======================================================
+      // 此处为登录的业务逻辑，自行调用自己的登录接口将返回值写入localstorage
+      // 修改src/router/index.js中的 beforeEach 业务，判断是否存在正确的定义值，例：skywalking-authority
+
+      // Here is the business logic of the login, call its own login interface to write the return value to localstorage
+      // Modify the beforeEach service in src/router/index.js to determine if there is a correct defined value. example：skywalking-authority
+
+      if (this.accountInfo.userName === 'admin' && this.accountInfo.password === 'admin') {
+        window.localStorage.setItem('skywalking-authority', 'admin');
+      } else {
+        this.error = true;
+        return;
+      }
+      this.$router.push('/');
     });
+  // ======================================================
   }
 }
 </script>
@@ -92,8 +97,9 @@ export default class Login extends Vue {
   width: 100%;
   height: 100%;
   background-image: url('../../assets/img/login-bg.svg');
-  animation: spin 60s linear infinite;
+  animation: spin 80s linear infinite;
   background-size: 100%;
+  background-position: center;
 }
 .rk-login-link{
   color: #252a2f;
@@ -119,12 +125,12 @@ export default class Login extends Vue {
 }
 .rocket{
   position: absolute;
-  width: 140px;
-  height: 140px;
+  width: 120px;
+  height: 120px;
   top: 50%;
   left: 50%;
-  margin-top: -70px;
-  margin-left: -70px;
+  margin-top: -60px;
+  margin-left: -60px;
 }
 .rk-login-form{
   max-width: 360px;
@@ -143,17 +149,17 @@ export default class Login extends Vue {
   position: relative;
   height: 100%;
   width: 100%;
-  background-color: #252a2f;
+  background-color: #21272b;
   overflow: hidden;
 }
-            @keyframes spin {
-                from {
-                    transform: rotate(0deg);
-                }
-                to {
-                    transform: rotate(360deg);
-                }
-            }
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
 .rk-login-btn{
   background-color: #0580ff;
   color:#fff;

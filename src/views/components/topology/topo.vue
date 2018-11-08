@@ -227,7 +227,7 @@ export default {
         .attr('height', 20)
         .attr('x', -10)
         .attr('y', -10)
-        .attr('fill', '#31363d');
+        .attr('fill', '#292d34');
       this.linkText
         .append('text')
         .attr('font-size', 10)

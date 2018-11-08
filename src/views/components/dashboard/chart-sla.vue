@@ -21,6 +21,9 @@ export default class Sla extends Vue {
       color: ['#75a8ff'],
       tooltip: {
         trigger: 'axis',
+        textStyle: {
+          fontSize: 13,
+        },
       },
       legend: {
         icon: 'circle',

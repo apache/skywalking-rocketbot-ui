@@ -6,10 +6,10 @@
     <div class="topology-board" v-if="this.current.id" v-show="open">
       <div class="mb10" v-for="(value,key) in current" :key="key"><span class="half">{{key}}:</span><span class="half">{{value}}</span></div>
     </div>
-    <div class="topology-board" v-else  v-show="open">
+    <div class="topology-board" v-else-if="typeGroup.length"  v-show="open">
       <div class="mb10" v-for="i in typeGroup" :key="i.type"><span class="half">{{i.type}}</span><span class="half">{{i.data.length}}</span></div>
     </div>
-    <div v-clickout="() => this.show = false" >
+    <div v-if="typeGroup.length" v-clickout="() => this.show = false" >
       <div class="topology-setting-btn" @click="open = !open" :style="`right:${open?345:25}px`">
         <Icon :type="open?'ios-arrow-forward':'ios-arrow-back'" style="vertical-align: initial;"/>
       </div>
@@ -107,7 +107,7 @@ export default class Topology extends Vue {
 
 <style lang="scss">
 .topology {
-  background-color: #31363d;
+  background-color: #292d34;
   position: relative;
 }
 .topology > svg {

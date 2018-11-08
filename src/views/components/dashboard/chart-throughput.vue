@@ -19,6 +19,9 @@ export default class Throughput extends Vue {
       color: ['#75a8ff', '#ff6464'],
       tooltip: {
         trigger: 'axis',
+        textStyle: {
+          fontSize: 13,
+        },
       },
       legend: {
         icon: 'circle',

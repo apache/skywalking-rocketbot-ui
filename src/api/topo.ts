@@ -200,7 +200,9 @@ const getTopo6 = (duration: Duration): any => {
   });
 };
 
-export const getTopo = window.localStorage.getItem('version') === '6' ? getTopo6 : getTopo5;
+export const getTopo = (duration: Duration) => {
+  return window.localStorage.getItem('version') === '6' ? getTopo6(duration) : getTopo5(duration);
+};
 
 // 获取应用拓扑图
 const getTopoAppGq = (duration: Duration, applicationId:String) => (
@@ -320,7 +322,9 @@ const getTopoApp6 = (params: TopoApp): any => {
     });
   });
 };
-export const getTopoApp = window.localStorage.getItem('version') === '6' ? getTopoApp6 : getTopoApp5;
+export const getTopoApp = (params: TopoApp) => {
+  return window.localStorage.getItem('version') === '6' ? getTopoApp6(params) : getTopoApp5(params);
+};
 // 获取应用下信息
 const getClusterBriefGq = (duration: Duration) => (
 {
