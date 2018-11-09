@@ -68,11 +68,18 @@ export default class SearchBox extends Vue {
     page: 1,
   };
   mounted() {
-    this.option.time = [this.stateGlobal.duration.start, this.stateGlobal.duration.end];
+    if (window.sessionStorage.getItem('traceOption')) {
+      const temp = JSON.parse(window.sessionStorage.getItem('traceOption'));
+      temp.time = [this.stateGlobal.duration.start, this.stateGlobal.duration.end];
+      this.option = temp;
+    } else {
+      this.option.time = [this.stateGlobal.duration.start, this.stateGlobal.duration.end];
+    }
   }
   @Watch('option', { deep: true })
   onOptionChanged(): void {
     getTraces(this.option);
+    window.sessionStorage.setItem('traceOption', JSON.stringify(this.option));
   }
   changePage(page) {
     this.option.page = page;
