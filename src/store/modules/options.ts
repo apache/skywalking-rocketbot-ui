@@ -78,7 +78,6 @@ const actions: ActionTree<State, any> = {
         }
       });
       context.commit(types.SET_SERVERS, res.data.data.servers);
-      console.log(res.data.data);
       context.commit(types.SET_SLOWENDPOINT, res.data.data.serviceSlowEndpoint);
       // context.commit(types.SET_SERVER, res.data.data.servers[0]);
     });

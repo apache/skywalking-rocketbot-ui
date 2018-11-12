@@ -33,12 +33,14 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import RkToolTime from '@/components/rk-tool-time.vue';
+import getLocalTime from '@/utils/localtime';
 
 @Component({
   components: { RkToolTime },
 })
 export default class Header extends Vue {
   show = false;
+  load = true;
   @Prop() time: any;
   logout() {
     window.localStorage.setItem('skywalking-authority', 'guest');
@@ -46,12 +48,16 @@ export default class Header extends Vue {
   }
   reload() {
     const gap = this.time.end.getTime() - this.time.start.getTime();
-    const newEnd = new Date();
-    const newStart = new Date(newEnd.getTime() - gap);
+    const newEnd = getLocalTime(parseInt(window.localStorage.getItem('utc'), 10), new Date());
+    const newStart = getLocalTime(parseInt(window.localStorage.getItem('utc'), 10), new Date(new Date().getTime() - gap));
     this.$store.dispatch('SET_DURATION', {
       end: newEnd,
       start: newStart,
       step: this.time.step,
+    }).then(() => {
+      const el:any = this.$refs.rktooltime;
+      el.load = false;
+      this.$nextTick(() => { el.load = true; });
     });
   }
 }

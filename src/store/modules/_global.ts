@@ -83,6 +83,9 @@ const actions: ActionTree<State, any> = {
   SET_DURATION(context: { commit: Commit }, data: Duration) {
     context.commit(types.SET_DURATION, data);
     context.commit(types.RUN_EVENTS);
+    return new Promise((resolve) => {
+      resolve();
+    });
   },
   RUN_EVENTS(context: { commit: Commit }) {
     context.commit(types.RUN_EVENTS);
