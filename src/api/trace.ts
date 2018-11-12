@@ -1,5 +1,6 @@
 import axios, { AxiosPromise } from 'axios';
 import dateCook from '@/utils/dateCook';
+import { cancelToken } from '@/utils/cancelToken';
 /* eslint-disable */
 const tag = '/api';
 
