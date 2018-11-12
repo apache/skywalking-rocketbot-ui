@@ -2,6 +2,7 @@ import axios, { AxiosPromise } from 'axios';
 import { Option } from '@/store/modules/options.ts';
 import { Duration } from '@/store/interfaces/options';
 import dateCook from '@/utils/dateCook';
+import { cancelToken } from '@/utils/cancelToken';
 
 const tag = '/api';
 // 获取服务器信息
@@ -22,7 +23,7 @@ const searchAppGq = (endpointId:String) => (
 export const searchApp = (
     endpointId: String,
   ): AxiosPromise<any> =>
-    axios.post(`${tag}/searchApp`, searchAppGq(endpointId));
+    axios.post(`${tag}/searchApp`, searchAppGq(endpointId), { cancelToken: cancelToken() });
 
 // 获取服务器详细信息
 const getServerDetailGq = (duration: Duration, serverId:String) => (
@@ -129,7 +130,7 @@ export const getServerDetail = (
     duration: Duration,
     serverId: String,
   ): AxiosPromise<any> =>
-    axios.post(`${tag}/serverinfo`, getServerDetailGq(dateCook(duration), serverId));
+    axios.post(`${tag}/serverinfo`, getServerDetailGq(dateCook(duration), serverId), { cancelToken: cancelToken() });
 
 // 获取服务器信息
 const getServerInfoGq = (duration: Duration, serverId:String) => (
@@ -171,7 +172,7 @@ export const getServerInfo = (
     duration: Duration,
     serverId: String,
   ): AxiosPromise<any> =>
-    axios.post(`${tag}/serverinfo`, getServerInfoGq(dateCook(duration), serverId));
+    axios.post(`${tag}/serverinfo`, getServerInfoGq(dateCook(duration), serverId), { cancelToken: cancelToken() });
 
 // 获取应用下信息
 const getApplicationInfoGq = (duration: Duration) => (
@@ -258,7 +259,7 @@ const getApplicationInfoGq = (duration: Duration) => (
 export const getApplicationInfo = (
   duration: Duration,
 ): AxiosPromise<any> =>
-  axios.post(`${tag}/applicationinfo`, getApplicationInfoGq(dateCook(duration)));
+  axios.post(`${tag}/applicationinfo`, getApplicationInfoGq(dateCook(duration)), { cancelToken: cancelToken() });
 
 // 获取服务下信息
 const getEndpointInfoGq = (duration: Duration, applicationId: String, endpoint: Option) => (
@@ -272,12 +273,12 @@ const getEndpointInfoGq = (duration: Duration, applicationId: String, endpoint: 
       queryDuration: duration,
       traceState: 'ALL',
       queryOrder: 'BY_DURATION',
-      paging: { pageNum:1, pageSize:10, needTotal: false },
+      paging: { pageNum:1, pageSize:8, needTotal: false },
     },
     traceConditionNew:  {
       endpointId:  endpoint ? endpoint.key : '',
       endpointName: endpoint ? endpoint.label : '',
-      paging: { pageNum: 1, pageSize: 10, needTotal: false },
+      paging: { pageNum: 1, pageSize: 8, needTotal: false },
       queryDuration: duration,
       queryOrder: 'BY_DURATION',
       traceState: 'ALL',
@@ -391,4 +392,4 @@ export const getEndpointInfo = (
   applicationId: String,
   endpoint: Option,
 ): AxiosPromise<any> =>
-  axios.post(`${tag}/endpointinfo`, getEndpointInfoGq(dateCook(duration), applicationId, endpoint));
+  axios.post(`${tag}/endpointinfo`, getEndpointInfoGq(dateCook(duration), applicationId, endpoint), { cancelToken: cancelToken() });

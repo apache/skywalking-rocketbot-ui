@@ -10,7 +10,7 @@ import TraceDetail from '@/views/containers/trace-detail.vue';
 import Axios from 'axios';
 
 Vue.use(Router);
-
+window.axiosCancel = [];
 const router = new Router({
   mode: 'history',
   linkActiveClass: 'active',
@@ -60,7 +60,10 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   const token = window.localStorage.getItem('skywalking-authority');
   Axios.defaults.timeout = 20000;
-
+  if (window.axiosCancel.length !== 0) {
+    for (let i = 0; i < window.axiosCancel.length; i += 1) setTimeout(window.axiosCancel[i](), 0);
+    window.axiosCancel = [];
+  }
   if (to.meta.login && (token === null || token === 'guest')) {
     next();
   } else if (token === null || token === 'guest') {

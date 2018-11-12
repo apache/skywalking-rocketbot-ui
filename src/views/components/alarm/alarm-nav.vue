@@ -26,7 +26,7 @@ export default class Nav extends Vue {
   cursor: pointer;
   margin-right: 20px;
   line-height: 39px;
-  font-weight: 600;
+  font-weight: 500;
   border-bottom: 1px;
   border-bottom-style: solid;
   color: rgba(61, 68, 79, .6);

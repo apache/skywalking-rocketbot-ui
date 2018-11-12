@@ -43,7 +43,8 @@ html,body,#app{
 }
 .wrapper{
   flex-grow: 1;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
   // &::-webkit-scrollbar {
   // }
 }

@@ -1,16 +1,16 @@
 <template>
-<rk-panel title="Slow Trace">
+<rk-panel title="Slow Traces">
   <div class="rk-slow-trace-item mb15" v-for="i in stateDashboard.slowTrace" :key="i.key">
     <div>
       <span class="r sm">{{i.duration}} ms</span>
-      <span class="r sm grey mr15">{{parseInt(i.start) | dateformat}}</span>
+      <!-- <span class="r sm grey mr15">{{parseInt(i.start) | dateformat}}</span> -->
       <div class="mb5">
         <Tooltip :content="`${moment(parseInt(i.start)).format('YYYY-MM-DD HH:mm:ss')}\n${i.operationNames[0]}`" placement="top" max-width="200" class="ell" style="max-width: 200px;">
           <span class="link-hover cp" @click="$router.push({ path:'/trace/link', query:{traces:i.traceIds.join('&')}})">{{i.operationNames[0]}}</span>
         </Tooltip>
       </div>
     </div>
-    <RkProgress :precent="i.duration/maxDuration*100"  :color="i.isError?'#ff6464':'#72a5fd'"/>
+    <RkProgress :precent="i.duration/maxDuration*100"/>
   </div>
 </rk-panel>
 </template>

@@ -108,15 +108,15 @@ const getters = {
 const mutations = {
   [types.SET_ENDPOINT_INFO](state: State, data: any) {
     state.throughput = data.data.throughput.values.map((i) => {
-      if (i.value) return i.value;
+      if (i.hasOwnProperty('value')) return i.value;
       return i;
     });
     state.responseTime = data.data.responseTime.values.map((i) => {
-      if (i.value) return i.value;
+      if (i.hasOwnProperty('value')) return i.value;
       return i;
     });
     state.sla = data.data.sla.values.map((i) => {
-      if (i.value) return i.value;
+      if (i.hasOwnProperty('value')) return i.value;
       return i;
     });
     state.slowTrace = data.data.slowTrace.traces;
@@ -129,11 +129,11 @@ const mutations = {
   },
   [types.SET_SERVER_INFO](state: State, data: any) {
     state.serverResponseTime = data.serverResponseTime.values.map((i) => {
-      if (i.value) return i.value;
+      if (i.hasOwnProperty('value')) return i.value;
       return i;
     });
     state.serverThroughput = data.serverThroughput.values.map((i) => {
-      if (i.value) return i.value;
+      if (i.hasOwnProperty('value')) return i.value;
       return i;
     });
   },

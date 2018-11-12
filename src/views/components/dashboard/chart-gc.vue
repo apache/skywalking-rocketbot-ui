@@ -31,6 +31,9 @@ export default class Gc extends Vue {
       color: ['#75a8ff', '#f7b32b'],
       tooltip: {
         trigger: 'axis',
+        textStyle: {
+          fontSize: 13,
+        },
       },
       legend: {
         data: ['Young GC Time', 'Old GC Time'],

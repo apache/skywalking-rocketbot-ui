@@ -1,5 +1,5 @@
 <template>
-<rk-panel title="Global Slow Endpoints">
+<rk-panel title="Service Slow Endpoints">
   <div class="mb15" v-for="i in fiveData" :key="i.key">
     <div>
       <span class="r sm">{{i.value}} ms</span>
@@ -27,7 +27,7 @@ export default class RkChartBox extends Vue {
   @State('options') stateOptions;
   serviceAppChange = serviceAppChange;
   get fiveData() {
-    return this.stateDashboard.slowService.splice(0, 4);
+    return this.stateOptions.serviceSlow.splice(0, 4);
   }
   get maxValue() {
     const temp:Number[] = this.fiveData.map(i => i.value);

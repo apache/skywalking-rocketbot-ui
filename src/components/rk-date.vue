@@ -303,7 +303,7 @@ export default {
 }
 
 .datepicker-range {
-  min-width: 325px;
+  min-width: 310px;
 }
 
 .datepicker-range .datepicker-popup {

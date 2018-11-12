@@ -75,6 +75,7 @@ export default class Trace extends Vue {
 }
 .rk-trace{
   padding: 15px 20px;
+  overflow: auto;
   .error{
     &:before{
       display: inline-block;

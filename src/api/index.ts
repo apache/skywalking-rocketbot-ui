@@ -2,7 +2,6 @@ import axios, { AxiosPromise } from 'axios';
 import { Duration } from '@/store/interfaces/options';
 import dateCook from '@/utils/dateCook';
 const tag = '/api';
-
 // 获取应用
 const getAppsGq = (duration: Duration) => (
 {
@@ -61,6 +60,17 @@ const getServersGq = (duration: Duration, applicationId: String) => (
   },
   query: window.localStorage.getItem('version') === '6' ?
   `query Service($applicationId: ID!, $duration: Duration!) {
+    serviceSlowEndpoint: getEndpointTopN(
+      serviceId: $applicationId
+      duration: $duration
+      name: "endpoint_avg",
+      topN: 10,
+      order: DES
+    ) {
+      key: id
+      label: name
+      value
+    }
     servers:  getServiceInstances(duration: $duration, serviceId: $applicationId) {
       key: id
       name
@@ -72,6 +82,15 @@ const getServersGq = (duration: Duration, applicationId: String) => (
   }`
   :
   `query Application($applicationId: ID!, $duration: Duration!) {
+    serviceSlowEndpoint: getSlowService(applicationId: $applicationId, duration: $duration, topN: 10) {
+      service {
+        key: id
+        label: name
+        applicationId
+        applicationName
+      }
+      value: avgResponseTime
+    }
     servers: getServerThroughput(
       applicationId: $applicationId,
       duration: $duration,

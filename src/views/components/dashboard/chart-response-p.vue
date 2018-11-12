@@ -33,6 +33,9 @@ export default class Response extends Vue {
       ],
       tooltip: {
         trigger: 'axis',
+        textStyle: {
+          fontSize: 13,
+        },
       },
       legend: {
         icon: 'circle',

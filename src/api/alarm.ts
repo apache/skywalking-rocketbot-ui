@@ -1,6 +1,7 @@
 import axios, { AxiosPromise } from 'axios';
 import { Duration } from '@/store/interfaces/options';
 import dateCook from '@/utils/dateCook';
+import { cancelToken } from '@/utils/cancelToken';
 /* eslint-disable */
 const tag = '/api';
 // 获取告警
@@ -53,4 +54,4 @@ export const getAlarm = (
     type: String,
     paging: Number,
   ): AxiosPromise<any> =>
-    axios.post(`${tag}/alarm`, getAlarmGq(dateCook(duration), paging, type));
+    axios.post(`${tag}/alarm`, getAlarmGq(dateCook(duration), paging, type), { cancelToken: cancelToken() });

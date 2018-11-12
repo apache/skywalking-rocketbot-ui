@@ -1,5 +1,5 @@
 <template>
-<rk-panel class="rk-application-throughput" title="Service Throughput">
+<rk-panel class="rk-application-throughput" title="Global Service Throughputs">
   <div class="mb15" v-for="i in fiveData" :key="i.key">
     <div>
       <span class="r sm">{{i.value}} calls/ m</span>

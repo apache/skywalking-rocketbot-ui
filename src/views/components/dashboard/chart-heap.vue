@@ -19,6 +19,9 @@ export default class Heap extends Vue {
       color: ['#75a8ff', '#f7b32b'],
       tooltip: {
         trigger: 'axis',
+        textStyle: {
+          fontSize: 13,
+        },
       },
       legend: {
         data: ['free', 'value'],

@@ -18,6 +18,9 @@ export default class Response extends Vue {
       color: ['#75a8ff', '#F44336'],
       tooltip: {
         trigger: 'axis',
+        textStyle: {
+          fontSize: 13,
+        },
       },
       legend: {
         data: ['server', 'service'],
