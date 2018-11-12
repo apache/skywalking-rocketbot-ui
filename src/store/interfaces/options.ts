@@ -1,5 +1,5 @@
 export interface Duration {
-  start: Date | string;
-  end: Date | string;
+  start: Date | string | number;
+  end: Date | string | number;
   step: String;
 }

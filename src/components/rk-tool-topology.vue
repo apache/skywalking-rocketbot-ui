@@ -15,7 +15,7 @@
           <a class="rk-tool-btn mr5" @click="quickTime(15)">15m</a>
           <a class="rk-tool-btn mr5" @click="quickTime(30)">30m</a>
           <a class="rk-tool-btn mr5" @click="quickTime(60)">1h</a>
-          <a class="rk-tool-btn mr5" @click="quickTime(120)">2h</a>
+          <!-- <a class="rk-tool-btn mr5" @click="quickTime(180)">3h</a> -->
           <a class="rk-tool-btn mr5" @click="quickTime(6*60)">6h</a>
           <a class="rk-tool-btn mr5" @click="quickTime(12*60)">12h</a>
           <a class="rk-tool-btn mr5" @click="quickTime(24*60)">1d</a>
@@ -42,6 +42,7 @@ export default class RkToolTime extends Vue {
   @Prop() propsTime: any;
   @Prop() stateOptions: any;
   @Prop() stateTopo: any;
+  @Prop() stateGlobal: any;
   time:Date[] = [this.propsTime.start, this.propsTime.end];
   @Watch('time')
   onTimeUpdate() {
@@ -59,7 +60,10 @@ export default class RkToolTime extends Vue {
     return getTopo();
   }
   quickTime(time) {
-    this.time = [new Date(new Date().getTime() - (time * 60 * 1000)), new Date()];
+    this.time = [
+      new Date(this.stateGlobal.duration.end.getTime() - (time * 60 * 1000)),
+      this.stateGlobal.duration.end,
+    ];
   }
 }
 </script>

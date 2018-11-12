@@ -2,23 +2,26 @@
 <div>
   <RkBoard :stateOptions="stateOptions" @showServer="getServerDetail"/>
   <div class="rk-dashboard">
-    <div class="flex">
-      <NumBox class="mr10" title="Endpoint Avg Response Time" :content="(responseTime?responseTime:0).toFixed(2)" unit="ms"/>
-      <NumBox class="mr10" title="Endpoint Avg Throughput" :content="(throughput?throughput:0).toFixed(2)" unit="cpm"/>
-      <NumBox title="Avg SLA" :content="(sla?sla/100:0).toFixed(2)" unit="%"/>
+    <div class="child-one-third clear">
+      <div class="l mr10">
+        <NumBox title="Endpoint Avg Response Time" :content="(responseTime?responseTime:0).toFixed(2)" unit="ms"/>
+        <ChartResponseP/>
+        <ChartResponse/>
+      </div>
+      <div class="l mr10">
+        <NumBox title="Endpoint Avg Throughput" :content="(throughput?throughput:0).toFixed(2)" unit="cpm"/>
+        <ChartThroughput/>
+        <TopThroughput/>
+      </div>
+      <div class="l">
+        <NumBox title="Avg SLA" :content="(sla?sla/100:0).toFixed(2)" unit="%"/>
+        <ChartSla/>
+        <SlowService/>
+      </div>
     </div>
     <div class="child-one-third clear">
-      <ChartResponseP class="l mr10"/>
-      <ChartThroughput class="l mr10"/>
-      <ChartSla class="l"/>
-    </div>
-    <div class="child-one-third clear">
-      <ChartResponse class="l mr10"/>
-      <TopThroughput class="l mr10"/>
-      <SlowService class="l"/>
-    </div>
-    <div class="flex">
-      <TopSlow/>
+      <TopSlow class="l mr10" style="width:66%;"/>
+      <SlowAppService class="l"/>
     </div>
   </div>
   <rk-sidebox title="Server" :notice="`${stateOptions.currentServer? stateOptions.currentServer.name: ''}`" :show.sync='show'>
@@ -54,6 +57,7 @@ import ChartGc from '../components/dashboard/chart-gc.vue';
 import NumBox from '../components/dashboard/num-box.vue';
 import TopThroughput from '../components/dashboard/top-throughput.vue';
 import SlowService from '../components/dashboard/slow-service.vue';
+import SlowAppService from '../components/dashboard/slow-app-service.vue';
 import TopSlow from '../components/dashboard/top-slow.vue';
 
 @Component({
@@ -70,6 +74,7 @@ import TopSlow from '../components/dashboard/top-slow.vue';
     ChartNonHeap,
     ChartCpu,
     ChartGc,
+    SlowAppService,
   },
 })
 

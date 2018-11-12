@@ -1,5 +1,6 @@
 import { Commit, ActionTree } from 'vuex';
 import { Duration } from '@/store/interfaces/options';
+import getLocalTime from '@/utils/localtime';
 import * as types from '../mutation-types';
 
 export interface State {
@@ -7,11 +8,16 @@ export interface State {
   eventStack: any;
   chartStack: any;
 }
-
+let utc = -(new Date().getTimezoneOffset() / 60);
+if (window.localStorage.getItem('utc')) {
+  utc = parseInt(window.localStorage.getItem('utc'), 10);
+} else {
+  window.localStorage.setItem('utc', utc.toString());
+}
 const initState: State = {
   duration: {
-    start: new Date(new Date().getTime() - (15 * 60 * 1000)),
-    end: new Date(),
+    start: getLocalTime(utc, new Date(new Date().getTime() - (15 * 60 * 1000))),
+    end: getLocalTime(utc, new Date()),
     step: 'MINUTE',
   },
   eventStack: [],

@@ -16,7 +16,7 @@
           <span class="mr5 sm">{{time.start | dateformat}} ~ {{time.end | dateformat}}</span>
           <Icon :type="show?'md-arrow-dropup':'md-arrow-dropdown'" class="mr10"/>
         </div>
-        <RkToolTime :show.sync="show" :propsTime="time"/>
+        <RkToolTime ref="rktooltime" :show.sync="show" :propsTime="time"/>
       </div>
       <div class="rk-nav-auto cp flex-c mr10" @click="reload"><Icon type="md-refresh" class="mr5"/>reload</div>
       <Dropdown trigger="click" placement="bottom-end">

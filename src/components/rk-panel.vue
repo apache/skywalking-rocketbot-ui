@@ -30,5 +30,6 @@ export default class RkPanel extends Vue {
 }
 .rk-box-container{
   padding:10px;
+  min-height: 220px;
 }
 </style>

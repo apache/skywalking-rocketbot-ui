@@ -13,10 +13,17 @@ export interface Server {
   osName: String;
   ipv4: String[];
 }
+export interface SlowEndpoint {
+  key: String;
+  label: String;
+  value: Number;
+}
+
 export interface State {
   applications: Option[];
   endpoints: Option[];
   servers: Server[];
+  serviceSlow: SlowEndpoint[];
   currentApplication: Option;
   currentEndpoint: Option;
   currentServer: Server;
@@ -26,6 +33,7 @@ const initState: State = {
   applications: [],
   endpoints: [],
   servers: [],
+  serviceSlow: [],
   currentApplication: {
     key: '',
     label: '',
@@ -70,6 +78,8 @@ const actions: ActionTree<State, any> = {
         }
       });
       context.commit(types.SET_SERVERS, res.data.data.servers);
+      console.log(res.data.data);
+      context.commit(types.SET_SLOWENDPOINT, res.data.data.serviceSlowEndpoint);
       // context.commit(types.SET_SERVER, res.data.data.servers[0]);
     });
   },
@@ -85,6 +95,9 @@ const mutations = {
   },
   [types.SET_SERVERS](state: State, data: Server[]) {
     state.servers = data;
+  },
+  [types.SET_SLOWENDPOINT](state: State, data: SlowEndpoint[]) {
+    state.serviceSlow = data;
   },
   [types.SET_APPLICATION](state: State, data: Option) {
     state.currentApplication = data;
