@@ -6,21 +6,23 @@
       <div class="l mr10">
         <NumBox title="Endpoint Avg Response Time" :content="(responseTime?responseTime:0).toFixed(2)" unit="ms"/>
         <ChartResponseP/>
-        <ChartResponse/>
       </div>
       <div class="l mr10">
         <NumBox title="Endpoint Avg Throughput" :content="(throughput?throughput:0).toFixed(2)" unit="cpm"/>
         <ChartThroughput/>
-        <TopThroughput/>
       </div>
       <div class="l">
         <NumBox title="Avg SLA" :content="(sla?sla/100:0).toFixed(2)" unit="%"/>
         <ChartSla/>
-        <SlowService/>
       </div>
     </div>
     <div class="child-one-third clear">
-      <TopSlow class="l mr10" style="width:66%;"/>
+      <ChartResponse class="l mr10"/>
+      <TopSlow class="l" style="width:66%;"/>
+    </div>
+    <div class="child-one-third clear">
+      <TopThroughput class="l mr10"/>
+      <SlowService class="l mr10"/>
       <SlowAppService class="l"/>
     </div>
   </div>

@@ -15,8 +15,8 @@
       </thead>
       <tbody>
         <tr v-for="i in stateTrace.traces" :key="i.key">
-          <td style="width:400px">
-            <Tooltip max-width="400" :content="i.operationNames[0]" placement="top" style="max-width:400px" class="ell">
+          <td style="width:300px">
+            <Tooltip max-width="300" :content="i.operationNames[0]" placement="top" style="max-width:300px" class="ell">
               <span :class="i.isError? 'error' : 'success'">{{i.operationNames[0]}}</span>
             </Tooltip>
           </td>

@@ -36,13 +36,14 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import { setDuration } from '@/store/dispatch/_global.ts';
 import { getTopo } from '@/store/dispatch/topo.ts';
+import { State } from 'vuex-class';
 @Component({})
 export default class RkToolTime extends Vue {
   @Prop({ type: Boolean, default: false }) show: Boolean;
   @Prop() propsTime: any;
   @Prop() stateOptions: any;
   @Prop() stateTopo: any;
-  @Prop() stateGlobal: any;
+  @State('global') stateGlobal;
   time:Date[] = [this.propsTime.start, this.propsTime.end];
   @Watch('time')
   onTimeUpdate() {
