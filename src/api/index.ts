@@ -71,6 +71,57 @@ const getServersGq = (duration: Duration, applicationId: String) => (
       label: name
       value
     }
+    getServiceInstanceThroughput: getServiceInstanceTopN(
+      serviceId: $applicationId
+      duration: $duration
+      name: "service_instance_cpm",
+      topN: 10,
+      order: DES
+    ) {
+      key: id
+      name
+      value
+    }
+    getP99: getLinearIntValues(metric: {
+      name: "service_p99"
+      id: $applicationId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP95: getLinearIntValues(metric: {
+      name: "service_p95"
+      id: $applicationId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP90: getLinearIntValues(metric: {
+      name: "service_p90"
+      id: $applicationId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP75: getLinearIntValues(metric: {
+      name: "service_p75"
+      id: $applicationId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP50: getLinearIntValues(metric: {
+      name: "service_p50"
+      id: $applicationId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
     servers:  getServiceInstances(duration: $duration, serviceId: $applicationId) {
       key: id
       name

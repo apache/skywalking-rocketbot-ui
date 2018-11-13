@@ -23,6 +23,7 @@ export interface State {
   applications: Option[];
   endpoints: Option[];
   servers: Server[];
+  serversThroughput: Server[];
   serviceSlow: SlowEndpoint[];
   currentApplication: Option;
   currentEndpoint: Option;
@@ -33,6 +34,7 @@ const initState: State = {
   applications: [],
   endpoints: [],
   servers: [],
+  serversThroughput: [],
   serviceSlow: [],
   currentApplication: {
     key: '',
@@ -77,6 +79,11 @@ const actions: ActionTree<State, any> = {
           i.name = `${i.pid}@${i.ipv4[0]}`;
         }
       });
+      if (res.data.data.getServiceInstanceThroughput) {
+        context.commit(types.SET_SERVERS_THROUGHPUT, res.data.data.getServiceInstanceThroughput);
+      } else {
+        context.commit(types.SET_SERVERS_THROUGHPUT, res.data.data.servers);
+      }
       context.commit(types.SET_SERVERS, res.data.data.servers);
       context.commit(types.SET_SLOWENDPOINT, res.data.data.serviceSlowEndpoint);
       // context.commit(types.SET_SERVER, res.data.data.servers[0]);
@@ -94,6 +101,9 @@ const mutations = {
   },
   [types.SET_SERVERS](state: State, data: Server[]) {
     state.servers = data;
+  },
+  [types.SET_SERVERS_THROUGHPUT](state: State, data: Server[]) {
+    state.serversThroughput = data;
   },
   [types.SET_SLOWENDPOINT](state: State, data: SlowEndpoint[]) {
     state.serviceSlow = data;

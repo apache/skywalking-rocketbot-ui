@@ -39,6 +39,7 @@
       <ChartCpu class="mr10"/>
       <ChartGc/>
     </div>
+    <ServerThroughput/>
   </rk-sidebox>
 </div>
 </template>
@@ -61,6 +62,7 @@ import TopThroughput from '../components/dashboard/top-throughput.vue';
 import SlowService from '../components/dashboard/slow-service.vue';
 import SlowAppService from '../components/dashboard/slow-app-service.vue';
 import TopSlow from '../components/dashboard/top-slow.vue';
+import ServerThroughput from '../components/dashboard/server-throughput.vue';
 
 @Component({
   components: {
@@ -77,6 +79,7 @@ import TopSlow from '../components/dashboard/top-slow.vue';
     ChartCpu,
     ChartGc,
     SlowAppService,
+    ServerThroughput,
   },
 })
 
