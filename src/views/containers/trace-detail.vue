@@ -27,7 +27,7 @@
         <div v-for="(i, index) in this.currentSpan.logs" :key="index">
           <div class="mb10 sm"><span class="mr10">Time:</span><span class="grey">{{i.time | dateformat}}</span></div>
           <div class="mb15" v-for="(_i, _index) in i.data" :key="_index">
-           <span class="one-fifth">{{_i.key}}:</span><pre class="four-fifth mt0 mb0" style="font-size：12px;overflow:auto">{{_i.value}}</pre>
+           <span class="one-fifth">{{_i.key}}:</span><pre class="four-fifth mt0 mb0" style="font-size:12px;overflow:auto">{{_i.value}}</pre>
           </div>
         </div>
       </div>
