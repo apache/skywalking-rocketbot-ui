@@ -2,7 +2,7 @@
 <h1 align="center"></h1>
 
 <p align="center">
-<a><img src="https://img.shields.io/badge/version-1.0.1-blue.svg?longCache=true&style=popout-square"></a>
+<a><img src="https://img.shields.io/badge/version-1.0.2-blue.svg?longCache=true&style=popout-square"></a>
 <a href="https://github.com/TinyAllen/rocketbot/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?longCache=true&style=popout-square"></a>
 <a href="https://github.com/TinyAllen/rocketbot/blob/master/LICENSE"><img src="https://img.shields.io/badge/support by-Daocloud Lab-brightgreen.svg?longCache=true&style=popout-square"></a>
 <a><img src="https://img.shields.io/badge/base-Skywalking-red.svg?longCache=true&style=popout-square"></a>
@@ -136,7 +136,6 @@ Supported by [DaoCloud Labs](https://github.com/DaoCloud-Labs).
 
 #### WeChat
 <p>
-  <img width="160" src="https://user-images.githubusercontent.com/19775780/47762068-03e1df00-dcf6-11e8-9315-cc17b28383e7.jpeg"/>
   <img width="160" src="https://user-images.githubusercontent.com/19775780/47297000-814a8700-d646-11e8-8ff6-c2748555ceca.jpeg"/>
 </p>
 
