@@ -141,14 +141,14 @@ export default class Login extends Vue {
   }
 }
 .rk-login-l{
-  width: 75%;
+  width: 38.2%;
   height: 100%;
   display: table;
 }
 .rk-login-r{
   position: relative;
   height: 100%;
-  width: 100%;
+  width: 61.8%;
   background-color: #21272b;
   overflow: hidden;
 }
