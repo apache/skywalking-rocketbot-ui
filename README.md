@@ -90,7 +90,7 @@ docker build -t rocketbot .
 ### Running the docker image
 
 ```
-docker run -p 8080:80 -d -e SKYWALKING_URL=127.0.0.1:1234,127.0.0.1:1235 SKYWALKING_COMMON=127.0.0.1:8080,127.0.0.1:80801 rocketbot
+docker run -p 8080:80 -d -e SKYWALKING_URL=127.0.0.1:1234,127.0.0.1:1235 rocketbot
 ```
 
 `SKYWALKING_URL` is the address of your backend, multiple IP is changed by comma.
