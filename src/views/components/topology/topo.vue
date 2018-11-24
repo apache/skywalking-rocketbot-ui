@@ -188,6 +188,11 @@ export default {
         .force('yPos', d3.forceY().strength(1))
         .force('xPos', d3.forceX().strength(1))
         .force('charge', d3.forceManyBody().strength(-500))
+          // .force('cluster', d3.cluster().strength(0.2))
+
+  // // apply collision with padding
+  // .force('collide', d3.forceCollide()
+  //   .strength(0.7))
         .force( 'link', d3.forceLink(this.datas.calls).id(d => d.id))
         .force('center', d3.forceCenter(this.width / 2, this.height / 2))
         .on('tick', this.tick)

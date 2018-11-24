@@ -80,7 +80,7 @@ export default class Trace extends Vue {
     this.CLEAR_TRACE();
   }
   created() {
-    this.traceId = this.$route.query.traces.split('&')[0];
+    this.traceId = this.$route.query.traces.toString().split('&')[0];
   }
 }
 </script>

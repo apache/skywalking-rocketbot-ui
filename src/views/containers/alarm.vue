@@ -9,7 +9,7 @@
   <div class="rk-alarm">
     <table class="rk-alarm-table">
       <thead>
-        <tr><th>&nbsp;</th><th>Start</th><th>Title</th><th>Type</th><th>Content</th></tr>
+        <tr><th>&nbsp;</th><th>Start</th><th v-show="!stateAlarm.alarmList[0].message">Title</th><th v-show="!stateAlarm.alarmList[0].message">Type</th><th>Content</th></tr>
       </thead>
       <tbody>
          <tr v-for="(i, index) in stateAlarm.alarmList" :key="index">
@@ -17,9 +17,9 @@
             <Icon type="md-alert" class="rk-alarm-icon"/>
           </td>
           <td class="grey ell">{{i.startTime}}</td>
-          <td>{{i.title}}</td>
-          <td>{{i.causeType}}</td>
-          <td>{{i.content}}</td>
+          <td>{{i.title || i.message}}</td>
+          <td v-if="!i.message">{{i.causeType}}</td>
+          <td v-if="!i.message">{{i.content}}</td>
         </tr>
       </tbody>
     </table>
