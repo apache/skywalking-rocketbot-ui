@@ -3,7 +3,12 @@
   <SearchBox/>
   <div class="rk-trace">
   <!-- <ChartTrace/> -->
-    <table class="rk-table">
+    <table class="rk-table" style="table-layout:fixed;">
+      <col style="width:100%"/>
+      <col style="width:180px"/>
+      <col style="width:70px"/>
+      <col style="width:120px"/>
+      <col style="width:180px"/>
       <thead>
         <tr>
           <th>Operate</th>
@@ -15,15 +20,15 @@
       </thead>
       <tbody>
         <tr v-for="i in stateTrace.traces" :key="i.key">
-          <td style="width:300px">
-            <Tooltip max-width="300" :content="i.operationNames[0]" placement="top" style="max-width:300px" class="ell">
+          <td>
+            <Tooltip :content="i.operationNames[0]" placement="top" style="width:100%;" class="ell">
               <span :class="i.isError? 'error' : 'success'">{{i.operationNames[0]}}</span>
             </Tooltip>
           </td>
-          <td class="grey" style="min-width:250px">{{parseInt(i.start) | dateformat}}</td>
+          <td class="grey">{{parseInt(i.start) | dateformat}}</td>
           <td><a v-if="i.traceIds" class="rk-trace-btn" @click="$router.push({ path:'/trace/link', query:{traces:i.traceIds.join('&')}})">link</a></td>
           <td>{{i.duration}} ms</td>
-          <td style="min-width:180px"><rk-progress :precent="i.duration/stateTraceMax*100" class="mr15"/></td>
+          <td><rk-progress :precent="i.duration/stateTraceMax*100" class="mr15"/></td>
         </tr>
       </tbody>
     </table>
@@ -59,6 +64,9 @@ export default class Trace extends Vue {
 </script>
 
 <style lang="scss">
+.rk-trace-table-title{
+  width:400px;
+}
 .rk-trace-btn{
   cursor: pointer;
   border-radius: 4px;

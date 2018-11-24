@@ -2,9 +2,9 @@
 <rk-panel title="Service Slow Endpoints">
   <div class="mb15" v-for="i in fiveData" :key="i.key">
     <div>
-      <span class="r sm">{{i.value}} ms</span>
-      <div class="mb5">
-        <Tooltip :content="i.service? i.service.label :i.label" max-width="200"  placement="top" class="ell" style="max-width: 200px;">
+      <span style="width:60px" class="r sm">{{i.value}} ms</span>
+      <div style="width:calc(100% - 65px)" class="mb5">
+        <Tooltip :content="i.service? i.service.label :i.label" max-width="200"  placement="top" class="ell" style="max-width: 100%;">
           <span class="cp link-hover" @click="changeEndpoint(i)">{{i.service? i.service.label :i.label}}</span>
         </Tooltip>
       </div>

@@ -2,9 +2,9 @@
 <rk-panel class="rk-server-throughput" title="Server Throughputs">
   <div class="mb15" v-for="i in fiveData" :key="i.key">
     <div>
-      <span class="r sm">{{i.value}} calls/ m</span>
-      <div class="mb5">
-        <Tooltip :content="i" max-width="300" placement="top" class="ell" style="max-width: 300px;">
+      <span style="width:60px" class="r sm">{{i.value}} calls/ m</span>
+      <div style="width:calc(100% - 65px)" class="mb5">
+        <Tooltip :content="i" max-width="300" placement="top" class="ell" style="max-width: 100%;">
           <span class="cp link-hover" @click="appChange(i)">{{i.name}}</span>
         </Tooltip>
       </div>

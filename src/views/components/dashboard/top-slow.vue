@@ -2,10 +2,10 @@
 <rk-panel title="Slow Traces">
   <div class="rk-slow-trace-item mb15" v-for="i in stateDashboard.slowTrace" :key="i.key">
     <div>
-      <span class="r sm">{{i.duration}} ms</span>
+      <span style="width:60px" class="r sm">{{i.duration}} ms</span>
       <!-- <span class="r sm grey mr15">{{parseInt(i.start) | dateformat}}</span> -->
-      <div class="mb5">
-        <Tooltip :content="`${moment(parseInt(i.start)).format('YYYY-MM-DD HH:mm:ss')}\n${i.operationNames[0]}`" placement="top" max-width="200" class="ell" style="max-width: 200px;">
+      <div style="width:calc(100% - 65px)" class="mb5">
+        <Tooltip :content="`${moment(parseInt(i.start)).format('YYYY-MM-DD HH:mm:ss')}\n${i.operationNames[0]}`" placement="top" max-width="200" class="ell"  style="max-width: 100%;">
           <span class="link-hover cp" @click="$router.push({ path:'/trace/link', query:{traces:i.traceIds.join('&')}})">{{i.operationNames[0]}}</span>
         </Tooltip>
       </div>
