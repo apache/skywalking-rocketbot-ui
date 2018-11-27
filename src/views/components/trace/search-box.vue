@@ -70,7 +70,6 @@ export default class SearchBox extends Vue {
   mounted() {
     if (window.sessionStorage.getItem('traceOption')) {
       const temp = JSON.parse(window.sessionStorage.getItem('traceOption'));
-      temp.time = [this.stateGlobal.duration.start, this.stateGlobal.duration.end];
       this.option = temp;
     } else {
       this.option.time = [this.stateGlobal.duration.start, this.stateGlobal.duration.end];
