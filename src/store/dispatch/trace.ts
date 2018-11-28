@@ -4,7 +4,7 @@ import { registerMap } from 'echarts';
 
 export const getTraces = (params: any): void => {
   let step = 'MINUTE';
-  const unix = Math.round(params.time[1].getTime()) - Math.round(params.time[0].getTime());
+  const unix = Math.round(new Date(params.time[1]).getTime()) - Math.round(new Date(params.time[0]).getTime());
   if (unix <= 60 * 60 * 1000) {
     step = 'MINUTE';
   } else if (unix <= 24 * 60 * 60 * 1000) {
