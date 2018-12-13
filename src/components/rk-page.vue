@@ -10,7 +10,7 @@
       <Icon type="ios-arrow-forward" />
     </button>
   </span><span class="micro-page-info"><span v-if="total">{{currentPage===1?1:((currentPage-1)*currentSize+1)}} -
-    {{last}}</span> Totol {{total}} {{name}}</span>
+    {{last}}</span> Total {{total}} {{name}}</span>
 </span>
 </template>
 <script lang="js">
