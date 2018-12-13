@@ -16,7 +16,8 @@
       <div class="mb5 label">TraceID</div>
       <input class="rk-trace-input" type="text" v-model="option.traceId">
     </div>
-    <RkDate position="bottom" v-model="option.time" format="YYYY-MM-DD HH:mm:ss"/>
+    <RkDate class="mr10" position="bottom" v-model="option.time" format="YYYY-MM-DD HH:mm:ss"/>
+    <button class="trace-search-btn" @click="handleChanged">Search</button>
   </div>
   <div class="rk-trace-search-subbox container mb10">
     <div class="label">Max:</div>
@@ -44,7 +45,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { State } from 'vuex-class';
-import { Component, Watch } from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import { getTraces } from '@/store/dispatch/trace.ts';
 
 @Component({
@@ -74,9 +75,10 @@ export default class SearchBox extends Vue {
     } else {
       this.option.time = [this.stateGlobal.duration.start, this.stateGlobal.duration.end];
     }
+    getTraces(this.option);
   }
-  @Watch('option', { deep: true })
-  onOptionChanged(): void {
+  // @Watch('option', { deep: true })
+  handleChanged() {
     getTraces(this.option);
     window.sessionStorage.setItem('traceOption', JSON.stringify(this.option));
   }
@@ -86,6 +88,16 @@ export default class SearchBox extends Vue {
 }
 </script>
 <style lang="scss">
+.trace-search-btn{
+  cursor: pointer;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #4477dd;
+  border: 0;
+  color: #fff;
+  outline: none;
+  padding: 6.5px .7em;
+}
 .rk-trace-search-subbox{
   display: flex;
   flex-shrink: 0;
