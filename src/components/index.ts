@@ -10,9 +10,10 @@ import RkToolbar from './rk-toolbar.vue';
 import RkEmpty from './rk-empty.vue';
 import RkPage from './rk-page.vue';
 import RkDrawer from './rk-drawer.vue';
+import RkSelect from './rk-select.vue';
 
 const components: Object = {
-  RkDrawer, RkEmpty, RkPanel, RkHeader, RkNav, RkBoard, RkDate, RkProgress, RkSidebox, RkEcharts, RkToolbar, RkPage,
+  RkDrawer, RkSelect, RkEmpty, RkPanel, RkHeader, RkNav, RkBoard, RkDate, RkProgress, RkSidebox, RkEcharts, RkToolbar, RkPage,
 };
 const componentsName: string[] = Object.keys(components);
 
