@@ -26,7 +26,7 @@ export default class RkSelect extends Vue {
   search: string = '';
   visible: boolean = false;
   get filterData() {
-    return this.data.filter((i: any) => i.toString().indexOf(this.search) !== -1);
+    return this.data.filter(i => i.label.indexOf(this.search) !== -1);
   }
   handleOpen() {
     this.visible = true;
