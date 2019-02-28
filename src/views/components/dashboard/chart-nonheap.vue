@@ -1,75 +1,88 @@
 <template>
-  <rk-panel title="NonHeap MB">
-    <RkEcharts height="220px" :option="throughputConfig"/>
+  <rk-panel :title="title">
+    <RkEcharts height="215px" :option="responseConfig"/>
   </rk-panel>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import { State, Getter } from 'vuex-class';
-import { Component } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 
-@Component({})
-export default class NonHeap extends Vue {
-  @State('dashboard') stateDashboard;
-  @State('global') stateGlobal;
-  @Getter('durationTime') durationTime;
-  get throughputConfig() {
+@Component
+export default class Response extends Vue {
+  @Prop() private title!: string;
+  @State('rocketDashboard') private stateDashboard!: any;
+  @Getter('intervalTime') private intervalTime: any;
+  get responseConfig() {
     return {
-      color: ['#75a8ff', '#f7b32b'],
+      color: [
+        '#a3a0e6',
+        '#a0b1e6',
+      ],
       tooltip: {
         trigger: 'axis',
+        backgroundColor: 'rgb(50,50,50)',
         textStyle: {
           fontSize: 13,
         },
       },
       legend: {
-        data: ['free', 'value'],
         icon: 'circle',
-        top: 10,
-        left: 10,
-        itemGap: 15,
-        itemWidth: 15,
-        itemHeight: 12,
+        top: 0,
+        left: 0,
+        itemWidth: 12,
       },
       grid: {
-        top: 50,
+        top: 55,
         left: 0,
         right: 18,
-        bottom: 30,
+        bottom: 15,
         containLabel: true,
       },
       xAxis: {
         type: 'time',
         axisTick: {
-          lineStyle: { color: 'rgba(0,0,0,.1)' },
+          lineStyle: { color: '#c1c5ca41' },
           alignWithLabel: true,
         },
         splitLine: { show: false },
-        axisLine: { lineStyle: { color: 'rgba(0,0,0,.1)' } },
-        axisLabel: { color: '#333', fontSize: '11' },
+        axisLine: { lineStyle: { color: '#c1c5ca41' } },
+        axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
       yAxis: {
         type: 'value',
         axisLine: { show: false },
         axisTick: { show: false },
-        splitLine: { lineStyle: { color: 'rgba(0,0,0,.1)' } },
-        axisLabel: { color: '#333', fontSize: '11' },
+        splitLine: { lineStyle: { color: '#c1c5ca41' } },
+        axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
       series: [
         {
-          data: this.stateDashboard.memory.noHeap.map((i, index) => [this.durationTime[index], i]),
-          name: 'free',
+          data: this.stateDashboard.instanceInfo.noheap.map((i: any, index: number) => [
+            this.intervalTime[index],
+            (i.value / 1048576).toFixed(2),
+          ]),
+          name: this.stateDashboard.instanceInfo.noheap.length ? 'Value' : null,
           type: 'line',
           symbol: 'none',
-          // smooth: 'true',
+          areaStyle: {},
+          lineStyle: {
+            width: 1.5,
+          },
         },
         {
-          data: this.stateDashboard.memory.maxNoHeap.map((i, index) => [this.durationTime[index], i]),
-          name: 'value',
+          data: this.stateDashboard.instanceInfo.maxNoheap.map((i: any, index: number) => [
+            this.intervalTime[index],
+            ((i.value - this.stateDashboard.instanceInfo.maxNoheap[index].value) / 1048576).toFixed(2),
+          ]),
+          name: this.stateDashboard.instanceInfo.noheap.length ? 'Free' : null,
           type: 'line',
           symbol: 'none',
-          // smooth: 'true',
+          areaStyle: {},
+          lineStyle: {
+            width: 1.5,
+          },
         },
       ],
     };

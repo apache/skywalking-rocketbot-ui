@@ -1,24 +1,28 @@
 <template>
-  <rk-panel title="CPU %">
-    <RkEcharts height="220px" :option="throughputConfig"/>
+  <rk-panel :title="title">
+    <RkEcharts height="215px" :option="responseConfig"/>
   </rk-panel>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import { State, Getter } from 'vuex-class';
-import { Component } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 
-@Component({})
-export default class CPU extends Vue {
-  @State('dashboard') stateDashboard;
-  @State('global') stateGlobal;
-  @Getter('durationTime') durationTime;
-  get throughputConfig() {
+@Component
+export default class Response extends Vue {
+  @Prop() private title!: string;
+  @State('rocketDashboard') private stateDashboard!: any;
+  @Getter('intervalTime') private intervalTime: any;
+  get responseConfig() {
     return {
-      color: ['#75a8ff', '#F44336'],
+      color: [
+        '#3f96e3',
+        '#6be6c1',
+      ],
       tooltip: {
         trigger: 'axis',
+        backgroundColor: 'rgb(50,50,50)',
         textStyle: {
           fontSize: 13,
         },
@@ -27,33 +31,38 @@ export default class CPU extends Vue {
         top: 20,
         left: 0,
         right: 18,
-        bottom: 30,
+        bottom: 15,
         containLabel: true,
       },
       xAxis: {
         type: 'time',
         axisTick: {
-          lineStyle: { color: 'rgba(0,0,0,.1)' },
+          lineStyle: { color: '#c1c5ca41' },
           alignWithLabel: true,
         },
         splitLine: { show: false },
-        axisLine: { lineStyle: { color: 'rgba(0,0,0,.1)' } },
-        axisLabel: { color: '#333', fontSize: '11' },
+        axisLine: { lineStyle: { color: '#c1c5ca41' } },
+        axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
       yAxis: {
         type: 'value',
         axisLine: { show: false },
         axisTick: { show: false },
-        splitLine: { lineStyle: { color: 'rgba(0,0,0,.1)' } },
-        axisLabel: { color: '#333', fontSize: '11' },
+        splitLine: { lineStyle: { color: '#c1c5ca41' } },
+        axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
       series: [
         {
-          data: this.stateDashboard.cpu.map((i, index) => [this.durationTime[index], i]),
-          name: 'cpu',
+          data: this.stateDashboard.instanceInfo.getCPUTrend.map((i: any, index: number) => [
+            this.intervalTime[index],
+            i.value,
+          ]),
+          name: this.stateDashboard.instanceInfo.getCPUTrend.length ? 'Cpu' : null,
           type: 'line',
           symbol: 'none',
-          // smooth: 'true',
+          lineStyle: {
+            width: 1.5,
+          },
         },
       ],
     };

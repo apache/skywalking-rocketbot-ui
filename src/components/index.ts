@@ -1,22 +1,17 @@
-import RkPanel from './rk-panel.vue';
 import RkHeader from './rk-header.vue';
+import RkFooter from './rk-footer.vue';
 import RkNav from './rk-nav.vue';
-import RkBoard from './rk-board.vue';
 import RkProgress from './rk-progress.vue';
-import RkDate from './rk-date.vue';
-import RkSidebox from './rk-sidebox.vue';
-import RkEcharts from './rk-echarts.vue';
-import RkToolbar from './rk-toolbar.vue';
-import RkEmpty from './rk-empty.vue';
 import RkPage from './rk-page.vue';
-import RkDrawer from './rk-drawer.vue';
-
-const components: Object = {
-  RkDrawer, RkEmpty, RkPanel, RkHeader, RkNav, RkBoard, RkDate, RkProgress, RkSidebox, RkEcharts, RkToolbar, RkPage,
+import RkDate from './rk-date.vue';
+import RkPanel from './rk-panel.vue';
+import RkSelect from './rk-select.vue';
+import RkEcharts from './rk-echarts.vue';
+const components: any = {
+  RkHeader, RkFooter, RkProgress, RkDate, RkNav, RkPanel, RkEcharts, RkPage, RkSelect,
 };
 const componentsName: string[] = Object.keys(components);
-
-export default {install: (vue) => {
+export default {install: (vue: any) => {
   componentsName.forEach((i) => {
     vue.component(i, components[i]);
   });

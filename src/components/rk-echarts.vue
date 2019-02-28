@@ -7,28 +7,24 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import echarts from 'echarts/lib/echarts';
 import { Action } from 'vuex-class';
-@Component({})
+@Component
 export default class RkEcharts extends Vue {
-  @Prop() option: Object;
-  @Prop({ type: Boolean, default: false }) uncombine: Boolean;
-  @Prop({ type: String, default: '400px' }) height: String;
-  @Prop({ type: String, default: '100%' }) width: String;
-  @Action('SET_CHARTS') SET_CHARTS;
-  @Action('CLEAR_CHARTS') CLEAR_CHARTS;
-  myChart: any = {};
-  mounted(): void {
+  @Prop() private option: any;
+  @Prop({ default: false }) private uncombine!: boolean;
+  @Prop({ default: '350px' }) private height!: string;
+  @Prop({default: '100%' }) private width!: string;
+  @Action('CLEAR_CHARTS') private CLEAR_CHARTS: any;
+  private myChart: any = {};
+  private mounted(): void {
     this.drawEcharts();
     window.addEventListener('resize', this.myChart.resize);
-    if (!this.uncombine) {
-      this.SET_CHARTS(this.myChart);
-    }
+
   }
-  beforeDestroy(): void {
+  private beforeDestroy(): void {
     window.removeEventListener('resize', this.myChart.resize);
-    this.CLEAR_CHARTS();
   }
   @Watch('option', { deep: true })
-  onoptionChanged(newVal: Object, oldVal: Object): void {
+  private onoptionChanged(newVal: any, oldVal: any): void {
     if (this.myChart) {
       if (newVal) {
         this.myChart.setOption(newVal);
@@ -39,8 +35,9 @@ export default class RkEcharts extends Vue {
       this.drawEcharts();
     }
   }
-  drawEcharts(): void {
-    this.myChart = echarts.init(<any>this.$el, '');
+  private drawEcharts(): void {
+    const el: any = this.$el;
+    this.myChart = echarts.init(el, '');
     this.myChart.setOption(this.option);
   }
 }

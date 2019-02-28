@@ -1,0 +1,19 @@
+.icon{
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+}
+.icon.sm{
+  width: 13px;
+  height: 13px;
+}
+.icon.lg{
+  width: 17px;
+  height: 17px;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .3s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}

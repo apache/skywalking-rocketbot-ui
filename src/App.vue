@@ -1,27 +1,33 @@
 <template>
   <div id="app">
-    <RkHeader :time="stateGlobal.duration"/>
-    <router-view class="wrapper"/>
+    <RkHeader/>
+    <router-view/>
+    <RkFooter/>
   </div>
 </template>
-
 <script lang="ts">
-import Vue from 'vue';
-import { State } from 'vuex-class';
-import { Component } from 'vue-property-decorator';
-
+import { Component, Vue } from 'vue-property-decorator';
+import RkHeader from '@/components/rk-header.vue';
+import RkFooter from '@/components/rk-footer.vue';
 @Component({
+  components: {
+    RkHeader, RkFooter,
+  },
 })
 export default class App extends Vue {
-  value = [];
-  local = {
-    hourTip: 'Select Hour', // tip of select hour
-    minuteTip: 'Select Minute', // tip of select minute
-    secondTip: 'Select Second', // tip of select second
-  };
-  @State('global') stateGlobal;
 }
 </script>
-
-<style lang='scss'>
+<style>
+@import './assets/styles/reset.scss';
+@import './assets/styles/lib.scss';
+@import './assets/styles/style.scss';
+@import './assets/styles/grid.scss';
+#app,.container{
+  height: 100%;
+}
+#app{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 </style>

@@ -1,0 +1,106 @@
+<template>
+  <div class="rk-service-response">
+    <div class="grey">{{title}}</div>
+    <div class="title b">
+      <span>{{this.stateDashboard[this.type].getResponseTimeTrend.length ? content.toFixed(2) : 0}}</span>
+      <span class="unit"> ms</span>
+    </div>
+    <RkEcharts height="180px" :option="responseConfig"/>
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from 'vue';
+import { State, Getter } from 'vuex-class';
+import { Component, Prop } from 'vue-property-decorator';
+import Num from './chart-num.vue';
+
+interface NumBoxData {
+  value: number;
+}
+@Component({components: {Num}})
+export default class Response extends Vue {
+  @Prop() private title!: string;
+  @Prop() private type!: string;
+  @State('rocketDashboard') private stateDashboard!: any;
+  @Getter('intervalTime') private intervalTime: any;
+  get content() {
+    const temp = this.stateDashboard[this.type].getResponseTimeTrend.map((i: NumBoxData) => i.value);
+    const sum = temp.reduce((preValue: number, curValue: number, index: number, array: number[]) => preValue + curValue)
+    / this.stateDashboard[this.type].getResponseTimeTrend.length;
+    return sum;
+  }
+  get avg() {
+     return this.stateDashboard[this.type].getResponseTimeTrend ?
+      [{
+        data: this.stateDashboard[this.type].getResponseTimeTrend.map((i: any, index: number) => [
+          this.intervalTime[index],
+          i.value,
+        ]),
+        name: this.stateDashboard[this.type].getResponseTimeTrend.length ? 'Avg Response' : null,
+        type: 'line',
+        symbol: 'none',
+        lineStyle: {
+          width: 1.5,
+        },
+      }] : [];
+  }
+  get responseConfig() {
+    return {
+      color: [
+        '#3f96e3',
+        '#6be6c1',
+        '#626c91',
+        '#a0a7e6',
+        '#96dee8',
+      ],
+      grid: {
+        top: 30,
+        left: 0,
+        right: 28,
+        bottom: 0,
+        containLabel: true,
+      },
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: 'rgb(50,50,50)',
+        textStyle: {
+          fontSize: 13,
+        },
+      },
+      xAxis: {
+        type: 'time',
+        axisTick: {
+          lineStyle: { color: '#c1c5ca41' },
+          alignWithLabel: true,
+        },
+        splitLine: { show: false },
+        axisLine: { lineStyle: { color: '#c1c5ca41' } },
+        axisLabel: { color: '#9da5b2', fontSize: '11' },
+      },
+      yAxis: {
+        type: 'value',
+        axisLine: { show: false },
+        axisTick: { show: false },
+        splitLine: { lineStyle: { color: '#c1c5ca41' } },
+        axisLabel: { color: '#9da5b2', fontSize: '11' },
+      },
+      series: [
+        ...this.avg,
+      ],
+    };
+  }
+}
+</script>
+<style lang="scss">
+.rk-service-response{
+  padding: 0 10px;
+  height: 258px;
+  .unit{
+    font-size: 16px;
+  }
+  .title{
+    font-size: 24px;
+  }
+}
+</style>

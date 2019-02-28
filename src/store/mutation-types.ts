@@ -1,40 +1,49 @@
+// comp
+export const SET_CURRENTCOMP = 'SET_CURRENTCOMP';
+export const ADD_COMPTREE = 'ADD_COMPTREE';
+export const DELETE_COMPTREE = 'DELETE_COMPTREE';
+export const ADD_COMP = 'ADD_COMP';
+export const DELETE_COMP = 'DELETE_COMP';
+export const SWICH_COMP = 'SWICH_COMP';
+export const SET_COMPTREE = 'SET_COMPTREE';
+export const SWICH_CURRENTCOMP = 'SWICH_CURRENTCOMP';
+export const EDIT_COMP = 'EDIT_COMP';
+
 // global
 export const SET_DURATION = 'SET_DURATION';
 export const SET_EVENTS = 'SET_EVENTS';
-export const CLEAR_EVENTS = 'CLEAR_EVENTS';
 export const RUN_EVENTS = 'RUN_EVENTS';
 export const SET_CHARTS = 'SET_CHARTS';
 export const CLEAR_CHARTS = 'CLEAR_CHARTS';
+export const SET_EDIT = 'SET_EDIT';
 
 // dashboard
-export const SET_APPLICATIONS = 'SET_APPLICATIONS';
+export const SET_GLOBAL = 'SET_GLOBAL';
+export const CLEAR_GLOBAL = 'CLEAR_GLOBAL';
+export const SET_SERVICES = 'SET_SERVICES';
+export const SET_CURRENTSERVICE = 'SET_CURRENTSERVICE';
+export const SET_SERVICEINFO = 'SET_SERVICEINFO';
 export const SET_ENDPOINTS = 'SET_ENDPOINTS';
-export const SET_SERVERS = 'SET_SERVERS';
-export const SET_APPLICATION = 'SET_APPLICATION';
-export const SET_ENDPOINT = 'SET_ENDPOINT';
-export const SET_SERVER = 'SET_SERVER';
-export const SET_SLOWENDPOINT = 'SET_SLOWENDPOINT';
-export const SET_SERVERS_THROUGHPUT = 'SET_SERVERS_THROUGHPUT';
+export const SET_CURRENTENDPOINT = 'SET_CURRENTENDPOINT';
+export const SET_ENDPOINTINFO = 'SET_ENDPOINTINFO';
+export const SET_INSTANCES = 'SET_INSTANCES';
+export const SET_CURRENTINSTANCE = 'SET_CURRENTINSTANCE';
+export const SET_INSTANCEINFO = 'SET_INSTANCEINFO';
 
-export const SET_ENDPOINT_INFO = 'SET_ENDPOINT_INFO';
-export const SET_APPLICATION_INFO = 'SET_APPLICATION_INFO';
-export const SET_SERVER_INFO = 'SET_SERVER_INFO';
-export const SET_SERVER_DETAIL = 'SET_SERVER_DETAIL';
-
-export const CLEAR_DASHBOARD = 'CLEAR_DASHBOARD';
 // alarm
 export const SET_ALARM = 'SET_ALARM';
 export const SET_ALARM_TOTAL = 'SET_ALARM_TOTAL';
 export const CLEAR_ALARM = 'CLEAR_ALARM';
 
 // trace
-export const SET_TRACE = 'SET_TRACE';
-export const SET_TRACE_TOTAL = 'SET_TRACE_TOTAL';
-export const SET_SPAN = 'SET_SPAN';
-export const CLEAR_TRACE = 'CLEAR_TRACE';
+export const SET_TRACELIST = 'SET_TRACELIST';
+export const SET_TRACELIST_TOTAL = 'SET_TRACELIST_TOTAL';
+export const SET_TRACESPANS = 'SET_TRACESPANS';
+export const SET_CURRENTTRACE = 'SET_CURRENTTRACE';
+export const SET_TRACEFORM = 'SET_TRACEFORM';
+export const SET_TRACEFORMITEM = 'SET_TRACEFORMITEM';
 
 // topo
 export const SET_TOPO = 'SET_TOPO';
-export const SET_TOPO_CURRENT = 'SET_TOPO_CURRENT';
-export const SET_CLUSTER = 'SET_CLUSTER';
-export const CLEAR_TOPO = 'CLEAR_TOPO';
+export const SET_NODE = 'SET_NODE';
+

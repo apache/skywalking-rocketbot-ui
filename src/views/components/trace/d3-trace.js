@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import d3tip from 'd3-tip';
 /* eslint-disable */
 const type = {
   MQ: '#bf99f8',
@@ -8,137 +9,243 @@ const type = {
   Cache: '#00bcd4',
   RPCFramework: '#ee4395',
 };
-const trace = (data,width,row,vm) => {
-  d3.select('svg').remove();
-  let i = 0,
-  root;
-  const margin = { top: 30, right: 20, bottom: 30, left: 20 };
-  const diagonal = d3.linkHorizontal().x(d => d.y).y(d => d.x);
-
-  const svg = d3.select('#svg').append('svg').attr('width', width-margin.right).append('g')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-  const min = d3.min(row.map(i => i.startTime));
-  const max = d3.max(row.map(i => i.endTime - min));
-  const list = Array.from(new Set(row.map(i => i.applicationCode)));
-  const sequentialScale = d3.scaleSequential()
-  .domain([0, list.length])
-  .interpolator(d3.interpolateWarm);
-  const xScale = d3.scaleLinear().range([0,width*0.387]).domain([0, max]);
-  const xAxis = d3.axisTop(xScale).tickFormat(d => {
-    if(d === 0) return 0;
-    if(d>=1000) return d/1000 + 's'; 
-    return d + ' ms'
+export default class Trace {
+  constructor(el, show) {
+    this.barHeight = 48;
+    this.show = show;
+    this.el = el;
+    this.i = 0;
+    this.width = el.clientWidth;
+    this.height = el.clientHeight;
+    this.svg = d3
+      .select(this.el)
+      .append('svg')
+      .attr('width', this.width)
+      .attr('height', this.height);
+    this.treemap = d3.tree().size([this.height * 0.7, this.width]);
+    this.tip = d3tip()
+      .attr('class', 'd3-tip')
+      .offset([-8, 0])
+      .html(d => `
+      <div class="mb-5">${d.data.label}</div>
+      ${d.data.dur?'<div class="sm">SelfDuration: ' + d.data.dur + 'ms</div>' : ''}
+      ${(d.data.endTime - d.data.startTime)?'<div class="sm">TotalDuration: ' + (d.data.endTime - d.data.startTime) + 'ms</div>' : ''}
+      `);
+    this.svg.call(this.tip);
+  }
+  diagonal(d) {
+    return `M ${d.source.y} ${d.source.x + 5}
+    L ${d.source.y} ${d.target.x - 30}
+    L${d.target.y} ${d.target.x - 20}
+    L${d.target.y} ${d.target.x - 5}`;
+  }
+  init(data, row) {
+    d3.select('.trace-xaxis').remove();
+    this.row = row;
+    this.data = data;
+    this.min = d3.min(this.row.map(i => i.startTime));
+    this.max = d3.max(this.row.map(i => i.endTime - this.min));
+    this.list = Array.from(new Set(this.row.map(i => i.serviceCode)));
+    this.xScale = d3
+      .scaleLinear()
+      .range([0, this.width * 0.387])
+      .domain([0, this.max]);
+    this.xAxis = d3.axisTop(this.xScale).tickFormat(d => {
+      if(d === 0) return 0;
+      if(d>=1000) return d/1000 + 's';
+      return d;
     });
-  d3.select('svg').append('g').attr('transform',`translate(${width*0.618-margin.right-margin.right},30)`).call(xAxis);
-
-  root = d3.hierarchy(data);
-  root.x0 = 0;
-  root.y0 = 0;
-  update(root);
-
-  function update(source) {
-    const nodes = root.descendants();
-    const height = Math.max( 500, nodes.length * 48 + margin.top + margin.bottom);
-
-    d3.select('svg').transition().duration(400).attr('height', height);
-
-    d3.select(self.frameElement).transition().duration(400).style('height', height + 'px');
-
+    this.svg.attr('height', (this.row.length+1) * this.barHeight);
+    this.svg
+    .append('g')
+    .attr('class','trace-xaxis')
+    .attr('transform', `translate(${this.width * 0.618 -20 },${30})`)
+    .call(this.xAxis);
+    this.sequentialScale = d3
+      .scaleSequential()
+      .domain([0, this.list.length + 1])
+      .interpolator(d3.interpolateCool);
+    this.root = d3.hierarchy(this.data, d => d.children);
+    this.root.x0 = 0;
+    this.root.y0 = 0;
+  }
+  draw() {
+    this.update(this.root);
+  }
+  click(d, scope) {
+    if (!d.data.type) return;
+    if (d.children) {
+      d._children = d.children;
+      d.children = null;
+    } else {
+      d.children = d._children;
+      d._children = null;
+    }
+    scope.update(d);
+  }
+  update(source) {
+    const that = this;
+    const nodes = this.root.descendants();
     let index = -1;
-    root.eachBefore(n => {
-      n.x = ++index * 48;
-      n.y = n.depth * 20;
+    this.root.eachBefore(n => {
+      n.x = ++index * this.barHeight + 24;
+      n.y = n.depth * 16;
     });
-
-    const node = svg.selectAll('.trace-node').data(nodes, d => d.id || (d.id = ++i));
-
-    const nodeEnter = node.enter().append('g').attr('class', 'trace-node')
-      .attr('transform',d => 'translate(' + source.y0 + ',' + source.x0 + ')')
-      .style('opacity', 0);
-
-    nodeEnter.append('rect').attr('class', 'trace-node-container').attr('rx',4).attr('ry',4).attr('y', -18).attr('height', 48).attr('width', '100%').on('click', click);
-    nodeEnter.append('text').attr('dy', 2).attr('dx', 25)
-      .text(d => d.data.label.length > 45 ? `${d.data.label.slice(0, 45)}...` : `${d.data.label}`);
-    nodeEnter.append('text').attr('dy', 2).attr('dx', 12)
-      .style('fill', d => d.data.isError? '#f1483f' : '')
-      .text(d => d.data.isError? 'x' : '');
-    nodeEnter.append('text').style('fill', d => type[d.data.layer]).style('stroke', d => type[d.data.layer]).style('stroke-width', '0.6').style('font-size', '11px').attr('dy', 2)
-      .attr('dx', d => d.data.label.length > 50 ? 320 : 45 + d.data.label.length * 6.9)
-      .text(d => d.data.layer);
-    nodeEnter.append('text').attr('dy', 20).attr('dx', 30).style('fill', '#acacac').style('font-size', '11px')
-      .text(d => `${d.data.applicationCode? d.data.applicationCode : ''} ${d.data.component? `> ${d.data.component}` : ''}`);
-    nodeEnter.append('rect').attr('height', 4)
-      .attr('width', (d) => {
-        if ( !d.data.endTime || !d.data.startTime) return 0
-        return xScale(d.data.endTime-d.data.startTime)+1;
+    const node = this.svg
+      .selectAll('.trace-node')
+      .data(nodes, d => d.id || (d.id = ++this.i));
+    const nodeEnter = node
+      .enter()
+      .append('g')
+      .attr('transform', `translate(${source.y0},${source.x0})`)
+      .attr('class', 'trace-node')
+      .style('opacity', 0)
+      .on('mouseover', function(d, i) {
+        that.tip.show(d, this);
       })
-      .attr('rx', 2).attr('ry', 2)
-      .attr('x', d => ( !d.data.endTime || !d.data.startTime) ? 0: width*0.618-margin.right-margin.left-margin.right - d.y + xScale(d.data.startTime-min))
-      .attr('y', -3)
-      .style('fill', d => `${sequentialScale(list.indexOf(d.data.applicationCode))}`);
-    nodeEnter.append('text')
-      .style('font-size', '10px')
-      .style('fill', '#888')
-      .attr('x', d => ( !d.data.endTime || !d.data.startTime) ? 0: width*0.618-margin.right-margin.left-margin.right - d.y + xScale(d.data.startTime-min))
-      .attr('y', 15)  
-      .text(d =>
-        d.data.endTime ? `${d.data.endTime - d.data.startTime} ms` : '');
-    nodeEnter.transition().duration(400).attr('transform', d => 'translate(' + d.y + ',' + d.x + ')').style('opacity', 1);
-
-    node.transition().duration(400)
-      .attr('transform', d =>  'translate(' + d.y + ',' + d.x + ')')
+      .on('mouseout', function(d, i) {
+        that.tip.hide(d, this);
+      })
+    nodeEnter
+      .append('rect')
+      .attr('height', 42)
+      .attr('ry',2)
+      .attr('rx',2)
+      .attr('y', -22)
+      .attr('x', 20)
+      .attr('width', '100%');
+    nodeEnter
+      .append('text')
+      .attr('x', 13)
+      .attr('y', 5)
+      .attr('fill', '#E54C17')
+      .html(d => d.data.isError?'◉': '')
+      nodeEnter
+      .append('text')
+      .attr('class','node-text')
+      .attr('x', 35)
+      .attr('y', -6)
+      .attr('fill', '#333')
+      .text( d => 
+        {
+          if(d.data.label === 'TRACE_ROOT') {
+            return '';
+          }
+          return   d.data.label.length > 30
+          ? `${d.data.label.slice(0, 30)}...`
+          : `${d.data.label}`
+        }
+      );
+    nodeEnter
+      .append('text')
+      .attr('class','node-text')
+      .attr('x', 35)
+      .attr('y', 12)
+      .attr('fill', '#ccc')
+      .style('font-size', '11px')
+      .text(
+        d =>
+          `${d.data.layer || ''} ${
+            d.data.component ? '- ' + d.data.component : d.data.component || ''
+          }`
+      );
+    nodeEnter
+      .append('rect')
+      .attr('rx', 2)
+      .attr('ry', 2)
+      .attr('height', 4)
+      .attr('width', d => {
+        if (!d.data.endTime || !d.data.startTime) return 0;
+        return this.xScale(d.data.endTime- d.data.startTime)+1 || 0;
+      })
+      .attr('x', d =>
+        !d.data.endTime || !d.data.startTime
+          ? 0
+          : (this.width * 0.618 -
+            20 -
+            d.y +
+            this.xScale(d.data.startTime - this.min)) || 0
+      )
+      .attr('y', -2)
+      .style(
+        'fill',
+        d => `${this.sequentialScale(this.list.indexOf(d.data.serviceCode))}`
+      );
+    nodeEnter
+      .transition()
+      .duration(400)
+      .attr('transform', d => `translate(${d.y},${d.x})`)
+      .style('opacity', 1);
+    nodeEnter
+      .append('circle')
+      .attr('r', 3)
+      .style('cursor', 'pointer')
+      .attr('stroke-width', 2.5)
+      .attr('fill', d =>
+        d._children
+          ? `${this.sequentialScale(this.list.indexOf(d.data.serviceCode))}`
+          : ''
+      )
+      .style(
+        'stroke',
+        d => d.data.label === 'TRACE_ROOT'?'':`${this.sequentialScale(this.list.indexOf(d.data.serviceCode))}`
+      )
+      .on('click', d => this.click(d, this));
+    node
+      .transition()
+      .duration(400)
+      .attr('transform', d => `translate(${d.y},${d.x})`)
       .style('opacity', 1)
-      .select('rect');
+      .select('circle')
+      .attr('fill', d =>
+        d._children
+          ? `${this.sequentialScale(this.list.indexOf(d.data.serviceCode))}`
+          : ''
+      );
 
+    // Transition exiting nodes to the parent's new position.
     node
       .exit()
       .transition()
       .duration(400)
-      .attr('transform', function(d) {
-        return 'translate(' + source.y + ',' + source.x + ')';
-      })
+      .attr('transform', `translate(${source.y},${source.x})`)
       .style('opacity', 0)
       .remove();
-    // Update the links…
-    var link = svg.selectAll('.trace-link').data(root.links(), function(d) {
-      return d.target.id;
-    });
+    const link = this.svg
+      .selectAll('.trace-link')
+      .data(this.root.links(), function(d) {
+        return d.target.id;
+      });
 
-    link.enter().insert('path', 'g').attr('class', 'trace-link')
+    link
+      .enter()
+      .insert('path', 'g')
+      .attr('class', 'trace-link')
       .attr('d', d => {
-        const o = { x: source.x0, y: source.y0 };
-        return diagonal({ source: o, target: o });
+        const o = { x: source.x0 + 35, y: source.y0 };
+        return this.diagonal({ source: o, target: o });
       })
       .transition()
       .duration(400)
-      .attr('d', diagonal);
+      .attr('d', this.diagonal);
 
-    link.transition().duration(400).attr('d', diagonal);
+    link
+      .transition()
+      .duration(400)
+      .attr('d', this.diagonal);
 
-    link.exit().transition().duration(400)
+    link
+      .exit()
+      .transition()
+      .duration(400)
       .attr('d', d => {
-        const o = { x: source.x, y: source.y };
-        return diagonal({ source: o, target: o });
+        const o = { x: source.x + 35, y: source.y };
+        return this.diagonal({ source: o, target: o });
       })
       .remove();
-    root.each(d => {
+    this.root.each(function(d) {
       d.x0 = d.x;
       d.y0 = d.y;
     });
   }
-
-  function click(d) {
-    if (!d.data.type) return;
-    // if (d.children) {
-    //   d._children = d.children;
-    //   d.children = null;
-    // } else {
-    //   d.children = d._children;
-    //   d._children = null;
-    // }
-    // update(d);
-    vm.$emit('show', d);
-  }
-};
-export default trace;
+}

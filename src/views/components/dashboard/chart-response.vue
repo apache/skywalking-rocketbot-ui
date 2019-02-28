@@ -1,36 +1,122 @@
 <template>
-  <rk-panel title="Service Response Time">
-    <RkEcharts height="200px" :option="responseConfig"/>
+  <rk-panel :title="title">
+    <RkEcharts height="215px" :option="responseConfig"/>
   </rk-panel>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import { State, Getter } from 'vuex-class';
-import { Component } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 
-@Component({})
-export default class ResponseServer extends Vue {
-  @State('dashboard') stateDashboard;
-  @Getter('durationTime') durationTime;
+@Component
+export default class Response extends Vue {
+  @Prop() private title!: string;
+  @Prop() private type!: string;
+  @State('rocketDashboard') private stateDashboard!: any;
+  @Getter('intervalTime') private intervalTime: any;
+  get p50() {
+     return this.stateDashboard[this.type].p50 ?
+      [{
+          data: this.stateDashboard[this.type].p50.map((i: any, index: number) => [
+            this.intervalTime[index],
+            i.value,
+          ]),
+          name: this.stateDashboard[this.type].p50.length ? 'p50' : null,
+          type: 'bar',
+          symbol: 'none',
+          barMaxWidth: 10,
+          stack: '总量',
+          lineStyle: {
+            width: 1.5,
+            type: 'dotted',
+          },
+      }] : [];
+  }
+  get p75() {
+     return this.stateDashboard[this.type].p75 ?
+      [{
+          data: this.stateDashboard[this.type].p75.map((i: any, index: number) => [
+            this.intervalTime[index],
+            i.value,
+          ]),
+          name: this.stateDashboard[this.type].p75.length ? 'p75' : null,
+          type: 'bar',
+          symbol: 'none',
+          barMaxWidth: 10,
+          stack: '总量',
+          lineStyle: {
+            width: 1.5,
+            type: 'dotted',
+          },
+      }] : [];
+  }
+  get p90() {
+     return this.stateDashboard[this.type].p90 ?
+      [{
+          data: this.stateDashboard[this.type].p90.map((i: any, index: number) => [
+            this.intervalTime[index],
+            i.value,
+          ]),
+          name: this.stateDashboard[this.type].p90.length ? 'p90' : null,
+          type: 'bar',
+          symbol: 'none',
+          barMaxWidth: 10,
+          stack: '总量',
+          lineStyle: {
+            width: 1.5,
+            type: 'dotted',
+          },
+      }] : [];
+  }
+  get p95() {
+    return this.stateDashboard[this.type].p95 ?
+    [{
+        data: this.stateDashboard[this.type].p95.map((i: any, index: number) => [
+          this.intervalTime[index],
+          i.value,
+        ]),
+        name: this.stateDashboard[this.type].p95.length ? 'p95' : null,
+        type: 'bar',
+        symbol: 'none',
+        barMaxWidth: 10,
+        stack: '总量',
+        lineStyle: {
+          width: 1.5,
+          type: 'dotted',
+        },
+    }] : [];
+  }
+  get p99() {
+     return this.stateDashboard[this.type].p99 ?
+      [{
+          data: this.stateDashboard[this.type].p99.map((i: any, index: number) => [
+            this.intervalTime[index],
+            i.value,
+          ]),
+          name: this.stateDashboard[this.type].p99.length ? 'p99' : null,
+          type: 'bar',
+          barMaxWidth: 10,
+          symbol: 'none',
+          stack: '总量',
+          lineStyle: {
+            width: 1.5,
+            type: 'dotted',
+          },
+      }] : [];
+  }
   get responseConfig() {
     return {
       color: [
-        '#75a8ff',
-        '#9a7fd1',
-        '#ff6464',
-        '#97b552',
-        '#588dd5',
-        '#f5994e',
-        '#c05050',
-        '#59678c',
-        '#c9ab00',
-        '#7eb00a',
-        '#6f5553',
-        '#c14089',
+        '#3fe1da',
+        '#3fcfdc',
+        '#3fbcde',
+        '#3fa9e1',
+        '#3f96e3',
       ],
       tooltip: {
         trigger: 'axis',
+        backgroundColor: 'rgb(50,50,50)',
         textStyle: {
           fontSize: 13,
         },
@@ -39,102 +125,38 @@ export default class ResponseServer extends Vue {
         icon: 'circle',
         top: 0,
         left: 0,
-        itemGap: 11,
         itemWidth: 12,
-        itemHeight: 12,
       },
       grid: {
-        top: 40,
+        top: 55,
         left: 0,
         right: 18,
-        bottom: 20,
+        bottom: 15,
         containLabel: true,
       },
       xAxis: {
         type: 'time',
         axisTick: {
-          lineStyle: { color: 'rgba(0,0,0,.1)' },
+          lineStyle: { color: '#c1c5ca41' },
           alignWithLabel: true,
         },
         splitLine: { show: false },
-        axisLine: { lineStyle: { color: 'rgba(0,0,0,.1)' } },
-        axisLabel: { color: '#333', fontSize: '11' },
+        axisLine: { lineStyle: { color: '#c1c5ca41' } },
+        axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
       yAxis: {
         type: 'value',
         axisLine: { show: false },
         axisTick: { show: false },
-        splitLine: { lineStyle: { color: 'rgba(0,0,0,.1)' } },
-        axisLabel: { color: '#333', fontSize: '11' },
+        splitLine: { lineStyle: { color: '#c1c5ca41' } },
+        axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
       series: [
-        {
-          data: this.stateDashboard.serverResponseTime.map((i, index) => [this.durationTime[index], i]),
-          name: 'avg',
-          type: 'line',
-          symbol: 'none',
-          // smooth: 'true',
-        },
-        {
-          data: this.stateDashboard.p.p50.map((i, index) => [
-            this.durationTime[index],
-            i,
-          ]),
-          name: this.stateDashboard.p.p50.length ? 'p50' : null,
-          type: 'line',
-          symbol: 'none',
-          lineStyle: {
-            type: 'dotted',
-          },
-        },
-        {
-          data: this.stateDashboard.p.p75.map((i, index) => [
-            this.durationTime[index],
-            i,
-          ]),
-          name: this.stateDashboard.p.p75.length ? 'p75' : null,
-          type: 'line',
-          symbol: 'none',
-          lineStyle: {
-            type: 'dotted',
-          },
-        },
-        {
-          data: this.stateDashboard.p.p90.map((i, index) => [
-            this.durationTime[index],
-            i,
-          ]),
-          name: this.stateDashboard.p.p90.length ? 'p90' : null,
-          type: 'line',
-          symbol: 'none',
-          lineStyle: {
-            type: 'dotted',
-          },
-        },
-        {
-          data: this.stateDashboard.p.p95.map((i, index) => [
-            this.durationTime[index],
-            i,
-          ]),
-          name: this.stateDashboard.p.p95.length ? 'p95' : null,
-          type: 'line',
-          symbol: 'none',
-          lineStyle: {
-            type: 'dotted',
-          },
-        },
-        {
-          data: this.stateDashboard.p.p99.map((i, index) => [
-            this.durationTime[index],
-            i,
-          ]),
-          name: this.stateDashboard.p.p99.length ? 'p99' : null,
-          type: 'line',
-          symbol: 'none',
-          lineStyle: {
-            type: 'dotted',
-          },
-        },
+        ...this.p50,
+        ...this.p75,
+        ...this.p90,
+        ...this.p95,
+        ...this.p99,
       ],
     };
   }

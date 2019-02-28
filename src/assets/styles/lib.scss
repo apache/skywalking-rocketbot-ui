@@ -1,0 +1,44 @@
+.l{float: left}
+.r{float: right}
+.n{font-weight: 400}
+.b{font-weight: 500}
+.long{width: 100%}
+.vm{vertical-align: middle;}
+.clear:after{display:table; content:''; clear:both}
+.ell{text-overflow:ellipsis; white-space:nowrap; overflow:hidden}
+.tc{text-align: center}
+.tr{text-align: right}
+.cp{cursor: pointer}
+.cm{cursor: move}
+.flex-v{display: flex;flex-direction: column;}
+.flex-h{display: flex;align-items: center;}
+.trans{transition:all .3s;}
+.db{display: block;}
+.dib{display: inline-block;}
+.auto{margin-right: auto;margin-left: auto;}
+.sm{font-size: 12px}
+.green{color:#4caf50}
+.red{color:#E54C17}
+.blue{color:#458eff}
+.yellow{color:#FBB03B}
+.grey{color: #9da5b2}
+.ml-5{margin-left:5px}
+.mr-0{margin-right: 0px}
+.mr-5{margin-right:5px}
+.mr-10{margin-right:10px}
+.mr-15{margin-right: 15px}
+.mr-20{margin-right: 20px}
+.mt-0{margin-top: 0}
+.mt-5{margin-top:5px}
+.mt-10{margin-top:10px}
+.mb-0{margin-bottom:0px}
+.mb-5{margin-bottom:5px}
+.mb-10{margin-bottom:10px}
+.mb-15{margin-bottom:15px}
+.mb-20{margin-bottom:20px}
+.link-hover{
+  transition: color .3s;
+}
+.link-hover:hover{
+  color: #458eff;
+}

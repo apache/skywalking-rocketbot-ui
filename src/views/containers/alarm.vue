@@ -1,92 +1,39 @@
 <template>
-<div>
-  <!-- <AlarmChart/> -->
-  <alarm-nav>
-    <a class="rk-alarm-nav-i" @click="type='APPLICATION'" :class="{'active':type === 'APPLICATION'}">Service</a>
-    <a class="rk-alarm-nav-i" @click="type='SERVER'" :class="{'active':type === 'SERVER'}">ServiceInstance</a>
-    <a class="rk-alarm-nav-i" @click="type='SERVICE'" :class="{'active':type === 'SERVICE'}">Endpoint</a>
-  </alarm-nav>
-  <div class="rk-alarm">
-    <table class="rk-alarm-table">
-      <thead>
-        <tr><th>&nbsp;</th><th>Start</th><th v-show="!stateAlarm.alarmList[0].message">Title</th><th v-show="!stateAlarm.alarmList[0].message">Type</th><th>Content</th></tr>
-      </thead>
-      <tbody>
-         <tr v-for="(i, index) in stateAlarm.alarmList" :key="index">
-          <td>
-            <Icon type="md-alert" class="rk-alarm-icon"/>
-          </td>
-          <td class="grey ell">{{i.startTime}}</td>
-          <td>{{i.title || i.message}}</td>
-          <td v-if="!i.message">{{i.causeType}}</td>
-          <td v-if="!i.message">{{i.content}}</td>
-        </tr>
-      </tbody>
-    </table>
-    <RkEmpty text="no alarm" v-if="!stateAlarm.alarmList.length"/>
-  </div>
-</div>
+  <RkAlarmWrapper/>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { State, Action } from 'vuex-class';
-import { Component, Watch } from 'vue-property-decorator';
-import { getAlarm } from '@/store/dispatch/alarm.ts';
-import AlarmNav from '../components/alarm/alarm-nav.vue';
+import Component from 'vue-class-component';
+import RkAlarmWrapper from '../components/alarm/rk-alarm-wrapper.vue';
+import alarm from '../../store/modules/alarm';
 
 @Component({
-  components: { AlarmNav },
+  components: { RkAlarmWrapper },
 })
 export default class Alarm extends Vue {
-  @State('alarm') stateAlarm;
-  @Action('SET_EVENTS') SET_EVENTS;
-  @Action('alarm/CLEAR_ALARM') CLEAR_ALARM;
-  page:Number = 1;
-  type:String = 'APPLICATION';
-  @Watch('type')
-  onTypeChanged() {
-    this.getAlarm();
+  private beforeCreate() {
+    this.$store.registerModule('rocketAlarm', alarm);
   }
-  beforeMount() {
-    this.getAlarm();
-    this.SET_EVENTS([this.getAlarm]);
-  }
-  beforeDestroy() {
-    this.CLEAR_ALARM();
-  }
-  getAlarm() {
-    getAlarm({ type: this.type, paging: this.page });
+  private beforeDestroy() {
+    this.$store.unregisterModule('rocketAlarm');
   }
 }
 </script>
 
 <style lang="scss">
-.rk-alarm{
-  padding: 15px 20px;
+.rk-alarm {
+  flex-grow: 1;
+  height: 100%;
   overflow: auto;
 }
-.rk-alarm-box{
-  width: 100%;
-  padding: 15px;
+.rk-alarm-table-wrapper{
+  padding: 0 10px;
+  border-right: 1px solid rgba(196, 200, 225, 0.2);
+  height: 100%;
 }
 .rk-alarm-table{
   width: 100%;
-  text-align: left;
-  .rk-alarm-icon{
-    font-size:19px;
-    color:#f7b32b;
-    line-height:1px;
-    display:block;
-    margin: 0 auto;
-  }
-  th{
-    padding: 8px 10px;
-    border-bottom: 1px solid #e4e7ed;
-  }
-  td{
-    padding: 8px 10px;
-    border-bottom: 1px solid #e4e7ed;
-  }
+  table-layout: fixed;
 }
 </style>

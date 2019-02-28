@@ -1,6 +1,9 @@
 <template>
 <div class="datepicker" :class="{'datepicker-range':range,'datepicker__clearable':clearable&&text&&!disabled}">
-  <input readonly :value="text" :class="[show ? 'focus' : '', inputClass]" :disabled="disabled" :placeholder="placeholder" :name="name" v-if="type!=='inline'"/>
+  <!-- <svg class="icon datepicker-icon">
+    <use xlink:href="#timer"></use>
+  </svg> -->
+  <input class="cp" readonly :value="text" :class="[show ? 'focus' : '', inputClass]" :disabled="disabled" :placeholder="placeholder" :name="name" v-if="type!=='inline'"/>
   <a class="datepicker-close" @click.stop="cls"></a>
   <transition name="datepicker-anim">
     <div class="datepicker-popup" :class="[popupClass,{'datepicker-inline':type==='inline'},position==='top'?'top':'bottom']" tabindex="-1" v-if="show||type==='inline'">
@@ -20,9 +23,10 @@
 </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import RkCalendar from './rk-date-calendar.vue';
 /* eslint-disable */
+/* tslint:disable */
 export default {
   name: 'VueDatepickerLocal',
   components: { RkCalendar },
@@ -190,19 +194,15 @@ export default {
 .datepicker {
   display: inline-block;
   position: relative;
-  color: #3d444f;
+  // color: #3d444f;
 }
 
-.datepicker:before {
-  content: '';
+.datepicker-icon {
   display: block;
   position: absolute;
-  width: 34px;
-  height: 100%;
-  top: 0;
-  right: 0;
-  background: url('data:image/svg+xml;base64,PHN2ZyBjbGFzcz0iaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiPjxwYXRoIGQ9Ik01NjQgMTgwLjJINDQ4Yy04LjMgMC0xNS02LjctMTUtMTVzNi43LTE1IDE1LTE1aDExNmM4LjIgMCAxNSA2LjcgMTUgMTVzLTYuOCAxNS0xNSAxNXoiIGZpbGw9IiM5ODk4OTgiLz48cGF0aCBkPSJNOTQ1IDk1Mi4ySDgxLjJjLTguMiAwLTE1LTYuNy0xNS0xNVYxNjIuOGMwLTguMyA2LjgtMTUgMTUtMTVIMjk0YzguMiAwIDE1IDYuNyAxNSAxNXMtNi44IDE1LTE1IDE1SDk2LjJ2NzQ0LjRIOTMwVjE3Ny44SDcxMy42Yy04LjMgMC0xNS02LjctMTUtMTVzNi43LTE1IDE1LTE1SDk0NWM4LjIgMCAxNSA2LjcgMTUgMTV2Nzc0LjRjMCA4LjMtNi44IDE1LTE1IDE1eiIgZmlsbD0iIzk4OTg5OCIvPjxwYXRoIGQ9Ik0zMzMuMyA1NTFIMjE2Yy04LjIgMC0xNS02LjgtMTUtMTVzNi44LTE1IDE1LTE1aDExNy4zYzguMyAwIDE1IDYuNiAxNSAxNXMtNi43IDE1LTE1IDE1em0yMzAuMyAwSDQ0Ni4zYy04LjMgMC0xNS02LjgtMTUtMTVzNi43LTE1IDE1LTE1aDExNy4zYzguMiAwIDE1IDYuNiAxNSAxNXMtNi44IDE1LTE1IDE1em0yMzAuMiAwSDY3Ni42Yy04LjMgMC0xNS02LjgtMTUtMTVzNi43LTE1IDE1LTE1aDExNy4yYzguMyAwIDE1IDYuNiAxNSAxNXMtNi43IDE1LTE1IDE1ek0zMzMuMyA3NDBIMjE2Yy04LjIgMC0xNS02LjgtMTUtMTVzNi44LTE1IDE1LTE1aDExNy4zYzguMyAwIDE1IDYuNiAxNSAxNXMtNi43IDE1LTE1IDE1em0yMzAuMyAwSDQ0Ni4zYy04LjMgMC0xNS02LjgtMTUtMTVzNi43LTE1IDE1LTE1aDExNy4zYzguMiAwIDE1IDYuNiAxNSAxNXMtNi44IDE1LTE1IDE1em0yMzAuMiAwSDY3Ni42Yy04LjMgMC0xNS02LjgtMTUtMTVzNi43LTE1IDE1LTE1aDExNy4yYzguMyAwIDE1IDYuNiAxNSAxNXMtNi43IDE1LTE1IDE1ek0zNzAuOCAyNTguNmMtOC4zIDAtMTUtNi43LTE1LTE1Vjg2LjhjMC04LjIgNi43LTE1IDE1LTE1czE1IDYuOCAxNSAxNXYxNTYuOGMwIDguMy02LjcgMTUtMTUgMTV6bTI3MC4yIDBjLTguMyAwLTE1LTYuNy0xNS0xNVY4Ni44YzAtOC4yIDYuNy0xNSAxNS0xNXMxNSA2LjggMTUgMTV2MTU2LjhjMCA4LjMtNi43IDE1LTE1IDE1ek05NDUgMzcyLjJIODEuMmMtOC4yIDAtMTUtNi43LTE1LTE1czYuOC0xNSAxNS0xNUg5NDVjOC4yIDAgMTUgNi43IDE1IDE1cy02LjggMTUtMTUgMTV6IiBmaWxsPSIjOTg5ODk4Ii8+PC9zdmc+')
-    no-repeat 50% 50%;
+  top: 8px;
+  left: 8px;
+  color: #515a6ecc;
 }
 
 .datepicker-close {
@@ -246,24 +246,24 @@ export default {
 }
 
 .datepicker > input {
-  color: #666;
-  transition: all 200ms ease;
+  color: inherit;
+  // transition: all 200ms ease;
   border-radius: 4px;
-  border: 1px solid #e5e5e500;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  height: 32px;
+  border: 0;
+  background: none;
+  height: 28px;
   box-sizing: border-box;
   outline: none;
-  padding: 0 34px 0 12px;
+  padding: 0 5px;
   width: 100%;
   user-select: none;
 }
 
-.datepicker > input.focus {
-  border-color: #3880ff;
-  -webkit-box-shadow: 0 0 5px rgba(59, 180, 242, 0.3);
-  box-shadow: 0 0 5px rgba(59, 180, 242, 0.3);
-}
+// .datepicker > input.focus {
+//   border-color: #3f97e3;
+//   -webkit-box-shadow: 0 0 5px rgba(59, 180, 242, 0.3);
+//   box-shadow: 0 0 5px rgba(59, 180, 242, 0.3);
+// }
 
 .datepicker > input:disabled {
   cursor: not-allowed;
@@ -274,6 +274,7 @@ export default {
 }
 
 .datepicker-popup {
+  right: 0px;
   border-radius: 4px;
   position: absolute;
   transition: all 200ms ease;
@@ -288,11 +289,11 @@ export default {
   overflow: hidden;
   z-index: 999;
   &.top{
-    bottom:40px;
+    bottom:35px;
     transform-origin: center bottom;
   }
   &.bottom{
-    top:40px;
+    top:35px;
     transform-origin: center top;
   }
 }
@@ -303,7 +304,7 @@ export default {
 }
 
 .datepicker-range {
-  min-width: 310px;
+  min-width: 280px;
 }
 
 .datepicker-range .datepicker-popup {
@@ -318,7 +319,7 @@ export default {
 
 .datepicker-btn {
   padding: 5px 10px;
-  background: #3880ff;
+  background: #3f97e3;
   color: #fff;
   border-radius: 2px;
   display: inline-block;
@@ -350,7 +351,7 @@ export default {
 }
 
 .datepicker__buttons .datepicker__button-select {
-  background: #3880ff;
+  background: #3f97e3;
 }
 
 .datepicker__buttons .datepicker__button-cancel {

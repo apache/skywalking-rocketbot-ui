@@ -1,74 +1,16 @@
 <template>
-  <div class="micro-topo">
-    <div class="micro-topo-container" ref="topo"></div>
-  </div>
+  <div class="micro-topo-chart"></div>
 </template>
 <script lang="js">
 import * as d3 from 'd3';
-/* eslint-disable */
+import d3tip from 'd3-tip';
 /* tslint:disable */
-const diagonal = d3.linkHorizontal().source(d => {
-  d.sx = d.source.x;
-  d.sy = d.source.y;
-  if (Math.abs(d.source.x - d.target.x) < 40){
-    return [d.source.x, d.source.y];
-  }
-  if (Math.abs(d.source.x + (d.source.name.length * 8 + 55) - d.target.x - (d.target.name.length * 8 + 55)) < 40){
-    d.sx = d.source.x + (d.source.name.length * 8 + 55);
-    return [d.source.x + (d.source.name.length * 8 + 55), d.source.y];
-  }
-  if (d.source.x > d.target.x) {
-    return [d.source.x, d.source.y];
-  }
-  d.sx = d.source.x + (d.source.name.length * 8 + 55);
-  return [d.source.x + (d.source.name.length * 8 + 55), d.source.y];
-}).target(d => {
-  d.tx = d.target.x;
-  d.ty = d.target.y;
-  if (Math.abs(d.source.x - d.target.x) < 40){
-    return [d.target.x, d.target.y];
-  }
-  if (Math.abs(d.source.x + (d.source.name.length * 8 + 55) - d.target.x - (d.target.name.length * 8 + 55)) < 40){
-     d.tx = d.target.x + (d.target.name.length * 8 + 55);
-    return [d.target.x + (d.target.name.length * 8 + 55), d.target.y];
-  }
-  if (d.source.x < d.target.x) {
-    return [d.target.x, d.target.y];
-  }
-  d.tx = d.target.x + (d.target.name.length * 8 + 55);
-  return [d.target.x + (d.target.name.length * 8 + 55), d.target.y];
-});
-const diagonalvertical = d3.linkVertical().source(d => {
-  d.sx = d.source.x;
-  d.sy = d.source.y;
-  if (Math.abs(d.source.x - d.target.x) < 40){
-    return [d.source.x, d.source.y];
-  }
-  if (Math.abs(d.source.x + (d.source.name.length * 8 + 55) - d.target.x - (d.target.name.length * 8 + 55)) < 40){
-    d.sx = d.source.x + (d.source.name.length * 8 + 55);
-    return [d.source.x + (d.source.name.length * 8 + 55), d.source.y];
-  }
-  if (d.source.x > d.target.x) {
-    return [d.source.x, d.source.y];
-  }
-  d.sx = d.source.x + (d.source.name.length * 8 + 55);
-  return [d.source.x + (d.source.name.length * 8 + 55), d.source.y];
-}).target(d => {
-  d.tx = d.target.x;
-  d.ty = d.target.y;
-    if (Math.abs(d.source.x - d.target.x) < 40){
-    return [d.target.x, d.target.y];
-  }
-  if (Math.abs(d.source.x + (d.source.name.length * 8 + 55) - d.target.x - (d.target.name.length * 8 + 55)) < 40){
-    d.tx = d.target.x + (d.target.name.length * 8 + 55);
-    return [d.target.x + (d.target.name.length * 8 + 55), d.target.y];
-  }
-  if (d.source.x < d.target.x) {
-    return [d.target.x, d.target.y];
-  }
-  d.tx = d.target.x + (d.target.name.length * 8 + 55);
-  return [d.target.x + (d.target.name.length * 8 + 55), d.target.y];
-});
+const diagonal = d3.linkHorizontal()
+  .x(function (d) { return d.x })
+  .y(function (d) { return d.y });
+const diagonalvertical = d3.linkVertical()
+  .x(function (d) { return d.x })
+  .y(function (d) { return d.y });
 
 export default {
   props: {
@@ -84,10 +26,12 @@ export default {
   },
   data() {
     return {
+      LOCAL: require('./assets/Local2.png'),
+      CUBE: require('./assets/cube22.png'),
+      CUBEERROR: require('./assets/cube21.png'),
       USER: require('./assets/USER.png'),
       UNKNOWN: require('./assets/UNKNOWN.png'),
       UNKNOWN_CLOUD: require('./assets/UNKNOWN_CLOUD.png'),
-      USER1: require('./assets/USER1.png'),
       UNDEFINED: require('./assets/UNDEFINED.png'),
       KAFKACONSUMER: require('./assets/kafka.png'),
       KAFKA: require('./assets/kafka.png'),
@@ -131,7 +75,6 @@ export default {
       MARIADB_GROUP: require('./assets/MARIADB_GROUP.png'),
       JETTY: require('./assets/JETTY.png'),
       JBOSS: require('./assets/JBOSS.png'),
-      FILTER: require('./assets/filter.png'),
       ETC: require('./assets/ETC.png'),
       DUBBO_PROVIDER: require('./assets/DUBBO_PROVIDER.png'),
       DUBBO_PROVIDER_GROUP: require('./assets/DUBBO_PROVIDER_GROUP.png'),
@@ -161,12 +104,22 @@ export default {
   },
   mounted() {
     window.addEventListener('resize', this.resize);
-    this.width = this.$refs.topo.offsetWidth;
-    this.height = document.body.clientHeight - 64;
+    this.tip = d3tip()
+      .attr('class', 'd3-tip-grey')
+      .offset([-8, 0])
+      .html(d => {
+        return `
+      <div class="mb-5">CallType: ${d.callType}</div>
+      <div class="mb-5">Cpm: ${d.cpm}</div>
+      <div class="mb-5">DetectPoint: ${d.detectPoint}</div>
+      <div>latency: ${d.latency}</div>
+      `});
+    this.height = this.$el.clientHeight;
     this.svg = d3
-      .select(this.$refs.topo)
+      .select(this.$el)
       .append('svg')
-      .attr('width', this.width)
+      .style('display','block')
+      .attr('width', '100%')
       .attr('height', this.height);
   },
   watch: {
@@ -181,30 +134,30 @@ export default {
           this.datas.calls[i].target = this.datas.calls[i].source;
         }
       }
+
       this.svg.select('.graph').remove();
       this.force = d3
         .forceSimulation(this.datas.nodes)
-        .force('collide', d3.forceCollide().radius(() => 90))
+        .force('collide', d3.forceCollide().radius(() => 60))
         .force('yPos', d3.forceY().strength(1))
         .force('xPos', d3.forceX().strength(1))
-        .force('charge', d3.forceManyBody().strength(-500))
-          // .force('cluster', d3.cluster().strength(0.2))
-
-  // // apply collision with padding
-  // .force('collide', d3.forceCollide()
-  //   .strength(0.7))
+        .force('charge', d3.forceManyBody().strength(-520))
         .force( 'link', d3.forceLink(this.datas.calls).id(d => d.id))
-        .force('center', d3.forceCenter(this.width / 2, this.height / 2))
+        .force('center', d3.forceCenter(window.innerWidth / 2 + 100, this.height / 2))
         .on('tick', this.tick)
         .stop();
       this.graph = this.svg.append('g').attr('class', 'graph');
+          this.svg.call(this.tip);
       this.svg.call(this.getZoomBehavior(this.graph));
+      this.graph.call(this.tip);
       this.svg.on('click', (d, i) => {
-        this.$emit('setCurrentApp', {name: '', id: ''});
+        this.$store.commit('rocketTopo/SET_NODE', {});
+        that.tip.hide({}, this);
         this.toggleNode(this.node, d, false);
         this.toggleLine(this.line, d, false);
+        this.toggleLine(this.lineNode, d, false);
         // this.toggleMarker(marker, currNode, true);
-        this.toggleLineText(this.linkText, d, false);
+        // this.toggleLineText(this.linkText, d, false);
       });
       this.defs = this.graph.append('defs');
       this.arrowMarker = this.defs
@@ -217,30 +170,27 @@ export default {
         .attr('refX', '11')
         .attr('refY', '6')
         .attr('orient', 'auto');
-      const arrow_path = 'M2,2 L10,6 L2,10 L5,6 L2,2';
-      this.glink = this.graph.append('g').selectAll('.link');
-      this.link = this.glink.data(this.datas.calls).enter().append('g');
-      this.line = this.link.append('path').attr('class', 'link')
-      .attr('stroke-dasharray', d => d.cpm ? '30 3': '0')
-      .attr('stroke', d => d.cpm ? 'rgba(255, 199, 31, 0.4)' : 'rgba(199, 199, 210, 0.3)').attr("marker-end","url(#arrow)");
-      this.linkText = this.link.append('g');
-      this.linkText
-        .append('rect')
-        .attr('rx', 10)
-        .attr('ry', 10)
-        .attr('width', 20)
-        .attr('height', 20)
-        .attr('x', -10)
-        .attr('y', -10)
-        .attr('fill', '#292d34');
-      this.linkText
-        .append('text')
-        .attr('font-size', 10)
-        .attr('class', 'linkText')
-        .attr('text-anchor', 'middle')
-        .attr('y', 3)
-        .text(d => d.cpm);
-      this.arrowMarker.append('path').attr('d', arrow_path).attr('fill', 'rgba(230, 170, 20,.8)');
+      const arrow_path = 'M2,2 L10,6 L2,10 L3,6 L2,2';
+
+      // .attr("marker-end","url(#arrow)");
+      // this.linkText = this.link.append('g');
+      // this.linkText
+      //   .append('rect')
+      //   .attr('rx', 3)
+      //   .attr('ry', 3)
+      //   .attr('width', 6)
+      //   .attr('height', 6)
+      //   .attr('x', -3)
+      //   .attr('y', -3)
+      //   .attr('fill', '#217EF2a0');
+      // this.linkText
+      //   .append('text')
+      //   .attr('font-size', 10)
+      //   .attr('class', 'link-text')
+      //   .attr('text-anchor', 'middle')
+      //   .attr('y', 5)
+      //   .text(d => d.cpm);
+      this.arrowMarker.append('path').attr('d', arrow_path).attr('fill', '#217EF2');
       this.gnode = this.graph.append('g').selectAll('.node');
       const that = this;
       this.node = this.gnode.data(this.datas.nodes)
@@ -253,6 +203,7 @@ export default {
         )
         .on('click', function(d, i) {
           event.stopPropagation();
+          that.tip.hide({}, this);
           that.node.attr('class', '');
           d3.select(this).attr('class', 'node-active');
           const copyD = JSON.parse(JSON.stringify(d));
@@ -263,64 +214,66 @@ export default {
           delete copyD.fx;
           delete copyD.fy;
           delete copyD.index;
-          that.$emit('setCurrentApp', copyD);
+          that.$store.commit('rocketTopo/SET_NODE', copyD);
           that.toggleNode(that.node, d, true);
           that.toggleLine(that.line, d, true);
-          // this.toggleMarker(marker, currNode, true);
-          that.toggleLineText(that.linkText, d, true);
+          that.toggleLine(that.lineNode, d, true);
         });
       this.node
-        .append('rect')
-        .attr('class', d => {
-          if(d.sla){
-            if(d.sla < 100) {
-              return 'node-error';
-            } else if (d.sla > 100 && d.sla < 10000) {
-              return 'node-error';
-            }
+        .append('image')
+        .attr('width', 49)
+        .attr('height', 49)
+        .attr('x', 2)
+        .attr('y', 10)
+        .attr('style', 'cursor: move;')
+        .attr('xlink:href',d => {
+          const type = d.type;
+          if( d.sla < 100 ) {
+            return this.CUBEERROR;
           }
-          return 'node';
-        })
-        .attr('rx', 17)
-        .attr('ry', 17)
-        .attr('width', d => d.name.length * 8 + 55)
-        .attr('height', 34);
+          return this.CUBE;
+        });
+      this.node
+        .append('image')
+        .attr('width',40)
+        .attr('height', 40)
+        .attr('x', 2)
+        .attr('y', -17)
+        .attr('style', 'opacity: 0.7;')
+        .attr('xlink:href',this.LOCAL);
       this.node
         .append('image')
         .attr('width', 20)
         .attr('height', 20)
-        .attr('style', 'cursor: move;')
-        .attr('x', 10)
-        .attr('y', 7)
+        .attr('x', 12)
+        .attr('y', -11)
         .attr('xlink:href',d => {
           if( !d.type || d.type === 'N/A') {
             return this['UNKNOWN_CLOUD']
           }
           return this[d.type.toUpperCase().replace('-','')];
         });
-      this.node
-        .append('text')
-        .attr('font-size', 10)
-        .attr('text-anchor', 'middle')
-        .attr('x', d => d.name.length * 8 + 40)
-        .attr('y', 21)
-        .attr('font-weight', 600)
-        .text(d => {
-          if (!d.sla) return;
-          const temp = d.sla > 100 ? d.sla/100 : d.sla;
-          if(temp === 100) return;
-          const rate = 100 - temp;
-          return rate.toFixed(1) + '%' 
-        })
-        .attr('fill', 'rgb(240, 84, 20)');
-      this.node
-        .append('text')
-        .attr('class', 'node-name')
-        .attr('x', 38)
-        .attr('font-size', 13)
-        .attr('y', 21)
-        .text(d => d.name)
-        .attr('fill', '#fafafa');
+      this.glink = this.graph.append('g').selectAll('.link');
+      this.link = this.glink.data(this.datas.calls).enter();
+      this.line = this.link.append('path').attr('class', 'link')
+        .attr('stroke-dasharray', d => d.cpm ? '15 5': '0')
+        .attr('stroke', d => d.cpm ? '#217EF288' : '#6a6d7777');
+      this.lineNode = this.link.append('rect').attr('class', 'link-node cp')
+        .attr('width', 6)
+        .attr('height', 6)
+        .attr('rx', 3)
+        .attr('ry', 3)
+        .attr('fill', d => d.cpm ? '#217EF2aa' : '#6a6d7799')
+        .on('click', function(d, i) {
+          event.stopPropagation();
+          that.tip.show(d, this);
+        });
+      // this.node
+      //   .append('text')
+      //   .attr('class', 'node-name')
+      //   .attr('x', 50)
+      //   .attr('y', 25)
+      //   .text(d => d.name)
       d3.timeout(() => {
         for (
           let i = 0,
@@ -364,12 +317,12 @@ toggleLine(linkLine, currNode, isHover) {
       .style('animation', 'none')
       .filter(link => this.isLinkLine(currNode, link))
       .style('opacity', 1)
-      .style('animation', 'dash 6s linear infinite');
+      .style('animation', 'dash 1s linear infinite');
       // .classed('link-active', true);
     } else {
       linkLine
         .style('opacity', 1)
-        .style('animation', 'dash 6s linear infinite');
+        .style('animation', 'dash 1s linear infinite');
         // .classed('link-active', false);
     }
   },
@@ -396,31 +349,22 @@ toggleLineText(lineText, currNode, isHover) {
       }
     },
     resize() {
-      this.svg.attr('width', this.$refs.topo.offsetWidth);
-      this.svg.attr('height', document.body.clientHeight - 64);
+      this.svg.attr('height', document.body.clientHeight - 50);
     },
     tick() {
       this.line
-        .attr('stroke-width', 1)
-        .attr(
-          'd',
-          d => {
-            if(Math.abs(d.sx-d.tx) > Math.abs(d.sy-d.ty)) return diagonal(d);
-            if(Math.abs(d.sx-d.tx) < Math.abs(d.sy-d.ty)) return diagonalvertical(d);
-            return diagonal(d);
-          }
-        );
-      this.linkText.attr('transform',d => {
-        let tagx = 1
-        return `translate(${d.sx - (d.sx-d.tx)/2}, ${d.sy - (d.sy-d.ty)/2})`
-      });
-      this.node.attr('transform', d => `translate(${d.x},${d.y - 20})`);
+        .attr('d', d => `M${d.source.x} ${d.source.y} Q ${(d.source.x + d.target.x)/2} ${(d.target.y + d.source.y)/2 - 80} ${d.target.x} ${d.target.y}`);
+      this.lineNode.attr('transform', d => `translate(${(d.source.x + d.target.x)/2 - 3},${(d.target.y + d.source.y)/2 - 43})`);
+      // this.linkText.attr('transform',d =>`translate(${(d.source.x + d.target.x) / 2},${(d.source.y + d.target.y) / 2})`);
+      this.node.attr('transform', d => `translate(${d.x -  22},${d.y - 22})`);
     },
     getZoomBehavior(g) {
+      const that = this;
       return d3
         .zoom()
         .scaleExtent([0.3, 10])
         .on('zoom', () => {
+          that.tip.hide({}, this);
           g.attr(
             'transform',
             `translate(${d3.event.transform.x},${d3.event.transform.y})scale(${
@@ -452,45 +396,32 @@ toggleLineText(lineText, currNode, isHover) {
 };
 </script>
 <style lang="scss">
-.micro-topo {
-  .micro-topo-container {
-    text-align: center;
-    border-radius: 2px;
-    overflow: hidden;
-  }
+.micro-topo-chart{
+  height: 100%;
+  width: 100%;
   .node-name {
     cursor: move;
+    font-size:14px;
+    fill: #ddd;
   }
   .link {
     stroke-linecap: round;
+    stroke-width: 1.3px;
     fill:rgba(255, 255, 255, 0);
-    animation: dash 6s linear infinite;
-  }
-@keyframes dash {
-    from {
-      stroke-dashoffset: 330;
-    }
-    to {
-      stroke-dashoffset: 0;
-    }
-  }
-  .link2 {
-    stroke: rgb(80, 80, 80);
-    // stroke-dasharray: 200 20;
-    // stroke-dashoffset: 0;
-    // animation: dash 1.5s linear infinite;
+    animation: dash 1.5s linear infinite;
   }
   @keyframes dash {
     from {
-      stroke-dashoffset: 220;
+      stroke-dashoffset: 20;
     }
     to {
       stroke-dashoffset: 0;
     }
   }
-  .linkText {
+  .link-text {
     font-family: SimSun;
-    fill: #eee;
+    fill: #ddd;
+    font-size:11px;
   }
   .user {
     cursor: move;
@@ -510,23 +441,43 @@ toggleLineText(lineText, currNode, isHover) {
   }
   .node {
     cursor: move;
-    fill: rgba(75, 78, 85, 0.6);
+    fill: #333840;
+    // stroke: #E6E9EF;
+    stroke-width: 0;
   }
-  .node-error {
-    cursor: move;
-    fill: rgba(75, 78, 85, 0.6);
-    stroke-width: 2;
-    stroke: rgba(226, 61, 61, 0.6);
-  }
-  .node-active {
-    .node {
-      stroke-width: 2;
-      stroke: rgba(255, 255, 255, 0.5);
-    }
-  }
-  .node-title {
-    cursor: move;
-    fill: #4c4c4e;
-  }
+  // .node-active {
+  //   .node {
+  //     // stroke-width: 1.5;
+  //     // stroke: #217EF2;
+  //   }
+  // }
 }
+  .d3-tip-grey {
+      line-height: 1;
+      padding: 8px;
+      background: #252a2fcc;
+      color: #eee;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+ 
+    /* Creates a small triangle extender for the tooltip */
+    .d3-tip-grey:after {
+      box-sizing: border-box;
+      display: block;
+      font-size: 10px;
+      width: 100%;
+      line-height: 0.8;
+      color: #252a2fcc;
+      content: "\25BC";
+      position: absolute;
+      text-align: center;
+    }
+ 
+    /* Style northward tooltips specifically */
+    .d3-tip-grey.n:after {
+      margin: -2px 0 0 0;
+      top: 100%;
+      left: 0;
+    }
 </style>

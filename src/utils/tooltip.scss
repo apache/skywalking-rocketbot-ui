@@ -1,0 +1,117 @@
+$zindex-tooltip:           1070 !default;
+$tooltip-max-width:        200px !default;
+$tooltip-color:            #fff !default;
+$tooltip-bg:               #252a2f !default;
+// Base class
+.rk-tooltip {
+  display: inline-block;
+}
+.rk-tooltip-popper {
+  z-index: $zindex-tooltip;
+  display: block;
+  font-size: 13px;
+  line-height: 22px;
+  position: absolute;
+  // when position error, fixed tooltip twinkle
+  pointer-events: none;
+
+  // Wrapper for the tooltip content
+  .rk-tooltip-inner {
+    max-width: $tooltip-max-width;
+    padding: 10px;
+    color: $tooltip-color;
+    text-align: left;
+    background-color: $tooltip-bg;
+    border-radius: 5px;
+    word-break:break-all;
+  }
+
+  // Arrows
+  .rk-tooltip-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+  }
+}
+
+// Note: Deprecated .top-left, .top-right, .bottom-left, and .bottom-right as of v3.3.1
+.rk-tooltip-popper {
+  &[x-placement^="top"] {
+    padding: 5px 0 15px;
+    .rk-tooltip-arrow {
+      bottom: 6px;
+      border-width: 13px 13px 0;
+      border-top-color: $tooltip-bg;
+    }
+  }
+  &[x-placement^="right"] {
+    padding: 0 5px 0 15px;
+    .rk-tooltip-arrow {
+      left: 6px;
+      border-width: 13px 13px 13px 0;
+      border-right-color: $tooltip-bg;
+    }
+  }
+  &[x-placement^="bottom"] {
+    padding: 15px 0 5px;
+    .rk-tooltip-arrow {
+      top: 6px;
+      border-width: 0 13px 13px;
+      border-bottom-color: $tooltip-bg;
+    }
+  }
+  &[x-placement^="left"] {
+    padding: 0 15px 0 5px;
+    .rk-tooltip-arrow {
+      right: 6px;
+      border-width: 13px 0 13px 13px;
+      border-left-color: $tooltip-bg;
+    }
+  }
+}
+
+.rk-tooltip-popper[x-placement="top"] .rk-tooltip-arrow {
+  left: 50%;
+  margin-left: -13px;
+}
+.rk-tooltip-popper[x-placement="top-start"] .rk-tooltip-arrow {
+  left: 16px;
+}
+.rk-tooltip-popper[x-placement="top-end"] .rk-tooltip-arrow {
+  right: 16px;
+}
+
+.rk-tooltip-popper[x-placement="bottom"] .rk-tooltip-arrow {
+  left: 50%;
+  margin-left: -13px;
+}
+.rk-tooltip-popper[x-placement="bottom-start"] .rk-tooltip-arrow {
+  left: 16px;
+}
+.rk-tooltip-popper[x-placement="bottom-end"] .rk-tooltip-arrow {
+  right: 16px;
+}
+
+.rk-tooltip-popper[x-placement="left"] .rk-tooltip-arrow {
+  top: 50%;
+  margin-top: -13px;
+}
+.rk-tooltip-popper[x-placement="left-start"] .rk-tooltip-arrow {
+  top: 8px;
+}
+.rk-tooltip-popper[x-placement="left-end"] .rk-tooltip-arrow {
+  bottom: 8px;
+}
+
+.rk-tooltip-popper[x-placement="right"] .rk-tooltip-arrow {
+  top: 50%;
+  margin-top: -13px;
+}
+.rk-tooltip-popper[x-placement="right-start"] .rk-tooltip-arrow {
+  top: 8px;
+}
+.rk-tooltip-popper[x-placement="right-end"] .rk-tooltip-arrow {
+  bottom: 8px;
+}

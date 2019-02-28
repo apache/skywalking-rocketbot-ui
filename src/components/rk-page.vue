@@ -1,19 +1,25 @@
+/**
+ * pagement
+ * @param {
+ *   currentPage: Number
+ *   currentSize: Number
+ *   total      : Number
+ *   name       : String (optional)
+ * }}
+ */
 <template>
-<span class="micro-page">
-  <span class="dao-btn-group">
-    <button class="rk-page-btn mr5" @click="pre"
-    :disabled="this.current == 1">
-      <Icon type="ios-arrow-back" />
-    </button>
-    <button class="rk-page-btn" @click="next"
-    :disabled="total=== 0 || this.current == Math.ceil(this.total / this.currentSize)">
-      <Icon type="ios-arrow-forward" />
-    </button>
-  </span><span class="micro-page-info"><span v-if="total">{{currentPage===1?1:((currentPage-1)*currentSize+1)}} -
-    {{last}}</span> Total {{total}} {{name}}</span>
-</span>
+  <span class="micro-page flex-h">
+    <svg class="icon cp icon-l" @click="pre">
+      <use xlink:href="#chevron-left"></use>
+    </svg>
+    <input class="micro-page-input" type="text" v-model="currentPage">
+    <svg class="icon cp icon-r" @click="next">
+      <use xlink:href="#chevron-right"></use>
+    </svg>
+    <span class="sm grey">{{this.total}}</span>
+  </span>
 </template>
-<script lang="js">
+<script lang="js">      // tslint:disable
 export default {
   name: 'MicroPage',
   props: {
@@ -73,33 +79,28 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.micro-page .dao-btn{
-  padding: 8px;
-  fill: #3d444f;
-  &:disabled{
-    fill: #ccd1d9;
+.micro-page{
+  display: inline-flex;
+  .icon{
+    padding: 3px;
+    opacity: 0.5;
+    &:hover{
+      opacity: 1;
+    }
   }
-  .icon{fill:inherit;}
+  .icon-l {
+    margin-left: 5px;
+  }
+  .icon-r {
+    margin-right: 5px;
+  }
 }
-.micro-page-info{
-  margin-left: 10px;
-  color: #9ba3af;
-  vertical-align: middle;
-}
-.rk-page-btn{
-  cursor: pointer;
+.micro-page-input{
+  width: 40px;
+  text-align: center;
+  outline: 0;
+  border-style: unset;
   border-radius: 4px;
-  background-color: #5487ed;
-  border: 0;
-  color: #fff;
-  outline: none;
-  padding: 0px .5em;
-  height: 23px;
-  vertical-align: bottom;
-  -webkit-transition: background-color .3s;
-  transition: background-color .3s;
-  &:hover {
-    background-color: #6296ff;
-  }
+  border: 1px solid #c1c5ca55;
 }
 </style>
