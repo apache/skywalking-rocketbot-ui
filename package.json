@@ -26,6 +26,7 @@
     "@vue/cli-plugin-typescript": "^3.4.1",
     "@vue/cli-service": "^3.4.1",
     "babel-plugin-import": "^1.11.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-plugin-transform-vue-jsx": "^3.7.0",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
