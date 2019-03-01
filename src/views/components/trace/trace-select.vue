@@ -1,5 +1,5 @@
 <template>
-  <div class="rk-trace-bar-select cp flex-h" v-clickout="() => { visible = false;search = '';}" :class="{'active':visible}">
+  <div class="rk-trace-sel-wrapper cp flex-h" v-clickout="() => { visible = false;search = '';}" :class="{'active':visible}">
     <div class="rk-trace-bar-i flex-h" @click="visible = !visible">
       <div class="mr-15 rk-trace-bar-i-text">
         <div class="sm grey">{{title}}</div>
@@ -16,7 +16,7 @@
           <use xlink:href="#clear"></use>
         </svg>
       </div>
-      <div class="rk-trace-opt-wrapper scroll_content">
+      <div class="rk-trace-opt-wrapper scroll_hide">
         <div class="rk-trace-opt ell" @click="handleSelect(i)" :class="{'active':i.key === value.key}" v-for="i in filterData" :key="i.key">{{i.label}}</div>
       </div>
     </div>
@@ -26,7 +26,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 @Component
-export default class ToolBarSelect extends Vue {
+export default class TraceSelect extends Vue {
   @Prop() public data!: any;
   @Prop() public value!: any;
   @Prop() public title!: string;
@@ -36,9 +36,6 @@ export default class ToolBarSelect extends Vue {
   get filterData() {
     return this.data.filter((i: any) => i.label.toUpperCase().indexOf(this.search.toUpperCase()) !== -1);
   }
-  public handleOpen() {
-    this.visible = true;
-  }
   public handleSelect(i: any) {
     this.$emit('input', i);
     this.visible = false;
@@ -47,13 +44,13 @@ export default class ToolBarSelect extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.rk-trace-bar-select {
+.rk-trace-sel-wrapper {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   height: 100%;
   justify-content: space-between;
-  .sm{ line-height: 12px;}
-  .icon { flex-shrink: 0};
+  .sm{line-height: 13px}
+  .icon {flex-shrink: 0}
 }
 .rk-trace-bar-i-text{
   max-width: 150px;

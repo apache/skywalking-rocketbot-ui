@@ -52,53 +52,53 @@ pre{
   font-family: Consolas, Menlo, Courier, monospace;
 }
 /*webkit内核*/
-.scroll_content::-webkit-scrollbar {
+.scroll_hide::-webkit-scrollbar {
   width:0px;
   height:0px;
 }
-.scroll_content::-webkit-scrollbar-button    {
+.scroll_hide::-webkit-scrollbar-button    {
   background-color:rgba(0,0,0,0);
 }
-.scroll_content::-webkit-scrollbar-track     {
+.scroll_hide::-webkit-scrollbar-track     {
   background-color:rgba(0,0,0,0);
 }
-.scroll_content::-webkit-scrollbar-track-piece {
+.scroll_hide::-webkit-scrollbar-track-piece {
   background-color:rgba(0,0,0,0);
 }
-.scroll_content::-webkit-scrollbar-thumb{
+.scroll_hide::-webkit-scrollbar-thumb{
   background-color:rgba(0,0,0,0);
 }
-.scroll_content::-webkit-scrollbar-corner {
+.scroll_hide::-webkit-scrollbar-corner {
   background-color:rgba(0,0,0,0);
 }
-.scroll_content::-webkit-scrollbar-resizer  {
+.scroll_hide::-webkit-scrollbar-resizer  {
   background-color:rgba(0,0,0,0);
 }
 /*o内核*/
-.scroll_content .-o-scrollbar{
+.scroll_hide .-o-scrollbar{
   -moz-appearance: none !important;   
   background: rgba(0,255,0,0) !important;  
 }
-.scroll_content::-o-scrollbar-button    {
+.scroll_hide::-o-scrollbar-button    {
   background-color:rgba(0,0,0,0);
 }
-.scroll_content::-o-scrollbar-track     {
+.scroll_hide::-o-scrollbar-track     {
   background-color:rgba(0,0,0,0);
 }
-.scroll_content::-o-scrollbar-track-piece {
+.scroll_hide::-o-scrollbar-track-piece {
   background-color:rgba(0,0,0,0);
 }
-.scroll_content::-o-scrollbar-thumb{
+.scroll_hide::-o-scrollbar-thumb{
   background-color:rgba(0,0,0,0);
 }
-.scroll_content::-o-scrollbar-corner {
+.scroll_hide::-o-scrollbar-corner {
   background-color:rgba(0,0,0,0);
 }
-.scroll_content::-o-scrollbar-resizer  {
+.scroll_hide::-o-scrollbar-resizer  {
   background-color:rgba(0,0,0,0);
 }
 /*IE10,IE11,IE12*/
-.scroll_content{
+.scroll_hide{
   -ms-scroll-chaining: chained;
   -ms-overflow-style: none;
   -ms-content-zooming: zoom;

@@ -1,5 +1,5 @@
 <template>
-  <div class="time-charts scroll_content">
+  <div class="time-charts scroll_hide">
     <transition-group name="fade" tag="div" class="mb-5">
       <span class="time-charts-item mr-10" v-for="(i,index) in list" :key="i" :style="`color:${computedScale(index)}`">
          <svg class="icon vm mr-5 sm">
@@ -128,7 +128,6 @@ export default {
   fill: rgba(0, 0, 0, 0);
   stroke-width: 5px;
   cursor: pointer;
-  // stroke: rgba(0,0,0,0);
   &:hover{
     fill: rgba(0,0,0,0.05)
   }
@@ -149,9 +148,7 @@ export default {
   border: 1px solid;
   font-size: 11px;
   border-radius: 4px;
-  // background-color: rgba(0, 0, 0, 0.04);
 }
-
  .trace-tree{
    fill: rgba(0,0,0,0)
  }
@@ -160,33 +157,4 @@ export default {
      fill: rgba(0,0,0,0.05)
    }
  }
-.d3-tip {
-      line-height: 1;
-      padding: 8px;
-      background: #252a2f;
-      color: #eee;
-      border-radius: 4px;
-      font-size: 12px;
-    }
- 
-    /* Creates a small triangle extender for the tooltip */
-    .d3-tip:after {
-      box-sizing: border-box;
-      display: block;
-      font-size: 10px;
-      width: 100%;
-      line-height: 0.8;
-      color: #252a2f;
-      content: "\25BC";
-      position: absolute;
-      text-align: center;
-    }
- 
-    /* Style northward tooltips specifically */
-    .d3-tip.n:after {
-      margin: -2px 0 0 0;
-      top: 100%;
-      left: 0;
-    }
-
 </style>

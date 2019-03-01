@@ -1,6 +1,6 @@
 <template>
   <div class="rk-alarm flex-v">
-    <AlarmTool :durationTime="durationTime"/>
+    <AlarmTool :durationTime="durationTime" :total="rocketAlarm.total"/>
     <div style="flex-grow: 1;overflow: auto;">
       <AlarmTable :data="rocketAlarm.alarmService"/>
     </div>
@@ -34,6 +34,5 @@ export default class Alarm extends Vue {
 .rk-alarm {
   flex-grow: 1;
   height: 100%;
-  overflow: auto;
 }
 </style>

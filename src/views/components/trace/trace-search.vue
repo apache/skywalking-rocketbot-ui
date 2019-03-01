@@ -1,13 +1,13 @@
 <template>
-  <div class="rk-trace-list-search">
+  <div class="rk-trace-search">
     <div>
-      <a class="rk-trace-list-search-btn r" @click="status = !status">
+      <a class="rk-trace-search-btn r" @click="status = !status">
         <span class="mr-5 vm">More</span>
         <svg class="icon trans vm" :style="`transform: rotate(${status?180:0}deg);`">
           <use xlink:href="#arrow-down"></use>
         </svg>
       </a>
-      <a class="rk-trace-list-search-btn bgblue r mr-10" @click="getTraceList">
+      <a class="rk-trace-search-btn bg-blue r mr-10" @click="getTraceList">
         <svg class="icon mr-5 vm">
           <use xlink:href="#search"></use>
         </svg>
@@ -20,23 +20,21 @@
         :data="[{label:'All', key: 'ALL'}, {label:'Success', key: 'SUCCESS'}, {label:'Error', key: 'ERROR'}]"/>
         <div class="mr-10" style="padding: 3px 15px 0">
           <div class="sm grey">Endpoint Name</div>
-          <input type="text"  v-model="endpointName" class="rk-trace-list-search-input">
+          <input type="text"  v-model="endpointName" class="rk-trace-search-input">
         </div>
       </div>
     </div>
-    <div class="rk-trace-list-search-more flex-h" v-show="status">
+    <div class="rk-trace-search-more flex-h" v-show="status">
       <div class="mr-15">
         <span class="sm b grey mr-10">TraceID:</span>
-        <div class="dib">
-          <input type="text" v-model="traceId" class="rk-trace-list-search-input">
-        </div>
+        <input type="text" v-model="traceId" class="rk-trace-search-input dib">
       </div>
       <div class="mr-15">
         <span class="sm b grey mr-10">Range:</span>
-        <div class="rk-trace-list-search-range">
-          <input class="vm" v-model="minTraceDuration">
+        <div class="rk-trace-search-range dib">
+          <input class="vm tc" v-model="minTraceDuration">
           <span class="grey vm">-</span>
-          <input class="vm" v-model="maxTraceDuration">
+          <input class="vm tc" v-model="maxTraceDuration">
         </div>
       </div>
       <div>
@@ -146,46 +144,41 @@ export default class TraceTool extends Vue {
 </script>
 
 <style lang="scss">
-.rk-trace-list-search {
+.rk-trace-search {
   flex-shrink: 0;
   background-color: #333840;
-  color: #efefef;
+  color: #eee;
   width: 100%;
   padding: 3px 15px 8px;
 }
-.rk-trace-list-search-input, {
+
+.rk-trace-search-input {
   border-style: unset;
-  background-color: #fff;
   outline: 0;
   padding: 2px 5px;
   border-radius: 3px;
 }
-.rk-trace-list-search-range{
+.rk-trace-search-range{
   border-radius: 3px;
-  display: inline-block;
   background-color: #fff;
   padding: 1px;
-  color: #3d444f;
   border-radius: 3px;
   input{
-    text-align: center;
-    border-radius: 0px;
     width: 38px;
     border-style: unset;
-    background-color: rgba(0, 0,0, 0);
     outline: 0;
   }
 }
-.rk-trace-list-search-btn{
+.rk-trace-search-btn{
   padding: 4px 10px;
   background-color: #484b55;
   border-radius: 3px;
   margin-top: 12px;
-  &.bgblue{
-    background-color: #428cfd;
+  &.bg-blue{
+    background-color: #458eff;
   }
 }
-.rk-trace-list-search-more{
+.rk-trace-search-more{
   background-color: #484b55;
   padding: 4px 10px;
   border-radius: 3px;

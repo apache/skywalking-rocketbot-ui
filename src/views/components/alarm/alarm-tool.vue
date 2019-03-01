@@ -5,6 +5,7 @@
       <div class="sm grey">Search Keyword</div>
       <input type="text"  :value="keyword" class="rk-alarm-tool-input" @input="handleRefresh">
     </div>
+    <RkPage class="mt-15" :currentSize="20" :currentPage="pageNum" @changePage="handlePage" :total="total"/>
   </nav>
 </template>
 
@@ -12,12 +13,15 @@
 import Vue from 'vue';
 import { Component, Prop, Model } from 'vue-property-decorator';
 import AlarmSelect from './alarm-select.vue';
-import { Action } from 'vuex-class';
+import { Action, Mutation } from 'vuex-class';
 
 @Component({components: {AlarmSelect}})
 export default class AlarmTool extends Vue {
+  @Mutation('SET_EVENTS') private SET_EVENTS: any;
   @Action('rocketAlarm/GET_ALARM') private GET_ALARM: any;
   @Prop() private durationTime: any;
+  @Prop() private total!: number;
+  private pageNum: number = 1;
   private alarmScope: any = {label: 'Global', key: ''};
   private alarmOptions: any = [
     {label: 'Global', key: ''},
@@ -27,16 +31,20 @@ export default class AlarmTool extends Vue {
   ];
   private keyword: string = '';
 
+  private handlePage(pageNum: number) {
+    this.handleRefresh(pageNum);
+  }
   private handleFilter(i: any) {
     this.alarmScope = i;
-    this.handleRefresh();
+    this.handleRefresh(1);
   }
-  private handleRefresh() {
+  private handleRefresh(pageNum: number) {
+    this.pageNum = pageNum;
     const params: any = {
       duration: this.durationTime,
       paging: {
-        pageNum: 1,
-        pageSize: 30,
+        pageNum,
+        pageSize: 20,
         needTotal: true,
       },
     };
@@ -45,7 +53,7 @@ export default class AlarmTool extends Vue {
     this.GET_ALARM(params);
   }
   private beforeMount() {
-    this.handleRefresh();
+    this.SET_EVENTS([this.handleRefresh(1)]);
   }
 }
 </script>

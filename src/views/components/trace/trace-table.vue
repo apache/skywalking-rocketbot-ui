@@ -1,14 +1,14 @@
 <template>
-    <div class="rk-trace-list">
-      <div class="rk-trace-list-tool flex-h">
+    <div class="rk-trace-t flex-v">
+      <div class="rk-trace-t-tool flex-h">
         <RkPage :currentSize="15" :currentPage="rocketTrace.traceForm.paging.pageNum" @changePage="page" :total="rocketTrace.traceTotal"/>
         <select class='grey' @change="changeSort" :value="rocketTrace.traceForm.queryOrder">
           <option value="BY_START_TIME">StartTime</option>
           <option value="BY_DURATION">Duration</option>
         </select>
       </div>
-      <div class="rk-trace-table-wrapper scroll_content">
-        <table class="rk-trace-table">
+      <div class="rk-trace-t-wrapper scroll_hide">
+        <table class="rk-trace-t">
           <tr class="rk-trace-tr cp" v-for="i in rocketTrace.traceList" @click="selectTrace(i)">
             <td class="rk-trace-td" :class="{
                 'rk-trace-success':!i.isError,
@@ -55,13 +55,11 @@ export default class Home extends Vue {
 }
 </script>
 <style lang="scss">
-.rk-trace-list{
+.rk-trace-t{
   flex-grow: 1;
   height: 100%;
-  display: flex;
-  flex-direction: column;
 }
-.rk-trace-list-tool{
+.rk-trace-t-tool{
   flex-shrink: 0;
   background-color: rgba(196, 200, 225, 0.2);
   justify-content: space-between;
@@ -76,13 +74,12 @@ export default class Home extends Vue {
   border-right: 1px solid #c1c5ca41;
   height: 35px;
 }
-.rk-trace-table-wrapper{
+.rk-trace-t-wrapper{
   overflow: auto;
-  // padding-top: 48px;
   flex-grow: 1;
   border-right: 1px solid rgba(0,0,0,0.1);
 }
-.rk-trace-table {
+.rk-trace-t {
   width: 100%;
   border-spacing: 0;
   table-layout: fixed;
@@ -107,7 +104,8 @@ export default class Home extends Vue {
 }
 .rk-tag{
   border-radius: 4px;
-  padding: 0px 5px;
+  padding-right: 5px;
+  padding-left: 5px;
   background-color: #40454e;
   color: #eee;
 }

@@ -109,10 +109,10 @@ export default {
       .offset([-8, 0])
       .html(d => {
         return `
-      <div class="mb-5">CallType: ${d.callType}</div>
-      <div class="mb-5">Cpm: ${d.cpm}</div>
-      <div class="mb-5">DetectPoint: ${d.detectPoint}</div>
-      <div>latency: ${d.latency}</div>
+      <div class="mb-5"><span class="grey">CallType: </span>${d.callType}</div>
+      <div class="mb-5"><span class="grey">Cpm: </span>${d.cpm}</div>
+      <div class="mb-5"><span class="grey">DetectPoint: </span>${d.detectPoint}</div>
+      <div><span class="grey">latency: </span>${d.latency}</div>
       `});
     this.height = this.$el.clientHeight;
     this.svg = d3
@@ -423,61 +423,10 @@ toggleLineText(lineText, currNode, isHover) {
     fill: #ddd;
     font-size:11px;
   }
-  .user {
-    cursor: move;
-    fill: #3890ff;
-  }
-  .user-content {
-    cursor: move;
-    fill: #217ef2;
-  }
-  .out {
-    cursor: move;
-    fill: #a330ec;
-  }
-  .out-title {
-    cursor: move;
-    fill: #9026d4;
-  }
   .node {
     cursor: move;
     fill: #333840;
-    // stroke: #E6E9EF;
     stroke-width: 0;
   }
-  // .node-active {
-  //   .node {
-  //     // stroke-width: 1.5;
-  //     // stroke: #217EF2;
-  //   }
-  // }
 }
-  .d3-tip-grey {
-      line-height: 1;
-      padding: 8px;
-      background: #252a2fcc;
-      color: #eee;
-      border-radius: 4px;
-      font-size: 12px;
-    }
- 
-    /* Creates a small triangle extender for the tooltip */
-    .d3-tip-grey:after {
-      box-sizing: border-box;
-      display: block;
-      font-size: 10px;
-      width: 100%;
-      line-height: 0.8;
-      color: #252a2fcc;
-      content: "\25BC";
-      position: absolute;
-      text-align: center;
-    }
- 
-    /* Style northward tooltips specifically */
-    .d3-tip-grey.n:after {
-      margin: -2px 0 0 0;
-      top: 100%;
-      left: 0;
-    }
 </style>

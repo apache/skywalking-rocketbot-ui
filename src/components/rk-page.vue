@@ -8,20 +8,21 @@
  * }}
  */
 <template>
-  <span class="micro-page flex-h">
-    <svg class="icon cp icon-l" @click="pre">
+  <span class="rk-page flex-h">
+    <svg class="icon cp mr-5" @click="pre">
       <use xlink:href="#chevron-left"></use>
     </svg>
-    <input class="micro-page-input" type="text" v-model="currentPage">
-    <svg class="icon cp icon-r" @click="next">
+    <input class="rk-page-input tc mr-5" type="text" v-model="currentPage">
+    <span class="mr-5">/</span>
+    <span class="mr-5">{{Math.ceil(this.total / this.currentSize)}}</span>
+    <svg class="icon cp" @click="next">
       <use xlink:href="#chevron-right"></use>
     </svg>
-    <span class="sm grey">{{this.total}}</span>
   </span>
 </template>
 <script lang="js">      // tslint:disable
 export default {
-  name: 'MicroPage',
+  name: 'RkPage',
   props: {
     name: {
       type: String,
@@ -59,9 +60,6 @@ export default {
   beforeMount() {
     this.current = this.currentPage;
   },
-  mounted() {
-    this.$emit('changePage', this.current);
-  },
   methods: {
     next() {
       if (this.current !== Math.ceil(this.total / this.currentSize)) {
@@ -79,25 +77,19 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.micro-page{
+.rk-page{
   display: inline-flex;
   .icon{
     padding: 3px;
     opacity: 0.5;
     &:hover{
       opacity: 1;
+      color: #458eff;
     }
   }
-  .icon-l {
-    margin-left: 5px;
-  }
-  .icon-r {
-    margin-right: 5px;
-  }
 }
-.micro-page-input{
+.rk-page-input{
   width: 40px;
-  text-align: center;
   outline: 0;
   border-style: unset;
   border-radius: 4px;

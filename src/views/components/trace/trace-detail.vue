@@ -1,5 +1,5 @@
 <template>
-  <div class="rk-trace-detail">
+  <div class="rk-trace-detail flex-v">
     <div class="rk-trace-detail-wrapper"  v-if="current.endpointNames">
       <h5 class="mb-5 mt-0">
         <svg v-if="current.isError" class="icon red vm mr-5 sm">
@@ -16,7 +16,12 @@
       <div class="rk-tag mr-5">Duration</div><span class="mr-15 sm">{{current.duration}} ms</span>
       <div class="rk-tag mr-5">Spans</div><span class="sm">9</span>
     </div>
-    <TraceDetailChart :data="spans" :traceId="current.traceIds[0]"/>
+    <TraceDetailChart v-if="current.endpointNames" :data="spans" :traceId="current.traceIds[0]"/>
+    <div v-else class="flex-h container">
+      <svg class="icon rk-icon-trace">
+        <use xlink:href="#unlink"></use>
+      </svg>
+    </div>
   </div>
 </template>
 
@@ -39,8 +44,6 @@ export default class Header extends Vue {
   flex-shrink: 0;
   height: 100%;
   width: 70%;
-  display: flex;
-  flex-direction: column;
 }
 .rk-trace-detail-wrapper {
   padding: 8px 30px;
@@ -60,5 +63,11 @@ export default class Header extends Vue {
   padding: 0px 7px;
   background-color: #40454e;
   color: #eee;
+}
+.rk-icon-trace{
+  width:100px;
+  height:100px;
+  margin: 0 auto;
+  fill: rgba(46, 47, 51, 0.15);
 }
 </style>
