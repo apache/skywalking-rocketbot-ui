@@ -1,17 +1,26 @@
 <template>
-  <RkAlarmWrapper/>
+  <div class="rk-alarm flex-v">
+    <AlarmTool :durationTime="durationTime"/>
+    <div style="flex-grow: 1;overflow: auto;">
+      <AlarmTable :data="rocketAlarm.alarmService"/>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import RkAlarmWrapper from '../components/alarm/rk-alarm-wrapper.vue';
-import alarm from '../../store/modules/alarm';
+import alarm from '@/store/modules/alarm';
+import AlarmTool from '../components/alarm/alarm-tool.vue';
+import AlarmTable from '../components/alarm/alarm-table.vue';
+import { State, Action, Getter } from 'vuex-class';
 
 @Component({
-  components: { RkAlarmWrapper },
+  components: { AlarmTool, AlarmTable },
 })
 export default class Alarm extends Vue {
+  @State('rocketAlarm') private rocketAlarm!: any;
+  @Getter('durationTime') private durationTime: any;
   private beforeCreate() {
     this.$store.registerModule('rocketAlarm', alarm);
   }
@@ -26,14 +35,5 @@ export default class Alarm extends Vue {
   flex-grow: 1;
   height: 100%;
   overflow: auto;
-}
-.rk-alarm-table-wrapper{
-  padding: 0 10px;
-  border-right: 1px solid rgba(196, 200, 225, 0.2);
-  height: 100%;
-}
-.rk-alarm-table{
-  width: 100%;
-  table-layout: fixed;
 }
 </style>

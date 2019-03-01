@@ -1,0 +1,68 @@
+<template>
+  <nav class="rk-alarm-tool flex-h">
+    <AlarmSelect title="Filter Scope" :value="alarmScope" @input="handleFilter" :data="alarmOptions"/>
+    <div class="mr-10" style="padding: 3px 15px 0">
+      <div class="sm grey">Search Keyword</div>
+      <input type="text"  :value="keyword" class="rk-alarm-tool-input" @input="handleRefresh">
+    </div>
+  </nav>
+</template>
+
+<script lang="ts">
+import Vue from 'vue';
+import { Component, Prop, Model } from 'vue-property-decorator';
+import AlarmSelect from './alarm-select.vue';
+import { Action } from 'vuex-class';
+
+@Component({components: {AlarmSelect}})
+export default class AlarmTool extends Vue {
+  @Action('rocketAlarm/GET_ALARM') private GET_ALARM: any;
+  @Prop() private durationTime: any;
+  private alarmScope: any = {label: 'Global', key: ''};
+  private alarmOptions: any = [
+    {label: 'Global', key: ''},
+    {label: 'Service', key: 'Service'},
+    {label: 'ServiceInstance', key: 'ServiceInstance'},
+    {label: 'Endpoint', key: 'Endpoint'},
+  ];
+  private keyword: string = '';
+
+  private handleFilter(i: any) {
+    this.alarmScope = i;
+    this.handleRefresh();
+  }
+  private handleRefresh() {
+    const params: any = {
+      duration: this.durationTime,
+      paging: {
+        pageNum: 1,
+        pageSize: 30,
+        needTotal: true,
+      },
+    };
+    if (this.alarmScope.key) { params.scope = this.alarmScope.key; }
+    if (this.keyword) { params.keyword = this.keyword; }
+    this.GET_ALARM(params);
+  }
+  private beforeMount() {
+    this.handleRefresh();
+  }
+}
+</script>
+
+<style lang="scss">
+.rk-alarm-tool{
+  border-bottom:1px solid #c1c5ca41;
+  height: 50px;
+  background-color: #333840;
+  padding: 0 15px;
+  color: #efefef;
+  flex-shrink: 0;
+}
+.rk-alarm-tool-input {
+  border-style: unset;
+  outline: 0;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+</style>

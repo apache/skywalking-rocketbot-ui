@@ -68,7 +68,9 @@ const getters = {
         interval = 86400000;
         break;
       case 'MONTH':
-        interval = 2592000000;
+        interval = (state.duration.end.getTime() - state.duration.start.getTime())
+        / (state.duration.end.getFullYear() * 12 + state.duration.end.getMonth()
+        - state.duration.start.getFullYear() * 12 - state.duration.start.getMonth());
         break;
     }
     const startUnix: number = state.duration.start.getTime();

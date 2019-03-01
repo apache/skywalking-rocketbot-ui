@@ -6,6 +6,7 @@ export const Alarm = {
         key: id
         message
         startTime
+        scope
       }
       total
     }`};

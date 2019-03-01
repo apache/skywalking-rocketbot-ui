@@ -22,3 +22,4 @@ import './svg/search.svg';
 import './svg/issue-open-m.svg';
 import './svg/sort-lowest.svg';
 import './svg/clear.svg';
+import './svg/error.svg';
