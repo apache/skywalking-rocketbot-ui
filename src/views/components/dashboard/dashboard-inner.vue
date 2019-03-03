@@ -3,17 +3,17 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Action, Getter, State, Mutation } from 'vuex-class';
-import ChartEdit from '@/views/components/dashboard/chart-edit.vue';
-import ChartAvgResponse from '@/views/components/dashboard/chart-avg-response.vue';
-import ChartAvgThroughput from '@/views/components/dashboard/chart-avg-throughput.vue';
-import ChartAvgSLA from '@/views/components/dashboard/chart-avg-sla.vue';
-import ChartResponse from '@/views/components/dashboard/chart-response.vue';
-import ChartTrace from '@/views/components/dashboard/chart-trace.vue';
-import ChartSlow from '@/views/components/dashboard/chart-slow.vue';
-import ChartCpu from '@/views/components/dashboard/chart-cpu.vue';
-import ChartGC from '@/views/components/dashboard/chart-gc.vue';
-import ChartHeap from '@/views/components/dashboard/chart-heap.vue';
-import ChartNonHeap from '@/views/components/dashboard/chart-nonheap.vue';
+import ChartEdit from './charts/chart-edit.vue';
+import ChartAvgResponse from './charts/chart-avg-response.vue';
+import ChartAvgThroughput from './charts/chart-avg-throughput.vue';
+import ChartAvgSLA from './charts/chart-avg-sla.vue';
+import ChartResponse from './charts/chart-response.vue';
+import ChartTrace from './charts/chart-trace.vue';
+import ChartSlow from './charts/chart-slow.vue';
+import ChartCpu from './charts/chart-cpu.vue';
+import ChartGC from './charts/chart-gc.vue';
+import ChartHeap from './charts/chart-heap.vue';
+import ChartNonHeap from './charts/chart-nonheap.vue';
 @Component({
   components: {
     ChartEdit,

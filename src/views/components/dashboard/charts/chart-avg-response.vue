@@ -55,7 +55,7 @@ export default class Response extends Vue {
         '#96dee8',
       ],
       grid: {
-        top: 30,
+        top: 35,
         left: 0,
         right: 28,
         bottom: 0,
@@ -75,14 +75,14 @@ export default class Response extends Vue {
           alignWithLabel: true,
         },
         splitLine: { show: false },
-        axisLine: { lineStyle: { color: '#c1c5ca41' } },
+        axisLine: { lineStyle: { color: 'rgba(0,0,0,0)' } },
         axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
       yAxis: {
         type: 'value',
         axisLine: { show: false },
         axisTick: { show: false },
-        splitLine: { lineStyle: { color: '#c1c5ca41' } },
+        splitLine: { lineStyle: { color: '#c1c5ca41', type: 'dashed'} },
         axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
       series: [

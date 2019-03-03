@@ -8,6 +8,7 @@ export interface CompsItem {
 }
 export interface CompsTree {
   name?: string;
+  type: string;
   children: CompsItem[];
 }
 

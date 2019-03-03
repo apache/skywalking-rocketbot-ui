@@ -1,9 +1,10 @@
 <template>
   <div class="flex-v wrapper" style="flex-grow:1;">
+    <ToolGroup/>
     <ToolBar/>
     <ToolNav/>
-    <Inner/>
-    <Comp v-if="rocketGlobal.edit"/>
+    <DashboardInner/>
+    <DashboardComp v-if="rocketGlobal.edit"/>
   </div>
 </template>
 
@@ -11,17 +12,19 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { Action, Getter, State, Mutation } from 'vuex-class';
 import ToolBar from '@/views/components/dashboard/tool-bar.vue';
+import ToolGroup from '@/views/components/dashboard/tool-group.vue';
 import ToolNav from '@/views/components/dashboard/tool-nav.vue';
-import Inner from './dashboard-inner.vue';
-import Comp from './dashboard-comp.vue';
+import DashboardInner from '@/views/components/dashboard/dashboard-inner.vue';
+import DashboardComp from '@/views/components/dashboard/dashboard-comp.vue';
 import dashboard from '../../store/modules/dashboard';
 
 @Component({
   components: {
     ToolBar,
+    ToolGroup,
     ToolNav,
-    Comp,
-    Inner,
+    DashboardInner,
+    DashboardComp,
   },
 })
 export default class Dashboard extends Vue {
@@ -68,9 +71,6 @@ export default class Dashboard extends Vue {
         });
     });
   }
-  private beforeunloadHandler() {
-    window.localStorage.setItem('dashboard', JSON.stringify([...this.rocketComps.tree]));
-  }
   private changeInstance() {
     this.GET_INSTANCES(
       {keyword: '', serviceId: this.stateDashboard.currentService.key})
@@ -79,21 +79,20 @@ export default class Dashboard extends Vue {
         {duration: this.durationTime, serviceInstanceId: this.stateDashboard.currentInstance.key});
     });
   }
-  private beforeMount() {
+  private beforeCreate() {
     this.$store.registerModule('rocketDashboard', dashboard);
+  }
+  private beforeMount() {
     if (window.localStorage.getItem('dashboard')) {
       const data: string = `${window.localStorage.getItem('dashboard')}`;
       this.SET_COMPTREE(JSON.parse(data));
     }
-    window.addEventListener('beforeunload', (e: any) => this.beforeunloadHandler());
     this.SET_EVENTS([this.changeService, this.changeGloabl]);
     this.changeService();
     this.changeGloabl();
   }
   private beforeDestroy() {
     this.$store.unregisterModule('rocketDashboard');
-    this.beforeunloadHandler();
-    window.removeEventListener('beforeunload', (e: any) => this.beforeunloadHandler());
   }
 }
 </script>

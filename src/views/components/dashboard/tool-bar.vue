@@ -1,8 +1,13 @@
 <template>
-  <div class="rk-dashboard-bar flex-h">
-    <ToolBarSelect @onChoose="selectService" title="Current Service" :current="stateDashboard.currentService" :data="stateDashboard.services" />
-    <ToolBarSelect @onChoose="selectEndpoint" title="Current Endpoint" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" />
-    <ToolBarSelect @onChoose="selectInstance" title="Current Instance" :current="stateDashboard.currentInstance" :data="stateDashboard.instances" />
+  <div>
+    <div class="rk-dashboard-bar flex-h" v-if="compType === 'Service'">
+      <ToolBarSelect @onChoose="selectService" title="Current Service" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
+      <ToolBarSelect @onChoose="selectEndpoint" title="Current Endpoint" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
+      <ToolBarSelect @onChoose="selectInstance" title="Current Instance" :current="stateDashboard.currentInstance" :data="stateDashboard.instances" icon="disk"/>
+    </div>
+    <div class="rk-dashboard-bar flex-h" v-else-if="compType === 'Database'">
+      <ToolBarSelect @onChoose="selectService" title="Current Database" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
+    </div>
   </div>
 </template>
 
@@ -13,10 +18,14 @@ import { State, Action, Mutation } from 'vuex-class';
 @Component({components: {ToolBarSelect}})
 export default class ToolBar extends Vue {
   @State('rocketDashboard') public stateDashboard!: any;
+  @State('rocketComps') public rocketComps: any;
   @Mutation('rocketDashboard/SET_CURRENTSERVICE') public SET_SERVICE: any;
   @Mutation('rocketDashboard/SET_CURRENTENDPOINT') public SET_CURRENTENDPOINT: any;
   @Mutation('rocketDashboard/SET_CURRENTINSTANCE') public SET_CURRENTINSTANCE: any;
   @Mutation('RUN_EVENTS') public RUN_EVENTS: any;
+  private get compType() {
+    return this.rocketComps.tree[this.rocketComps.current].type;
+  }
   private selectService(i: any) {
     this.SET_SERVICE(i);
     this.RUN_EVENTS();
@@ -35,7 +44,7 @@ export default class ToolBar extends Vue {
 <style lang="scss" scoped>
 .rk-dashboard-bar {
   flex-shrink: 0;
-  height: 50px;
+  height: 52px;
   color: #efefef;
   background-color: #333840;
 }

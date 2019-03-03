@@ -1,9 +1,9 @@
 <template>
-  <div class="rk-service-throughput">
+  <div class="rk-service-sla">
     <div class="grey">{{title}}</div>
     <div class="title b">
-      <span>{{this.stateDashboard[this.type].getThroughputTrend.length ? content.toFixed(2) : 0}}</span>
-      <span class="unit"> ms</span>
+      <span>{{this.stateDashboard[this.type].getSLATrend.length ? content.toFixed(2) : 0}}</span>
+      <span class="unit"> %</span>
     </div>
     <RkEcharts height="180px" :option="responseConfig"/>
   </div>
@@ -25,37 +25,31 @@ export default class Response extends Vue {
   @State('rocketDashboard') private stateDashboard!: any;
   @Getter('intervalTime') private intervalTime: any;
   get content() {
-    const temp = this.stateDashboard[this.type].getThroughputTrend.map((i: NumBoxData) => i.value);
+    const temp = this.stateDashboard[this.type].getSLATrend.map((i: NumBoxData) => i.value);
     const sum = temp.reduce((preValue: number, curValue: number, index: number, array: number[]) => preValue + curValue)
-    / this.stateDashboard[this.type].getThroughputTrend.length;
-    return sum;
+    / this.stateDashboard[this.type].getSLATrend.length;
+    return sum / 100;
   }
   get avg() {
-     return this.stateDashboard[this.type].getThroughputTrend ?
+     return this.stateDashboard[this.type].getSLATrend ?
       [{
-        data: this.stateDashboard[this.type].getThroughputTrend.map((i: any, index: number) => [
+        data: this.stateDashboard[this.type].getSLATrend.map((i: any, index: number) => [
           this.intervalTime[index],
           i.value,
         ]),
-        name: this.stateDashboard[this.type].getThroughputTrend.length ? 'Avg Response' : null,
-        type: 'line',
-        symbol: 'none',
-        lineStyle: {
-          width: 1.5,
-        },
+        name: this.stateDashboard[this.type].getSLATrend.length ? 'Avg Response' : null,
+        type: 'pictorialBar',
+        barCategoryGap: '-70%',
+        symbol: 'path://d="M150 50 L130 130 L170 130  Z"',
       }] : [];
   }
   get responseConfig() {
     return {
       color: [
-        '#3f96e3',
-        '#6be6c1',
-        '#626c91',
-        '#a0a7e6',
-        '#96dee8',
+        'rgba(63, 150, 227, 0.8)',
       ],
       grid: {
-        top: 30,
+        top: 35,
         left: 0,
         right: 28,
         bottom: 0,
@@ -75,14 +69,14 @@ export default class Response extends Vue {
           alignWithLabel: true,
         },
         splitLine: { show: false },
-        axisLine: { lineStyle: { color: '#c1c5ca41' } },
+        axisLine: { lineStyle: { color: 'rgba(0,0,0,0)' } },
         axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
       yAxis: {
         type: 'value',
         axisLine: { show: false },
         axisTick: { show: false },
-        splitLine: { lineStyle: { color: '#c1c5ca41' } },
+        splitLine: { lineStyle: { color: '#c1c5ca41', type: 'dashed' } },
         axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
       series: [
@@ -93,7 +87,7 @@ export default class Response extends Vue {
 }
 </script>
 <style lang="scss">
-.rk-service-throughput{
+.rk-service-sla{
   padding: 0 10px;
   height: 258px;
   .unit{

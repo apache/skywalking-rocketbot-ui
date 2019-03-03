@@ -1,13 +1,14 @@
 <template>
   <div class="rk-chart-edit" draggable="true" @dragstart="$emit('dragstart', index)" @dragover="$event.preventDefault();" @drop="$emit('drop', index)">
     <div class="rk-chart-edit-title clear cm ell">
+      <svg class="icon red lg cp vm mr-10" @click="DELETE_COMP(index)">
+        <use xlink:href="#file-deletion"></use>
+      </svg>
       <svg class="icon mr-10 vm">
         <use xlink:href="#marquee-selection"></use>
       </svg>
       <span class="vm">{{`${o} ${name}`}}</span>
-      <svg class="icon red r lg cp" @click="DELETE_COMP(index)">
-        <use xlink:href="#file-deletion"></use>
-      </svg>
+      
     </div>
     <div class="rk-chart-edit-container">
       <div class="flex-h mb-5">
@@ -44,7 +45,7 @@ export default class Response extends Vue {
   padding-right: 5px;
 }
 .rk-chart-edit-title{
-  padding: 5px 15px;
+  padding: 5px 10px;
   line-height: 15px;
   border-radius: 4px;
   background-color: rgba(196, 200, 225, .2);

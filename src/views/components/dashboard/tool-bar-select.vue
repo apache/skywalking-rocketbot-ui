@@ -2,7 +2,7 @@
   <div class="rk-dashboard-bar-select cp flex-h" v-clickout="() => { visible = false;search = '';}" :class="{'active':visible}">
     <div class="rk-dashboard-bar-i flex-h" @click="visible = !visible">
       <svg class="icon lg mr-15">
-        <use xlink:href="#package"></use>
+        <use :xlink:href="`#${icon}`"></use>
       </svg>
       <div class="mr-15 rk-dashboard-bar-i-text">
         <div class="sm grey">{{title}}</div>
@@ -19,7 +19,7 @@
           <use xlink:href="#clear"></use>
         </svg>
       </div>
-      <div class="rk-dashboard-opt-wrapper scroll_content">
+      <div class="rk-dashboard-opt-wrapper scroll_hide">
         <div class="rk-dashboard-opt ell" @click="handleSelect(i)" :class="{'active':i.key === current.key}" v-for="i in filterData" :key="i.key">{{i.label}}</div>
       </div>
     </div>
@@ -33,6 +33,7 @@ export default class ToolBarSelect extends Vue {
   @Prop() public data!: any;
   @Prop() public current!: any;
   @Prop() public title!: string;
+  @Prop() public icon!: string;
   public search: string = '';
   public visible: boolean = false;
   get filterData() {
@@ -70,7 +71,7 @@ export default class ToolBarSelect extends Vue {
 }
 .rk-dashboard-sel{
   position: absolute;
-  top: 48px;
+  top: 50px;
   left: -1px;
   box-shadow: 0 1px 6px rgba(99, 99, 99, 0.2);
   background-color: #252a2f;

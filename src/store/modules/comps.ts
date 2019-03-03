@@ -29,7 +29,8 @@ const initState: State = {
   ],
   current: 0,
   tree: [{
-    name: 'Dashboard',
+    name: 'Service Dashboard',
+    type: 'Service',
     children: [],
     }],
 };
@@ -39,22 +40,27 @@ const mutations: MutationTree<State> = {
   [types.SET_COMPTREE](state: State, data: CompsTree[]) {
     state.tree = data;
   },
-  [types.ADD_COMPTREE](state: State, name: string) {
-    if (!name) {return; }
-    state.tree.push({name, children: []});
+  [types.ADD_COMPTREE](state: State, parmas: any) {
+    if (!parmas.name) {return; }
+    state.tree.push({name: parmas.name, type: parmas.type, children: []});
+    window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
   },
   [types.DELETE_COMPTREE](state: State, index: number) {
     state.tree.splice(index, 1);
+    window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
   },
   [types.ADD_COMP](state: State, comp: CompsItem) {
     state.tree[state.current].children.push(comp);
+    window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
   },
   [types.DELETE_COMP](state: State, index: number) {
     state.tree[state.current].children.splice(index, 1);
+    window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
   },
   [types.EDIT_COMP](state: State, params: any) {
     const temp: any = state.tree[state.current].children[params.index];
     temp[params.type] = params.value;
+    window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
   },
   [types.SET_CURRENTCOMP](state: State, current: number) {
     state.current = current;

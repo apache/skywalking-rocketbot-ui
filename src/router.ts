@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Dashboard from './views/containers/dashboard.vue';
-import DashboardInner from './views/containers/dashboard-inner.vue';
 import Trace from './views/containers/trace.vue';
 import Topology from './views/containers/topology.vue';
 import Alarm from './views/containers/alarm.vue';
@@ -18,10 +17,6 @@ const router = new Router({
     {
       path: '/',
       component: Dashboard,
-      children: [{
-        path: '',
-        component: DashboardInner,
-      }],
     },
     {
       path: '/trace',

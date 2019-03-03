@@ -17,8 +17,8 @@ export default class Response extends Vue {
   get responseConfig() {
     return {
       color: [
-        '#3f96e3',
-        '#3fbde3',
+        '#a3a0e6',
+        '#a0b1e6',
       ],
       tooltip: {
         trigger: 'axis',
@@ -40,30 +40,30 @@ export default class Response extends Vue {
         bottom: 15,
         containLabel: true,
       },
-      xAxis: {
+       xAxis: {
         type: 'time',
         axisTick: {
           lineStyle: { color: '#c1c5ca41' },
           alignWithLabel: true,
         },
         splitLine: { show: false },
-        axisLine: { lineStyle: { color: '#c1c5ca41' } },
+        axisLine: { lineStyle: { color: 'rgba(0,0,0,0)' } },
         axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
       yAxis: {
         type: 'value',
         axisLine: { show: false },
         axisTick: { show: false },
-        splitLine: { lineStyle: { color: '#c1c5ca41' } },
+        splitLine: { lineStyle: { color: '#c1c5ca41', type: 'dashed' } },
         axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
       series: [
         {
-          data: this.stateDashboard.instanceInfo.heap.map((i: any, index: number) => [
+          data: this.stateDashboard.instanceInfo.noheap.map((i: any, index: number) => [
             this.intervalTime[index],
             (i.value / 1048576).toFixed(2),
           ]),
-          name: this.stateDashboard.instanceInfo.heap.length ? 'Value' : null,
+          name: this.stateDashboard.instanceInfo.noheap.length ? 'Value' : null,
           type: 'line',
           symbol: 'none',
           areaStyle: {},
@@ -72,11 +72,11 @@ export default class Response extends Vue {
           },
         },
         {
-          data: this.stateDashboard.instanceInfo.heap.map((i: any, index: number) => [
+          data: this.stateDashboard.instanceInfo.maxNoheap.map((i: any, index: number) => [
             this.intervalTime[index],
-            ((this.stateDashboard.instanceInfo.maxHeap[index].value - i.value) / 1048576).toFixed(2),
+            ((i.value - this.stateDashboard.instanceInfo.maxNoheap[index].value) / 1048576).toFixed(2),
           ]),
-          name: this.stateDashboard.instanceInfo.heap.length ? 'Free' : null,
+          name: this.stateDashboard.instanceInfo.noheap.length ? 'Free' : null,
           type: 'line',
           symbol: 'none',
           areaStyle: {},

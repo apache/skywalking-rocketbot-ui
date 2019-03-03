@@ -24,7 +24,10 @@ export default class Comps extends Vue {
   @State('rocketComps') private rocketComps: any;
   @Mutation('ADD_COMP') private ADD_COMP: any;
   private current: string = 'Global';
-  get tree() {
+  private get compType() {
+    return this.rocketComps.tree[this.rocketComps.current].type;
+  }
+  private get tree() {
     const temp: any = {
       Global: [],
       Service: [],
@@ -42,7 +45,6 @@ export default class Comps extends Vue {
 
 <style lang="scss" scoped>
 .rk-dashboard-comp-nav{
-  height: 30px;
   padding: 0 15px;
 }
 .rk-dashboard-comp-nav-i{

@@ -1,27 +1,27 @@
 <template>
-  <nav class="rk-dashboard-nav">
-    <span v-for="(i, index) in rocketComps.tree" :key="index" class="mr-20">
-      <a class="rk-dashboard-nav-i b" @click="SET_CURRENTCOMP(index)" :class="{'active': rocketComps.current == index}">{{i.name}}</a>
+  <nav class="rk-dashboard-group">
+    <span v-for="(i, index) in rocketComps.tree" :key="index" class="mr-15">
+      <a class="rk-dashboard-group-i" @click="SET_CURRENTCOMP(index)" :class="{'active': rocketComps.current == index}">{{i.name}}</a>
       <svg v-if="rocketGlobal.edit" class="ml-5 icon cp red vm"  @click="DELETE_COMPTREE(index)">
         <use xlink:href="#file-deletion"></use>
       </svg>
     </span>
-    <a class="rk-dashboard-nav-add" v-clickout="handleHide" v-if="rocketGlobal.edit">
+    <a class="rk-dashboard-group-add" v-clickout="handleHide" v-if="rocketGlobal.edit">
       <svg class="icon vm" @click="show=!show">
         <use xlink:href="#todo-add"></use>
       </svg>
-      <div class="rk-dashboard-nav-add-box" v-if="show">
+      <div class="rk-dashboard-group-add-box" v-if="show">
         <div class="mb-10">
           <span class="vm">Create Tab</span>
           <a class="rk-btn r vm" @click="handleCreate">Confirm</a>
         </div>
         <div class="sm grey mb-5 mr-10">Tab Type</div>
-        <select v-model="type" class="rk-dashboard-nav-sel mb-5 long">
+        <select v-model="type" class="rk-dashboard-group-sel mb-5 long">
           <option value="Service">Service</option>
           <option value="Database">Database</option>
         </select>
         <div class="sm grey mb-5 mr-10">Tab Name</div>
-        <input class="mb-10 rk-dashboard-nav-input" type="text" v-model="name">
+        <input class="mb-10 rk-dashboard-group-input" type="text" v-model="name">
       </div>
     </a>
   </nav>
@@ -54,20 +54,20 @@ export default class DashboardNav extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.rk-dashboard-nav{
-  border-bottom:1px solid #c1c5ca41;
-  height: 40px;
-  background-color: rgba(196, 200, 225, .2);
-  padding: 0 15px;
+.rk-dashboard-group{
+  border-bottom:1px solid #252a2f;
+  background-color: #333840;
+  padding: 8px 15px;
+  color: #eee;
 }
-.rk-dashboard-nav-sel{
+.rk-dashboard-group-sel{
   outline: none;
   border: 0;
 }
-.rk-dashboard-nav-add{
+.rk-dashboard-group-add{
   position: relative;
 }
-.rk-dashboard-nav-add-box{
+.rk-dashboard-group-add-box{
   position: absolute;
   left: -10px;
   top: 35px;
@@ -77,7 +77,7 @@ export default class DashboardNav extends Vue {
   color: #eee;
   background-color: #333840;
 }
-.rk-dashboard-nav-add-box:after {
+.rk-dashboard-group-add-box:after {
 	bottom: 100%;
 	left: 10px;
 	border: solid transparent;
@@ -91,28 +91,31 @@ export default class DashboardNav extends Vue {
 	border-width: 8px;
 	margin-left: 0px;
 }
-.rk-dashboard-nav-input{
+.rk-dashboard-group-input{
   border: 0;
   outline: 0;
   padding: 1px 8px;
   border-radius: 4px;
 }
-.rk-dashboard-nav-i{
+.rk-dashboard-group-i{
   display: inline-block;
-  height: 41px;
-  line-height: 40px;
-  border-bottom: 2px;
-  border-bottom-style: solid;
-  color: rgba(61, 68, 79, .6);
-  border-color: rgba(0, 0, 0, 0);
+  padding: 4px 12px 4px 14px;
+  border-radius: 4px;
+  position: relative;
+  background-color: #484b55;
+  font-size: 12.5px;
   will-change: border-color,color;
   transition: border-color .3s, color .3s;
-  &:hover{
-    color: #458eff;
-  }
-  &.active{
-    color: #458eff;
-    border-color: #458eff;
+  &.active::before{
+    content: '';
+    position: absolute;
+    display: inline-block;
+    width: 5px;
+    height: 12px;
+    border-radius: 3px;
+    background-color: #458eff;
+    top: 7px;
+    left: 5px;
   }
 }
 </style>
