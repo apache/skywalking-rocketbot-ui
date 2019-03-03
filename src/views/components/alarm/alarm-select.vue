@@ -66,7 +66,7 @@ export default class ToolBarSelect extends Vue {
 }
 .rk-alarm-sel{
   position: absolute;
-  top: 48px;
+  top: 50px;
   box-shadow: 0 1px 6px rgba(99, 99, 99, 0.2);
   background-color: #252a2f;
   width: 100%;

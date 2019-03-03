@@ -53,7 +53,8 @@ export default class AlarmTool extends Vue {
     this.GET_ALARM(params);
   }
   private beforeMount() {
-    this.SET_EVENTS([this.handleRefresh(1)]);
+    this.SET_EVENTS([() => { this.handleRefresh(1); } ]);
+    this.handleRefresh(1);
   }
 }
 </script>
@@ -61,7 +62,7 @@ export default class AlarmTool extends Vue {
 <style lang="scss">
 .rk-alarm-tool{
   border-bottom:1px solid #c1c5ca41;
-  height: 50px;
+  height: 52px;
   background-color: #333840;
   padding: 0 15px;
   color: #efefef;

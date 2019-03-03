@@ -28,7 +28,9 @@ export default class Trace extends Vue {
   private show: boolean = true;
   private beforeCreate() {
     this.$store.registerModule('rocketTrace', trace);
-    this.SET_EVENTS([]);
+  }
+  private beforeMount() {
+     this.SET_EVENTS([]);
   }
   private beforeDestroy() {
     this.$store.unregisterModule('rocketTrace');

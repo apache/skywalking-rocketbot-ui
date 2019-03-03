@@ -138,7 +138,7 @@ export default {
       this.svg.select('.graph').remove();
       this.force = d3
         .forceSimulation(this.datas.nodes)
-        .force('collide', d3.forceCollide().radius(() => 60))
+        .force('collide', d3.forceCollide().radius(() => 65))
         .force('yPos', d3.forceY().strength(1))
         .force('xPos', d3.forceX().strength(1))
         .force('charge', d3.forceManyBody().strength(-520))
@@ -253,17 +253,25 @@ export default {
           }
           return this[d.type.toUpperCase().replace('-','')];
         });
+      this.node
+        .append('text')
+        .attr('class', 'node-text')
+        .attr('text-anchor', 'middle')
+        .attr('x', 22)
+        .attr('y', 70)
+        .text(d => d.name)
+      
       this.glink = this.graph.append('g').selectAll('.link');
       this.link = this.glink.data(this.datas.calls).enter();
       this.line = this.link.append('path').attr('class', 'link')
         .attr('stroke-dasharray', d => d.cpm ? '15 5': '0')
-        .attr('stroke', d => d.cpm ? '#217EF288' : '#6a6d7777');
+        .attr('stroke', d => d.cpm ? '#217EF25f' : '#6a6d7777');
       this.lineNode = this.link.append('rect').attr('class', 'link-node cp')
         .attr('width', 6)
         .attr('height', 6)
         .attr('rx', 3)
         .attr('ry', 3)
-        .attr('fill', d => d.cpm ? '#217EF2aa' : '#6a6d7799')
+        .attr('fill', d => d.cpm ? '#217EF299' : '#6a6d7799')
         .on('click', function(d, i) {
           event.stopPropagation();
           that.tip.show(d, this);
@@ -418,15 +426,26 @@ toggleLineText(lineText, currNode, isHover) {
       stroke-dashoffset: 0;
     }
   }
+  .node-text{
+    font-family: SimSun;
+    fill: #ddd;
+    font-size:11px;
+    opacity: 0.8;
+  }
   .link-text {
     font-family: SimSun;
     fill: #ddd;
     font-size:11px;
+    opacity: 0.8;
   }
   .node {
     cursor: move;
     fill: #333840;
     stroke-width: 0;
+  }
+  .link-node{
+    stroke-width: 6px;
+    stroke: rgba(255, 255, 255, 0);
   }
 }
 </style>

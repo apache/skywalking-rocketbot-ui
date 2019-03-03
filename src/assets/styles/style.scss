@@ -53,3 +53,12 @@
   top: 100%;
   left: 0;
 }
+.rk-btn{
+  padding: 3px 8px;
+  background-color: #458eff;
+  border-radius: 3px;
+  color: #fff;
+  &:hover{
+    background-color: #357de9;
+  }
+}
