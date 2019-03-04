@@ -1,6 +1,6 @@
 {
-  "name": "rocketbot-ui",
-  "version": "0.1.0",
+  "name": "rocketbot",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

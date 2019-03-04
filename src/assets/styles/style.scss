@@ -3,6 +3,9 @@
   height: 15px;
   fill: currentColor;
 }
+.icon.loading {
+  animation: loading 1.5s linear infinite;
+}
 .icon.sm{
   width: 13px;
   height: 13px;
@@ -60,5 +63,15 @@
   color: #fff;
   &:hover{
     background-color: #357de9;
+  }
+}
+@keyframes loading {
+  0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+  }
+  to {
+      -webkit-transform: rotate(1turn);
+      transform: rotate(1turn);
   }
 }

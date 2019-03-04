@@ -3,6 +3,7 @@ module.exports = {
     proxy: {
       '/graphql': {
         target: 'http://172.16.100.80:12800',
+        // target: 'http://35.203.129.14:12800',
         changeOrigin: true,
         // pathRewrite:  (path) => {
         //   return "/graphql"
