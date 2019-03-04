@@ -106,6 +106,9 @@ export default class Trace {
       .on('mouseout', function(d, i) {
         that.tip.hide(d, this);
       })
+      .on('click', function(d) {
+        that.show.handleSelectSpan(d);
+      });
     nodeEnter
       .append('rect')
       .attr('height', 42)

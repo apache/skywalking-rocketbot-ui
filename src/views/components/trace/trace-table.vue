@@ -7,6 +7,11 @@
           <option value="BY_DURATION">Duration</option>
         </select>
       </div>
+      <div class="rk-trace-t-loading" v-show="!rocketTrace.traceList.length">
+        <svg class="icon loading">
+          <use xlink:href="#spinner"></use>
+        </svg>
+      </div>
       <div class="rk-trace-t-wrapper scroll_hide">
         <table class="rk-trace-t">
           <tr class="rk-trace-tr cp" v-for="i in rocketTrace.traceList" @click="selectTrace(i)">
@@ -36,7 +41,6 @@ export default class Home extends Vue {
   @Mutation('rocketTrace/SET_CURRENTTRACE') private SET_CURRENTTRACE: any;
   @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
   @Action('rocketTrace/GET_TRACESPANS') private GET_TRACESPANS: any;
-
   private selectTrace(i: any) {
     this.SET_CURRENTTRACE(i);
     if (i.traceIds.length) {
@@ -58,6 +62,7 @@ export default class Home extends Vue {
 .rk-trace-t{
   flex-grow: 1;
   height: 100%;
+  position: relative;
 }
 .rk-trace-t-tool{
   flex-shrink: 0;
@@ -79,6 +84,19 @@ export default class Home extends Vue {
   flex-grow: 1;
   border-right: 1px solid rgba(0,0,0,0.1);
 }
+.rk-trace-t-loading{
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  height: 70px;
+  margin-top: 40px;
+  line-height: 88px;
+  overflow: hidden;
+  .icon{
+    width: 30px;
+    height: 30px;
+  }
+}
 .rk-trace-t {
   width: 100%;
   border-spacing: 0;
@@ -94,13 +112,13 @@ export default class Home extends Vue {
   border-bottom: 1px solid rgba(0,0,0,.07);
 }
 .rk-trace-success{
-  border-left: 5px solid rgba(46, 47, 51, 0.1);
+  border-left: 4px solid rgba(46, 47, 51, 0.1);
 }
 .rk-trace-warning{
-  border-left: 5px solid #FBB03B;
+  border-left: 4px solid #FBB03B;
 }
 .rk-trace-error{
-  border-left: 5px solid #E54C17;
+  border-left: 4px solid #E54C17;
 }
 .rk-tag{
   border-radius: 4px;
