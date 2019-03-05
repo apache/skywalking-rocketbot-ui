@@ -1,3 +1,8 @@
+export interface CompsContainer {
+  service: CompsItem[];
+  proxy: CompsItem[];
+  database: CompsItem[];
+}
 export interface CompsItem {
   o: string;
   comp: string;
@@ -6,10 +11,25 @@ export interface CompsItem {
   type?: string;
   width: number;
 }
+export interface CurrentQuery {
+  key?: string;
+  label?: string;
+}
+export interface CompsGroup {
+  name: string;
+  children: CompsItem[];
+}
+export interface CompQuery {
+  service?: CurrentQuery;
+  endpoint?: CurrentQuery;
+  instance?: CurrentQuery;
+}
+
 export interface CompsTree {
   name?: string;
   type: string;
-  children: CompsItem[];
+  query: CompQuery;
+  children: CompsGroup[];
 }
 
 export interface Option {

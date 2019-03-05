@@ -45,11 +45,15 @@ export default class Dashboard extends Vue {
   private changeGloabl() {
     this.GET_GLOBAL({duration: this.durationTime});
   }
+  private get compType() {
+    return this.rocketComps.tree[this.rocketComps.group].type;
+  }
   private changeService() {
     this.GET_SERVICES({duration: this.durationTime})
     .then(() => this.GET_SERVICE(
       {duration: this.durationTime, serviceId: this.stateDashboard.currentService.key, keyword: ''})
     .then(() => {
+      if ( this.compType === 'database') { return; }
       this.GET_ENDPOINT(
         { duration: this.durationTime,
           endpointId: this.stateDashboard.currentEndpoint.key,

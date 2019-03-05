@@ -1,6 +1,9 @@
 // comp
+export const SET_CURRENTGROUP = 'SET_CURRENTGROUP';
 export const SET_CURRENTCOMP = 'SET_CURRENTCOMP';
+export const ADD_COMPGROUP = 'ADD_COMPGROUP';
 export const ADD_COMPTREE = 'ADD_COMPTREE';
+export const DELETE_COMPGROUP = 'DELETE_COMPGROUP';
 export const DELETE_COMPTREE = 'DELETE_COMPTREE';
 export const ADD_COMP = 'ADD_COMP';
 export const DELETE_COMP = 'DELETE_COMP';
@@ -8,7 +11,7 @@ export const SWICH_COMP = 'SWICH_COMP';
 export const SET_COMPTREE = 'SET_COMPTREE';
 export const SWICH_CURRENTCOMP = 'SWICH_CURRENTCOMP';
 export const EDIT_COMP = 'EDIT_COMP';
-
+export const SET_GROUPQUERY = 'SET_GROUPQUERY';
 // global
 export const SET_DURATION = 'SET_DURATION';
 export const SET_EVENTS = 'SET_EVENTS';
@@ -21,6 +24,8 @@ export const SET_EDIT = 'SET_EDIT';
 export const SET_GLOBAL = 'SET_GLOBAL';
 export const CLEAR_GLOBAL = 'CLEAR_GLOBAL';
 export const SET_SERVICES = 'SET_SERVICES';
+export const SET_DATABASES = 'SET_DATABASES';
+
 export const SET_CURRENTSERVICE = 'SET_CURRENTSERVICE';
 export const SET_SERVICEINFO = 'SET_SERVICEINFO';
 export const SET_ENDPOINTS = 'SET_ENDPOINTS';

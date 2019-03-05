@@ -5,10 +5,30 @@
         <use xlink:href="#logo"></use>
       </svg>
       <span class="logo">Rocketbot</span>
-      <router-link class="nav-link mr-20" to="/" exact>Dashboard</router-link>
-      <router-link class="nav-link mr-20" to="/topology">Topology</router-link>
-      <router-link class="nav-link mr-20" to="/trace">Trace</router-link>
-      <router-link class="nav-link mr-20" to="/alarm">Alarm</router-link>
+      <router-link class="nav-link mr-20" to="/" exact>
+        <svg class="icon mr-5 sm vm">
+          <use xlink:href="#chart"></use>
+        </svg>
+        <span class="vm">Dashboard</span>
+      </router-link>
+      <router-link class="nav-link mr-20" to="/topology">
+        <svg class="icon mr-5 sm vm">
+          <use xlink:href="#issues"></use>
+        </svg>
+        <span class="vm">Topology</span>
+      </router-link>
+      <router-link class="nav-link mr-20" to="/trace">
+        <svg class="icon mr-5 sm vm">
+          <use xlink:href="#merge"></use>
+        </svg>
+        <span class="vm">Trace</span>
+      </router-link>
+      <router-link class="nav-link mr-20" to="/alarm">
+        <svg class="icon mr-5 sm vm">
+          <use xlink:href="#spam"></use>
+        </svg>
+        <span class="vm">Alarm</span>
+      </router-link>
     </div>
     <div class="flex-h">
       <span class="mr-5">Admin</span>
@@ -43,7 +63,7 @@ export default class Header extends Vue {}
     font-family: "Avenir", Helvetica, Arial, sans-serif;
     font-size: 18px;
     padding-top: 2px;
-    margin-right: 40px;
+    margin-right: 50px;
   }
   .nav-link {
     padding: 4px 10px;

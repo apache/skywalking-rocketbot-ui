@@ -39,6 +39,7 @@ export default class Response extends Vue {
         ]),
         name: this.stateDashboard[this.type].getSLATrend.length ? 'Avg Response' : null,
         type: 'pictorialBar',
+        barMaxWidth: 10,
         barCategoryGap: '-70%',
         symbol: 'path://d="M150 50 L130 130 L170 130  Z"',
       }] : [];

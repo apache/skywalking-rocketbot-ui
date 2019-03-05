@@ -1,38 +1,85 @@
 import { Commit, ActionTree, MutationTree } from 'vuex';
-import { CompsItem, CompsTree } from '../interfaces';
+import { CompsItem, CompsContainer, CompsTree, CompQuery } from '../interfaces';
 import * as types from '../mutation-types';
 
 export interface State {
-  data: CompsItem[];
+  data: CompsContainer;
   current: number;
+  group: number;
   tree: CompsTree[];
 }
 
 const initState: State = {
-  data: [
-    { o: 'Service', name: 'Avg Response',
-    comp: 'ChartAvgResponse', title: 'ChartAvgSLA', type: 'serviceInfo', width: 4 },
-    { o: 'Service', name: 'Avg Throughput',
-    comp: 'ChartAvgThroughput', title: 'ChartAvgSLA', type: 'serviceInfo', width: 4 },
-    { o: 'Service', name: 'Avg SLA', comp: 'ChartAvgSLA', title: 'ChartAvgSLA', type: 'serviceInfo', width: 4 },
-    { o: 'Global', name: 'Critical Response', comp: 'ChartResponse', title: 'ChartResponse', type: 'global', width: 4 },
-    { o: 'Service', name: 'Critical Response',
-    comp: 'ChartResponse', title: 'serviceInfo', type: 'serviceInfo', width: 4 },
-    { o: 'Instance', name: 'CPU', comp: 'ChartCpu', title: 'CPU %' , width: 4 },
-    { o: 'Instance', name: 'GC', comp: 'ChartGC', title: 'GC ms' , width: 4 },
-    { o: 'Instance', name: 'Heap', comp: 'ChartHeap', title: 'Heap MB' , width: 4 },
-    { o: 'Instance', name: 'NonHeap', comp: 'ChartNonHeap', title: 'Non-Heap MB' , width: 4 },
-    { o: 'Service', name: 'Slow Endpoints',
-    comp: 'ChartTrace', title: 'serviceInfo', type: 'serviceInfo.getSlowEndpoint', width: 4 },
-    { o: 'Service', name: 'Slow Instance Throughput',
-    comp: 'ChartSlow', title: 'serviceInfo', type: 'serviceInfo.getInstanceThroughput', width: 4 },
-  ],
+  data: {
+    service: [
+      { o: 'Global', name: 'Critical Response',
+      comp: 'ChartResponse', title: 'ChartResponse', type: 'global', width: 3 },
+      { o: 'Service', name: 'Avg Response',
+      comp: 'ChartAvgResponse', title: 'ChartAvgSLA', type: 'serviceInfo', width: 3 },
+      { o: 'Service', name: 'Avg Throughput',
+      comp: 'ChartAvgThroughput', title: 'ChartAvgSLA', type: 'serviceInfo', width: 3 },
+      { o: 'Service', name: 'Avg SLA',
+      comp: 'ChartAvgSLA', title: 'ChartAvgSLA', type: 'serviceInfo', width: 3 },
+      { o: 'Service', name: 'Critical Response',
+      comp: 'ChartResponse', title: 'serviceInfo', type: 'serviceInfo', width: 3 },
+      { o: 'ServiceInstance', name: 'CPU',
+      comp: 'ChartCpu', title: 'CPU %' , width: 3 },
+      { o: 'ServiceInstance', name: 'GC',
+      comp: 'ChartGC', title: 'GC ms' , width: 3 },
+      { o: 'ServiceInstance', name: 'Heap',
+      comp: 'ChartHeap', title: 'Heap MB' , width: 3 },
+      { o: 'ServiceInstance', name: 'NonHeap',
+      comp: 'ChartNonHeap', title: 'Non-Heap MB' , width: 3 },
+      { o: 'Service', name: 'Slow Endpoints',
+      comp: 'ChartTrace', title: 'serviceInfo', type: 'serviceInfo.getSlowEndpoint', width: 3 },
+      { o: 'Service', name: 'Slow Instance Throughput',
+      comp: 'ChartSlow', title: 'serviceInfo', type: 'serviceInfo.getInstanceThroughput', width: 3 },
+    ],
+    proxy: [
+      { o: 'Global', name: 'Critical Response',
+      comp: 'ChartResponse', title: 'ChartResponse', type: 'global', width: 3 },
+    ],
+    database: [
+      { o: 'Global', name: 'Critical Response',
+      comp: 'ChartResponse', title: 'ChartResponse', type: 'global', width: 3 },
+      { o: 'Database', name: 'Avg Response',
+      comp: 'ChartAvgResponse', title: 'ChartAvgSLA', type: 'serviceInfo', width: 3 },
+      { o: 'Database', name: 'Avg Throughput',
+      comp: 'ChartAvgThroughput', title: 'ChartAvgSLA', type: 'serviceInfo', width: 3 },
+      { o: 'Database', name: 'Avg SLA', comp: 'ChartAvgSLA', title: 'ChartAvgSLA', type: 'serviceInfo', width: 3 },
+      { o: 'Database', name: 'Critical Response',
+      comp: 'ChartResponse', title: 'serviceInfo', type: 'serviceInfo', width: 3 },
+    ],
+  },
   current: 0,
+  group: 0,
   tree: [{
     name: 'Service Dashboard',
-    type: 'Service',
-    children: [],
-    }],
+    type: 'service',
+    query:  {
+      service: {},
+      endpoint: {},
+      instance: {},
+    },
+    children: [
+      {
+        name: 'service',
+        children: [],
+      },
+    ],
+  }, {
+    name: 'Database Dashboard',
+    type: 'database',
+    query:  {
+      service: {},
+    },
+    children: [
+      {
+        name: 'Database',
+        children: [],
+      },
+    ],
+  }],
 };
 
 // mutations
@@ -40,17 +87,31 @@ const mutations: MutationTree<State> = {
   [types.SET_COMPTREE](state: State, data: CompsTree[]) {
     state.tree = data;
   },
-  [types.ADD_COMPTREE](state: State, parmas: any) {
+  [types.SET_GROUPQUERY](state: State, params: CompQuery) {
+    state.tree[state.group].query = params;
+  },
+  [types.ADD_COMPGROUP](state: State, parmas: any) {
     if (!parmas.name) {return; }
-    state.tree.push({name: parmas.name, type: parmas.type, children: []});
+    state.tree.push({name: parmas.name, type: parmas.type, query: {}, children: [
+      {name: 'demo', children: []},
+    ]});
     window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
   },
-  [types.DELETE_COMPTREE](state: State, index: number) {
+  [types.ADD_COMPTREE](state: State, parmas: any) {
+    if (!parmas.name) {return; }
+    state.tree[state.group].children.push({name: parmas.name, children: []});
+    window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
+  },
+  [types.DELETE_COMPGROUP](state: State, index: number) {
     state.tree.splice(index, 1);
     window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
   },
+  [types.DELETE_COMPTREE](state: State, index: number) {
+    state.tree[state.group].children.splice(index, 1);
+    window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
+  },
   [types.ADD_COMP](state: State, comp: CompsItem) {
-    state.tree[state.current].children.push(comp);
+    state.tree[state.current].children[state.group].children.push(comp);
     window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
   },
   [types.DELETE_COMP](state: State, index: number) {
@@ -65,10 +126,16 @@ const mutations: MutationTree<State> = {
   [types.SET_CURRENTCOMP](state: State, current: number) {
     state.current = current;
   },
+  [types.SET_CURRENTGROUP](state: State, current: number) {
+    state.group = current;
+    state.current = 0;
+  },
   [types.SWICH_COMP](state: State, params: any) {
-    const tempStart: any = state.tree[state.current].children[params.start];
-    state.tree[state.current].children[params.start] = state.tree[state.current].children[params.end];
-    state.tree[state.current].children[params.end] = tempStart;
+    const tempStart: any =
+    state.tree[state.group].children[state.current].children[params.start];
+    state.tree[state.group].children[state.current].children[params.start] =
+    state.tree[state.group].children[state.current].children[params.end];
+    state.tree[state.group].children[state.current].children[params.end] = tempStart;
     state.tree = {...state.tree};
   },
 };

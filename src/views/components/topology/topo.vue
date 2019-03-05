@@ -416,7 +416,7 @@ toggleLineText(lineText, currNode, isHover) {
     stroke-linecap: round;
     stroke-width: 1.3px;
     fill:rgba(255, 255, 255, 0);
-    animation: dash 1.5s linear infinite;
+    animation: dash 1s linear infinite;
   }
   @keyframes dash {
     from {

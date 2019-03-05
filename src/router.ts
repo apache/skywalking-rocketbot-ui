@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import Login from './views/containers/login.vue';
+import Index from './views/containers/index.vue';
 import Dashboard from './views/containers/dashboard.vue';
 import Trace from './views/containers/trace.vue';
 import Topology from './views/containers/topology.vue';
@@ -15,20 +17,30 @@ const router = new Router({
   linkActiveClass: 'active',
   routes: [
     {
+      path: '/login',
+      component: Login,
+    },
+    {
       path: '/',
-      component: Dashboard,
-    },
-    {
-      path: '/trace',
-      component: Trace,
-    },
-    {
-      path: '/topology',
-      component: Topology,
-    },
-    {
-      path: '/alarm',
-      component: Alarm,
+      component: Index,
+      children: [
+        {
+          path: '',
+          component: Dashboard,
+        },
+        {
+          path: 'trace',
+          component: Trace,
+        },
+        {
+          path: 'topology',
+          component: Topology,
+        },
+        {
+          path: 'alarm',
+          component: Alarm,
+        },
+      ],
     },
   ],
 });

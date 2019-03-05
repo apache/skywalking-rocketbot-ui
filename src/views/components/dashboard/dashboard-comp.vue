@@ -1,7 +1,7 @@
 <template>
   <div class="rk-dashboard-comp">
     <nav class="rk-dashboard-comp-nav mb-10">
-      <a class="rk-dashboard-comp-nav-i b mr-20" @click="current = key" :class="{'active': key === current}" v-for="(value, key) in tree" :key="key">{{key}}</a>
+      <a class="rk-dashboard-comp-nav-i b mr-20" v-if="value.length" @click="current = key" :class="{'active': key === current}" v-for="(value, key) in tree" :key="key">{{key}}</a>
     </nav>
     <div class="rk-dashboard-comp-wrapper">
       <div class="rk-dashboard-comp-i mr-5 mb-15" v-for="(i, index) in tree[current]" :key="index">
@@ -25,17 +25,20 @@ export default class Comps extends Vue {
   @Mutation('ADD_COMP') private ADD_COMP: any;
   private current: string = 'Global';
   private get compType() {
-    return this.rocketComps.tree[this.rocketComps.current].type;
+    return this.rocketComps.tree[this.rocketComps.group].type;
   }
   private get tree() {
     const temp: any = {
       Global: [],
       Service: [],
-      Endpoint: [],
-      Instance: [],
+      ServiceEndpoint: [],
+      ServiceInstance: [],
+      Proxy: [],
+      ProxyEndpoint: [],
+      ProxyInstance: [],
       Database: [],
     };
-    this.rocketComps.data.forEach((i: any) => {
+    this.rocketComps.data[this.compType].forEach((i: any) => {
       temp[i.o].push(i);
     });
     return temp;
@@ -68,6 +71,7 @@ export default class Comps extends Vue {
   flex-shrink: 0;
   border-top: 1px solid #c1c5ca41;
   color: #515a6e;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
   background-color: rgba(196, 200, 225, 0.2);
   .title{
     padding: 0 15px;
@@ -84,5 +88,6 @@ export default class Comps extends Vue {
   display: inline-block;
   border-radius: 3px;
   background-color: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
 }
 </style>

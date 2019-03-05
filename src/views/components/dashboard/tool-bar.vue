@@ -1,12 +1,17 @@
 <template>
   <div>
-    <div class="rk-dashboard-bar flex-h" v-if="compType === 'Service'">
+    <div class="rk-dashboard-bar flex-h" v-if="compType === 'service'">
       <ToolBarSelect @onChoose="selectService" title="Current Service" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
       <ToolBarSelect @onChoose="selectEndpoint" title="Current Endpoint" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
       <ToolBarSelect @onChoose="selectInstance" title="Current Instance" :current="stateDashboard.currentInstance" :data="stateDashboard.instances" icon="disk"/>
     </div>
-    <div class="rk-dashboard-bar flex-h" v-else-if="compType === 'Database'">
-      <ToolBarSelect @onChoose="selectService" title="Current Database" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
+    <div class="rk-dashboard-bar flex-h" v-if="compType === 'proxy'">
+      <ToolBarSelect @onChoose="selectService" title="Current Proxy" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
+      <ToolBarSelect @onChoose="selectEndpoint" title="Current Endpoint" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
+      <ToolBarSelect @onChoose="selectInstance" title="Current Instance" :current="stateDashboard.currentInstance" :data="stateDashboard.instances" icon="disk"/>
+    </div>
+    <div class="rk-dashboard-bar flex-h" v-else-if="compType === 'database'">
+      <ToolBarSelect @onChoose="selectService" title="Current Database" :current="stateDashboard.currentService" :data="stateDashboard.databases" icon="epic"/>
     </div>
   </div>
 </template>
@@ -19,15 +24,15 @@ import { State, Action, Mutation } from 'vuex-class';
 export default class ToolBar extends Vue {
   @State('rocketDashboard') public stateDashboard!: any;
   @State('rocketComps') public rocketComps: any;
-  @Mutation('rocketDashboard/SET_CURRENTSERVICE') public SET_SERVICE: any;
+  @Mutation('rocketDashboard/SET_CURRENTSERVICE') public SET_CURRENTSERVICE: any;
   @Mutation('rocketDashboard/SET_CURRENTENDPOINT') public SET_CURRENTENDPOINT: any;
   @Mutation('rocketDashboard/SET_CURRENTINSTANCE') public SET_CURRENTINSTANCE: any;
-  @Mutation('RUN_EVENTS') public RUN_EVENTS: any;
+  @Action('RUN_EVENTS') public RUN_EVENTS: any;
   private get compType() {
-    return this.rocketComps.tree[this.rocketComps.current].type;
+    return this.rocketComps.tree[this.rocketComps.group].type;
   }
   private selectService(i: any) {
-    this.SET_SERVICE(i);
+    this.SET_CURRENTSERVICE(i);
     this.RUN_EVENTS();
   }
   private selectEndpoint(i: any) {

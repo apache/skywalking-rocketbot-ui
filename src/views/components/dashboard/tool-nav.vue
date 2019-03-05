@@ -1,6 +1,6 @@
 <template>
   <nav class="rk-dashboard-nav">
-    <span v-for="(i, index) in rocketComps.tree" :key="index" class="mr-20">
+    <span v-for="(i, index) in rocketComps.tree[rocketComps.group].children" :key="index" class="mr-20">
       <a class="rk-dashboard-nav-i b" @click="SET_CURRENTCOMP(index)" :class="{'active': rocketComps.current == index}">{{i.name}}</a>
       <svg v-if="rocketGlobal.edit" class="ml-5 icon cp red vm"  @click="DELETE_COMPTREE(index)">
         <use xlink:href="#file-deletion"></use>
@@ -11,17 +11,10 @@
         <use xlink:href="#todo-add"></use>
       </svg>
       <div class="rk-dashboard-nav-add-box" v-if="show">
-        <div class="mb-10">
-          <span class="vm">Create Tab</span>
-          <a class="rk-btn r vm" @click="handleCreate">Confirm</a>
-        </div>
-        <div class="sm grey mb-5 mr-10">Tab Type</div>
-        <select v-model="type" class="rk-dashboard-nav-sel mb-5 long">
-          <option value="Service">Service</option>
-          <option value="Database">Database</option>
-        </select>
+        <div class="mb-10 vm">Create Tab</div>
         <div class="sm grey mb-5 mr-10">Tab Name</div>
         <input class="mb-10 rk-dashboard-nav-input" type="text" v-model="name">
+        <a class="rk-btn r vm long tc" @click="handleCreate">Confirm</a>
       </div>
     </a>
   </nav>
@@ -47,7 +40,7 @@ export default class DashboardNav extends Vue {
     this.show = false;
   }
   private handleCreate() {
-    this.ADD_COMPTREE({name: this.name, type: this.type});
+    this.ADD_COMPTREE({name: this.name});
     this.handleHide();
   }
 }
@@ -71,11 +64,12 @@ export default class DashboardNav extends Vue {
   position: absolute;
   left: -10px;
   top: 35px;
-  padding: 4px;
+  padding: 10px 5px;
   z-index: 1;
   border-radius: 3px;
   color: #eee;
-  background-color: #333840;
+  background-color: #252a2f;
+  box-shadow: 0 3px 6px 0 rgba(0,0,0,.1), 0 1px 3px 0 rgba(0,0,0,.08);
 }
 .rk-dashboard-nav-add-box:after {
 	bottom: 100%;

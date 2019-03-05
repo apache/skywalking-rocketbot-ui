@@ -7,6 +7,15 @@ export const Services = {
     }
   `};
 
+export const Database = {
+  variable: '$duration: Duration!',
+  query: `
+    services: getAllDatabases(duration: $duration) {
+      key: id
+      label: name
+    }
+  `};
+
 export const Endpoints = {
   variable: '$serviceId: ID!, $keyword: String!',
   query: `

@@ -8,6 +8,12 @@ export const DashBoardGlobal = {
         numOfCache
         numOfMQ
       }
+      getThermodynamic(duration: $duration, metric: {
+        name: "all_heatmap"
+      }) {
+        nodes
+        responseTimeStep: axisYStep
+      }
       getTopNSlowEndpoint: getAllEndpointTopN(
         duration: $duration,
         name: "endpoint_avg",

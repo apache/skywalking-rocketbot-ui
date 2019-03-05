@@ -43,8 +43,8 @@ export default class AlarmTable extends Vue {
     content: '';
     display: inline-block;
     position: absolute;
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     left: -23px;
     top: 25px;
     border-radius: 4px;
@@ -54,7 +54,7 @@ export default class AlarmTable extends Vue {
     content: '';
     display: inline-block;
     position: absolute;
-    width: 2px;
+    width: 1px;
     height: calc(100% + 11px);
     top: 0;
     left: -20px;

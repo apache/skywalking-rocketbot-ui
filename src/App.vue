@@ -1,19 +1,11 @@
 <template>
-  <div id="app">
-    <RkHeader/>
-    <router-view/>
-    <RkFooter/>
+    <router-view></router-view>
   </div>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import RkHeader from '@/components/rk-header.vue';
-import RkFooter from '@/components/rk-footer.vue';
-@Component({
-  components: {
-    RkHeader, RkFooter,
-  },
-})
+
+@Component
 export default class App extends Vue {
 }
 </script>

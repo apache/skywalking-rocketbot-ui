@@ -8,6 +8,8 @@ export interface State {
   services: any;
   serviceInfo: any;
   currentService: any;
+  databases: any;
+  currentDatabase: any;
   endpoints: any;
   endpointInfo: any;
   currentEndpoint: any;
@@ -28,6 +30,8 @@ const initState: State = {
   },
   services: [],
   currentService: {},
+  databases: [],
+  currentDatabase: {},
   serviceInfo: {
     p50: [],
     p75: [],
@@ -92,6 +96,12 @@ const mutations: MutationTree<State> = {
       state.currentService = data[0];
     }
   },
+  [types.SET_DATABASES](state: State, data: any) {
+    state.databases = data;
+    if (!state.currentDatabase.key && data.length) {
+      state.currentDatabase = data[0];
+    }
+  },
   [types.SET_SERVICEINFO](state: State, data: any) {
     state.serviceInfo.p50 = data.getP50.values;
     state.serviceInfo.p75 = data.getP75.values;
@@ -154,6 +164,17 @@ const mutations: MutationTree<State> = {
 
 // actions
 const actions: ActionTree<State, any> = {
+  SET_CURRENTSTATE(context: { commit: Commit }, params: any) {
+    if (params.service) {
+      context.commit(types.SET_CURRENTSERVICE, params.service);
+    }
+    if (params.endpoint) {
+      context.commit(types.SET_CURRENTENDPOINT, params.endpoint);
+    }
+    if (params.instance) {
+      context.commit(types.SET_CURRENTINSTANCE, params.instance);
+    }
+  },
   GET_GLOBAL(context: { commit: Commit }, params: any) {
     return graph
     .query('queryDashBoardGlobal')
@@ -162,15 +183,35 @@ const actions: ActionTree<State, any> = {
       context.commit(types.SET_GLOBAL, res.data.data);
     });
   },
-  GET_SERVICES(context: { commit: Commit }, params: any) {
+  GET_SERVICES(context: { commit: Commit, rootState: any  }, params: any) {
+    const compsState = context.rootState.rocketComps;
+    if (compsState.tree[compsState.group].type === 'service') {
+      return graph
+        .query('queryServices')
+        .params(params)
+        .then((res: AxiosResponse) => {
+          context.commit(types.SET_SERVICES, res.data.data.services);
+        });
+    } else {
+      return graph
+        .query('queryDatabases')
+        .params(params)
+        .then((res: AxiosResponse) => {
+          context.commit(types.SET_DATABASES, res.data.data.services);
+        });
+    }
+  },
+  GET_SERVICE(context: { commit: Commit, rootState: any }, params: any) {
     return graph
-    .query('queryServices')
+    .query('queryDashBoardService')
     .params(params)
     .then((res: AxiosResponse) => {
-      context.commit(types.SET_SERVICES, res.data.data.services);
+      context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
+      context.commit(types.SET_INSTANCES, res.data.data.getServiceInstances);
+      context.commit(types.SET_SERVICEINFO, res.data.data);
     });
   },
-  GET_SERVICE(context: { commit: Commit }, params: any) {
+  GET_DATABASE(context: { commit: Commit, rootState: any }, params: any) {
     return graph
     .query('queryDashBoardService')
     .params(params)

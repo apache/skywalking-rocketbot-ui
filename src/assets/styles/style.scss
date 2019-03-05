@@ -35,7 +35,7 @@
   background: #252a2fcc;
 }
 
-.d3-tip-grey:after.d3-tip:after {
+.d3-tip-grey:after,.d3-tip:after {
   box-sizing: border-box;
   display: block;
   font-size: 10px;
@@ -61,10 +61,13 @@
   background-color: #458eff;
   border-radius: 3px;
   color: #fff;
-  &:hover{
-    background-color: #357de9;
-  }
+  will-change: background-color;
+  transition: background-color .3s
 }
+.rk-btn:hover{
+  background-color: #357de9;
+}
+
 @keyframes loading {
   0% {
       -webkit-transform: rotate(0deg);

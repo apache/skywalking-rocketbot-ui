@@ -44,7 +44,9 @@ export default class DashboardService extends Vue {
   }
   private render(h: any) {
     const comps: any = [];
-    this.rocketComps.tree[this.rocketComps.current].children.forEach((i: any, index: number) => {
+    if (!this.rocketComps.tree[this.rocketComps.group].children.length) { return; }
+    this.rocketComps.tree[this.rocketComps.group]
+    .children[this.rocketComps.current].children.forEach((i: any, index: number) => {
       const rowComp = h(this.rocketGlobal.edit ? 'ChartEdit' : i.comp, {
         props: {
           ...i,
