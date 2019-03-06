@@ -21,12 +21,10 @@ import { State, Mutation } from 'vuex-class';
 
 @Component
 export default class Comps extends Vue {
-  @State('rocketComps') private rocketComps: any;
+  @Prop() private rocketComps: any;
+  @Prop() private compType: any;
   @Mutation('ADD_COMP') private ADD_COMP: any;
   private current: string = 'Global';
-  private get compType() {
-    return this.rocketComps.tree[this.rocketComps.group].type;
-  }
   private get tree() {
     const temp: any = {
       Global: [],

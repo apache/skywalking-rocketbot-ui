@@ -61,6 +61,9 @@ const mutations = {
 
 // actions
 const actions: ActionTree<State, any> = {
+  CLEAR_TOPO(context: { commit: Commit; state: State; }) {
+    context.commit(types.SET_TOPO, {calls: [], nodes: []});
+  },
   GET_TOPO(context: { commit: Commit; state: State; }, params: any) {
     return graph
     .query('queryTopo')

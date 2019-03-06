@@ -58,7 +58,7 @@ export default class TraceTool extends Vue {
   @Action('rocketTrace/GET_SERVICES') private GET_SERVICES: any;
   @Action('rocketTrace/GET_INSTANCES') private GET_INSTANCES: any;
   @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
-  @Action('rocketTrace/SET_TRACEFORM') private SET_TRACEFORM: any;
+  @Action('rocketTrace/SET_TRACE_FORM') private SET_TRACE_FORM: any;
 
   private time: Date[] = [new Date(new Date().getTime() - 900000) , new Date()];
   private status: boolean = true;
@@ -134,7 +134,7 @@ export default class TraceTool extends Vue {
     if (this.minTraceDuration) { temp.minTraceDuration = this.minTraceDuration; }
     if (this.endpointName) { temp.endpointName = this.endpointName; }
     if (this.traceId) { temp.traceId = this.traceId; }
-    this.SET_TRACEFORM(temp);
+    this.SET_TRACE_FORM(temp);
     this.GET_TRACELIST();
   }
   private mounted() {
@@ -170,12 +170,12 @@ export default class TraceTool extends Vue {
   }
 }
 .rk-trace-search-btn{
-  padding: 4px 10px;
+  padding: 3px 9px;
   background-color: #484b55;
-  border-radius: 3px;
+  border-radius: 4px;
   margin-top: 12px;
   &.bg-blue{
-    background-color: #458eff;
+    background-color: #448dfe;
   }
 }
 .rk-trace-search-more{

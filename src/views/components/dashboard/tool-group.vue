@@ -1,8 +1,8 @@
 <template>
   <nav class="rk-dashboard-group">
     <span v-for="(i, index) in rocketComps.tree" :key="index" class="mr-15">
-      <a class="rk-dashboard-group-i" @click="changeGroup(index)" :class="{'active': rocketComps.group == index, 'grey': rocketComps.group !== index}">{{i.name}}</a>
-      <svg v-if="rocketGlobal.edit" class="ml-5 icon cp red vm"  @click="DELETE_COMPGROUP(index)">
+      <a class="rk-dashboard-group-i" @click="MIXHANDLE_CHANGE_GROUP(index)" :class="{'active': rocketComps.group == index, 'grey': rocketComps.group != index}">{{i.name}}</a>
+      <svg v-if="rocketGlobal.edit" class="ml-5 icon cp red vm"  @click="DELETE_COMPS_GROUP(index)">
         <use xlink:href="#file-deletion"></use>
       </svg>
     </span>
@@ -28,45 +28,26 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Prop, Model } from 'vue-property-decorator';
-import { State, Mutation, Action } from 'vuex-class';
+import { Component, Prop } from 'vue-property-decorator';
+import { Mutation, Action } from 'vuex-class';
 
 @Component({})
-export default class DashboardNav extends Vue {
-  @State('rocketbot') private rocketGlobal: any;
-  @State('rocketComps') private rocketComps: any;
-  @State('rocketDashboard') private rocketDashboard: any;
-  @Mutation('SET_CURRENTGROUP') private SET_CURRENTGROUP: any;
-  @Mutation('DELETE_COMPGROUP') private DELETE_COMPGROUP: any;
-  @Mutation('ADD_COMPGROUP') private ADD_COMPGROUP: any;
-  @Mutation('SET_GROUPQUERY') private SET_GROUPQUERY: any;
-  @Action('RUN_EVENTS') private RUN_EVENTS: any;
-  @Action('rocketDashboard/SET_CURRENTSTATE') private SET_CURRENTSTATE: any;
+export default class ToolGroup extends Vue {
+  @Prop() private rocketGlobal: any;
+  @Prop() private rocketComps: any;
+  @Mutation('DELETE_COMPS_GROUP') private DELETE_COMPS_GROUP: any;
+  @Mutation('ADD_COMPS_GROUP') private ADD_COMPS_GROUP: any;
+  @Action('MIXHANDLE_CHANGE_GROUP') private MIXHANDLE_CHANGE_GROUP: any;
   private name: string = '';
   private type: string = 'service';
   private show: boolean = false;
   private handleHide() {
     this.name = '';
+    this.type = 'service';
     this.show = false;
   }
-  private changeGroup(index: number) {
-    if (this.rocketDashboard.currentService
-    && this.rocketDashboard.currentEndpoint
-    && this.rocketDashboard.currentInstance) {
-      this.SET_GROUPQUERY({
-        service: this.rocketDashboard.currentService,
-        endpoint: this.rocketDashboard.currentEndpoint,
-        instance: this.rocketDashboard.currentInstance,
-      });
-    }
-    this.SET_CURRENTGROUP(index);
-    this.SET_CURRENTSTATE(this.rocketComps.tree[index].query);
-    this.RUN_EVENTS();
-  }
   private handleCreate() {
-    this.ADD_COMPGROUP({name: this.name, type: this.type});
-    this.name = '';
-    this.type = 'service';
+    this.ADD_COMPS_GROUP({name: this.name, type: this.type});
     this.handleHide();
   }
 }
@@ -133,7 +114,7 @@ export default class DashboardNav extends Vue {
     width: 5px;
     height: 10px;
     border-radius: 3px;
-    background-color: #458eff;
+    background-color: #448dfe;
     top: 9px;
     left: 4px;
   }

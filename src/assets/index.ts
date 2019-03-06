@@ -31,3 +31,7 @@ import './svg/spam.svg';
 import './svg/issues.svg';
 import './svg/epic.svg';
 import './svg/spinner.svg';
+import './svg/retry.svg';
+import './svg/soft-unwrap.svg';
+import './svg/token.svg';
+import './svg/warning.svg';

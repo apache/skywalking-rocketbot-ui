@@ -53,7 +53,7 @@ export default class ToolBarSelect extends Vue {
 .rk-dashboard-bar-select {
   position: relative;
   z-index: 1;
-  height: 100%;
+  height: 52px;
   justify-content: space-between;
   .sm{ line-height: 12px;}
   .icon { flex-shrink: 0};

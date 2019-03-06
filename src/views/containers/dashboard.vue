@@ -1,10 +1,10 @@
 <template>
   <div class="flex-v wrapper" style="flex-grow:1;">
-    <ToolGroup/>
-    <ToolBar/>
-    <ToolNav/>
-    <DashboardInner/>
-    <DashboardComp v-if="rocketGlobal.edit"/>
+    <ToolGroup :rocketGlobal="rocketGlobal" :rocketComps="rocketComps"/>
+    <ToolBar  :compType="compType" :durationTime="durationTime"  :stateDashboard='stateDashboard'/>
+    <ToolNav :rocketGlobal="rocketGlobal" :rocketComps="rocketComps"/>
+    <DashboardInner :rocketGlobal="rocketGlobal" :stateDashboard='stateDashboard' :rocketComps="rocketComps"/>
+    <DashboardComp v-if="rocketGlobal.edit" :compType="compType" :rocketComps="rocketComps"/>
   </div>
 </template>
 
@@ -32,68 +32,29 @@ export default class Dashboard extends Vue {
   @State('rocketDashboard') private stateDashboard!: any;
   @State('rocketComps') private rocketComps: any;
   @Mutation('SET_EVENTS') private SET_EVENTS: any;
-  @Mutation('SET_COMPTREE') private SET_COMPTREE: any;
-  @Mutation('SET_CURRENTCOMP') private SET_CURRENTCOMP: any;
+  @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
+  @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
   @Action('rocketDashboard/GET_GLOBAL') private GET_GLOBAL: any;
-  @Action('rocketDashboard/GET_SERVICES') private GET_SERVICES: any;
-  @Action('rocketDashboard/GET_SERVICE') private GET_SERVICE: any;
-  @Action('rocketDashboard/GET_ENDPOINTS') private GET_ENDPOINTS: any;
-  @Action('rocketDashboard/GET_ENDPOINT') private GET_ENDPOINT: any;
-  @Action('rocketDashboard/GET_INSTANCES') private GET_INSTANCES: any;
-  @Action('rocketDashboard/GET_INSTANCE') private GET_INSTANCE: any;
+  @Action('rocketDashboard/MIXHANDLE_GET_DASHBOARD') private MIXHANDLE_GET_DASHBOARD: any;
   @Getter('durationTime') private durationTime: any;
-  private changeGloabl() {
-    this.GET_GLOBAL({duration: this.durationTime});
-  }
   private get compType() {
     return this.rocketComps.tree[this.rocketComps.group].type;
   }
-  private changeService() {
-    this.GET_SERVICES({duration: this.durationTime})
-    .then(() => this.GET_SERVICE(
-      {duration: this.durationTime, serviceId: this.stateDashboard.currentService.key, keyword: ''})
-    .then(() => {
-      if ( this.compType === 'database') { return; }
-      this.GET_ENDPOINT(
-        { duration: this.durationTime,
-          endpointId: this.stateDashboard.currentEndpoint.key,
-          endpointName: this.stateDashboard.currentEndpoint.label,
-        });
-      this.GET_INSTANCE(
-        {duration: this.durationTime, serviceInstanceId: this.stateDashboard.currentService.key});
-      }),
-    );
+  private handleRefresh() {
+    this.MIXHANDLE_GET_DASHBOARD({compType: this.compType, duration: this.durationTime});
+    this.GET_GLOBAL({duration: this.durationTime});
   }
-  private changeEndpoint() {
-    this.GET_ENDPOINTS(
-      {keyword: '', serviceId: this.stateDashboard.currentService.key})
-    .then(() => {
-      this.GET_ENDPOINT(
-        { duration: this.durationTime,
-          endpointId: this.stateDashboard.currentEndpoint.key,
-          endpointName: this.stateDashboard.currentEndpoint.label,
-        });
-    });
-  }
-  private changeInstance() {
-    this.GET_INSTANCES(
-      {keyword: '', serviceId: this.stateDashboard.currentService.key})
-    .then(() => {
-      this.GET_INSTANCE(
-        {duration: this.durationTime, serviceInstanceId: this.stateDashboard.currentInstance.key});
-    });
-  }
+
   private beforeCreate() {
     this.$store.registerModule('rocketDashboard', dashboard);
   }
   private beforeMount() {
     if (window.localStorage.getItem('dashboard')) {
       const data: string = `${window.localStorage.getItem('dashboard')}`;
-      this.SET_COMPTREE(JSON.parse(data));
+      this.SET_COMPS_TREE(JSON.parse(data));
     }
-    this.SET_EVENTS([this.changeService, this.changeGloabl]);
-    this.changeService();
-    this.changeGloabl();
+    this.SET_EVENTS([this.handleRefresh]);
+    this.handleRefresh();
   }
   private beforeDestroy() {
     this.$store.unregisterModule('rocketDashboard');

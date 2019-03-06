@@ -37,23 +37,23 @@ import { Action, Getter, Mutation, State } from 'vuex-class';
 @Component
 export default class Home extends Vue {
   @State('rocketTrace') private rocketTrace: any;
-  @Mutation('rocketTrace/SET_TRACEFORMITEM') private SET_TRACEFORMITEM: any;
-  @Mutation('rocketTrace/SET_CURRENTTRACE') private SET_CURRENTTRACE: any;
+  @Mutation('rocketTrace/SET_TRACE_FORM_ITEM') private SET_TRACE_FORM_ITEM: any;
+  @Mutation('rocketTrace/SET_CURRENT_TRACE') private SET_CURRENT_TRACE: any;
   @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
-  @Action('rocketTrace/GET_TRACESPANS') private GET_TRACESPANS: any;
+  @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
   private selectTrace(i: any) {
-    this.SET_CURRENTTRACE(i);
+    this.SET_CURRENT_TRACE(i);
     if (i.traceIds.length) {
-      this.GET_TRACESPANS({traceId: i.traceIds[0]});
+      this.GET_TRACE_SPANS({traceId: i.traceIds[0]});
     }
   }
   private changeSort(e: any) {
-    this.SET_TRACEFORMITEM({type: 'queryOrder', data: e.target.options[e.target.selectedIndex].value});
-    this.SET_TRACEFORMITEM({type: 'paging', data: { pageNum: 1, pageSize: 15, needTotal: true}});
+    this.SET_TRACE_FORM_ITEM({type: 'queryOrder', data: e.target.options[e.target.selectedIndex].value});
+    this.SET_TRACE_FORM_ITEM({type: 'paging', data: { pageNum: 1, pageSize: 15, needTotal: true}});
     this.GET_TRACELIST();
   }
   private page(p: number) {
-    this.SET_TRACEFORMITEM({type: 'paging', data: { pageNum: p, pageSize: 15, needTotal: true}});
+    this.SET_TRACE_FORM_ITEM({type: 'paging', data: { pageNum: p, pageSize: 15, needTotal: true}});
     this.GET_TRACELIST();
   }
 }

@@ -6,14 +6,13 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { State, Getter } from 'vuex-class';
 import { Component, Prop } from 'vue-property-decorator';
 
 @Component
 export default class Response extends Vue {
   @Prop() private title!: string;
-  @State('rocketDashboard') private stateDashboard!: any;
-  @Getter('intervalTime') private intervalTime: any;
+  @Prop() private stateDashboard!: any;
+  @Prop() private intervalTime!: any;
   get responseConfig() {
     return {
       color: [

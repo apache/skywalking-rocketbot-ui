@@ -8,7 +8,7 @@
         <span class="vm">{{current.endpointNames[0]}}</span>
       </h5>
       <div class="mb-5 blue sm">
-        <select class="rk-trace-detail-ids" @change="GET_TRACESPANS({traceId: i})">
+        <select class="rk-trace-detail-ids" @change="GET_TRACE_SPANS({traceId: i})">
           <option v-for="i in current.traceIds" :value="i" :key="i">{{i}}</option>
         </select>
       </div>
@@ -33,7 +33,7 @@ import { Action } from 'vuex-class';
 
 @Component({ components: { TraceDetailChart } })
 export default class Header extends Vue {
-  @Action('rocketTrace/GET_TRACESPANS') private GET_TRACESPANS: any;
+  @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
   @Prop() private spans!: Span[];
   @Prop() private current!: Trace;
 }

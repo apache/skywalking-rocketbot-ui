@@ -53,7 +53,7 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_ALARM_TOTAL, res.data.data.getAlarm.total);
       });
   },
-  CLEAR_ALARM(context: { commit: Commit; state: State, rootState: any }) {
+  CLEAR_ALARM(context: { commit: Commit; state: State }) {
     context.commit(types.CLEAR_ALARM);
   },
 };

@@ -1,6 +1,6 @@
 import { Commit, ActionTree, MutationTree } from 'vuex';
 import getLocalTime from '@/utils/localtime';
-import * as interfaces from '../interfaces';
+import { Duration } from '../interfaces';
 import * as types from '../mutation-types';
 
 const w = window as any;
@@ -31,7 +31,7 @@ const dateFormate = (date: Date, step: string) => {
 };
 
 export interface State {
-  duration: interfaces.Duration;
+  duration: Duration;
   eventStack: any;
   chartStack: any;
   edit: boolean;
@@ -95,7 +95,7 @@ const getters = {
 
 // mutations
 const mutations: MutationTree<State> = {
-  [types.SET_DURATION](state: State, data: interfaces.Duration) {
+  [types.SET_DURATION](state: State, data: Duration) {
     state.duration = data;
   },
   [types.SET_EVENTS](state: State, data: any[]) {
@@ -115,7 +115,7 @@ const mutations: MutationTree<State> = {
 
 // actions
 const actions: ActionTree<State, any> = {
-  SET_DURATION(context: { commit: Commit }, data: interfaces.Duration) {
+  SET_DURATION(context: { commit: Commit }, data: Duration) {
     context.commit(types.SET_DURATION, data);
     if (w.axiosCancel.length !== 0) {
       for (const event of w.axiosCancel) { setTimeout(event(), 0); }

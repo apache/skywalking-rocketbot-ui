@@ -12,14 +12,13 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { State } from 'vuex-class';
 import { Component, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class RkTopThroughput extends Vue {
   @Prop() private title!: string;
   @Prop() private type!: string;
-  @State('rocketDashboard') private stateDashboard!: any;
+  @Prop() private stateDashboard!: any;
   private appChange(i: any) {
     const temp = { key: `${i.key}`, label: i.label };
   }

@@ -3,37 +3,19 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Action, Getter, State, Mutation } from 'vuex-class';
-import ChartEdit from './charts/chart-edit.vue';
-import ChartAvgResponse from './charts/chart-avg-response.vue';
-import ChartAvgThroughput from './charts/chart-avg-throughput.vue';
-import ChartAvgSLA from './charts/chart-avg-sla.vue';
-import ChartResponse from './charts/chart-response.vue';
-import ChartTrace from './charts/chart-trace.vue';
-import ChartSlow from './charts/chart-slow.vue';
-import ChartCpu from './charts/chart-cpu.vue';
-import ChartGC from './charts/chart-gc.vue';
-import ChartHeap from './charts/chart-heap.vue';
-import ChartNonHeap from './charts/chart-nonheap.vue';
+import charts from './charts';
+
 @Component({
   components: {
-    ChartEdit,
-    ChartCpu,
-    ChartGC,
-    ChartHeap,
-    ChartNonHeap,
-    ChartAvgResponse,
-    ChartAvgThroughput,
-    ChartAvgSLA,
-    ChartResponse,
-    ChartTrace,
-    ChartSlow,
+    ...charts,
   },
 })
 export default class DashboardService extends Vue {
-  @State('rocketbot') private rocketGlobal: any;
-  @State('rocketComps') private rocketComps: any;
+  @Prop() private rocketGlobal: any;
+  @Prop() private rocketComps: any;
+  @Prop() private stateDashboard: any;
+  @Getter('intervalTime') private intervalTime: any;
   @Mutation('SWICH_COMP') private SWICH_COMP: any;
-  @Mutation('SET_CURRENTCOMP') private SET_CURRENTCOMP: any;
 
   private dragIndex: number = NaN;
   private dragstart(index: number) {
@@ -51,6 +33,8 @@ export default class DashboardService extends Vue {
         props: {
           ...i,
           index,
+          intervalTime: this.intervalTime,
+          stateDashboard: this.stateDashboard,
         },
         key: index,
         class: `g-sm-${i.width}`,
@@ -69,20 +53,13 @@ export default class DashboardService extends Vue {
       // },
     }, comps);
   }
-  // private created() {
-  //   this.temp.children.forEach((i: any, index: number) => {
-  //     const sym = Symbol();
-  //     this.temp.children[index].sym = sym;
-  //   });
-  // }
 }
 </script>
 <style lang="scss">
 .list-complete-item {
   transition: all .4s;
 }
-.list-complete-enter, .list-complete-leave-to
-/* .list-complete-leave-active for below version 2.1.8 */ {
+.list-complete-enter, .list-complete-leave-to{
   opacity: 0;
   transform: translateY(30px);
 }

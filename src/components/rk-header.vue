@@ -6,31 +6,37 @@
       </svg>
       <span class="logo">Rocketbot</span>
       <router-link class="nav-link mr-20" to="/" exact>
-        <svg class="icon mr-5 sm vm">
+        <svg class="icon sm vm">
           <use xlink:href="#chart"></use>
         </svg>
-        <span class="vm">Dashboard</span>
+        <span class="vm hide-xs ml-5">Dashboard</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/topology">
-        <svg class="icon mr-5 sm vm">
+        <svg class="icon sm vm">
           <use xlink:href="#issues"></use>
         </svg>
-        <span class="vm">Topology</span>
+        <span class="vm hide-xs ml-5">Topology</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/trace">
-        <svg class="icon mr-5 sm vm">
+        <svg class="icon sm vm">
           <use xlink:href="#merge"></use>
         </svg>
-        <span class="vm">Trace</span>
+        <span class="vm hide-xs ml-5">Trace</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/alarm">
-        <svg class="icon mr-5 sm vm">
+        <svg class="icon sm vm">
           <use xlink:href="#spam"></use>
         </svg>
-        <span class="vm">Alarm</span>
+        <span class="vm hide-xs ml-5">Alarm</span>
       </router-link>
     </div>
     <div class="flex-h">
+      <a class="rk-btn mr-15 sm" @click="handleReload">
+        <svg class="icon mr-5 vm">
+          <use xlink:href="#retry"></use>
+        </svg>
+        <span class="vm">Reload</span>
+      </a>
       <span class="mr-5">Admin</span>
       <svg class="icon">
         <use xlink:href="#arrow-down"></use>
@@ -41,8 +47,18 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import { Action, State } from 'vuex-class';
+import timeFormat from '@/utils/timeFormat';
+
 @Component
-export default class Header extends Vue {}
+export default class Header extends Vue {
+  @State('rocketbot') private rocketbotGlobal: any;
+  @Action('SET_DURATION') private SET_DURATION: any;
+  private handleReload() {
+    const gap = this.rocketbotGlobal.duration.end.getTime() - this.rocketbotGlobal.duration.start.getTime();
+    this.SET_DURATION(timeFormat([new Date(new Date().getTime() - gap), new Date()]));
+  }
+}
 </script>
 
 <style lang="scss" scoped>

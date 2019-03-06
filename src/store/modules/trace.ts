@@ -45,10 +45,10 @@ const mutations: MutationTree<State> = {
   [types.SET_INSTANCES](state: State, data: any) {
     state.instances = [{label: 'All', key: ''}].concat(data);
   },
-  [types.SET_TRACEFORM](state: State, data: any) {
+  [types.SET_TRACE_FORM](state: State, data: any) {
     state.traceForm = data;
   },
-  [types.SET_TRACEFORMITEM](state: State, params: any) {
+  [types.SET_TRACE_FORM_ITEM](state: State, params: any) {
     state.traceForm[params.type] = params.data;
   },
   [types.SET_TRACELIST](state: State, data: Trace[]) {
@@ -57,10 +57,10 @@ const mutations: MutationTree<State> = {
   [types.SET_TRACELIST_TOTAL](state: State, data: number) {
     state.traceTotal = data;
   },
-  [types.SET_TRACESPANS](state: State, data: Span[]) {
+  [types.SET_TRACE_SPANS](state: State, data: Span[]) {
     state.traceSpans = data;
   },
-  [types.SET_CURRENTTRACE](state: State, data: Span) {
+  [types.SET_CURRENT_TRACE](state: State, data: Span) {
     state.currentTrace = data;
   },
 };
@@ -83,8 +83,8 @@ const actions: ActionTree<State, any> = {
       context.commit(types.SET_INSTANCES, res.data.data.instanceId);
     });
   },
-  SET_TRACEFORM(context: { commit: Commit, dispatch: Dispatch }, params) {
-    context.commit(types.SET_TRACEFORM, params);
+  SET_TRACE_FORM(context: { commit: Commit, dispatch: Dispatch }, params) {
+    context.commit(types.SET_TRACE_FORM, params);
   },
   GET_TRACELIST(context: { state: State, commit: Commit }) {
     context.commit(types.SET_TRACELIST, []);
@@ -96,13 +96,13 @@ const actions: ActionTree<State, any> = {
       context.commit(types.SET_TRACELIST_TOTAL, res.data.data.traces.total);
     });
   },
-  GET_TRACESPANS(context: { commit: Commit }, params) {
-    context.commit(types.SET_TRACESPANS, []);
+  GET_TRACE_SPANS(context: { commit: Commit }, params) {
+    context.commit(types.SET_TRACE_SPANS, []);
     return graph
     .query('queryTrace')
     .params(params)
     .then((res: AxiosResponse) => {
-      context.commit(types.SET_TRACESPANS, res.data.data.trace.spans);
+      context.commit(types.SET_TRACE_SPANS, res.data.data.trace.spans);
     });
   },
 };

@@ -6,15 +6,14 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { State, Getter } from 'vuex-class';
 import { Component, Prop } from 'vue-property-decorator';
 
 @Component
 export default class Response extends Vue {
   @Prop() private title!: string;
   @Prop() private type!: string;
-  @State('rocketDashboard') private stateDashboard!: any;
-  @Getter('intervalTime') private intervalTime: any;
+  @Prop() private stateDashboard!: any;
+  @Prop() private intervalTime!: any;
   get p50() {
      return this.stateDashboard[this.type].p50 ?
       [{

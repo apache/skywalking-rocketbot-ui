@@ -1,7 +1,11 @@
-import { Commit, ActionTree, MutationTree } from 'vuex';
-import { AxiosResponse } from 'axios';
-import graph from '@/graph';
+import { Commit, ActionTree, MutationTree, Dispatch } from 'vuex';
+import { CompQuery } from '../interfaces';
 import * as types from '../mutation-types';
+import dashboardGlobal from './dashboard-global';
+import dashboardService from './dashboard-service';
+import dashboardDatabase from './dashboard-database';
+import dashboardEndpoint from './dashboard-endpoint';
+import dashboardInstance from './dashboard-instance';
 
 export interface State {
   global: any;
@@ -19,248 +23,68 @@ export interface State {
 }
 
 const initState: State = {
-  global: {
-    p50: [],
-    p75: [],
-    p90: [],
-    p95: [],
-    p99: [],
-    getTopNServiceThroughput: [],
-    getTopNSlowEndpoint: [],
-  },
-  services: [],
-  currentService: {},
-  databases: [],
-  currentDatabase: {},
-  serviceInfo: {
-    p50: [],
-    p75: [],
-    p90: [],
-    p95: [],
-    p99: [],
-    getResponseTimeTrend: [],
-    getSLATrend: [],
-    getInstanceThroughput: [],
-    getSlowEndpoint: [],
-    getThroughputTrend: [],
-  },
-  endpoints: [],
-  currentEndpoint: {},
-  endpointInfo: {
-    p50: [],
-    p75: [],
-    p90: [],
-    p95: [],
-    p99: [],
-    getResponseTimeTrend: [],
-    getSLATrend: [],
-    getThroughputTrend: [],
-    queryBasicTraces: [],
-  },
-  instances: [],
-  currentInstance: {},
-  instanceInfo: {
-    getCPUTrend: [],
-    getResponseTimeTrend: [],
-    getSLATrend: [],
-    getThroughputTrend: [],
-    heap: [],
-    maxHeap: [],
-    maxNoheap: [],
-    noheap: [],
-    oldGCCount: [],
-    oldGCTime: [],
-    youngGCCount: [],
-    youngGCTime: [],
-  },
+  ...dashboardGlobal.state,
+  ...dashboardService.state,
+  ...dashboardDatabase.state,
+  ...dashboardEndpoint.state,
+  ...dashboardInstance.state,
 };
 
 // getters
 const getters = {
+  ...dashboardGlobal.getters,
+  ...dashboardService.getters,
+  ...dashboardDatabase.getters,
+  ...dashboardEndpoint.getters,
+  ...dashboardInstance.getters,
 };
 
 // mutations
-const mutations: MutationTree<State> = {
-  [types.SET_GLOBAL](state: State, data: any) {
-    state.global.p50 = data.getP50.values;
-    state.global.p75 = data.getP75.values;
-    state.global.p90 = data.getP90.values;
-    state.global.p95 = data.getP95.values;
-    state.global.p99 = data.getP99.values;
-    state.global.getTopNServiceThroughput = data.getTopNServiceThroughput;
-    state.global.getTopNSlowEndpoint = data.getTopNSlowEndpoint;
-  },
-  [types.SET_SERVICES](state: State, data: any) {
-    state.services = data;
-    if (!state.currentService.key && data.length) {
-      state.currentService = data[0];
-    }
-  },
-  [types.SET_DATABASES](state: State, data: any) {
-    state.databases = data;
-    if (!state.currentDatabase.key && data.length) {
-      state.currentDatabase = data[0];
-    }
-  },
-  [types.SET_SERVICEINFO](state: State, data: any) {
-    state.serviceInfo.p50 = data.getP50.values;
-    state.serviceInfo.p75 = data.getP75.values;
-    state.serviceInfo.p90 = data.getP90.values;
-    state.serviceInfo.p95 = data.getP95.values;
-    state.serviceInfo.p99 = data.getP99.values;
-    state.serviceInfo.getResponseTimeTrend = data.getResponseTimeTrend.values;
-    state.serviceInfo.getSLATrend = data.getSLATrend.values;
-    state.serviceInfo.getInstanceThroughput = data.getServiceInstanceThroughput;
-    state.serviceInfo.getSlowEndpoint = data.getSlowEndpoint;
-    state.serviceInfo.getThroughputTrend = data.getThroughputTrend.values;
-  },
-  [types.SET_CURRENTSERVICE](state: State, service: any) {
-    state.currentService = service;
-  },
-  [types.SET_ENDPOINTS](state: State, data: any) {
-    state.endpoints = data;
-    if ((!state.currentEndpoint.key && data.length) || state.endpoints.indexOf(state.currentEndpoint) === -1 ) {
-      state.currentEndpoint = data[0];
-    }
-  },
-  [types.SET_CURRENTENDPOINT](state: State, endpoint: any) {
-    state.currentEndpoint = endpoint;
-  },
-  [types.SET_ENDPOINTINFO](state: State, data: any) {
-    state.endpointInfo.p50 = data.getP50.values;
-    state.endpointInfo.p75 = data.getP75.values;
-    state.endpointInfo.p90 = data.getP90.values;
-    state.endpointInfo.p95 = data.getP95.values;
-    state.endpointInfo.p99 = data.getP99.values;
-    state.endpointInfo.getResponseTimeTrend = data.getEndpointResponseTimeTrend.values;
-    state.endpointInfo.getSLATrend = data.getEndpointSLATrend.values;
-    state.endpointInfo.getThroughputTrend = data.getEndpointThroughputTrend.values;
-    state.endpointInfo.queryBasicTraces = data.queryBasicTraces.traces;
-  },
-  [types.SET_INSTANCES](state: State, data: any) {
-    state.instances = data;
-    if ((!state.currentInstance.key && data.length) || state.instances.indexOf(state.currentInstance) === -1 ) {
-      state.currentInstance = data[0];
-    }
-  },
-  [types.SET_CURRENTINSTANCE](state: State, instance: any) {
-    state.currentInstance = instance;
-  },
-  [types.SET_INSTANCEINFO](state: State, data: any) {
-    state.instanceInfo.getCPUTrend = data.getCPUTrend.values;
-    state.instanceInfo.getResponseTimeTrend = data.getServiceInstanceResponseTimeTrend.values;
-    state.instanceInfo.getSLATrend = data.getServiceInstanceSLA.values;
-    state.instanceInfo.getThroughputTrend = data.getServiceInstanceThroughputTrend.values;
-    state.instanceInfo.heap = data.heap.values;
-    state.instanceInfo.maxHeap = data.maxHeap.values;
-    state.instanceInfo.maxNoheap = data.maxNoheap.values;
-    state.instanceInfo.noheap = data.noheap.values;
-    state.instanceInfo.oldGCCount = data.oldGCCount.values;
-    state.instanceInfo.oldGCTime = data.oldGCTime.values;
-    state.instanceInfo.youngGCCount = data.youngGCCount.values;
-    state.instanceInfo.youngGCTime = data.youngGCTime.values;
-  },
+const mutations: MutationTree<any> = {
+  ...dashboardGlobal.mutations,
+  ...dashboardService.mutations,
+  ...dashboardDatabase.mutations,
+  ...dashboardEndpoint.mutations,
+  ...dashboardInstance.mutations,
 };
 
 // actions
-const actions: ActionTree<State, any> = {
-  SET_CURRENTSTATE(context: { commit: Commit }, params: any) {
-    if (params.service) {
-      context.commit(types.SET_CURRENTSERVICE, params.service);
-    }
-    if (params.endpoint) {
-      context.commit(types.SET_CURRENTENDPOINT, params.endpoint);
-    }
-    if (params.instance) {
-      context.commit(types.SET_CURRENTINSTANCE, params.instance);
-    }
+const actions: ActionTree<any, any> = {
+  ...dashboardGlobal.actions,
+  ...dashboardService.actions,
+  ...dashboardDatabase.actions,
+  ...dashboardEndpoint.actions,
+  ...dashboardInstance.actions,
+  SET_CURRENT_STATE(context: { commit: Commit }, params: CompQuery) {
+    if (params.service) { context.commit(types.SET_CURRENT_SERVICE, params.service); }
+    if (params.database) { context.commit(types.SET_CURRENT_DATABASE, params.database); }
+    if (params.endpoint) { context.commit(types.SET_CURRENT_ENDPOINT, params.endpoint); }
+    if (params.instance) { context.commit(types.SET_CURRENT_INSTANCE, params.instance); }
   },
-  GET_GLOBAL(context: { commit: Commit }, params: any) {
-    return graph
-    .query('queryDashBoardGlobal')
-    .params(params)
-    .then((res: AxiosResponse) => {
-      context.commit(types.SET_GLOBAL, res.data.data);
-    });
-  },
-  GET_SERVICES(context: { commit: Commit, rootState: any  }, params: any) {
-    const compsState = context.rootState.rocketComps;
-    if (compsState.tree[compsState.group].type === 'service') {
-      return graph
-        .query('queryServices')
-        .params(params)
-        .then((res: AxiosResponse) => {
-          context.commit(types.SET_SERVICES, res.data.data.services);
+  MIXHANDLE_GET_DASHBOARD(context: { commit: Commit, dispatch: Dispatch, state: State, rootState: any }, params: any) {
+    if ( params.compType === 'service') {
+      context.dispatch('GET_SERVICES', {duration: params.duration})
+      .then(() => context.dispatch('GET_SERVICE',
+        {duration: params.duration, serviceId: context.state.currentService.key, keyword: ''})
+      .then(() => {
+        context.dispatch('GET_ENDPOINT',
+        {
+          duration: params.duration,
+          endpointId: context.state.currentEndpoint.key,
+          endpointName: context.state.currentEndpoint.label,
         });
-    } else {
-      return graph
-        .query('queryDatabases')
-        .params(params)
-        .then((res: AxiosResponse) => {
-          context.commit(types.SET_DATABASES, res.data.data.services);
+        context.dispatch('GET_INSTANCE',
+        {
+          duration: params.duration,
+          serviceInstanceId: context.state.currentInstance.key,
         });
+      }));
+    } else if ( params.compType === 'database') {
+      context.dispatch('GET_DATABASES', {duration: params.duration})
+      .then(() => context.dispatch('GET_DATABASE',
+        {duration: params.duration, serviceId: context.state.currentDatabase.key, keyword: ''}),
+      );
     }
-  },
-  GET_SERVICE(context: { commit: Commit, rootState: any }, params: any) {
-    return graph
-    .query('queryDashBoardService')
-    .params(params)
-    .then((res: AxiosResponse) => {
-      context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
-      context.commit(types.SET_INSTANCES, res.data.data.getServiceInstances);
-      context.commit(types.SET_SERVICEINFO, res.data.data);
-    });
-  },
-  GET_DATABASE(context: { commit: Commit, rootState: any }, params: any) {
-    return graph
-    .query('queryDashBoardService')
-    .params(params)
-    .then((res: AxiosResponse) => {
-      context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
-      context.commit(types.SET_INSTANCES, res.data.data.getServiceInstances);
-      context.commit(types.SET_SERVICEINFO, res.data.data);
-    });
-  },
-  GET_ENDPOINTS(context: { commit: Commit }, params: any) {
-    return graph
-    .query('queryEndpoints')
-    .params(params)
-    .then((res: AxiosResponse) => {
-      context.commit(types.SET_ENDPOINTS, res.data.data.endpoints);
-    });
-  },
-  GET_ENDPOINT(context: { commit: Commit }, params: any) {
-    return graph
-    .query('queryDashBoardEndpoint')
-    .params({
-      ...params,
-      traceCondition: {
-        endpointId: params.endpointId,
-        endpointName: params.endpointName,
-        paging: {pageNum: 1, pageSize: 20, needTotal: false},
-        queryDuration: params.duration,
-        queryOrder: 'BY_DURATION',
-        traceState: 'ALL',
-      }})
-    .then((res: AxiosResponse) => {
-      context.commit(types.SET_ENDPOINTINFO, res.data.data);
-    });
-  },
-  GET_INSTANCES(context: { commit: Commit }, params: any) {
-    return graph
-    .query('queryInstances')
-    .params(params)
-    .then((res: AxiosResponse) => {
-      context.commit(types.SET_INSTANCES, res.data.data);
-    });
-  },
-  GET_INSTANCE(context: { commit: Commit }, params: any) {
-    return graph
-    .query('queryDashBoardInstance')
-    .params(params)
-    .then((res: AxiosResponse) => {
-      context.commit(types.SET_INSTANCEINFO, res.data.data);
-    });
   },
 };
 

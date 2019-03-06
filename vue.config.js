@@ -1,6 +1,9 @@
 module.exports = {
   devServer: {
     proxy: {
+      '/dmp-sw-query-service': {
+        target: 'http://all-in-one-dev.dmptesting.xyz:9000',
+      },
       '/graphql': {
         target: 'http://172.16.100.80:12800',
         // target: 'http://35.203.129.14:12800',

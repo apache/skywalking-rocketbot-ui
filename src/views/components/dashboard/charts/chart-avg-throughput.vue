@@ -11,7 +11,6 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { State, Getter } from 'vuex-class';
 import { Component, Prop } from 'vue-property-decorator';
 import Num from './chart-num.vue';
 
@@ -22,8 +21,8 @@ interface NumBoxData {
 export default class Response extends Vue {
   @Prop() private title!: string;
   @Prop() private type!: string;
-  @State('rocketDashboard') private stateDashboard!: any;
-  @Getter('intervalTime') private intervalTime: any;
+  @Prop() private stateDashboard!: any;
+  @Prop() private intervalTime!: any;
   get content() {
     const temp = this.stateDashboard[this.type].getThroughputTrend.map((i: NumBoxData) => i.value);
     const sum = temp.reduce((preValue: number, curValue: number, index: number, array: number[]) => preValue + curValue)

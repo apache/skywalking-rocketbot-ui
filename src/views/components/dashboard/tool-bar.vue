@@ -1,47 +1,40 @@
 <template>
   <div>
     <div class="rk-dashboard-bar flex-h" v-if="compType === 'service'">
-      <ToolBarSelect @onChoose="selectService" title="Current Service" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
+      <ToolBarSelect @onChoose="SELECT_SERVICE" title="Current Service" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
       <ToolBarSelect @onChoose="selectEndpoint" title="Current Endpoint" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
       <ToolBarSelect @onChoose="selectInstance" title="Current Instance" :current="stateDashboard.currentInstance" :data="stateDashboard.instances" icon="disk"/>
     </div>
     <div class="rk-dashboard-bar flex-h" v-if="compType === 'proxy'">
-      <ToolBarSelect @onChoose="selectService" title="Current Proxy" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
+      <ToolBarSelect @onChoose="SELECT_SERVICE" title="Current Proxy" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
       <ToolBarSelect @onChoose="selectEndpoint" title="Current Endpoint" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
       <ToolBarSelect @onChoose="selectInstance" title="Current Instance" :current="stateDashboard.currentInstance" :data="stateDashboard.instances" icon="disk"/>
     </div>
     <div class="rk-dashboard-bar flex-h" v-else-if="compType === 'database'">
-      <ToolBarSelect @onChoose="selectService" title="Current Database" :current="stateDashboard.currentService" :data="stateDashboard.databases" icon="epic"/>
+      <ToolBarSelect @onChoose="SELECT_DATABASE" title="Current Database" :current="stateDashboard.currentDatabase" :data="stateDashboard.databases" icon="epic"/>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import ToolBarSelect from './tool-bar-select.vue';
-import { State, Action, Mutation } from 'vuex-class';
+import { State, Action } from 'vuex-class';
 @Component({components: {ToolBarSelect}})
 export default class ToolBar extends Vue {
-  @State('rocketDashboard') public stateDashboard!: any;
-  @State('rocketComps') public rocketComps: any;
-  @Mutation('rocketDashboard/SET_CURRENTSERVICE') public SET_CURRENTSERVICE: any;
-  @Mutation('rocketDashboard/SET_CURRENTENDPOINT') public SET_CURRENTENDPOINT: any;
-  @Mutation('rocketDashboard/SET_CURRENTINSTANCE') public SET_CURRENTINSTANCE: any;
-  @Action('RUN_EVENTS') public RUN_EVENTS: any;
-  private get compType() {
-    return this.rocketComps.tree[this.rocketComps.group].type;
-  }
-  private selectService(i: any) {
-    this.SET_CURRENTSERVICE(i);
-    this.RUN_EVENTS();
-  }
+  @Prop() private compType!: any;
+  @Prop() private stateDashboard!: any;
+  @Prop() private durationTime!: any;
+  @Action('rocketDashboard/SELECT_SERVICE') private SELECT_SERVICE: any;
+  @Action('rocketDashboard/SELECT_DATABASE') private SELECT_DATABASE: any;
+  @Action('rocketDashboard/SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
+  @Action('rocketDashboard/SELECT_INSTANCE') private SELECT_INSTANCE: any;
+
   private selectEndpoint(i: any) {
-    this.SET_CURRENTENDPOINT(i);
-    this.RUN_EVENTS();
+    this.SELECT_ENDPOINT({endpoint: i, duration: this.durationTime});
   }
   private selectInstance(i: any) {
-    this.SET_CURRENTINSTANCE(i);
-    this.RUN_EVENTS();
+    this.SELECT_INSTANCE({instance: i, duration: this.durationTime});
   }
 }
 </script>
@@ -49,7 +42,6 @@ export default class ToolBar extends Vue {
 <style lang="scss" scoped>
 .rk-dashboard-bar {
   flex-shrink: 0;
-  height: 52px;
   color: #efefef;
   background-color: #333840;
 }

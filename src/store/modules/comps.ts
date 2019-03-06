@@ -1,6 +1,7 @@
-import { Commit, ActionTree, MutationTree } from 'vuex';
-import { CompsItem, CompsContainer, CompsTree, CompQuery } from '../interfaces';
-import * as types from '../mutation-types';
+import { ActionTree, MutationTree, Commit, Dispatch } from 'vuex';
+import { CompsContainer, CompsTree } from '../interfaces';
+import compsData from './comps-data';
+import compsTree from './comps-tree';
 
 export interface State {
   data: CompsContainer;
@@ -10,141 +11,38 @@ export interface State {
 }
 
 const initState: State = {
-  data: {
-    service: [
-      { o: 'Global', name: 'Critical Response',
-      comp: 'ChartResponse', title: 'ChartResponse', type: 'global', width: 3 },
-      { o: 'Service', name: 'Avg Response',
-      comp: 'ChartAvgResponse', title: 'ChartAvgSLA', type: 'serviceInfo', width: 3 },
-      { o: 'Service', name: 'Avg Throughput',
-      comp: 'ChartAvgThroughput', title: 'ChartAvgSLA', type: 'serviceInfo', width: 3 },
-      { o: 'Service', name: 'Avg SLA',
-      comp: 'ChartAvgSLA', title: 'ChartAvgSLA', type: 'serviceInfo', width: 3 },
-      { o: 'Service', name: 'Critical Response',
-      comp: 'ChartResponse', title: 'serviceInfo', type: 'serviceInfo', width: 3 },
-      { o: 'ServiceInstance', name: 'CPU',
-      comp: 'ChartCpu', title: 'CPU %' , width: 3 },
-      { o: 'ServiceInstance', name: 'GC',
-      comp: 'ChartGC', title: 'GC ms' , width: 3 },
-      { o: 'ServiceInstance', name: 'Heap',
-      comp: 'ChartHeap', title: 'Heap MB' , width: 3 },
-      { o: 'ServiceInstance', name: 'NonHeap',
-      comp: 'ChartNonHeap', title: 'Non-Heap MB' , width: 3 },
-      { o: 'Service', name: 'Slow Endpoints',
-      comp: 'ChartTrace', title: 'serviceInfo', type: 'serviceInfo.getSlowEndpoint', width: 3 },
-      { o: 'Service', name: 'Slow Instance Throughput',
-      comp: 'ChartSlow', title: 'serviceInfo', type: 'serviceInfo.getInstanceThroughput', width: 3 },
-    ],
-    proxy: [
-      { o: 'Global', name: 'Critical Response',
-      comp: 'ChartResponse', title: 'ChartResponse', type: 'global', width: 3 },
-    ],
-    database: [
-      { o: 'Global', name: 'Critical Response',
-      comp: 'ChartResponse', title: 'ChartResponse', type: 'global', width: 3 },
-      { o: 'Database', name: 'Avg Response',
-      comp: 'ChartAvgResponse', title: 'ChartAvgSLA', type: 'serviceInfo', width: 3 },
-      { o: 'Database', name: 'Avg Throughput',
-      comp: 'ChartAvgThroughput', title: 'ChartAvgSLA', type: 'serviceInfo', width: 3 },
-      { o: 'Database', name: 'Avg SLA', comp: 'ChartAvgSLA', title: 'ChartAvgSLA', type: 'serviceInfo', width: 3 },
-      { o: 'Database', name: 'Critical Response',
-      comp: 'ChartResponse', title: 'serviceInfo', type: 'serviceInfo', width: 3 },
-    ],
-  },
-  current: 0,
-  group: 0,
-  tree: [{
-    name: 'Service Dashboard',
-    type: 'service',
-    query:  {
-      service: {},
-      endpoint: {},
-      instance: {},
-    },
-    children: [
-      {
-        name: 'service',
-        children: [],
-      },
-    ],
-  }, {
-    name: 'Database Dashboard',
-    type: 'database',
-    query:  {
-      service: {},
-    },
-    children: [
-      {
-        name: 'Database',
-        children: [],
-      },
-    ],
-  }],
+  ...compsData.state,
+  ...compsTree.state,
 };
 
 // mutations
-const mutations: MutationTree<State> = {
-  [types.SET_COMPTREE](state: State, data: CompsTree[]) {
-    state.tree = data;
-  },
-  [types.SET_GROUPQUERY](state: State, params: CompQuery) {
-    state.tree[state.group].query = params;
-  },
-  [types.ADD_COMPGROUP](state: State, parmas: any) {
-    if (!parmas.name) {return; }
-    state.tree.push({name: parmas.name, type: parmas.type, query: {}, children: [
-      {name: 'demo', children: []},
-    ]});
-    window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
-  },
-  [types.ADD_COMPTREE](state: State, parmas: any) {
-    if (!parmas.name) {return; }
-    state.tree[state.group].children.push({name: parmas.name, children: []});
-    window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
-  },
-  [types.DELETE_COMPGROUP](state: State, index: number) {
-    state.tree.splice(index, 1);
-    window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
-  },
-  [types.DELETE_COMPTREE](state: State, index: number) {
-    state.tree[state.group].children.splice(index, 1);
-    window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
-  },
-  [types.ADD_COMP](state: State, comp: CompsItem) {
-    state.tree[state.current].children[state.group].children.push(comp);
-    window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
-  },
-  [types.DELETE_COMP](state: State, index: number) {
-    state.tree[state.current].children.splice(index, 1);
-    window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
-  },
-  [types.EDIT_COMP](state: State, params: any) {
-    const temp: any = state.tree[state.current].children[params.index];
-    temp[params.type] = params.value;
-    window.localStorage.setItem('dashboard', JSON.stringify([... state.tree]));
-  },
-  [types.SET_CURRENTCOMP](state: State, current: number) {
-    state.current = current;
-  },
-  [types.SET_CURRENTGROUP](state: State, current: number) {
-    state.group = current;
-    state.current = 0;
-  },
-  [types.SWICH_COMP](state: State, params: any) {
-    const tempStart: any =
-    state.tree[state.group].children[state.current].children[params.start];
-    state.tree[state.group].children[state.current].children[params.start] =
-    state.tree[state.group].children[state.current].children[params.end];
-    state.tree[state.group].children[state.current].children[params.end] = tempStart;
-    state.tree = {...state.tree};
-  },
+const mutations: MutationTree<any> = {
+  ...compsData.mutations,
+  ...compsTree.mutations,
 };
 
 // actions
-const actions: ActionTree<State, any> = {} ;
+const actions: ActionTree<any, any> = {
+  ...compsData.actions,
+  ...compsTree.actions,
+  MIXHANDLE_CHANGE_GROUP(context: { commit: Commit, dispatch: Dispatch, state: State, rootState: any }, index: number) {
+    const rocketDashboard = context.rootState.rocketDashboard;
+    const temp: any = {};
+    if (rocketDashboard.currentService) { temp.service = rocketDashboard.currentService; }
+    if (rocketDashboard.currentEndpoint) { temp.endpoint = rocketDashboard.currentEndpoint; }
+    if (rocketDashboard.currentInstance) { temp.instance = rocketDashboard.currentInstance; }
+    if (rocketDashboard.currentDatabase) { temp.database = rocketDashboard.currentDatabase; }
+    context.commit('SET_GROUP_QUERY', temp);
+    context.commit('SET_CURRENT_GROUP', index);
+    context.dispatch('rocketDashboard/SET_CURRENT_STATE', context.state.tree[index].query);
+    context.dispatch('RUN_EVENTS');
+  },
+} ;
 
 // getters
 const getters = {
+  ...compsData.getters,
+  ...compsTree.getters,
 };
 
 export default {

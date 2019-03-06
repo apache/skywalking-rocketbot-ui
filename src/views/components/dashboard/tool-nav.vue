@@ -1,8 +1,8 @@
 <template>
   <nav class="rk-dashboard-nav">
     <span v-for="(i, index) in rocketComps.tree[rocketComps.group].children" :key="index" class="mr-20">
-      <a class="rk-dashboard-nav-i b" @click="SET_CURRENTCOMP(index)" :class="{'active': rocketComps.current == index}">{{i.name}}</a>
-      <svg v-if="rocketGlobal.edit" class="ml-5 icon cp red vm"  @click="DELETE_COMPTREE(index)">
+      <a class="rk-dashboard-nav-i b" @click="SET_CURRENT_COMPS(index)" :class="{'active': rocketComps.current == index}">{{i.name}}</a>
+      <svg v-if="rocketGlobal.edit" class="ml-5 icon cp red vm"  @click="DELETE_COMPS_TREE(index)">
         <use xlink:href="#file-deletion"></use>
       </svg>
     </span>
@@ -25,22 +25,21 @@ import Vue from 'vue';
 import { Component, Prop, Model } from 'vue-property-decorator';
 import { State, Mutation } from 'vuex-class';
 
-@Component({})
-export default class DashboardNav extends Vue {
-  @State('rocketbot') private rocketGlobal: any;
-  @State('rocketComps') private rocketComps: any;
-  @Mutation('SET_CURRENTCOMP') private SET_CURRENTCOMP: any;
-  @Mutation('DELETE_COMPTREE') private DELETE_COMPTREE: any;
-  @Mutation('ADD_COMPTREE') private ADD_COMPTREE: any;
+@Component
+export default class ToolNav extends Vue {
+  @Prop() private rocketGlobal: any;
+  @Prop() private rocketComps: any;
+  @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
+  @Mutation('DELETE_COMPS_TREE') private DELETE_COMPS_TREE: any;
+  @Mutation('ADD_COMPS_TREE') private ADD_COMPS_TREE: any;
   private name: string = '';
-  private type: string = 'Service';
   private show: boolean = false;
   private handleHide() {
     this.name = '';
     this.show = false;
   }
   private handleCreate() {
-    this.ADD_COMPTREE({name: this.name});
+    this.ADD_COMPS_TREE({name: this.name});
     this.handleHide();
   }
 }
@@ -102,11 +101,11 @@ export default class DashboardNav extends Vue {
   will-change: border-color,color;
   transition: border-color .3s, color .3s;
   &:hover{
-    color: #458eff;
+    color: #448dfe;
   }
   &.active{
-    color: #458eff;
-    border-color: #458eff;
+    color: #448dfe;
+    border-color: #448dfe;
   }
 }
 </style>

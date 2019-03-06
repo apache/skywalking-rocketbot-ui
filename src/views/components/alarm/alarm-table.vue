@@ -48,7 +48,7 @@ export default class AlarmTable extends Vue {
     left: -23px;
     top: 25px;
     border-radius: 4px;
-    background-color: #458eff;
+    background-color: #448dfe;
   }
   &:before{
     content: '';
@@ -59,7 +59,7 @@ export default class AlarmTable extends Vue {
     top: 0;
     left: -20px;
     border-radius: 5px;
-    background-color: #458eff99;
+    background-color: #448dfe99;
   }
 }
 .rk-alarm-table-i-scope{

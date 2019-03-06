@@ -21,6 +21,7 @@ export interface CompsGroup {
 }
 export interface CompQuery {
   service?: CurrentQuery;
+  database?: CurrentQuery;
   endpoint?: CurrentQuery;
   instance?: CurrentQuery;
 }

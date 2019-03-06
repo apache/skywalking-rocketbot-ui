@@ -1,15 +1,23 @@
 <template>
   <footer class="rk-footer trans" :class="{'rk-footer-edit':rocketbotGlobal.edit, 'rk-footer-dark': $route.path === '/topology'}">
-    <div class="rk-footer-time">
-      <div class="flex-h cp" :class="rocketbotGlobal.edit?'':'link-hover'" @click="setEdit">
-        <svg class="icon mr-5">
-          <use xlink:href="#settings"></use>
-        </svg>
-        <span>{{rocketbotGlobal.edit?'Edit Mode':'User Mode'}}</span>
+    <div class="rk-footer-inner">
+      <div class="flex-h">
+        <!-- <div class="mr-15 sm red">
+          <svg class="vm icon mr-5">
+            <use xlink:href="#warning"></use>
+          </svg>
+          <span class="vm">Connect Error</span>
+        </div> -->
+        <div class="sm cp" :class="rocketbotGlobal.edit?'':'link-hover'" @click="setEdit">
+          <svg class="vm icon mr-5">
+            <use xlink:href="#settings"></use>
+          </svg>
+          <span class="vm">{{rocketbotGlobal.edit?'Edit Mode':'User Mode'}}</span>
+        </div>
       </div>
       <div class="sm flex-h">
         <RkDate v-model="time" position="top" format="YYYY-MM-DD HH:mm:ss"/>
-        <span>UTC {{utc >= 0 ? '+' : ''}}</span><input v-model="utc" min='-12' max="12" style="color:inherit;background: 0;border: 0;outline: none; width:27px" type="number">
+        <span>UTC {{utc >= 0 ? '+' : ''}}</span><input v-model="utc" min='-12' max="12" class="rk-footer-utc" type="number">
       </div>
     </div>
   </footer>
@@ -69,11 +77,13 @@ export default class Footer extends Vue {
 }
 .rk-footer-edit {
   color: #eee;
-  background:#458eff;
-  border-top: 1px solid #458eff;
+  background:#448dfe;
+  border-top: 1px solid #448dfe;
 }
-
-.rk-footer-time{
+.rk-footer-utc{
+  color:inherit;background: 0;border: 0;outline: none; width:27px;padding-bottom: 0;
+}
+.rk-footer-inner{
   justify-content: space-between;
   display: flex;
 }
