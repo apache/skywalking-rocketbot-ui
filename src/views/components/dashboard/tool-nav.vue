@@ -65,7 +65,7 @@ export default class ToolNav extends Vue {
   top: 35px;
   padding: 10px 5px;
   z-index: 1;
-  border-radius: 3px;
+  border-radius: 4px;
   color: #eee;
   background-color: #252a2f;
   box-shadow: 0 3px 6px 0 rgba(0,0,0,.1), 0 1px 3px 0 rgba(0,0,0,.08);

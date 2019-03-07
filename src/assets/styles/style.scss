@@ -62,7 +62,10 @@
   border-radius: 4px;
   color: #fff;
   will-change: background-color;
-  transition: background-color .3s
+  transition: background-color .3s;
+}
+.rk-btn.ghost{
+  background-color: #333844;
 }
 .rk-btn:hover{
   background-color: #357de9;

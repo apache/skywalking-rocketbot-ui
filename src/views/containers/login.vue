@@ -14,12 +14,13 @@
       </div>
     </div>
   </div>
-  <div class="rk-login-r">
-    <!-- <div class="rk-img-wrapper">
-      <svg class="rk-login-logo">
-        <use xlink:href="#logo"></use>
-      </svg>
-    </div> -->
+  <div class="rk-login-r hide-xs">
+    <svg class="rk-img-wrapper">
+      <use xlink:href="#login-bg"></use>
+    </svg>
+    <svg class="rk-img-logo">
+      <use xlink:href="#logo"></use>
+    </svg>
   </div>
 </div>
 </template>
@@ -74,10 +75,15 @@ export default class Login extends Vue {
 .rk-img-wrapper{
   width: 100%;
   height: 100%;
-  background-image: url('../../assets/img/login-bg.svg');
   animation: spin 100s linear infinite;
   background-size: 100%;
   background-position: center;
+}
+.rk-img-logo{
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  margin-left: -150px;
 }
 .rk-login-input{
   width: 100%;
@@ -113,11 +119,11 @@ export default class Login extends Vue {
   }
 }
 .rk-login-l{
-  width: 38.2%;
-  min-width: 500px;
+  padding: 0 40px;
   height: 100%;
   display: table;
   flex-shrink: 0;
+  margin: 0 auto;
 }
 .rk-login-r{
   position: relative;

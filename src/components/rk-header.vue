@@ -31,17 +31,30 @@
       </router-link>
     </div>
     <div class="flex-h">
-      <a class="rk-btn mr-15 sm" @click="handleReload">
+      <a class="rk-btn mr-15 sm ghost" @click="handleReload">
         <svg class="icon mr-5 vm">
           <use xlink:href="#retry"></use>
         </svg>
         <span class="vm">Reload</span>
       </a>
-      <span class="mr-5">Admin</span>
-      <svg class="icon">
-        <use xlink:href="#arrow-down"></use>
-      </svg>
-    </div>
+      <a class="rk-header-user" v-clickout="handleHide">
+        <div @click="handleShow" class="rk-btn" :class="show? 'blue' : 'ghost'">
+          <svg class="icon vs">
+            <use xlink:href="#user"></use>
+          </svg>
+          <svg class="icon vs">
+            <use xlink:href="#arrow-down"></use>
+          </svg>
+        </div>
+        <div class="rk-header-user-menu" v-if="show">
+          <div class="rk-header-user-menu-i" @click="handleSignout">
+            <svg class="icon vs">
+              <use xlink:href="#issue-close"></use>
+            </svg>
+            Sign out</div>
+        </div>
+      </a>      
+  </div>
   </header>
 </template>
 
@@ -54,9 +67,20 @@ import timeFormat from '@/utils/timeFormat';
 export default class Header extends Vue {
   @State('rocketbot') private rocketbotGlobal: any;
   @Action('SET_DURATION') private SET_DURATION: any;
+  private show: boolean = false;
   private handleReload() {
     const gap = this.rocketbotGlobal.duration.end.getTime() - this.rocketbotGlobal.duration.start.getTime();
     this.SET_DURATION(timeFormat([new Date(new Date().getTime() - gap), new Date()]));
+  }
+  private handleHide() {
+    this.show = false;
+  }
+  private handleShow() {
+    this.show = !this.show;
+  }
+  private handleSignout() {
+    localStorage.removeItem('skywalking-authority');
+    this.$router.push('/login');
   }
 }
 </script>
@@ -92,7 +116,30 @@ export default class Header extends Vue {
   .nav-link:hover,
   .nav-link.active {
     opacity: 1;
-    background-color: #333840;
+    background-color: #333844;
+  }
+}
+.rk-header-user{
+  position: relative;
+}
+.rk-header-user-menu{
+  position: absolute;
+  top: 35px;
+  right: 0;
+  background-color: #fff;
+  overflow: hidden;
+  border-radius: 4px;
+  padding: 3px 0;
+  color: #333844;
+  width: 100px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+}
+.rk-header-user-menu-i{
+  padding: 6px 10px;
+  will-change: background-color;
+  transition: background-color .3s;
+  &:hover{
+    background-color:#dededf; 
   }
 }
 </style>

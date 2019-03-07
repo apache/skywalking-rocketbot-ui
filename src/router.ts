@@ -19,6 +19,7 @@ const router = new Router({
     {
       path: '/login',
       component: Login,
+      meta: { login: true },
     },
     {
       path: '/',
@@ -45,23 +46,23 @@ const router = new Router({
   ],
 });
 
-// router.beforeEach((to, from, next) => {
-//   const token = window.localStorage.getItem('skywalking-authority');
-//   if (w.axiosCancel.length !== 0) {
-//     for (const func of  w.axiosCancel) {
-//       setTimeout(func(), 0);
-//     }
-//     w.axiosCancel = [];
-//   }
-//   if (to.meta.login && (token === null || token === 'guest')) {
-//     next();
-//   } else if (token === null || token === 'guest') {
-//     next('/login');
-//   } else if (to.meta.login) {
-//     next(from.path);
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  const token = window.localStorage.getItem('skywalking-authority');
+  if (w.axiosCancel.length !== 0) {
+    for (const func of  w.axiosCancel) {
+      setTimeout(func(), 0);
+    }
+    w.axiosCancel = [];
+  }
+  if (to.meta.login && (token === null || token === 'guest')) {
+    next();
+  } else if (token === null || token === 'guest') {
+    next('/login');
+  } else if (to.meta.login) {
+    next(from.path);
+  } else {
+    next();
+  }
+});
 
 export default router;

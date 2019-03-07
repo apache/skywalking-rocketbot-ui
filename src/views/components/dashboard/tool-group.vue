@@ -73,7 +73,7 @@ export default class ToolGroup extends Vue {
   top: 35px;
   padding: 10px 5px;
   z-index: 2;
-  border-radius: 3px;
+  border-radius: 4px;
   color: #eee;
   background-color: #252a2f;
   box-shadow: 0 3px 6px 0 rgba(0,0,0,.1), 0 1px 3px 0 rgba(0,0,0,.08);
@@ -113,7 +113,7 @@ export default class ToolGroup extends Vue {
     display: inline-block;
     width: 5px;
     height: 10px;
-    border-radius: 3px;
+    border-radius: 4px;
     background-color: #448dfe;
     top: 9px;
     left: 4px;

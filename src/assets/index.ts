@@ -1,4 +1,5 @@
 import './svg/logo.svg';
+import './svg/login-bg.svg';
 import './svg/disk.svg';
 import './svg/arrow-down.svg';
 import './svg/link.svg';
@@ -36,3 +37,5 @@ import './svg/soft-unwrap.svg';
 import './svg/token.svg';
 import './svg/warning.svg';
 import './svg/review-list.svg';
+import './svg/user.svg';
+import './svg/issue-close.svg';
