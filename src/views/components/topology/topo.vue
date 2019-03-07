@@ -31,63 +31,41 @@ export default {
       CUBEERROR: require('./assets/cube21.png'),
       USER: require('./assets/USER.png'),
       UNKNOWN: require('./assets/UNKNOWN.png'),
-      UNKNOWN_CLOUD: require('./assets/UNKNOWN_CLOUD.png'),
+      UNKNOWNCLOUD: require('./assets/UNKNOWN_CLOUD.png'),
       UNDEFINED: require('./assets/UNDEFINED.png'),
-      KAFKACONSUMER: require('./assets/kafka.png'),
-      KAFKA: require('./assets/kafka.png'),
-      H2:require('./assets/DATABASE.png'),
+      KAFKA: require('./assets/KAFKA.png'),
+      KAFKACONSUMER: require('./assets/KAFKA.png'),
+      H2:require('./assets/H2.png'),
       REDIS:require('./assets/REDIS.png'),
       TOMCAT: require('./assets/TOMCAT.png'),
-      HTTPCLIENT: require('./assets/www(1).png'),
-      DUBBO: require('./assets/DUBBO_PROVIDER.png'),
-      MOTAN: require('./assets/DATABASE.png'),
+      HTTPCLIENT: require('./assets/HTTPCLIENT.png'),
+      DUBBO: require('./assets/DUBBO.png'),
+      MOTAN: require('./assets/MOTAN.png'),
       RESIN: require('./assets/RESIN.png'),
-      FEIGN: require('./assets/www(1).png'),
-      OKHTTP: require('./assets/www(1).png'),
-      SPRINGRESTTEMPLATE: require('./assets/www(1).png'),
-      SPRINGMVC: require('./assets/SPRING_BOOT.png'),
-      STRUTS2: require('./assets/DATABASE.png'),
-      NUTZMVC: require('./assets/SPRING_BOOT.png'),
-      NUTZHTTP: require('./assets/www(1).png'),
-      JETTYCLIENT:require('./assets/www(1).png'),
-      JETTYSERVER: require('./assets/SPRING_BOOT.png'),
-      SHARDINGJDBC: require('./assets/ShardingJDBC.png'),
+      OKHTTP: require('./assets/OKHTTP.png'),
+      SPRINGMVC: require('./assets/SPRINGMVC.png'),
+      STRUTS2: require('./assets/STRUTS2.png'),
+      NUTZMVC: require('./assets/SPRINGMVC.png'),
+      NUTZHTTP: require('./assets/HTTPCLIENT.png'),
+      JETTY:require('./assets/JETTY.png'),
+      JETTYSERVER: require('./assets/JETTYSERVER.png'),
       GRPC: require('./assets/GRPC.png'),
-      ELASTICJOB: require('./assets/ElasticJob.png'),
-      HTTPASYNCCLIENT: require('./assets/www(1).png'),
-      DUBBO_PROVIDER: require('./assets/DUBBO_PROVIDER.png'),
-      DUBBO_PROVIDER_GROUP: require('./assets/DUBBO_PROVIDER_GROUP.png'),
-      ServiceComb: require('./assets/ORACLE_GROUP.png'),
       ORACLE: require('./assets/ORACLE.png'),
-      NG: require('./assets/ng.png'),
-      NBASE: require('./assets/NBASE.png'),
-      NBASE_T: require('./assets/NBASE_T.png'),
-      NBASE_ARC: require('./assets/NBASE_ARC.png'),
-      NBASE_ARC_GROUP: require('./assets/NBASE_ARC_GROUP.png'),
       MYSQL: require('./assets/MYSQL.png'),
-      MYSQL_GROUP: require('./assets/MYSQL.png'),
-      MSSQLSERVER: require('./assets/MSSQLSERVER.png'),
-      MSSQLSERVER_GROUP: require('./assets/MSSQLSERVER_GROUP.png'),
+      MYSQLGROUP: require('./assets/MYSQL.png'),
+      MSSQLSERVER: require('./assets/MYSQL.png'),
+      MSSQLSERVERGROUP: require('./assets/MYSQL.png'),
       MONGODB: require('./assets/MONGODB.png'),
-      MONGODB_GROUP: require('./assets/MONGODB_GROUP.png'),
-      MEMCACHED: require('./assets/MEMCACHED.png'),
-      MARIADB: require('./assets/MARIADB.png'),
-      MARIADB_GROUP: require('./assets/MARIADB_GROUP.png'),
-      JETTY: require('./assets/JETTY.png'),
-      JBOSS: require('./assets/JBOSS.png'),
-      ETC: require('./assets/ETC.png'),
-      DUBBO_PROVIDER: require('./assets/DUBBO_PROVIDER.png'),
-      DUBBO_PROVIDER_GROUP: require('./assets/DUBBO_PROVIDER_GROUP.png'),
-      CUBRID: require('./assets/CUBRID.png'),
-      CUBRID_GROUP: require('./assets/CUBRID_GROUP.png'),
-      CLIENT: require('./assets/CLIENT.png'),
-      CASSANDRA: require('./assets/CASSANDRA.png'),
-      BLOC: require('./assets/BLOC.png'),
-      BACKEND: require('./assets/BACKEND.png'),
-      ARCUS: require('./assets/ARCUS.png'),
-      APACHE: require('./assets/APACHE.png'),
-      ACTIVEMQ_CLIENT: require('./assets/ACTIVEMQ_CLIENT.png'),
-      ACTIVEMQ_CLIENT_GROUP: require('./assets/ACTIVEMQ_CLIENT_GROUP.png'),
+      MONGODBGROUP: require('./assets/MONGODB.png'),
+      ACTIVEMQ: require('./assets/ACTIVEMQ.png'),
+      ELASTICSEARCH: require('./assets/ELASTICSEARCH.png'),
+      FEIGNDEFAULTHTTP: require('./assets/FEIGNDEFAULTHTTP.png'),
+      HPROSE: require('./assets/HPROSE.png'),
+      HPROSE: require('./assets/POSTGRESQL.png'),
+      RESIN: require('./assets/RESIN.png'),
+      RABBITMQ: require('./assets/RABBITMQ.png'),
+      SOFARPC: require('./assets/SOFARPC.png'),
+      ROCKETMQ: require('./assets/ROCKETMQ.png'),
       width: 600,
       height: 600,
       force: '',
@@ -147,7 +125,7 @@ export default {
         .on('tick', this.tick)
         .stop();
       this.graph = this.svg.append('g').attr('class', 'graph');
-          this.svg.call(this.tip);
+      this.svg.call(this.tip);
       this.svg.call(this.getZoomBehavior(this.graph));
       this.graph.call(this.tip);
       this.svg.on('click', (d, i) => {
@@ -171,25 +149,6 @@ export default {
         .attr('refY', '6')
         .attr('orient', 'auto');
       const arrow_path = 'M2,2 L10,6 L2,10 L3,6 L2,2';
-
-      // .attr("marker-end","url(#arrow)");
-      // this.linkText = this.link.append('g');
-      // this.linkText
-      //   .append('rect')
-      //   .attr('rx', 3)
-      //   .attr('ry', 3)
-      //   .attr('width', 6)
-      //   .attr('height', 6)
-      //   .attr('x', -3)
-      //   .attr('y', -3)
-      //   .attr('fill', '#217EF2a0');
-      // this.linkText
-      //   .append('text')
-      //   .attr('font-size', 10)
-      //   .attr('class', 'link-text')
-      //   .attr('text-anchor', 'middle')
-      //   .attr('y', 5)
-      //   .text(d => d.cpm);
       this.arrowMarker.append('path').attr('d', arrow_path).attr('fill', '#217EF2');
       this.gnode = this.graph.append('g').selectAll('.node');
       const that = this;
@@ -197,9 +156,9 @@ export default {
         .enter()
         .append('g')
         .call(d3.drag()
-            .on('start', this.dragstart)
-            .on('drag', this.dragged)
-            .on('end', this.dragended)
+          .on('start', this.dragstart)
+          .on('drag', this.dragged)
+          .on('end', this.dragended)
         )
         .on('click', function(d, i) {
           event.stopPropagation();
@@ -249,7 +208,7 @@ export default {
         .attr('y', -11)
         .attr('xlink:href',d => {
           if( !d.type || d.type === 'N/A') {
-            return this['UNKNOWN_CLOUD']
+            return this['UNDEFINED']
           }
           return this[d.type.toUpperCase().replace('-','')];
         });
