@@ -1,9 +1,16 @@
 <template>
 <div :class="`${pre}`">
   <div :class="`${pre}-head`">
-    <a :class="`${pre}-prev-decade-btn`" v-show="showYears" @click="year-=10">«</a>
-    <a :class="`${pre}-prev-year-btn`" v-show="!showYears" @click="year--">«</a>
-    <a :class="`${pre}-prev-month-btn`" v-show="!showYears&&!showMonths" @click="pm">‹</a>
+    <a :class="`${pre}-prev-decade-btn`" v-show="showYears" @click="year-=10"><svg class="icon sm cp" @click="pre">
+      <use xlink:href="#angle-double-left"></use>
+    </svg></a>
+    <a :class="`${pre}-prev-year-btn`" v-show="!showYears" @click="year--"><svg class="icon sm cp" @click="pre">
+      <use xlink:href="#angle-double-left"></use>
+    </svg></a>
+    <a :class="`${pre}-prev-month-btn`" v-show="!showYears&&!showMonths" @click="pm">
+      <svg class="icon lg cp" @click="pre">
+      <use xlink:href="#chevron-left"></use>
+    </svg></a>
     <a :class="`${pre}-year-select`" v-show="showYears">{{ys+'-'+ye}}</a>
     <template v-if="local.yearSuffix">
       <a :class="`${pre}-year-select`" @click="showYears=!showYears" v-show="!showYears">{{year}}{{local.yearSuffix}}</a>
@@ -13,9 +20,16 @@
       <a :class="`${pre}-month-select`" @click="showMonths=!showMonths" v-show="!showYears&&!showMonths">{{local.monthsHead[month]}}</a>
       <a :class="`${pre}-year-select`" @click="showYears=!showYears" v-show="!showYears">{{year}}</a>
     </template>
-    <a :class="`${pre}-next-month-btn`" v-show="!showYears&&!showMonths" @click="nm">›</a>
-    <a :class="`${pre}-next-year-btn`" v-show="!showYears" @click="year++">»</a>
-    <a :class="`${pre}-next-decade-btn`" v-show="showYears" @click="year+=10">»</a>
+    <a :class="`${pre}-next-month-btn`" v-show="!showYears&&!showMonths" @click="nm">
+      <svg class="icon lg cp" @click="pre">
+      <use xlink:href="#chevron-right"></use>
+    </svg></a>
+    <a :class="`${pre}-next-year-btn`" v-show="!showYears" @click="year++"><svg class="icon sm cp" @click="pre">
+      <use xlink:href="#angle-double-right"></use>
+    </svg></a>
+    <a :class="`${pre}-next-decade-btn`" v-show="showYears" @click="year+=10"><svg class="icon sm cp" @click="pre">
+      <use xlink:href="#angle-double-right"></use>
+    </svg></a>
   </div>
   <div :class="`${pre}-body`">
     <div :class="`${pre}-days`">
@@ -53,7 +67,7 @@
 </div>
 </template>
 
-<script lang="ts">
+<script lang="js">
 /* eslint-disable */
 /* tslint:disable */
 export default {
@@ -292,6 +306,7 @@ export default {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  color: #3d444f;
 }
 .calendar + .calendar {
   border-left: solid 1px #eaeaea;
@@ -316,7 +331,7 @@ export default {
 }
 
 .calendar-head a:hover {
-  color: #3880ff;
+  color: #3f97e3;
 }
 
 .calendar-head .calendar-year-select,
@@ -343,7 +358,9 @@ export default {
 .calendar-next-month-btn {
   right: 24px;
 }
-
+.calendar-next-month-btn .icon.lg, .calendar-prev-month-btn .icon.lg{
+  margin-top: 8px;
+}
 .calendar-body {
   position: relative;
   width: 196px;
@@ -376,7 +393,6 @@ export default {
 
 .calendar-date {
   cursor: pointer;
-  /* border-radius: 4px; */
   line-height: 29px;
   transition: background-color .3s;
 }
@@ -387,7 +403,7 @@ export default {
 
 .calendar-date:hover,
 .calendar-date-on {
-  color: #3880ff;
+  color: #3f97e3;
   background-color: #f8f8f8;
 }
 
@@ -395,8 +411,8 @@ export default {
 .calendar-date-selected:hover {
   color: #fff;
   font-weight: bold;
-  border-radius: 4px;
-  background: #3880ff;
+  border-radius: 14px;
+  background: #3f97e3;
 }
 
 .calendar-date-disabled {
@@ -423,7 +439,7 @@ export default {
 
 .calendar-hour a:hover,
 .calendar-hour a.on {
-  color: #3880ff;
+  color: #3f97e3;
 }
 
 .calendar-years,

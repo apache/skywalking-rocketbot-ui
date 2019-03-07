@@ -1,113 +1,109 @@
-import { Commit, ActionTree } from 'vuex';
-import { getTraces, getTraceSpans } from '@/api/trace.ts';
+import { Commit, ActionTree, MutationTree, Dispatch } from 'vuex';
+import { AxiosResponse } from 'axios';
+import graph from '@/graph';
+import { Trace, Span, Option } from '../interfaces';
 import * as types from '../mutation-types';
 
-export interface Trace {
-  duration: Number;
-  isError: Boolean;
-  key: String;
-  operationNames: String[];
-  start: String;
-  traceIds: String[];
-}
-export interface Span {
-  duration: Number;
-  isError: Boolean;
-  key: String;
-  operationNames: String[];
-  start: String;
-  traceIds: String[];
-}
-
 export interface State {
-  traces: Trace[];
-  spans: Span[];
-  tracesTotal: Number;
+  services: Option[];
+  instances: Option[];
+  traceForm: any;
+  traceList: Trace[];
+  traceTotal: number;
+  traceSpans: Span[];
+  currentTrace: Trace;
 }
 
 const initState: State = {
-  traces: [],
-  spans: [],
-  tracesTotal: 0,
+  services: [],
+  instances: [],
+  traceForm: {
+    paging: {pageNum: 1, pageSize: 15, needTotal: true},
+    queryOrder: 'BY_DURATION',
+  },
+  traceList: [],
+  traceTotal: 0,
+  traceSpans: [],
+  currentTrace: {
+    operationNames: [],
+    duration: 0,
+    isError: false,
+    key: '',
+    start: '',
+    traceIds: [],
+  },
 };
 
 // getters
 const getters = {};
 
 // mutations
-const mutations = {
-  [types.SET_TRACE](state: State, data: Trace[]) {
-    state.traces = data;
+const mutations: MutationTree<State> = {
+  [types.SET_SERVICES](state: State, data: any) {
+    state.services = [{label: 'All', key: ''}].concat(data);
   },
-  [types.SET_TRACE_TOTAL](state: State, total: Number) {
-    state.tracesTotal = total;
+  [types.SET_INSTANCES](state: State, data: any) {
+    state.instances = [{label: 'All', key: ''}].concat(data);
   },
-  [types.SET_SPAN](state: State, data: Span[]) {
-    state.spans = data;
+  [types.SET_TRACE_FORM](state: State, data: any) {
+    state.traceForm = data;
   },
-  [types.CLEAR_TRACE](state: State) {
-    state.traces = [];
-    state.spans = [];
+  [types.SET_TRACE_FORM_ITEM](state: State, params: any) {
+    state.traceForm[params.type] = params.data;
+  },
+  [types.SET_TRACELIST](state: State, data: Trace[]) {
+    state.traceList = data;
+  },
+  [types.SET_TRACELIST_TOTAL](state: State, data: number) {
+    state.traceTotal = data;
+  },
+  [types.SET_TRACE_SPANS](state: State, data: Span[]) {
+    state.traceSpans = data;
+  },
+  [types.SET_CURRENT_TRACE](state: State, data: Span) {
+    state.currentTrace = data;
   },
 };
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_TRACES(
-    context: { commit: Commit; state: State; rootState: any },
-    params: any,
-  ) {
-    return getTraces(params).then((res) => {
-      context.commit(types.SET_TRACE, res.data.data.queryBasicTraces.traces);
-      context.commit(
-        types.SET_TRACE_TOTAL,
-        res.data.data.queryBasicTraces.total,
-      );
+  GET_SERVICES(context: { commit: Commit }, params: any) {
+    return graph
+    .query('queryServices')
+    .params(params)
+    .then((res: AxiosResponse) => {
+      context.commit(types.SET_SERVICES, res.data.data.services);
     });
   },
-  GET_SPANS(
-    context: { commit: Commit; state: State; rootState: any },
-    params: String,
-  ) {
-    context.commit(types.SET_SPAN, []);
-    return getTraceSpans(params).then((res) => {
-      const top = res.data.data.queryTrace.spans.filter(i => i.parentSpanId === -1);
-      const group = res.data.data.queryTrace.spans.filter(i => (i.parentSpanId === -1) && (i.refs.length !== 0));
-      if (top.length !== group.length) {
-        context.commit(types.SET_SPAN, res.data.data.queryTrace.spans);
-      } else {
-        const segment = group.map(i => i.segmentId);
-        const refs = group.map(i => i.refs[0].parentSegmentId);
-        const subset = [];
-        refs.forEach((val) => {
-          if (segment.indexOf(val) === -1) {
-            subset.push(val);
-          }
-        });
-        const result = res.data.data.queryTrace.spans.concat({
-          applicationCode: 'Warning: It may be a broken trace!',
-          component: '',
-          endTime: 0,
-          isError: false,
-          layer: '',
-          logs: [],
-          operationName: `Previous: ${subset[0]}`,
-          parentSpanId: -1,
-          refs: [],
-          segmentId: subset[0],
-          spanId: 0,
-          peer: '',
-          startTime: 0,
-          tags: [],
-          traceId: params.toString(),
-          type: '',
-        });
-        context.commit(types.SET_SPAN, result);
-      }
+  GET_INSTANCES(context: { commit: Commit }, params: any) {
+    return graph
+    .query('queryServiceInstance')
+    .params(params)
+    .then((res: AxiosResponse) => {
+      context.commit(types.SET_INSTANCES, res.data.data.instanceId);
     });
   },
-  CLEAR_TRACE(context: { commit: Commit; state: State; rootState: any }) {
-    context.commit(types.CLEAR_TRACE);
+  SET_TRACE_FORM(context: { commit: Commit, dispatch: Dispatch }, params) {
+    context.commit(types.SET_TRACE_FORM, params);
+  },
+  GET_TRACELIST(context: { state: State, commit: Commit }) {
+    context.commit(types.SET_TRACELIST, []);
+    return graph
+    .query('queryTraces')
+    .params({condition: context.state.traceForm})
+    .then((res: AxiosResponse) => {
+      context.commit(types.SET_TRACELIST, res.data.data.traces.data);
+      context.commit(types.SET_TRACELIST_TOTAL, res.data.data.traces.total);
+    });
+  },
+  GET_TRACE_SPANS(context: { commit: Commit }, params) {
+    context.commit(types.SET_TRACE_SPANS, []);
+    return graph
+    .query('queryTrace')
+    .params(params)
+    .then((res: AxiosResponse) => {
+      context.commit(types.SET_TRACE_SPANS, res.data.data.trace.spans);
+    });
   },
 };
 

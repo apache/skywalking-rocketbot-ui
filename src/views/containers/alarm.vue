@@ -1,92 +1,38 @@
 <template>
-<div>
-  <!-- <AlarmChart/> -->
-  <alarm-nav>
-    <a class="rk-alarm-nav-i" @click="type='APPLICATION'" :class="{'active':type === 'APPLICATION'}">Service</a>
-    <a class="rk-alarm-nav-i" @click="type='SERVER'" :class="{'active':type === 'SERVER'}">ServiceInstance</a>
-    <a class="rk-alarm-nav-i" @click="type='SERVICE'" :class="{'active':type === 'SERVICE'}">Endpoint</a>
-  </alarm-nav>
-  <div class="rk-alarm">
-    <table class="rk-alarm-table">
-      <thead>
-        <tr><th>&nbsp;</th><th>Start</th><th v-show="!stateAlarm.alarmList[0].message">Title</th><th v-show="!stateAlarm.alarmList[0].message">Type</th><th>Content</th></tr>
-      </thead>
-      <tbody>
-         <tr v-for="(i, index) in stateAlarm.alarmList" :key="index">
-          <td>
-            <Icon type="md-alert" class="rk-alarm-icon"/>
-          </td>
-          <td class="grey ell">{{i.startTime}}</td>
-          <td>{{i.title || i.message}}</td>
-          <td v-if="!i.message">{{i.causeType}}</td>
-          <td v-if="!i.message">{{i.content}}</td>
-        </tr>
-      </tbody>
-    </table>
-    <RkEmpty text="no alarm" v-if="!stateAlarm.alarmList.length"/>
+  <div class="rk-alarm flex-v">
+    <AlarmTool :durationTime="durationTime" :total="rocketAlarm.total"/>
+    <div style="flex-grow: 1;overflow: auto;">
+      <AlarmTable :data="rocketAlarm.alarmService"/>
+    </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { State, Action } from 'vuex-class';
-import { Component, Watch } from 'vue-property-decorator';
-import { getAlarm } from '@/store/dispatch/alarm.ts';
-import AlarmNav from '../components/alarm/alarm-nav.vue';
+import Component from 'vue-class-component';
+import alarm from '@/store/modules/alarm';
+import AlarmTool from '../components/alarm/alarm-tool.vue';
+import AlarmTable from '../components/alarm/alarm-table.vue';
+import { State, Action, Getter } from 'vuex-class';
 
 @Component({
-  components: { AlarmNav },
+  components: { AlarmTool, AlarmTable },
 })
 export default class Alarm extends Vue {
-  @State('alarm') stateAlarm;
-  @Action('SET_EVENTS') SET_EVENTS;
-  @Action('alarm/CLEAR_ALARM') CLEAR_ALARM;
-  page:Number = 1;
-  type:String = 'APPLICATION';
-  @Watch('type')
-  onTypeChanged() {
-    this.getAlarm();
+  @State('rocketAlarm') private rocketAlarm!: any;
+  @Getter('durationTime') private durationTime: any;
+  private beforeCreate() {
+    this.$store.registerModule('rocketAlarm', alarm);
   }
-  beforeMount() {
-    this.getAlarm();
-    this.SET_EVENTS([this.getAlarm]);
-  }
-  beforeDestroy() {
-    this.CLEAR_ALARM();
-  }
-  getAlarm() {
-    getAlarm({ type: this.type, paging: this.page });
+  private beforeDestroy() {
+    this.$store.unregisterModule('rocketAlarm');
   }
 }
 </script>
 
 <style lang="scss">
-.rk-alarm{
-  padding: 15px 20px;
-  overflow: auto;
-}
-.rk-alarm-box{
-  width: 100%;
-  padding: 15px;
-}
-.rk-alarm-table{
-  width: 100%;
-  text-align: left;
-  .rk-alarm-icon{
-    font-size:19px;
-    color:#f7b32b;
-    line-height:1px;
-    display:block;
-    margin: 0 auto;
-  }
-  th{
-    padding: 8px 10px;
-    border-bottom: 1px solid #e4e7ed;
-  }
-  td{
-    padding: 8px 10px;
-    border-bottom: 1px solid #e4e7ed;
-  }
+.rk-alarm {
+  flex-grow: 1;
+  height: 100%;
 }
 </style>

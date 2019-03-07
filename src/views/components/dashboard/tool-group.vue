@@ -1,0 +1,122 @@
+<template>
+  <nav class="rk-dashboard-group">
+    <span v-for="(i, index) in rocketComps.tree" :key="index" class="mr-15">
+      <a class="rk-dashboard-group-i" @click="MIXHANDLE_CHANGE_GROUP(index)" :class="{'active': rocketComps.group == index, 'grey': rocketComps.group != index}">{{i.name}}</a>
+      <svg v-if="rocketGlobal.edit" class="ml-5 icon cp red vm"  @click="DELETE_COMPS_GROUP(index)">
+        <use xlink:href="#file-deletion"></use>
+      </svg>
+    </span>
+    <a class="rk-dashboard-group-add" v-clickout="handleHide" v-if="rocketGlobal.edit">
+      <svg class="icon vm" @click="show=!show">
+        <use xlink:href="#todo-add"></use>
+      </svg>
+      <div class="rk-dashboard-group-add-box" v-if="show">
+        <div class="mb-10 vm">Create Group</div>
+        <div class="sm grey mb-5 mr-10">Group Type</div>
+        <select v-model="type" class="rk-dashboard-group-sel mb-5 long">
+          <option value="service">Service</option>
+          <option value="proxy">Proxy</option>
+          <option value="database">Database</option>
+        </select>
+        <div class="sm grey  mb-5 mr-10">Group Name</div>
+        <input class="mb-10 rk-dashboard-group-input" type="text" v-model="name">
+        <a class="rk-btn r vm long tc" @click="handleCreate">Confirm</a>
+      </div>
+    </a>
+  </nav>
+</template>
+
+<script lang="ts">
+import Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
+import { Mutation, Action } from 'vuex-class';
+
+@Component({})
+export default class ToolGroup extends Vue {
+  @Prop() private rocketGlobal: any;
+  @Prop() private rocketComps: any;
+  @Mutation('DELETE_COMPS_GROUP') private DELETE_COMPS_GROUP: any;
+  @Mutation('ADD_COMPS_GROUP') private ADD_COMPS_GROUP: any;
+  @Action('MIXHANDLE_CHANGE_GROUP') private MIXHANDLE_CHANGE_GROUP: any;
+  private name: string = '';
+  private type: string = 'service';
+  private show: boolean = false;
+  private handleHide() {
+    this.name = '';
+    this.type = 'service';
+    this.show = false;
+  }
+  private handleCreate() {
+    this.ADD_COMPS_GROUP({name: this.name, type: this.type});
+    this.handleHide();
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.rk-dashboard-group{
+  border-bottom:1px solid #252a2f;
+  background-color: #333840;
+  padding: 10px 15px;
+  color: #eee;
+}
+.rk-dashboard-group-sel{
+  outline: none;
+  border: 0;
+}
+.rk-dashboard-group-add{
+  position: relative;
+}
+.rk-dashboard-group-add-box{
+  position: absolute;
+  left: -10px;
+  top: 35px;
+  padding: 10px 5px;
+  z-index: 2;
+  border-radius: 4px;
+  color: #eee;
+  background-color: #252a2f;
+  box-shadow: 0 3px 6px 0 rgba(0,0,0,.1), 0 1px 3px 0 rgba(0,0,0,.08);
+}
+.rk-dashboard-group-add-box:after {
+	bottom: 100%;
+	left: 10px;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(136, 183, 213, 0);
+	border-bottom-color: #252a2f;
+	border-width: 8px;
+	margin-left: 0px;
+}
+.rk-dashboard-group-input{
+  border: 0;
+  outline: 0;
+  padding: 1px 8px;
+  border-radius: 4px;
+}
+.rk-dashboard-group-i{
+  display: inline-block;
+  padding: 4px 13px 4px 15px;
+  border-radius: 4px;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+  will-change: border-color,color;
+  transition: border-color .3s, color .3s;
+  &.active::before{
+    content: '';
+    position: absolute;
+    display: inline-block;
+    width: 5px;
+    height: 10px;
+    border-radius: 4px;
+    background-color: #448dfe;
+    top: 9px;
+    left: 4px;
+  }
+}
+</style>

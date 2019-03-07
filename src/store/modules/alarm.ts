@@ -1,27 +1,26 @@
 import { Commit, ActionTree } from 'vuex';
-import { getAlarm } from '@/api/alarm';
 import * as types from '../mutation-types';
+import { AxiosResponse } from 'axios';
+import graph from '@/graph';
 
 export interface AlarmParams {
-  paging:Number;
-  type:String;
+  paging: number;
+  type: string;
 }
 
 export interface Alarm {
-  causeType: String;
-  content: String;
-  key: String;
-  startTime: String;
-  title: String;
+  message: string;
+  key: string;
+  startTime: string;
 }
 
 export interface State {
-  alarmList: Alarm[];
-  total: Number;
+  alarmService: Alarm[];
+  total: number;
 }
 
 const initState: State = {
-  alarmList: [],
+  alarmService: [],
   total: 0,
 };
 
@@ -32,26 +31,29 @@ const getters = {
 // mutations
 const mutations = {
   [types.SET_ALARM](state: State, data: Alarm[]) {
-    state.alarmList = data;
+    state.alarmService = data;
   },
-  [types.SET_ALARM_TOTAL](state: State, total:Number) {
+  [types.SET_ALARM_TOTAL](state: State, total: number) {
     state.total = total;
   },
   [types.CLEAR_ALARM](state: State) {
-    state.alarmList = [];
+    state.alarmService = [];
   },
 };
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_ALARM(context: { commit: Commit; state: State, rootState: any }, params:AlarmParams) {
-    const { paging, type } = params;
-    return getAlarm(context.rootState.global.duration, type, paging).then((res) => {
-      context.commit(types.SET_ALARM, res.data.data.alarmList.items);
-      context.commit(types.SET_ALARM_TOTAL, res.data.data.alarmList.total);
-    });
+  GET_ALARM(context: { commit: Commit; state: State}, params: AlarmParams) {
+    // const { paging, type } = params;
+    return graph
+      .query('queryAlarms')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_ALARM, res.data.data.getAlarm.items);
+        context.commit(types.SET_ALARM_TOTAL, res.data.data.getAlarm.total);
+      });
   },
-  CLEAR_ALARM(context: { commit: Commit; state: State, rootState: any }) {
+  CLEAR_ALARM(context: { commit: Commit; state: State }) {
     context.commit(types.CLEAR_ALARM);
   },
 };

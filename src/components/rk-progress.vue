@@ -9,22 +9,20 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
 @Component({})
-export default class RkChartBox extends Vue {
+export default class RkProgress extends Vue {
   @Prop({
-    type: Number,
     default: 0,
-  }) precent: Number;
+  }) public precent!: number;
   @Prop({
-    type: String,
-    default: '#72a5fd',
-  }) color: String;
+    default: '#3fb1e3',
+  }) public color!: string;
 }
 </script>
 <style lang="scss" scoped>
 .rk-progress{
-  height: 3px;
+  height: 4px;
   border-radius: 2px;
-  background-color: #eaeaeb;
+  background-color: rgba(196, 200, 225, 0.3);
 }
 .rk-progress-inner{
   height: 100%;;

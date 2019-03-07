@@ -1,21 +1,28 @@
+/**
+ * pagement
+ * @param {
+ *   currentPage: Number
+ *   currentSize: Number
+ *   total      : Number
+ *   name       : String (optional)
+ * }}
+ */
 <template>
-<span class="micro-page">
-  <span class="dao-btn-group">
-    <button class="rk-page-btn mr5" @click="pre"
-    :disabled="this.current == 1">
-      <Icon type="ios-arrow-back" />
-    </button>
-    <button class="rk-page-btn" @click="next"
-    :disabled="total=== 0 || this.current == Math.ceil(this.total / this.currentSize)">
-      <Icon type="ios-arrow-forward" />
-    </button>
-  </span><span class="micro-page-info"><span v-if="total">{{currentPage===1?1:((currentPage-1)*currentSize+1)}} -
-    {{last}}</span> Total {{total}} {{name}}</span>
-</span>
+  <span class="rk-page flex-h">
+    <svg class="icon cp mr-5" @click="pre">
+      <use xlink:href="#chevron-left"></use>
+    </svg>
+    <input class="rk-page-input tc mr-5" type="text" v-model="currentPage">
+    <span class="mr-5">/</span>
+    <span class="mr-5">{{Math.ceil(this.total / this.currentSize)}}</span>
+    <svg class="icon cp" @click="next">
+      <use xlink:href="#chevron-right"></use>
+    </svg>
+  </span>
 </template>
-<script lang="js">
+<script lang="js">      // tslint:disable
 export default {
-  name: 'MicroPage',
+  name: 'RkPage',
   props: {
     name: {
       type: String,
@@ -53,9 +60,6 @@ export default {
   beforeMount() {
     this.current = this.currentPage;
   },
-  mounted() {
-    this.$emit('changePage', this.current);
-  },
   methods: {
     next() {
       if (this.current !== Math.ceil(this.total / this.currentSize)) {
@@ -73,33 +77,22 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.micro-page .dao-btn{
-  padding: 8px;
-  fill: #3d444f;
-  &:disabled{
-    fill: #ccd1d9;
+.rk-page{
+  display: inline-flex;
+  .icon{
+    padding: 3px;
+    opacity: 0.5;
+    &:hover{
+      opacity: 1;
+      color: #448dfe;
+    }
   }
-  .icon{fill:inherit;}
 }
-.micro-page-info{
-  margin-left: 10px;
-  color: #9ba3af;
-  vertical-align: middle;
-}
-.rk-page-btn{
-  cursor: pointer;
+.rk-page-input{
+  width: 40px;
+  outline: 0;
+  border-style: unset;
   border-radius: 4px;
-  background-color: #5487ed;
-  border: 0;
-  color: #fff;
-  outline: none;
-  padding: 0px .5em;
-  height: 23px;
-  vertical-align: bottom;
-  -webkit-transition: background-color .3s;
-  transition: background-color .3s;
-  &:hover {
-    background-color: #6296ff;
-  }
+  border: 1px solid #c1c5ca55;
 }
 </style>

@@ -1,31 +1,30 @@
 <template>
   <div>
     <div class="rk-sidebox-backdrop" v-show="show" @click="handleHide"></div>
-    <aside class="rk-sidebox" :style="show?`width:${width};right:0`:`width:${width};right:-${width}`">
-      <div class="clear">
-        <h3 class="rk-sidebox-title l mr15">{{this.title}}</h3>
+    <aside class="rk-sidebox" :style="show?`width:${width};left:0`:`width:${width};left:-${width}`">
+      <h3 class="rk-sidebox-title">{{this.title}}
         <div class="r rk-sidebox-close" @click="handleHide">
-          <Icon type="md-close"/>
+          <svg class="icon">
+            <use xlink:href="#close"></use>
+          </svg>
         </div>
-        <div class="mb10">{{this.notice}}</div>
+      </h3>
+      <div class="rk-sidebox-inner">
+        <slot/>
       </div>
-      <slot/>
     </aside>
   </div>
 </template>
-<script lang="ts">
+<script lang="js">      // tslint:disable
 export default {
-  name: 'rkSidebox',
+  name: 'RkSidebox',
   props: {
     show: {},
     title: {
       default: '',
     },
-    notice: {
-      default: '',
-    },
     width: {
-      default: '648px',
+      default: '550px',
     },
   },
   methods: {
@@ -39,45 +38,44 @@ export default {
 <style lang="scss">
 .rk-sidebox-backdrop{
   position: fixed;
-  top: 0;
+  top: 50px;
   left: 0;
   bottom: 0;
   right: 0;
-  background-color: rgba(31, 33, 38, 0.3);
+  background-color: rgba(31, 33, 38, 0.2);
   z-index: 199;
 }
 .rk-sidebox{
   overflow-y: auto;
-  will-change: right;
-  transition:right .3s;
+  will-change: left;
+  transition:left .3s;
   position: fixed;
   right: 0;
-  top: 52px;
+  top: 50px;
   bottom: 0;
-  z-index: 999999999;
-  padding: 25px 20px 20px;
+  z-index: 200;
   background-color: #fff;
-  border: solid 1px #ccd1d9;
+}
+.rk-sidebox-inner{
+  padding: 35px 20px 20px;
 }
 .rk-sidebox-title {
-  margin-bottom: 20px;
+  font-size: 16px;
+  position: absolute;
+  width: 100%;
+  padding: 0 20px;
   line-height: 20px;
-  &::before{
-    content:"";
-    display: block;
-    float: left;
-    width:3px;
-    height: 14px;
-    margin-top: 3px;
-    background-color: #595f69;
-    margin-right:8px;
-  }
 }
 .rk-sidebox-close{
   cursor: pointer;
-  color: #217ef2;
-  .close-btn{
-    font-weight: normal;
+  color: #D8D8D8;
+  transition: color .3s;
+  .icon{
+    width: 18px;
+    height: 20px;
+  }
+  &:hover{
+    color: #3D92FF;
   }
 }
 </style>

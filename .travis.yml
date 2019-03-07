@@ -1,0 +1,15 @@
+language: node_js
+
+node_js:
+  - "8"
+
+env:
+  matrix:
+    - TEST_TYPE=build
+
+
+install:
+  - npm install
+
+script:
+  - npm run build

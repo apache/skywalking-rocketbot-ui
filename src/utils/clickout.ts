@@ -1,11 +1,10 @@
-/* eslint-disable */
 export default {
-  bind(el, binding) {
-    function documentHandler(e) {
+  bind(el: any, binding: any) {
+    function documentHandler(e: any) {
       if (binding.arg) {
         const nodes = document.getElementsByClassName(binding.arg);
-        for (let i = 0; i < nodes.length; i += 1) {
-          if (nodes[i].contains(e.target)) {
+        for (const iterator of nodes) {
+          if (iterator.contains(e.target)) {
             return false;
           }
         }
@@ -21,7 +20,7 @@ export default {
     el.__vueClickOutside__ = documentHandler;
     document.addEventListener('click', documentHandler);
   },
-  unbind(el) {
+  unbind(el: any) {
     document.removeEventListener('click', el.__vueClickOutside__);
     delete el.__vueClickOutside__;
   },

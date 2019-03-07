@@ -1,40 +1,56 @@
+// comp
+export const SET_CURRENT_GROUP = 'SET_CURRENT_GROUP';
+export const SET_CURRENT_COMPS = 'SET_CURRENT_COMPS';
+export const ADD_COMPS_GROUP = 'ADD_COMPS_GROUP';
+export const ADD_COMPS_TREE = 'ADD_COMPS_TREE';
+export const DELETE_COMPS_GROUP = 'DELETE_COMPS_GROUP';
+export const DELETE_COMPS_TREE = 'DELETE_COMPS_TREE';
+export const ADD_COMP = 'ADD_COMP';
+export const DELETE_COMP = 'DELETE_COMP';
+export const SWICH_COMP = 'SWICH_COMP';
+export const SET_COMPS_TREE = 'SET_COMPS_TREE';
+export const SWICH_CURRENTCOMP = 'SWICH_CURRENTCOMP';
+export const EDIT_COMP = 'EDIT_COMP';
+export const SET_GROUP_QUERY = 'SET_GROUP_QUERY';
+
 // global
 export const SET_DURATION = 'SET_DURATION';
 export const SET_EVENTS = 'SET_EVENTS';
-export const CLEAR_EVENTS = 'CLEAR_EVENTS';
 export const RUN_EVENTS = 'RUN_EVENTS';
 export const SET_CHARTS = 'SET_CHARTS';
 export const CLEAR_CHARTS = 'CLEAR_CHARTS';
+export const SET_EDIT = 'SET_EDIT';
 
 // dashboard
-export const SET_APPLICATIONS = 'SET_APPLICATIONS';
+export const SET_GLOBAL = 'SET_GLOBAL';
+export const CLEAR_GLOBAL = 'CLEAR_GLOBAL';
+export const SET_SERVICES = 'SET_SERVICES';
+export const SET_DATABASES = 'SET_DATABASES';
+export const SET_DATABASE_INFO = 'SET_DATABASE_INFO';
+export const SET_CURRENT_DATABASE = 'SET_CURRENT_DATABASE';
+export const SET_CURRENT_SERVICE = 'SET_CURRENT_SERVICE';
+export const SET_SERVICE_INFO = 'SET_SERVICE_INFO';
 export const SET_ENDPOINTS = 'SET_ENDPOINTS';
-export const SET_SERVERS = 'SET_SERVERS';
-export const SET_APPLICATION = 'SET_APPLICATION';
-export const SET_ENDPOINT = 'SET_ENDPOINT';
-export const SET_SERVER = 'SET_SERVER';
-export const SET_SLOWENDPOINT = 'SET_SLOWENDPOINT';
-export const SET_SERVERS_THROUGHPUT = 'SET_SERVERS_THROUGHPUT';
-
+export const SET_CURRENT_ENDPOINT = 'SET_CURRENT_ENDPOINT';
 export const SET_ENDPOINT_INFO = 'SET_ENDPOINT_INFO';
-export const SET_APPLICATION_INFO = 'SET_APPLICATION_INFO';
-export const SET_SERVER_INFO = 'SET_SERVER_INFO';
-export const SET_SERVER_DETAIL = 'SET_SERVER_DETAIL';
+export const SET_INSTANCES = 'SET_INSTANCES';
+export const SET_CURRENT_INSTANCE = 'SET_CURRENT_INSTANCE';
+export const SET_INSTANCE_INFO = 'SET_INSTANCE_INFO';
 
-export const CLEAR_DASHBOARD = 'CLEAR_DASHBOARD';
 // alarm
 export const SET_ALARM = 'SET_ALARM';
 export const SET_ALARM_TOTAL = 'SET_ALARM_TOTAL';
 export const CLEAR_ALARM = 'CLEAR_ALARM';
 
 // trace
-export const SET_TRACE = 'SET_TRACE';
-export const SET_TRACE_TOTAL = 'SET_TRACE_TOTAL';
-export const SET_SPAN = 'SET_SPAN';
-export const CLEAR_TRACE = 'CLEAR_TRACE';
+export const SET_TRACELIST = 'SET_TRACELIST';
+export const SET_TRACELIST_TOTAL = 'SET_TRACELIST_TOTAL';
+export const SET_TRACE_SPANS = 'SET_TRACE_SPANS';
+export const SET_CURRENT_TRACE = 'SET_CURRENT_TRACE';
+export const SET_TRACE_FORM = 'SET_TRACE_FORM';
+export const SET_TRACE_FORM_ITEM = 'SET_TRACE_FORM_ITEM';
 
 // topo
 export const SET_TOPO = 'SET_TOPO';
-export const SET_TOPO_CURRENT = 'SET_TOPO_CURRENT';
-export const SET_CLUSTER = 'SET_CLUSTER';
-export const CLEAR_TOPO = 'CLEAR_TOPO';
+export const SET_NODE = 'SET_NODE';
+
