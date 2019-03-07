@@ -1,12 +1,12 @@
 <template>
 <rk-panel :title="title">
-  <div class="rk-chart-slow clear scroll_hide" style="overflow:auto;">
-    <div class="rk-chart-slow-i" v-for="(i, index) in stateDashboard[typeArr[0]][typeArr[1]]" :key="index">
+  <div class="rk-chart-trace clear scroll_hide" style="overflow:auto;">
+    <div class="rk-chart-trace-i" v-for="i in stateDashboard[typeArr[0]][typeArr[1]]" :key="i.key">
       <div class="mb-5 ell" v-tooltip:top.ellipsis="i.label || ''">
-        <span class="calls sm mr-10">{{i.value}} ms</span>
-        <span class="cp link-hover"  @click="appChange(i)">{{i.label}}</span>
+        <span class="calls sm mr-10">{{i.value}} cpm</span>
+        <span class="cp link-hover" @click="appChange(i)">{{i.label}}</span>
       </div>
-      <RkProgress :precent="i.value/maxValue*100" color="#bf99f8"/>
+      <RkProgress :precent="i.value/maxValue*100"/>
     </div>
   </div>
 </rk-panel>
@@ -17,7 +17,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
 @Component({})
-export default class RkTopSlow extends Vue {
+export default class RkTopThroughput extends Vue {
   @Prop() private title!: string;
   @Prop() private type!: string;
   @Prop() private stateDashboard!: any;
@@ -28,13 +28,13 @@ export default class RkTopSlow extends Vue {
     return this.type.split('.');
   }
   get maxValue() {
-    const temp: number[] = this.stateDashboard[this.typeArr[0]][this.typeArr[1]].map((i: any) => i.value);
+    const temp: number[] = this.stateDashboard[this.typeArr[0]][this.typeArr[1]].map((i: any) => i.duration);
     return Math.max.apply(null, temp);
   }
 }
 </script>
 <style lang="scss">
-.rk-chart-slow{
+.rk-chart-trace{
   height: 215px;
   .calls{
     padding: 0 5px;
@@ -44,7 +44,7 @@ export default class RkTopSlow extends Vue {
     border-radius: 4px;
   }
 }
-.rk-chart-slow-i{
+.rk-chart-trace-i{
   padding: 6px 0;
 }
 </style>

@@ -82,7 +82,16 @@ const actions: ActionTree<any, any> = {
     } else if ( params.compType === 'database') {
       context.dispatch('GET_DATABASES', {duration: params.duration})
       .then(() => context.dispatch('GET_DATABASE',
-        {duration: params.duration, serviceId: context.state.currentDatabase.key, keyword: ''}),
+        {
+          duration: params.duration,
+          databaseId: context.state.currentDatabase.key,
+          condition: {
+            serviceId: context.state.currentDatabase.key,
+            metricName: 'top_n_database_statement',
+            topN: 20,
+            order: 'DES',
+            duration: params.duration,
+      }}),
       );
     }
   },

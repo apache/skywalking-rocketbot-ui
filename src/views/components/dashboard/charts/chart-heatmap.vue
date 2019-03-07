@@ -9,7 +9,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import moment from 'dayjs';
 @Component
-export default class Response extends Vue {
+export default class Heatmap extends Vue {
   @Prop() private title!: string;
   @Prop() private type!: string;
   @Prop() private stateDashboard!: any;

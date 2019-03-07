@@ -54,6 +54,8 @@ export default class Footer extends Vue {
   }
   private setEdit() {
     this.SET_EDIT(this.rocketbotGlobal.edit ? false : true);
+    const dashboardInner: any = this.$root.$children[0].$children[0].$children[1];
+    dashboardInner.reload();
   }
   private beforeMount() {
     this.time = [this.rocketbotGlobal.duration.start, this.rocketbotGlobal.duration.end];

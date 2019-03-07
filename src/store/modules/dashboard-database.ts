@@ -20,9 +20,8 @@ const initState: State = {
     p99: [],
     getResponseTimeTrend: [],
     getSLATrend: [],
-    getInstanceThroughput: [],
-    getSlowEndpoint: [],
     getThroughputTrend: [],
+    getTopNRecords: [],
   },
 };
 
@@ -49,9 +48,8 @@ const mutations: MutationTree<State> = {
     state.databaseInfo.p99 = data.getP99.values;
     state.databaseInfo.getResponseTimeTrend = data.getResponseTimeTrend.values;
     state.databaseInfo.getSLATrend = data.getSLATrend.values;
-    state.databaseInfo.getInstanceThroughput = data.getServiceInstanceThroughput;
-    state.databaseInfo.getSlowEndpoint = data.getSlowEndpoint;
     state.databaseInfo.getThroughputTrend = data.getThroughputTrend.values;
+    state.databaseInfo.getTopNRecords = data.getTopNRecords;
   },
 };
 
@@ -67,7 +65,7 @@ const actions: ActionTree<State, any> = {
   },
   GET_DATABASE(context: { commit: Commit, rootState: any }, params: any) {
     return graph
-    .query('queryDashBoardService')
+    .query('queryDashBoardDatabase')
     .params(params)
     .then((res: AxiosResponse) => {
       context.commit(types.SET_DATABASE_INFO, res.data.data);

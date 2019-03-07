@@ -1,6 +1,6 @@
 <template>
+  <rk-panel :title="title">
   <div class="rk-chart-brief">
-    <div class="grey mb-10">{{title}}</div>
     <div class="rk-chart-brief-i">
       <svg class="icon lg mr-15 vm">
         <use :xlink:href="`#package`"></use>
@@ -37,6 +37,7 @@
       <span class="r b">{{this.stateDashboard[this.type].getGlobalBrief.numOfMQ}}</span>
     </div>
   </div>
+  </rk-panel>
 </template>
 
 <script lang="ts">
@@ -44,7 +45,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import moment from 'dayjs';
 @Component
-export default class Response extends Vue {
+export default class Brief extends Vue {
   @Prop() private title!: string;
   @Prop() private type!: string;
   @Prop() private stateDashboard!: any;
@@ -52,8 +53,7 @@ export default class Response extends Vue {
 </script>
 <style lang="scss">
 .rk-chart-brief{
-  height: 258px;
-  padding: 0 10px 10px;
+  height: 215px;
 }
 .rk-chart-brief-i{
   padding: 10px 0px;

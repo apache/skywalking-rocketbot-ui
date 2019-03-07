@@ -3,7 +3,7 @@
     <ToolGroup :rocketGlobal="rocketGlobal" :rocketComps="rocketComps"/>
     <ToolBar  :compType="compType" :durationTime="durationTime"  :stateDashboard='stateDashboard'/>
     <ToolNav :rocketGlobal="rocketGlobal" :rocketComps="rocketComps"/>
-    <DashboardInner :rocketGlobal="rocketGlobal" :stateDashboard='stateDashboard' :rocketComps="rocketComps"/>
+    <DashboardInner  v-if="isRouterAlive" :rocketGlobal="rocketGlobal" :stateDashboard='stateDashboard' :rocketComps="rocketComps"/>
     <DashboardComp v-if="rocketGlobal.edit" :compType="compType" :rocketComps="rocketComps"/>
   </div>
 </template>
@@ -37,6 +37,11 @@ export default class Dashboard extends Vue {
   @Action('rocketDashboard/GET_GLOBAL') private GET_GLOBAL: any;
   @Action('rocketDashboard/MIXHANDLE_GET_DASHBOARD') private MIXHANDLE_GET_DASHBOARD: any;
   @Getter('durationTime') private durationTime: any;
+  private isRouterAlive: boolean = true;
+  public reload(): void {
+    this.isRouterAlive = false;
+    this.$nextTick(() => { this.isRouterAlive = true; });
+  }
   private get compType() {
     return this.rocketComps.tree[this.rocketComps.group].type;
   }

@@ -35,3 +35,4 @@ import './svg/retry.svg';
 import './svg/soft-unwrap.svg';
 import './svg/token.svg';
 import './svg/warning.svg';
+import './svg/review-list.svg';

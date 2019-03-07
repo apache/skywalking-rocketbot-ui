@@ -1,6 +1,6 @@
 <template>
   <div class="rk-box" :style="width?`width: ${width};`:''">
-    <div class="rk-box-title">{{title}}</div>
+    <div class="rk-box-title ell">{{title}}</div>
     <div class="rk-box-container"><slot></slot></div>
   </div>
 </template>
