@@ -1,8 +1,8 @@
-<p align="center"><img src="document/assets/logo.png"  width="250"></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/19775780/53944427-4f6c2580-40fa-11e9-95f3-2b4ce1f2f8f3.png"  width="250"></p>
 <h1 align="center"></h1>
 
 <p align="center">
-<a><img src="https://img.shields.io/badge/version-1.0.2-blue.svg?longCache=true&style=popout-square"></a>
+<a><img src="https://img.shields.io/badge/version-1.0.4-blue.svg?longCache=true&style=popout-square"></a>
 <a href="https://github.com/TinyAllen/rocketbot/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?longCache=true&style=popout-square"></a>
 <a href="https://github.com/TinyAllen/rocketbot/blob/master/LICENSE"><img src="https://img.shields.io/badge/support by-Daocloud Lab-brightgreen.svg?longCache=true&style=popout-square"></a>
 <a><img src="https://img.shields.io/badge/base-Skywalking-red.svg?longCache=true&style=popout-square"></a>
@@ -14,13 +14,20 @@
 ## Screenshots
 **Dashboard**
 
-![](document/assets/demo1.png)
+![](https://user-images.githubusercontent.com/19775780/53947142-22bb0c80-4100-11e9-82b5-6efe6d38bc0a.png)
+
+![](https://user-images.githubusercontent.com/19775780/53947161-28185700-4100-11e9-96ef-a4852d6b60ad.png)
+
 **Topology**
 
-![](document/assets/demo2.png)
+![](https://user-images.githubusercontent.com/19775780/53947172-2babde00-4100-11e9-8213-d6d4f5992de4.png)
 **Trace**
 
-![](document/assets/demo3.png)
+![](https://user-images.githubusercontent.com/19775780/53947182-2e0e3800-4100-11e9-96e7-1c7eed437ed2.png)
+
+**Alarm**
+
+![](https://user-images.githubusercontent.com/19775780/53947184-2fd7fb80-4100-11e9-90b8-205c307a6a55.png)
 
 ## Live Demo
 **[Demo](http://rocketbot.daocloud.io/)**
@@ -28,11 +35,6 @@
 | Username        | Password           | 
 | ------------- |:-------------:| 
 | admin     | admin | 
-
-## Document
-
-Please read **[Docs](https://github.com/TinyAllen/rocketbot/blob/master/Document.md
-)**
 
 ## Development
 
