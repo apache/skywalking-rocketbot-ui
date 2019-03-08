@@ -100,18 +100,11 @@ docker run -p 8080:80 -d -e SKYWALKING_URL=127.0.0.1:1234,127.0.0.1:1235 rocketb
 
 The default UI address is `http://localhost:8080`.
 
-## Nginx config
+### Replace default UI
 
-### Reserve proxy
+![41401552022848_ pic_hd](https://user-images.githubusercontent.com/19775780/54009539-24d7a680-41a6-11e9-9ee1-d70c20042ced.jpg)
 
-```
-  location /api {
-    rewrite ^/(.*) /graphql break;
-    proxy_pass SKYWALKING_URL;
-  }
-```
-
-**Important**: If you want to deploy the application by yourself，**you need to rewirte the URL path into ```/graphql``` before reserve proxy**.
+Change the submodule url into ``` https://github.com/TinyAllen/rocketbot ```
 
 ## Contributing to RocketBot
 
