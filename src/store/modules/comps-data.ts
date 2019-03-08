@@ -49,6 +49,8 @@ const initState: State = {
       comp: 'ChartHeap', title: 'Instance Heap MB' , width: 3 },
       { o: 'ServiceInstance', name: 'Instance NonHeap',
       comp: 'ChartNonHeap', title: 'Instance Non-Heap MB' , width: 3 },
+      { o: 'ServiceInstance', name: 'Envoy Info',
+      comp: 'ChartEnvoy', title: 'Envoy Info', type: 'instanceInfo', width: 3 },
     ],
     proxy: [],
     database: [

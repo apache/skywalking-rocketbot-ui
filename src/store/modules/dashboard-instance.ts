@@ -25,6 +25,9 @@ const initState: State = {
     oldGCTime: [],
     youngGCCount: [],
     youngGCTime: [],
+    envoyHeap: [],
+    envoyTotal: [],
+    envoyParent: [],
   },
 };
 
@@ -56,6 +59,9 @@ const mutations: MutationTree<State> = {
     state.instanceInfo.oldGCTime = data.oldGCTime.values;
     state.instanceInfo.youngGCCount = data.youngGCCount.values;
     state.instanceInfo.youngGCTime = data.youngGCTime.values;
+    state.instanceInfo.envoyHeap = data.envoyHeap ? data.envoyHeap.values : [];
+    state.instanceInfo.envoyParent =  data.envoyParent ? data.envoyParent.values : [];
+    state.instanceInfo.envoyTotal =  data.envoyTotal ? data.envoyTotal.values : [];
   },
 };
 

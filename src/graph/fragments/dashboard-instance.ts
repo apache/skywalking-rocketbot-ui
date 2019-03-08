@@ -97,4 +97,28 @@ export const DashBoardInstance = {
         value
       }
     }
+    envoyHeap: getLinearIntValues(metric: {
+      name: "envoy_heap_memory_max_used"
+      id: $serviceInstanceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    envoyTotal: getLinearIntValues(metric: {
+      name: "envoy_total_connections_used"
+      id: $serviceInstanceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    envoyParent: getLinearIntValues(metric: {
+      name: "envoy_parent_connections_used"
+      id: $serviceInstanceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
   `};

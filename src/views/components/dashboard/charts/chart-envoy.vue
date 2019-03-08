@@ -9,13 +9,15 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
 @Component
-export default class Nonheap extends Vue {
+export default class Envoy extends Vue {
   @Prop() private title!: string;
+  @Prop() private type!: string;
   @Prop() private stateDashboard!: any;
   @Prop() private intervalTime!: any;
   get responseConfig() {
     return {
       color: [
+        '#3f96e3',
         '#a3a0e6',
         '#a0b1e6',
       ],
@@ -58,27 +60,37 @@ export default class Nonheap extends Vue {
       },
       series: [
         {
-          data: this.stateDashboard.instanceInfo.noheap.map((i: any, index: number) => [
+          data: this.stateDashboard.instanceInfo.envoyHeap.map((i: any, index: number) => [
             this.intervalTime[index],
             (i.value / 1048576).toFixed(2),
           ]),
-          name: this.stateDashboard.instanceInfo.noheap.length ? 'Value' : null,
+          name: this.stateDashboard[this.type].envoyHeap.length ? 'Heap' : null,
           type: 'line',
           symbol: 'none',
-          areaStyle: {},
           lineStyle: {
             width: 1.5,
           },
         },
-        {
-          data: this.stateDashboard.instanceInfo.maxNoheap.map((i: any, index: number) => [
+         {
+          data: this.stateDashboard.instanceInfo.envoyParent.map((i: any, index: number) => [
             this.intervalTime[index],
-            ((i.value - this.stateDashboard.instanceInfo.maxNoheap[index].value) / 1048576).toFixed(2),
+            (i.value / 1048576).toFixed(2),
           ]),
-          name: this.stateDashboard.instanceInfo.noheap.length ? 'Free' : null,
+          name: this.stateDashboard[this.type].envoyParent.length ? 'Parent' : null,
           type: 'line',
           symbol: 'none',
-          areaStyle: {},
+          lineStyle: {
+            width: 1.5,
+          },
+        },
+         {
+          data: this.stateDashboard.instanceInfo.envoyTotal.map((i: any, index: number) => [
+            this.intervalTime[index],
+            (i.value / 1048576).toFixed(2),
+          ]),
+          name: this.stateDashboard[this.type].envoyTotal.length ? 'Total' : null,
+          type: 'line',
+          symbol: 'none',
           lineStyle: {
             width: 1.5,
           },
