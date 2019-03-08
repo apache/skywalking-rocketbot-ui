@@ -9,7 +9,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
 @Component
-export default class Envoy extends Vue {
+export default class EnvoyCollections extends Vue {
   @Prop() private title!: string;
   @Prop() private type!: string;
   @Prop() private stateDashboard!: any;
@@ -17,7 +17,6 @@ export default class Envoy extends Vue {
   get responseConfig() {
     return {
       color: [
-        '#3f96e3',
         '#a3a0e6',
         '#a0b1e6',
       ],
@@ -59,25 +58,14 @@ export default class Envoy extends Vue {
         axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
       series: [
-        {
-          data: this.stateDashboard.instanceInfo.envoyHeap.map((i: any, index: number) => [
-            this.intervalTime[index],
-            (i.value / 1048576).toFixed(2),
-          ]),
-          name: this.stateDashboard[this.type].envoyHeap.length ? 'Heap' : null,
-          type: 'line',
-          symbol: 'none',
-          lineStyle: {
-            width: 1.5,
-          },
-        },
          {
           data: this.stateDashboard.instanceInfo.envoyParent.map((i: any, index: number) => [
             this.intervalTime[index],
-            (i.value / 1048576).toFixed(2),
+            i.value,
           ]),
           name: this.stateDashboard[this.type].envoyParent.length ? 'Parent' : null,
           type: 'line',
+          areaStyle: {},
           symbol: 'none',
           lineStyle: {
             width: 1.5,
@@ -86,10 +74,11 @@ export default class Envoy extends Vue {
          {
           data: this.stateDashboard.instanceInfo.envoyTotal.map((i: any, index: number) => [
             this.intervalTime[index],
-            (i.value / 1048576).toFixed(2),
+            i.value,
           ]),
           name: this.stateDashboard[this.type].envoyTotal.length ? 'Total' : null,
           type: 'line',
+          areaStyle: {},
           symbol: 'none',
           lineStyle: {
             width: 1.5,

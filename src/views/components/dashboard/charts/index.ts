@@ -13,7 +13,8 @@ import ChartGC from './chart-gc.vue';
 import ChartHeap from './chart-heap.vue';
 import ChartNonHeap from './chart-nonheap.vue';
 import ChartTrace from './chart-trace.vue';
-import ChartEnvoy from './chart-envoy.vue';
+import ChartEnvoyCollections from './chart-envoy-collections.vue';
+import ChartEnvoyMemory from './chart-envoy-memory.vue';
 
 export default {
   ChartEdit,
@@ -25,7 +26,8 @@ export default {
   ChartTrace,
   ChartBrief,
   ChartHeatmap,
-  ChartEnvoy,
+  ChartEnvoyCollections,
+  ChartEnvoyMemory,
   ChartInstance,
   ChartSlow,
   ChartCpu,
