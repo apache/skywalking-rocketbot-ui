@@ -56,10 +56,10 @@ const actions: ActionTree<any, any> = {
   ...dashboardEndpoint.actions,
   ...dashboardInstance.actions,
   SET_CURRENT_STATE(context: { commit: Commit }, params: CompQuery) {
-    if (params.service) { context.commit(types.SET_CURRENT_SERVICE, params.service); }
-    if (params.database) { context.commit(types.SET_CURRENT_DATABASE, params.database); }
-    if (params.endpoint) { context.commit(types.SET_CURRENT_ENDPOINT, params.endpoint); }
-    if (params.instance) { context.commit(types.SET_CURRENT_INSTANCE, params.instance); }
+    context.commit(types.SET_CURRENT_SERVICE, params.service ? params.service : {});
+    context.commit(types.SET_CURRENT_DATABASE, params.database ? params.database : {});
+    context.commit(types.SET_CURRENT_ENDPOINT, params.endpoint ? params.endpoint : {});
+    context.commit(types.SET_CURRENT_INSTANCE, params.instance ? params.instance : {});
   },
   MIXHANDLE_GET_DASHBOARD(context: { commit: Commit, dispatch: Dispatch, state: State, rootState: any }, params: any) {
     if ( params.compType === 'service') {

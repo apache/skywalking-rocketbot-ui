@@ -33,6 +33,7 @@ const getters = {
 const mutations: MutationTree<State> = {
   [types.SET_DATABASES](state: State, data: any) {
     state.databases = data;
+    if (!data.length) { return; }
     if (!state.currentDatabase.key && data.length) {
       state.currentDatabase = data[0];
     }

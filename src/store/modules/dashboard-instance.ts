@@ -39,6 +39,7 @@ const getters = {
 const mutations: MutationTree<State> = {
   [types.SET_INSTANCES](state: State, data: any) {
     state.instances = data;
+    if (!data.length) { return; }
     if ((!state.currentInstance.key && data.length) || state.instances.indexOf(state.currentInstance) === -1 ) {
       state.currentInstance = data[0];
     }

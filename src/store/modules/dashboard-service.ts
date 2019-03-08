@@ -34,6 +34,7 @@ const getters = {
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: any) {
     state.services = data;
+    if (!data.length) { return; }
     if (!state.currentService.key && data.length) {
       state.currentService = data[0];
     }
