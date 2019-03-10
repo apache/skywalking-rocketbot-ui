@@ -42,15 +42,17 @@ const mutations: MutationTree<State> = {
     state.currentEndpoint = endpoint;
   },
   [types.SET_ENDPOINT_INFO](state: State, data: any) {
-    state.endpointInfo.p50 = data.getP50.values;
-    state.endpointInfo.p75 = data.getP75.values;
-    state.endpointInfo.p90 = data.getP90.values;
-    state.endpointInfo.p95 = data.getP95.values;
-    state.endpointInfo.p99 = data.getP99.values;
-    state.endpointInfo.getResponseTimeTrend = data.getEndpointResponseTimeTrend.values;
-    state.endpointInfo.getSLATrend = data.getEndpointSLATrend.values;
-    state.endpointInfo.getThroughputTrend = data.getEndpointThroughputTrend.values;
-    state.endpointInfo.queryBasicTraces = data.queryBasicTraces.traces;
+    state.endpointInfo.p50 = data.getP50 ? data.getP50.values : [];
+    state.endpointInfo.p75 = data.getP75 ? data.getP75.values : [];
+    state.endpointInfo.p90 = data.getP90 ? data.getP90.values : [];
+    state.endpointInfo.p95 = data.getP95 ? data.getP95.values : [];
+    state.endpointInfo.p99 = data.getP99 ? data.getP99.values : [];
+    state.endpointInfo.getResponseTimeTrend =
+    data.getEndpointResponseTimeTrend ? data.getEndpointResponseTimeTrend.values : [];
+    state.endpointInfo.getSLATrend = data.getEndpointSLATrend ? data.getEndpointSLATrend.values : [];
+    state.endpointInfo.getThroughputTrend =
+    data.getEndpointThroughputTrend ? data.getEndpointThroughputTrend.values : [];
+    state.endpointInfo.queryBasicTraces = data.queryBasicTraces ? data.queryBasicTraces.traces : [];
   },
 };
 

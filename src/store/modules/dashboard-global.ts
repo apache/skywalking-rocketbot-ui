@@ -28,14 +28,14 @@ const getters = {
 const mutations: MutationTree<State> = {
   [types.SET_GLOBAL](state: State, data: any) {
     state.global.getGlobalBrief = data.getGlobalBrief;
-    state.global.p50 = data.getP50.values;
-    state.global.p75 = data.getP75.values;
-    state.global.p90 = data.getP90.values;
-    state.global.p95 = data.getP95.values;
-    state.global.p99 = data.getP99.values;
-    state.global.getThermodynamic = data.getThermodynamic.nodes;
-    state.global.getTopNServiceThroughput = data.getTopNServiceThroughput;
-    state.global.getTopNSlowEndpoint = data.getTopNSlowEndpoint;
+    state.global.p50 = data.getP50 ? data.getP50.values : [];
+    state.global.p75 = data.getP75 ? data.getP75.values : [];
+    state.global.p90 = data.getP90 ? data.getP90.values : [];
+    state.global.p95 = data.getP95 ? data.getP95.values : [];
+    state.global.p99 = data.getP99 ? data.getP99.values : [];
+    state.global.getThermodynamic = data.getThermodynamic ? data.getThermodynamic.nodes : [];
+    state.global.getTopNServiceThroughput = data.getTopNServiceThroughput ? data.getTopNServiceThroughput : [];
+    state.global.getTopNSlowEndpoint = data.getTopNSlowEndpoint ? data.getTopNSlowEndpoint : [];
   },
 };
 

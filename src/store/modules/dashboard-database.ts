@@ -42,15 +42,15 @@ const mutations: MutationTree<State> = {
     state.currentDatabase = service;
   },
   [types.SET_DATABASE_INFO](state: State, data: any) {
-    state.databaseInfo.p50 = data.getP50.values;
-    state.databaseInfo.p75 = data.getP75.values;
-    state.databaseInfo.p90 = data.getP90.values;
-    state.databaseInfo.p95 = data.getP95.values;
-    state.databaseInfo.p99 = data.getP99.values;
-    state.databaseInfo.getResponseTimeTrend = data.getResponseTimeTrend.values;
-    state.databaseInfo.getSLATrend = data.getSLATrend.values;
-    state.databaseInfo.getThroughputTrend = data.getThroughputTrend.values;
-    state.databaseInfo.getTopNRecords = data.getTopNRecords;
+    state.databaseInfo.p50 = data.getP50 ? data.getP50.values : [];
+    state.databaseInfo.p75 = data.getP75 ? data.getP75.values : [];
+    state.databaseInfo.p90 = data.getP90 ? data.getP90.values : [];
+    state.databaseInfo.p95 = data.getP95 ? data.getP95.values : [];
+    state.databaseInfo.p99 = data.getP99 ? data.getP99.values : [];
+    state.databaseInfo.getResponseTimeTrend = data.getResponseTimeTrend ? data.getResponseTimeTrend.values : [];
+    state.databaseInfo.getSLATrend = data.getSLATrend ? data.getSLATrend.values : [];
+    state.databaseInfo.getThroughputTrend = data.getThroughputTrend ? data.getThroughputTrend.values : [];
+    state.databaseInfo.getTopNRecords = data.getTopNRecords ? data.getTopNRecords : [];
   },
 };
 

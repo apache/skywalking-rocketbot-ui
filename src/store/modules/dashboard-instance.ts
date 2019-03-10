@@ -48,18 +48,20 @@ const mutations: MutationTree<State> = {
     state.currentInstance = instance;
   },
   [types.SET_INSTANCE_INFO](state: State, data: any) {
-    state.instanceInfo.getCPUTrend = data.getCPUTrend.values;
-    state.instanceInfo.getResponseTimeTrend = data.getServiceInstanceResponseTimeTrend.values;
-    state.instanceInfo.getSLATrend = data.getServiceInstanceSLA.values;
-    state.instanceInfo.getThroughputTrend = data.getServiceInstanceThroughputTrend.values;
-    state.instanceInfo.heap = data.heap.values;
-    state.instanceInfo.maxHeap = data.maxHeap.values;
-    state.instanceInfo.maxNoheap = data.maxNoheap.values;
-    state.instanceInfo.noheap = data.noheap.values;
-    state.instanceInfo.oldGCCount = data.oldGCCount.values;
-    state.instanceInfo.oldGCTime = data.oldGCTime.values;
-    state.instanceInfo.youngGCCount = data.youngGCCount.values;
-    state.instanceInfo.youngGCTime = data.youngGCTime.values;
+    state.instanceInfo.getCPUTrend = data.getCPUTrend ? data.getCPUTrend.values : [];
+    state.instanceInfo.getResponseTimeTrend =
+    data.getServiceInstanceResponseTimeTrend ? data.getServiceInstanceResponseTimeTrend.values : [];
+    state.instanceInfo.getSLATrend =  data.getServiceInstanceSLA ? data.getServiceInstanceSLA.values : [];
+    state.instanceInfo.getThroughputTrend =
+    data.getServiceInstanceThroughputTrend ? data.getServiceInstanceThroughputTrend.values : [];
+    state.instanceInfo.heap =  data.heap ? data.heap.values : [];
+    state.instanceInfo.maxHeap =  data.maxHeap ? data.maxHeap.values : [];
+    state.instanceInfo.maxNoheap =  data.maxNoheap ? data.maxNoheap.values : [];
+    state.instanceInfo.noheap =  data.noheap ? data.noheap.values : [];
+    state.instanceInfo.oldGCCount =  data.oldGCCount ? data.oldGCCount.values : [];
+    state.instanceInfo.oldGCTime =  data.oldGCTime ? data.oldGCTime.values : [];
+    state.instanceInfo.youngGCCount =  data.youngGCCount ? data.youngGCCount.values : [];
+    state.instanceInfo.youngGCTime =  data.youngGCTime ? data.youngGCTime.values : [];
     state.instanceInfo.envoyHeap = data.envoyHeap ? data.envoyHeap.values : [];
     state.instanceInfo.envoyParent =  data.envoyParent ? data.envoyParent.values : [];
     state.instanceInfo.envoyTotal =  data.envoyTotal ? data.envoyTotal.values : [];

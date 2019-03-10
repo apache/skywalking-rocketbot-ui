@@ -1,8 +1,8 @@
 <template>
 <div id="app">
-  <RkHeader/>
+  <RkHeader @reloadFooter="reloadFooter"/>
   <router-view></router-view>
-  <RkFooter/>
+  <RkFooter ref="footer"/>
 </div>
 </template>
 
@@ -17,5 +17,10 @@ import RkFooter from '@/components/rk-footer.vue';
   },
 })
 export default class RouterIndex extends Vue {
+  private isRouterAlive: boolean = true;
+   public reloadFooter(timeArray: Date[]): void {
+     const footer: any = this.$refs.footer;
+     footer.time = timeArray;
+  }
 }
 </script>

@@ -40,16 +40,17 @@ const mutations: MutationTree<State> = {
     }
   },
   [types.SET_SERVICE_INFO](state: State, data: any) {
-    state.serviceInfo.p50 = data.getP50.values;
-    state.serviceInfo.p75 = data.getP75.values;
-    state.serviceInfo.p90 = data.getP90.values;
-    state.serviceInfo.p95 = data.getP95.values;
-    state.serviceInfo.p99 = data.getP99.values;
-    state.serviceInfo.getResponseTimeTrend = data.getResponseTimeTrend.values;
-    state.serviceInfo.getSLATrend = data.getSLATrend.values;
-    state.serviceInfo.getInstanceThroughput = data.getServiceInstanceThroughput;
-    state.serviceInfo.getSlowEndpoint = data.getSlowEndpoint;
-    state.serviceInfo.getThroughputTrend = data.getThroughputTrend.values;
+    state.serviceInfo.p50 = data.getP50 ? data.getP50.values : [];
+    state.serviceInfo.p75 = data.getP75 ? data.getP75.values : [];
+    state.serviceInfo.p90 = data.getP90 ? data.getP90.values : [];
+    state.serviceInfo.p95 = data.getP95 ? data.getP95.values : [];
+    state.serviceInfo.p99 = data.getP99 ? data.getP99.values : [];
+    state.serviceInfo.getResponseTimeTrend = data.getResponseTimeTrend ? data.getResponseTimeTrend.values : [];
+    state.serviceInfo.getSLATrend = data.getSLATrend ? data.getSLATrend.values : [];
+    state.serviceInfo.getInstanceThroughput =
+    data.getServiceInstanceThroughput ? data.getServiceInstanceThroughput : [];
+    state.serviceInfo.getSlowEndpoint = data.getSlowEndpoint ? data.getSlowEndpoint : [];
+    state.serviceInfo.getThroughputTrend = data.getThroughputTrend ? data.getThroughputTrend.values : [];
   },
   [types.SET_CURRENT_SERVICE](state: State, service: any) {
     state.currentService = service;

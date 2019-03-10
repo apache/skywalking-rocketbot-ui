@@ -70,7 +70,13 @@ export default class Header extends Vue {
   private show: boolean = false;
   private handleReload() {
     const gap = this.rocketbotGlobal.duration.end.getTime() - this.rocketbotGlobal.duration.start.getTime();
-    this.SET_DURATION(timeFormat([new Date(new Date().getTime() - gap), new Date()]));
+    const w = window as any;
+    const utc = w.localStorage.getItem('utc');
+    const utcCopy: any = -(new Date().getTimezoneOffset() / 60);
+    this.$emit('reloadFooter', [
+      new Date(new Date().getTime() - gap + (utc - utcCopy) * 3600000),
+      new Date(new Date().getTime() + (utc - utcCopy) * 3600000),
+    ]);
   }
   private handleHide() {
     this.show = false;
