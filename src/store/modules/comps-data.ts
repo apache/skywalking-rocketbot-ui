@@ -32,6 +32,17 @@ const initState: State = {
       comp: 'ChartSlow', title: 'Service Top Slow Endpoint', type: 'serviceInfo.getSlowEndpoint', width: 3 },
       { o: 'Service', name: 'Running ServiceInstance',
       comp: 'ChartTroughput', title: 'Running ServiceInstance', type: 'serviceInfo.getInstanceThroughput', width: 3 },
+      // Endpoint
+      { o: 'ServiceEndpoint', name: 'Endpoint Avg Response',
+      comp: 'ChartAvgResponse', title: 'Endpoint Avg Response', type: 'endpointInfo', width: 3 },
+      { o: 'ServiceEndpoint', name: 'Endpoint Avg Throughput',
+      comp: 'ChartAvgThroughput', title: 'Endpoint Avg Throughput', type: 'endpointInfo', width: 3 },
+      { o: 'ServiceEndpoint', name: 'Endpoint Avg SLA',
+      comp: 'ChartAvgSLA', title: 'Endpoint Avg SLA', type: 'endpointInfo', width: 3 },
+      { o: 'ServiceEndpoint', name: 'Endpoint Percent Response',
+      comp: 'ChartResponse', title: 'Endpoint Percent Response', type: 'endpointInfo', width: 3 },
+      { o: 'ServiceEndpoint', name: 'Endpoint Top Slow Traces',
+      comp: 'ChartTrace', title: 'Endpoint Top Slow Traces', type: 'endpointInfo.queryBasicTraces', width: 6 },
       // instance
       { o: 'ServiceInstance', name: 'Instance Avg Response',
       comp: 'ChartAvgResponse', title: 'Instance Avg Response', type: 'instanceInfo', width: 3 },
@@ -77,7 +88,7 @@ const initState: State = {
         { o: 'Database', name: 'Database Percent Response',
         comp: 'ChartResponse', title: 'Database Percent Response', type: 'databaseInfo', width: 3 },
         { o: 'Database', name: 'Database Top Slow SQL',
-        comp: 'ChartTrace', title: 'Database Top Slow SQL', type: 'databaseInfo.getTopNRecords', width: 6 },
+        comp: 'ChartTraceDB', title: 'Database Top Slow SQL', type: 'databaseInfo.getTopNRecords', width: 6 },
 
     ],
   },

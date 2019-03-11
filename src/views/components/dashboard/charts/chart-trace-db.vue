@@ -2,14 +2,14 @@
 <rk-panel :title="title">
   <div class="rk-chart-trace clear scroll_hide" style="overflow:auto;">
     <div class="rk-chart-trace-i" v-for="i in stateDashboard[typeArr[0]][typeArr[1]]" :key="i.key">
-      <div class="mb-5 ell" v-tooltip:top.ellipsis="i.endpointNames[0] || ''">
-        <svg class="icon vm r grey link-hover cp" @click="handleClick(i.key)">
+      <div class="mb-5 ell" v-tooltip:top.ellipsis="i.statement || ''">
+        <svg class="icon vm r grey link-hover cp" @click="handleClick(i.statement)">
           <use xlink:href="#review-list"></use>
         </svg>
-        <span class="calls sm mr-10">{{i.duration}} ms</span>
-        <span class="cp link-hover mr-10" @click="appChange(i)">{{i.endpointNames[0]}}</span>
+        <span class="calls sm mr-10">{{i.latency}} ms</span>
+        <span class="cp link-hover mr-10" @click="appChange(i)">{{i.statement}}</span>
       </div>
-      <RkProgress :precent="i.duration/maxValue*100"/>
+      <RkProgress :precent="i.latency/maxValue*100"/>
     </div>
   </div>
 </rk-panel>
@@ -31,7 +31,7 @@ export default class RkTopTrace extends Vue {
     return this.type.split('.');
   }
   get maxValue() {
-    const temp: number[] = this.stateDashboard[this.typeArr[0]][this.typeArr[1]].map((i: any) => i.duration);
+    const temp: number[] = this.stateDashboard[this.typeArr[0]][this.typeArr[1]].map((i: any) => i.latency);
     return Math.max.apply(null, temp);
   }
   private handleClick(i: any) {
