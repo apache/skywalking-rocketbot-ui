@@ -1,4 +1,5 @@
-import { Topo, TopoMetric, TopoServiceMetric, TopoClientMetric } from '../fragments/topology';
+import { Topo, TopoMetric,
+  TopoServiceMetric, TopoClientMetric, TopoServiceInfo, TopoClientInfo } from '../fragments/topology';
 
 export const queryTopo =
   `query queryTraces(${Topo.variable}) {${Topo.query}}`;
@@ -14,3 +15,9 @@ export const queryTopoInfo =
         ${TopoServiceMetric.query},
         ${TopoClientMetric.query}
       }`;
+
+export const queryTopoServiceInfo =
+  `query queryTopoServiceInfo(${TopoServiceInfo.variable}) {${TopoServiceInfo.query}}`;
+
+export const queryTopoClientInfo =
+  `query queryTopoClientInfo(${TopoClientInfo.variable}) {${TopoClientInfo.query}}`;

@@ -1,3 +1,61 @@
+export const TopoServiceInfo = {
+  variable: '$duration: Duration!, $id: ID!',
+  query: `
+    getResponseTimeTrend: getLinearIntValues(metric: {
+      name: "service_relation_server_resp_time"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getThroughputTrend: getLinearIntValues(metric: {
+      name: "service_relation_server_cpm"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getSLATrend: getLinearIntValues(metric: {
+      name: "service_relation_server_call_sla"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+`};
+
+export const TopoClientInfo = {
+  variable: '$duration: Duration!, $id: ID!',
+  query: `
+    getResponseTimeTrend: getLinearIntValues(metric: {
+      name: "service_relation_client_resp_time"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getThroughputTrend: getLinearIntValues(metric: {
+      name: "service_relation_client_cpm"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getSLATrend: getLinearIntValues(metric: {
+      name: "service_relation_client_call_sla"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+`};
+
 export const Topo = {
   variable: '$duration: Duration!',
   query: `

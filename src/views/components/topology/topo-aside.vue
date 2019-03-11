@@ -1,9 +1,9 @@
 <template>
   <aside class="link-topo-aside">
-    <svg class="link-topo-aside-btn icon cp lg" @click="show = !show" :style="`left:${show?290:0}px;transform: rotate(${show?0 : 180}deg);`">
+    <svg class="link-topo-aside-btn mb-10 icon cp lg" @click="show = !show" :style="`position:${show?'absolute':'initial'};left:${show?290:0}px;transform: rotate(${show?0 : 180}deg);`">
       <use xlink:href="#chevron-left"></use>
     </svg>
-    <div class="link-topo-aside-box"  v-if="!stateTopo.currentNode.name && show">
+    <div class="link-topo-aside-box mb-10" v-if="!stateTopo.currentNode.name && show">
       <div class="mb-20">
         <span class="b dib mr-20">All Services</span>
       </div>
@@ -12,7 +12,7 @@
         <span class="grey">{{key}}</span>
       </div>
     </div>
-    <div class="link-topo-aside-box" v-else-if="show">
+    <div class="link-topo-aside-box mb-10" v-else-if="show">
       <div class="mb-20">
         <span class="b dib mr-20">Service Detail</span>
       </div>
@@ -37,16 +37,30 @@
         <span class="content">{{stateTopo.currentNode.latency}} ms</span>
       </div>
     </div>
+    <div class="link-topo-aside-box">
+      <div class="mb-5 clear">
+        <span class="b dib mr-20 vm">Current Mode</span>
+        <span class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':!stateTopo.mode}" @click="setMode(false)">Client</span>
+        <span class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':stateTopo.mode}" @click="setMode(true)">Service</span>
+      </div>
+      <TopoChart v-if="stateTopo.getResponseTimeTrend.length" title="Avg Response Time" unit="ms" :intervalTime="intervalTime" :data="stateTopo.getResponseTimeTrend"/>
+      <TopoChart v-if="stateTopo.getThroughputTrend.length" title="Avg Throughput" unit="cpm" :intervalTime="intervalTime" :data="stateTopo.getThroughputTrend"/>
+      <TopoChart v-if="stateTopo.getSLATrend.length" title="Avg SLA" unit="%" :intervalTime="intervalTime" :precent="true" :data="stateTopo.getSLATrend"/>
+    </div>
   </aside>
 </template>
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import topo, { State as topoState} from '@/store/modules/topo';
-import { State } from 'vuex-class';
+import { State, Mutation, Getter, Action } from 'vuex-class';
+import TopoChart from './topo-chart.vue';
 
-@Component
+@Component({components: {TopoChart}})
 export default class Topology extends Vue {
   @State('rocketTopo') public stateTopo!: topoState;
+  @Getter('intervalTime') public intervalTime: any;
+  @Mutation('rocketTopo/SET_MODE') public SET_MODE: any;
+  @Action('rocketTopo/CLEAR_TOPO_INFO') public CLEAR_TOPO_INFO: any;
   get types() {
     const result: any = {};
     this.stateTopo.nodes.forEach((i: any) => {
@@ -59,6 +73,11 @@ export default class Topology extends Vue {
     return result;
   }
   private show: boolean = true;
+  private showInfo: boolean = false;
+  private setMode(mode: boolean) {
+    this.SET_MODE(mode);
+    this.CLEAR_TOPO_INFO();
+  }
 }
 </script>
 <style lang="scss">
@@ -73,9 +92,18 @@ export default class Topology extends Vue {
     border-top: 1px solid #d8d8d866;
   }
 }
+.link-topo-aside-box-btn{
+  color: #626977;
+  border: 1px solid;
+  padding: 0px 3px;
+  width: 45px;
+  display: inline-block;
+  &.active{
+    color: #448dfe;
+  }
+}
 .link-topo-aside-btn{
   display:block;
-  position:absolute;
   background: #252a2f9a;
   color: #ddd;
   border-radius: 4px 4px 4px 4px;

@@ -70,7 +70,7 @@ export default class Footer extends Vue {
   padding-right: 15px;
   padding-left: 15px;
   padding-bottom: 1px;
-  border-top: 1px solid #c1c5ca41;
+  box-shadow: 0 -1px 0px rgba(0, 0, 0, 0.08);
 }
 .rk-footer-dark {
   color: #ddd;

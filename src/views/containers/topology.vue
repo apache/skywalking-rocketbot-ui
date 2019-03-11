@@ -19,6 +19,7 @@ export default class Topology extends Vue {
   @Mutation('SET_EVENTS') private SET_EVENTS: any;
   @Action('rocketTopo/GET_TOPO') private GET_TOPO: any;
   @Action('rocketTopo/CLEAR_TOPO') private CLEAR_TOPO: any;
+  @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
   @Getter('durationTime') private durationTime: any;
   private beforeMount(): void {
     this.SET_EVENTS([this.getTopo]);
@@ -33,6 +34,7 @@ export default class Topology extends Vue {
     this.$store.registerModule('rocketTopo', topo);
   }
   private beforeDestroy() {
+    this.CLEAR_TOPO_INFO();
     this.CLEAR_TOPO();
     this.$store.unregisterModule('rocketTopo');
   }

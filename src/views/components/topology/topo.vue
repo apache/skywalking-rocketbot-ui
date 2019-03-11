@@ -92,6 +92,11 @@ export default {
       <div class="mb-5"><span class="grey">DetectPoint: </span>${d.detectPoint}</div>
       <div><span class="grey">latency: </span>${d.latency}</div>
       `});
+    this.tipName = d3tip()
+      .attr('class', 'd3-tip-grey')
+      .offset([-8, 0])
+      .html(d => {
+        return `<div>${d.name}</div>`});
     this.height = this.$el.clientHeight;
     this.svg = d3
       .select(this.$el)
@@ -112,7 +117,6 @@ export default {
           this.datas.calls[i].target = this.datas.calls[i].source;
         }
       }
-
       this.svg.select('.graph').remove();
       this.force = d3
         .forceSimulation(this.datas.nodes)
@@ -125,17 +129,18 @@ export default {
         .on('tick', this.tick)
         .stop();
       this.graph = this.svg.append('g').attr('class', 'graph');
-      this.svg.call(this.tip);
       this.svg.call(this.getZoomBehavior(this.graph));
       this.graph.call(this.tip);
+      this.graph.call(this.tipName);
       this.svg.on('click', (d, i) => {
+        event.stopPropagation();
+        event.preventDefault();
         this.$store.commit('rocketTopo/SET_NODE', {});
+        this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
         that.tip.hide({}, this);
         this.toggleNode(this.node, d, false);
         this.toggleLine(this.line, d, false);
         this.toggleLine(this.lineNode, d, false);
-        // this.toggleMarker(marker, currNode, true);
-        // this.toggleLineText(this.linkText, d, false);
       });
       this.defs = this.graph.append('defs');
       this.arrowMarker = this.defs
@@ -158,8 +163,15 @@ export default {
         .call(d3.drag()
           .on('start', this.dragstart)
           .on('drag', this.dragged)
-          .on('end', this.dragended)
-        )
+          .on('end', function(d, i) {
+           that.tipName.show(d, this);
+          }))
+        .on('mouseover', function(d, i) {
+           that.tipName.show(d, this);
+        })
+        .on('mouseout', function(d, i) {
+          that.tipName.hide(d, this);
+        })
         .on('click', function(d, i) {
           event.stopPropagation();
           that.tip.hide({}, this);
@@ -218,12 +230,12 @@ export default {
         .attr('text-anchor', 'middle')
         .attr('x', 22)
         .attr('y', 70)
-        .text(d => d.name)
+        .text(d => d.name.length >= 12 ? `${d.name.substring(0,12)}...`: d.name)
       
       this.glink = this.graph.append('g').selectAll('.link');
       this.link = this.glink.data(this.datas.calls).enter();
       this.line = this.link.append('path').attr('class', 'link')
-        .attr('stroke-dasharray', d => d.cpm ? '15 5': '0')
+        .attr('stroke-dasharray', d => d.cpm ? '13 7': '0')
         .attr('stroke', d => d.cpm ? '#217EF25f' : '#6a6d7777');
       this.lineNode = this.link.append('rect').attr('class', 'link-node cp')
         .attr('width', 6)
@@ -234,13 +246,8 @@ export default {
         .on('click', function(d, i) {
           event.stopPropagation();
           that.tip.show(d, this);
+          that.$store.dispatch(d.detectPoint === 'SERVER' && that.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', {id:d.id,duration: that.$store.getters.durationTime});
         });
-      // this.node
-      //   .append('text')
-      //   .attr('class', 'node-name')
-      //   .attr('x', 50)
-      //   .attr('y', 25)
-      //   .text(d => d.name)
       d3.timeout(() => {
         for (
           let i = 0,
@@ -332,6 +339,7 @@ toggleLineText(lineText, currNode, isHover) {
         .scaleExtent([0.3, 10])
         .on('zoom', () => {
           that.tip.hide({}, this);
+          that.tipName.hide({}, this);
           g.attr(
             'transform',
             `translate(${d3.event.transform.x},${d3.event.transform.y})scale(${
@@ -341,6 +349,8 @@ toggleLineText(lineText, currNode, isHover) {
         });
     },
     dragstart(d) {
+      const that = this;
+      that.tipName.hide({}, this);
       this.node._groups[0].forEach(d => {
         d.__data__.fx = d.__data__.x;
         d.__data__.fy = d.__data__.y;
@@ -351,8 +361,10 @@ toggleLineText(lineText, currNode, isHover) {
       d3.event.sourceEvent.stopPropagation();
     },
     dragged(d) {
-        d.fx = d3.event.x;
-        d.fy = d3.event.y;
+      const that = this;
+      that.tipName.hide({}, this);
+      d.fx = d3.event.x;
+      d.fy = d3.event.y;
     },
     dragended() {
       if (!d3.event.active) {
@@ -374,7 +386,7 @@ toggleLineText(lineText, currNode, isHover) {
   .link {
     stroke-linecap: round;
     stroke-width: 1.3px;
-    fill:rgba(255, 255, 255, 0);
+    fill: none;
     animation: dash 1s linear infinite;
   }
   @keyframes dash {

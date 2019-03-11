@@ -1,4 +1,4 @@
-import { Commit, ActionTree } from 'vuex';
+import { Commit, ActionTree, Dispatch } from 'vuex';
 import graph from '../../graph';
 import * as types from '../mutation-types';
 import { AxiosResponse } from 'axios';
@@ -33,9 +33,14 @@ export interface State {
   nodes: Node[];
   currentNode: any;
   current: Option;
+  mode: boolean;
+  getResponseTimeTrend: number[];
+  getSLATrend: number[];
+  getThroughputTrend: number[];
 }
 
 const initState: State = {
+  mode: true,
   calls: [],
   nodes: [],
   currentNode: {},
@@ -43,6 +48,9 @@ const initState: State = {
     key: 'default',
     label: 'default',
   },
+  getResponseTimeTrend: [],
+  getSLATrend: [],
+  getThroughputTrend: [],
 };
 
 // getters
@@ -50,6 +58,9 @@ const getters = {};
 
 // mutations
 const mutations = {
+  [types.SET_MODE](state: State, data: boolean) {
+    state.mode = data;
+  },
   [types.SET_NODE](state: State, data: any) {
     state.currentNode = data;
   },
@@ -57,12 +68,36 @@ const mutations = {
     state.calls = data.calls;
     state.nodes = data.nodes;
   },
+  [types.SET_TOPO_RELATION](state: State, data: any) {
+    state.getResponseTimeTrend = data.getThroughputTrend ? data.getThroughputTrend.values.map((i: any) => i.value) : [];
+    state.getSLATrend = data.getThroughputTrend ? data.getSLATrend.values.map((i: any) => i.value) : [];
+    state.getThroughputTrend = data.getThroughputTrend ? data.getThroughputTrend.values.map((i: any) => i.value) : [];
+  },
 };
 
 // actions
 const actions: ActionTree<State, any> = {
   CLEAR_TOPO(context: { commit: Commit; state: State; }) {
     context.commit(types.SET_TOPO, {calls: [], nodes: []});
+  },
+  CLEAR_TOPO_INFO(context: { commit: Commit; state: State; }) {
+    context.commit(types.SET_TOPO_RELATION, {});
+  },
+  GET_TOPO_SERVICE_INFO(context: { commit: Commit; state: State; }, params: any) {
+    return graph
+    .query('queryTopoServiceInfo')
+    .params(params)
+    .then((res: AxiosResponse) => {
+      context.commit('SET_TOPO_RELATION', res.data.data);
+    });
+  },
+  GET_TOPO_CLIENT_INFO(context: { commit: Commit; state: State; }, params: any) {
+    return graph
+    .query('queryTopoClientInfo')
+    .params(params)
+    .then((res: AxiosResponse) => {
+      context.commit('SET_TOPO_RELATION', res.data.data);
+    });
   },
   GET_TOPO(context: { commit: Commit; state: State; }, params: any) {
     return graph
