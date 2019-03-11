@@ -66,6 +66,7 @@ export default {
       RABBITMQ: require('./assets/RABBITMQ.png'),
       SOFARPC: require('./assets/SOFARPC.png'),
       ROCKETMQ: require('./assets/ROCKETMQ.png'),
+      HTTP: require('./assets/HTTPCLIENT.png'),
       width: 600,
       height: 600,
       force: '',
@@ -235,7 +236,7 @@ export default {
       this.glink = this.graph.append('g').selectAll('.link');
       this.link = this.glink.data(this.datas.calls).enter();
       this.line = this.link.append('path').attr('class', 'link')
-        .attr('stroke-dasharray', d => d.cpm ? '13 7': '0')
+        .attr('stroke-dasharray', '13 7')
         .attr('stroke', d => d.cpm ? '#217EF25f' : '#6a6d7777');
       this.lineNode = this.link.append('rect').attr('class', 'link-node cp')
         .attr('width', 6)
