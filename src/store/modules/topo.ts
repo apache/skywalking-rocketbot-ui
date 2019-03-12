@@ -74,8 +74,9 @@ const mutations = {
     state.nodes = data.nodes;
   },
   [types.SET_TOPO_RELATION](state: State, data: any) {
-    state.getResponseTimeTrend = data.getThroughputTrend ? data.getThroughputTrend.values.map((i: any) => i.value) : [];
-    state.getSLATrend = data.getThroughputTrend ? data.getSLATrend.values.map((i: any) => i.value) : [];
+    state.getResponseTimeTrend = data.getResponseTimeTrend ?
+    data.getResponseTimeTrend.values.map((i: any) => i.value) : [];
+    state.getSLATrend = data.getSLATrend ? data.getSLATrend.values.map((i: any) => i.value) : [];
     state.getThroughputTrend = data.getThroughputTrend ? data.getThroughputTrend.values.map((i: any) => i.value) : [];
   },
 };

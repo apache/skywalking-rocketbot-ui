@@ -252,11 +252,11 @@ export default {
           event.stopPropagation();
           that.tip.hide({}, this);
           that.tip.show(d, this);
-          that.$store.dispatch(d.detectPoint === 'SERVER' && that.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', {id:d.id,duration: that.$store.getters.durationTime});
+          that.$store.dispatch(that.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', {id:d.id,duration: that.$store.getters.durationTime});
           that.$store.commit('rocketTopo/SET_CALLBACK', function() {
             that.tip.hide({}, this);
             that.tip.show(d, this);
-            that.$store.dispatch(d.detectPoint === 'SERVER' && that.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', {id:d.id,duration: that.$store.getters.durationTime});
+            that.$store.dispatch(that.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', {id:d.id,duration: that.$store.getters.durationTime});
           })
         });
       d3.timeout(() => {
