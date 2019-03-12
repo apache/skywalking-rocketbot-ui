@@ -29,6 +29,7 @@ interface Node {
 }
 
 export interface State {
+  callback: any;
   calls: Call[];
   nodes: Node[];
   currentNode: any;
@@ -40,6 +41,7 @@ export interface State {
 }
 
 const initState: State = {
+  callback: '',
   mode: true,
   calls: [],
   nodes: [],
@@ -58,6 +60,9 @@ const getters = {};
 
 // mutations
 const mutations = {
+  [types.SET_CALLBACK](state: State, data: any) {
+    state.callback = data;
+  },
   [types.SET_MODE](state: State, data: boolean) {
     state.mode = data;
   },
@@ -138,7 +143,7 @@ const actions: ActionTree<State, any> = {
                 calls[j] = {
                   ...calls[j],
                   cpm: resInfo.cpmC.values[i].value,
-                  latency: resInfo.latencyC.values[i].vaule,
+                  latency: resInfo.latencyC.values[i].value,
                 };
               }
             }

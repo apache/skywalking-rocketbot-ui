@@ -78,6 +78,7 @@ export default {
     };
   },
   beforeDestroy() {
+    this.tip.hide({}, this);
     window.removeEventListener('resize', this.resize);
     // this.$store.commit('skywalking/setCurrentNode', []);
   },
@@ -90,7 +91,7 @@ export default {
         return `
       <div class="mb-5"><span class="grey">CallType: </span>${d.callType}</div>
       <div class="mb-5"><span class="grey">Cpm: </span>${d.cpm}</div>
-      <div class="mb-5"><span class="grey">DetectPoint: </span>${d.detectPoint}</div>
+      <div class="mb-5"><span class="grey">DetectPoint: </span>${this.$store.state.rocketTopo.mode?d.detectPoint:'CLIENT'}</div>
       <div><span class="grey">latency: </span>${d.latency}</div>
       `});
     this.tipName = d3tip()
@@ -211,7 +212,7 @@ export default {
         .attr('height', 40)
         .attr('x', 2)
         .attr('y', -17)
-        .attr('style', 'opacity: 0.7;')
+        .attr('style', 'opacity: 0.5;')
         .attr('xlink:href',this.LOCAL);
       this.node
         .append('image')
@@ -238,6 +239,9 @@ export default {
       this.line = this.link.append('path').attr('class', 'link')
         .attr('stroke-dasharray', '13 7')
         .attr('stroke', d => d.cpm ? '#217EF25f' : '#6a6d7777');
+      const handleSelectLine = function(d, i) {
+        that.tip.hide({}, this);
+      }
       this.lineNode = this.link.append('rect').attr('class', 'link-node cp')
         .attr('width', 6)
         .attr('height', 6)
@@ -246,8 +250,14 @@ export default {
         .attr('fill', d => d.cpm ? '#217EF299' : '#6a6d7799')
         .on('click', function(d, i) {
           event.stopPropagation();
+          that.tip.hide({}, this);
           that.tip.show(d, this);
           that.$store.dispatch(d.detectPoint === 'SERVER' && that.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', {id:d.id,duration: that.$store.getters.durationTime});
+          that.$store.commit('rocketTopo/SET_CALLBACK', function() {
+            that.tip.hide({}, this);
+            that.tip.show(d, this);
+            that.$store.dispatch(d.detectPoint === 'SERVER' && that.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', {id:d.id,duration: that.$store.getters.durationTime});
+          })
         });
       d3.timeout(() => {
         for (

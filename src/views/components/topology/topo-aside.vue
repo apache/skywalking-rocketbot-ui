@@ -39,9 +39,9 @@
     </div>
     <div class="link-topo-aside-box">
       <div class="mb-5 clear">
-        <span class="b dib mr-20 vm">Current Mode</span>
+        <span class="b dib mr-20 vm">Detect Point</span>
         <span class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':!stateTopo.mode}" @click="setMode(false)">Client</span>
-        <span class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':stateTopo.mode}" @click="setMode(true)">Service</span>
+        <span class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':stateTopo.mode}" @click="setMode(true)">Server</span>
       </div>
       <TopoChart v-if="stateTopo.getResponseTimeTrend.length" title="Avg Response Time" unit="ms" :intervalTime="intervalTime" :data="stateTopo.getResponseTimeTrend"/>
       <TopoChart v-if="stateTopo.getThroughputTrend.length" title="Avg Throughput" unit="cpm" :intervalTime="intervalTime" :data="stateTopo.getThroughputTrend"/>
@@ -76,7 +76,7 @@ export default class Topology extends Vue {
   private showInfo: boolean = false;
   private setMode(mode: boolean) {
     this.SET_MODE(mode);
-    this.CLEAR_TOPO_INFO();
+    this.stateTopo.callback();
   }
 }
 </script>
