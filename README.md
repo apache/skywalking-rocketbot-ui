@@ -28,7 +28,7 @@
 ![](https://user-images.githubusercontent.com/19775780/53947184-2fd7fb80-4100-11e9-90b8-205c307a6a55.png)
 
 ## Live Demo
-**[Demo](http://rocketbot.daocloud.io/)**
+**[Demo](http://106.75.237.45/)**
 
 | Username        | Password           |
 | ------------- |:-------------:|
