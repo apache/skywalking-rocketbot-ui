@@ -7,7 +7,7 @@ COPY ./run.sh /usr/share/run.sh
 ENV TZ=Asia/Shanghai
 
 RUN set -ex \
-    && apk add --no-cache bash \
+    && apk add --no-cache bash tzdata \
     && chmod +x /usr/share/run.sh
 
 EXPOSE 80

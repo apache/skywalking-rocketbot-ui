@@ -32,9 +32,9 @@
 ## Live Demo
 **[Demo](http://rocketbot.daocloud.io/)**
 
-| Username        | Password           | 
-| ------------- |:-------------:| 
-| admin     | admin | 
+| Username        | Password           |
+| ------------- |:-------------:|
+| admin     | admin |
 
 ## Development
 
@@ -99,6 +99,21 @@ docker run -p 8080:80 -d -e SKYWALKING_URL=127.0.0.1:1234,127.0.0.1:1235 rocketb
 
 
 The default UI address is `http://localhost:8080`.
+
+### Setting the timezone for docker image
+
+Suppose you want to use Shanghai First copy the proper zone to localtime
+
+```dockerfile
+ls /usr/share/zoneinfo
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+```
+
+Now specify your timezone
+
+```
+echo "Asia/Shanghai" >  /etc/timezone
+```
 
 ### Replace default UI
 
