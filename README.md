@@ -84,6 +84,8 @@ npm run build
 
 ## Docker Build
 
+**Note: Those dockerfile is just for developer review or refer methods.**
+
 ```
 npm install
 npm run build
