@@ -13,8 +13,6 @@ RUN set -ex \
     && mv /app/nginx.conf /etc/nginx/nginx.conf \
     && mv /app/run.sh /usr/share/ \
     && chmod +x /usr/share/run.sh  \
-    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && echo "Asia/Shanghai" > /etc/timezone \
     && rm -rf /app
     
 EXPOSE 80

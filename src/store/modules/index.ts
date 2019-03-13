@@ -29,7 +29,29 @@ const dateFormate = (date: Date, step: string) => {
   if (minuteTemp < 10) { minute = `0${minuteTemp}`; }
   if (step === 'MINUTE') { return `${year}-${month}-${day} ${hour}${minute}`; }
 };
-
+const dateFormateTime = (date: Date, step: string) => {
+  const year = date.getFullYear();
+  const monthTemp = date.getMonth() + 1;
+  let month: string = `${monthTemp}`;
+  if (monthTemp < 10) {
+    month = `0${monthTemp}`;
+  }
+  if (step === 'MONTH') {
+    return `${year}-${month}`;
+  }
+  const dayTemp = date.getDate();
+  let day: string = `${dayTemp}`;
+  if (dayTemp < 10) { day = `0${dayTemp}`; }
+  if (step === 'DAY') { return `${month}-${day}`; }
+  const hourTemp = date.getHours();
+  let hour: string = `${hourTemp}`;
+  if (hourTemp < 10) { hour = `0${hourTemp}`; }
+  if (step === 'HOUR') { return `${month}-${day} ${hour}`; }
+  const minuteTemp = date.getMinutes();
+  let minute: string = `${minuteTemp}`;
+  if (minuteTemp < 10) { minute = `0${minuteTemp}`; }
+  if (step === 'MINUTE') { return `${hour}:${minute}\n${month}-${day}`; }
+};
 export interface State {
   duration: Duration;
   eventStack: any;
@@ -77,7 +99,8 @@ const getters = {
     const endUnix: number = state.duration.end.getTime();
     const timeIntervals: number[] = [];
     for (let i = 0; i <= endUnix - startUnix; i += interval) {
-      timeIntervals.push(startUnix + i);
+      const temp: any = dateFormateTime(new Date(startUnix + i), state.duration.step);
+      timeIntervals.push(temp);
     }
     return timeIntervals;
   },

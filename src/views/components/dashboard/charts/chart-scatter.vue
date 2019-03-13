@@ -38,7 +38,7 @@ export default class Response extends Vue {
       },
       xAxis: {
         type: 'category',
-        data: this.intervalTime.map((i: number) => moment(i).format('HH:mm\nMM-DD')),
+        data: this.intervalTime,
         axisTick: {
           lineStyle: { color: '#c1c5ca41' },
           alignWithLabel: true,

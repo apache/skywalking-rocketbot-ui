@@ -34,7 +34,7 @@ export default class Response extends Vue {
         containLabel: true,
       },
       xAxis: {
-        type: 'time',
+        type: 'category',
         axisTick: {
           lineStyle: { color: '#c1c5ca41' },
           alignWithLabel: true,
