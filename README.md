@@ -2,14 +2,12 @@
 <h1 align="center"></h1>
 
 <p align="center">
-<a><img src="https://img.shields.io/badge/version-1.0.4-blue.svg?longCache=true&style=popout-square"></a>
-<a href="https://github.com/TinyAllen/rocketbot/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?longCache=true&style=popout-square"></a>
-<a href="https://github.com/TinyAllen/rocketbot/blob/master/LICENSE"><img src="https://img.shields.io/badge/support by-Daocloud Lab-brightgreen.svg?longCache=true&style=popout-square"></a>
-<a><img src="https://img.shields.io/badge/base-Skywalking-red.svg?longCache=true&style=popout-square"></a>
+<a><img src="https://img.shields.io/badge/version-1.1.0-blue.svg?longCache=true&style=popout-square"></a>
+<a href="https://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/license-Apache2.0-brightgreen.svg?longCache=true&style=popout-square"></a>
 </p>
 
 ## Introduction
-**RocketBot**: A modern and awesome UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking). This project is supported By [DaoCloud Labs](https://github.com/DaoCloud-Labs).
+**RocketBot**: A modern and awesome UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking).
 
 ## Screenshots
 **Dashboard**
@@ -121,7 +119,7 @@ echo "Asia/Shanghai" >  /etc/timezone
 
 ![41401552022848_ pic_hd](https://user-images.githubusercontent.com/19775780/54009539-24d7a680-41a6-11e9-9ee1-d70c20042ced.jpg)
 
-Change the submodule url into ``` https://github.com/TinyAllen/rocketbot ```
+Change the submodule url
 
 ## Contributing to RocketBot
 
@@ -134,35 +132,15 @@ Most of the contributions received are code contributions, and documentation, bu
 
 ### How to report a bug?
 
-* **Ensure the bug was not already reported** by searching on GitHub under [Issues](https://github.com/TinyAllen/rocketbot/issues).
+* **Ensure the bug was not already reported** by searching on GitHub under [Issues]().
 
-* If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/TinyAllen/rocketbot/issues/new). Be sure to include a **title and clear description**, as much relevant information as possible, and a **code sample** or an **executable test case** demonstrating the expected behavior that is not occurring.
+* If you're unable to find an open issue addressing the problem, [open a new one](). Be sure to include a **title and clear description**, as much relevant information as possible, and a **code sample** or an **executable test case** demonstrating the expected behavior that is not occurring.
 
-## Support
-
-<img src="https://daoweb-resource.daocloud.io/logo/daocloud-logo-gray-account.svg" alt="Sample"  width="130">
-
-Supported by [DaoCloud Labs](https://github.com/DaoCloud-Labs).
-
-## Contact
-
-#### WeChat
-<p>
-  <img width="160" src="https://user-images.githubusercontent.com/19775780/47297000-814a8700-d646-11e8-8ff6-c2748555ceca.jpeg"/>
-</p>
-
-
-## License
-
-Copyright © 2018, [Allen Wang](https://github.com/TinyAllen). 
-Released under the [MIT](http://opensource.org/licenses/MIT) License.
-
-## Who Uses Rocketbot?
-按照登记顺序排序，更多接入公司，欢迎在 [https://github.com/TinyAllen/rocketbot/issues/15](https://github.com/TinyAllen/rocketbot/issues/15) 登记（仅供开源用户参考）
+## Who Uses SkyWalking Rocketbot?
+Which companies are using SkyWalking RocketBot, Welcome to register in issues #15 !（This is for open source users reference only.）
 <p>
 
 <img src="https://daoweb-resource.daocloud.io/logo/daocloud-logo-gray-account.svg" height="40px">&nbsp;&nbsp;
-<img src="http://springcloud.cn/default/img/logo.png" height="40px">&nbsp;&nbsp;
 <img src="https://user-images.githubusercontent.com/19775780/47834441-7c21d080-ddda-11e8-9e3a-67c43ab074bf.png" height="40px"  >&nbsp;&nbsp;
 <img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=4229681157,1554083661&fm=58&s=51B3A8720790BF80CCC2538703007088&bpow=121&bpoh=75" height="40px">&nbsp;&nbsp;
 

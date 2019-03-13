@@ -27,7 +27,7 @@
           <div class="sm b mb-5">Password</div>
           <input @keyup.enter="login" @input="error = false;" class="rk-login-input mb-20"  :class="{'rk-login-red':error}" v-model="accountInfo.password" type="password">
           <a class="rk-btn dib tc cp long mb-10 rk-login-btn" @click="login">Login Now</a>
-          <p class="grey sm">Copyright © 2018, Created by <a class="blue" target="_blank" href="https://github.com/TinyAllen">Allen Wang</a> and Supported by <a class="blue"  target="_blank" href="https://github.com/DaoCloud-Labs">DaoCloud Labs</a>.</p>
+          <p class="grey sm">Copyright © 2018</p>
       </div>
     </div>
   </div>
