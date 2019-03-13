@@ -59,6 +59,7 @@ const mutations: MutationTree<State> = {
     state.currentEndpoint = endpoint;
   },
   [types.SET_ENDPOINT_INFO](state: State, data: any) {
+    if (!data) { data = {}; }
     state.endpointInfo.p50 = data.getP50 ? data.getP50.values : [];
     state.endpointInfo.p75 = data.getP75 ? data.getP75.values : [];
     state.endpointInfo.p90 = data.getP90 ? data.getP90.values : [];
