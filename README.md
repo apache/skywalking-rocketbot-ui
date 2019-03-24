@@ -115,12 +115,6 @@ Now specify your timezone
 echo "Asia/Shanghai" >  /etc/timezone
 ```
 
-### Replace default UI
-
-![41401552022848_ pic_hd](https://user-images.githubusercontent.com/19775780/54009539-24d7a680-41a6-11e9-9ee1-d70c20042ced.jpg)
-
-Change the submodule url
-
 ## Contributing to RocketBot
 
 Thanks for your interest and hope it will be a
