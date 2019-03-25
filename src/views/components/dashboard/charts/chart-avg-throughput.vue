@@ -20,7 +20,7 @@
     <div class="grey">{{title}}</div>
     <div class="title b">
       <span>{{this.stateDashboard[this.type].getThroughputTrend.length ? content.toFixed(2) : 0}}</span>
-      <span class="unit"> ms</span>
+      <span class="unit"> cpm</span>
     </div>
     <RkEcharts height="180px" :option="responseConfig"/>
   </div>
