@@ -20,6 +20,7 @@ import ChartAvgResponse from './chart-avg-response.vue';
 import ChartAvgThroughput from './chart-avg-throughput.vue';
 import ChartAvgSLA from './chart-avg-sla.vue';
 import ChartResponse from './chart-response.vue';
+import ChartResponseLine from './chart-response-line.vue';
 import ChartTroughput from './chart-through.vue';
 import ChartBrief from './chart-brief.vue';
 import ChartHeatmap from './chart-heatmap.vue';
@@ -40,6 +41,7 @@ export default {
   ChartAvgThroughput,
   ChartAvgSLA,
   ChartResponse,
+  ChartResponseLine,
   ChartTroughput,
   ChartTrace,
   ChartBrief,

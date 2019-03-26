@@ -52,7 +52,7 @@ export default class Response extends Vue {
       [{
         data: this.stateDashboard[this.type].getSLATrend.map((i: any, index: number) => [
           this.intervalTime[index],
-          i.value,
+          i.value / 100,
         ]),
         name: this.stateDashboard[this.type].getSLATrend.length ? 'Avg Response' : null,
         type: 'bar',

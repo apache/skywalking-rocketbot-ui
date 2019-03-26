@@ -48,8 +48,11 @@
       </router-link>
     </div>
     <div class="flex-h">
+      <a class="rk-btn mr-5 sm" :class="auto?'blue':'ghost'" @click="handleAuto">
+        <span class="vm">Auto</span>
+      </a>
       <a class="rk-btn mr-15 sm ghost" @click="handleReload">
-        <svg class="icon mr-5 vm">
+        <svg class="icon mr-5 vm" :class="{'loading': auto}">
           <use xlink:href="#retry"></use>
         </svg>
         <span class="vm">Reload</span>
@@ -85,6 +88,8 @@ export default class Header extends Vue {
   @State('rocketbot') private rocketbotGlobal: any;
   @Action('SET_DURATION') private SET_DURATION: any;
   private show: boolean = false;
+  private auto: boolean = false;
+  private timer: any = null;
   private handleReload() {
     const gap = this.rocketbotGlobal.duration.end.getTime() - this.rocketbotGlobal.duration.start.getTime();
     const w = window as any;
@@ -94,6 +99,15 @@ export default class Header extends Vue {
       new Date(new Date().getTime() - gap + (utc - utcCopy) * 3600000),
       new Date(new Date().getTime() + (utc - utcCopy) * 3600000),
     ]);
+  }
+  private handleAuto() {
+    this.auto = !this.auto;
+    if (this.auto) {
+      this.handleReload();
+      this.timer = setInterval(this.handleReload, 6000);
+    } else {
+      clearInterval(this.timer);
+    }
   }
   private handleHide() {
     this.show = false;

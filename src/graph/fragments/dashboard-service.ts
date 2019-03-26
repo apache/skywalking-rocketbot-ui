@@ -40,7 +40,7 @@ export const DashBoardService = {
       label: name
       value
     }
-    getEndpoints: searchEndpoint(serviceId: $serviceId, keyword: $keyword, limit: 10) {
+    getEndpoints: searchEndpoint(serviceId: $serviceId, keyword: $keyword, limit: 9999) {
       key: id
       label: name
     }
