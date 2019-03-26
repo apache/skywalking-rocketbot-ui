@@ -225,18 +225,18 @@ export default {
         });
       this.node
         .append('image')
-        .attr('width',40)
-        .attr('height', 40)
-        .attr('x', 2)
-        .attr('y', -17)
+        .attr('width',32)
+        .attr('height', 32)
+        .attr('x', 6)
+        .attr('y', -10)
         .attr('style', 'opacity: 0.5;')
         .attr('xlink:href',this.LOCAL);
       this.node
         .append('image')
-        .attr('width', 20)
-        .attr('height', 20)
-        .attr('x', 12)
-        .attr('y', -11)
+        .attr('width', 18)
+        .attr('height', 18)
+        .attr('x', 13)
+        .attr('y', -7)
         .attr('xlink:href',d => {
           if( !d.type || d.type === 'N/A') {
             return this['UNDEFINED']

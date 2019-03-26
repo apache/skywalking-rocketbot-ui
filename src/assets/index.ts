@@ -56,3 +56,5 @@ import './svg/warning.svg';
 import './svg/review-list.svg';
 import './svg/user.svg';
 import './svg/issue-close.svg';
+import './svg/list-bulleted.svg';
+import './svg/file-tree.svg';

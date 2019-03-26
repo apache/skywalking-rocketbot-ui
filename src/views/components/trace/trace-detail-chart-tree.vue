@@ -44,13 +44,13 @@
       </div>
     </rk-sidebox>
     <div class="trace-tree">
-      <div ref="traceTree"></div>
+      <div class="trace-tree-inner" ref="traceTree"></div>
     </div>
   </div>
 </template>
 <script lang="js">
 import * as d3 from 'd3';
-import Trace from './d3-trace';
+import Tree from './d3-trace-tree';
 /* eslint-disable */
 /* tslint:disable */
 export default {
@@ -66,16 +66,20 @@ export default {
   watch: {
     data() {
       if(!this.data.length) {return;}
+      d3.select('.trace-tree-inner').selectAll('svg').remove();
       this.changeTree();
-      this.tree.init({label:`TRACE_ROOT`, children: this.segmentId}, this.data);
-      this.tree.draw()
+      this.tree = new Tree(this.$refs.traceTree,this.data, null, this.topSlowMax,this.topSlowMin,this.topChildMax,this.topChildMin)
+      this.tree.init({label:`${this.traceId}`, children: this.segmentId}, this.data);
+      this.tree.draw();
+      this.resize = this.tree.resize.bind(this.tree);
     }
   },
   mounted() {
     this.changeTree();
-    this.tree = new Trace(this.$refs.traceTree, this)
-    this.tree.init({label:`TRACE_ROOT`, children: this.segmentId}, this.data);
-    this.tree.draw()
+    this.tree = new Tree(this.$refs.traceTree,this.data, null, this.topSlowMax,this.topSlowMin,this.topChildMax,this.topChildMin)
+    this.tree.init({label:`${this.traceId}`, children: this.segmentId}, this.data);
+    this.tree.draw();
+    this.resize = this.tree.resize.bind(this.tree);
     // this.computedScale();
   },
   methods: {

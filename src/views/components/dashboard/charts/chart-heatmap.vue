@@ -24,6 +24,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
+import 'echarts/lib/component/visualMap';
 import moment from 'dayjs';
 @Component
 export default class Heatmap extends Vue {
@@ -34,10 +35,6 @@ export default class Heatmap extends Vue {
   get responseConfig() {
     const w: any = window;
     return {
-      color: [
-        '#3f96e3',
-        '#6be6c1',
-      ],
       tooltip: {
         position: 'top',
         formatter: (a: any) => `${a.data[1] * 100}ms  [ ${a.data[2]} ]`,
@@ -64,6 +61,20 @@ export default class Heatmap extends Vue {
         axisLine: { lineStyle: { color: 'rgba(0,0,0,0)' } },
         axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
+      visualMap: [
+        {
+          min: 0,
+          max: 25,
+          show: false,
+          calculable: true,
+          orient: 'horizontal',
+          left: 'center',
+          bottom: '0',
+          inRange: {
+            color: ['#4ff1ea', '#3f96e3'],
+          },
+        },
+      ],
       yAxis: {
         type: 'value',
         axisLine: { show: false },

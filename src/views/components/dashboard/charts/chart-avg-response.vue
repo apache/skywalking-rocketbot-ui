@@ -41,9 +41,11 @@ export default class Response extends Vue {
   @Prop() private stateDashboard!: any;
   @Prop() private intervalTime!: any;
   get content() {
-    const temp = this.stateDashboard[this.type].getResponseTimeTrend.map((i: NumBoxData) => i.value);
-    const sum = temp.reduce((preValue: number, curValue: number, index: number, array: number[]) => preValue + curValue)
-    / this.stateDashboard[this.type].getResponseTimeTrend.length;
+    const temp = this.stateDashboard[this.type].getResponseTimeTrend
+    .map((i: NumBoxData) => i.value).filter((i: any) => i);
+    const sum = temp.length ? temp
+    .reduce((preValue: number, curValue: number, index: number, array: number[]) => preValue + curValue)
+    / this.stateDashboard[this.type].getResponseTimeTrend.length : 0;
     return sum;
   }
   get avg() {

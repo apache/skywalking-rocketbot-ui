@@ -37,9 +37,10 @@ export default class TopoChart extends Vue {
   @Prop() private precent!: boolean;
   get content() {
     if (!this.data.length) {return 0; }
-    const sum = this.data.
-    reduce((preValue: number, curValue: number, index: number, array: number[]) => preValue + curValue)
-    / this.data.length;
+    const noZero = this.data.filter((i: any) => i);
+    const sum = noZero.length ? noZero
+    .reduce((preValue: number, curValue: number, index: number, array: number[]) => preValue + curValue)
+    / noZero.length : 0;
     return this.precent ? sum / 100 : sum;
   }
   get responseConfig() {

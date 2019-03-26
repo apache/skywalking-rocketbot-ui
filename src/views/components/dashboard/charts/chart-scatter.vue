@@ -25,6 +25,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import moment from 'dayjs';
+import 'echarts/lib/component/visualMap';
 @Component
 export default class Response extends Vue {
   @Prop() private title!: string;
@@ -34,10 +35,10 @@ export default class Response extends Vue {
   get responseConfig() {
     const w: any = window;
     return {
-      color: [
-        '#3f96e3',
-        '#6be6c1',
-      ],
+      // color: [
+      //   '#3f96e3',
+      //   '#6be6c1',
+      // ],
       tooltip: {
         position: 'top',
         formatter: (a: any) => `${a.data[1] * 100}ms  [ ${a.data[2]} ]`,
@@ -64,6 +65,21 @@ export default class Response extends Vue {
         axisLine: { lineStyle: { color: 'rgba(0,0,0,0)' } },
         axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
+      visualMap: [
+        {
+          min: 0,
+          max: 25,
+          show: false,
+          calculable: true,
+          orient: 'horizontal',
+          left: 'center',
+          bottom: '0',
+          inRange: {
+            color: ['rgba(94, 188, 255, .05)', 'rgba(64, 158, 255, 1)'],
+            symbolSize: [30, 100],
+          },
+        },
+      ],
       yAxis: {
         type: 'value',
         axisLine: { show: false },
