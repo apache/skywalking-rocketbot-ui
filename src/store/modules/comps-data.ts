@@ -35,9 +35,9 @@ const initState: State = {
       { o: 'Global', name: 'Global Heatmap',
       comp: 'ChartHeatmap', title: 'Global Heatmap', type: 'global', width: 3 },
       { o: 'Global', name: 'Global Top Slow Endpoint',
-      comp: 'ChartTroughput', title: 'Global Top Slow Endpoint', type: 'global.getTopNSlowEndpoint', width: 3 },
+      comp: 'ChartSlow', title: 'Global Top Slow Endpoint', type: 'global.getTopNSlowEndpoint', width: 3 },
       { o: 'Global', name: 'Global Top Throughput',
-      comp: 'ChartSlow', title: 'Global Top Throughput', type: 'global.getTopNServiceThroughput', width: 3 },
+      comp: 'ChartTroughput', title: 'Global Top Throughput', type: 'global.getTopNServiceThroughput', width: 3 },
       // service
       { o: 'Service', name: 'Service Avg Response',
       comp: 'ChartAvgResponse', title: 'Service Avg Response', type: 'serviceInfo', width: 3 },
