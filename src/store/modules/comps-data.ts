@@ -34,6 +34,8 @@ const initState: State = {
       comp: 'ChartResponseLine', title: 'Global Percent Response', type: 'global', width: 3 },
       { o: 'Global', name: 'Global Heatmap',
       comp: 'ChartHeatmap', title: 'Global Heatmap', type: 'global', width: 3 },
+      { o: 'Global', name: 'Global Heatmap(Scatter)',
+      comp: 'ChartHeatmapScatter', title: 'Global Heatmap', type: 'global', width: 3 },
       { o: 'Global', name: 'Global Top Slow Endpoint',
       comp: 'ChartSlow', title: 'Global Top Slow Endpoint', type: 'global.getTopNSlowEndpoint', width: 3 },
       { o: 'Global', name: 'Global Top Throughput',

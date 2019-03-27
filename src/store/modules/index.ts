@@ -164,6 +164,10 @@ const actions: ActionTree<State, any> = {
     context.commit(types.RUN_EVENTS);
   },
   RUN_EVENTS(context: { commit: Commit }) {
+    if (w.axiosCancel.length !== 0) {
+      for (const event of w.axiosCancel) { setTimeout(event(), 0); }
+      w.axiosCancel = [];
+    }
     context.commit(types.RUN_EVENTS);
   },
   SET_CHARTS(context: { commit: Commit }, data: any[]) {

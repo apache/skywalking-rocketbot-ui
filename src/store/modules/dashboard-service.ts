@@ -84,19 +84,36 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_SERVICES, res.data.data.services);
       });
   },
+  GET_SERVICE_ENDPOINTS(context: { commit: Commit, state: any }) {
+    return graph
+      .query('queryEndpoints')
+      .params({serviceId: context.state.currentService.key, keyword: ''})
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
+      });
+  },
+  GET_SERVICE_INSTANCES(context: { commit: Commit, state: any }, params: any) {
+    return graph
+      .query('queryInstances')
+      .params({serviceId: context.state.currentService.key, ...params})
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_INSTANCES, res.data.data.getServiceInstances);
+      });
+  },
   GET_SERVICE(context: { commit: Commit, rootState: any }, params: any) {
     return graph
     .query('queryDashBoardService')
     .params(params)
     .then((res: AxiosResponse) => {
-      context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
-      context.commit(types.SET_INSTANCES, res.data.data.getServiceInstances);
       context.commit(types.SET_SERVICE_INFO, res.data.data);
     });
   },
   SELECT_SERVICE(context: { commit: Commit, dispatch: Dispatch }, params: any) {
-    context.commit('SET_CURRENT_SERVICE', params);
-    context.dispatch('RUN_EVENTS', {}, {root: true});
+    context.commit('SET_CURRENT_SERVICE', params.service);
+    context.dispatch('MIXHANDLE_GET_OPTION', {...params, compType: 'service'})
+    .then(() => {
+      context.dispatch('RUN_EVENTS', {}, {root: true});
+    });
   },
 };
 

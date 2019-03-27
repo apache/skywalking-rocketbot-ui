@@ -16,6 +16,7 @@
  */
 
 import axios, { AxiosPromise } from 'axios';
+import { cancelToken } from '@/utils/cancelToken';
 import query from './query';
 
 const queryArr: any = query;
@@ -30,7 +31,7 @@ class Graph {
     return axios.post('/graphql', {
       query: queryArr[this.queryData],
       variables: variablesData,
-    });
+    }, { cancelToken: cancelToken() });
   }
 }
 

@@ -71,7 +71,7 @@ export default class Heatmap extends Vue {
           left: 'center',
           bottom: '0',
           inRange: {
-            color: ['#4ff1ea', '#3f96e3'],
+            color: ['#fff', '#3f96e3'],
           },
         },
       ],
@@ -84,7 +84,7 @@ export default class Heatmap extends Vue {
       },
       series: [
         {
-          type: 'scatter',
+          type: 'heatmap',
           data: this.stateDashboard[this.type].getThermodynamic,
           symbolSize: (d: any) => d[2] ? 7 : 0,
         },

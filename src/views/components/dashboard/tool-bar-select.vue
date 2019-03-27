@@ -16,7 +16,7 @@
  */
 
 <template>
-  <div v-show="data.length" class="rk-dashboard-bar-select cp flex-h" v-clickout="() => { visible = false;search = '';}" :class="{'active':visible}">
+  <div class="rk-dashboard-bar-select cp flex-h" v-clickout="() => { visible = false;search = '';}" :class="{'active':visible}">
     <div class="rk-dashboard-bar-i flex-h" @click="visible = !visible">
       <svg class="icon lg mr-15">
         <use :xlink:href="`#${icon}`"></use>

@@ -18,7 +18,7 @@
 <template>
   <nav class="rk-dashboard-group">
     <span v-for="(i, index) in rocketComps.tree" :key="index" class="mr-15">
-      <a class="rk-dashboard-group-i" @click="MIXHANDLE_CHANGE_GROUP(index)" :class="{'active': rocketComps.group == index, 'grey': rocketComps.group != index}">{{i.name}}</a>
+      <a class="rk-dashboard-group-i" @click="handleOption(index)" :class="{'active': rocketComps.group == index, 'grey': rocketComps.group != index}">{{i.name}}</a>
       <svg v-if="rocketGlobal.edit" class="ml-5 icon cp red vm"  @click="DELETE_COMPS_GROUP(index)">
         <use xlink:href="#file-deletion"></use>
       </svg>
@@ -46,7 +46,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import { Mutation, Action } from 'vuex-class';
+import { Mutation, Action, Getter } from 'vuex-class';
 
 @Component({})
 export default class ToolGroup extends Vue {
@@ -55,9 +55,18 @@ export default class ToolGroup extends Vue {
   @Mutation('DELETE_COMPS_GROUP') private DELETE_COMPS_GROUP: any;
   @Mutation('ADD_COMPS_GROUP') private ADD_COMPS_GROUP: any;
   @Action('MIXHANDLE_CHANGE_GROUP') private MIXHANDLE_CHANGE_GROUP: any;
+  @Action('rocketDashboard/MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+  @Getter('durationTime') private durationTime: any;
   private name: string = '';
   private type: string = 'service';
   private show: boolean = false;
+  private get compType() {
+    return this.rocketComps.tree[this.rocketComps.group].type;
+  }
+  private handleOption(index: any) {
+    this.MIXHANDLE_CHANGE_GROUP(index);
+    return this.MIXHANDLE_GET_OPTION({compType: this.compType, duration: this.durationTime});
+  }
   private handleHide() {
     this.name = '';
     this.type = 'service';

@@ -24,10 +24,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import moment from 'dayjs';
 import 'echarts/lib/component/visualMap';
+import moment from 'dayjs';
 @Component
-export default class Response extends Vue {
+export default class Heatmap extends Vue {
   @Prop() private title!: string;
   @Prop() private type!: string;
   @Prop() private stateDashboard!: any;
@@ -35,10 +35,6 @@ export default class Response extends Vue {
   get responseConfig() {
     const w: any = window;
     return {
-      // color: [
-      //   '#3f96e3',
-      //   '#6be6c1',
-      // ],
       tooltip: {
         position: 'top',
         formatter: (a: any) => `${a.data[1] * 100}ms  [ ${a.data[2]} ]`,
@@ -75,8 +71,7 @@ export default class Response extends Vue {
           left: 'center',
           bottom: '0',
           inRange: {
-            color: ['rgba(94, 188, 255, .05)', 'rgba(64, 158, 255, 1)'],
-            symbolSize: [30, 100],
+            color: ['#fff', '#3f96e3'],
           },
         },
       ],

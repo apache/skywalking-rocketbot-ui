@@ -24,6 +24,7 @@ import ChartResponseLine from './chart-response-line.vue';
 import ChartTroughput from './chart-through.vue';
 import ChartBrief from './chart-brief.vue';
 import ChartHeatmap from './chart-heatmap.vue';
+import ChartHeatmapScatter from './chart-scatter.vue';
 import ChartInstance from './chart-instance.vue';
 import ChartSlow from './chart-slow.vue';
 import ChartCpu from './chart-cpu.vue';
@@ -46,6 +47,7 @@ export default {
   ChartTrace,
   ChartBrief,
   ChartHeatmap,
+  ChartHeatmapScatter,
   ChartEnvoyCollections,
   ChartEnvoyMemory,
   ChartInstance,

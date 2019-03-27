@@ -16,7 +16,7 @@
  */
 
 export const DashBoardService = {
-  variable: '$serviceId: ID!, $duration: Duration!, $keyword: String!',
+  variable: '$serviceId: ID!, $duration: Duration!',
   query: `
     getSlowEndpoint: getEndpointTopN(
       serviceId: $serviceId
@@ -39,19 +39,6 @@ export const DashBoardService = {
       key: id
       label: name
       value
-    }
-    getEndpoints: searchEndpoint(serviceId: $serviceId, keyword: $keyword, limit: 9999) {
-      key: id
-      label: name
-    }
-    getServiceInstances(duration: $duration, serviceId: $serviceId) {
-      key: id
-      label: name
-      attributes {
-        name
-        value
-      }
-      language
     }
     getResponseTimeTrend: getLinearIntValues(metric: {
       name: "service_resp_time"

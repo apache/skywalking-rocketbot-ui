@@ -36,16 +36,16 @@ export const Database = {
 export const Endpoints = {
   variable: '$serviceId: ID!, $keyword: String!',
   query: `
-    endpoints: searchEndpoint(serviceId: $serviceId, keyword: $keyword, limit: 10) {
+    getEndpoints: searchEndpoint(serviceId: $serviceId, keyword: $keyword, limit: 9999) {
       key: id
       label: name
     }
 `};
 
 export const Instances = {
-  variable: '$serviceId: ID!, $keyword: String!',
+  variable: '$serviceId: ID!, $duration: Duration!',
   query: `
-    instances: getServiceInstances(duration: $duration, serviceId: $serviceId) {
+    getServiceInstances(duration: $duration, serviceId: $serviceId) {
       key: id
       label: name
       attributes {

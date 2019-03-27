@@ -26,8 +26,10 @@ import components from './components';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/scatter';
+import 'echarts/lib/chart/heatmap';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/tooltip';
+
 import './assets';
 
 Vue.use(components);

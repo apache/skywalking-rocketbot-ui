@@ -51,7 +51,7 @@ export default class Dashboard extends Vue {
   @Mutation('SET_EVENTS') private SET_EVENTS: any;
   @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
   @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
-  @Action('rocketDashboard/GET_GLOBAL') private GET_GLOBAL: any;
+  @Action('rocketDashboard/MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
   @Action('rocketDashboard/MIXHANDLE_GET_DASHBOARD') private MIXHANDLE_GET_DASHBOARD: any;
   @Getter('durationTime') private durationTime: any;
   private isRouterAlive: boolean = true;
@@ -64,9 +64,13 @@ export default class Dashboard extends Vue {
   }
   private handleRefresh() {
     this.MIXHANDLE_GET_DASHBOARD({compType: this.compType, duration: this.durationTime});
-    this.GET_GLOBAL({duration: this.durationTime});
   }
-
+  private handleOption() {
+    return this.MIXHANDLE_GET_OPTION({compType: this.compType, duration: this.durationTime})
+      .then(() => {
+        this.handleRefresh();
+      });
+  }
   private beforeCreate() {
     this.$store.registerModule('rocketDashboard', dashboard);
   }
@@ -75,8 +79,8 @@ export default class Dashboard extends Vue {
       const data: string = `${window.localStorage.getItem('dashboard')}`;
       this.SET_COMPS_TREE(JSON.parse(data));
     }
+    this.handleOption();
     this.SET_EVENTS([this.handleRefresh]);
-    this.handleRefresh();
   }
   private beforeDestroy() {
     this.$store.unregisterModule('rocketDashboard');

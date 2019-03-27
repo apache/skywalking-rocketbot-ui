@@ -18,16 +18,25 @@
 <template>
   <div>
     <div class="rk-dashboard-bar flex-h" v-if="compType === 'service'">
-      <ToolBarSelect @onChoose="SELECT_SERVICE" title="Current Service" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
+      <div class="rk-dashboard-bar-reload">
+        <svg class="icon vm cp rk-btn ghost" @click="handleOption"><use xlink:href="#retry"></use></svg>
+      </div>
+      <ToolBarSelect @onChoose="selectService" title="Current Service" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
       <ToolBarSelect @onChoose="selectEndpoint" title="Current Endpoint" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
       <ToolBarSelect @onChoose="selectInstance" title="Current Instance" :current="stateDashboard.currentInstance" :data="stateDashboard.instances" icon="disk"/>
     </div>
     <div class="rk-dashboard-bar flex-h" v-if="compType === 'proxy'">
-      <ToolBarSelect @onChoose="SELECT_SERVICE" title="Current Proxy" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
+      <div class="rk-dashboard-bar-reload">
+        <svg class="icon vm cp rk-btn ghost" @click="handleOption"><use xlink:href="#retry"></use></svg>
+      </div>
+      <ToolBarSelect @onChoose="selectService" title="Current Proxy" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
       <ToolBarSelect @onChoose="selectEndpoint" title="Current Endpoint" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
       <ToolBarSelect @onChoose="selectInstance" title="Current Instance" :current="stateDashboard.currentInstance" :data="stateDashboard.instances" icon="disk"/>
     </div>
     <div class="rk-dashboard-bar flex-h" v-else-if="compType === 'database'">
+      <div class="rk-dashboard-bar-reload">
+        <svg class="icon vm cp rk-btn ghost" @click="handleOption"><use xlink:href="#retry"></use></svg>
+      </div>
       <ToolBarSelect @onChoose="SELECT_DATABASE" title="Current Database" :current="stateDashboard.currentDatabase" :data="stateDashboard.databases" icon="epic"/>
     </div>
   </div>
@@ -46,7 +55,13 @@ export default class ToolBar extends Vue {
   @Action('rocketDashboard/SELECT_DATABASE') private SELECT_DATABASE: any;
   @Action('rocketDashboard/SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
   @Action('rocketDashboard/SELECT_INSTANCE') private SELECT_INSTANCE: any;
-
+  @Action('rocketDashboard/MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+  private handleOption() {
+    return this.MIXHANDLE_GET_OPTION({compType: this.compType, duration: this.durationTime});
+  }
+  private selectService(i: any) {
+    this.SELECT_SERVICE({service: i, duration: this.durationTime});
+  }
   private selectEndpoint(i: any) {
     this.SELECT_ENDPOINT({endpoint: i, duration: this.durationTime});
   }
@@ -61,5 +76,9 @@ export default class ToolBar extends Vue {
   flex-shrink: 0;
   color: #efefef;
   background-color: #333840;
+}
+.rk-dashboard-bar-reload{
+  padding: 0 5px 0 10px;
+  border-right: 2px solid #252a2f;
 }
 </style>

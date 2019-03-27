@@ -78,28 +78,41 @@ const actions: ActionTree<any, any> = {
     context.commit(types.SET_CURRENT_ENDPOINT, params.endpoint ? params.endpoint : {});
     context.commit(types.SET_CURRENT_INSTANCE, params.instance ? params.instance : {});
   },
+  MIXHANDLE_GET_OPTION(context: { commit: Commit, dispatch: Dispatch, state: State, getters: any }, params: any) {
+    switch (params.compType) {
+      case 'service':
+        return context.dispatch('GET_SERVICES', {duration: params.duration})
+          .then(() => context.dispatch('GET_SERVICE_ENDPOINTS'))
+          .then(() => context.dispatch('GET_SERVICE_INSTANCES', {duration: params.duration}));
+      case 'database':
+        return context.dispatch('GET_DATABASES', {duration: params.duration});
+      default:
+        break;
+    }
+  },
   MIXHANDLE_GET_DASHBOARD(context: { commit: Commit, dispatch: Dispatch, state: State, rootState: any }, params: any) {
-    if ( params.compType === 'service') {
-      context.dispatch('GET_SERVICES', {duration: params.duration})
-      .then(() => context.dispatch('GET_SERVICE',
-        {duration: params.duration, serviceId: context.state.currentService.key, keyword: ''})
-      .then(() => {
-        context.dispatch('GET_ENDPOINT',
-        {
+    context.dispatch('GET_GLOBAL', {duration: params.duration});
+    switch (params.compType) {
+      case 'service':
+        if (!context.state.currentService.key) { return; }
+        context.dispatch('GET_SERVICE', {
+          duration: params.duration,
+          serviceId: context.state.currentService.key,
+          keyword: '',
+        });
+        context.dispatch('GET_ENDPOINT', {
           duration: params.duration,
           endpointId: context.state.currentEndpoint.key,
           endpointName: context.state.currentEndpoint.label,
         });
-        context.dispatch('GET_INSTANCE',
-        {
+        context.dispatch('GET_INSTANCE', {
           duration: params.duration,
           serviceInstanceId: context.state.currentInstance.key,
         });
-      }));
-    } else if ( params.compType === 'database') {
-      context.dispatch('GET_DATABASES', {duration: params.duration})
-      .then(() => context.dispatch('GET_DATABASE',
-        {
+        break;
+      case 'database':
+        if (!context.state.currentDatabase.key) { return; }
+        context.dispatch('GET_DATABASE', {
           duration: params.duration,
           databaseId: context.state.currentDatabase.key,
           condition: {
@@ -108,8 +121,11 @@ const actions: ActionTree<any, any> = {
             topN: 20,
             order: 'DES',
             duration: params.duration,
-      }}),
-      );
+          },
+        });
+        break;
+      default:
+        break;
     }
   },
 };
