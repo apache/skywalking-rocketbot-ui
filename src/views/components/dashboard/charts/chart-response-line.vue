@@ -124,10 +124,10 @@ export default class Response extends Vue {
   get responseConfig() {
     return {
       color: [
-        '#3fe1da',
-        '#3fcfdc',
-        '#3fbcde',
-        '#3fa9e1',
+        '#6be6c1',
+        '#626c91',
+        '#a0a7e6',
+        '#96dee8',
         '#3f96e3',
       ],
       tooltip: {
