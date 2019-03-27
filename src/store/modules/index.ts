@@ -157,10 +157,6 @@ const mutations: MutationTree<State> = {
 const actions: ActionTree<State, any> = {
   SET_DURATION(context: { commit: Commit }, data: Duration) {
     context.commit(types.SET_DURATION, data);
-    if (w.axiosCancel.length !== 0) {
-      for (const event of w.axiosCancel) { setTimeout(event(), 0); }
-      w.axiosCancel = [];
-    }
     context.commit(types.RUN_EVENTS);
   },
   RUN_EVENTS(context: { commit: Commit }) {

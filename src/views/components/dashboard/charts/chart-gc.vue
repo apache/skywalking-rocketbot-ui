@@ -17,7 +17,11 @@
 
 <template>
   <rk-panel :title="title">
-    <RkEcharts height="215px" :option="responseConfig"/>
+    <RkEcharts height="165px" :option="responseConfig"/>
+    <div class="rk-chart-gc sm">
+      <div class="mb-5"><span class="tag mr-5">{{youngGCT}}</span>youngGC collections</div>
+      <div><span class="tag mr-5">{{oldGCT}}</span>oldGC collections</div>
+    </div>
   </rk-panel>
 </template>
 
@@ -30,6 +34,20 @@ export default class Response extends Vue {
   @Prop() private title!: string;
   @Prop() private stateDashboard!: any;
   @Prop() private intervalTime!: any;
+  get youngGCT() {
+    let sum = 0;
+    this.stateDashboard.instanceInfo.youngGCCount.forEach((i: any) => {
+      sum += i.value;
+    });
+    return sum;
+  }
+  get oldGCT() {
+    let sum = 0;
+    this.stateDashboard.instanceInfo.oldGCCount.forEach((i: any) => {
+      sum += i.value;
+    });
+    return sum;
+  }
   get responseConfig() {
     return {
       color: [
@@ -103,3 +121,15 @@ export default class Response extends Vue {
   }
 }
 </script>
+<style lang="scss">
+.rk-chart-gc{
+  height: 50px;
+  .tag{
+    padding: 0 5px;
+    display: inline-block;
+    background-color: #40454e;
+    color: #eee;
+    border-radius: 4px;
+  }
+}
+</style>
