@@ -50,7 +50,10 @@ const getters = {
 const mutations: MutationTree<State> = {
   [types.SET_ENDPOINTS](state: State, data: any) {
     state.endpoints = data;
-    if (!data.length) { return; }
+    if (!data.length) {
+      state.currentEndpoint = {};
+      return;
+    }
     if ((!state.currentEndpoint.key && data.length) || state.endpoints.indexOf(state.currentEndpoint) === -1 ) {
       state.currentEndpoint = data[0];
     }
