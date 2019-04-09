@@ -26,6 +26,17 @@ export const DashBoardEndpoint = {
         value
       }
     }
+    getEndpointTopology(endpointId: $endpointId, duration: $duration) {
+      nodes {
+        name: id
+        value: name
+      }
+      calls {
+        id
+        source
+        target
+      }
+    }
     getEndpointThroughputTrend: getLinearIntValues(metric: {
       name: "endpoint_cpm"
       id: $endpointId
@@ -94,3 +105,17 @@ export const DashBoardEndpoint = {
       }
     }
   `};
+
+export const DashBoardEndpointTopo = {
+  variable: '$duration: Duration!, $idsS: [ID!]!',
+  query: `
+    cpm: getValues(metric: {
+      name: "endpoint_relation_cpm"
+      ids: $idsS
+    }, duration: $duration) {
+      values {
+        id
+        value
+      }
+    }
+`};

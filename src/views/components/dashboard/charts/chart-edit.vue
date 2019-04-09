@@ -69,7 +69,7 @@ export default class Response extends Vue {
 }
 .rk-chart-edit-container{
   padding: 7px 10px;
-  border: 1px dashed rgba(196, 200, 225, .4);
+  border: 1px dashed rgba(196, 200, 225, .5);
   margin-bottom: 10px;
   border-top: 0;
   .title{

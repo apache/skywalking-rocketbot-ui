@@ -23,6 +23,7 @@ import ChartResponse from './chart-response.vue';
 import ChartResponseLine from './chart-response-line.vue';
 import ChartTroughput from './chart-through.vue';
 import ChartBrief from './chart-brief.vue';
+import ChartDependency from './chart-dependency.vue';
 import ChartHeatmap from './chart-heatmap.vue';
 import ChartHeatmapScatter from './chart-scatter.vue';
 import ChartInstance from './chart-instance.vue';
@@ -57,4 +58,5 @@ export default {
   ChartHeap,
   ChartNonHeap,
   ChartTraceDB,
+  ChartDependency,
 };

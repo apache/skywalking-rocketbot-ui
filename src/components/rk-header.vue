@@ -131,7 +131,9 @@ export default class Header extends Vue {
   padding-left: 15px;
   font-size: 13px;
   color: #efefef;
+  z-index: 9;
   background-color: #252a2f;
+  box-shadow: 0 1px 2px 0 rgba(26, 24, 29, 0.24);
   .svg-logo {
     width: 22px;
     height: 22px;

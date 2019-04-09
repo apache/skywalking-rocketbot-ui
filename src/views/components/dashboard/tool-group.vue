@@ -32,7 +32,7 @@
         <div class="sm grey mb-5 mr-10">Group Type</div>
         <select v-model="type" class="rk-dashboard-group-sel mb-5 long">
           <option value="service">Service</option>
-          <option value="proxy">Proxy</option>
+          <!-- <option value="proxy">Proxy</option> -->
           <option value="database">Database</option>
         </select>
         <div class="sm grey  mb-5 mr-10">Group Name</div>

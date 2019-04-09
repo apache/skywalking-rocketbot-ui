@@ -36,7 +36,7 @@ export const Database = {
 export const Endpoints = {
   variable: '$serviceId: ID!, $keyword: String!',
   query: `
-    getEndpoints: searchEndpoint(serviceId: $serviceId, keyword: $keyword, limit: 9999) {
+    getEndpoints: searchEndpoint(serviceId: $serviceId, keyword: $keyword, limit: 100) {
       key: id
       label: name
     }

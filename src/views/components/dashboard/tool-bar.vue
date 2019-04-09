@@ -22,7 +22,7 @@
         <svg class="icon vm cp rk-btn ghost" @click="handleOption"><use xlink:href="#retry"></use></svg>
       </div>
       <ToolBarSelect @onChoose="selectService" title="Current Service" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
-      <ToolBarSelect @onChoose="selectEndpoint" title="Current Endpoint" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
+      <ToolBarEndpointSelect @onChoose="selectEndpoint" title="Current Endpoint" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
       <ToolBarSelect @onChoose="selectInstance" title="Current Instance" :current="stateDashboard.currentInstance" :data="stateDashboard.instances" icon="disk"/>
     </div>
     <div class="rk-dashboard-bar flex-h" v-if="compType === 'proxy'">
@@ -30,7 +30,7 @@
         <svg class="icon vm cp rk-btn ghost" @click="handleOption"><use xlink:href="#retry"></use></svg>
       </div>
       <ToolBarSelect @onChoose="selectService" title="Current Proxy" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
-      <ToolBarSelect @onChoose="selectEndpoint" title="Current Endpoint" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
+      <ToolBarEndpointSelect @onChoose="selectEndpoint" title="Current Endpoint" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
       <ToolBarSelect @onChoose="selectInstance" title="Current Instance" :current="stateDashboard.currentInstance" :data="stateDashboard.instances" icon="disk"/>
     </div>
     <div class="rk-dashboard-bar flex-h" v-else-if="compType === 'database'">
@@ -45,8 +45,9 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import ToolBarSelect from './tool-bar-select.vue';
+import ToolBarEndpointSelect from './tool-bar-select-endpoint.vue';
 import { State, Action } from 'vuex-class';
-@Component({components: {ToolBarSelect}})
+@Component({components: {ToolBarSelect, ToolBarEndpointSelect}})
 export default class ToolBar extends Vue {
   @Prop() private compType!: any;
   @Prop() private stateDashboard!: any;

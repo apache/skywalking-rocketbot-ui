@@ -17,7 +17,7 @@
 
 import { DashBoardGlobal } from '../fragments/dashboard-global';
 import { DashBoardService } from '../fragments/dashboard-service';
-import { DashBoardEndpoint } from '../fragments/dashboard-endpoint';
+import { DashBoardEndpoint, DashBoardEndpointTopo } from '../fragments/dashboard-endpoint';
 import { DashBoardInstance } from '../fragments/dashboard-instance';
 import { DashBoardDatabase } from '../fragments/dashboard-database';
 
@@ -29,6 +29,9 @@ export const queryDashBoardService =
 
 export const queryDashBoardEndpoint =
   `query queryDashBoardEndpoint(${DashBoardEndpoint.variable}) {${DashBoardEndpoint.query}}`;
+
+export const queryDashBoardEndpointTopo =
+  `query DashBoardEndpointTopo(${DashBoardEndpointTopo.variable}) {${DashBoardEndpointTopo.query}}`;
 
 export const queryDashBoardInstance =
   `query queryDashBoardInstance(${DashBoardInstance.variable}) {${DashBoardInstance.query}}`;

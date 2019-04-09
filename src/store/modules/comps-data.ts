@@ -66,6 +66,8 @@ const initState: State = {
       comp: 'ChartResponse', title: 'Endpoint Percent Response', type: 'endpointInfo', width: 3 },
       { o: 'ServiceEndpoint', name: 'Endpoint Percent Response(line)',
       comp: 'ChartResponseLine', title: 'Endpoint Percent Response', type: 'endpointInfo', width: 3 },
+      { o: 'ServiceEndpoint', name: 'Dependency Map',
+      comp: 'ChartDependency', title: 'Dependency Map', type: 'endpointInfo', width: 6 },
       { o: 'ServiceEndpoint', name: 'Endpoint Top Slow Traces',
       comp: 'ChartTrace', title: 'Endpoint Top Slow Traces', type: 'endpointInfo.queryBasicTraces', width: 6 },
       // instance

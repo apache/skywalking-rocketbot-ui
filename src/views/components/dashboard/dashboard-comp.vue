@@ -17,12 +17,12 @@
 
 <template>
   <div class="rk-dashboard-comp">
-    <nav class="rk-dashboard-comp-nav mb-10">
+    <nav class="rk-dashboard-comp-nav mb-15">
       <a class="rk-dashboard-comp-nav-i b mr-20" v-if="value.length" @click="current = key" :class="{'active': key === current}" v-for="(value, key) in tree" :key="key">{{key}}</a>
     </nav>
     <div class="rk-dashboard-comp-wrapper">
-      <div class="rk-dashboard-comp-i mr-5 mb-15" v-for="(i, index) in tree[current]" :key="index">
-        <span class="b mr-5">{{i.o}}</span>
+      <div class="rk-dashboard-comp-i mr-10 mb-10" v-for="(i, index) in tree[current]" :key="index">
+        <span class="b mr-5 sm">{{i.o}}</span>
         <svg class="icon blue cp lg r" @click="ADD_COMP(i)">
           <use xlink:href="#file-addition"></use>
         </svg>
@@ -68,33 +68,33 @@ export default class Comps extends Vue {
 .rk-dashboard-comp-nav-i{
   display: inline-block;
   line-height: 30px;
-  border-top: 2px;
-  border-top-style: solid;
+  border-bottom: 2px;
+  border-bottom-style: solid;
   color: rgba(61, 68, 79, .6);
   border-color: rgba(0, 0, 0, 0);
   will-change: border-color,color;
   transition: border-color .3s, color .3s;
   &:hover{
-    color: inherit;
+    color: #448dfe;
   }
   &.active{
-    color: inherit;
-    border-color: inherit;
+    color: #448dfe;
+    border-color: #448dfe;
   }
 }
 .rk-dashboard-comp {
   flex-shrink: 0;
   border-top: 1px solid #c1c5ca41;
   color: #515a6e;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 2px 0 rgba(26, 24, 29, 0.15), 0 1px 4px 0 rgba(26, 24, 29, 0.1);
   background-color: rgba(196, 200, 225, 0.2);
   .title{
     padding: 0 15px;
   }
 }
 .rk-dashboard-comp-wrapper{
-  white-space: nowrap;
-  overflow: auto;
+  // white-space: nowrap;
+  // overflow: auto;
   padding: 0 15px;
 }
 .rk-dashboard-comp-i{

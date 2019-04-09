@@ -36,6 +36,10 @@ const initState: State = {
     p95: [],
     p99: [],
     getResponseTimeTrend: [],
+    getEndpointTopology: {
+      nodes: [],
+      calls: [],
+    },
     getSLATrend: [],
     getThroughputTrend: [],
     queryBasicTraces: [],
@@ -48,6 +52,15 @@ const getters = {
 
 // mutations
 const mutations: MutationTree<State> = {
+  [types.SET_SEARCH_ENDPOINTS](state: State, data: any) {
+    state.endpoints = data;
+    if (!data.length) {
+      return ;
+    }
+    if ((!state.currentEndpoint.key && data.length) || state.endpoints.indexOf(state.currentEndpoint) === -1 ) {
+      state.currentEndpoint = data[0];
+    }
+  },
   [types.SET_ENDPOINTS](state: State, data: any) {
     state.endpoints = data;
     if (!data.length) {
@@ -68,6 +81,8 @@ const mutations: MutationTree<State> = {
     state.endpointInfo.p90 = data.getP90 ? data.getP90.values : [];
     state.endpointInfo.p95 = data.getP95 ? data.getP95.values : [];
     state.endpointInfo.p99 = data.getP99 ? data.getP99.values : [];
+    state.endpointInfo.getEndpointTopology =
+    data.getEndpointTopology ? data.getEndpointTopology : { nodes: [], calls: []};
     state.endpointInfo.getResponseTimeTrend =
     data.getEndpointResponseTimeTrend ? data.getEndpointResponseTimeTrend.values : [];
     state.endpointInfo.getSLATrend = data.getEndpointSLATrend ? data.getEndpointSLATrend.values : [];
@@ -101,7 +116,27 @@ const actions: ActionTree<State, any> = {
         traceState: 'ALL',
       }})
     .then((res: AxiosResponse) => {
-      context.commit(types.SET_ENDPOINT_INFO, res.data.data);
+      return graph
+        .query('queryDashBoardEndpointTopo')
+        .params({
+          duration: params.duration,
+          idsS: res.data.data.getEndpointTopology.calls.map((i: any) => i.id),
+        })
+        .then((resInfo: AxiosResponse) => {
+          const info = resInfo.data.data.cpm.values;
+          // tslint:disable-next-line:prefer-for-of
+          for (let i = 0; i < info.length; i += 1) {
+            for (let j = 0; j < res.data.data.getEndpointTopology.calls.length; j += 1) {
+              if (res.data.data.getEndpointTopology.calls[j].id === info[i].id) {
+                res.data.data.getEndpointTopology.calls[j] = {
+                  ...res.data.data.getEndpointTopology.calls[j],
+                  value: info[i].value,
+                };
+              }
+            }
+          }
+          context.commit(types.SET_ENDPOINT_INFO, res.data.data);
+        });
     });
   },
   SELECT_ENDPOINT(context: { commit: Commit, dispatch: Dispatch }, params: any) {

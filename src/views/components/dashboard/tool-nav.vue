@@ -64,7 +64,6 @@ export default class ToolNav extends Vue {
 
 <style lang="scss" scoped>
 .rk-dashboard-nav{
-  border-bottom:1px solid #c1c5ca00;
   box-shadow: 0 1px 0px rgba(0, 0, 0, 0.08);
   height: 40px;
   background-color: rgba(196, 200, 225, .2);

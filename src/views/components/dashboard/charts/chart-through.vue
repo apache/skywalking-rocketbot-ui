@@ -19,6 +19,9 @@
 <rk-panel :title="title">
   <div class="rk-chart-trace clear scroll_hide" style="overflow:auto;">
     <div class="rk-chart-trace-i" v-for="i in stateDashboard[typeArr[0]][typeArr[1]]" :key="i.key">
+      <svg class="icon vm r grey link-hover cp" @click="handleClick(i.label)">
+        <use xlink:href="#review-list"></use>
+      </svg>
       <div class="mb-5 ell" v-tooltip:top.ellipsis="i.label || ''">
         <span class="calls sm mr-10">{{i.value}} cpm</span>
         <span class="cp link-hover" @click="appChange(i)">{{i.label}}</span>
@@ -47,6 +50,16 @@ export default class RkTopThroughput extends Vue {
   get maxValue() {
     const temp: number[] = this.stateDashboard[this.typeArr[0]][this.typeArr[1]].map((i: any) => i.duration);
     return Math.max.apply(null, temp);
+  }
+  private handleClick(i: any) {
+    const input = document.createElement('input');
+    input.value = i;
+    document.body.appendChild(input);
+    input.select();
+    if (document.execCommand('Copy')) {
+        document.execCommand('Copy');
+    }
+    input.style.display = 'none';
   }
 }
 </script>
