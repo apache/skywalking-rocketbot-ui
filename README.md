@@ -7,6 +7,9 @@
 </p>
 
 ## Introduction
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b81568ea483d48c3aecf2305741d9b15)](https://app.codacy.com/app/TinyAllen/rocketbot?utm_source=github.com&utm_medium=referral&utm_content=TinyAllen/rocketbot&utm_campaign=Badge_Grade_Dashboard)
+
 **RocketBot**: A modern and awesome UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking).
 
 ## Screenshots
