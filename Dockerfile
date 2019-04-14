@@ -20,11 +20,13 @@ COPY ./dist/ /usr/share/nginx/html/
 COPY ./nginx.conf /etc/nginx/nginx.conf
 COPY ./run.sh /usr/share/run.sh
 
-ENV TZ=Asia/Shanghai
+ENV TZ Asia/Shanghai
 
 RUN set -ex \
     && apk add --no-cache bash tzdata \
-    && chmod +x /usr/share/run.sh
+    && chmod +x /usr/share/run.sh \
+    && ln -sf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone
 
 EXPOSE 80
 
