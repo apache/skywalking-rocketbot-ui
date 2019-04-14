@@ -127,7 +127,14 @@ Which companies are using SkyWalking RocketBot, Welcome to register in issues #1
 
 ## FAQ
 
-- How to set DateTimeZone in RocketBot Docker?
 
-RocketBot [Dockerfile](Dockerfile) use `Asia/Shanghai` TimeZone default.
-Just reset `TZ` env variable value,if you need to adjust for your situation.
+1、How to set TimeZone in RocketBot Docker?
+
+e.g: setting `Asia/Shanghai` TimeZone in RocketBot [Dockerfile](Dockerfile) as followings:
+
+```txt
+···
+ENV TZ Asia/Shanghai
+RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone
+```
