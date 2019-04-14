@@ -100,21 +100,6 @@ docker run -p 8080:80 -d -e SKYWALKING_URL=127.0.0.1:1234,127.0.0.1:1235 rocketb
 
 The default UI address is `http://localhost:8080`.
 
-### Setting the timezone for docker image
-
-Suppose you want to use Shanghai First copy the proper zone to localtime
-
-```dockerfile
-ls /usr/share/zoneinfo
-cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-```
-
-Now specify your timezone
-
-```
-echo "Asia/Shanghai" >  /etc/timezone
-```
-
 ## Contributing to RocketBot
 
 Thanks for your interest and hope it will be a
@@ -139,3 +124,17 @@ Which companies are using SkyWalking RocketBot, Welcome to register in issues #1
 <img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=4229681157,1554083661&fm=58&s=51B3A8720790BF80CCC2538703007088&bpow=121&bpoh=75" height="40px">&nbsp;&nbsp;
 
 </p>
+
+## FAQ
+
+
+1、How to set TimeZone in RocketBot Docker?
+
+e.g: setting `Asia/Shanghai` TimeZone in RocketBot [Dockerfile](Dockerfile) as followings:
+
+```txt
+···
+ENV TZ Asia/Shanghai
+RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone
+```

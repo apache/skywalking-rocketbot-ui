@@ -20,8 +20,6 @@ COPY ./dist/ /usr/share/nginx/html/
 COPY ./nginx.conf /etc/nginx/nginx.conf
 COPY ./run.sh /usr/share/run.sh
 
-ENV TZ=Asia/Shanghai
-
 RUN set -ex \
     && apk add --no-cache bash tzdata \
     && chmod +x /usr/share/run.sh

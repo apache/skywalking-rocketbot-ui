@@ -22,7 +22,9 @@ RUN cd /app/ \
     && npm run build
 
 FROM nginx:1.14-alpine
+
 COPY --from=node-builder /app/ /app/
+
 RUN set -ex \
     && apk add --no-cache bash tzdata \
     && mv /app/dist/* /usr/share/nginx/html/ \
