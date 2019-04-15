@@ -138,4 +138,44 @@ export const DashBoardInstance = {
         value
       }
     }
+    clrHeap: getLinearIntValues(metric: {
+      name: "instance_clr_heap_memory"
+      id: $serviceInstanceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    clrGCGen0: getLinearIntValues(metric: {
+      name: "instance_clr_gen0_collect_count"
+      id: $serviceInstanceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    clrGCGen1: getLinearIntValues(metric: {
+      name: "instance_clr_gen1_collect_count"
+      id: $serviceInstanceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    clrGCGen2: getLinearIntValues(metric: {
+      name: "instance_clr_gen2_collect_count"
+      id: $serviceInstanceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    clrCPU: getLinearIntValues(metric: {
+      name: "instance_clr_cpu"
+      id: $serviceInstanceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
   `};
