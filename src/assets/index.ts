@@ -23,7 +23,10 @@ import './svg/link.svg';
 import './svg/code.svg';
 import './svg/close.svg';
 import './svg/clear.svg';
+import './svg/issue-child.svg';
 import './svg/package.svg';
+import './svg/list-bulleted.svg';
+
 import './svg/earth.svg';
 import './svg/epic.svg';
 import './svg/chevron-left.svg';

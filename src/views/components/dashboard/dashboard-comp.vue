@@ -18,11 +18,11 @@
 <template>
   <div class="rk-dashboard-comp">
     <nav class="rk-dashboard-comp-nav mb-15">
-      <a class="rk-dashboard-comp-nav-i b mr-20" v-if="value.length" @click="current = key" :class="{'active': key === current}" v-for="(value, key) in tree" :key="key">{{key}}</a>
+      <a class="rk-dashboard-comp-nav-i b mr-20" v-if="value.length" @click="current = key" :class="{'active': key === current}" v-for="(value, key) in tree" :key="key">{{$t(key.toLowerCase())}}</a>
     </nav>
     <div class="rk-dashboard-comp-wrapper">
       <div class="rk-dashboard-comp-i mr-10 mb-10" v-for="(i, index) in tree[current]" :key="index">
-        <span class="b mr-5 sm">{{i.o}}</span>
+        <span class="b mr-5 sm">{{$t(i.o.toLowerCase())}}</span>
         <svg class="icon blue cp lg r" @click="ADD_COMP(i)">
           <use xlink:href="#file-addition"></use>
         </svg>

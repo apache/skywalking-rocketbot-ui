@@ -22,7 +22,7 @@
     </svg>
     <div class="link-topo-aside-box mb-10" v-if="!stateTopo.currentNode.name && show">
       <div class="mb-20">
-        <span class="b dib mr-20">All Services</span>
+        <span class="b dib mr-20">{{this.$t('allServices')}}</span>
       </div>
       <div class="mb-10" v-for="(val, key, index) in types" :key="index">
         <span class="r">{{val}}</span>
@@ -31,34 +31,34 @@
     </div>
     <div class="link-topo-aside-box mb-10" v-else-if="show">
       <div class="mb-20">
-        <span class="b dib mr-20">Service Detail</span>
+        <span class="b dib mr-20">{{this.$t('serviceDetail')}}</span>
       </div>
       <div class="mb-10">
-        <span class="label grey">Name</span>
+        <span class="label grey">{{this.$t('name')}}</span>
         <span class="content">{{stateTopo.currentNode.name}}</span>
       </div>
       <div class="mb-10">
-        <span class="label grey">Type</span>
+        <span class="label grey">{{this.$t('type')}}</span>
         <span class="content">{{stateTopo.currentNode.type}}</span>
       </div>
       <div class="mb-10" v-if="stateTopo.currentNode.cpm">
-        <span class="label grey">Cpm</span>
+        <span class="label grey">{{this.$t('cpm')}}</span>
         <span class="content">{{stateTopo.currentNode.cpm}}</span>
       </div>
       <div class="mb-10" v-if="stateTopo.currentNode.sla">
-        <span class="label grey">SLA</span>
+        <span class="label grey">{{this.$t('sla')}}SLA</span>
         <span class="content">{{stateTopo.currentNode.sla || ''}}%</span>
       </div>
       <div class="mb-10" v-if="stateTopo.currentNode.latency">
-        <span class="label grey">Latency</span>
+        <span class="label grey">{{this.$t('latency')}}</span>
         <span class="content">{{stateTopo.currentNode.latency}} ms</span>
       </div>
     </div>
     <div class="link-topo-aside-box">
       <div class="mb-5 clear">
-        <span class="b dib mr-20 vm">Detect Point</span>
-        <span class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':!stateTopo.mode}" @click="setMode(false)">Client</span>
-        <span class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':stateTopo.mode}" @click="setMode(true)">Server</span>
+        <span class="b dib mr-20 vm">{{this.$t('detectPoint')}}</span>
+        <span class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':!stateTopo.mode}" @click="setMode(false)">{{this.$t('client')}}</span>
+        <span class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':stateTopo.mode}" @click="setMode(true)">{{this.$t('server')}}</span>
       </div>
       <TopoChart v-if="stateTopo.getResponseTimeTrend.length" title="Avg Response Time" unit="ms" :intervalTime="intervalTime" :data="stateTopo.getResponseTimeTrend"/>
       <TopoChart v-if="stateTopo.getThroughputTrend.length" title="Avg Throughput" unit="cpm" :intervalTime="intervalTime" :data="stateTopo.getThroughputTrend"/>

@@ -21,9 +21,9 @@
       <div class="rk-dashboard-bar-reload">
         <svg class="icon vm cp rk-btn ghost" @click="handleOption"><use xlink:href="#retry"></use></svg>
       </div>
-      <ToolBarSelect @onChoose="selectService" title="Current Service" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
-      <ToolBarEndpointSelect @onChoose="selectEndpoint" title="Current Endpoint" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
-      <ToolBarSelect @onChoose="selectInstance" title="Current Instance" :current="stateDashboard.currentInstance" :data="stateDashboard.instances" icon="disk"/>
+      <ToolBarSelect @onChoose="selectService" :title="this.$t('currentService')" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
+      <ToolBarEndpointSelect @onChoose="selectEndpoint" :title="this.$t('currentEndpoint')" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
+      <ToolBarSelect @onChoose="selectInstance" :title="this.$t('currentInstance')" :current="stateDashboard.currentInstance" :data="stateDashboard.instances" icon="disk"/>
     </div>
     <div class="rk-dashboard-bar flex-h" v-if="compType === 'proxy'">
       <div class="rk-dashboard-bar-reload">
@@ -37,7 +37,7 @@
       <div class="rk-dashboard-bar-reload">
         <svg class="icon vm cp rk-btn ghost" @click="handleOption"><use xlink:href="#retry"></use></svg>
       </div>
-      <ToolBarSelect @onChoose="SELECT_DATABASE" title="Current Database" :current="stateDashboard.currentDatabase" :data="stateDashboard.databases" icon="epic"/>
+      <ToolBarSelect @onChoose="SELECT_DATABASE" :title="this.$t('currentDatabase')" :current="stateDashboard.currentDatabase" :data="stateDashboard.databases" icon="epic"/>
     </div>
   </div>
 </template>

@@ -16,8 +16,8 @@
  */
 
 <template>
-  <div class="time-charts scroll_hide">
-    <transition-group name="fade" tag="div" class="mb-5">
+  <div class="time-charts scroll_hide flex-v">
+    <transition-group name="fade" tag="div">
       <span class="time-charts-item mr-10" v-for="(i,index) in list" :key="i" :style="`color:${computedScale(index)}`">
          <svg class="icon vm mr-5 sm">
             <use xlink:href="#issue-open-m"></use>
@@ -70,16 +70,16 @@ export default {
       this.changeTree();
       this.tree = new Tree(this.$refs.traceTree,this.data, null, this.topSlowMax,this.topSlowMin,this.topChildMax,this.topChildMin)
       this.tree.init({label:`${this.traceId}`, children: this.segmentId}, this.data);
-      this.tree.draw();
-      this.resize = this.tree.resize.bind(this.tree);
+      // this.tree.draw();
+      // this.resize = this.tree.resize.bind(this.tree);
     }
   },
   mounted() {
     this.changeTree();
     this.tree = new Tree(this.$refs.traceTree,this.data, null, this.topSlowMax,this.topSlowMin,this.topChildMax,this.topChildMin)
     this.tree.init({label:`${this.traceId}`, children: this.segmentId}, this.data);
-    this.tree.draw();
-    this.resize = this.tree.resize.bind(this.tree);
+    // this.tree.draw();
+    // this.resize = this.tree.resize.bind(this.tree);
     // this.computedScale();
   },
   methods: {
@@ -163,11 +163,16 @@ export default {
 <style lang="scss">
 .time-charts{
   overflow: auto;
+  flex-grow: 1;
+  height: 100%;
   padding: 15px 30px;
 }
 .trace-node .group {
   cursor: pointer;
   fill-opacity: 0;
+}
+.trace-tree-inner{
+  height: 100%;
 }
 .trace-node-container{
   fill: rgba(0, 0, 0, 0);
@@ -195,7 +200,8 @@ export default {
   border-radius: 4px;
 }
  .trace-tree{
-   fill: rgba(0,0,0,0)
+   fill: rgba(0,0,0,0);
+   flex-grow: 1;
  }
  .trace-tree .trace-node rect{
    &:hover{

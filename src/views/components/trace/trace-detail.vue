@@ -17,7 +17,7 @@
 
 <template>
   <div class="rk-trace-detail flex-v">
-    <div class="rk-trace-detail-wrapper"  v-if="current.endpointNames">
+    <div class="rk-trace-detail-wrapper clear"  v-if="current.endpointNames">
       <h5 class="mb-5 mt-0">
         <svg v-if="current.isError" class="icon red vm mr-5 sm">
           <use xlink:href="#clear"></use>
@@ -29,13 +29,24 @@
           <option v-for="i in current.traceIds" :value="i" :key="i">{{i}}</option>
         </select>
       </div>
-      <div class="rk-tag mr-5">Start</div><span class="mr-15 sm">{{parseInt(current.start) | dateformat}}</span>
-      <div class="rk-tag mr-5">Duration</div><span class="mr-15 sm">{{current.duration}} ms</span>
-      <div class="rk-tag mr-5">Spans</div><span class="sm">9</span>
+      <!-- <a class="rk-btn sm r" :class="{'ghost':mode}" @click="mode = false">
+        <svg class="icon vm sm">
+          <use xlink:href="#issue-child"></use>
+        </svg>
+        Tree</a>
+      <a class="rk-btn mr-5 sm r" :class="{'ghost':!mode}" @click="mode = true">
+         <svg class="icon vm sm">
+          <use xlink:href="#list-bulleted"></use>
+        </svg>
+        List</a> -->
+      
+      <div class="rk-tag mr-5">{{this.$t('start')}}</div><span class="mr-15 sm">{{parseInt(current.start) | dateformat}}</span>
+      <div class="rk-tag mr-5">{{this.$t('duration')}}</div><span class="mr-15 sm">{{current.duration}} ms</span>
+      <div class="rk-tag mr-5">{{this.$t('spans')}}</div><span class="sm">9</span>
     </div>
-    <TraceDetailChartList v-show="mode" v-if="current.endpointNames" :data="spans" :traceId="current.traceIds[0]"/>
-    <!-- <TraceDetailChartTree v-show="!mode" v-if="current.endpointNames" :data="spans" :traceId="current.traceIds[0]"/> -->
-    <div v-else class="flex-h container">
+    <TraceDetailChartList v-if="mode&&current.endpointNames" :data="spans" :traceId="current.traceIds[0]"/>
+    <TraceDetailChartTree v-if="!mode&&current.endpointNames" :data="spans" :traceId="current.traceIds[0]"/>
+    <div v-if="!current.endpointNames" class="flex-h container">
       <svg class="icon rk-icon-trace">
         <use xlink:href="#unlink"></use>
       </svg>
@@ -63,7 +74,7 @@ export default class Header extends Vue {
 .rk-trace-detail {
   flex-shrink: 0;
   height: 100%;
-  width: 70%;
+  width: 75%;
 }
 .rk-trace-detail-wrapper {
   padding: 8px 30px;

@@ -123,7 +123,7 @@ const actions: ActionTree<State, any> = {
           idsS: res.data.data.getEndpointTopology.calls.map((i: any) => i.id),
         })
         .then((resInfo: AxiosResponse) => {
-          const info = resInfo.data.data.cpm.values;
+          const info = resInfo.data.data.cpm ? resInfo.data.data.cpm.values : [];
           // tslint:disable-next-line:prefer-for-of
           for (let i = 0; i < info.length; i += 1) {
             for (let j = 0; j < res.data.data.getEndpointTopology.calls.length; j += 1) {

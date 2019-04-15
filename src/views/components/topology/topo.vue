@@ -97,6 +97,7 @@ export default {
   beforeDestroy() {
     this.tip.hide({}, this);
     window.removeEventListener('resize', this.resize);
+    d3.selectAll('.d3-tip-grey').remove();
     // this.$store.commit('skywalking/setCurrentNode', []);
   },
   mounted() {

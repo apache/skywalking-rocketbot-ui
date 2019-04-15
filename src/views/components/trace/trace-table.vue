@@ -20,8 +20,8 @@
       <div class="rk-trace-t-tool flex-h">
         <RkPage :currentSize="15" :currentPage="rocketTrace.traceForm.paging.pageNum" @changePage="page" :total="rocketTrace.traceTotal"/>
         <select class='grey' @change="changeSort" :value="rocketTrace.traceForm.queryOrder">
-          <option value="BY_START_TIME">StartTime</option>
-          <option value="BY_DURATION">Duration</option>
+          <option value="BY_START_TIME">{{this.$t('startTime')}}</option>
+          <option value="BY_DURATION">{{this.$t('duration')}}</option>
         </select>
       </div>
       <div class="rk-trace-t-loading" v-show="!rocketTrace.traceList.length">

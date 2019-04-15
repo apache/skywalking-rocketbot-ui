@@ -17,9 +17,9 @@
 
 <template>
   <nav class="rk-alarm-tool flex-h">
-    <AlarmSelect title="Filter Scope" :value="alarmScope" @input="handleFilter" :data="alarmOptions"/>
+    <AlarmSelect :title="this.$t('filterScope')" :value="alarmScope" @input="handleFilter" :data="alarmOptions"/>
     <div class="mr-10" style="padding: 3px 15px 0">
-      <div class="sm grey">Search Keyword</div>
+      <div class="sm grey">{{this.$t('searchKeyword')}}</div>
       <input type="text"  :value="keyword" class="rk-alarm-tool-input" @input="handleRefresh">
     </div>
     <RkPage class="mt-15" :currentSize="20" :currentPage="pageNum" @changePage="handlePage" :total="total"/>

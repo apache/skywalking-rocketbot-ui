@@ -256,3 +256,5 @@ d3-tip          0.9.1:  https://github.com/Caged/d3-tip BSD-3-Clause
 d3-transition   1.1.3:  https://github.com/d3/d3-transition     BSD-3-Clause
 d3-voronoi      1.1.4:  https://github.com/d3/d3-voronoi        BSD-3-Clause
 d3-zoom 1.7.3:  https://github.com/d3/d3-zoom   BSD-3-Clause
+zrender 4.0.4:  https://github.com/ecomfe/zrender   BSD-3-Clause
+vue-i18n 8.10.0:  https://github.com/kazupon/vue-i18n   MIT

@@ -19,6 +19,9 @@ import Vue from 'vue';
 import moment from 'dayjs';
 import clickout from '@/utils/clickout';
 import tooltip from '@/utils/tooltip';
+import zh from '@/assets/lang/zh';
+import en from '@/assets/lang/en';
+import VueI18n from 'vue-i18n';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -32,11 +35,28 @@ import 'echarts/lib/component/legend';
 import 'echarts/lib/component/tooltip';
 import './assets';
 
+Vue.use(VueI18n);
 Vue.use(components);
 Vue.directive('clickout', clickout);
 Vue.directive('tooltip', tooltip);
 
 Vue.filter('dateformat', (dataStr: any, pattern = 'YYYY-MM-DD HH:mm:ss') => moment(dataStr).format(pattern));
+const saveLang = window.localStorage.getItem('lang');
+let language = navigator.language;
+if (!saveLang) {
+  window.localStorage.setItem('lang', language);
+} else {
+  language = saveLang;
+}
+
+const i18n = new VueI18n({
+  // locale: 'en-us',
+  locale: language,
+  messages: {
+    zh,
+    en,
+  },
+});
 
 const w = window as any;
 if (!w.Promise) { w.Promise = Promise; }
@@ -44,6 +64,7 @@ if (!w.Promise) { w.Promise = Promise; }
 Vue.config.productionTip = false;
 
 new Vue({
+  i18n,
   router,
   store,
   render: (h) => h(App),

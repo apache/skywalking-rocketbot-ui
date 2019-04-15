@@ -38,7 +38,7 @@
         <div v-for="(i, index) in this.currentSpan.logs" :key="index">
           <div class="mb-10 sm"><span class="mr-10">Time:</span><span class="grey">{{i.time | dateformat}}</span></div>
           <div class="mb-15 clear" v-for="(_i, _index) in i.data" :key="_index">
-            <span class="g-sm-4">{{_i.key}}:</span><pre class="g-sm-8 mt-0 mb-0 sm" style="overflow:auto">{{_i.value}}</pre>
+            <div class="mb-10">{{_i.key}}:</div><pre class="g-sm-8 mt-0 mb-0 sm" style="overflow:auto">{{_i.value}}</pre>
           </div>
         </div>
       </div>
@@ -70,6 +70,9 @@ export default {
       this.tree.init({label:`TRACE_ROOT`, children: this.segmentId}, this.data);
       this.tree.draw()
     }
+  },
+  beforeDestroy() {
+    d3.selectAll('.d3-tip').remove();
   },
   mounted() {
     this.changeTree();

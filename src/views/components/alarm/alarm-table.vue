@@ -25,7 +25,7 @@
         'blue': i.scope === 'Service',
         'green':i.scope === 'Endpoint',
         'yellow':i.scope === 'ServiceInstance',
-      }">{{i.scope}}</div>
+      }">{{$t(i.scope.toLowerCase())}}</div>
       <div class="grey sm show-xs">{{parseInt(i.startTime) | dateformat}}</div>
     </div>
   </div>

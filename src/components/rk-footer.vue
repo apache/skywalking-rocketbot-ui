@@ -29,11 +29,12 @@
           <svg class="vm icon mr-5">
             <use xlink:href="#settings"></use>
           </svg>
-          <span class="vm">{{rocketbotGlobal.edit?'Edit Mode':'User Mode'}}</span>
+          <span class="vm">{{rocketbotGlobal.edit?this.$t('editmode'):this.$t('usermode')}}</span>
         </div>
       </div>
       <div class="sm flex-h">
         <RkDate v-model="time" position="top" format="YYYY-MM-DD HH:mm:ss"/>
+        <span class="mr-15 cp" @click="setLang">{{lang === 'zh' ? '中' : 'En'}}</span>
         <span>UTC {{utc >= 0 ? '+' : ''}}</span><input v-model="utc" min='-12' max="12" class="rk-footer-utc" type="number">
       </div>
     </div>
@@ -50,7 +51,7 @@ export default class Footer extends Vue {
   @State('rocketbot') private rocketbotGlobal: any;
   @Action('SET_DURATION') private SET_DURATION: any;
   @Action('SET_EDIT') private SET_EDIT: any;
-
+  private lang: any = '';
   private time: Date[] = [new Date(), new Date()];
   private utc: any = window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60);
   private utcCopy: any = window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60);
@@ -69,12 +70,24 @@ export default class Footer extends Vue {
       new Date(this.rocketbotGlobal.duration.end.getTime() + ((this.utc - this.utcCopy) * 3600000))];
     this.utcCopy = this.utc;
   }
+  private setLang() {
+    if (this.lang === 'zh') {
+      this.$i18n.locale = 'en';
+      window.localStorage.setItem('lang', 'en');
+      this.lang = 'en';
+    } else {
+      this.$i18n.locale = 'zh';
+      window.localStorage.setItem('lang', 'zh');
+      this.lang = 'zh';
+    }
+  }
   private setEdit() {
     this.SET_EDIT(this.rocketbotGlobal.edit ? false : true);
     const dashboardInner: any = this.$root.$children[0].$children[0].$children[1];
     dashboardInner.reload();
   }
   private beforeMount() {
+    this.lang = window.localStorage.getItem('lang');
     this.time = [this.rocketbotGlobal.duration.start, this.rocketbotGlobal.duration.end];
   }
 }

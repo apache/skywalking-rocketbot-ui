@@ -19,7 +19,7 @@
   <div class="rk-trace-search">
     <div>
       <a class="rk-trace-search-btn r" @click="status = !status">
-        <span class="mr-5 vm">More</span>
+        <span class="mr-5 vm">{{this.$t('more')}}</span>
         <svg class="icon trans vm" :style="`transform: rotate(${status?180:0}deg);`">
           <use xlink:href="#arrow-down"></use>
         </svg>
@@ -28,26 +28,26 @@
         <svg class="icon mr-5 vm">
           <use xlink:href="#search"></use>
         </svg>
-        <span class="vm">Search</span>
+        <span class="vm">{{this.$t('search')}}</span>
       </a>
       <div class="flex-h">
-        <TraceSelect :hasSearch="true" title="Service" :value="service" @input="chooseService" :data="rocketTrace.services"/>
-        <TraceSelect :hasSearch="true" title="Instance" v-model="instance" :data="rocketTrace.instances"/>
-        <TraceSelect  title="Status" :value="traceState" @input="chooseStatus"
+        <TraceSelect :hasSearch="true" :title="this.$t('service')" :value="service" @input="chooseService" :data="rocketTrace.services"/>
+        <TraceSelect :hasSearch="true" :title="this.$t('instance')" v-model="instance" :data="rocketTrace.instances"/>
+        <TraceSelect  :title="this.$t('status')" :value="traceState" @input="chooseStatus"
         :data="[{label:'All', key: 'ALL'}, {label:'Success', key: 'SUCCESS'}, {label:'Error', key: 'ERROR'}]"/>
         <div class="mr-10" style="padding: 3px 15px 0">
-          <div class="sm grey">Endpoint Name</div>
+          <div class="sm grey">{{this.$t('endpointName')}}</div>
           <input type="text"  v-model="endpointName" class="rk-trace-search-input">
         </div>
       </div>
     </div>
     <div class="rk-trace-search-more flex-h" v-show="status">
       <div class="mr-15">
-        <span class="sm b grey mr-10">TraceID:</span>
+        <span class="sm b grey mr-10">{{this.$t('traceID')}}:</span>
         <input type="text" v-model="traceId" class="rk-trace-search-input dib">
       </div>
       <div class="mr-15">
-        <span class="sm b grey mr-10">Range:</span>
+        <span class="sm b grey mr-10">{{this.$t('range')}}:</span>
         <div class="rk-trace-search-range dib">
           <input class="vm tc" v-model="minTraceDuration">
           <span class="grey vm">-</span>
@@ -55,7 +55,7 @@
         </div>
       </div>
       <div>
-        <span class="sm b grey mr-5">Time Range:</span>
+        <span class="sm b grey mr-5">{{this.$t('timeRange')}}:</span>
         <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss"/>
       </div>
     </div>

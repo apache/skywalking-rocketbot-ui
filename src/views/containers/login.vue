@@ -20,13 +20,13 @@
   <div class="rk-login-l">
     <div class="rk-login-form-wrapper">
       <div class="rk-login-form">
-          <h1 class="mb-10 title"><span class="grey">Hello, </span>Rocketbot</h1>
-          <div class="grey dscp">Welcome Back, Apache Skywalking APM System !</div>
-          <div class="sm b mb-5">Username</div>
+          <h1 class="mb-10 title"><span class="grey">{{$t('hello')}}, </span>Rocketbot</h1>
+          <div class="grey dscp">{{$t('helloMessage')}}</div>
+          <div class="sm b mb-5">{{$t('username')}}</div>
           <input @keyup.enter="login" @input="error = false;" class="rk-login-input mb-15" :class="{'rk-login-red':error}" v-model="accountInfo.userName" type="text">
-          <div class="sm b mb-5">Password</div>
+          <div class="sm b mb-5">{{$t('password')}}</div>
           <input @keyup.enter="login" @input="error = false;" class="rk-login-input mb-20"  :class="{'rk-login-red':error}" v-model="accountInfo.password" type="password">
-          <a class="rk-btn dib tc cp long mb-10 rk-login-btn" @click="login">Login Now</a>
+          <a class="rk-btn dib tc cp long mb-10 rk-login-btn" @click="login">{{$t('login')}}</a>
           <p class="grey sm">Copyright © 2018</p>
       </div>
     </div>

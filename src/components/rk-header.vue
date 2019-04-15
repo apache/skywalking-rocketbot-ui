@@ -26,36 +26,36 @@
         <svg class="icon sm vm">
           <use xlink:href="#chart"></use>
         </svg>
-        <span class="vm hide-xs ml-5">Dashboard</span>
+        <span class="vm hide-xs ml-5">{{this.$t('dashboard')}}</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/topology">
         <svg class="icon sm vm">
           <use xlink:href="#issues"></use>
         </svg>
-        <span class="vm hide-xs ml-5">Topology</span>
+        <span class="vm hide-xs ml-5">{{this.$t('topology')}}</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/trace">
         <svg class="icon sm vm">
           <use xlink:href="#merge"></use>
         </svg>
-        <span class="vm hide-xs ml-5">Trace</span>
+        <span class="vm hide-xs ml-5">{{this.$t('trace')}}</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/alarm">
         <svg class="icon sm vm">
           <use xlink:href="#spam"></use>
         </svg>
-        <span class="vm hide-xs ml-5">Alarm</span>
+        <span class="vm hide-xs ml-5">{{this.$t('alarm')}}</span>
       </router-link>
     </div>
     <div class="flex-h">
       <a class="rk-btn mr-5 sm" :class="auto?'blue':'ghost'" @click="handleAuto">
-        <span class="vm">Auto</span>
+        <span class="vm">{{this.$t('auto')}}</span>
       </a>
       <a class="rk-btn mr-15 sm ghost" @click="handleReload">
         <svg class="icon mr-5 vm" :class="{'loading': auto}">
           <use xlink:href="#retry"></use>
         </svg>
-        <span class="vm">Reload</span>
+        <span class="vm">{{this.$t('reload')}}</span>
       </a>
       <a class="rk-header-user" v-clickout="handleHide">
         <div @click="handleShow" class="rk-btn" :class="show? 'blue' : 'ghost'">
@@ -71,7 +71,7 @@
             <svg class="icon vs">
               <use xlink:href="#issue-close"></use>
             </svg>
-            Sign out</div>
+            {{this.$t('signout')}}</div>
         </div>
       </a>      
   </div>
