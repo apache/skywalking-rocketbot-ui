@@ -28,17 +28,17 @@
         <use xlink:href="#todo-add"></use>
       </svg>
       <div class="rk-dashboard-group-add-box" v-if="show">
-        <div class="mb-10 vm">Create Group</div>
-        <div class="sm grey mb-5 mr-10">Group Type</div>
+        <div class="mb-10 vm">{{$t('createGroup')}}</div>
+        <div class="sm grey mb-5 mr-10">{{$t('groupType')}}</div>
         <select v-model="type" class="rk-dashboard-group-sel mb-5 long">
-          <option value="service">Service</option>
+          <option value="service">{{$t('service')}}</option>
           <!-- <option value="proxy">Proxy</option> -->
-          <option value="database">Database</option>
+          <option value="database">{{$t('database')}}</option>
         </select>
-        <div class="sm grey  mb-5 mr-10">Group Name</div>
+        <div class="sm grey  mb-5 mr-10">{{$t('groupName')}}</div>
         <input class="mb-5 rk-dashboard-group-input" type="text" v-model="name">
-        <label class="mb-10 dib"><input type="checkbox" v-model="template">Template</label>
-        <a class="rk-btn r vm long tc" @click="handleCreate">Confirm</a>
+        <label class="mb-10 dib"><input type="checkbox" v-model="template">{{$t('template')}}</label>
+        <a class="rk-btn r vm long tc" @click="handleCreate">{{$t('confirm')}}</a>
       </div>
     </a>
   </nav>

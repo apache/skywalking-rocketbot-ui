@@ -28,17 +28,17 @@
         <use xlink:href="#todo-add"></use>
       </svg>
       <div class="rk-dashboard-nav-add-box" v-if="show">
-        <div class="mb-10 vm">Create Tab</div>
-        <div class="sm grey mb-5 mr-10">Tab Name</div>
+        <div class="mb-10 vm">{{$t('createTab')}}</div>
+        <div class="sm grey mb-5 mr-10">{{$t('tabName')}}</div>
         <input class="mb-5 rk-dashboard-nav-input" type="text" v-model="name">
-        <div class="sm grey mb-5 mr-10">Template</div>
-        <label class="dib mb-5 mr-10 sm"><input type="radio" v-model="template" value="nouse">No Use</label>
-        <label class="dib mb-5 mr-10 sm"><input type="radio" v-model="template" value="global">Gloabl</label>
-        <label class="dib mb-5 mr-10 sm" v-if="type === 'service'"><input type="radio" v-model="template" value="service">Service</label>
-        <label class="dib mb-5 mr-10 sm" v-if="type === 'service'"><input type="radio" v-model="template" value="endpoint">Endpoint</label>
-        <label class="dib mb-5 mr-10 sm" v-if="type === 'service'"><input type="radio" v-model="template" value="instance">Instance</label>
-        <label class="dib mb-5 mr-10 sm" v-if="type === 'database'"><input type="radio" v-model="template" value="database">Database</label>
-        <a class="rk-btn r vm long tc" @click="handleCreate">Confirm</a>
+        <div class="sm grey mb-5 mr-10">{{$t('template')}}</div>
+        <label class="dib mb-5 mr-10 sm"><input type="radio" v-model="template" value="nouse">{{$t('nouse')}}</label>
+        <label class="dib mb-5 mr-10 sm"><input type="radio" v-model="template" value="global">{{$t('global')}}</label>
+        <label class="dib mb-5 mr-10 sm" v-if="type === 'service'"><input type="radio" v-model="template" value="service">{{$t('service')}}</label>
+        <label class="dib mb-5 mr-10 sm" v-if="type === 'service'"><input type="radio" v-model="template" value="endpoint">{{$t('endpoint')}}</label>
+        <label class="dib mb-5 mr-10 sm" v-if="type === 'service'"><input type="radio" v-model="template" value="instance">{{$t('instance')}}</label>
+        <label class="dib mb-5 mr-10 sm" v-if="type === 'database'"><input type="radio" v-model="template" value="database">{{$t('database')}}</label>
+        <a class="rk-btn r vm long tc" @click="handleCreate">{{$t('confirm')}}</a>
       </div>
     </a>
   </nav>

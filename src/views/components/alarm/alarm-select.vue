@@ -20,7 +20,7 @@
     <div class="rk-alarm-bar-i flex-h" @click="visible = !visible">
       <div class="mr-15 rk-alarm-bar-i-text">
         <div class="sm grey">{{title}}</div>
-        <div class="ell" v-tooltip:right.ellipsis="value.label || ''">{{value.label  || ''}}</div>
+        <div class="ell" v-tooltip:right.ellipsis="$t(value.label.toLowerCase()) || ''">{{$t(value.label.toLowerCase()) || ''}}</div>
       </div>
       <svg class="icon lg trans" :style="`transform: rotate(${visible?180:0}deg)`">
         <use xlink:href="#arrow-down"></use>
@@ -34,7 +34,7 @@
         </svg>
       </div>
       <div class="rk-alarm-opt-wrapper scroll_content">
-        <div class="rk-alarm-opt ell" @click="handleSelect(i)" :class="{'active':i.key === value.key}" v-for="i in filterData" :key="i.key">{{i.label}}</div>
+        <div class="rk-alarm-opt ell" @click="handleSelect(i)" :class="{'active':i.key === value.key}" v-for="i in filterData" :key="i.key">{{$t(i.label.toLowerCase())}}</div>
       </div>
     </div>
   </div>

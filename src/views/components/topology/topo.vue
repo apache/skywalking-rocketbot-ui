@@ -107,10 +107,10 @@ export default {
       .offset([-8, 0])
       .html(d => {
         return `
-      <div class="mb-5"><span class="grey">CallType: </span>${d.callType}</div>
-      <div class="mb-5"><span class="grey">Cpm: </span>${d.cpm}</div>
-      <div class="mb-5"><span class="grey">DetectPoint: </span>${this.$store.state.rocketTopo.mode?d.detectPoint:'CLIENT'}</div>
-      <div><span class="grey">latency: </span>${d.latency}</div>
+      <div class="mb-5"><span class="grey">${this.$t('callType')}: </span>${d.callType}</div>
+      <div class="mb-5"><span class="grey">${this.$t('cpm')}: </span>${d.cpm}</div>
+      <div class="mb-5"><span class="grey">${this.$t('detectPoint')}: </span>${this.$store.state.rocketTopo.mode?d.detectPoint:'CLIENT'}</div>
+      <div><span class="grey">${this.$t('latency')}: </span>${d.latency}</div>
       `});
     this.tipName = d3tip()
       .attr('class', 'd3-tip-grey')

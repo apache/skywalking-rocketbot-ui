@@ -18,10 +18,19 @@
 <template>
   <div class="rk-dashboard-comp">
     <nav class="rk-dashboard-comp-nav mb-15">
-      <a class="rk-dashboard-comp-nav-i b mr-20" v-if="value.length" @click="current = key" :class="{'active': key === current}" v-for="(value, key) in tree" :key="key">{{$t(key.toLowerCase())}}</a>
+      <a class="rk-dashboard-comp-nav-i b mr-20" v-if="value.length" @click="current = key;configMode = false" :class="{'active': key === current}" v-for="(value, key) in tree" :key="key">{{$t(key.toLowerCase())}}</a>
+      <div class="pt-10 r">
+        <a class="rk-btn ghost sm" @click="configMode = true">{{$t('templateConfig')}}</a>
+      </div>
     </nav>
     <div class="rk-dashboard-comp-wrapper">
-      <div class="rk-dashboard-comp-i mr-10 mb-10" v-for="(i, index) in tree[current]" :key="index">
+      <div v-if="configMode" class="mb-15">
+        <textarea class="long mb-5 sm rk-dashboard-textarea" rows="3" v-model="config"></textarea>
+        <a class="rk-btn ghost sm mr-10" @click="handleCopy(config)">{{$t('copy')}}</a>
+        <a class="rk-btn ghost sm mr-10" @click="handleReset">{{$t('reset')}}</a>
+        <a class="rk-btn ghost sm" @click="handleApply">{{$t('apply')}}</a>
+      </div>
+      <div v-else class="rk-dashboard-comp-i mr-10 mb-10" v-for="(i, index) in tree[current]" :key="index">
         <span class="b mr-5 sm">{{$t(i.o.toLowerCase())}}</span>
         <svg class="icon blue cp lg r" @click="ADD_COMP(i)">
           <use xlink:href="#file-addition"></use>
@@ -42,6 +51,8 @@ export default class Comps extends Vue {
   @Prop() private compType: any;
   @Mutation('ADD_COMP') private ADD_COMP: any;
   private current: string = 'Global';
+  private configMode: boolean = false;
+  private config: string = '';
   private get tree() {
     const temp: any = {
       Global: [],
@@ -58,12 +69,48 @@ export default class Comps extends Vue {
     });
     return temp;
   }
+  private created() {
+    this.config = JSON.stringify(this.rocketComps.tree);
+  }
+  private handleCopy(i: any) {
+    const input = document.createElement('input');
+    input.value = i;
+    document.body.appendChild(input);
+    input.select();
+    if (document.execCommand('Copy')) {
+        document.execCommand('Copy');
+    }
+    input.style.display = 'none';
+  }
+  private handleApply() {
+    const r = confirm('');
+    if (r === true) {
+      window.localStorage.setItem('dashboard', this.config);
+      this.configMode = false;
+      location.reload();
+    }
+  }
+  private handleReset() {
+    const r = confirm('');
+    if (r === true) {
+      window.localStorage.removeItem('dashboard');
+      this.configMode = false;
+      location.reload();
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .rk-dashboard-comp-nav{
   padding: 0 15px;
+}
+.rk-dashboard-textarea{
+  resize:none;
+  border: 1px solid #c1c5ca41;
+  outline: none;
+  padding: 8px;
+  border-radius: 4px;
 }
 .rk-dashboard-comp-nav-i{
   display: inline-block;

@@ -75,27 +75,6 @@ export default {
       type: String,
       default: 'YYYY-MM-DD',
     },
-    local: {
-      type: Object,
-      default() {
-        return {
-          dow: 1, // Monday is the first day of the week
-          hourTip: '选择小时', // tip of select hour
-          minuteTip: '选择分钟', // tip of select minute
-          secondTip: '选择秒数', // tip of select second
-          yearSuffix: '年', // format of head
-          monthsHead: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split(
-            '_',
-          ), // months of head
-          months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split(
-            '_',
-          ), // months of panel
-          weeks: '一_二_三_四_五_六_日'.split('_'), // weeks
-          cancelTip: '取消', // default text for cancel button
-          submitTip: '确定', // default text for submit button
-        };
-      },
-    },
     showButtons: {
       type: Boolean,
       default: false,
@@ -109,6 +88,24 @@ export default {
     };
   },
   computed: {
+    local() {
+      return {
+        dow: 1, // Monday is the first day of the week
+        hourTip: this.$t('hourTip'), // tip of select hour
+        minuteTip: this.$t('minuteTip'), // tip of select minute
+        secondTip: this.$t('secondTip'), // tip of select second
+        yearSuffix: this.$t('yearSuffix'), // format of head
+        monthsHead: this.$t('monthsHead').split(
+          '_',
+        ), // months of head
+        months: this.$t('months').split(
+          '_',
+        ), // months of panel
+        weeks: this.$t('weeks').split('_'), // weeks
+        cancelTip: this.$t('cancel'), // default text for cancel button
+        submitTip: this.$t('confirm'), // default text for submit button
+      };
+    },
     range() {
       return this.dates.length === 2;
     },
@@ -321,7 +318,7 @@ export default {
 }
 
 .datepicker-range {
-  min-width: 280px;
+  min-width: 270px;
 }
 
 .datepicker-range .datepicker-popup {

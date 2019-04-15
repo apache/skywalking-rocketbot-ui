@@ -44,7 +44,7 @@ Vue.filter('dateformat', (dataStr: any, pattern = 'YYYY-MM-DD HH:mm:ss') => mome
 const saveLang = window.localStorage.getItem('lang');
 let language = navigator.language;
 if (!saveLang) {
-  window.localStorage.setItem('lang', language);
+  window.localStorage.setItem('lang', language.split('-')[0]);
 } else {
   language = saveLang;
 }

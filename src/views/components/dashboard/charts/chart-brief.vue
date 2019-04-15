@@ -22,28 +22,28 @@
       <svg class="icon lg mr-15 vm">
         <use :xlink:href="`#package`"></use>
       </svg>
-      <span class="vm">{{this.$t('service')}}</span>
+      <span class="vm">{{$t('service')}}</span>
       <span class="r b">{{this.stateDashboard[this.type].getGlobalBrief.numOfService}}</span>
     </div>
     <div class="rk-chart-brief-i">
       <svg class="icon lg mr-15 vm">
         <use :xlink:href="`#code`"></use>
       </svg>
-      <span class="vm">{{this.$t('endpoint')}}</span>
+      <span class="vm">{{$t('endpoint')}}</span>
       <span class="r b">{{this.stateDashboard[this.type].getGlobalBrief.numOfEndpoint}}</span>
     </div>
     <div class="rk-chart-brief-i">
       <svg class="icon lg mr-15 vm">
         <use :xlink:href="`#epic`"></use>
       </svg>
-      <span class="vm">{{this.$t('database')}}</span>
+      <span class="vm">{{$t('database')}}</span>
       <span class="r b">{{this.stateDashboard[this.type].getGlobalBrief.numOfDatabase}}</span>
     </div>
     <div class="rk-chart-brief-i">
       <svg class="icon lg mr-15 vm">
         <use :xlink:href="`#token`"></use>
       </svg>
-      <span class="vm">Cache</span>
+      <span class="vm">{{$t('cache')}}</span>
       <span class="r b">{{this.stateDashboard[this.type].getGlobalBrief.numOfCache}}</span>
     </div>
     <div class="rk-chart-brief-i">

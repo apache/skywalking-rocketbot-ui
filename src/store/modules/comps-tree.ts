@@ -44,24 +44,14 @@ const initState: State = {
       endpoint: {},
       instance: {},
     },
-    children: [
-      {
-        name: 'service',
-        children: [],
-      },
-    ],
+    children: groupServiceTemp,
   }, {
     name: 'Database Dashboard',
     type: 'database',
     query:  {
       service: {},
     },
-    children: [
-      {
-        name: 'Database',
-        children: [],
-      },
-    ],
+    children: groupDatabaseTemp,
   }],
 };
 
