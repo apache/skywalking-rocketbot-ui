@@ -45,6 +45,11 @@ const initState: State = {
     envoyHeap: [],
     envoyTotal: [],
     envoyParent: [],
+    clrHeap: [],
+    clrGCGen0: [],
+    clrGCGen1: [],
+    clrGCGen2: [],
+    clrCPU: [],
   },
 };
 
@@ -85,6 +90,11 @@ const mutations: MutationTree<State> = {
     state.instanceInfo.envoyHeap = data.envoyHeap ? data.envoyHeap.values : [];
     state.instanceInfo.envoyParent =  data.envoyParent ? data.envoyParent.values : [];
     state.instanceInfo.envoyTotal =  data.envoyTotal ? data.envoyTotal.values : [];
+    state.instanceInfo.clrHeap =  data.clrHeap ? data.clrHeap.values : [];
+    state.instanceInfo.clrGCGen0 =  data.clrGCGen0 ? data.clrGCGen0.values : [];
+    state.instanceInfo.clrGCGen1 =  data.clrGCGen1 ? data.clrGCGen1.values : [];
+    state.instanceInfo.clrGCGen2 =  data.clrGCGen2 ? data.clrGCGen2.values : [];
+    state.instanceInfo.clrCPU =  data.clrCPU ? data.clrCPU.values : [];
   },
 };
 

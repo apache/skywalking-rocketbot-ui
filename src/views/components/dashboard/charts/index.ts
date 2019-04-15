@@ -36,6 +36,9 @@ import ChartTrace from './chart-trace.vue';
 import ChartTraceDB from './chart-trace-db.vue';
 import ChartEnvoyCollections from './chart-envoy-collections.vue';
 import ChartEnvoyMemory from './chart-envoy-memory.vue';
+import ChartClrHeap from './chart-clr-heap.vue';
+import ChartClrGC from './chart-clr-gc.vue';
+import ChartClrCPU from './chart-clr-cpu.vue';
 
 export default {
   ChartEdit,
@@ -59,4 +62,7 @@ export default {
   ChartNonHeap,
   ChartTraceDB,
   ChartDependency,
+  ChartClrHeap,
+  ChartClrGC,
+  ChartClrCPU,
 };
