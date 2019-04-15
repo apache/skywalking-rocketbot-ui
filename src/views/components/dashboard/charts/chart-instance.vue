@@ -17,7 +17,7 @@
 
 <template>
   <rk-panel :title="title">
-    <div>
+    <div class="chart-instance-info">
       <div class="ell mb-10 pt-10 b" v-tooltip="stateDashboard.currentInstance.label || ''">
         {{this.stateDashboard.currentInstance.label}}
       </div>
@@ -44,3 +44,9 @@ export default class Response extends Vue {
   @Prop() private stateDashboard!: any;
 }
 </script>
+<style lang="scss">
+  .chart-instance-info{
+    height: 215px;
+    overflow: auto;
+  }
+</style>

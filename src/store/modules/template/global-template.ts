@@ -1,0 +1,43 @@
+export default [{
+  o: 'Global',
+  name: 'Global Brief',
+  comp: 'ChartBrief',
+  title: 'Global Brief',
+  type: 'global',
+  width: 3,
+}, {
+  o: 'Global',
+  name: 'Global Percent Response',
+  comp: 'ChartResponse',
+  title: 'Global Percent Response',
+  type: 'global',
+  width: 3,
+}, {
+  o: 'Global',
+  name: 'Global Percent Response(line)',
+  comp: 'ChartResponseLine',
+  title: 'Global Percent Response',
+  type: 'global',
+  width: 3,
+}, {
+  o: 'Global',
+  name: 'Global Heatmap',
+  comp: 'ChartHeatmap',
+  title: 'Global Heatmap',
+  type: 'global',
+  width: 3,
+}, {
+  o: 'Global',
+  name: 'Global Top Throughput',
+  comp: 'ChartTroughput',
+  title: 'Global Top Throughput',
+  type: 'global.getTopNServiceThroughput',
+  width: 3,
+}, {
+  o: 'Global',
+  name: 'Global Top Slow Endpoint',
+  comp: 'ChartSlow',
+  title: 'Global Top Slow Endpoint',
+  type: 'global.getTopNSlowEndpoint',
+  width: 3,
+}];

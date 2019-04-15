@@ -15,8 +15,16 @@
  * limitations under the License.
  */
 
+
 import { ActionTree, MutationTree } from 'vuex';
 import { CompsItem, CompsTree, CompQuery } from '../interfaces';
+import globalTemp from './template/global-template';
+import serviceTemp from './template/service-template';
+import endpointTemp from './template/endpoint-template';
+import instanceTemp from './template/instance-template';
+import databaseTemp from './template/database-template';
+import groupServiceTemp from './template/group-service-template';
+import groupDatabaseTemp from './template/group-database-template';
 import * as types from '../mutation-types';
 
 export interface State {
@@ -74,14 +82,43 @@ const mutations: MutationTree<State> = {
   },
   [types.ADD_COMPS_GROUP](state: State, params: any) {
     if (!params.name) {return; }
-    state.tree.push({name: params.name, type: params.type, query: {}, children: [
-      {name: 'demo', children: []},
-    ]});
+    switch (params.template) {
+      case 'nouse':
+        state.tree.push({name: params.name, type: params.type, query: {}, children: [
+          {name: 'demo', children: []},
+        ]});
+        break;
+      case 'groupService':
+        state.tree.push({name: params.name, type: params.type, query: {}, children: groupServiceTemp});
+        break;
+      case 'groupDatabase':
+        state.tree.push({name: params.name, type: params.type, query: {}, children: groupDatabaseTemp});
+        break;
+    }
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
   [types.ADD_COMPS_TREE](state: State, params: any) {
     if (!params.name) {return; }
-    state.tree[state.group].children.push({name: params.name, children: []});
+    switch (params.template) {
+      case 'nouse':
+        state.tree[state.group].children.push({name: params.name, children: []});
+        break;
+      case 'global':
+        state.tree[state.group].children.push({name: params.name, children: globalTemp});
+        break;
+      case 'service':
+        state.tree[state.group].children.push({name: params.name, children: serviceTemp});
+        break;
+      case 'endpoint':
+        state.tree[state.group].children.push({name: params.name, children: endpointTemp});
+        break;
+      case 'instance':
+        state.tree[state.group].children.push({name: params.name, children: instanceTemp});
+        break;
+      case 'database':
+        state.tree[state.group].children.push({name: params.name, children: databaseTemp});
+        break;
+    }
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
   [types.DELETE_COMPS_GROUP](state: State, index: number) {

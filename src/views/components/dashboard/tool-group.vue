@@ -36,7 +36,8 @@
           <option value="database">Database</option>
         </select>
         <div class="sm grey  mb-5 mr-10">Group Name</div>
-        <input class="mb-10 rk-dashboard-group-input" type="text" v-model="name">
+        <input class="mb-5 rk-dashboard-group-input" type="text" v-model="name">
+        <label class="mb-10 dib"><input type="checkbox" v-model="template">Template</label>
         <a class="rk-btn r vm long tc" @click="handleCreate">Confirm</a>
       </div>
     </a>
@@ -60,6 +61,7 @@ export default class ToolGroup extends Vue {
   private name: string = '';
   private type: string = 'service';
   private show: boolean = false;
+  private template: boolean = false;
   private get compType() {
     return this.rocketComps.tree[this.rocketComps.group].type;
   }
@@ -73,8 +75,19 @@ export default class ToolGroup extends Vue {
     this.show = false;
   }
   private handleCreate() {
-    this.ADD_COMPS_GROUP({name: this.name, type: this.type});
+    let template = 'nouse';
+    if (this.type === 'service') {
+      template = 'groupService';
+    }
+    if (this.type === 'database') {
+      template = 'groupDatabase';
+    }
+    if (!this.template) {
+      template = 'nouse';
+    }
+    this.ADD_COMPS_GROUP({name: this.name, type: this.type, template });
     this.handleHide();
+    this.template = false;
   }
 }
 </script>

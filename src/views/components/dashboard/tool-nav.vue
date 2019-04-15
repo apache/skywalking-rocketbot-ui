@@ -30,7 +30,14 @@
       <div class="rk-dashboard-nav-add-box" v-if="show">
         <div class="mb-10 vm">Create Tab</div>
         <div class="sm grey mb-5 mr-10">Tab Name</div>
-        <input class="mb-10 rk-dashboard-nav-input" type="text" v-model="name">
+        <input class="mb-5 rk-dashboard-nav-input" type="text" v-model="name">
+        <div class="sm grey mb-5 mr-10">Template</div>
+        <label class="dib mb-5 mr-10 sm"><input type="radio" v-model="template" value="nouse">No Use</label>
+        <label class="dib mb-5 mr-10 sm"><input type="radio" v-model="template" value="global">Gloabl</label>
+        <label class="dib mb-5 mr-10 sm" v-if="type === 'service'"><input type="radio" v-model="template" value="service">Service</label>
+        <label class="dib mb-5 mr-10 sm" v-if="type === 'service'"><input type="radio" v-model="template" value="endpoint">Endpoint</label>
+        <label class="dib mb-5 mr-10 sm" v-if="type === 'service'"><input type="radio" v-model="template" value="instance">Instance</label>
+        <label class="dib mb-5 mr-10 sm" v-if="type === 'database'"><input type="radio" v-model="template" value="database">Database</label>
         <a class="rk-btn r vm long tc" @click="handleCreate">Confirm</a>
       </div>
     </a>
@@ -50,14 +57,20 @@ export default class ToolNav extends Vue {
   @Mutation('DELETE_COMPS_TREE') private DELETE_COMPS_TREE: any;
   @Mutation('ADD_COMPS_TREE') private ADD_COMPS_TREE: any;
   private name: string = '';
+  private template: string = 'nouse';
   private show: boolean = false;
+  get type() {
+    return this.rocketComps.tree[this.rocketComps.group].type;
+  }
   private handleHide() {
     this.name = '';
     this.show = false;
   }
   private handleCreate() {
-    this.ADD_COMPS_TREE({name: this.name});
+    if (!this.name) { return; }
+    this.ADD_COMPS_TREE({name: this.name, template: this.template});
     this.handleHide();
+    this.template = 'nouse';
   }
 }
 </script>
