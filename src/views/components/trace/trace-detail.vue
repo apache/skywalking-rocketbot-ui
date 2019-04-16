@@ -29,16 +29,16 @@
           <option v-for="i in current.traceIds" :value="i" :key="i">{{i}}</option>
         </select>
       </div>
-      <!-- <a class="rk-btn sm r" :class="{'ghost':mode}" @click="mode = false">
+      <a class="rk-btn sm r" :class="{'ghost':mode}" @click="mode = false">
         <svg class="icon vm sm">
           <use xlink:href="#issue-child"></use>
         </svg>
-        Tree</a>
+        {{$t('tree')}}</a>
       <a class="rk-btn mr-5 sm r" :class="{'ghost':!mode}" @click="mode = true">
          <svg class="icon vm sm">
           <use xlink:href="#list-bulleted"></use>
         </svg>
-        List</a> -->
+        {{$t('list')}}</a>
       
       <div class="rk-tag mr-5">{{this.$t('start')}}</div><span class="mr-15 sm">{{parseInt(current.start) | dateformat}}</span>
       <div class="rk-tag mr-5">{{this.$t('duration')}}</div><span class="mr-15 sm">{{current.duration}} ms</span>

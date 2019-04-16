@@ -20,7 +20,7 @@
     <nav class="rk-dashboard-comp-nav mb-15">
       <a class="rk-dashboard-comp-nav-i b mr-20" v-if="value.length" @click="current = key;configMode = false" :class="{'active': key === current}" v-for="(value, key) in tree" :key="key">{{$t(key.toLowerCase())}}</a>
       <div class="pt-10 r">
-        <a class="rk-btn ghost sm" @click="configMode = true">{{$t('templateConfig')}}</a>
+        <a class="rk-btn ghost sm" @click="configMode = !configMode">{{$t('templateConfig')}}</a>
       </div>
     </nav>
     <div class="rk-dashboard-comp-wrapper">
@@ -35,7 +35,7 @@
         <svg class="icon blue cp lg r" @click="ADD_COMP(i)">
           <use xlink:href="#file-addition"></use>
         </svg>
-        <div class="mr-5">{{i.name}}</div>
+        <div class="mr-5">{{i.n}}</div>
       </div>
     </div>
   </div>
@@ -109,7 +109,7 @@ export default class Comps extends Vue {
   resize:none;
   border: 1px solid #c1c5ca41;
   outline: none;
-  padding: 8px;
+  padding: 0 8px;
   border-radius: 4px;
 }
 .rk-dashboard-comp-nav-i{

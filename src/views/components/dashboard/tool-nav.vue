@@ -19,7 +19,7 @@
   <nav class="rk-dashboard-nav">
     <span v-for="(i, index) in rocketComps.tree[rocketComps.group].children" :key="index" class="mr-20">
       <a class="rk-dashboard-nav-i b" @click="SET_CURRENT_COMPS(index)" :class="{'active': rocketComps.current == index}">{{i.name}}</a>
-      <svg v-if="rocketGlobal.edit" class="ml-5 icon cp red vm"  @click="DELETE_COMPS_TREE(index)">
+      <svg v-if="rocketGlobal.edit && rocketComps.current !== index" class="ml-5 icon cp red vm"  @click="DELETE_COMPS_TREE(index)">
         <use xlink:href="#file-deletion"></use>
       </svg>
     </span>
@@ -78,7 +78,6 @@ export default class ToolNav extends Vue {
 <style lang="scss" scoped>
 .rk-dashboard-nav{
   box-shadow: 0 1px 0px rgba(0, 0, 0, 0.08);
-  height: 40px;
   background-color: rgba(196, 200, 225, .2);
   padding: 0 15px;
 }

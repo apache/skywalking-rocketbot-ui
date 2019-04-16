@@ -18,20 +18,13 @@
 /* eslint-disable */
 import * as d3 from 'd3';
 // import d3tip from 'd3-tip';
+var i = 0;
 export default class TraceMap {
   constructor(el) {
-    this.type = {
-      MQ: '#bf99f8',
-      Http: '#72a5fd',
-      Database: '#ff6732',
-      Unknown: '#ffc107',
-      Cache: '#00bcd4',
-      RPCFramework: '#ee4395',
-    };
     this.el = el;
     this.i = 0;
     this.width = el.clientWidth;
-    this.height = el.clientHeight;
+    this.height = el.clientHeight - 28;
     this.body = d3
       .select(this.el)
       .style('height', this.height + 'px')
@@ -40,157 +33,205 @@ export default class TraceMap {
       .attr('height', this.height);
   }
   init(data, row) {
-    this.treemap = d3.tree().size([row.length * 40, this.width]);
+    this.treemap = d3.tree().size([row.length * 35, this.width]);
     this.row = row;
     this.data = data;
+    this.min = d3.min(this.row.map(i => i.startTime));
+    this.max = d3.max(this.row.map(i => i.endTime - this.min));
     this.list = Array.from(new Set(this.row.map(i => i.serviceCode)));
+    this.xScale = d3
+      .scaleLinear()
+      .range([0, 100])
+      .domain([0, this.max]);
     this.sequentialScale = d3
       .scaleSequential()
-      .domain([0, this.list.length])
+      .domain([0, this.list.length + 1])
       .interpolator(d3.interpolateCool);
-    this.svg = this.body.append('g').attr('transform', d => `translate(0, ${this.row.length * 14 + 20})`).append('g');
+    this.svg = this.body.append('g').attr('transform', d => `translate(120, 0)`).append('g');
     this.body.call(this.getZoomBehavior(this.svg));
     this.root = d3.hierarchy(this.data, d => d.children);
     this.root.x0 = this.height / 2;
     this.root.y0 = 0;
-    this.nodes = this.treemap(this.root).descendants();
-    this.nodes.forEach(function(d) {
-      d.y = d.depth * 200;
-      d.x0 = d.x;
-      d.y0 = d.y;
-    });
+    // this.root.children.forEach(collapse);
+
     this.update(this.root);
+    
+    // Collapse the node and all it's children
+    function collapse(d) {
+      if(d.children) {
+        d._children = d.children
+        d._children.forEach(collapse)
+        d.children = null
+      }
+    }
   }
   update(source) {
-    const that = this;
-    const links = this.nodes.slice(1);
-    const node = this.svg.selectAll('g.node').data(this.nodes, d => {
-      return d.id|| (d.id = ++this.i);
-    });
-    // node
-    const nodeEnter = node
-      .enter()
-      .append('g')
+  var treeData = this.treemap(this.root);
+  var nodes = treeData.descendants(),
+      links = treeData.descendants().slice(1);
+
+  nodes.forEach(function(d){ d.y = d.depth * 140});
+
+
+  var node = this.svg.selectAll('g.node')
+      .data(nodes, function(d) {return d.id || (d.id = ++i); });
+
+  var nodeEnter = node.enter().append('g')
       .attr('class', 'node')
-      .attr('transform', `translate(${source.y0},${source.x0})`)
-    nodeEnter
-      .append('rect')
-      .attr('class', 'block')
-      .attr('y', '-20')
-      .attr('rx', 5)
-      .attr('ry', 5)
-      .attr('width', 140)
-      .attr('height', 50)
-      .attr('stroke', d => (d.data.isError ? '#ff5722aa' : '#e4e4e4aa'));
-    nodeEnter
-      .append('rect')
-      .attr('width', 7)
-      .attr('height', 7)
-      .attr('x', '5')
-      .attr('y', '-8')
-      .attr('rx', 3)
-      .attr('ry', 3)
-      .style('stroke-width', 2)
-      .style('stroke', d => `${this.sequentialScale(this.list.indexOf(d.data.serviceCode))}`);
+      .attr("transform", function(d) {
+        return "translate(" + source.y0 + "," + source.x0 + ")";
+    })
+    .on('click', click);
+
+  nodeEnter.append('circle')
+      .attr('class', 'node')
+      .attr('r', 1e-6)
+      .style("fill", function(d) {
+          return d._children ? this.sequentialScale(this.list.indexOf(d.data.serviceCode)) : "#fff";
+      })
+      .attr('stroke', d => this.sequentialScale(this.list.indexOf(d.data.serviceCode)))
+      .attr('stroke-width', 2.5)
+
+  nodeEnter.append('text')
+      .attr('font-size', 11)
+      .attr("dy", "-0.5em")
+      .attr("x", function(d) {
+          return d.children || d._children ? -15 : 15;
+      })
+      .attr("text-anchor", function(d) {
+          return d.children || d._children ? "end" : "start";
+      })
+      .text(d => d.data.label.length > 19 ? d.data.label.slice(0, 19) + '...' : d.data.label)
+      .style("fill", '#3d444f');
     nodeEnter
       .append('text')
-      .attr('dx', 17)
-      .attr('fill', '#333')
-      .attr('text-anchor', 'start')
-      .text(d => d.data.label.length > 15 ? d.data.label.slice(0, 15)+ '...' : d.data.label);
-    nodeEnter
-      .append('circle')
-      .attr('class', 'node')
-      .attr('r', 4)
-      .attr('cx', '140')
-      .style('fill', d => d._children ? '#8543e0aa' : '#eee')
-      .on('click', click);
+      .attr('x', -110)
+      .attr("dy", "-0.5em")
+      .attr('fill', '#E54C17')
+      .attr('font-size', 10)
+      .html(d => d.data.isError?'◉': '')
+    nodeEnter.append('text')
+      .attr('class','node-text')
+      .attr("x", function(d) {
+        return d.children || d._children ? -15 : 15;
+      })
+      .attr("dy", "1em")
+      .attr('fill', '#bbb')
+      .attr("text-anchor", function(d) {
+        return d.children || d._children ? "end" : "start";
+      })
+      .style('font-size', '10px')
+      .text(
+        d =>
+          `${d.data.layer || ''}${
+            d.data.component ? '-' + d.data.component : d.data.component || ''
+          }`
+      );
+      nodeEnter
+      .append('rect')
+      .attr('rx', 1)
+      .attr('ry', 1)
+      .attr('height', 2)
+      .attr('width', 100)
+      .attr('x', function(d) {
+        return d.children || d._children ? "-110" : "10";
+      })
+      .attr('y', -1)
+      .style('fill', '#00000020');
+      nodeEnter
+      .append('rect')
+      .attr('rx', 1)
+      .attr('ry', 1)
+      .attr('height', 2)
+      .attr('width', d => {
+        if (!d.data.endTime || !d.data.startTime) return 0;
+        return this.xScale(d.data.endTime- d.data.startTime) + 1 || 0;
+      })
+      .attr('x', d => {
+        if (!d.data.endTime || !d.data.startTime) { return 0; }
+        if( d.children || d._children ) {
+          return -110 + this.xScale(d.data.startTime - this.min)
+        }
+        return 10 + this.xScale(d.data.startTime - this.min)
+      })
+      .attr('y', -1)
+      .style( 'fill', d => this.sequentialScale(this.list.indexOf(d.data.serviceCode)));
+  var nodeUpdate = nodeEnter.merge(node);
 
-    this.nodeUpdate = nodeEnter.merge(node);
+  nodeUpdate.transition()
+    .duration(600)
+    .attr('transform', function(d) {
+      return 'translate(' + d.y + ',' + d.x + ')';
+    });
 
-    this.nodeUpdate
-      .transition()
-      .duration(600)
-      .attr('transform', function(d) {
-        return 'translate(' + d.y + ',' + d.x + ')';
-      });
+  // Update the node attributes and style
+  nodeUpdate.select('circle.node')
+    .attr('r', 5)
+    .style("fill", (d) => d._children ? this.sequentialScale(this.list.indexOf(d.data.serviceCode)) : "#fff" )
+    .attr('cursor', 'pointer');
 
-    this.nodeUpdate
-      .select('circle.node')
-      .attr('r', 4)
-      .attr('cx', '140')
-      .style('fill', d => d._children ? '#8543e0aa' : '#eee')
-      .attr('cursor', 'pointer');
 
-    const nodeExit = node
-      .exit()
-      .transition()
+  // Remove any exiting nodes
+  var nodeExit = node.exit().transition()
       .duration(600)
       .attr('transform', function(d) {
         return 'translate(' + source.y + ',' + source.x + ')';
       })
       .remove();
 
-    // link
-    const link = this.svg.selectAll('path.link').data(links, d => d.id);
+  nodeExit.select('circle')
+    .attr('r', 1e-6);
 
-    const linkEnter = link
-      .enter()
-      .insert('path', 'g')
-      .attr('stroke', '#0000002a')
-      .attr('d', function(d) {
-        const o = { x: source.x0, y: source.y0 };
-        return diagonal(o, o);
-      });
+  nodeExit.select('text')
+    .style('fill-opacity', 1e-6);
 
-    const linkUpdate = linkEnter.merge(link);
+  var link = this.svg.selectAll('path.tree-link')
+      .data(links, function(d) { return d.id; })
+  		.style('stroke-width', 1.5);
 
-    linkUpdate
-      .transition()
-      .duration(600)
-      .attr('d', function(d) {
-        return diagonal(d, d.parent);
-      });
-
-    link
-      .exit()
-      .transition()
-      .duration(600)
-      .attr('d', function(d) {
-        var o = { x: source.x, y: source.y };
-        return diagonal(o, o);
+  var linkEnter = link.enter().insert('path', "g")
+      .attr("class", "tree-link")
+      .attr('d', function(d){
+        var o = {x: source.x0, y: source.y0}
+        return diagonal(o, o)
       })
+  		.style('stroke-width', 1.5);
+
+  var linkUpdate = linkEnter.merge(link);
+
+  linkUpdate.transition()
+      .duration(600)
+      .attr('d', function(d){ return diagonal(d, d.parent) });
+
+  var linkExit = link.exit().transition()
+      .duration(600)
+      .attr('d', function(d) {
+        var o = {x: source.x, y: source.y}
+        return diagonal(o, o)
+      })
+  		.style('stroke-width', 1.5)
       .remove();
 
+  nodes.forEach(function(d){
+    d.x0 = d.x;
+    d.y0 = d.y;
+  });
+const that = this;
     function diagonal(s, d) {
       return `M ${s.y} ${s.x}
-      C ${s.y - 30} ${s.x}, ${d.y + 170} ${d.x},
-      ${d.y + 140} ${d.x}`;
+      C ${(s.y + d.y) / 2} ${s.x}, ${(s.y + d.y) / 2} ${d.x},
+      ${d.y} ${d.x}`;
     }
-    function click(d, i) {
+    function click(d) {
       if (d.children) {
-        d._children = d.children;
-        d.children = null;
-      } else {
-        d.children = d._children;
-        d._children = null;
-      }
-      that.update(d);
-      that.updatexAxis(d);
-      d3.event.stopPropagation();
+          d._children = d.children;
+          d.children = null;
+        } else {
+          d.children = d._children;
+          d._children = null;
+        }
+        that.update(d);
     }
-  }
-  updatexAxis(source) {
-    // time
-    const that = this;
-    this.nodes = this.treemap(this.root).descendants();
-    let index = -1;
-    this.nodes.forEach(function(d) {
-      d.y = d.depth * 200;
-      d.timeX = ++index * 12;
-      d.x0 = d.x;
-      d.y0 = d.y;
-    });
   }
   getZoomBehavior(g) {
     return d3

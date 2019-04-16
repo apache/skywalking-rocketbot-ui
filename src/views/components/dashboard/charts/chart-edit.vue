@@ -24,17 +24,17 @@
       <svg class="icon mr-10 vm">
         <use xlink:href="#marquee-selection"></use>
       </svg>
-      <span class="vm">{{`${o} ${name}`}}</span>
+      <span class="vm">{{`${o} ${n}`}}</span>
       
     </div>
     <div class="rk-chart-edit-container">
       <div class="flex-h mb-5">
-        <div class="title grey">Title:</div>
-        <input type="text" class="rk-chart-edit-input long" :value="title" @change="EDIT_COMP({index,type:'title',value:$event.target.value})">
+        <div class="title grey sm">{{$t('title')}}:</div>
+        <input type="text" class="rk-chart-edit-input long" :value="t" @change="EDIT_COMP({index,type:'t',value:$event.target.value})">
       </div>
       <div class="flex-h">
-        <div class="title grey">Width:</div>
-        <input type="number" min="1" max="12" class="rk-chart-edit-input long" :value="width" @change="EDIT_COMP({index,type:'width',value:$event.target.value})">
+        <div class="title grey sm">{{$t('width')}}:</div>
+        <input type="number" min="1" max="12" class="rk-chart-edit-input long" :value="w" @change="EDIT_COMP({index,type:'w',value:$event.target.value})">
       </div>
     </div>
   </div>
@@ -51,9 +51,9 @@ export default class Response extends Vue {
   @Mutation('EDIT_COMP') private EDIT_COMP: any;
   @Prop() private o!: string;
   @Prop() private index!: number;
-  @Prop() private name!: string;
-  @Prop() private title!: string;
-  @Prop() private width!: number;
+  @Prop() private n!: string;
+  @Prop() private t!: string;
+  @Prop() private w!: number;
 }
 </script>
 <style lang="scss">
@@ -65,15 +65,16 @@ export default class Response extends Vue {
   padding: 5px 10px;
   line-height: 15px;
   border-radius: 4px;
+  margin-bottom: 5px;
   background-color: rgba(196, 200, 225, .2);
 }
 .rk-chart-edit-container{
   padding: 7px 10px;
   border: 1px dashed rgba(196, 200, 225, .5);
   margin-bottom: 10px;
-  border-top: 0;
+  border-radius: 4px;
   .title{
-    width: 70px;
+    width: 55px;
     flex-shrink: 0;
   }
 }
@@ -82,7 +83,7 @@ export default class Response extends Vue {
   outline: 0;
   padding: 4px 10px;
   border-radius: 3px;
-  border: 1px solid #c1c5ca41;
-  // background-color: rgba(196, 200, 225, 0.05);
+  // border: 1px solid #c1c5ca41;
+  background-color: rgba(196, 200, 225, 0.2);
 }
 </style>

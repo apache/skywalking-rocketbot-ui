@@ -18,8 +18,8 @@
 <template>
   <nav class="rk-dashboard-group">
     <span v-for="(i, index) in rocketComps.tree" :key="index" class="mr-15">
-      <a class="rk-dashboard-group-i" @click="handleOption(index)" :class="{'active': rocketComps.group == index, 'grey': rocketComps.group != index}">{{i.name}}</a>
-      <svg v-if="rocketGlobal.edit" class="ml-5 icon cp red vm"  @click="DELETE_COMPS_GROUP(index)">
+      <a class="rk-dashboard-group-i mb-10" @click="handleOption(index)" :class="{'active': rocketComps.group == index, 'grey': rocketComps.group != index}">{{i.name}}</a>
+      <svg v-if="rocketGlobal.edit && rocketComps.group !== index" class="ml-5 icon cp red vm"  @click="DELETE_COMPS_GROUP(index)">
         <use xlink:href="#file-deletion"></use>
       </svg>
     </span>
@@ -96,7 +96,7 @@ export default class ToolGroup extends Vue {
 .rk-dashboard-group{
   border-bottom:1px solid #252a2f;
   background-color: #333840;
-  padding: 10px 15px;
+  padding: 10px 15px 0;
   color: #eee;
 }
 .rk-dashboard-group-sel{

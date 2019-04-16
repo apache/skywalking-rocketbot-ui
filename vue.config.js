@@ -2,7 +2,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/graphql': {
-        target: 'http://skywalking-dev.dmptesting.xyz:12800',
+        target: 'http://172.16.100.80:12800',
         // target: 'http://35.203.129.14:12800',
         changeOrigin: true,
         // pathRewrite:  (path) => {

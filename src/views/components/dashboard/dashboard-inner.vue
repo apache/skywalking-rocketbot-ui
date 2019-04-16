@@ -47,12 +47,13 @@ export default class DashboardService extends Vue {
       const rowComp = h(this.rocketGlobal.edit ? 'ChartEdit' : i.comp, {
         props: {
           ...i,
+          title: i.t,
           index,
           intervalTime: this.intervalTime,
           stateDashboard: this.stateDashboard,
         },
         key: index,
-        class: `g-sm-${i.width}`,
+        class: `g-sm-${i.w}`,
         on: {
           dragstart: this.dragstart,
           drop: this.drop,

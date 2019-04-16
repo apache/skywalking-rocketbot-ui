@@ -23,10 +23,10 @@ export interface CompsContainer {
 export interface CompsItem {
   o: string;
   comp: string;
-  name: string;
-  title: string;
+  n: string;
+  t: string;
   type?: string;
-  width: number;
+  w: number;
 }
 export interface CurrentQuery {
   key?: string;

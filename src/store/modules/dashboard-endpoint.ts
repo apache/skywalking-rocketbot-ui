@@ -116,6 +116,9 @@ const actions: ActionTree<State, any> = {
         traceState: 'ALL',
       }})
     .then((res: AxiosResponse) => {
+      if (!res.data.data) {
+        return;
+      }
       return graph
         .query('queryDashBoardEndpointTopo')
         .params({

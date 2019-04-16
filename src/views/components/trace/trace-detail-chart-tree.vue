@@ -16,8 +16,8 @@
  */
 
 <template>
-  <div class="time-charts scroll_hide flex-v">
-    <transition-group name="fade" tag="div">
+  <div class="trace-tree-charts scroll_hide flex-v">
+    <transition-group name="fade" tag="div" style="padding: 15px 30px;">
       <span class="time-charts-item mr-10" v-for="(i,index) in list" :key="i" :style="`color:${computedScale(index)}`">
          <svg class="icon vm mr-5 sm">
             <use xlink:href="#issue-open-m"></use>
@@ -161,11 +161,10 @@ export default {
 };
 </script>
 <style lang="scss">
-.time-charts{
+.trace-tree-charts{
   overflow: auto;
   flex-grow: 1;
   height: 100%;
-  padding: 15px 30px;
 }
 .trace-node .group {
   cursor: pointer;
@@ -187,7 +186,7 @@ export default {
   pointer-events: none;
 }
 .domain{display: none;}
-.trace-link {
+.tree-link {
   fill: none;
   stroke: rgba(0,0,0,0.1);
   stroke-width: 2px;

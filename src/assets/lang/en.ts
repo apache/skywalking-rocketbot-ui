@@ -10,6 +10,8 @@ const m = {
   helloMessage: 'Welcome Back, Apache Skywalking APM System !',
   username: 'Username',
   password: 'Password',
+  title: 'Title',
+  width: 'Width',
   login: 'Login Now',
   signout: 'Sign Out',
   dashboard: 'Dashboard',
@@ -73,7 +75,8 @@ const m = {
   startTime: 'startTime',
   start: 'Start',
   spans: 'Spans',
-
+  list: 'List',
+  tree: 'Tree',
   filterScope: 'Filter Scope',
   searchKeyword: 'Search Keyword',
 };

@@ -427,13 +427,13 @@ toggleLineText(lineText, currNode, isHover) {
     }
   }
   .node-text{
-    font-family: SimSun;
+    font-family: "Lato","Source Han Sans CN", "Microsoft YaHei", sans-serif;
     fill: #ddd;
     font-size:11px;
     opacity: 0.8;
   }
   .link-text {
-    font-family: SimSun;
+    font-family: "Lato","Source Han Sans CN", "Microsoft YaHei", sans-serif;
     fill: #ddd;
     font-size:11px;
     opacity: 0.8;

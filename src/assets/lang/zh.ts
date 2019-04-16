@@ -10,6 +10,8 @@ const m = {
   helloMessage: '欢迎来到, Apache Skywalking APM 系统 !',
   username: '用户名',
   password: '密码',
+  title: '标题',
+  width: '宽度',
   login: '登录',
   signout: '登出',
   dashboard: '仪表盘',
@@ -71,9 +73,10 @@ const m = {
   timeRange: '时间范围',
   duration: '持续时间',
   startTime: '开始时间',
-  start: '开始点',
+  start: '起始点',
   spans: '跨度',
-
+  list: '列表',
+  tree: '树结构',
   filterScope: '过滤范围',
   searchKeyword: '关键字搜索',
 };
