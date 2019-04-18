@@ -17,7 +17,7 @@
 
 <template>
   <div class="trace-tree-charts scroll_hide flex-v">
-    <transition-group name="fade" tag="div" style="padding: 15px 30px;">
+    <transition-group name="fade" tag="div" style="padding: 10px 30px;">
       <span class="time-charts-item mr-10" v-for="(i,index) in list" :key="i" :style="`color:${computedScale(index)}`">
          <svg class="icon vm mr-5 sm">
             <use xlink:href="#issue-open-m"></use>
@@ -25,20 +25,25 @@
         <span>{{i}}</span>
       </span>
     </transition-group>
-    <rk-sidebox :show.sync="showDetail" title="Span Info">
+    <div style="padding: 0 30px;">
+      <a class="trace-tree-btn mr-10" @click="tree.setDefault()">Default</a>
+      <a class="trace-tree-btn mr-10" @click="tree.getTopSlow()">Top 5 of slow</a>
+      <a class="trace-tree-btn mr-10" @click="tree.getTopChild()">Top 5 of children</a>
+    </div>
+      <rk-sidebox :show.sync="showDetail" :title="$t('spanInfo')">
       <div class="rk-trace-detail">
-        <h5 class="mb-15">Tags.</h5>
-        <div class="mb-10 clear"><span class="g-sm-4 grey">Endpoint:</span><span class="g-sm-8 wba">{{this.currentSpan.label}}</span></div>
-        <div class="mb-10 clear"><span class="g-sm-4 grey">Span Type:</span><span class="g-sm-8 wba">{{this.currentSpan.type}}</span></div>
-        <div class="mb-10 clear"><span class="g-sm-4 grey">Component:</span><span class="g-sm-8 wba">{{this.currentSpan.component}}</span></div>
+        <h5 class="mb-15">{{$t('tags')}}.</h5>
+        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('endpoint')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.label}}</span></div>
+        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('spanType')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.type}}</span></div>
+        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('component')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.component}}</span></div>
         <div class="mb-10 clear"><span class="g-sm-4 grey">Peer:</span><span class="g-sm-8 wba">{{this.currentSpan.peer||'No Peer'}}</span></div>
-        <div class="mb-10 clear"><span class="g-sm-4 grey">Error:</span><span class="g-sm-8 wba">{{this.currentSpan.isError}}</span></div>
+        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('error')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.isError}}</span></div>
         <div class="mb-10 clear" v-for="i in this.currentSpan.tags" :key="i.key"><span class="g-sm-4 grey">{{i.key}}:</span><span class="g-sm-8 wba">{{i.value}}</span></div>
-        <h5 class="mb-10" v-if="this.currentSpan.logs" v-show="this.currentSpan.logs.length">Logs.</h5>
+        <h5 class="mb-10" v-if="this.currentSpan.logs" v-show="this.currentSpan.logs.length">{{$t('logs')}}.</h5>
         <div v-for="(i, index) in this.currentSpan.logs" :key="index">
-          <div class="mb-10 sm"><span class="mr-10">Time:</span><span class="grey">{{i.time | dateformat}}</span></div>
+          <div class="mb-10 sm"><span class="mr-10">{{$t('time')}}:</span><span class="grey">{{i.time | dateformat}}</span></div>
           <div class="mb-15 clear" v-for="(_i, _index) in i.data" :key="_index">
-            <span class="g-sm-4">{{_i.key}}:</span><pre class="g-sm-8 mt-0 mb-0 sm" style="overflow:auto">{{_i.value}}</pre>
+            <div class="mb-10">{{_i.key}}:</div><pre class="g-sm-8 mt-0 mb-0 sm" style="overflow:auto">{{_i.value}}</pre>
           </div>
         </div>
       </div>
@@ -68,7 +73,6 @@ export default {
       if(!this.data.length) {return;}
       d3.select('.trace-tree-inner').selectAll('svg').remove();
       this.changeTree();
-      this.tree = new Tree(this.$refs.traceTree,this.data, null, this.topSlowMax,this.topSlowMin,this.topChildMax,this.topChildMin)
       this.tree.init({label:`${this.traceId}`, children: this.segmentId}, this.data);
       // this.tree.draw();
       // this.resize = this.tree.resize.bind(this.tree);
@@ -76,7 +80,7 @@ export default {
   },
   mounted() {
     this.changeTree();
-    this.tree = new Tree(this.$refs.traceTree,this.data, null, this.topSlowMax,this.topSlowMin,this.topChildMax,this.topChildMin)
+    this.tree = new Tree(this.$refs.traceTree, this)
     this.tree.init({label:`${this.traceId}`, children: this.segmentId}, this.data);
     // this.tree.draw();
     // this.resize = this.tree.resize.bind(this.tree);
@@ -161,6 +165,14 @@ export default {
 };
 </script>
 <style lang="scss">
+.trace-tree-btn{
+  display: inline-block;
+  border-radius: 4px;
+  padding: 0px 7px;
+  background-color: #40454e;
+  color: #eee;
+  font-size: 11px;
+}
 .trace-tree-charts{
   overflow: auto;
   flex-grow: 1;

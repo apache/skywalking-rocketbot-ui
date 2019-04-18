@@ -17,12 +17,15 @@
 
 /* eslint-disable */
 import * as d3 from 'd3';
-// import d3tip from 'd3-tip';
+import d3tip from 'd3-tip';
 var i = 0;
 export default class TraceMap {
-  constructor(el) {
+  constructor(el, scope) {
     this.el = el;
+    this.scope = scope;
     this.i = 0;
+    this.topSlow = [];
+    this.topChild = [];
     this.width = el.clientWidth;
     this.height = el.clientHeight - 28;
     this.body = d3
@@ -31,6 +34,16 @@ export default class TraceMap {
       .append('svg')
       .attr('width', this.width)
       .attr('height', this.height);
+    this.tip = d3tip()
+      .attr('class', 'd3-tip')
+      .offset([-8, 0])
+      .html(d => `
+      <div class="mb-5">${d.data.label}</div>
+      ${d.data.dur?'<div class="sm">SelfDuration: ' + d.data.dur + 'ms</div>' : ''}
+      ${(d.data.endTime - d.data.startTime)?'<div class="sm">TotalDuration: ' + (d.data.endTime - d.data.startTime) + 'ms</div>' : ''}
+      `);
+      this.svg = this.body.append('g').attr('transform', d => `translate(120, 0)`);
+      this.svg.call(this.tip);
   }
   init(data, row) {
     this.treemap = d3.tree().size([row.length * 35, this.width]);
@@ -47,48 +60,77 @@ export default class TraceMap {
       .scaleSequential()
       .domain([0, this.list.length + 1])
       .interpolator(d3.interpolateCool);
-    this.svg = this.body.append('g').attr('transform', d => `translate(120, 0)`).append('g');
+
     this.body.call(this.getZoomBehavior(this.svg));
     this.root = d3.hierarchy(this.data, d => d.children);
     this.root.x0 = this.height / 2;
     this.root.y0 = 0;
-    // this.root.children.forEach(collapse);
-
+    this.topSlow = [];
+    this.topChild = [];
+    const that = this;
+    this.root.children.forEach(collapse);
+    this.topSlowMax = this.topSlow.sort((a,b) => b - a)[0];
+    this.topSlowMin = this.topSlow.sort((a,b) => b - a)[4];
+    this.topChildMax = this.topChild.sort((a,b) => b - a)[0];
+    this.topChildMin = this.topChild.sort((a,b) => b - a)[4];
     this.update(this.root);
-    
     // Collapse the node and all it's children
     function collapse(d) {
       if(d.children) {
-        d._children = d.children
-        d._children.forEach(collapse)
-        d.children = null
+        let dur = d.data.endTime - d.data.startTime;
+        d.children.forEach(i => {
+          dur -= (i.data.endTime - i.data.startTime);
+        })
+        d.dur = dur < 0 ? 0 : dur;
+        that.topSlow.push(dur);
+        that.topChild.push(d.children.length);
+        d.childrenLength = d.children.length;
+        d.children.forEach(collapse)
       }
     }
   }
   update(source) {
-  var treeData = this.treemap(this.root);
-  var nodes = treeData.descendants(),
-      links = treeData.descendants().slice(1);
+    const that = this;
+    var treeData = this.treemap(this.root);
+    var nodes = treeData.descendants(),
+        links = treeData.descendants().slice(1);
 
-  nodes.forEach(function(d){ d.y = d.depth * 140});
+    nodes.forEach(function(d){ d.y = d.depth * 140});
 
 
-  var node = this.svg.selectAll('g.node')
-      .data(nodes, function(d) {return d.id || (d.id = ++i); });
+    var node = this.svg.selectAll('g.node')
+        .data(nodes, function(d) {return d.id || (d.id = ++i); });
 
-  var nodeEnter = node.enter().append('g')
+    var nodeEnter = node.enter().append('g')
       .attr('class', 'node')
+      .attr('cursor', 'pointer')
       .attr("transform", function(d) {
         return "translate(" + source.y0 + "," + source.x0 + ")";
+      }).on('mouseover', function(d, i) {
+        that.tip.show(d, this);
+        if(!that.timeUpdate) {return;}
+        const _node = that.timeUpdate._groups[0].filter(group => group.__data__.id === (i+1));
+        if(_node.length){
+          that.timeTip.show(d, _node[0].children[1]);
+        }
     })
-    .on('click', click);
+    .on('mouseout', function(d, i) {
+      that.tip.hide(d, this);
+      if(!that.timeUpdate) {return;}
+      const _node = that.timeUpdate._groups[0].filter(group => group.__data__.id === (i+1));
+      if(_node.length){
+        that.timeTip.hide(d, _node[0].children[1]);
+      }
+    })
+    .on('click', function(d) {
+      d3.event.stopPropagation();
+      that.scope.handleSelectSpan(d);
+    });
 
   nodeEnter.append('circle')
       .attr('class', 'node')
       .attr('r', 1e-6)
-      .style("fill", function(d) {
-          return d._children ? this.sequentialScale(this.list.indexOf(d.data.serviceCode)) : "#fff";
-      })
+      .style("fill", d => d._children ? this.sequentialScale(this.list.indexOf(d.data.serviceCode)) : "#fff")
       .attr('stroke', d => this.sequentialScale(this.list.indexOf(d.data.serviceCode)))
       .attr('stroke-width', 2.5)
 
@@ -157,7 +199,7 @@ export default class TraceMap {
       .attr('y', -1)
       .style( 'fill', d => this.sequentialScale(this.list.indexOf(d.data.serviceCode)));
   var nodeUpdate = nodeEnter.merge(node);
-
+  this.nodeUpdate = nodeUpdate;
   nodeUpdate.transition()
     .duration(600)
     .attr('transform', function(d) {
@@ -168,8 +210,11 @@ export default class TraceMap {
   nodeUpdate.select('circle.node')
     .attr('r', 5)
     .style("fill", (d) => d._children ? this.sequentialScale(this.list.indexOf(d.data.serviceCode)) : "#fff" )
-    .attr('cursor', 'pointer');
-
+    .attr('cursor', 'pointer')
+    .on('click', d => {
+      d3.event.stopPropagation();
+      click(d);
+    });
 
   // Remove any exiting nodes
   var nodeExit = node.exit().transition()
@@ -198,7 +243,6 @@ export default class TraceMap {
   		.style('stroke-width', 1.5);
 
   var linkUpdate = linkEnter.merge(link);
-
   linkUpdate.transition()
       .duration(600)
       .attr('d', function(d){ return diagonal(d, d.parent) });
@@ -216,7 +260,6 @@ export default class TraceMap {
     d.x0 = d.x;
     d.y0 = d.y;
   });
-const that = this;
     function diagonal(s, d) {
       return `M ${s.y} ${s.x}
       C ${(s.y + d.y) / 2} ${s.x}, ${(s.y + d.y) / 2} ${d.x},
@@ -232,6 +275,39 @@ const that = this;
         }
         that.update(d);
     }
+  }
+  setDefault() {
+    d3.selectAll('.time-inner').style('opacity', 1);
+    d3.selectAll('.time-inner-duration').style('opacity', 0);
+    d3.selectAll('.trace-tree-node-selfdur').style('opacity', 0);
+    d3.selectAll('.trace-tree-node-selfchild').style('opacity', 0);
+    this.nodeUpdate._groups[0].forEach(i => {
+      d3.select(i).style('opacity', 1);
+    })
+  }
+  getTopChild() {
+    d3.selectAll('.time-inner').style('opacity', 1);
+    d3.selectAll('.time-inner-duration').style('opacity', 0);
+    d3.selectAll('.trace-tree-node-selfdur').style('opacity', 0);
+    d3.selectAll('.trace-tree-node-selfchild').style('opacity', 1);
+    this.nodeUpdate._groups[0].forEach(i => {
+      d3.select(i).style('opacity', .2);
+      if(i.__data__.data.children.length >= this.topChildMin && i.__data__.data.children.length <= this.topChildMax){
+        d3.select(i).style('opacity', 1);
+      }
+    })
+  }
+  getTopSlow() {
+    d3.selectAll('.time-inner').style('opacity', 0);
+    d3.selectAll('.time-inner-duration').style('opacity', 1);
+    d3.selectAll('.trace-tree-node-selfchild').style('opacity', 0);
+    d3.selectAll('.trace-tree-node-selfdur').style('opacity', 1);
+    this.nodeUpdate._groups[0].forEach(i => {
+      d3.select(i).style('opacity', .2);
+      if(i.__data__.data.dur >= this.topSlowMin && i.__data__.data.dur <= this.topSlowMax){
+        d3.select(i).style('opacity', 1);
+      }
+    })
   }
   getZoomBehavior(g) {
     return d3

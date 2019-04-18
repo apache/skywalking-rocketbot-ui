@@ -106,7 +106,7 @@ export default class Trace {
     let index = -1;
     this.root.eachBefore(n => {
       n.x = ++index * this.barHeight + 24;
-      n.y = n.depth * 16;
+      n.y = n.depth * 12;
     });
     const node = this.svg
       .selectAll('.trace-node')
