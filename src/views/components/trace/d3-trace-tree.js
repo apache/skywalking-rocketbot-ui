@@ -89,6 +89,9 @@ export default class TraceMap {
       }
     }
   }
+  draw() {
+    this.update(this.root);
+  }
   update(source) {
     const that = this;
     var treeData = this.treemap(this.root);

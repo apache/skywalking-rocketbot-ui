@@ -71,20 +71,15 @@ export default {
   watch: {
     data() {
       if(!this.data.length) {return;}
-      d3.select('.trace-tree-inner').selectAll('svg').remove();
+      d3.select('.trace-tree-inner').selectAll('svg').selectAll('svg').remove();
       this.changeTree();
       this.tree.init({label:`${this.traceId}`, children: this.segmentId}, this.data);
-      // this.tree.draw();
-      // this.resize = this.tree.resize.bind(this.tree);
     }
   },
   mounted() {
     this.changeTree();
     this.tree = new Tree(this.$refs.traceTree, this)
     this.tree.init({label:`${this.traceId}`, children: this.segmentId}, this.data);
-    // this.tree.draw();
-    // this.resize = this.tree.resize.bind(this.tree);
-    // this.computedScale();
   },
   methods: {
     handleSelectSpan(i) {
