@@ -18,10 +18,10 @@
 <template>
   <header class="rk-header flex-h">
     <div class="flex-h">
-      <svg class="svg-logo icon mr-5">
-        <use xlink:href="#logo"></use>
+      <svg class="svg-logo icon" style="margin-right:35px;margin-top:-5px">
+        <use xlink:href="#logo-sw"></use>
       </svg>
-      <span class="logo">Rocketbot</span>
+      <span class="grey rocketbot">Rocketbot</span>
       <router-link class="nav-link mr-20" to="/" exact>
         <svg class="icon sm vm">
           <use xlink:href="#chart"></use>
@@ -135,8 +135,13 @@ export default class Header extends Vue {
   background-color: #252a2f;
   box-shadow: 0 1px 2px 0 rgba(26, 24, 29, 0.24);
   .svg-logo {
-    width: 22px;
+    width: 90px;
     height: 22px;
+  }
+  .rocketbot{
+    padding-top: 27px;
+    position: absolute;
+    font-size: 11px;
   }
   .logo {
     font-family: "Avenir", Helvetica, Arial, sans-serif;

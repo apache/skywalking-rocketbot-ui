@@ -20,14 +20,14 @@
   <div class="rk-login-l">
     <div class="rk-login-form-wrapper">
       <div class="rk-login-form">
-          <h1 class="mb-10 title"><span class="grey">{{$t('hello')}}, </span>Rocketbot</h1>
+          <h1 class="mb-10 title"><span class="grey">{{$t('hello')}}, </span>SkyWalking Rockbot UI</h1>
           <div class="grey dscp">{{$t('helloMessage')}}</div>
           <div class="sm b mb-5">{{$t('username')}}</div>
           <input @keyup.enter="login" @input="error = false;" class="rk-login-input mb-15" :class="{'rk-login-red':error}" v-model="accountInfo.userName" type="text">
           <div class="sm b mb-5">{{$t('password')}}</div>
           <input @keyup.enter="login" @input="error = false;" class="rk-login-input mb-20"  :class="{'rk-login-red':error}" v-model="accountInfo.password" type="password">
           <a class="rk-btn dib tc cp long mb-10 rk-login-btn" @click="login">{{$t('login')}}</a>
-          <p class="grey sm">Copyright © 2018</p>
+          <p class="grey sm">Copyright © 2018 - 2019</p>
       </div>
     </div>
   </div>
@@ -35,8 +35,8 @@
     <svg class="rk-img-wrapper">
       <use xlink:href="#login-bg"></use>
     </svg>
-    <svg class="rk-img-logo">
-      <use xlink:href="#logo"></use>
+     <svg class="rk-img-logo">
+      <use xlink:href="#logo-sw"></use>
     </svg>
   </div>
 </div>

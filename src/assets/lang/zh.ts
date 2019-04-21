@@ -7,7 +7,7 @@ const m = {
   months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月',
   weeks: '一_二_三_四_五_六_日',
   hello: '你好',
-  helloMessage: '欢迎来到, Apache Skywalking APM 系统 !',
+  helloMessage: '欢迎来到, Apache SkyWalking APM 系统 !',
   username: '用户名',
   password: '密码',
   title: '标题',

@@ -16,6 +16,7 @@
  */
 
 import './svg/logo.svg';
+import './svg/logo-sw.svg';
 import './svg/login-bg.svg';
 import './svg/disk.svg';
 import './svg/arrow-down.svg';
