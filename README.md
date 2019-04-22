@@ -1,13 +1,14 @@
-<p align="center"><img src="https://user-images.githubusercontent.com/19775780/53944427-4f6c2580-40fa-11e9-95f3-2b4ce1f2f8f3.png"  width="250"></p>
-<h1 align="center"></h1>
+Apache SkyWalking Rocketbot UI
+===============
+
+<img src="http://skywalking.apache.org/assets/logo.svg" alt="Sky Walking logo" height="90px" align="right" />
+
+The UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking).
 
 <p align="center">
 <a><img src="https://img.shields.io/badge/version-1.1.0-blue.svg?longCache=true&style=popout-square"></a>
 <a href="https://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/license-Apache2.0-brightgreen.svg?longCache=true&style=popout-square"></a>
 </p>
-
-## Introduction
-**RocketBot**: A modern and awesome UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking).
 
 ## Screenshots
 **Dashboard**
@@ -87,12 +88,12 @@ npm run build
 ```
 npm install
 npm run build
-docker build -t rocketbot .
+docker build -t skywalking-rocketbot .
 ```
 ### Running the docker image
 
 ```
-docker run -p 8080:80 -d -e SKYWALKING_URL=127.0.0.1:1234,127.0.0.1:1235 rocketbot
+docker run -p 8080:80 -d -e SKYWALKING_URL=127.0.0.1:1234,127.0.0.1:1235 skywalking-rocketbot
 ```
 
 `SKYWALKING_URL` is the address of your backend, multiple IP is changed by comma.
@@ -100,7 +101,7 @@ docker run -p 8080:80 -d -e SKYWALKING_URL=127.0.0.1:1234,127.0.0.1:1235 rocketb
 
 The default UI address is `http://localhost:8080`.
 
-## Contributing to RocketBot
+## Contributing to SkyWalking RocketBot
 
 Thanks for your interest and hope it will be a
 pleasant experience.
