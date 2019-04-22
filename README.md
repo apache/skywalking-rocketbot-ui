@@ -28,12 +28,6 @@ The UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking).
 
 ![](https://user-images.githubusercontent.com/19775780/53947184-2fd7fb80-4100-11e9-90b8-205c307a6a55.png)
 
-## Live Demo
-**[Demo](http://106.75.237.45/)**
-
-| Username        | Password           |
-| ------------- |:-------------:|
-| admin     | admin |
 
 ## Development
 
@@ -41,13 +35,7 @@ The UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking).
 
 ### Prepare
 
-Fork, then clone the `rocketbot` repo and change directory into it.
-
-```
-git clone https://github.com/TinyAllen/rocketbot.git
-cd rocketbot
-```
-
+Fork, then clone the repo and change directory into it.
 Install dependencies via `npm`:
 
 ```
@@ -115,16 +103,6 @@ Most of the contributions received are code contributions, and documentation, bu
 * **Ensure the bug was not already reported** by searching on GitHub under [Issues]().
 
 * If you're unable to find an open issue addressing the problem, [open a new one](). Be sure to include a **title and clear description**, as much relevant information as possible, and a **code sample** or an **executable test case** demonstrating the expected behavior that is not occurring.
-
-## Who Uses SkyWalking Rocketbot?
-Which companies are using SkyWalking RocketBot, Welcome to register in issues #15 !（This is for open source users reference only.）
-<p>
-
-<img src="https://daoweb-resource.daocloud.io/logo/daocloud-logo-gray-account.svg" height="40px">&nbsp;&nbsp;
-<img src="https://user-images.githubusercontent.com/19775780/47834441-7c21d080-ddda-11e8-9e3a-67c43ab074bf.png" height="40px"  >&nbsp;&nbsp;
-<img src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=4229681157,1554083661&fm=58&s=51B3A8720790BF80CCC2538703007088&bpow=121&bpoh=75" height="40px">&nbsp;&nbsp;
-
-</p>
 
 ## FAQ
 
