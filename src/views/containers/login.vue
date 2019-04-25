@@ -77,7 +77,7 @@ export default class Login extends Vue {
       }
       this.$router.push('/');
     } else {
-      axios.post('/api/login/account', this.accountInfo).then((res: AxiosResponse) => {
+      axios.post('/login/account', this.accountInfo).then((res: AxiosResponse) => {
         window.localStorage.setItem('skywalking-authority', res.data.currentAuthority);
         this.$router.push('/');
       }).catch(() => {
