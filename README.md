@@ -40,6 +40,9 @@ npm run serve
 docker build -t skywalking-rocketbot .
 ```
 
+The default UI address is `http://localhost:8081/`. Default username/password is `admin/admin`. 
+The OAP backend should be hosted at `http://localhost:12800/`.
+
 ### Running the docker image
 
 ```
