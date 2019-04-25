@@ -1,1 +1,16 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. -->
+
 <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>icn/spam</title><path d="M12.79 3.554c.749.461 1.21 1.315 1.21 2.239v4.414c0 .924-.461 1.778-1.21 2.24l-3.58 2.207a2.288 2.288 0 0 1-2.42 0l-3.58-2.208C2.461 11.985 2 11.131 2 10.207V5.793c0-.924.461-1.778 1.21-2.24l3.58-2.207a2.288 2.288 0 0 1 2.42 0l3.58 2.208zm-4.548-.416a.458.458 0 0 0-.484 0l-3.58 2.207a.525.525 0 0 0-.241.448v4.414c0 .185.092.356.242.448l3.579 2.207c.15.093.334.093.484 0l3.58-2.207a.525.525 0 0 0 .241-.448V5.793a.525.525 0 0 0-.242-.448L8.242 3.138zM8 5a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V6a1 1 0 0 1 1-1zm0 6.5c-.552 0-1-.336-1-.75S7.448 10 8 10s1 .336 1 .75-.448.75-1 .75z" id="a"/></svg>

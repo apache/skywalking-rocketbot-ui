@@ -45,7 +45,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import Axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 interface Account {
   userName: string;
@@ -68,16 +68,24 @@ export default class Login extends Vue {
       // Modify the beforeEach service in src/router/index.js to determine.
       // if there is a correct defined value. example：skywalking-authority
   private login() {
-    if (this.accountInfo.userName === 'admin' && this.accountInfo.password === 'admin') {
-      window.localStorage.setItem('skywalking-authority', 'admin');
+    if (process.env.NODE_ENV === 'development') {
+      if (this.accountInfo.userName === 'admin' && this.accountInfo.password === 'admin') {
+        window.localStorage.setItem('skywalking-authority', 'admin');
+      } else {
+        this.error = true;
+        return;
+      }
+      this.$router.push('/');
     } else {
-      this.error = true;
-      return;
+      axios.post('/api/login/account', this.accountInfo).then((res: AxiosResponse) => {
+        window.localStorage.setItem('skywalking-authority', res.data.currentAuthority);
+        this.$router.push('/');
+      }).catch(() => {
+         this.error = true;
+      });
     }
-    this.$router.push('/');
   }
 // ======================================================
-
 }
 </script>
 

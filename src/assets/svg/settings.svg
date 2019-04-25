@@ -1,1 +1,16 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. -->
+
 <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>icn/settings</title><path d="M7.898 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm-4.69-3.736l-.933-1.239a1 1 0 0 1 .022-1.23l.276-.341a1 1 0 0 1 1.199-.278l1.382.644a4.98 4.98 0 0 1 1.182-.571l.373-1.492A1 1 0 0 1 7.679 1h.438a1 1 0 0 1 .97.757L9.46 3.25a4.98 4.98 0 0 1 1.182.57l1.383-.643a1 1 0 0 1 1.199.277l.276.341a1 1 0 0 1 .022 1.23l-.933 1.24c.148.401.247.826.288 1.268l1.374.701a1 1 0 0 1 .52 1.116l-.099.427a1 1 0 0 1-.956.775l-1.533.028a5.022 5.022 0 0 1-.819 1.025l.318 1.496a1 1 0 0 1-.54 1.106l-.394.192a1 1 0 0 1-1.204-.255l-.996-1.185a5.047 5.047 0 0 1-1.3 0l-.995 1.185a1 1 0 0 1-1.204.256l-.394-.193a1 1 0 0 1-.54-1.106l.317-1.496a5.022 5.022 0 0 1-.818-1.025L2.08 10.55a1 1 0 0 1-.957-.775l-.098-.427a1 1 0 0 1 .52-1.116l1.374-.701c.04-.442.14-.867.288-1.268z" id="a"/></svg>

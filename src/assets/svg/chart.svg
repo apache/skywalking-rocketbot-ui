@@ -1,1 +1,16 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. -->
+
 <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>icn/chart</title><path d="M5.55 3.824L6.853 5.78a.3.3 0 0 0 .384.102l1.526-.764a.3.3 0 0 1 .384.102l1.65 2.476a.3.3 0 0 0 .462.045l1.229-1.229a.3.3 0 0 1 .512.212v4.243H5V3.99a.3.3 0 0 1 .55-.167zM13 12a1 1 0 0 1 0 2H3.833A1.833 1.833 0 0 1 2 12.167V3a1 1 0 1 1 2 0v9h9z" id="a"/></svg>

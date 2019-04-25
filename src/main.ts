@@ -40,7 +40,7 @@ Vue.use(components);
 Vue.directive('clickout', clickout);
 Vue.directive('tooltip', tooltip);
 
-Vue.filter('dateformat', (dataStr: any, pattern = 'YYYY-MM-DD HH:mm:ss') => moment(dataStr).format(pattern));
+Vue.filter('dateformat', (dataStr: any, pattern: string = 'YYYY-MM-DD HH:mm:ss') => moment(dataStr).format(pattern));
 const saveLang = window.localStorage.getItem('lang');
 let language = navigator.language;
 if (!saveLang) {
