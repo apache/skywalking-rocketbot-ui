@@ -5,10 +5,7 @@ Apache SkyWalking Rocketbot UI
 
 The UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking).
 
-<p align="center">
-<a><img src="https://img.shields.io/badge/version-1.1.0-blue.svg?longCache=true&style=popout-square"></a>
-<a href="https://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/license-Apache2.0-brightgreen.svg?longCache=true&style=popout-square"></a>
-</p>
+[![Build Status](https://travis-ci.org/apache/skywalking-rocketbot-ui.svg?branch=master)](https://travis-ci.org/apache/skywalking-rocketbot-ui)
 
 ## Screenshots
 **Dashboard**
