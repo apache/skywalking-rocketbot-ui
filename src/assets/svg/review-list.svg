@@ -1,3 +1,18 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. -->
+
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M6.26756439,1 C6.61337381,0.40219863 7.25971764,0 8,0 C8.74028236,0 9.38662619,0.40219863 9.73243561,1 L11,1 C12.6568542,1 14,2.34314575 14,4 L14,12 C14,13.6568542 12.6568542,15 11,15 L5,15 C3.34314575,15 2,13.6568542 2,12 L2,4 C2,2.34314575 3.34314575,1 5,1 L6.26756439,1 Z M5,3 C4.44771525,3 4,3.44771525 4,4 L4,12 C4,12.5522847 4.44771525,13 5,13 L11,13 C11.5522847,13 12,12.5522847 12,12 L12,4 C12,3.44771525 11.5522847,3 11,3 L11,4 L5,4 L5,3 Z M5.5,6 L9.5,6 C9.77614237,6 10,6.22385763 10,6.5 C10,6.77614237 9.77614237,7 9.5,7 L5.5,7 C5.22385763,7 5,6.77614237 5,6.5 C5,6.22385763 5.22385763,6 5.5,6 Z M5.5,8 L10.5,8 C10.7761424,8 11,8.22385763 11,8.5 C11,8.77614237 10.7761424,9 10.5,9 L5.5,9 C5.22385763,9 5,8.77614237 5,8.5 C5,8.22385763 5.22385763,8 5.5,8 Z M5.5,10 L8.5,10 C8.77614237,10 9,10.2238576 9,10.5 C9,10.7761424 8.77614237,11 8.5,11 L5.5,11 C5.22385763,11 5,10.7761424 5,10.5 C5,10.2238576 5.22385763,10 5.5,10 Z"/>
 </svg>

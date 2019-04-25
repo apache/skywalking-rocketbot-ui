@@ -1,1 +1,16 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. -->
+
 <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>icn/unlink</title><path d="M11.178 9l-.652-1.645a1.76 1.76 0 0 0 .04-.039l1.399-1.398c.579-.579.646-1.45.15-1.947-.497-.496-1.369-.43-1.948.15L8.769 5.519a1.76 1.76 0 0 0-.039.04l-1.645-.651c.14-.206.301-.403.486-.587l1.398-1.399c1.35-1.35 3.385-1.507 4.543-.35 1.159 1.16 1.002 3.193-.35 4.545l-1.397 1.398a4.028 4.028 0 0 1-.587.486zm-2.422 2.423c-.14.206-.302.403-.486.587l-1.398 1.398c-1.352 1.351-3.386 1.508-4.544.35-1.158-1.159-1.002-3.193.35-4.544l1.397-1.398c.185-.185.382-.347.588-.486l.65 1.645a1.76 1.76 0 0 0-.04.04l-1.397 1.397c-.58.58-.647 1.451-.15 1.948.496.496 1.368.429 1.947-.15l1.398-1.398a1.76 1.76 0 0 0 .039-.04l1.646.65zm3.768-2.064h1.977c.273 0 .495.221.495.494v.05a.494.494 0 0 1-.495.494h-1.977a.494.494 0 0 1-.494-.494v-.05c0-.273.221-.494.494-.494zm-.38 2.092l1.399 1.398a.494.494 0 0 1 0 .699l-.036.036a.494.494 0 0 1-.699 0l-1.398-1.398a.494.494 0 0 1 0-.7l.036-.035a.494.494 0 0 1 .699 0zm-2.79 1.078c0-.273.221-.495.494-.495H9.9c.273 0 .494.222.494.495v1.977A.494.494 0 0 1 9.9 15h-.05a.494.494 0 0 1-.495-.494v-1.977zM6.637 3.47a.494.494 0 0 1-.495.495h-.049a.494.494 0 0 1-.494-.495V1.494c0-.273.221-.494.494-.494h.05c.272 0 .494.221.494.494v1.977zm-2.092.38a.494.494 0 0 1 0 .699l-.036.036a.494.494 0 0 1-.699 0L2.412 3.188a.494.494 0 0 1 0-.7l.036-.035a.494.494 0 0 1 .699 0L4.545 3.85zM3.467 6.64H1.49a.494.494 0 0 1-.494-.494v-.05c0-.273.221-.495.494-.495h1.977c.273 0 .494.222.494.495v.05a.494.494 0 0 1-.494.495z" id="a"/></svg>
