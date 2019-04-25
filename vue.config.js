@@ -19,11 +19,11 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://172.16.100.80:12800',
+        target: 'http://localhost:12800',
         changeOrigin: true,
       },
       '/graphql': {
-        target: 'http://172.16.100.80:12800',
+        target: 'http://localhost:12800',
         changeOrigin: true,
       },
     },
