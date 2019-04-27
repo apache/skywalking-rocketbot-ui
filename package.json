@@ -15,6 +15,7 @@
     "d3-tip": "^0.9.1",
     "dayjs": "^1.8.8",
     "echarts": "^4.1.0",
+    "noty": "^3.2.0-beta",
     "popper.js": "^1.14.7",
     "vue": "^2.6.6",
     "vue-class-component": "^6.0.0",

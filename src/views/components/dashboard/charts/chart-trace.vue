@@ -59,7 +59,8 @@ export default class RkTopTrace extends Vue {
     if (document.execCommand('Copy')) {
         document.execCommand('Copy');
     }
-    input.style.display = 'none';
+    input.remove();
+    Vue.prototype.$noty.success('Copied!', {timeout: 500});
   }
 }
 </script>
