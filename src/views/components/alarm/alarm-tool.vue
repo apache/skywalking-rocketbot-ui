@@ -20,7 +20,7 @@
     <AlarmSelect :title="this.$t('filterScope')" :value="alarmScope" @input="handleFilter" :data="alarmOptions"/>
     <div class="mr-10" style="padding: 3px 15px 0">
       <div class="sm grey">{{this.$t('searchKeyword')}}</div>
-      <input type="text"  :value="keyword" class="rk-alarm-tool-input" @input="handleRefresh">
+      <input type="text" v-model="keyword" class="rk-alarm-tool-input" @input="handleRefresh(1)">
     </div>
     <RkPage class="mt-15" :currentSize="20" :currentPage="pageNum" @changePage="handlePage" :total="total"/>
   </nav>
@@ -39,9 +39,9 @@ export default class AlarmTool extends Vue {
   @Prop() private durationTime: any;
   @Prop() private total!: number;
   private pageNum: number = 1;
-  private alarmScope: any = {label: 'Global', key: ''};
+  private alarmScope: any = {label: 'All', key: ''};
   private alarmOptions: any = [
-    {label: 'Global', key: ''},
+    {label: 'All', key: ''},
     {label: 'Service', key: 'Service'},
     {label: 'ServiceInstance', key: 'ServiceInstance'},
     {label: 'Endpoint', key: 'Endpoint'},

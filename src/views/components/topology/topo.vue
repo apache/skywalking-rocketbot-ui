@@ -267,6 +267,7 @@ export default {
         .attr('ry', 3)
         .attr('fill', d => d.cpm ? '#217EF299' : '#6a6d7799')
         .on('click', function(d, i) {
+          that.$store.commit('rocketTopo/SET_MODE', d.detectPoint === 'SERVER')
           event.stopPropagation();
           that.tip.hide({}, this);
           that.tip.show(d, this);

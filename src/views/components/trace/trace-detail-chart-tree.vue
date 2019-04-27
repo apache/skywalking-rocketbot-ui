@@ -48,7 +48,7 @@
         </div>
       </div>
     </rk-sidebox>
-    <div class="trace-tree">
+    <div class="trace-tree" style="height:100%">
       <div class="trace-tree-inner" ref="traceTree"></div>
     </div>
   </div>

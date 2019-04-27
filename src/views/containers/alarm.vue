@@ -18,7 +18,7 @@
 <template>
   <div class="rk-alarm flex-v">
     <AlarmTool :durationTime="durationTime" :total="rocketAlarm.total"/>
-    <div style="flex-grow: 1;overflow: auto;">
+    <div style="flex-grow: 1;overflow: auto;height: 100%;">
       <AlarmTable :data="rocketAlarm.alarmService"/>
     </div>
   </div>

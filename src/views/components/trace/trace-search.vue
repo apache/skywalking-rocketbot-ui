@@ -47,7 +47,7 @@
         <input type="text" v-model="traceId" class="rk-trace-search-input dib">
       </div>
       <div class="mr-15">
-        <span class="sm b grey mr-10">{{this.$t('range')}}:</span>
+        <span class="sm b grey mr-10">{{this.$t('duration')}}:</span>
         <div class="rk-trace-search-range dib">
           <input class="vm tc" v-model="minTraceDuration">
           <span class="grey vm">-</span>

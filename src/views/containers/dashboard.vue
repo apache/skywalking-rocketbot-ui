@@ -91,6 +91,7 @@ export default class Dashboard extends Vue {
 .dashboard-container{
   overflow: auto;
   padding:20px 15px;
+  height: 100%;
   flex-grow: 1;
 }
 </style>
