@@ -17,30 +17,23 @@
 
 export default [{
   o: 'Global',
-  n: 'Global Brief',
-  comp: 'ChartBrief',
-  t: 'Global Brief',
+  n: 'Global Heatmap',
+  comp: 'ChartHeatmap',
+  t: 'Global Heatmap',
   type: 'global',
-  w: 3,
-}, {
-  o: 'Global',
-  n: 'Global Percent Response',
-  comp: 'ChartResponse',
-  t: 'Global Percent Response',
-  type: 'global',
-  w: 3,
+  w: 6,
 }, {
   o: 'Global',
   n: 'Global Percent Response(line)',
   comp: 'ChartResponseLine',
   t: 'Global Percent Response',
   type: 'global',
-  w: 3,
+  w: 6,
 }, {
   o: 'Global',
-  n: 'Global Heatmap',
-  comp: 'ChartHeatmap',
-  t: 'Global Heatmap',
+  n: 'Global Brief',
+  comp: 'ChartBrief',
+  t: 'Global Brief',
   type: 'global',
   w: 3,
 }, {
@@ -56,5 +49,5 @@ export default [{
   comp: 'ChartSlow',
   t: 'Global Top Slow Endpoint',
   type: 'global.getTopNSlowEndpoint',
-  w: 3,
+  w: 6,
 }];
