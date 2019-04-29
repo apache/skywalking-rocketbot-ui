@@ -70,6 +70,7 @@ import TraceSelect from './trace-select.vue';
 
 @Component({components: {TraceSelect}})
 export default class TraceTool extends Vue {
+  @State('rocketbot') private rocketbotGlobal: any;
   @State('rocketTrace') private rocketTrace: any;
   @Getter('durationTime') private durationTime: any;
   @Action('rocketTrace/GET_SERVICES') private GET_SERVICES: any;
@@ -77,7 +78,7 @@ export default class TraceTool extends Vue {
   @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
   @Action('rocketTrace/SET_TRACE_FORM') private SET_TRACE_FORM: any;
 
-  private time: Date[] = [new Date(new Date().getTime() - 900000) , new Date()];
+  private time: Date[] = [new Date() , new Date()];
   private status: boolean = true;
   private maxTraceDuration: string = '';
   private minTraceDuration: string = '';
@@ -155,6 +156,7 @@ export default class TraceTool extends Vue {
     this.GET_TRACELIST();
   }
   private mounted() {
+    this.time = [this.rocketbotGlobal.duration.start, this.rocketbotGlobal.duration.end];
     this.getTraceList();
   }
 }
