@@ -21,7 +21,7 @@
       <span class="time-charts-item mr-10" v-for="(i,index) in list" :key="i" :style="`color:${computedScale(index)}`">
          <svg class="icon vm mr-5 sm">
             <use xlink:href="#issue-open-m"></use>
-          </svg> 
+          </svg>
         <span>{{i}}</span>
       </span>
     </transition-group>
