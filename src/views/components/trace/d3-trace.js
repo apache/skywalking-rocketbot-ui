@@ -146,7 +146,7 @@ export default class Trace {
       .attr('x', 35)
       .attr('y', -6)
       .attr('fill', '#333')
-      .text( d => 
+      .text( d =>
         {
           if(d.data.label === 'TRACE_ROOT') {
             return '';
@@ -210,7 +210,11 @@ export default class Trace {
         'stroke',
         d => d.data.label === 'TRACE_ROOT'?'':`${this.sequentialScale(this.list.indexOf(d.data.serviceCode))}`
       )
-      .on('click', d => this.click(d, this));
+      .on('click', d => {
+        this.click(d, this)
+        d3.event.stopPropagation();
+
+      });
     node
       .transition()
       .duration(400)
