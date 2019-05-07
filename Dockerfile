@@ -16,13 +16,14 @@
 
 FROM nginx:1.14-alpine
 
-COPY ./dist/ /usr/share/nginx/html/
-COPY ./nginx.conf /etc/nginx/nginx.conf
 COPY ./run.sh /usr/share/run.sh
 
 RUN set -ex \
     && apk add --no-cache bash tzdata \
     && chmod +x /usr/share/run.sh
+
+COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./dist/ /usr/share/nginx/html/
 
 EXPOSE 80
 
