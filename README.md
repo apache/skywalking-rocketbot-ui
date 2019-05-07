@@ -3,7 +3,7 @@ Apache SkyWalking Rocketbot UI
 
 <img src="http://skywalking.apache.org/assets/logo.svg" alt="Sky Walking logo" height="90px" align="right" />
 
-The UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking).
+[Apache SkyWalking](https://github.com/apache/incubator-skywalking) UI.
 
 [![Build Status](https://travis-ci.org/apache/skywalking-rocketbot-ui.svg?branch=master)](https://travis-ci.org/apache/skywalking-rocketbot-ui)
 
