@@ -42,7 +42,7 @@
       
       <div class="rk-tag mr-5">{{this.$t('start')}}</div><span class="mr-15 sm">{{parseInt(current.start) | dateformat}}</span>
       <div class="rk-tag mr-5">{{this.$t('duration')}}</div><span class="mr-15 sm">{{current.duration}} ms</span>
-      <div class="rk-tag mr-5">{{this.$t('spans')}}</div><span class="sm">9</span>
+      <div class="rk-tag mr-5">{{this.$t('spans')}}</div><span class="sm">{{spans.length}}</span>
     </div>
     <TraceDetailChartList v-if="mode&&current.endpointNames" :data="spans" :traceId="current.traceIds[0]"/>
     <TraceDetailChartTree v-if="!mode&&current.endpointNames" :data="spans" :traceId="current.traceIds[0]"/>
