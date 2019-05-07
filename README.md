@@ -47,17 +47,3 @@ Most of the contributions received are code contributions, and documentation, bu
 ### How to report a bug?
 
 Please report bug to [SkyWalking main repo](https://github.com/apache/skywalking/issues).
-
-## FAQ
-
-
-1、How to set TimeZone in RocketBot Docker?
-
-e.g: setting `Asia/Shanghai` TimeZone in RocketBot [Dockerfile](Dockerfile) as followings:
-
-```txt
-···
-ENV TZ Asia/Shanghai
-RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime \
-    && echo $TZ > /etc/timezone
-```
