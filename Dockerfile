@@ -27,4 +27,4 @@ COPY ./dist/ /usr/share/nginx/html/
 
 EXPOSE 80
 
-CMD /usr/share/run.sh && nginx -g 'daemon off;'
+CMD bash /usr/share/run.sh && nginx -g 'daemon off;'
