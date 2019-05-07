@@ -36,7 +36,7 @@ npm run serve
 ### Docker Build
 ```
 npm install
-npm run serve
+npm run build
 docker build -t skywalking-rocketbot .
 ```
 
