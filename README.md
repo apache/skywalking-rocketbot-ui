@@ -3,7 +3,7 @@ Apache SkyWalking Rocketbot UI
 
 <img src="http://skywalking.apache.org/assets/logo.svg" alt="Sky Walking logo" height="90px" align="right" />
 
-The UI for [Apache SkyWalking](https://github.com/apache/incubator-skywalking).
+[Apache SkyWalking](https://github.com/apache/incubator-skywalking) UI.
 
 [![Build Status](https://travis-ci.org/apache/skywalking-rocketbot-ui.svg?branch=master)](https://travis-ci.org/apache/skywalking-rocketbot-ui)
 
@@ -33,25 +33,6 @@ npm install
 npm run serve
 ```
 
-### Docker Build
-```
-npm install
-npm run serve
-docker build -t skywalking-rocketbot .
-```
-
-The default UI address is `http://localhost:8081/`. Default username/password is `admin/admin`. 
-The OAP backend should be hosted at `http://localhost:12800/`.
-
-### Running the docker image
-
-```
-docker run -p 8080:80 -d -e SKYWALKING_URL=127.0.0.1:1234,127.0.0.1:1235 skywalking-rocketbot
-```
-
-`SKYWALKING_URL` is the address of your OAP backend, multiple IP is changed by comma.
-
-
 The default UI address is `http://localhost:8080`. Default username/password is `admin/admin`.
 
 ## Contributing to SkyWalking RocketBot
@@ -66,17 +47,3 @@ Most of the contributions received are code contributions, and documentation, bu
 ### How to report a bug?
 
 Please report bug to [SkyWalking main repo](https://github.com/apache/skywalking/issues).
-
-## FAQ
-
-
-1、How to set TimeZone in RocketBot Docker?
-
-e.g: setting `Asia/Shanghai` TimeZone in RocketBot [Dockerfile](Dockerfile) as followings:
-
-```txt
-···
-ENV TZ Asia/Shanghai
-RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime \
-    && echo $TZ > /etc/timezone
-```
