@@ -59,17 +59,23 @@
     <div :class="`${pre}-years`" v-show="showYears">
       <a v-for="(i,j) in years" @click="is($event)&&(showYears=(m==='Y'),year=i,(m==='Y'&&ok('y')))" :class="[(j===0||j===11)?`${pre}-date-out`:'',status(i,month,day,hour,minute,second,'YYYY')]" :key="j">{{i}}</a>
     </div>
-    <div :class="`${pre}-hours`" v-show="showHours">
+    <div :class="`${pre}-hours scroll_hide`" v-show="showHours">
       <div :class="`${pre}-title`">{{local.hourTip}}</div>
-      <a v-for="(j,i) in 24" @click="is($event)&&(showHours=false,hour=i,ok('h'))" :class="[status(year,month,day,i,minute,second,'YYYYMMDDHH')]" :key="i">{{i}}</a>
+      <div class="scroll_hide calendar-overflow">
+        <a v-for="(j,i) in 24" @click="is($event)&&(showHours=false,hour=i,ok('h'))" :class="[status(year,month,day,i,minute,second,'YYYYMMDDHH')]" :key="i">{{i}}</a>
+      </div>
     </div>
     <div :class="`${pre}-minutes`" v-show="showMinutes">
       <div :class="`${pre}-title`">{{local.minuteTip}}</div>
-      <a v-for="(j,i) in 60" @click="is($event)&&(showMinutes=false,minute=i,ok('h'))" :class="[status(year,month,day,hour,i,second,'YYYYMMDDHHmm')]" :key="i">{{i}}</a>
+      <div class="scroll_hide calendar-overflow">
+        <a v-for="(j,i) in 60" @click="is($event)&&(showMinutes=false,minute=i,ok('h'))" :class="[status(year,month,day,hour,i,second,'YYYYMMDDHHmm')]" :key="i">{{i}}</a>
+      </div>
     </div>
     <div :class="`${pre}-seconds`" v-show="showSeconds">
       <div :class="`${pre}-title`">{{local.secondTip}}</div>
-      <a v-for="(j,i) in 60" @click="is($event)&&(showSeconds=false,second=i,ok('h'))" :class="[status(year,month,day,hour,minute,i,'YYYYMMDDHHmmss')]" :key="i">{{i}}</a>
+      <div class="scroll_hide calendar-overflow">
+        <a v-for="(j,i) in 60" @click="is($event)&&(showSeconds=false,second=i,ok('h'))" :class="[status(year,month,day,hour,minute,i,'YYYYMMDDHHmmss')]" :key="i">{{i}}</a>
+      </div>
     </div>
   </div>
   <div :class="`${pre}-foot`" v-if="m==='H'">
@@ -482,7 +488,12 @@ export default {
   height: 25%;
 }
 
-.calendar-hours a {
+.calendar-overflow{
+  overflow-x:scroll;
+  height: 100%;
+}
+
+/* .calendar-hours a {
   width: 20%;
   height: 20%;
 }
@@ -491,7 +502,7 @@ export default {
 .calendar-seconds a {
   width: 16.66%;
   height: 10%;
-}
+} */
 
 .calendar-title {
   margin-top: -30px;

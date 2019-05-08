@@ -85,6 +85,12 @@ const m = {
   tree: '树结构',
   filterScope: '过滤范围',
   searchKeyword: '关键字搜索',
+  quarterHourCutTip: '最近15分钟',
+  halfHourCutTip: '最近30分钟',
+  hourCutTip: '最近1小时',
+  dayCutTip: '最近1天',
+  weekCutTip: '最近1周',
+  monthCutTip: '最近1月',
 };
 
 export default m;
