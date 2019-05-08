@@ -226,7 +226,8 @@ export default {
         default:
           break;
       }
-      this.dates = [start, end]
+      this.dates = [start, end];
+      this.$emit('input', this.get());
     },
     submit() {
       this.$emit('confirm', this.get());
