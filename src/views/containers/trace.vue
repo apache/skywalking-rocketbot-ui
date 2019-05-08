@@ -58,9 +58,11 @@ export default class Trace extends Vue {
 .rk-trace {
   flex-grow: 1;
   height: 100%;
+  min-height: 0;
 }
 .rk-trace-inner{
   height: 100%;
   display: flex;
+  min-height: 0;
 }
 </style>
