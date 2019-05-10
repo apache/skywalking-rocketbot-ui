@@ -203,7 +203,7 @@ export default {
       this.show = this.$el.contains(e.target) && !this.disabled;
     },
     quickPick(type){
-      const utc = window.localStorage.getItem('utc') || 8; //默认东8区
+      const utc = window.localStorage.getItem('utc'); // get UTC
       const end = getLocalTime(utc, new Date());
       const start = getLocalTime(utc, new Date());
       switch (type) {
@@ -214,16 +214,16 @@ export default {
           start.setTime(start.getTime() - 60 * 30 * 1000);//30 mins
           break;
         case 'hour':
-          start.setTime(start.getTime() - 3600 * 1000);//小时
+          start.setTime(start.getTime() - 3600 * 1000);//1 hour
           break;
         case 'day':
-          start.setTime(start.getTime() - 3600 * 1000 * 24);//天
+          start.setTime(start.getTime() - 3600 * 1000 * 24);//1 day
           break;
         case 'week':
-          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);//周
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);//1 week
           break;
         case 'month':
-          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);//月
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);//1 month
           break;
         default:
           break;
