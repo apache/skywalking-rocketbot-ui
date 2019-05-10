@@ -52,6 +52,7 @@
 
 <script lang="js">
 import RkCalendar from './rk-date-calendar.vue';
+import getLocalTime from '@/utils/localtime';
 /* eslint-disable */
 /* tslint:disable */
 export default {
@@ -202,8 +203,9 @@ export default {
       this.show = this.$el.contains(e.target) && !this.disabled;
     },
     quickPick(type){
-      const end = new Date();
-      const start = new Date();
+      const utc = window.localStorage.getItem('utc') || 8; //默认东8区
+      const end = getLocalTime(utc, new Date());
+      const start = getLocalTime(utc, new Date());
       switch (type) {
         case 'quarter':
           start.setTime(start.getTime() - 60 * 15 * 1000);//15 mins
@@ -226,6 +228,7 @@ export default {
         default:
           break;
       }
+      console.log()
       this.dates = [start, end];
       this.$emit('input', this.get());
     },
