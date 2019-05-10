@@ -85,6 +85,12 @@ const m = {
   tree: 'Tree',
   filterScope: 'Filter Scope',
   searchKeyword: 'Search Keyword',
+  quarterHourCutTip: 'Last 15 mins',
+  halfHourCutTip: 'Last 30 mins',
+  hourCutTip: 'Last 1 hour',
+  dayCutTip: 'Last 1 day',
+  weekCutTip: 'Last 1 week',
+  monthCutTip: 'Last 1 month',
 };
 
 export default m;

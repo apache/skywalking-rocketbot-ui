@@ -25,8 +25,18 @@
   <transition name="datepicker-anim">
     <div class="datepicker-popup" :class="[popupClass,{'datepicker-inline':type==='inline'},position==='top'?'top':'bottom']" tabindex="-1" v-if="show||type==='inline'">
       <template v-if="range">
-        <rk-calendar v-model="dates[0]" :left="true"></rk-calendar>
-        <rk-calendar v-model="dates[1]" :right="true"></rk-calendar>
+        <div class="datepicker-popup__sidebar">
+          <button type="button" class="datepicker-popup__shortcut" @click="quickPick('quarter')">{{this.local.quarterHourCutTip}}</button>
+          <button type="button" class="datepicker-popup__shortcut" @click="quickPick('half')">{{this.local.halfHourCutTip}}</button>
+          <button type="button" class="datepicker-popup__shortcut" @click="quickPick('hour')">{{this.local.hourCutTip}}</button>
+          <button type="button" class="datepicker-popup__shortcut" @click="quickPick('day')">{{this.local.dayCutTip}}</button>
+          <button type="button" class="datepicker-popup__shortcut" @click="quickPick('week')">{{this.local.weekCutTip}}</button>
+          <button type="button" class="datepicker-popup__shortcut" @click="quickPick('month')">{{this.local.monthCutTip}}</button>
+        </div>
+        <div class="datepicker-popup__body">
+          <rk-calendar v-model="dates[0]" :left="true"></rk-calendar>
+          <rk-calendar v-model="dates[1]" :right="true"></rk-calendar>
+        </div>
       </template>
       <template v-else>
         <rk-calendar v-model="dates[0]"></rk-calendar>
@@ -42,6 +52,7 @@
 
 <script lang="js">
 import RkCalendar from './rk-date-calendar.vue';
+import getLocalTime from '@/utils/localtime';
 /* eslint-disable */
 /* tslint:disable */
 export default {
@@ -104,6 +115,12 @@ export default {
         weeks: this.$t('weeks').split('_'), // weeks
         cancelTip: this.$t('cancel'), // default text for cancel button
         submitTip: this.$t('confirm'), // default text for submit button
+        quarterHourCutTip: this.$t('quarterHourCutTip'),
+        halfHourCutTip: this.$t('halfHourCutTip'),
+        hourCutTip: this.$t('hourCutTip'),
+        dayCutTip: this.$t('dayCutTip'),
+        weekCutTip: this.$t('weekCutTip'),
+        monthCutTip: this.$t('monthCutTip'),
       };
     },
     range() {
@@ -184,6 +201,36 @@ export default {
     },
     dc(e) {
       this.show = this.$el.contains(e.target) && !this.disabled;
+    },
+    quickPick(type){
+      const utc = window.localStorage.getItem('utc'); // get UTC
+      const end = getLocalTime(utc, new Date());
+      const start = getLocalTime(utc, new Date());
+      switch (type) {
+        case 'quarter':
+          start.setTime(start.getTime() - 60 * 15 * 1000);//15 mins
+          break;
+        case 'half':
+          start.setTime(start.getTime() - 60 * 30 * 1000);//30 mins
+          break;
+        case 'hour':
+          start.setTime(start.getTime() - 3600 * 1000);//1 hour
+          break;
+        case 'day':
+          start.setTime(start.getTime() - 3600 * 1000 * 24);//1 day
+          break;
+        case 'week':
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);//1 week
+          break;
+        case 'month':
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);//1 month
+          break;
+        default:
+          break;
+      }
+      console.log()
+      this.dates = [start, end];
+      this.$emit('input', this.get());
     },
     submit() {
       this.$emit('confirm', this.get());
@@ -310,6 +357,35 @@ export default {
     top:35px;
     transform-origin: center top;
   }
+  &__sidebar{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width:100px;
+    height: 100%;
+    padding: 5px;
+    border-right: solid 1px #eaeaea;
+  }
+  &__shortcut{
+    display: block;
+    width: 100%;
+    border: 0;
+    background-color: transparent;
+    line-height: 34px;
+    font-size: 12px;
+    color: #666;
+    text-align: left;
+    outline: none;
+    cursor: pointer;
+    white-space: nowrap;
+    &:hover{
+      color: #3f97e3;
+    }
+  }
+  &__body{
+    margin-left: 100px;
+    padding-left: 5px;
+  }
 }
 
 .datepicker-inline {
@@ -322,7 +398,7 @@ export default {
 }
 
 .datepicker-range .datepicker-popup {
-  width: 420px;
+  width:520px;
 }
 
 .datepicker-bottom {
