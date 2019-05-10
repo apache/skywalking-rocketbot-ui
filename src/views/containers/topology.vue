@@ -62,6 +62,7 @@ export default class Topology extends Vue {
 .rk-topo{
   position: relative;
   height: 100%;
+  min-height: 0;
   display: flex;
   background: #333840;
 }

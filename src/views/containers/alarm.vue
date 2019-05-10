@@ -51,5 +51,6 @@ export default class Alarm extends Vue {
 .rk-alarm {
   flex-grow: 1;
   height: 100%;
+  min-height: 0;
 }
 </style>
