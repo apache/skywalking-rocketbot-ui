@@ -63,7 +63,7 @@ export default {
     };
   },
   watch: {
-    currentPage() { this.current = this.currentPage; },
+    currentPage() { this.current = parseInt(this.currentPage); },
   },
   beforeMount() {
     this.current = this.currentPage;
