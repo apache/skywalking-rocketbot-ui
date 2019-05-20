@@ -32,12 +32,12 @@
     <div class="rk-dashboard-sel" v-if="visible">
       <div>
         <input type="text" class="rk-dashboard-sel-search" v-model="search" @input="handleSearch">
-        <svg class="icon sm close" @click="search = ''" v-if="search">
+        <svg class="icon sm close" style="margin-top: 3px;" @click="search = ''" v-if="search">
           <use xlink:href="#clear"></use>
         </svg>
       </div>
       <div class="rk-dashboard-opt-wrapper scroll_hide">
-        <div class="rk-dashboard-opt ell" @click="handleSelect(i)" :class="{'active':i.key === current.key}" v-for="i in data" :key="i.key">{{i.label}}</div>
+        <EndpointOpt @handleSelect="handleSelect" :class="{'active':i.key === current.key}" v-for="i in data" :key="i.key" :data="i"/>
       </div>
     </div>
   </div>
@@ -46,7 +46,8 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Action } from 'vuex-class';
-@Component
+import EndpointOpt from './tool-bar-select-endpoint-opt.vue';
+@Component({components: {EndpointOpt}})
 export default class ToolBarSelect extends Vue {
   @Action('rocketDashboard/SEARCH_ENDPOINTS') public SEARCH_ENDPOINTS: any;
   @Prop() public data!: any;
@@ -78,7 +79,7 @@ export default class ToolBarSelect extends Vue {
   .icon { flex-shrink: 0};
 }
 .rk-dashboard-bar-i-text{
-  max-width: 200px;
+  max-width: 250px;
 }
 .rk-dashboard-bar-i {
   height: 100%;

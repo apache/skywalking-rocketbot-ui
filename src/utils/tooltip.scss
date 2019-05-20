@@ -35,7 +35,7 @@ $tooltip-bg:               #252a2f !default;
   // Wrapper for the tooltip content
   .rk-tooltip-inner {
     max-width: $tooltip-max-width;
-    padding: 10px;
+    padding: 5px 10px;
     color: $tooltip-color;
     text-align: left;
     background-color: $tooltip-bg;

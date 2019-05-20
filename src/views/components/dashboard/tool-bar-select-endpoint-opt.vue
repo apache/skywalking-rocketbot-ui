@@ -15,27 +15,33 @@
  * limitations under the License.
  */
 
-module.exports = {
-  devServer: {
-    proxy: {
-      '/api': {
-        target: 'http://skywalking.daocloud.io:12800',
-        changeOrigin: true,
-      },
-      '/graphql': {
-        target: 'http://skywalking.daocloud.io:12800',
-        changeOrigin: true,
-      },
-    },
-  },
-  chainWebpack: config => {
-    const svgRule = config.module.rule('svg');
-    svgRule.uses.clear();
-    svgRule
-      .use('svg-sprite-loader')
-      .loader('svg-sprite-loader')
-      .options({
-        symbolId: '[name]',
-      });
-  },
-};
+<template>
+  <div class="rk-dashboard-opt ell" @click="$emit('handleSelect', data)" >{{data.label}}
+    <svg style="margin-top: 3px;" class="icon sm r" @click.stop="show = !show">
+      <use xlink:href="#code"></use>
+    </svg>  
+    <div class="rk-dashboard-opt-tip" v-if="show">{{data.label}}</div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Action } from 'vuex-class';
+@Component
+export default class ToolBarSelectOpt extends Vue {
+  @Prop() public data!: any;
+  private show: boolean = false;
+}
+</script>
+
+<style lang="scss" scoped>
+.rk-dashboard-opt-tip{
+  margin-top: 5px;
+  word-break: break-all; 
+  white-space: pre-wrap;
+  border-radius: 3px;
+  padding: 3px;
+  background-color: #f3f4f9;
+  color: #334444;
+}
+</style>
