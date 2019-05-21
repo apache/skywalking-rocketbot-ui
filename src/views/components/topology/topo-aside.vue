@@ -20,6 +20,7 @@
     <svg class="link-topo-aside-btn mb-10 icon cp lg" @click="show = !show" :style="`position:${show?'absolute':'initial'};left:${show?290:0}px;transform: rotate(${show?0 : 180}deg);`">
       <use xlink:href="#chevron-left"></use>
     </svg>
+    <TopoService/>
     <div class="link-topo-aside-box mb-10" v-if="!stateTopo.currentNode.name && show">
       <div class="mb-20">
         <span class="b dib mr-20">{{$t('allServices')}}</span>
@@ -57,8 +58,8 @@
     <div class="link-topo-aside-box">
       <div class="mb-5 clear">
         <span class="b dib mr-20 vm">{{$t('detectPoint')}}</span>
-        <span class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':!stateTopo.mode}" @click="setMode(false)">{{this.$t('client')}}</span>
-        <span class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':stateTopo.mode}" @click="setMode(true)">{{this.$t('server')}}</span>
+        <span v-if="stateTopo.detectPoints.indexOf('CLIENT') !== -1" class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':!stateTopo.mode}" @click="setMode(false)">{{this.$t('client')}}</span>
+        <span v-if="stateTopo.detectPoints.indexOf('SERVER') !== -1" class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':stateTopo.mode}" @click="setMode(true)">{{this.$t('server')}}</span>
       </div>
       <TopoChart v-if="stateTopo.getResponseTimeTrend.length" :title="$t('avgResponseTime')" unit="ms" :intervalTime="intervalTime" :data="stateTopo.getResponseTimeTrend"/>
       <TopoChart v-if="stateTopo.getThroughputTrend.length" :title="$t('avgThroughput')" unit="cpm" :intervalTime="intervalTime" :data="stateTopo.getThroughputTrend"/>
@@ -71,12 +72,13 @@ import { Vue, Component } from 'vue-property-decorator';
 import topo, { State as topoState} from '@/store/modules/topo';
 import { State, Mutation, Getter, Action } from 'vuex-class';
 import TopoChart from './topo-chart.vue';
+import TopoService from './topo-services.vue';
 
-@Component({components: {TopoChart}})
+@Component({components: {TopoChart, TopoService}})
 export default class Topology extends Vue {
   @State('rocketTopo') public stateTopo!: topoState;
   @Getter('intervalTime') public intervalTime: any;
-  @Mutation('rocketTopo/SET_MODE') public SET_MODE: any;
+  @Mutation('rocketTopo/SET_MODE_STATUS') public SET_MODE_STATUS: any;
   @Action('rocketTopo/CLEAR_TOPO_INFO') public CLEAR_TOPO_INFO: any;
   get types() {
     const result: any = {};
@@ -92,7 +94,7 @@ export default class Topology extends Vue {
   private show: boolean = true;
   private showInfo: boolean = false;
   private setMode(mode: boolean) {
-    this.SET_MODE(mode);
+    this.SET_MODE_STATUS(mode);
     this.stateTopo.callback();
   }
 }

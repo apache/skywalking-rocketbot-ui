@@ -1,0 +1,53 @@
+<template>
+<div class="link-topo-aside-box mb-10" style="padding:0">
+  <TopoSelect class="mb-5" :current="service" :data="services" @onChoose="handleChange"/>
+  <!-- <select v-model="service" class="mr10 topo-aside-server mb-5" style="width: 100%;" @change="handleChange">
+    <option v-for="item in services" :value="item.key" :label="item.label" :key="item.key"></option>
+  </select> -->
+</div>
+</template>
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+import { State, Getter, Action } from 'vuex-class';
+import Axios, { AxiosResponse } from 'axios';
+import TopoSelect from './topo-select.vue';
+
+@Component({components: {TopoSelect}})
+export default class TopologyServices extends Vue {
+  @Getter('durationTime') public durationTime: any;
+  @Action('rocketTopo/GET_TOPO') public GET_TOPO: any;
+  private services = [{key: 0, label: 'All services'}];
+  private service = {key: 0, label: 'All services'};
+  private fetchData() {
+    Axios.post('/graphql', {
+      query: `
+      query queryServices($duration: Duration!) {
+        services: getAllServices(duration: $duration) {
+          key: id
+          label: name
+        }
+      }`,
+      variables: {
+        duration: this.durationTime,
+      }}).then((res: AxiosResponse) => {
+        this.services = res.data.data.services
+        ?
+        [{key: 0, label: 'All services'}, ...res.data.data.services]
+        :
+        [{key: 0, label: 'All services'}];
+      });
+  }
+  private handleChange(i: any) {
+    this.service = i;
+    this.GET_TOPO({serviceId: this.service.key, duration: this.durationTime});
+  }
+  private created() {
+    this.fetchData();
+  }
+}
+</script>
+<style lang="scss">
+.topo-server.dao-select .dao-select-main .dao-select-switch{
+  border: 0;
+}
+</style>

@@ -86,12 +86,27 @@ export const Topo = {
     calls {
       id
       source
+      detectPoints
       target
-      callType
-      detectPoint
     }
   }`};
-
+export const ServiceTopo = {
+  variable: '$duration: Duration!, $serviceId: ID!',
+  query: `
+  topo: getServiceTopology(duration: $duration, serviceId: $serviceId) {
+    nodes {
+      id
+      name
+      type
+      isReal
+    }
+    calls {
+      id
+      source
+      detectPoints
+      target
+    }
+  }`};
 export const TopoMetric = {
   variable: '$ids: [ID!]!',
   query: `

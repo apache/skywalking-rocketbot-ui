@@ -25,7 +25,6 @@ interface Option {
 }
 interface Call {
   avgResponseTime: number;
-  callType: string;
   cpm: number;
   isAlert: boolean;
   source: string;
@@ -49,6 +48,7 @@ export interface State {
   callback: any;
   calls: Call[];
   nodes: Node[];
+  detectPoints: string[];
   currentNode: any;
   current: Option;
   mode: boolean;
@@ -60,6 +60,7 @@ export interface State {
 const initState: State = {
   callback: '',
   mode: true,
+  detectPoints: [],
   calls: [],
   nodes: [],
   currentNode: {},
@@ -80,7 +81,14 @@ const mutations = {
   [types.SET_CALLBACK](state: State, data: any) {
     state.callback = data;
   },
-  [types.SET_MODE](state: State, data: boolean) {
+  [types.SET_MODE](state: State, data: string[]) {
+    state.detectPoints = data;
+    const temp = state.mode ? 'SERVER' : 'CLIENT';
+    if (data.indexOf(temp) === -1) {
+      state.mode = !state.mode;
+    }
+  },
+  [types.SET_MODE_STATUS](state: State, data: boolean) {
     state.mode = data;
   },
   [types.SET_NODE](state: State, data: any) {
@@ -123,8 +131,12 @@ const actions: ActionTree<State, any> = {
     });
   },
   GET_TOPO(context: { commit: Commit; state: State; }, params: any) {
+    let query = 'queryTopo';
+    if (params.serviceId) {
+      query = 'queryServiceTopo';
+    }
     return graph
-    .query('queryTopo')
+    .query(query)
     .params(params)
     .then((res: AxiosResponse) => {
       const calls = res.data.data.topo.calls;

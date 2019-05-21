@@ -83,6 +83,7 @@ export default {
       RABBITMQ: require('./assets/RABBITMQ.png'),
       SOFARPC: require('./assets/SOFARPC.png'),
       ROCKETMQ: require('./assets/ROCKETMQ.png'),
+      ROCKETMQCONSUMER: require('./assets/ROCKETMQ.png'),
       HTTP: require('./assets/HTTPCLIENT.png'),
       width: 600,
       height: 600,
@@ -107,9 +108,8 @@ export default {
       .offset([-8, 0])
       .html(d => {
         return `
-      <div class="mb-5"><span class="grey">${this.$t('callType')}: </span>${d.callType}</div>
       <div class="mb-5"><span class="grey">${this.$t('cpm')}: </span>${d.cpm}</div>
-      <div class="mb-5"><span class="grey">${this.$t('detectPoint')}: </span>${this.$store.state.rocketTopo.mode?d.detectPoint:'CLIENT'}</div>
+      <div class="mb-5"><span class="grey">${this.$t('detectPoint')}: </span>${this.$store.state.rocketTopo.detectPoints.join(' | ')}</div>
       <div><span class="grey">${this.$t('latency')}: </span>${d.latency}</div>
       `});
     this.tipName = d3tip()
@@ -267,7 +267,7 @@ export default {
         .attr('ry', 3)
         .attr('fill', d => d.cpm ? '#217EF299' : '#6a6d7799')
         .on('click', function(d, i) {
-          that.$store.commit('rocketTopo/SET_MODE', d.detectPoint === 'SERVER')
+          that.$store.commit('rocketTopo/SET_MODE', d.detectPoints) 
           event.stopPropagation();
           that.tip.hide({}, this);
           that.tip.show(d, this);
