@@ -119,6 +119,9 @@ const actions: ActionTree<State, any> = {
       if (!res.data.data) {
         return;
       }
+      if (!res.data.data.getEndpointTopology.nodes.length || !res.data.data.getEndpointTopology.calls.length) {
+        return;
+      }
       return graph
         .query('queryDashBoardEndpointTopo')
         .params({

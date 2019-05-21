@@ -74,3 +74,4 @@ export const SET_NODE = 'SET_NODE';
 export const SET_MODE = 'SET_MODE';
 export const SET_TOPO_RELATION = 'SET_TOPO_RELATION';
 export const SET_CALLBACK = 'SET_CALLBACK';
+export const SET_MODE_STATUS = 'SET_MODE_STATUS';
