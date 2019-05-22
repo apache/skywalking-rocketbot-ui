@@ -142,8 +142,8 @@ const actions: ActionTree<State, any> = {
       const calls = res.data.data.topo.calls;
       const nodes = res.data.data.topo.nodes;
       const ids = nodes.map((i: any) => i.id);
-      const idsS = calls.filter((i: any) => i.detectPoint === 'SERVER').map((b: any) => b.id);
-      const idsC = calls.filter((i: any) => i.detectPoint === 'CLIENT').map((b: any) => b.id);
+      const idsS = calls.filter((i: any) => i.detectPoints.indexOf('CLIENT') === -1).map((b: any) => b.id);
+      const idsC = calls.filter((i: any) => i.detectPoints.indexOf('CLIENT') !== -1).map((b: any) => b.id);
       return graph
         .query('queryTopoInfo')
         .params({...params, ids, idsC, idsS})
