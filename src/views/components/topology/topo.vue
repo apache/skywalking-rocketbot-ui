@@ -306,7 +306,6 @@ export default {
   },
     toggleNode(nodeCircle, currNode, isHover) {
     if (isHover) {
-        // ?????????????????? 
       nodeCircle.sort((a, b) => a.id === currNode.id ? 1 : -1);
       nodeCircle
           .style('opacity', .2)
