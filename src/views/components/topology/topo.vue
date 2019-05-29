@@ -86,6 +86,7 @@ export default {
       ROCKETMQCONSUMER: require('./assets/ROCKETMQ.png'),
       HTTP: require('./assets/HTTPCLIENT.png'),
       RESTEASY: require('./assets/RESTEASY.png'),
+      SOLR: require('./assets/SOLR.png'),
       width: 600,
       height: 600,
       force: '',
@@ -305,7 +306,7 @@ export default {
   },
     toggleNode(nodeCircle, currNode, isHover) {
     if (isHover) {
-        // 提升节点层级 
+        // ?????????????????? 
       nodeCircle.sort((a, b) => a.id === currNode.id ? 1 : -1);
       nodeCircle
           .style('opacity', .2)
