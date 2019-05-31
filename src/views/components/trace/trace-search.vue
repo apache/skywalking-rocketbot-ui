@@ -73,6 +73,7 @@ export default class TraceTool extends Vue {
   @State('rocketbot') private rocketbotGlobal: any;
   @State('rocketTrace') private rocketTrace: any;
   @Getter('durationTime') private durationTime: any;
+  @Getter('duration') private duration: any;
   @Action('rocketTrace/GET_SERVICES') private GET_SERVICES: any;
   @Action('rocketTrace/GET_INSTANCES') private GET_INSTANCES: any;
   @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
@@ -156,7 +157,7 @@ export default class TraceTool extends Vue {
     this.GET_TRACELIST();
   }
   private mounted() {
-    this.time = [this.rocketbotGlobal.duration.start, this.rocketbotGlobal.duration.end];
+    this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     this.getTraceList();
   }
 }

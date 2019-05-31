@@ -40,7 +40,7 @@
                 'blue':!i.isError,
                 'red':i.isError,
                 }"><span class="b">{{i.endpointNames[0]}}</span></div>
-                <div class="grey ell sm"><span class="rk-tag mr-10 sm">{{i.duration}} ms</span>{{parseInt(i.start) | dateformat('YYYY-MM-DD HH:mm:ss')}}</div>
+                <div class="grey ell sm"><span class="rk-tag mr-10 sm">{{i.duration}} ms</span>{{parseInt(i.start) + ( parseInt(rocketbot.utc) + new Date().getTimezoneOffset() / 60) * 3600000 | dateformat('YYYY-MM-DD HH:mm:ss')}}</div>
             </td>
           </tr>
         </table>
@@ -54,6 +54,7 @@ import { Action, Getter, Mutation, State } from 'vuex-class';
 @Component
 export default class Home extends Vue {
   @State('rocketTrace') private rocketTrace: any;
+  @State('rocketbot') private rocketbot: any;
   @Mutation('rocketTrace/SET_TRACE_FORM_ITEM') private SET_TRACE_FORM_ITEM: any;
   @Mutation('rocketTrace/SET_CURRENT_TRACE') private SET_CURRENT_TRACE: any;
   @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;

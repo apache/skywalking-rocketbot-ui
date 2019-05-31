@@ -39,8 +39,7 @@
           <use xlink:href="#list-bulleted"></use>
         </svg>
         {{$t('list')}}</a>
-      
-      <div class="rk-tag mr-5">{{this.$t('start')}}</div><span class="mr-15 sm">{{parseInt(current.start) | dateformat}}</span>
+      <div class="rk-tag mr-5">{{this.$t('start')}}</div><span class="mr-15 sm">{{parseInt(current.start) + ( parseInt(rocketbot.utc) + new Date().getTimezoneOffset() / 60) * 3600000 | dateformat}}</span>
       <div class="rk-tag mr-5">{{this.$t('duration')}}</div><span class="mr-15 sm">{{current.duration}} ms</span>
       <div class="rk-tag mr-5">{{this.$t('spans')}}</div><span class="sm">{{spans.length}}</span>
     </div>
@@ -59,10 +58,11 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import TraceDetailChartList from './trace-detail-chart-list.vue';
 import TraceDetailChartTree from './trace-detail-chart-tree.vue';
 import { Trace, Span } from '../../../store/interfaces';
-import { Action } from 'vuex-class';
+import { Action, State } from 'vuex-class';
 
 @Component({ components: { TraceDetailChartList, TraceDetailChartTree } })
 export default class Header extends Vue {
+  @State('rocketbot') private rocketbot: any;
   @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
   @Prop() private spans!: Span[];
   @Prop() private current!: Trace;

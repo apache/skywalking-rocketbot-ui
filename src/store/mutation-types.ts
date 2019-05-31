@@ -37,6 +37,8 @@ export const RUN_EVENTS = 'RUN_EVENTS';
 export const SET_CHARTS = 'SET_CHARTS';
 export const CLEAR_CHARTS = 'CLEAR_CHARTS';
 export const SET_EDIT = 'SET_EDIT';
+export const SET_UTC = 'SET_UTC';
+
 
 // dashboard
 export const SET_GLOBAL = 'SET_GLOBAL';
