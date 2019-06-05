@@ -40,7 +40,7 @@
                 'blue':!i.isError,
                 'red':i.isError,
                 }"><span class="b">{{i.endpointNames[0]}}</span></div>
-                <div class="grey ell sm"><span class="rk-tag mr-10 sm">{{i.duration}} ms</span>{{parseInt(i.start) + ( parseInt(rocketbot.utc) + new Date().getTimezoneOffset() / 60) * 3600000 | dateformat('YYYY-MM-DD HH:mm:ss')}}</div>
+                <div class="grey ell sm"><span class="rk-tag mr-10 sm">{{i.duration}} ms</span>{{parseInt(i.start) | dateformat}}</div>
             </td>
           </tr>
         </table>

@@ -143,8 +143,10 @@ export default class TraceTool extends Vue {
     this.GET_SERVICES({duration: this.durationTime});
     const temp: any = {
         queryDuration: this.globalTimeFormate([
-          new Date(this.time[0].getTime() + (new Date().getTimezoneOffset() / 60 - this.rocketbotGlobal.utc) * 3600000),
-          new Date(this.time[1].getTime() + (new Date().getTimezoneOffset() / 60 - this.rocketbotGlobal.utc) * 3600000),
+          new Date(this.time[0].getTime() +
+          (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000),
+          new Date(this.time[1].getTime() +
+          (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000),
         ]),
         traceState:  this.traceState.key,
         paging: {pageNum: 1, pageSize: 15, needTotal: true},

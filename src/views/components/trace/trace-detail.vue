@@ -39,7 +39,7 @@
           <use xlink:href="#list-bulleted"></use>
         </svg>
         {{$t('list')}}</a>
-      <div class="rk-tag mr-5">{{this.$t('start')}}</div><span class="mr-15 sm">{{parseInt(current.start) + ( parseInt(rocketbot.utc) + new Date().getTimezoneOffset() / 60) * 3600000 | dateformat}}</span>
+      <div class="rk-tag mr-5">{{this.$t('start')}}</div><span class="mr-15 sm">{{parseInt(current.start) | dateformat}}</span>
       <div class="rk-tag mr-5">{{this.$t('duration')}}</div><span class="mr-15 sm">{{current.duration}} ms</span>
       <div class="rk-tag mr-5">{{this.$t('spans')}}</div><span class="sm">{{spans.length}}</span>
     </div>
