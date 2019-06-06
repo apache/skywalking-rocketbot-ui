@@ -103,7 +103,7 @@ const getters = {
       step: state.durationRow.step,
     };
   },
-  intervalTime(_: State, getter: any) {
+  intervalTime(state: State, getter: any) {
     let interval: number = 946080000000;
     switch (getter.duration.step) {
       case 'MINUTE':
@@ -121,11 +121,12 @@ const getters = {
         - getter.duration.start.getFullYear() * 12 - getter.duration.start.getMonth());
         break;
     }
+    const utcSpace = (parseInt(state.utc + '', 10) + new Date().getTimezoneOffset() / 60) * 3600000;
     const startUnix: number = getter.duration.start.getTime();
     const endUnix: number = getter.duration.end.getTime();
     const timeIntervals: number[] = [];
     for (let i = 0; i <= endUnix - startUnix; i += interval) {
-      const temp: any = dateFormateTime(new Date(startUnix + i), getter.duration.step);
+      const temp: any = dateFormateTime(new Date(startUnix + i - utcSpace), getter.duration.step);
       timeIntervals.push(temp);
     }
     return timeIntervals;
