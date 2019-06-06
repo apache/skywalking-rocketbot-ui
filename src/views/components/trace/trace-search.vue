@@ -73,6 +73,7 @@ export default class TraceTool extends Vue {
   @State('rocketbot') private rocketbotGlobal: any;
   @State('rocketTrace') private rocketTrace: any;
   @Getter('durationTime') private durationTime: any;
+  @Getter('duration') private duration: any;
   @Action('rocketTrace/GET_SERVICES') private GET_SERVICES: any;
   @Action('rocketTrace/GET_INSTANCES') private GET_INSTANCES: any;
   @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
@@ -141,7 +142,12 @@ export default class TraceTool extends Vue {
   private getTraceList() {
     this.GET_SERVICES({duration: this.durationTime});
     const temp: any = {
-        queryDuration: this.globalTimeFormate(this.time),
+        queryDuration: this.globalTimeFormate([
+          new Date(this.time[0].getTime() +
+          (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000),
+          new Date(this.time[1].getTime() +
+          (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000),
+        ]),
         traceState:  this.traceState.key,
         paging: {pageNum: 1, pageSize: 15, needTotal: true},
         queryOrder: this.rocketTrace.traceForm.queryOrder,
@@ -156,7 +162,7 @@ export default class TraceTool extends Vue {
     this.GET_TRACELIST();
   }
   private mounted() {
-    this.time = [this.rocketbotGlobal.duration.start, this.rocketbotGlobal.duration.end];
+    this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     this.getTraceList();
   }
 }
