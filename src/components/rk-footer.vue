@@ -35,7 +35,7 @@
       <div class="sm flex-h">
         <RkDate v-model="time" position="top" format="YYYY-MM-DD HH:mm:ss"/>
         <span class="mr-15 cp" @click="setLang">{{lang === 'zh' ? '中' : 'En'}}</span>
-        <span>UTC {{utc >= 0 ? '+' : ''}}</span><input v-model="utc" min='-12' max="12" class="rk-footer-utc" type="number">
+        <span>{{$t('serverZone')}} UTC {{utc >= 0 ? '+' : ''}}</span><input v-model="utc" min='-12' max="14" class="rk-footer-utc" type="number">
       </div>
     </div>
   </footer>
@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator';
-import { State, Action } from 'vuex-class';
+import { State, Action, Mutation } from 'vuex-class';
 import timeFormat from '@/utils/timeFormat';
 
 @Component
@@ -51,6 +51,7 @@ export default class Footer extends Vue {
   @State('rocketbot') private rocketbotGlobal: any;
   @Action('SET_DURATION') private SET_DURATION: any;
   @Action('SET_EDIT') private SET_EDIT: any;
+  @Mutation('SET_UTC') private SET_UTC: any;
   private lang: any = '';
   private time: Date[] = [new Date(), new Date()];
   private utc: any = window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60);
@@ -62,12 +63,14 @@ export default class Footer extends Vue {
   @Watch('utc')
   private onUtcUpdate() {
     if (this.utc < -12) { this.utc = -12; }
-    if (this.utc > 12) { this.utc = 12; }
+    if (this.utc > 14) { this.utc = 14; }
     if (this.utc === '') { this.utc = 0; }
+    this.SET_UTC(this.utc);
     window.localStorage.setItem('utc', this.utc.toString());
     this.time = [
-      new Date(this.rocketbotGlobal.duration.start.getTime() + ((this.utc - this.utcCopy) * 3600000)),
-      new Date(this.rocketbotGlobal.duration.end.getTime() + ((this.utc - this.utcCopy) * 3600000))];
+      this.rocketbotGlobal.durationRow.start,
+      this.rocketbotGlobal.durationRow.end,
+    ];
     this.utcCopy = this.utc;
   }
   private setLang() {
@@ -88,7 +91,7 @@ export default class Footer extends Vue {
   }
   private beforeMount() {
     this.lang = window.localStorage.getItem('lang');
-    this.time = [this.rocketbotGlobal.duration.start, this.rocketbotGlobal.duration.end];
+    this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
   }
 }
 </script>

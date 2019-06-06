@@ -91,6 +91,7 @@ const m = {
   dayCutTip: 'Last 1 day',
   weekCutTip: 'Last 1 week',
   monthCutTip: 'Last 1 month',
+  serverZone: 'Server Zone',
 };
 
 export default m;

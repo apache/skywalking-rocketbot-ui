@@ -87,6 +87,7 @@ export default {
       HTTP: require('./assets/HTTPCLIENT.png'),
       RESTEASY: require('./assets/RESTEASY.png'),
       SOLR: require('./assets/SOLR.png'),
+      ZOOKEEPER: require('./assets/ZOOKEEPER.png'),
       width: 600,
       height: 600,
       force: '',
@@ -221,7 +222,7 @@ export default {
         .attr('style', 'cursor: move;')
         .attr('xlink:href',d => {
           const type = d.type;
-          if( d.sla < 100 ) {
+          if( d.sla < 98 ) {
             return this.CUBEERROR;
           }
           return this.CUBE;

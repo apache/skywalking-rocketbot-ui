@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Commit, ActionTree, MutationTree } from 'vuex';
+import { Commit, ActionTree, MutationTree, GetterTree, Getter } from 'vuex';
 import getLocalTime from '@/utils/localtime';
 import { Duration } from '../interfaces';
 import * as types from '../mutation-types';
@@ -70,10 +70,11 @@ const dateFormateTime = (date: Date, step: string) => {
   if (step === 'MINUTE') { return `${hour}:${minute}\n${month}-${day}`; }
 };
 export interface State {
-  duration: Duration;
+  durationRow: Duration;
   eventStack: any;
   chartStack: any;
   edit: boolean;
+  utc: string | number;
 }
 
 let utc = w.localStorage.getItem('utc');
@@ -82,21 +83,29 @@ if (!utc) {
   w.localStorage.setItem('utc', utc);
 }
 const initState: State = {
-  duration: {
-    start: getLocalTime(parseInt(utc, 10), new Date().getTime() - 900000),
-    end: getLocalTime(parseInt(utc, 10), new Date()),
+  durationRow: {
+    start: new Date(new Date().getTime() - 900000),
+    end: new Date(),
     step: 'MINUTE',
   },
   eventStack: [],
   chartStack: [],
   edit: false,
+  utc: window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60),
 };
 
 // getters
 const getters = {
-  intervalTime(state: State) {
+  duration(state: State) {
+    return {
+      start: getLocalTime(parseInt(state.utc + '', 10), state.durationRow.start),
+      end: getLocalTime(parseInt(state.utc + '', 10), state.durationRow.end),
+      step: state.durationRow.step,
+    };
+  },
+  intervalTime(state: State, getter: any) {
     let interval: number = 946080000000;
-    switch (state.duration.step) {
+    switch (getter.duration.step) {
       case 'MINUTE':
         interval = 60000;
         break;
@@ -107,28 +116,26 @@ const getters = {
         interval = 86400000;
         break;
       case 'MONTH':
-        interval = (state.duration.end.getTime() - state.duration.start.getTime())
-        / (state.duration.end.getFullYear() * 12 + state.duration.end.getMonth()
-        - state.duration.start.getFullYear() * 12 - state.duration.start.getMonth());
+        interval = (getter.duration.end.getTime() - getter.duration.start.getTime())
+        / (getter.duration.end.getFullYear() * 12 + getter.duration.end.getMonth()
+        - getter.duration.start.getFullYear() * 12 - getter.duration.start.getMonth());
         break;
     }
-    const startUnix: number = state.duration.start.getTime();
-    const endUnix: number = state.duration.end.getTime();
+    const utcSpace = (parseInt(state.utc + '', 10) + new Date().getTimezoneOffset() / 60) * 3600000;
+    const startUnix: number = getter.duration.start.getTime();
+    const endUnix: number = getter.duration.end.getTime();
     const timeIntervals: number[] = [];
     for (let i = 0; i <= endUnix - startUnix; i += interval) {
-      const temp: any = dateFormateTime(new Date(startUnix + i), state.duration.step);
+      const temp: any = dateFormateTime(new Date(startUnix + i - utcSpace), getter.duration.step);
       timeIntervals.push(temp);
     }
     return timeIntervals;
   },
-  durationTime(state: State) {
-    const startTemp = new Date(state.duration.start);
-    const endTemp = new Date(state.duration.end);
-    const stepTemp = state.duration.step;
+  durationTime(_: State, getter: any) {
     return {
-      start: dateFormate(startTemp, stepTemp),
-      end: dateFormate(endTemp, stepTemp),
-      step: stepTemp,
+      start: dateFormate(getter.duration.start, getter.duration.step),
+      end: dateFormate(getter.duration.end, getter.duration.step),
+      step: getter.duration.step,
     };
   },
 };
@@ -136,7 +143,10 @@ const getters = {
 // mutations
 const mutations: MutationTree<State> = {
   [types.SET_DURATION](state: State, data: Duration) {
-    state.duration = data;
+    state.durationRow = data;
+  },
+  [types.SET_UTC](state: State, data: number) {
+    state.utc = data;
   },
   [types.SET_EVENTS](state: State, data: any[]) {
     state.eventStack = data;
