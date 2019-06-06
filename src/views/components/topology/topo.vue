@@ -86,6 +86,7 @@ export default {
       ROCKETMQCONSUMER: require('./assets/ROCKETMQ.png'),
       HTTP: require('./assets/HTTPCLIENT.png'),
       RESTEASY: require('./assets/RESTEASY.png'),
+      ZOOKEEPER: require('./assets/ZOOKEEPER.png'),
       width: 600,
       height: 600,
       force: '',
