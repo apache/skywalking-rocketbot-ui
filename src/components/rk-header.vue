@@ -80,18 +80,18 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { Action, State } from 'vuex-class';
+import { Action, State, Getter } from 'vuex-class';
 import timeFormat from '@/utils/timeFormat';
 
 @Component
 export default class Header extends Vue {
-  @State('rocketbot') private rocketbotGlobal: any;
+  @Getter('duration') private duration: any;
   @Action('SET_DURATION') private SET_DURATION: any;
   private show: boolean = false;
   private auto: boolean = false;
   private timer: any = null;
   private handleReload() {
-    const gap = this.rocketbotGlobal.duration.end.getTime() - this.rocketbotGlobal.duration.start.getTime();
+    const gap = this.duration.end.getTime() - this.duration.start.getTime();
     const w = window as any;
     const utc = w.localStorage.getItem('utc');
     const utcCopy: any = -(new Date().getTimezoneOffset() / 60);
