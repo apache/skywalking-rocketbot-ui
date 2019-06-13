@@ -57,7 +57,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import TraceDetailChartList from './trace-detail-chart-list.vue';
 import TraceDetailChartTree from './trace-detail-chart-tree.vue';
-import { Trace, Span } from '../../../store/interfaces';
+import { Trace, Span } from '@/types/trace';
 import { Action, State } from 'vuex-class';
 
 @Component({ components: { TraceDetailChartList, TraceDetailChartTree } })

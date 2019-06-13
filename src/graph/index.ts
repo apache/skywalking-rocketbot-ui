@@ -17,9 +17,17 @@
 
 import axios, { AxiosPromise } from 'axios';
 import { cancelToken } from '@/utils/cancelToken';
-import query from './query';
+import * as option from './query/option';
+import * as trace from './query/trace';
+import * as topology from './query/topology';
+import * as alarm from './query/alarm';
 
-const queryArr: any = query;
+const query: any = {
+  ...option,
+  ...trace,
+  ...topology,
+  ...alarm,
+};
 
 class Graph {
   private queryData: string = '';
@@ -27,9 +35,9 @@ class Graph {
     this.queryData = queryData;
     return this;
   }
-  public params(variablesData: any): AxiosPromise<any> {
+  public params(variablesData: any): AxiosPromise<void> {
     return axios.post('/graphql', {
-      query: queryArr[this.queryData],
+      query: query[this.queryData],
       variables: variablesData,
     }, { cancelToken: cancelToken() });
   }

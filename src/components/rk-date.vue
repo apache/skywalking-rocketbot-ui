@@ -318,6 +318,8 @@ export default {
   padding: 0 5px;
   width: 100%;
   user-select: none;
+  font-family: Monaco;
+  letter-spacing: -0.7px;
 }
 
 // .datepicker > input.focus {
@@ -394,7 +396,7 @@ export default {
 }
 
 .datepicker-range {
-  min-width: 275px;
+  min-width: 280px;
 }
 
 .datepicker-range .datepicker-popup {

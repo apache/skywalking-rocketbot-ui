@@ -19,8 +19,23 @@
   <div>
     <div class="rk-dashboard-bar flex-h" v-if="compType === 'service'">
       <div class="rk-dashboard-bar-reload">
-        <svg class="icon vm cp rk-btn ghost" @click="handleOption"><use xlink:href="#retry"></use></svg>
+        <svg class="icon lg vm cp rk-btn ghost" :style="`color:${rocketGlobal.lock? '' :'#ffc107'}`" @click="handleSetEdit"><use :xlink:href="rocketGlobal.lock?'#lock':'#lock-open'"></use></svg>
       </div>
+      <div class="rk-dashboard-bar-reload" v-show="!rocketGlobal.lock">
+        <svg class="icon lg vm cp rk-btn ghost"  @click="ADD_COMP({
+          d: '',
+          c: 'ChartLine',
+          t: 'Initial Chart',
+          x: 0,
+          y: 0,
+          w: 2,
+          h: 200,
+        })"><use :xlink:href="rocketGlobal.lock?'#lock':'#todo-add'"></use></svg>
+      </div>
+      <div class="rk-dashboard-bar-reload">
+        <svg class="icon lg vm cp rk-btn ghost" @click="handleOption"><use xlink:href="#retry"></use></svg>
+      </div>
+
       <ToolBarSelect @onChoose="selectService" :title="this.$t('currentService')" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
       <ToolBarEndpointSelect @onChoose="selectEndpoint" :title="this.$t('currentEndpoint')" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
       <ToolBarSelect @onChoose="selectInstance" :title="this.$t('currentInstance')" :current="stateDashboard.currentInstance" :data="stateDashboard.instances" icon="disk"/>
@@ -46,19 +61,25 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import ToolBarSelect from './tool-bar-select.vue';
 import ToolBarEndpointSelect from './tool-bar-select-endpoint.vue';
-import { State, Action } from 'vuex-class';
+import { State, Action, Mutation } from 'vuex-class';
 @Component({components: {ToolBarSelect, ToolBarEndpointSelect}})
 export default class ToolBar extends Vue {
   @Prop() private compType!: any;
   @Prop() private stateDashboard!: any;
+  @Prop() private rocketGlobal!: any;
   @Prop() private durationTime!: any;
-  @Action('rocketDashboard/SELECT_SERVICE') private SELECT_SERVICE: any;
-  @Action('rocketDashboard/SELECT_DATABASE') private SELECT_DATABASE: any;
-  @Action('rocketDashboard/SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
-  @Action('rocketDashboard/SELECT_INSTANCE') private SELECT_INSTANCE: any;
-  @Action('rocketDashboard/MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+  @Mutation('ADD_COMP') private ADD_COMP: any;
+  @Action('SET_LOCK') private SET_LOCK: any;
+  @Action('rocketOption/SELECT_SERVICE') private SELECT_SERVICE: any;
+  @Action('rocketOption/SELECT_DATABASE') private SELECT_DATABASE: any;
+  @Action('rocketOption/SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
+  @Action('rocketOption/SELECT_INSTANCE') private SELECT_INSTANCE: any;
+  @Action('rocketOption/MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
   private handleOption() {
     return this.MIXHANDLE_GET_OPTION({compType: this.compType, duration: this.durationTime});
+  }
+  private handleSetEdit() {
+     this.SET_LOCK(this.rocketGlobal.lock ? false : true);
   }
   private selectService(i: any) {
     this.SELECT_SERVICE({service: i, duration: this.durationTime});
@@ -79,7 +100,7 @@ export default class ToolBar extends Vue {
   background-color: #333840;
 }
 .rk-dashboard-bar-reload{
-  padding: 0 5px 0 10px;
+  padding: 0 5px;
   border-right: 2px solid #252a2f;
 }
 </style>

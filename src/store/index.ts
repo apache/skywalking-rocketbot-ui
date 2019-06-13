@@ -17,18 +17,24 @@
 
 import Vue from 'vue';
 import Vuex from 'vuex';
-import rocketbot, { State as RocketbotState } from './modules';
-import rocketComps, { State as rocketCompsState } from './modules/comps';
+import rocketbot, { State as RocketbotState } from './modules/global';
+import rocketOption, { State as DashboardOptionState } from './modules/dashboard/modules/dashboard-option';
+import rocketData, { State as DashboardDataState } from './modules/dashboard/modules/dashboard-data';
+import rocketDashboard, { State as DashboardState } from './modules/dashboard/source';
 Vue.use(Vuex);
 
 export interface State {
   rocketbot: RocketbotState;
-  rocketComps: rocketCompsState;
+  rocketOption: DashboardOptionState;
+  rocketData: DashboardDataState;
+  rocketDashboard: DashboardState;
 }
 
 export default new Vuex.Store({
   modules: {
     rocketbot,
-    rocketComps,
+    rocketOption,
+    rocketData,
+    rocketDashboard,
   },
 });

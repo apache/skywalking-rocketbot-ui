@@ -28,7 +28,7 @@ import { AxiosResponse } from 'axios';
 import Topo from '../components/topology/topo.vue';
 import TopoDate from '../components/topology/topo-date.vue';
 import TopoAside from '../components/topology/topo-aside.vue';
-import topo, { State as topoState} from '@/store/modules/topo';
+import topo, { State as topoState} from '@/store/modules/topology';
 
 @Component({components: {Topo, TopoAside, TopoDate}})
 export default class Topology extends Vue {

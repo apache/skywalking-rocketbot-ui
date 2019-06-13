@@ -25,8 +25,7 @@ import Topology from './views/containers/topology.vue';
 import Alarm from './views/containers/alarm.vue';
 
 Vue.use(Router);
-const w: any = window;
-w.axiosCancel = [];
+window.axiosCancel = [];
 
 const router = new Router({
   mode: 'history',
@@ -65,11 +64,11 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const token = window.localStorage.getItem('skywalking-authority');
-  if (w.axiosCancel.length !== 0) {
-    for (const func of  w.axiosCancel) {
+  if (window.axiosCancel.length !== 0) {
+    for (const func of  window.axiosCancel) {
       setTimeout(func(), 0);
     }
-    w.axiosCancel = [];
+    window.axiosCancel = [];
   }
   if (to.meta.login && (token === null || token === 'guest')) {
     next();

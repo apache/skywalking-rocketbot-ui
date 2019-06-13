@@ -64,17 +64,19 @@
       <TopoChart v-if="stateTopo.getResponseTimeTrend.length" :title="$t('avgResponseTime')" unit="ms" :intervalTime="intervalTime" :data="stateTopo.getResponseTimeTrend"/>
       <TopoChart v-if="stateTopo.getThroughputTrend.length" :title="$t('avgThroughput')" unit="cpm" :intervalTime="intervalTime" :data="stateTopo.getThroughputTrend"/>
       <TopoChart v-if="stateTopo.getSLATrend.length" :title="$t('avgSLA')" unit="%" :intervalTime="intervalTime" :precent="true" :data="stateTopo.getSLATrend"/>
+      <ChartResponse v-if="stateTopo.p50.length" :title="$t('percentResponse')" :intervalTime="intervalTime" :data="stateTopo"/>
     </div>
   </aside>
 </template>
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import topo, { State as topoState} from '@/store/modules/topo';
+import topo, { State as topoState} from '@/store/modules/topology';
 import { State, Mutation, Getter, Action } from 'vuex-class';
 import TopoChart from './topo-chart.vue';
 import TopoService from './topo-services.vue';
+import ChartResponse from './topo-response.vue';
 
-@Component({components: {TopoChart, TopoService}})
+@Component({components: {TopoChart, TopoService, ChartResponse}})
 export default class Topology extends Vue {
   @State('rocketTopo') public stateTopo!: topoState;
   @Getter('intervalTime') public intervalTime: any;
