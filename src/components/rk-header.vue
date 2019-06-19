@@ -73,7 +73,7 @@
             </svg>
             {{this.$t('signout')}}</div>
         </div>
-      </a>
+      </a>      
   </div>
   </header>
 </template>
@@ -184,7 +184,7 @@ export default class Header extends Vue {
   will-change: background-color;
   transition: background-color .3s;
   &:hover{
-    background-color:#dededf;
+    background-color:#dededf; 
   }
 }
 </style>
