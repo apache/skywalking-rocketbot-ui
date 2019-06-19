@@ -164,6 +164,7 @@ export default class Header extends Vue {
   }
 }
 .rk-header-user{
+  display: none;
   position: relative;
 }
 .rk-header-user-menu{
