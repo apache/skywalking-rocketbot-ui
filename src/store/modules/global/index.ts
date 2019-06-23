@@ -158,9 +158,6 @@ const mutations: MutationTree<State> = {
   [types.SET_EDIT](state: State, status: boolean): void {
     state.edit = status;
   },
-  [types.SET_LOCK](state: State, status: boolean): void {
-    state.lock = status;
-  },
 };
 
 // actions

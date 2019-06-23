@@ -1,113 +1,44 @@
 <template>
-<div>
-  <div v-show="isDrag || isMousedown" class="dashboard-item-shadow" :style="`top:${top}px;left:${left}%;height:${height}px;width:${width}%;`"></div>
-  <div class="dashboard-item" @mouseup="end" :style="`top:${trueTop}px;left:${trueLeft}%;height:${trueHeight}px;width:${trueWidth}%;`">
-    <div class="dashboard-item-title" @mousedown.stop="drageStart">
+  <div class="dashboard-item" :class="`g-sm-${i.w}`" :style="`height:${i.h}px;`"
+    draggable="true" @dragstart="dragstart" @dragover="$event.preventDefault();" @drop="drop">
+    <div class="dashboard-item-title">
       <div>
-        <svg class="icon cp grey r" v-if="!rocketGlobal.lock" @click="handleSelect">
-          <use xlink:href="#settings"></use>
+        <svg class="icon cp red r" v-if="rocketGlobal.edit" @click="DELETE_COMP(index)">
+          <use xlink:href="#file-deletion"></use>
         </svg>
         <span>{{i.t}}</span>
-        <!-- <input class="dashboard-item-title-input"  :value="i.t" @change="EDIT_COMP({index,type:'t',value:$event.target.value})"/> -->
       </div>
     </div>
-    <div class="dashboard-item-body" style="flex-grow:1;">
+    <div class="dashboard-item-body">
       <div style="height:100%;">
-        <component :is="i.c" ref="chart"></component>
+        <component :is="rocketGlobal.edit ? 'ChartEdit' : i.c" ref="chart" :i="i" :index="index" :intervalTime="intervalTime" :data="rocketDashboard[i.d]"></component>
       </div>
     </div>
-    <svg  v-if="!rocketGlobal.lock" @mousedown.stop="start" class="dashboard-item-resize" xmlns="http://www.w3.org/2000/svg" width="6" height="6"><path d="M6 6H0V4.2h4.2V0H6v6z"/></svg>
   </div>
-</div>
 </template>
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import charts from './charts';
 
-import { Mutation, Action } from 'vuex-class';
+import { Mutation, Action, State, Getter } from 'vuex-class';
 
 @Component({
   components: { ...charts },
 })
 export default class DashboardItem extends Vue {
-  @Mutation('EDIT_COMP') private EDIT_COMP: any;
-  @Mutation('SET_CURRENT_INDEX') private SET_CURRENT_INDEX: any;
-  @Action('SET_EDIT') private SET_EDIT: any;
+  @Mutation('DELETE_COMP') private DELETE_COMP: any;
+  @Mutation('SWICH_COMP') private SWICH_COMP: any;
+  @State('rocketDashboard') private rocketDashboard: any;
+  @Getter('intervalTime') private intervalTime: any;
   @Prop() private rocketGlobal!: any;
   @Prop() private i!: any;
   @Prop() private index!: number;
-  private current: string = 'Line';
-  private config: boolean = false;
-  private width: number = 30;
-  private widthCopy: number = 30;
-  private trueWidth: number = 30;
-  private height: number = 200;
-  private heightCopy: number = 200;
-  private trueHeight: number = 200;
-  private top: number = 0;
-  private left: number = 0;
-  private trueTop: number = 0;
-  private trueLeft: number = 0;
-  private topCopy: number = 0;
-  private leftCopy: number = 0;
-  private isMousedown: boolean = false;
-  private isDrag: boolean = false;
-  private startX: number = 0;
-  private startY: number = 0;
-  public drageStart(event: any) {
-    if (this.rocketGlobal.lock) { return; }
-    this.isDrag = true;
-    this.startX = event.clientX;
-    this.startY = event.clientY;
-    this.topCopy = this.top;
-    this.leftCopy = this.left;
-    document.onmousemove = (e: any) => {
-      this.move(e);
-    };
+  private dragIndex: number = NaN;
+  private dragstart() {
+    this.dragIndex = this.index;
   }
-  public handleSelect() {
-    this.SET_CURRENT_INDEX(this.index);
-    this.SET_EDIT(true);
-  }
-  public start(event: any) {
-    if (this.rocketGlobal.lock) { return; }
-    this.isMousedown = true;
-    this.startX = event.clientX;
-    this.startY = event.clientY;
-    this.widthCopy = this.width;
-    this.heightCopy = this.height;
-    document.onmousemove = (e: any) => {
-      this.move(e);
-    };
-  }
-  public end() {
-    this.trueWidth = this.width;
-    this.trueHeight = this.height;
-    this.trueTop = this.top;
-    this.trueLeft = this.left;
-    this.isMousedown = false;
-    this.isDrag = false;
-    document.onmousemove = null;
-  }
-  public move(e: any) {
-    if (this.isMousedown) {
-      const tempX = Math.ceil((e.clientX - this.startX) / 10);
-      const tempY = Math.ceil((e.clientY - this.startY) / 10);
-      this.trueWidth = this.widthCopy + (e.clientX - this.startX) * 100 / (document.documentElement.offsetWidth - 30);
-      this.trueHeight  = this.heightCopy + (e.clientY - this.startY);
-      this.width = this.widthCopy + tempX * 10 * 100 / (document.documentElement.offsetWidth - 30);
-      this.height = this.heightCopy + tempY * 10;
-      const chart: any = this.$refs.chart;
-      chart.resize();
-    }
-    if (this.isDrag) {
-      const tempX = Math.ceil((e.clientX - this.startX) / 10);
-      const tempY = Math.ceil((e.clientY - this.startY) / 10);
-      this.trueLeft = this.leftCopy + (e.clientX - this.startX) * 100 / (document.documentElement.offsetWidth - 30);
-      this.trueTop  = this.topCopy + (e.clientY - this.startY);
-      this.left = this.leftCopy + tempX * 10 * 100 / (document.documentElement.offsetWidth - 30);
-      this.top = this.topCopy + tempY * 10;
-    }
+  private drop() {
+    this.SWICH_COMP({start: this.dragIndex, end: this.index});
   }
 }
 
@@ -117,7 +48,8 @@ export default class DashboardItem extends Vue {
   display: flex;
   height: 100%;
   flex-direction: column;
-  position:absolute;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 .dashboard-item-shadow{
   background-color:#448dfe15;
@@ -146,7 +78,7 @@ export default class DashboardItem extends Vue {
 .dashboard-item-resize{
   position: absolute;
   fill: #9da5b2;
-  z-index: 2;
+  z-index: 1;
   width: 8px;
   height: 8px;
   padding: 3px;
@@ -156,7 +88,8 @@ export default class DashboardItem extends Vue {
 }
 .dashboard-item-body{
   padding: 7px 10px;
-  z-index: 1;
-  color: #f1f3f6;
+  flex-grow:1;
+  // height:100%;
+  height: calc(100% - 28px);
 }
 </style>

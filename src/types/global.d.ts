@@ -29,3 +29,8 @@ export interface DurationTime {
   end: string;
   step: string;
 }
+export interface SlowItem {
+  key: string;
+  label: string;
+  value: number;
+}

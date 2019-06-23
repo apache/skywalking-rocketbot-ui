@@ -1,9 +1,9 @@
 <template>
-<div class="dashboard-container">
-  <div style="position: relative;">
-    <DashboardItem :rocketGlobal="rocketGlobal" v-for="(i, index) in this.rocketComps.tree[this.rocketComps.group]
-    .children[this.rocketComps.current].children" :key="index" :index="index"  :i="i"/>
-  </div>
+<div class="dashboard-container clear">
+  <DashboardItem 
+  :class="`g-sm-${i.w}`"
+   :rocketGlobal="rocketGlobal" v-for="(i, index) in this.rocketComps.tree[this.rocketComps.group]
+  .children[this.rocketComps.current].children" :key="i.k" :index="index"  :i="i"/>
 </div>
 </template>
 <script lang="ts">

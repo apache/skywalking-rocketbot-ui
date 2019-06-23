@@ -16,19 +16,33 @@
  */
 
 export default [{
-  d: 'globalPercent',
-  c: 'ChartLine',
-  t: 'Global Brief',
-  x: 0,
-  y: 0,
-  w: 2,
+  d: 'globalHeatmap',
+  c: 'ChartHeatmap',
+  t: 'Global Heatmap',
+  w: 6,
   h: 200,
 }, {
-  d: 'globalHeatmap',
-  c: 'ChartBar',
+  d: 'globalPercent',
+  c: 'ChartLine',
+  t: 'Global Percent Response',
+  w: 6,
+  h: 200,
+}, {
+  d: 'globalBrief',
+  c: 'ChartBrief',
   t: 'Global Brief',
-  x: 4,
-  y: 0,
   w: 3,
+  h: 200,
+}, {
+  d: 'globalThroughput',
+  c: 'ChartTrace',
+  t: 'Global Top Throughput',
+  w: 3,
+  h: 200,
+}, {
+  d: 'globalSlow',
+  c: 'ChartSlow',
+  t: 'Global Top Slow Endpoint',
+  w: 6,
   h: 200,
 }];

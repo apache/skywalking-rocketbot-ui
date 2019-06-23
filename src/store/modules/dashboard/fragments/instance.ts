@@ -17,23 +17,24 @@
 
 
 export const instanceResponseTime =  {
-  variable: ['$serviceInstanceId: ID!, $duration: Duration!'],
+  variable: ['$instanceId: ID!, $duration: Duration!'],
   fragment: `
   instanceResponseTime: getLinearIntValues(metric: {
     name: "service_instance_resp_time"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values {
       value
-    }`,
+    }
+  }`,
 };
 
 export const instanceThroughput =  {
-  variable: ['$serviceInstanceId: ID!, $duration: Duration!'],
+  variable: ['$instanceId: ID!, $duration: Duration!'],
   fragment: `
   instanceThroughput: getLinearIntValues(metric: {
     name: "service_instance_cpm"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values {
       value
@@ -41,11 +42,11 @@ export const instanceThroughput =  {
   }`,
 };
 export const instanceSLA =  {
-  variable: ['$serviceInstanceId: ID!, $duration: Duration!'],
+  variable: ['$instanceId: ID!, $duration: Duration!'],
   fragment: `
   instanceSLA: getLinearIntValues(metric: {
     name: "service_instance_sla"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values {
       value
@@ -54,11 +55,11 @@ export const instanceSLA =  {
 };
 
 export const instanceCPU =  {
-  variable: ['$serviceInstanceId: ID!, $duration: Duration!'],
+  variable: ['$instanceId: ID!, $duration: Duration!'],
   fragment: `
   instanceCPU: getLinearIntValues(metric: {
     name: "instance_jvm_cpu"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values {
       value
@@ -67,113 +68,118 @@ export const instanceCPU =  {
 };
 
 export const instanceGC =  {
-  variable: ['$serviceInstanceId: ID!, $duration: Duration!'],
+  variable: ['$instanceId: ID!, $duration: Duration!'],
   fragment: `
-  youngGCCount: getLinearIntValues(metric: {
-    name: "instance_jvm_young_gc_count"
-    id: $serviceInstanceId
-  }, duration: $duration) {
-    values { value }
-  }
-  oldGCCount: getLinearIntValues(metric: {
-    name: "instance_jvm_old_gc_count"
-    id: $serviceInstanceId
-  }, duration: $duration) {
-    values { value }
-  }
   youngGCTime: getLinearIntValues(metric: {
     name: "instance_jvm_young_gc_time"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values { value }
   }
   oldGCTime: getLinearIntValues(metric: {
     name: "instance_jvm_old_gc_time"
-    id: $serviceInstanceId
+    id: $instanceId
+  }, duration: $duration) {
+    values { value }
+  }`,
+};
+
+export const instanceGCCount =  {
+  variable: ['$instanceId: ID!, $duration: Duration!'],
+  fragment: `
+  youngGCCount: getLinearIntValues(metric: {
+    name: "instance_jvm_young_gc_count"
+    id: $instanceId
+  }, duration: $duration) {
+    values { value }
+  }
+  oldGCCount: getLinearIntValues(metric: {
+    name: "instance_jvm_old_gc_count"
+    id: $instanceId
   }, duration: $duration) {
     values { value }
   }`,
 };
 
 export const instanceHeap =  {
-  variable: ['$serviceInstanceId: ID!, $duration: Duration!'],
+  variable: ['$instanceId: ID!, $duration: Duration!'],
   fragment: `
   heap: getLinearIntValues(metric: {
     name: "instance_jvm_memory_heap"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values { value }
   }
   maxHeap: getLinearIntValues(metric: {
     name: "instance_jvm_memory_heap_max"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values { value }
   }`,
 };
 
 export const instanceNonheap =  {
-  variable: ['$serviceInstanceId: ID!, $duration: Duration!'],
+  variable: ['$instanceId: ID!, $duration: Duration!'],
   fragment: `
   nonheap: getLinearIntValues(metric: {
     name: "instance_jvm_memory_noheap"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values { value }
   }
   maxNonHeap: getLinearIntValues(metric: {
     name: "instance_jvm_memory_noheap_max"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values { value }
   }`,
 };
 
 export const instanceEnvoyCount =  {
-  variable: ['$serviceInstanceId: ID!, $duration: Duration!'],
+  variable: ['$instanceId: ID!, $duration: Duration!'],
   fragment: `
   envoyTotal: getLinearIntValues(metric: {
     name: "envoy_total_connections_used"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values { value }
   }
   envoyParent: getLinearIntValues(metric: {
     name: "envoy_parent_connections_used"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values { value }
   }`,
 };
 
 export const instanceEnvoyHeap =  {
-  variable: ['$serviceInstanceId: ID!, $duration: Duration!'],
+  variable: ['$instanceId: ID!, $duration: Duration!'],
   fragment: `
   envoyHeap: getLinearIntValues(metric: {
     name: "envoy_heap_memory_max_used"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values { value }
   }`,
 };
 
 export const instanceClrHeap =  {
-  variable: ['$serviceInstanceId: ID!, $duration: Duration!'],
+  variable: ['$instanceId: ID!, $duration: Duration!'],
   fragment: `
   clrHeap: getLinearIntValues(metric: {
     name: "instance_clr_heap_memory"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values { value }
   }`,
 };
 
 export const instanceClrCPU =  {
-  variable: ['$serviceInstanceId: ID!, $duration: Duration!'],
+  variable: ['$instanceId: ID!, $duration: Duration!'],
   fragment: `
   clrCPU: getLinearIntValues(metric: {
     name: "instance_clr_cpu"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values { value }
   }`,
@@ -181,11 +187,11 @@ export const instanceClrCPU =  {
 
 
 export const instanceClrGC =  {
-  variable: ['$serviceInstanceId: ID!, $duration: Duration!'],
+  variable: ['$instanceId: ID!, $duration: Duration!'],
   fragment: `
   clrGCGen0: getLinearIntValues(metric: {
     name: "instance_clr_gen0_collect_count"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values {
       value
@@ -193,7 +199,7 @@ export const instanceClrGC =  {
   }
   clrGCGen1: getLinearIntValues(metric: {
     name: "instance_clr_gen1_collect_count"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values {
       value
@@ -201,7 +207,7 @@ export const instanceClrGC =  {
   }
   clrGCGen2: getLinearIntValues(metric: {
     name: "instance_clr_gen2_collect_count"
-    id: $serviceInstanceId
+    id: $instanceId
   }, duration: $duration) {
     values {
       value

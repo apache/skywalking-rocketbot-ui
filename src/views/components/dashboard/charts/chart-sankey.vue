@@ -16,9 +16,7 @@
  */
 
 <template>
-  <rk-panel :title="title">
-    <RkEcharts height="215px" :option="responseConfig"/>
-  </rk-panel>
+  <RkEcharts ref="chart" :option="option" :autoResize="true"/>
 </template>
 
 <script lang="ts">
@@ -28,9 +26,9 @@ import { Component, Prop } from 'vue-property-decorator';
 @Component
 export default class Nonheap extends Vue {
   @Prop() private title!: string;
-  @Prop() private stateDashboard!: any;
+  @Prop() private data!: any;
   @Prop() private intervalTime!: any;
-  get responseConfig() {
+  get option() {
     return {
       tooltip: {
         trigger: 'item',
@@ -61,8 +59,8 @@ export default class Nonheap extends Vue {
             '#3fa9e1',
             '#96dee8',
           ],
-        data: this.stateDashboard.endpointInfo.getEndpointTopology.nodes,
-        links: this.stateDashboard.endpointInfo.getEndpointTopology.calls,
+        data: this.data.nodes,
+        links: this.data.calls,
         itemStyle: {
           normal: {
             borderWidth: 0,

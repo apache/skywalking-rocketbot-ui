@@ -27,11 +27,15 @@ const getters = {
     let variablesArr: any = [];
     state.tree[state.group].children[state.current].children.forEach((i: any) => {
       const globalArr: any = fragmentAll;
-      fragmentsArr = [...fragmentsArr, globalArr[i.d].fragment];
-      variablesArr = [...variablesArr, ...globalArr[i.d].variable];
+      if (globalArr[i.d]) {
+        fragmentsArr = [...fragmentsArr, globalArr[i.d].fragment];
+      }
+      if (globalArr[i.d]) {
+        variablesArr = [...variablesArr, ...globalArr[i.d].variable];
+      }
     });
-    const fragments = Array.from(new Set(fragmentsArr)).concat('');
-    const variables = Array.from(new Set(variablesArr)).concat(',');
+    const fragments = Array.from(new Set(fragmentsArr)).join('');
+    const variables = Array.from(new Set(variablesArr)).join(',');
     return  `query queryData(${variables}) {${fragments}}`;
   },
 };

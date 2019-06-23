@@ -16,20 +16,20 @@
  */
 
 <template>
-<rk-panel :title="title">
-  <div class="rk-chart-trace clear scroll_hide" style="overflow:auto;">
-    <div class="rk-chart-trace-i" v-for="i in stateDashboard[typeArr[0]][typeArr[1]]" :key="i.key">
-      <div class="mb-5 ell" v-tooltip:top.ellipsis="i.statement || ''">
-        <svg class="icon vm r grey link-hover cp" @click="handleClick(i.statement)">
-          <use xlink:href="#review-list"></use>
-        </svg>
-        <span class="calls sm mr-10">{{i.latency}} ms</span>
-        <span class="cp link-hover mr-10" @click="appChange(i)">{{i.statement}}</span>
+  <div style="overflow: auto;height: 100%;" class="scroll_hide">
+  <div class="rk-chart-slow clear">
+    <div class="rk-chart-slow-i" v-for="(i, index) in data" :key="index">
+      <svg class="icon vm r grey link-hover cp" @click="handleClick(i.label)">
+        <use xlink:href="#review-list"></use>
+      </svg>
+      <div class="mb-5 ell" v-tooltip:top.ellipsis="i.label || ''">
+        <span class="calls sm mr-10">{{i.value}} cpm</span>
+        <span class="cp link-hover"  @click="appChange(i)">{{i.label}}</span>
       </div>
-      <RkProgress :precent="i.latency/maxValue*100"/>
+      <RkProgress :precent="i.value/maxValue*100"/>
     </div>
   </div>
-</rk-panel>
+  </div>
 </template>
 
 <script lang="ts">
@@ -37,18 +37,14 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
 @Component({})
-export default class RkTopTrace extends Vue {
-  @Prop() private title!: string;
-  @Prop() private type!: string;
-  @Prop() private stateDashboard!: any;
+export default class RkTopSlow extends Vue {
+  @Prop() private intervalTime!: any;
+  @Prop() private data!: any;
   private appChange(i: any) {
-    // const temp = { key: `${i.key}`, label: i.label };
-  }
-  get typeArr() {
-    return this.type.split('.');
+    const temp = { key: `${i.key}`, label: i.label };
   }
   get maxValue() {
-    const temp: number[] = this.stateDashboard[this.typeArr[0]][this.typeArr[1]].map((i: any) => i.latency);
+    const temp: number[] = this.data.map((i: any) => i.value);
     return Math.max.apply(null, temp);
   }
   private handleClick(i: any) {
@@ -65,8 +61,8 @@ export default class RkTopTrace extends Vue {
 }
 </script>
 <style lang="scss">
-.rk-chart-trace{
-  height: 215px;
+.rk-chart-slow{
+  height: 100%;
   .calls{
     padding: 0 5px;
     display: inline-block;
@@ -75,7 +71,7 @@ export default class RkTopTrace extends Vue {
     border-radius: 4px;
   }
 }
-.rk-chart-trace-i{
+.rk-chart-slow-i{
   padding: 6px 0;
 }
 </style>

@@ -20,7 +20,7 @@ export const databaseResponseTime =  {
   variable: ['$duration: Duration!'],
   fragment: `
   databaseResponseTime: getLinearIntValues(metric: {
-    name: "database_avg"
+    name: "database_access_resp_time"
     id: $databaseId
   }, duration: $duration) {
     values {value}
@@ -31,7 +31,7 @@ export const databaseThroughput =  {
   variable: ['$databaseId: ID!', '$duration: Duration!'],
   fragment: `
   databaseThroughput: getLinearIntValues(metric: {
-    name: "database_cpm"
+    name: "database_access_cpm"
     id: $databaseId
   }, duration: $duration) {
     values {
@@ -43,7 +43,7 @@ export const databaseSLA =  {
   variable: ['$databaseId: ID!', '$duration: Duration!'],
   fragment: `
   databaseSLA: getLinearIntValues(metric: {
-    name: "database_sla"
+    name: "database_access_sla"
     id: $databaseId
   }, duration: $duration) {
     values {
@@ -55,26 +55,37 @@ export const databasePercent =  {
   variable: ['$databaseId: ID!', '$duration: Duration!'],
   fragment: `
   databaseP99: getLinearIntValues(metric: {
-    name: "database_p99"
+    name: "database_access_p99"
+    id: $databaseId
   }, duration: $duration) { values { value } }
   databaseP95: getLinearIntValues(metric: {
-    name: "database_p95"
+    name: "database_access_p95"
+    id: $databaseId
   }, duration: $duration) { values { value } }
   databaseP90: getLinearIntValues(metric: {
-    name: "database_p90"
+    name: "database_access_p90"
+    id: $databaseId
   }, duration: $duration) { values { value } }
   databaseP75: getLinearIntValues(metric: {
-    name: "database_p75"
+    name: "database_access_p75"
+    id: $databaseId
   }, duration: $duration) { values { value } }
   databaseP50: getLinearIntValues(metric: {
-    name: "database_p50"
+    name: "database_access_p50"
+    id: $databaseId
   }, duration: $duration) { values { value } }`,
 };
 
 export const databaseTopNRecords =  {
   variable: ['$databaseId: ID!', '$duration: Duration!'],
   fragment: `
-  databaseTopNRecords(condition: $condition) {
+  databaseTopNRecords: getTopNRecords(condition: {
+		serviceId: $databaseId,
+    metricName: "top_n_database_statement",
+    order: DES,
+    topN: 20,
+    duration: $duration,
+	}) {
     statement
     latency
     traceId

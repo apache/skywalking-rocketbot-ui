@@ -15,69 +15,22 @@
  * limitations under the License.
  */
 
-export default [
-  {
-    o: 'Global',
-    n: 'Global Brief',
-    comp: 'ChartBrief',
-    t: 'Global Brief',
-    type: 'global',
-    w: 3,
-  },
-  {
-    o: 'Service',
-    n: 'Service Avg Response',
-    comp: 'ChartAvgResponse',
-    t: 'Service Avg Response',
-    type: 'serviceInfo',
-    w: 3,
-  },
-  {
-    o: 'Service',
-    n: 'Service Avg Throughput',
-    comp: 'ChartAvgThroughput',
-    t: 'Service Avg Throughput',
-    type: 'serviceInfo',
-    w: 3,
-  },
-  {
-    o: 'Service',
-    n: 'Service Avg SLA',
-    comp: 'ChartAvgSLA',
-    t: 'Service Avg SLA',
-    type: 'serviceInfo',
-    w: 3,
-  },
-  {
-    o: 'Global',
-    n: 'Global Percent Response(line)',
-    comp: 'ChartResponseLine',
-    t: 'Global Percent Response',
-    type: 'global',
-    w: 3,
-  },
-  {
-    o: 'Service',
-    n: 'Service Percent Response(line)',
-    comp: 'ChartResponseLine',
-    t: 'Service Percent Response',
-    type: 'serviceInfo',
-    w: 3,
-  },
-  {
-    o: 'Service',
-    n: 'Service Top Slow Endpoint',
-    comp: 'ChartSlow',
-    t: 'Service Top Slow Endpoint',
-    type: 'serviceInfo.getSlowEndpoint',
-    w: 3,
-  },
-  {
-    o: 'Service',
-    n: 'Running ServiceInstance',
-    comp: 'ChartTroughput',
-    t: 'Running ServiceInstance',
-    type: 'serviceInfo.getInstanceThroughput',
-    w: 3,
-  },
-];
+export default [{
+  d: 'globalBrief',
+  c: 'ChartBrief',
+  t: 'Global Brief',
+  w: 3,
+  h: 200,
+}, {
+  d: 'ServiceResponse',
+  c: 'ChartLine',
+  t: 'Service Avg Response',
+  w: 3,
+  h: 200,
+}, {
+  d: 'ServiceThroughput',
+  c: 'ChartSlow',
+  t: 'Service Avg Throughput',
+  w: 6,
+  h: 200,
+}];
