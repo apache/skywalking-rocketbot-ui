@@ -67,7 +67,7 @@ export const SetEndpoint = (state: State, params: any) => {
     state.endpointThroughput.Throughput = params.endpointThroughput.values.map((i: Value) => i.value);
   }
   if (params && params.endpointSLA) {
-    state.endpointSLA.SLA = params.endpointSLA.values.map((i: Value) => i.value);
+    state.endpointSLA.SLA = params.endpointSLA.values.map((i: Value) => i.value / 100);
   }
   if (params && params.endpointSlowEndpoint) {
     state.endpointSlowEndpoint = params.endpointSlowEndpoint;

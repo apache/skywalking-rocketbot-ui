@@ -23,8 +23,9 @@
     <div class="dashboard-container clear">
       <DashboardItem
       v-for="(i, index) in rocketComps.tree[this.rocketComps.group]
-      .children[this.rocketComps.current].children" :key="i.t" :index="index" 
-      :rocketComps="rocketComps" :rocketGlobal="rocketGlobal":i="i">
+      .children[this.rocketComps.current].children" :key="index+i.t+i.w+i.d" :index="index" 
+       :rocketGlobal="rocketGlobal" :i="i" :dragIndex="dragIndex"
+       @dragStart="dragStart">
       </DashboardItem>
     </div>
     <DashboardComp v-if="rocketGlobal.edit" :compType="compType" :rocketComps="rocketComps"/>
@@ -60,6 +61,10 @@ export default class Dashboard extends Vue {
   @Action('GET_QUERY') private GET_QUERY: any;
   @Getter('durationTime') private durationTime: any;
   private isRouterAlive: boolean = true;
+  private dragIndex: number = NaN;
+  public dragStart(index: number) {
+    this.dragIndex = index;
+  }
   public reload(): void {
     this.isRouterAlive = false;
     this.$nextTick(() => { this.isRouterAlive = true; });

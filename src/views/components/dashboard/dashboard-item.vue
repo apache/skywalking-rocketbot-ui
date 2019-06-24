@@ -1,13 +1,11 @@
 <template>
   <div class="dashboard-item" :class="`g-sm-${i.w}`" :style="`height:${i.h}px;`"
-    draggable="true" @dragstart="dragstart" @dragover="$event.preventDefault();" @drop="drop">
-    <div class="dashboard-item-title">
-      <div>
+    draggable="true" @dragstart="$emit('dragStart', index)" @dragover="$event.preventDefault();" @drop="drop">
+    <div class="dashboard-item-title ell">
         <svg class="icon cp red r" v-if="rocketGlobal.edit" @click="DELETE_COMP(index)">
           <use xlink:href="#file-deletion"></use>
         </svg>
         <span>{{i.t}}</span>
-      </div>
     </div>
     <div class="dashboard-item-body">
       <div style="height:100%;">
@@ -33,10 +31,7 @@ export default class DashboardItem extends Vue {
   @Prop() private rocketGlobal!: any;
   @Prop() private i!: any;
   @Prop() private index!: number;
-  private dragIndex: number = NaN;
-  private dragstart() {
-    this.dragIndex = this.index;
-  }
+  @Prop() private dragIndex!: number;
   private drop() {
     this.SWICH_COMP({start: this.dragIndex, end: this.index});
   }

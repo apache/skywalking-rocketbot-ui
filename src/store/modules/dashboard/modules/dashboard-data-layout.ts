@@ -45,8 +45,19 @@ const initState: State = {
       service: {},
       endpoint: {},
       instance: {},
+      database: {},
     },
     children: groupServiceTemp,
+  }, {
+    name: 'Database Dashboard',
+    type: 'database',
+    query:  {
+      service: {},
+      endpoint: {},
+      instance: {},
+      database: {},
+    },
+    children: groupDatabaseTemp,
   }],
 };
 
@@ -72,15 +83,30 @@ const mutations: MutationTree<State> = {
     if (!params.name) {return; }
     switch (params.template) {
       case 'nouse':
-        state.tree.push({name: params.name, type: params.type, query: {}, children: [
+        const newTree = [];
+        Object.keys(state.tree).forEach((i: any) => {
+          newTree.push(state.tree[i]);
+        });
+        newTree.push({name: params.name, type: params.type, query: {}, children: [
           {name: 'demo', children: []},
         ]});
+        state.tree = newTree;
         break;
       case 'groupService':
-        state.tree.push({name: params.name, type: params.type, query: {}, children: groupServiceTemp});
-        break;
+          const newServerTree = [];
+          Object.keys(state.tree).forEach((i: any) => {
+            newServerTree.push(state.tree[i]);
+          });
+          newServerTree.push({name: params.name, type: params.type, query: {}, children: groupServiceTemp});
+          state.tree = newServerTree;
+          break;
       case 'groupDatabase':
-        state.tree.push({name: params.name, type: params.type, query: {}, children: groupDatabaseTemp});
+        const newDatabaseTree = [];
+        Object.keys(state.tree).forEach((i: any) => {
+          newDatabaseTree.push(state.tree[i]);
+        });
+        newDatabaseTree.push({name: params.name, type: params.type, query: {}, children: groupDatabaseTemp});
+        state.tree = newDatabaseTree;
         break;
     }
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));

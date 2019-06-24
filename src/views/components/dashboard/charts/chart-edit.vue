@@ -50,12 +50,15 @@ export default class Response extends Vue {
 <style lang="scss">
 .rk-chart-edit{
   margin: 0 -10px;
+  height: 100%;
+  overflow: auto;
 }
 
 .rk-chart-edit-container{
   padding: 7px 5px;
   border: 1px dashed rgba(196, 200, 225, .5);
   border-radius: 4px;
+  height: 100%;
   .title{
     width: 45px;
     flex-shrink: 0;

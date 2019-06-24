@@ -56,7 +56,7 @@ export const SetService = (state: State, params: any) => {
     state.serviceInstanceThroughput = params.serviceInstanceThroughput;
   }
   if (params && params.serviceSLA) {
-    state.serviceSLA.SLA = params.serviceSLA.values.map((i: Value) => i.value);
+    state.serviceSLA.SLA = params.serviceSLA.values.map((i: Value) => i.value / 100);
   }
   if (params && params.serviceP50 && params.serviceP75 && params.serviceP90 && params.serviceP95 && params.serviceP99) {
     state.servicePercent.p50 = params.serviceP50.values.map((i: Value) => i.value);

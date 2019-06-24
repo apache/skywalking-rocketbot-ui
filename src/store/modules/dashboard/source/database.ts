@@ -48,7 +48,7 @@ export const initState: State = {
 
 export const SetDatabase = (state: State, params: any) => {
   if (params && params.databaseResponseTime) {
-    state.databaseResponseTime.ResponseTime = params.databaseResponseTime.values.map((i: Value) => i.value);
+    state.databaseResponseTime.ResponseTime = params.databaseResponseTime.values.map((i: Value) => i.value / 100);
   }
   if (params && params.databaseSLA) {
     state.databaseSLA.SLA = params.databaseSLA.values.map((i: Value) => i.value);

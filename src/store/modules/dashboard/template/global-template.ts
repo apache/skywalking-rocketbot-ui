@@ -15,34 +15,40 @@
  * limitations under the License.
  */
 
-export default [{
-  d: 'globalHeatmap',
-  c: 'ChartHeatmap',
-  t: 'Global Heatmap',
-  w: 6,
-  h: 200,
-}, {
-  d: 'globalPercent',
-  c: 'ChartLine',
-  t: 'Global Percent Response',
-  w: 6,
-  h: 200,
-}, {
-  d: 'globalBrief',
-  c: 'ChartBrief',
-  t: 'Global Brief',
-  w: 3,
-  h: 200,
-}, {
-  d: 'globalThroughput',
-  c: 'ChartTrace',
-  t: 'Global Top Throughput',
-  w: 3,
-  h: 200,
-}, {
-  d: 'globalSlow',
-  c: 'ChartSlow',
-  t: 'Global Top Slow Endpoint',
-  w: 6,
-  h: 200,
-}];
+export default [
+  {
+    d: 'globalHeatmap',
+    c: 'ChartHeatmap',
+    t: 'Global Heatmap',
+    w: 6,
+    h: 250,
+  },
+  {
+    d: 'globalPercent',
+    c: 'ChartLine',
+    t: 'Global Percent Response',
+    w: 6,
+    h: 250,
+  },
+  {
+    d: 'globalBrief',
+    c: 'ChartBrief',
+    t: 'Global Brief',
+    w: 3,
+    h: 250,
+  },
+  {
+    d: 'globalThroughput',
+    c: 'ChartTrace',
+    t: 'Global Top Throughput',
+    w: 3,
+    h: 250,
+  },
+  {
+    d: 'globalSlow',
+    c: 'ChartSlow',
+    t: 'Global Top Slow Endpoint',
+    w: 6,
+    h: 250,
+  },
+];

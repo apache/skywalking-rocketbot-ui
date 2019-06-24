@@ -76,7 +76,7 @@ export default class Request extends Vue {
         itemWidth: 12,
       },
       grid: {
-        top: keys.length === 1 ? 15 : 40,
+        top: keys.length === 1 ? 15 : 55,
         left: 0,
         right: 10,
         bottom: 5,

@@ -16,6 +16,7 @@
  */
 
 import ChartBrief from './chart-brief.vue';
+import ChartNum from './chart-num.vue';
 import ChartLine from './chart-line.vue';
 import ChartBar from './chart-bar.vue';
 import ChartHeatmap from './chart-heatmap.vue';
@@ -26,6 +27,7 @@ import ChartInstance from './chart-instance.vue';
 import ChartEdit from './chart-edit.vue';
 
 export default {
+  ChartNum,
   ChartBrief,
   ChartLine,
   ChartBar,

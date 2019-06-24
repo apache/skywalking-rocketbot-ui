@@ -35,7 +35,7 @@
         <svg class="icon blue cp lg r" @click="ADD_COMP(i)">
           <use xlink:href="#file-addition"></use>
         </svg>
-        <div class="mr-5">{{i.d}}</div>
+        <div class="mr-5">{{i.t}}</div>
       </div>
     </div>
   </div>

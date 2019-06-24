@@ -41,7 +41,7 @@ export interface CompsTree {
   name?: string;
   type: string;
   query: any;
-  children: CompsGroup[];
+  children: any;
 }
 
 interface Fragment {

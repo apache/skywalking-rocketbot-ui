@@ -50,7 +50,7 @@ export const SetInstance = (state: State, params: any) => {
     state.instanceThroughput.Throughput = params.instanceThroughput.values.map((i: Value) => i.value);
   }
   if (params && params.instanceSLA) {
-    state.instanceSLA.SLA = params.instanceSLA.values.map((i: Value) => i.value);
+    state.instanceSLA.SLA = params.instanceSLA.values.map((i: Value) => i.value / 100);
   }
   if (params && params.instanceCPU) {
     state.instanceCPU.cpu = params.instanceCPU.values.map((i: Value) => i.value);
