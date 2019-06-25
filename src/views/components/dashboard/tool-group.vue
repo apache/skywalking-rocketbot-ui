@@ -56,7 +56,7 @@ export default class ToolGroup extends Vue {
   @Mutation('DELETE_COMPS_GROUP') private DELETE_COMPS_GROUP: any;
   @Mutation('ADD_COMPS_GROUP') private ADD_COMPS_GROUP: any;
   @Action('MIXHANDLE_CHANGE_GROUP') private MIXHANDLE_CHANGE_GROUP: any;
-  @Action('rocketDashboard/MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+  @Action('rocketOption/MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
   @Getter('durationTime') private durationTime: any;
   private name: string = '';
   private type: string = 'service';

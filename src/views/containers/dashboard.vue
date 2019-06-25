@@ -18,9 +18,16 @@
 <template>
   <div class="flex-v wrapper" style="flex-grow:1;">
     <ToolGroup :rocketGlobal="rocketGlobal" :rocketComps="rocketComps"/>
-    <ToolBar  :compType="compType" :durationTime="durationTime"  :stateDashboard='stateDashboard'/>
+    <ToolBar :rocketGlobal="rocketGlobal" :compType="compType" :durationTime="durationTime"  :stateDashboard='stateDashboardOption'/>
     <ToolNav :rocketGlobal="rocketGlobal" :rocketComps="rocketComps"/>
-    <DashboardInner  v-if="isRouterAlive" :rocketGlobal="rocketGlobal" :stateDashboard='stateDashboard' :rocketComps="rocketComps"/>
+    <div class="dashboard-container clear">
+      <DashboardItem
+      v-for="(i, index) in rocketComps.tree[this.rocketComps.group]
+      .children[this.rocketComps.current].children" :key="index+i.t+i.w+i.d" :index="index" 
+       :rocketGlobal="rocketGlobal" :i="i" :dragIndex="dragIndex"
+       @dragStart="dragStart">
+      </DashboardItem>
+    </div>
     <DashboardComp v-if="rocketGlobal.edit" :compType="compType" :rocketComps="rocketComps"/>
   </div>
 </template>
@@ -31,30 +38,33 @@ import { Action, Getter, State, Mutation } from 'vuex-class';
 import ToolBar from '@/views/components/dashboard/tool-bar.vue';
 import ToolGroup from '@/views/components/dashboard/tool-group.vue';
 import ToolNav from '@/views/components/dashboard/tool-nav.vue';
-import DashboardInner from '@/views/components/dashboard/dashboard-inner.vue';
+import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
 import DashboardComp from '@/views/components/dashboard/dashboard-comp.vue';
-import dashboard from '../../store/modules/dashboard';
 
 @Component({
   components: {
     ToolBar,
     ToolGroup,
     ToolNav,
-    DashboardInner,
+    DashboardItem,
     DashboardComp,
   },
 })
 export default class Dashboard extends Vue {
   @State('rocketbot') private rocketGlobal: any;
-  @State('rocketDashboard') private stateDashboard!: any;
-  @State('rocketComps') private rocketComps: any;
+  @State('rocketOption') private stateDashboardOption!: any;
+  @State('rocketData') private rocketComps!: any;
   @Mutation('SET_EVENTS') private SET_EVENTS: any;
   @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
   @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
-  @Action('rocketDashboard/MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
-  @Action('rocketDashboard/MIXHANDLE_GET_DASHBOARD') private MIXHANDLE_GET_DASHBOARD: any;
+  @Action('rocketOption/MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+  @Action('GET_QUERY') private GET_QUERY: any;
   @Getter('durationTime') private durationTime: any;
   private isRouterAlive: boolean = true;
+  private dragIndex: number = NaN;
+  public dragStart(index: number) {
+    this.dragIndex = index;
+  }
   public reload(): void {
     this.isRouterAlive = false;
     this.$nextTick(() => { this.isRouterAlive = true; });
@@ -63,17 +73,22 @@ export default class Dashboard extends Vue {
     return this.rocketComps.tree[this.rocketComps.group].type;
   }
   private handleRefresh() {
-    this.MIXHANDLE_GET_DASHBOARD({compType: this.compType, duration: this.durationTime});
+    this.GET_QUERY({
+      serviceId: this.stateDashboardOption.currentService.key || '',
+      endpointId: this.stateDashboardOption.currentEndpoint.key || '',
+      endpointName: this.stateDashboardOption.currentEndpoint.label || '',
+      instanceId: this.stateDashboardOption.currentInstance.key || '',
+      databaseId: this.stateDashboardOption.currentDatabase.key || '',
+      duration: this.durationTime,
+    });
   }
   private handleOption() {
     return this.MIXHANDLE_GET_OPTION({compType: this.compType, duration: this.durationTime})
-      .then(() => {
-        this.handleRefresh();
-      });
+      .then(() => {this.handleRefresh(); });
   }
-  private beforeCreate() {
-    this.$store.registerModule('rocketDashboard', dashboard);
-  }
+  // private beforeCreate() {
+  //   this.$store.registerModule('rocketDashboard', dashboard);
+  // }
   private beforeMount() {
     if (window.localStorage.getItem('dashboard')) {
       const data: string = `${window.localStorage.getItem('dashboard')}`;
@@ -82,9 +97,9 @@ export default class Dashboard extends Vue {
     this.handleOption();
     this.SET_EVENTS([this.handleRefresh]);
   }
-  private beforeDestroy() {
-    this.$store.unregisterModule('rocketDashboard');
-  }
+  // private beforeDestroy() {
+  //   this.$store.unregisterModule('rocketDashboard');
+  // }
 }
 </script>
 <style lang="scss">

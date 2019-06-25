@@ -15,54 +15,26 @@
  * limitations under the License.
  */
 
-import ChartEdit from './chart-edit.vue';
-import ChartAvgResponse from './chart-avg-response.vue';
-import ChartAvgThroughput from './chart-avg-throughput.vue';
-import ChartAvgSLA from './chart-avg-sla.vue';
-import ChartResponse from './chart-response.vue';
-import ChartResponseLine from './chart-response-line.vue';
-import ChartTroughput from './chart-through.vue';
 import ChartBrief from './chart-brief.vue';
-import ChartDependency from './chart-dependency.vue';
+import ChartNum from './chart-num.vue';
+import ChartLine from './chart-line.vue';
+import ChartBar from './chart-bar.vue';
 import ChartHeatmap from './chart-heatmap.vue';
-import ChartHeatmapScatter from './chart-scatter.vue';
-import ChartInstance from './chart-instance.vue';
 import ChartSlow from './chart-slow.vue';
-import ChartCpu from './chart-cpu.vue';
-import ChartGC from './chart-gc.vue';
-import ChartHeap from './chart-heap.vue';
-import ChartNonHeap from './chart-nonheap.vue';
 import ChartTrace from './chart-trace.vue';
-import ChartTraceDB from './chart-trace-db.vue';
-import ChartEnvoyCollections from './chart-envoy-collections.vue';
-import ChartEnvoyMemory from './chart-envoy-memory.vue';
-import ChartClrHeap from './chart-clr-heap.vue';
-import ChartClrGC from './chart-clr-gc.vue';
-import ChartClrCPU from './chart-clr-cpu.vue';
+import ChartSankey from './chart-sankey.vue';
+import ChartInstance from './chart-instance.vue';
+import ChartEdit from './chart-edit.vue';
 
 export default {
-  ChartEdit,
-  ChartAvgResponse,
-  ChartAvgThroughput,
-  ChartAvgSLA,
-  ChartResponse,
-  ChartResponseLine,
-  ChartTroughput,
-  ChartTrace,
+  ChartNum,
   ChartBrief,
-  ChartHeatmap,
-  ChartHeatmapScatter,
-  ChartEnvoyCollections,
-  ChartEnvoyMemory,
+  ChartLine,
+  ChartBar,
   ChartInstance,
+  ChartHeatmap,
   ChartSlow,
-  ChartCpu,
-  ChartGC,
-  ChartHeap,
-  ChartNonHeap,
-  ChartTraceDB,
-  ChartDependency,
-  ChartClrHeap,
-  ChartClrGC,
-  ChartClrCPU,
+  ChartTrace,
+  ChartSankey,
+  ChartEdit,
 };

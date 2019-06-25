@@ -16,25 +16,19 @@
  */
 
 <template>
-  <div class="rk-chart-edit" draggable="true" @dragstart="$emit('dragstart', index)" @dragover="$event.preventDefault();" @drop="$emit('drop', index)">
-    <div class="rk-chart-edit-title clear cm ell">
-      <svg class="icon red lg cp vm mr-10" @click="DELETE_COMP(index)">
-        <use xlink:href="#file-deletion"></use>
-      </svg>
-      <svg class="icon mr-10 vm">
-        <use xlink:href="#marquee-selection"></use>
-      </svg>
-      <span class="vm">{{`${o} ${n}`}}</span>
-      
-    </div>
+  <div class="rk-chart-edit">
     <div class="rk-chart-edit-container">
       <div class="flex-h mb-5">
         <div class="title grey sm">{{$t('title')}}:</div>
-        <input type="text" class="rk-chart-edit-input long" :value="t" @change="EDIT_COMP({index,type:'t',value:$event.target.value})">
+        <input type="text" class="rk-chart-edit-input long" :value="i.t" @change="EDIT_COMP({index,type:'t',value:$event.target.value})">
+      </div>
+      <div class="flex-h mb-5">
+        <div class="title grey sm">{{$t('width')}}:</div>
+        <input type="number" min="1" max="12" class="rk-chart-edit-input long" :value="i.w" @change="EDIT_COMP({index,type:'w',value:$event.target.value})">
       </div>
       <div class="flex-h">
-        <div class="title grey sm">{{$t('width')}}:</div>
-        <input type="number" min="1" max="12" class="rk-chart-edit-input long" :value="w" @change="EDIT_COMP({index,type:'w',value:$event.target.value})">
+        <div class="title grey sm">{{$t('height')}}:</div>
+        <input type="number" min="1"  class="rk-chart-edit-input long" :value="i.h" @change="EDIT_COMP({index,type:'h',value:$event.target.value})">
       </div>
     </div>
   </div>
@@ -47,34 +41,26 @@ import { Component, Prop } from 'vue-property-decorator';
 
 @Component
 export default class Response extends Vue {
-  @Mutation('DELETE_COMP') private DELETE_COMP: any;
   @Mutation('EDIT_COMP') private EDIT_COMP: any;
-  @Prop() private o!: string;
+  @Prop() private i!: any;
   @Prop() private index!: number;
-  @Prop() private n!: string;
-  @Prop() private t!: string;
-  @Prop() private w!: number;
+  @Prop() private intervalTime!: any;
 }
 </script>
 <style lang="scss">
 .rk-chart-edit{
-  padding-left: 5px;
-  padding-right: 5px;
+  margin: 0 -10px;
+  height: 100%;
+  overflow: auto;
 }
-.rk-chart-edit-title{
-  padding: 5px 10px;
-  line-height: 15px;
-  border-radius: 4px;
-  margin-bottom: 5px;
-  background-color: rgba(196, 200, 225, .2);
-}
+
 .rk-chart-edit-container{
-  padding: 7px 10px;
+  padding: 7px 5px;
   border: 1px dashed rgba(196, 200, 225, .5);
-  margin-bottom: 10px;
   border-radius: 4px;
+  height: 100%;
   .title{
-    width: 55px;
+    width: 45px;
     flex-shrink: 0;
   }
 }

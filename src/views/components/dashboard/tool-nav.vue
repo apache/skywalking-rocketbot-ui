@@ -18,7 +18,7 @@
 <template>
   <nav class="rk-dashboard-nav">
     <span v-for="(i, index) in rocketComps.tree[rocketComps.group].children" :key="index" class="mr-20">
-      <a class="rk-dashboard-nav-i b" @click="SET_CURRENT_COMPS(index)" :class="{'active': rocketComps.current == index}">{{i.name}}</a>
+      <a class="rk-dashboard-nav-i b" @click="SET_CURRENT_COMPS(index);RUN_EVENTS({})" :class="{'active': rocketComps.current == index}">{{i.name}}</a>
       <svg v-if="rocketGlobal.edit && rocketComps.current !== index" class="ml-5 icon cp red vm"  @click="DELETE_COMPS_TREE(index)">
         <use xlink:href="#file-deletion"></use>
       </svg>
@@ -47,7 +47,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop, Model } from 'vue-property-decorator';
-import { State, Mutation } from 'vuex-class';
+import { State, Mutation, Action } from 'vuex-class';
 
 @Component
 export default class ToolNav extends Vue {
@@ -56,6 +56,7 @@ export default class ToolNav extends Vue {
   @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
   @Mutation('DELETE_COMPS_TREE') private DELETE_COMPS_TREE: any;
   @Mutation('ADD_COMPS_TREE') private ADD_COMPS_TREE: any;
+  @Action('RUN_EVENTS') private RUN_EVENTS: any;
   private name: string = '';
   private template: string = 'nouse';
   private show: boolean = false;
@@ -93,7 +94,7 @@ export default class ToolNav extends Vue {
   left: -10px;
   top: 35px;
   padding: 10px 5px;
-  z-index: 1;
+  z-index: 10;
   border-radius: 4px;
   color: #eee;
   background-color: #252a2f;

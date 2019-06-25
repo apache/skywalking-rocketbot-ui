@@ -14,7 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import './svg/lock.svg';
+import './svg/lock-open.svg';
 import './svg/logo.svg';
 import './svg/logo-sw.svg';
 import './svg/login-bg.svg';

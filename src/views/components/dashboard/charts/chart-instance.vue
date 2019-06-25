@@ -16,32 +16,30 @@
  */
 
 <template>
-  <rk-panel :title="title">
     <div class="chart-instance-info">
-      <div class="ell mb-10 pt-10 b" v-tooltip="stateDashboard.currentInstance.label || ''">
-        {{this.stateDashboard.currentInstance.label}}
+      <div class="ell mb-10 pt-10 b" v-tooltip="rocketOption.currentInstance.label || ''">
+        {{this.rocketOption.currentInstance.label}}
       </div>
       <div>
         <span class="mr-5 mb-5 grey">Language</span>
-        <span>{{this.stateDashboard.currentInstance.language}}</span>
+        <span>{{this.rocketOption.currentInstance.language}}</span>
       </div>
-      <div v-for="i in stateDashboard.currentInstance.attributes">
+      <div v-for="i in rocketOption.currentInstance.attributes">
         <span class="mr-5 mb-5 grey">{{i.name}}</span>
         <span>{{i.value}}</span>
       </div>
     </div>
-  </rk-panel>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import moment from 'dayjs';
+import { State } from 'vuex-class';
 @Component
 export default class Response extends Vue {
-  @Prop() private title!: string;
-  @Prop() private type!: string;
-  @Prop() private stateDashboard!: any;
+  @State('rocketOption') private rocketOption!: any;
+  @Prop() private intervalTime!: any;
 }
 </script>
 <style lang="scss">

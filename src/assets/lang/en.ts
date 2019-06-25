@@ -12,6 +12,7 @@ const m = {
   password: 'Password',
   title: 'Title',
   width: 'Width',
+  height: 'Height',
   login: 'Login Now',
   signout: 'Sign Out',
   dashboard: 'Dashboard',

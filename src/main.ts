@@ -58,8 +58,7 @@ const i18n = new VueI18n({
   },
 });
 
-const w = window as any;
-if (!w.Promise) { w.Promise = Promise; }
+if (!window.Promise) { window.Promise = Promise; }
 
 Vue.config.productionTip = false;
 

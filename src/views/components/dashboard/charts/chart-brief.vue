@@ -16,45 +16,45 @@
  */
 
 <template>
-  <rk-panel :title="title">
+  <div style="overflow: auto;height: 100%;" class="scroll_hide">
   <div class="rk-chart-brief">
     <div class="rk-chart-brief-i">
       <svg class="icon lg mr-15 vm">
         <use :xlink:href="`#package`"></use>
       </svg>
       <span class="vm">{{$t('service')}}</span>
-      <span class="r b">{{this.stateDashboard[this.type].getGlobalBrief.numOfService}}</span>
+      <span class="r b">{{data.numOfService}}</span>
     </div>
     <div class="rk-chart-brief-i">
       <svg class="icon lg mr-15 vm">
         <use :xlink:href="`#code`"></use>
       </svg>
       <span class="vm">{{$t('endpoint')}}</span>
-      <span class="r b">{{this.stateDashboard[this.type].getGlobalBrief.numOfEndpoint}}</span>
+      <span class="r b">{{data.numOfEndpoint}}</span>
     </div>
     <div class="rk-chart-brief-i">
       <svg class="icon lg mr-15 vm">
         <use :xlink:href="`#epic`"></use>
       </svg>
       <span class="vm">{{$t('database')}}</span>
-      <span class="r b">{{this.stateDashboard[this.type].getGlobalBrief.numOfDatabase}}</span>
+      <span class="r b">{{data.numOfDatabase}}</span>
     </div>
     <div class="rk-chart-brief-i">
       <svg class="icon lg mr-15 vm">
         <use :xlink:href="`#token`"></use>
       </svg>
       <span class="vm">{{$t('cache')}}</span>
-      <span class="r b">{{this.stateDashboard[this.type].getGlobalBrief.numOfCache}}</span>
+      <span class="r b">{{data.numOfCache}}</span>
     </div>
     <div class="rk-chart-brief-i">
       <svg class="icon lg mr-15 vm">
         <use :xlink:href="`#soft-unwrap`"></use>
       </svg>
       <span class="vm">MQ</span>
-      <span class="r b">{{this.stateDashboard[this.type].getGlobalBrief.numOfMQ}}</span>
+      <span class="r b">{{data.numOfMQ}}</span>
     </div>
   </div>
-  </rk-panel>
+  </div>
 </template>
 
 <script lang="ts">
@@ -63,17 +63,16 @@ import { Component, Prop } from 'vue-property-decorator';
 import moment from 'dayjs';
 @Component
 export default class Brief extends Vue {
-  @Prop() private title!: string;
-  @Prop() private type!: string;
-  @Prop() private stateDashboard!: any;
+  @Prop() private data!: any;
+  @Prop() private intervalTime!: any;
 }
 </script>
 <style lang="scss">
 .rk-chart-brief{
-  height: 215px;
+  // height: 215px;
 }
 .rk-chart-brief-i{
-  padding: 10px 0px;
+  padding: 5px 0px;
 }
 </style>
 

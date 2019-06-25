@@ -42,6 +42,46 @@ export const TopoServiceInfo = {
         value
       }
     }
+    getP50: getLinearIntValues(metric: {
+      name: "service_relation_server_p50"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP75: getLinearIntValues(metric: {
+      name: "service_relation_server_p75"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP90: getLinearIntValues(metric: {
+      name: "service_relation_server_p90"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP95: getLinearIntValues(metric: {
+      name: "service_relation_server_p95"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP99: getLinearIntValues(metric: {
+      name: "service_relation_server_p99"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
 `};
 
 export const TopoClientInfo = {
@@ -65,6 +105,46 @@ export const TopoClientInfo = {
     }
     getSLATrend: getLinearIntValues(metric: {
       name: "service_relation_client_call_sla"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP50: getLinearIntValues(metric: {
+      name: "service_relation_client_p50"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP75: getLinearIntValues(metric: {
+      name: "service_relation_client_p75"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP90: getLinearIntValues(metric: {
+      name: "service_relation_client_p90"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP95: getLinearIntValues(metric: {
+      name: "service_relation_client_p95"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    getP99: getLinearIntValues(metric: {
+      name: "service_relation_client_p99"
       id: $id
     }, duration: $duration) {
       values {

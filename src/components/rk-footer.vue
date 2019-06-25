@@ -16,7 +16,7 @@
  */
 
 <template>
-  <footer class="rk-footer trans" :class="{'rk-footer-edit':rocketbotGlobal.edit, 'rk-footer-dark': $route.path === '/topology'}">
+  <footer class="rk-footer trans" :class="{'rk-footer-dark': $route.path === '/topology'}">
     <div class="rk-footer-inner">
       <div class="flex-h">
         <!-- <div class="mr-15 sm red">
@@ -25,15 +25,9 @@
           </svg>
           <span class="vm">Connect Error</span>
         </div> -->
-        <div class="sm cp" :class="rocketbotGlobal.edit?'':'link-hover'" @click="setEdit">
-          <svg class="vm icon mr-5">
-            <use xlink:href="#settings"></use>
-          </svg>
-          <span class="vm">{{rocketbotGlobal.edit?this.$t('editmode'):this.$t('usermode')}}</span>
-        </div>
       </div>
       <div class="sm flex-h">
-        <RkDate v-model="time" position="top" format="YYYY-MM-DD HH:mm:ss"/>
+        <RkDate class="mr-10" v-model="time" position="top" format="YYYY-MM-DD HH:mm:ss"/>
         <span class="mr-15 cp" @click="setLang">{{lang === 'zh' ? '中' : 'En'}}</span>
         <span>{{$t('serverZone')}} UTC {{utc >= 0 ? '+' : ''}}</span><input v-model="utc" min='-12' max="14" class="rk-footer-utc" type="number">
       </div>
@@ -50,12 +44,10 @@ import timeFormat from '@/utils/timeFormat';
 export default class Footer extends Vue {
   @State('rocketbot') private rocketbotGlobal: any;
   @Action('SET_DURATION') private SET_DURATION: any;
-  @Action('SET_EDIT') private SET_EDIT: any;
   @Mutation('SET_UTC') private SET_UTC: any;
   private lang: any = '';
   private time: Date[] = [new Date(), new Date()];
   private utc: any = window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60);
-  private utcCopy: any = window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60);
   @Watch('time')
   private onTimeUpdate() {
     this.SET_DURATION(timeFormat(this.time));
@@ -67,11 +59,6 @@ export default class Footer extends Vue {
     if (this.utc === '') { this.utc = 0; }
     this.SET_UTC(this.utc);
     window.localStorage.setItem('utc', this.utc.toString());
-    this.time = [
-      this.rocketbotGlobal.durationRow.start,
-      this.rocketbotGlobal.durationRow.end,
-    ];
-    this.utcCopy = this.utc;
   }
   private setLang() {
     if (this.lang === 'zh') {
@@ -83,11 +70,6 @@ export default class Footer extends Vue {
       window.localStorage.setItem('lang', 'zh');
       this.lang = 'zh';
     }
-  }
-  private setEdit() {
-    this.SET_EDIT(this.rocketbotGlobal.edit ? false : true);
-    const dashboardInner: any = this.$root.$children[0].$children[0].$children[1];
-    dashboardInner.reload();
   }
   private beforeMount() {
     this.lang = window.localStorage.getItem('lang');

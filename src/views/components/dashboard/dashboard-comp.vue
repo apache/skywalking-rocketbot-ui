@@ -35,7 +35,7 @@
         <svg class="icon blue cp lg r" @click="ADD_COMP(i)">
           <use xlink:href="#file-addition"></use>
         </svg>
-        <div class="mr-5">{{i.n}}</div>
+        <div class="mr-5">{{i.t}}</div>
       </div>
     </div>
   </div>
@@ -134,15 +134,12 @@ export default class Comps extends Vue {
   flex-shrink: 0;
   border-top: 1px solid #c1c5ca41;
   color: #515a6e;
-  box-shadow: 0 2px 2px 0 rgba(26, 24, 29, 0.15), 0 1px 4px 0 rgba(26, 24, 29, 0.1);
   background-color: rgba(196, 200, 225, 0.2);
   .title{
     padding: 0 15px;
   }
 }
 .rk-dashboard-comp-wrapper{
-  // white-space: nowrap;
-  // overflow: auto;
   padding: 0 15px;
 }
 .rk-dashboard-comp-i{

@@ -50,10 +50,10 @@ export default class Response extends Vue {
         itemWidth: 12,
       },
       grid: {
-        top: 55,
+        top: 10,
         left: 0,
-        right: 18,
-        bottom: 15,
+        right: 10,
+        bottom: 5,
         containLabel: true,
       },
       xAxis: {

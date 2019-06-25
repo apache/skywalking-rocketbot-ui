@@ -16,9 +16,7 @@
  */
 
 <template>
-  <rk-panel :title="title">
-    <RkEcharts height="215px" :option="responseConfig"/>
-  </rk-panel>
+  <RkEcharts ref="chart" :option="option"/>
 </template>
 
 <script lang="ts">
@@ -30,9 +28,13 @@ import moment from 'dayjs';
 export default class Heatmap extends Vue {
   @Prop() private title!: string;
   @Prop() private type!: string;
-  @Prop() private stateDashboard!: any;
+  @Prop() private data!: any;
   @Prop() private intervalTime!: any;
-  get responseConfig() {
+  public resize() {
+    const chart: any = this.$refs.chart;
+    chart.myChart.resize();
+  }
+  get option() {
     const w: any = window;
     return {
       tooltip: {
@@ -44,10 +46,10 @@ export default class Heatmap extends Vue {
         },
       },
       grid: {
-        top: 20,
+        top: 15,
         left: 0,
-        right: 18,
-        bottom: 15,
+        right: 10,
+        bottom: 5,
         containLabel: true,
       },
       xAxis: {
@@ -85,7 +87,7 @@ export default class Heatmap extends Vue {
       series: [
         {
           type: 'heatmap',
-          data: this.stateDashboard[this.type].getThermodynamic,
+          data: this.data,
           symbolSize: (d: any) => d[2] ? 7 : 0,
         },
       ],

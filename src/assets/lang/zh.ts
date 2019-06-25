@@ -12,6 +12,7 @@ const m = {
   password: '密码',
   title: '标题',
   width: '宽度',
+  height: '高度',
   login: '登录',
   signout: '登出',
   dashboard: '仪表盘',

@@ -28,7 +28,7 @@ import { Action } from 'vuex-class';
 export default class RkEcharts extends Vue {
   @Prop() private option: any;
   @Prop({ default: false }) private uncombine!: boolean;
-  @Prop({ default: '350px' }) private height!: string;
+  @Prop({ default: '100%' }) private height!: string;
   @Prop({default: '100%' }) private width!: string;
   @Action('CLEAR_CHARTS') private CLEAR_CHARTS: any;
   private myChart: any = {};
