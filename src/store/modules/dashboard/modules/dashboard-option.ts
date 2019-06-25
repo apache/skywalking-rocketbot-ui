@@ -122,6 +122,9 @@ const actions: ActionTree<State, any> = {
       });
   },
   GET_SERVICE_ENDPOINTS(context: { commit: Commit, state: any }) {
+    if (!context.state.currentService.key) {
+      return new Promise((resolve) => resolve());
+    }
     return graph
       .query('queryEndpoints')
       .params({serviceId: context.state.currentService.key, keyword: ''})
@@ -144,6 +147,9 @@ const actions: ActionTree<State, any> = {
       });
   },
   GET_SERVICE_INSTANCES(context: { commit: Commit, state: any }, params: any) {
+    if (!context.state.currentService.key) {
+      return new Promise((resolve) => resolve());
+    }
     return graph
       .query('queryInstances')
       .params({serviceId: context.state.currentService.key, ...params})

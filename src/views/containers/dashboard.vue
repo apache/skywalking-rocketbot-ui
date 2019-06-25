@@ -74,11 +74,11 @@ export default class Dashboard extends Vue {
   }
   private handleRefresh() {
     this.GET_QUERY({
-      serviceId: this.stateDashboardOption.currentService.key,
-      endpointId: this.stateDashboardOption.currentEndpoint.key,
-      endpointName: this.stateDashboardOption.currentEndpoint.label,
-      instanceId: this.stateDashboardOption.currentInstance.key,
-      databaseId: this.stateDashboardOption.currentDatabase.key,
+      serviceId: this.stateDashboardOption.currentService.key || '',
+      endpointId: this.stateDashboardOption.currentEndpoint.key || '',
+      endpointName: this.stateDashboardOption.currentEndpoint.label || '',
+      instanceId: this.stateDashboardOption.currentInstance.key || '',
+      databaseId: this.stateDashboardOption.currentDatabase.key || '',
       duration: this.durationTime,
     });
   }
