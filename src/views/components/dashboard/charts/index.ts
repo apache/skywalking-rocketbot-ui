@@ -24,9 +24,11 @@ import ChartSlow from './chart-slow.vue';
 import ChartTrace from './chart-trace.vue';
 import ChartSankey from './chart-sankey.vue';
 import ChartInstance from './chart-instance.vue';
+import ChartCount from './chart-count.vue';
 import ChartEdit from './chart-edit.vue';
 
 export default {
+  ChartCount,
   ChartNum,
   ChartBrief,
   ChartLine,

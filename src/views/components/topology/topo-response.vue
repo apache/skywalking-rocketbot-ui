@@ -18,7 +18,7 @@
 <template>
   <div>
     <div class="grey sm mb-5">{{title}}</div>
-    <RkEcharts height="32px" :option="responseConfig"/>
+    <RkEcharts height="80px" :option="responseConfig"/>
   </div>
 </template>
 
@@ -36,7 +36,7 @@ export default class Response extends Vue {
       [{
           data: this.data.p50.map((i: any, index: number) => [
             this.intervalTime[index],
-            i.value,
+            i,
           ]),
           name: this.data.p50.length ? 'p50' : null,
           type: 'line',
@@ -54,7 +54,7 @@ export default class Response extends Vue {
       [{
           data: this.data.p75.map((i: any, index: number) => [
             this.intervalTime[index],
-            i.value,
+            i,
           ]),
           name: this.data.p75.length ? 'p75' : null,
           type: 'line',
@@ -72,7 +72,7 @@ export default class Response extends Vue {
       [{
           data: this.data.p90.map((i: any, index: number) => [
             this.intervalTime[index],
-            i.value,
+            i,
           ]),
           name: this.data.p90.length ? 'p90' : null,
           type: 'line',
@@ -90,7 +90,7 @@ export default class Response extends Vue {
     [{
         data: this.data.p95.map((i: any, index: number) => [
           this.intervalTime[index],
-          i.value,
+          i,
         ]),
         name: this.data.p95.length ? 'p95' : null,
         type: 'line',
@@ -108,7 +108,7 @@ export default class Response extends Vue {
       [{
           data: this.data.p99.map((i: any, index: number) => [
             this.intervalTime[index],
-            i.value,
+            i,
           ]),
           name: this.data.p99.length ? 'p99' : null,
           type: 'line',
@@ -137,17 +137,17 @@ export default class Response extends Vue {
           fontSize: 13,
         },
       },
-      legend: {
-        icon: 'circle',
-        top: 0,
-        left: 0,
-        itemWidth: 12,
-      },
+      // legend: {
+      //   icon: 'circle',
+      //   top: 0,
+      //   left: 0,
+      //   itemWidth: 12,
+      // },
       grid: {
-        top: 55,
+        top: 5,
         left: 0,
         right: 18,
-        bottom: 15,
+        bottom: 5,
         containLabel: true,
       },
       xAxis: {

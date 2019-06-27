@@ -70,6 +70,7 @@ export interface State {
   instanceThroughput: { Throughput: number[]; };
   instanceCPU: { cpu: number[]; };
   instanceGC: { oldGC: number[], youngGC: number[] };
+  instanceGCCount: { oldGC: number[], youngGC: number[] };
   instanceHeap: { Value: number[], Free: number[] };
   instanceNonheap: { Value: number[], Free: number[] };
   instanceClrHeap: { Value: number[] };

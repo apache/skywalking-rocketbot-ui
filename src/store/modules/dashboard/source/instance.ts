@@ -23,6 +23,7 @@ export interface State {
   instanceThroughput: { Throughput: number[]; };
   instanceCPU: { cpu: number[]; };
   instanceGC: { oldGC: number[], youngGC: number[] };
+  instanceGCCount: { oldGC: number[], youngGC: number[] };
   instanceHeap: { Value: number[], Free: number[] };
   instanceNonheap: { Value: number[], Free: number[] };
   instanceClrHeap: { Value: number[] };
@@ -36,6 +37,7 @@ export const initState: State = {
   instanceThroughput: { Throughput: [] },
   instanceCPU: { cpu: [] },
   instanceGC: { oldGC: [], youngGC: [] },
+  instanceGCCount: { oldGC: [], youngGC: [] },
   instanceHeap: { Value: [], Free: [] },
   instanceNonheap: { Value: [], Free: [] },
   instanceClrHeap: { Value: [] },
@@ -58,6 +60,10 @@ export const SetInstance = (state: State, params: any) => {
   if (params && params.oldGCTime && params.youngGCTime) {
     state.instanceGC.oldGC = params.oldGCTime.values.map((i: Value) => i.value);
     state.instanceGC.youngGC = params.youngGCTime.values.map((i: Value) => i.value);
+  }
+  if (params && params.oldGCCount && params.youngGCCount) {
+    state.instanceGCCount.oldGC = params.oldGCCount.values.map((i: Value) => i.value);
+    state.instanceGCCount.youngGC = params.youngGCCount.values.map((i: Value) => i.value);
   }
   if (params && params.heap && params.maxHeap) {
     state.instanceHeap.Value = params.heap.values.map((i: Value) => (i.value / 1048576).toFixed(2));

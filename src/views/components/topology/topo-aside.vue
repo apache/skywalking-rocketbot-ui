@@ -55,7 +55,7 @@
         <span class="content">{{stateTopo.currentNode.latency}} ms</span>
       </div>
     </div>
-    <div class="link-topo-aside-box">
+    <div class="link-topo-aside-box" style="width:280px;top:78px;position: fixed;right: 30px;">
       <div class="mb-5 clear">
         <span class="b dib mr-20 vm">{{$t('detectPoint')}}</span>
         <span v-if="stateTopo.detectPoints.indexOf('CLIENT') !== -1" class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':!stateTopo.mode}" @click="setMode(false)">{{this.$t('client')}}</span>
