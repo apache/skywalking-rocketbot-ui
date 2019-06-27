@@ -18,7 +18,7 @@
 <template>
   <div>
     <div class="grey sm mb-5">{{title}}</div>
-    <RkEcharts height="80px" :option="responseConfig"/>
+    <RkEcharts height="120px" :option="responseConfig"/>
   </div>
 </template>
 
@@ -41,8 +41,6 @@ export default class Response extends Vue {
           name: this.data.p50.length ? 'p50' : null,
           type: 'line',
           symbol: 'none',
-          barMaxWidth: 10,
-          stack: '总量',
           lineStyle: {
             width: 1.5,
             type: 'dotted',
@@ -59,8 +57,6 @@ export default class Response extends Vue {
           name: this.data.p75.length ? 'p75' : null,
           type: 'line',
           symbol: 'none',
-          barMaxWidth: 10,
-          stack: '总量',
           lineStyle: {
             width: 1.5,
             type: 'dotted',
@@ -77,8 +73,6 @@ export default class Response extends Vue {
           name: this.data.p90.length ? 'p90' : null,
           type: 'line',
           symbol: 'none',
-          barMaxWidth: 10,
-          stack: '总量',
           lineStyle: {
             width: 1.5,
             type: 'dotted',
@@ -95,8 +89,6 @@ export default class Response extends Vue {
         name: this.data.p95.length ? 'p95' : null,
         type: 'line',
         symbol: 'none',
-        barMaxWidth: 10,
-        stack: '总量',
         lineStyle: {
           width: 1.5,
           type: 'dotted',
@@ -112,9 +104,7 @@ export default class Response extends Vue {
           ]),
           name: this.data.p99.length ? 'p99' : null,
           type: 'line',
-          barMaxWidth: 10,
           symbol: 'none',
-          stack: '总量',
           lineStyle: {
             width: 1.5,
             type: 'dotted',

@@ -93,6 +93,7 @@ const m = {
   weekCutTip: '最近1周',
   monthCutTip: '最近1月',
   serverZone: '服务器时区',
+  percentResponse: '百分比响应',
 };
 
 export default m;
