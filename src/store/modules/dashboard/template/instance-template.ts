@@ -98,6 +98,14 @@ export default [
   },
   {
     o: 'ServiceInstance',
+    d: 'instanceGCCount',
+    c: 'ChartCount',
+    t: 'JVM GC Count',
+    w: 3,
+    h: 250,
+  },
+  {
+    o: 'ServiceInstance',
     d: 'instanceCPU',
     c: 'ChartLine',
     t: 'JVM CPU (%)',

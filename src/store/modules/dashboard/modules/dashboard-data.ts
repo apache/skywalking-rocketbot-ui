@@ -74,6 +74,7 @@ const initState: State = {
       { o: 'ServiceInstance', d: 'instanceHeap', c: 'ChartLine', t: 'JVM Heap (MB)', w: 3, h: 250 },
       { o: 'ServiceInstance', d: 'instanceNonheap', c: 'ChartLine', t: 'JVM Non-Heap (MB)', w: 3, h: 250 },
       { o: 'ServiceInstance', d: 'instanceGC', c: 'ChartLine', t: 'JVM GC (ms)', w: 3, h: 250 },
+      { o: 'ServiceInstance', d: 'instanceGCCount', c: 'ChartCount', t: 'JVM GC Count', w: 3, h: 250 },
       { o: 'ServiceInstance', d: 'instanceCPU', c: 'ChartLine', t: 'JVM CPU (%)', w: 3, h: 250 },
       { o: 'ServiceInstance', d: 'instanceClrCPU', c: 'ChartLine', t: 'CLR CPU (%)', w: 3, h: 250 },
       { o: 'ServiceInstance', d: 'instanceClrGC', c: 'ChartLine', t: 'CLR GC (Count)', w: 3, h: 250 },

@@ -42,7 +42,7 @@ export const TopoServiceInfo = {
         value
       }
     }
-    getP50: getLinearIntValues(metric: {
+    p50: getLinearIntValues(metric: {
       name: "service_relation_server_p50"
       id: $id
     }, duration: $duration) {
@@ -50,7 +50,7 @@ export const TopoServiceInfo = {
         value
       }
     }
-    getP75: getLinearIntValues(metric: {
+    p75: getLinearIntValues(metric: {
       name: "service_relation_server_p75"
       id: $id
     }, duration: $duration) {
@@ -58,7 +58,7 @@ export const TopoServiceInfo = {
         value
       }
     }
-    getP90: getLinearIntValues(metric: {
+    p90: getLinearIntValues(metric: {
       name: "service_relation_server_p90"
       id: $id
     }, duration: $duration) {
@@ -66,7 +66,7 @@ export const TopoServiceInfo = {
         value
       }
     }
-    getP95: getLinearIntValues(metric: {
+    p95: getLinearIntValues(metric: {
       name: "service_relation_server_p95"
       id: $id
     }, duration: $duration) {
@@ -74,7 +74,7 @@ export const TopoServiceInfo = {
         value
       }
     }
-    getP99: getLinearIntValues(metric: {
+    p99: getLinearIntValues(metric: {
       name: "service_relation_server_p99"
       id: $id
     }, duration: $duration) {
@@ -111,7 +111,7 @@ export const TopoClientInfo = {
         value
       }
     }
-    getP50: getLinearIntValues(metric: {
+    p50: getLinearIntValues(metric: {
       name: "service_relation_client_p50"
       id: $id
     }, duration: $duration) {
@@ -119,7 +119,7 @@ export const TopoClientInfo = {
         value
       }
     }
-    getP75: getLinearIntValues(metric: {
+    p75: getLinearIntValues(metric: {
       name: "service_relation_client_p75"
       id: $id
     }, duration: $duration) {
@@ -127,7 +127,7 @@ export const TopoClientInfo = {
         value
       }
     }
-    getP90: getLinearIntValues(metric: {
+    p90: getLinearIntValues(metric: {
       name: "service_relation_client_p90"
       id: $id
     }, duration: $duration) {
@@ -135,7 +135,7 @@ export const TopoClientInfo = {
         value
       }
     }
-    getP95: getLinearIntValues(metric: {
+    p95: getLinearIntValues(metric: {
       name: "service_relation_client_p95"
       id: $id
     }, duration: $duration) {
@@ -143,7 +143,7 @@ export const TopoClientInfo = {
         value
       }
     }
-    getP99: getLinearIntValues(metric: {
+    p99: getLinearIntValues(metric: {
       name: "service_relation_client_p99"
       id: $id
     }, duration: $duration) {
