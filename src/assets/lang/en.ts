@@ -93,6 +93,7 @@ const m = {
   weekCutTip: 'Last 1 week',
   monthCutTip: 'Last 1 month',
   serverZone: 'Server Zone',
+  percentResponse: 'Percent Response',
 };
 
 export default m;
