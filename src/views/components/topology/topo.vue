@@ -253,8 +253,7 @@ export default {
         .attr('text-anchor', 'middle')
         .attr('x', 22)
         .attr('y', 70)
-        .text(d => d.name.length >= 12 ? `${d.name.substring(0,12)}...`: d.name)
-      
+        .text(d => d.name.length > 12 ? `${d.name.substring(0,12)}...`: d.name)
       this.glink = this.graph.append('g').selectAll('.link');
       this.link = this.glink.data(this.datas.calls).enter();
       this.line = this.link.append('path').attr('class', 'link')

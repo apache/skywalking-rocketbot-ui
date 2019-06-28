@@ -33,7 +33,7 @@ npm install
 npm run serve
 ```
 
-The default UI address is `http://localhost:8080`. Default username/password is `admin/admin`.
+The default UI address is `http://localhost:8080`.
 
 ## Contributing to SkyWalking RocketBot
 
