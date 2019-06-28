@@ -23,7 +23,7 @@ npm install
 
 ### Build
 
-**Notice, as SkyWalking primary UI, the npm build has been integration in SkyWalking dist build.** 
+**Notice, as SkyWalking primary UI, the npm build has been integration in SkyWalking dist build.**
 
 **All following builds are for dev.**
 
@@ -33,7 +33,7 @@ npm install
 npm run serve
 ```
 
-The default UI address is `http://localhost:8080`. Default username/password is `admin/admin`.
+The default UI address is `http://localhost:8080`.
 
 ## Contributing to SkyWalking RocketBot
 
