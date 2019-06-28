@@ -42,7 +42,6 @@ export default class Request extends Vue {
           type: 'line',
           symbol: 'none',
           barMaxWidth: 10,
-          stack: '总量',
           lineStyle: {
             width: 1.5,
             type: keys.length !== 5 ? 'solid' : 'dotted',
