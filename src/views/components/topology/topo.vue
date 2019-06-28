@@ -254,7 +254,6 @@ export default {
         .attr('x', 22)
         .attr('y', 70)
         .text(d => d.name.length > 12 ? `${d.name.substring(0,12)}...`: d.name)
-
       this.glink = this.graph.append('g').selectAll('.link');
       this.link = this.glink.data(this.datas.calls).enter();
       this.line = this.link.append('path').attr('class', 'link')
@@ -270,7 +269,7 @@ export default {
         .attr('ry', 3)
         .attr('fill', d => d.cpm ? '#217EF299' : '#6a6d7799')
         .on('click', function(d, i) {
-          that.$store.commit('rocketTopo/SET_MODE', d.detectPoints)
+          that.$store.commit('rocketTopo/SET_MODE', d.detectPoints) 
           event.stopPropagation();
           that.tip.hide({}, this);
           that.tip.show(d, this);
@@ -300,7 +299,7 @@ export default {
     if (currNode.id === node.id) {
         return true;
     }
-    return this.datas.calls.filter(i =>
+    return this.datas.calls.filter(i => 
       (i.source.id === currNode.id || i.target.id === currNode.id) &&
       (i.source.id === node.id || i.target.id === node.id)
     ).length;
