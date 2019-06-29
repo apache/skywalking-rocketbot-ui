@@ -42,7 +42,7 @@ pleasant experience.
 
 ### How to contribute?
 
-Most of the contributions received are code contributions, and documentation, bugs, requirements are also welcomed.
+Most of the contributions received are code contributions. And documentation, bugs, requirements are also welcomed.
 
 ### How to report a bug?
 
