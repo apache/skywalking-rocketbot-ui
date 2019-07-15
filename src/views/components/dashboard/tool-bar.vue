@@ -62,11 +62,11 @@ export default class ToolBar extends Vue {
   @Prop() private durationTime!: any;
   @Mutation('ADD_COMP') private ADD_COMP: any;
   @Action('SET_EDIT') private SET_EDIT: any;
-  @Action('rocketOption/SELECT_SERVICE') private SELECT_SERVICE: any;
-  @Action('rocketOption/SELECT_DATABASE') private SELECT_DATABASE: any;
-  @Action('rocketOption/SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
-  @Action('rocketOption/SELECT_INSTANCE') private SELECT_INSTANCE: any;
-  @Action('rocketOption/MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+  @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
+  @Action('SELECT_DATABASE') private SELECT_DATABASE: any;
+  @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
+  @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
+  @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
   get lastKey() {
     const current = this.rocketComps.tree[this.rocketComps.group]
     .children[this.rocketComps.current].children;

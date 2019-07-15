@@ -49,7 +49,7 @@ import { Action } from 'vuex-class';
 import EndpointOpt from './tool-bar-select-endpoint-opt.vue';
 @Component({components: {EndpointOpt}})
 export default class ToolBarSelect extends Vue {
-  @Action('rocketOption/SEARCH_ENDPOINTS') public SEARCH_ENDPOINTS: any;
+  @Action('SEARCH_ENDPOINTS') public SEARCH_ENDPOINTS: any;
   @Prop() public data!: any;
   @Prop() public current!: any;
   @Prop() public title!: string;

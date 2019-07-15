@@ -57,7 +57,7 @@ export default class Dashboard extends Vue {
   @Mutation('SET_EVENTS') private SET_EVENTS: any;
   @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
   @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
-  @Action('rocketOption/MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+  @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
   @Action('GET_QUERY') private GET_QUERY: any;
   @Getter('durationTime') private durationTime: any;
   private isRouterAlive: boolean = true;
