@@ -81,6 +81,7 @@ export const SetEndpoint = (state: State, params: any) => {
       key: i.key,
       label: i.endpointNames[0],
       value: i.duration,
+      traceIds: i.traceIds,
     }));
   }
 };

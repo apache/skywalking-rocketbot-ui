@@ -81,7 +81,7 @@ const mutations: MutationTree<State> = {
     if (!data.length) {
       return ;
     }
-    if ((!state.currentEndpoint.key && data.length) || state.endpoints.indexOf(state.currentEndpoint) === -1 ) {
+    if (!state.currentEndpoint.key && data.length) {
       state.currentEndpoint = data[0];
     }
   },
@@ -94,7 +94,7 @@ const mutations: MutationTree<State> = {
       state.currentInstance = {};
       return;
     }
-    if ((!state.currentInstance.key && data.length) || state.instances.indexOf(state.currentInstance) === -1 ) {
+    if (!state.currentInstance.key && data.length) {
       state.currentInstance = data[0];
     }
   },
@@ -180,19 +180,26 @@ const actions: ActionTree<State, any> = {
       context.dispatch('RUN_EVENTS', {}, {root: true});
     });
   },
-  SELECT_ENDPOINT(context: { commit: Commit, dispatch: Dispatch }, params: any) {
+  SELECT_ENDPOINT(context: { commit: Commit, dispatch: Dispatch, state: any }, params: any) {
     context.commit('SET_CURRENT_ENDPOINT', params.endpoint);
-    context.dispatch('GET_ENDPOINT', {
-        duration: params.duration,
-        endpointId: params.endpoint.key,
-        endpointName: params.endpoint.label,
+    context.dispatch('GET_QUERY', {
+      serviceId: context.state.currentService.key || '',
+      endpointId: context.state.currentEndpoint.key || '',
+      endpointName: context.state.currentEndpoint.label || '',
+      instanceId: context.state.currentInstance.key || '',
+      databaseId: context.state.currentDatabase.key || '',
+      duration: params.duration,
     });
   },
-  SELECT_INSTANCE(context: { commit: Commit, dispatch: Dispatch }, params: any) {
+  SELECT_INSTANCE(context: { commit: Commit, dispatch: Dispatch, state: any }, params: any) {
     context.commit('SET_CURRENT_INSTANCE', params.instance);
-    context.dispatch('GET_INSTANCE', {
-        duration: params.duration,
-        serviceInstanceId: params.instance.key,
+    context.dispatch('GET_QUERY', {
+      serviceId: context.state.currentService.key || '',
+      endpointId: context.state.currentEndpoint.key || '',
+      endpointName: context.state.currentEndpoint.label || '',
+      instanceId: context.state.currentInstance.key || '',
+      databaseId: context.state.currentDatabase.key || '',
+      duration: params.duration,
     });
   },
   SELECT_DATABASE(context: { commit: Commit, dispatch: Dispatch }, params: any) {
@@ -220,7 +227,6 @@ const actions: ActionTree<State, any> = {
 };
 
 export default {
-  namespaced: true,
   state: initState,
   getters,
   actions,
