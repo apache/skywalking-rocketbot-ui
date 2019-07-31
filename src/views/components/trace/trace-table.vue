@@ -78,12 +78,12 @@ export default class Home extends Vue {
       this.loading = false;
     });
   }
-  @Watch('rocketTrace.traceList')
-  onListChanged(val: any, oldVal: any) {
-    if (this.rocketTrace && this.rocketTrace.traceList.length > 0) {
-      this.selectTrace(this.rocketTrace.traceList[0])
-    }    
-  }
+  // @Watch('rocketTrace.traceList')
+  // onListChanged(val: any, oldVal: any) {
+  //   if (this.rocketTrace && this.rocketTrace.traceList.length > 0) {
+  //     this.selectTrace(this.rocketTrace.traceList[0])
+  //   }
+  // }
 }
 </script>
 <style lang="scss">

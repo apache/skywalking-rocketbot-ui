@@ -1,24 +1,16 @@
 <template>
   <div>
-    <!-- <div> -->
-  
-      <!-- {{data.name}} -->
-      <!--todo 显示指标 -->
-
-      <div :class="['trace-item', 'level'+( data.level - 1)]">
+      <div @click="showSelectSpan" :class="['trace-item', 'level'+( data.level - 1)]">
         <div :class="['method', 'level'+( data.level - 1)]">
           <span 
               v-if="data.children && data.children.length > 0" 
-              @click="toggle" 
+              @click.stop="toggle" 
               :class="['trace-table-toggle', displayChildren? 'collapse': 'expand']">
 
           </span>
           <span v-tooltip:bottom.inTraceTable="data.endpointName">
             {{data.endpointName}}
           </span>
-          <!-- <span ref="endpoint">
-            {{data.endpointName}}
-          </span>           -->
         </div>
         <div class="start-time">
           {{formatTime(data.startTime)}}
@@ -40,22 +32,15 @@
         <div class="self">
           {{data.dur ? data.dur + '' : '0'}}
         </div>
-        <!-- <div class="class">
-          Abstract
-        </div> -->
         <div class="api">
           <span v-tooltip:bottom="data.component||'-'">{{data.component || '-'}}</span>
         </div>
-        <!-- <div class="agent">
-          audit-center-tomcat
-        </div> -->
         <div class="application">
           <span v-tooltip:bottom="data.serviceCode||'-'">{{data.serviceCode}}</span>
           
 
         </div>
       </div>      
-    <!-- </div> -->
     <div v-show="data.children && data.children.length > 0 && displayChildren" class="children-trace">
         <item v-for="(item, index) in data.children" :key="index" :data="item"> </item>
     </div>
@@ -96,7 +81,6 @@
 
   .trace-item {
     display: flex;
-    /* justify-content: space-between; */
     position: relative;
     &::before{
       position: absolute;
@@ -116,10 +100,6 @@
     border-top: 1px solid white;
   }
 
-  // .trace-item div.method {
-  //   // border-left:  5px solid #cb7686;
-
-  // }
 
   .trace-item>div {
     padding: 0 4px;
@@ -128,28 +108,22 @@
     border-right: 1px dotted silver;
     overflow: hidden;
     line-height: 30px;
-    /* float:left; */
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap
   }
   .method {
-    /* border-right: 1px dashed black; */
     width: 45%;
   }
   .argument {
-    /* border-right: 1px dashed black; */
     width: 15%;
   }
   .start-time {
-    /* border-right: 1px dashed black; */
     width: 5%;
     min-width: 100px;
   }
   .gap {
-    /* border-right: 1px dashed black; */
     width: 5%;
   }
   .exec-ms {
-    /* border-right: 1px dashed black; */
     width: 6%;
   }
   .trace-item div.exec-percent {
@@ -176,29 +150,21 @@
     }
   }
   .self {
-    /* border-right: 1px dashed black; */
     width: 5%;
   }
-  // .class {
-  //   /* border-right: 1px dashed black; */
-  //   width: 10%;
-  // }
   .api {
-    /* border-right: 1px dashed black; */
     width: 10%;
   }
   .agent {
-    /* border-right: 1px dashed black; */
     width: 15%;
   }
   .application {
-    /* border-right: 1px dashed black; */
     width: 15%;
   }
 
 </style>
 <script type="text/javascript">
-import moment from 'dayjs'
+import moment from 'dayjs';
 import Popper from 'popper.js';
 
 export default {
@@ -206,46 +172,44 @@ export default {
   props: ['data'],
   data() {
     return {
-      displayChildren: true
+      displayChildren: true,
     }
   },
   computed: {
     selfTime() {
-      const {data} = this
-      return  data.dur ? data.dur : 0
+      const {data} = this;
+      return  data.dur ? data.dur : 0;
     },
     execTime() {
-      const {data} = this
-      return  (data.endTime - data.startTime)?(data.endTime - data.startTime) : 0
+      const {data} = this;
+      return  (data.endTime - data.startTime) ? (data.endTime - data.startTime) : 0;
     },
     outterPercent() {
       if (this.data.level == 1) {
-        return '100%'
+        return '100%';
       } else {
         let data = this.data
         // let exec = ((data.endTime - data.startTime) && data.children && data.children.length > 0 ) ? (data.endTime - data.startTime) : 0
         let exec = (data.endTime - data.startTime) ? (data.endTime - data.startTime) : 0
-        console.log(exec, data.totalExec, 'aaaaa')
-        const result = (exec/data.totalExec * 100).toFixed(4) + '%'
-        return result == '0.0000%' ? '0.9%' : result
+        const result = (exec / data.totalExec * 100).toFixed(4) + '%'
+        return result == '0.0000%' ? '0.9%' : result;
       }
     },
     innerPercent() {
-      const result = (this.selfTime/this.execTime) * 100 .toFixed(4) + '%'
-      return result == '0.0000%' ? '0.9%' : result
+      const result = (this.selfTime / this.execTime) * 100 .toFixed(4) + '%'
+      return result == '0.0000%' ? '0.9%' : result;
     }
   },
   methods: {
     toggle() {
-      this.displayChildren = ! this.displayChildren
+      this.displayChildren = ! this.displayChildren;
     },
     formatTime(timestamp) {
-      return moment(timestamp).format('HH:mm:ss SSS')
+      return moment(timestamp).format('HH:mm:ss SSS');
+    },
+    showSelectSpan() {
+      this.$root.eventHub.$emit('HANDLE-SELECT-SPAN', this.data);
     }
-  },
-  mounted() {
-    this.$nextTick(()=>{       
-    })
   }
 }
 </script>

@@ -4,11 +4,33 @@
     <TraceContainer>
       <Item v-for="(item, index) in tableData"  :data="item"  :key="'key'+ index" /> 
     </TraceContainer>
+    <rk-sidebox :show.sync="showDetail" :title="$t('spanInfo')">
+      <div class="rk-trace-detail">
+        <h5 class="mb-15">{{$t('tags')}}.</h5>
+        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('endpoint')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.label}}</span></div>
+        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('spanType')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.type}}</span></div>
+        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('component')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.component}}</span></div>
+        <div class="mb-10 clear"><span class="g-sm-4 grey">Peer:</span><span class="g-sm-8 wba">{{this.currentSpan.peer||'No Peer'}}</span></div>
+        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('error')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.isError}}</span></div>
+        <div class="mb-10 clear" v-for="i in this.currentSpan.tags" :key="i.key"><span class="g-sm-4 grey">{{i.key}}:</span><span class="g-sm-8 wba">{{i.value}}</span></div>
+        <h5 class="mb-10" v-if="this.currentSpan.logs" v-show="this.currentSpan.logs.length">{{$t('logs')}}.</h5>
+        <div v-for="(i, index) in this.currentSpan.logs" :key="index">
+          <div class="mb-10 sm">
+            <span class="mr-10">{{$t('time')}}:</span>
+            <span class="grey">{{i.time | dateformat}}</span>
+          </div>
+          <div class="mb-15 clear" v-for="(_i, _index) in i.data" :key="_index">
+            <div class="mb-10">{{_i.key}}:</div>
+            <pre class="g-sm-8 mt-0 mb-0 sm" style="overflow:auto">{{_i.value}}</pre>
+          </div>
+        </div>
+      </div>
+    </rk-sidebox>
   </div>
 </template>
 <script>
-import Item from './trace-chart-table/trace-item'
-import TraceContainer from './trace-chart-table/trace-container'
+import Item from './trace-chart-table/trace-item';
+import TraceContainer from './trace-chart-table/trace-container';
 
 export default {
   components: {
@@ -28,36 +50,10 @@ export default {
       tableData: [],
       diaplay: true,
       selected: false,
-      fakeData: [
-          {
-            name: 'a',
-            index: 0,
-            children: [
-              {
-                name: 'a-1',
-                index: 1,
-              },
-              {
-                name: 'a-2',
-                index: 1,
-                children: [
-                  {
-                    name: 'a-2-1',
-                    index: 2,
-                  },
-                  {
-                    name: 'a-2-2',
-                    index: 2,
-                  },
-                ]
-              }
-            ]
-          },
-          {
-            name: 'b',
-            index: 0,
-          }
-      ]
+      segmentId:[],
+      showDetail: false,
+      list: [],
+      currentSpan: []      
     }
   },
   methods: {
@@ -77,12 +73,11 @@ export default {
       return arr
     },
     changeTree(){
-      console.log('trace-detail-chart-list')
       if (this.data.length === 0) return [];
       this.list = Array.from(new Set(this.data.map(i => i.serviceCode)));
       this.segmentId = [];
-      const segmentGroup = {}
-      const segmentIdGroup = []
+      const segmentGroup = {};
+      const segmentIdGroup = [];
       this.data.forEach(i => {
         i.label=i.endpointName || 'no operation name';
         i.children = [];
@@ -121,8 +116,8 @@ export default {
         this.collapse(this.segmentId[i]);
       })
       // console.log(this.segmentId, 'dddd')
-      console.log('table页面的数据-------', this.segmentId)
-      return this.segmentId
+      // console.log('table页面的数据-------', this.segmentId)
+      return this.segmentId;
     },
     collapse(d) {
       if(d.children){
@@ -139,16 +134,18 @@ export default {
       if(node.spanId == spanId && node.segmentId == segmentId) {node.children.push(data);return;}
       if (node.children && node.children.length > 0) {
         for (let i = 0; i < node.children.length; i++) {
-            this.traverseTree(node.children[i],spanId,segmentId,data);
+            this.traverseTree(node.children[i], spanId, segmentId, data);
         }
       }
-    },        
+    },
+    handleSelectSpan(data) {
+      this.currentSpan = data;
+      this.showDetail = true;
+    },
   },
-  mounted () {
-    this.tableData = this.formatData(this.changeTree())
-    // TODO 还需要将层级给定义到对象里面，根据层级赋值样式确定每一行的缩进，indent_1/2/3
-    console.log(this.tableData, "格式化之后的数据tableData")
-  }
-}
-
+  mounted() {
+    this.tableData = this.formatData(this.changeTree());
+    this.$root.eventHub.$on('HANDLE-SELECT-SPAN', this.handleSelectSpan);
+  },
+};
 </script>
