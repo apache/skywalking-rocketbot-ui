@@ -19,7 +19,10 @@ module.exports = {
   devServer: {
     proxy: {
       '/graphql': {
-        target: 'http://skywalking.daocloud.io:12800',
+        // target: 'http://skywalking.daocloud.io:12800',
+        // target: 'http://10.251.70.84:8080/graphql',
+        // target: 'http://106.75.237.45:8080',
+        target: 'http://devtrace.itwork.yonghui.cn',
         changeOrigin: true,
       },
     },

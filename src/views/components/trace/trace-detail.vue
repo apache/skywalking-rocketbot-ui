@@ -29,7 +29,7 @@
           <option v-for="i in current.traceIds" :value="i" :key="i">{{i}}</option>
         </select>
       </div>
-      <a class="rk-btn sm r" :class="{'ghost':mode}" @click="mode = false">
+      <!-- <a class="rk-btn sm r" :class="{'ghost':mode}" @click="mode = false">
         <svg class="icon vm sm">
           <use xlink:href="#issue-child"></use>
         </svg>
@@ -38,13 +38,33 @@
          <svg class="icon vm sm">
           <use xlink:href="#list-bulleted"></use>
         </svg>
+        {{$t('list')}}</a> -->
+      <a class="rk-btn sm r" :class="{'ghost':displayMode == 'tree'}" @click="displayMode = 'tree'">
+        <svg class="icon vm sm">
+          <use xlink:href="#issue-child"></use>
+        </svg>
+        {{$t('tree')}}</a>
+      <a class="rk-btn mr-5 sm r" :class="{'ghost':displayMode == 'list'}" @click="displayMode = 'list'">
+         <svg class="icon vm sm">
+          <use xlink:href="#list-bulleted"></use>
+        </svg>
         {{$t('list')}}</a>
+
+      <a class="rk-btn mr-5 sm r" :class="{'ghost':displayMode == 'table'}" @click="displayMode = 'table'">
+         <svg class="icon vm sm">
+          <use xlink:href="#list-bulleted"></use>
+        </svg>
+        {{$t('table')}}</a>                
       <div class="rk-tag mr-5">{{this.$t('start')}}</div><span class="mr-15 sm">{{parseInt(current.start) | dateformat}}</span>
       <div class="rk-tag mr-5">{{this.$t('duration')}}</div><span class="mr-15 sm">{{current.duration}} ms</span>
       <div class="rk-tag mr-5">{{this.$t('spans')}}</div><span class="sm">{{spans.length}}</span>
     </div>
-    <TraceDetailChartList v-if="mode&&current.endpointNames" :data="spans" :traceId="current.traceIds[0]"/>
-    <TraceDetailChartTree v-if="!mode&&current.endpointNames" :data="spans" :traceId="current.traceIds[0]"/>
+    <!-- <TraceDetailChartList v-if="mode&&current.endpointNames" :data="spans" :traceId="current.traceIds[0]"/>
+    <TraceDetailChartTree v-if="!mode&&current.endpointNames" :data="spans" :traceId="current.traceIds[0]"/> -->
+    <TraceDetailChartList v-if="displayMode == 'list'&&current.endpointNames" :data="spans" :traceId="current.traceIds[0]"/>
+    <TraceDetailChartTree v-if="displayMode == 'tree'&&current.endpointNames" :data="spans" :traceId="current.traceIds[0]"/>    
+    <TraceDetailChartTable v-if="displayMode == 'table'&&current.endpointNames" :data="spans" :traceId="current.traceIds[0]"/>    
+
     <div v-if="!current.endpointNames" class="flex-h container">
       <svg class="icon rk-icon-trace">
         <use xlink:href="#unlink"></use>
@@ -57,16 +77,19 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import TraceDetailChartList from './trace-detail-chart-list.vue';
 import TraceDetailChartTree from './trace-detail-chart-tree.vue';
+import TraceDetailChartTable from './trace-detail-chart-table.vue';
 import { Trace, Span } from '@/types/trace';
 import { Action, State } from 'vuex-class';
 
-@Component({ components: { TraceDetailChartList, TraceDetailChartTree } })
+@Component({ components: { TraceDetailChartList, TraceDetailChartTree, TraceDetailChartTable } })
+// @Component({ components: { TraceDetailChartList, TraceDetailChartTree }})
 export default class Header extends Vue {
   @State('rocketbot') private rocketbot: any;
   @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
   @Prop() private spans!: Span[];
   @Prop() private current!: Trace;
   private mode: boolean = true;
+  private displayMode: string = 'list';
 }
 </script>
 
@@ -75,6 +98,7 @@ export default class Header extends Vue {
   flex-shrink: 0;
   height: 100%;
   width: 75%;
+  overflow-y:auto;
 }
 .rk-trace-detail-wrapper {
   padding: 8px 30px;

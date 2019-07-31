@@ -82,6 +82,7 @@ const m = {
   tags: '标记',
   logs: '日志',
   component: '组件',
+  table: '表格',
   list: '列表',
   tree: '树结构',
   filterScope: '过滤范围',

@@ -41,6 +41,9 @@ $tooltip-bg:               #252a2f !default;
     background-color: $tooltip-bg;
     border-radius: 5px;
     word-break:break-all;
+    &.trace-table-tooltip-inner {
+      max-width: 600px;
+    }
   }
 
   // Arrows
@@ -52,6 +55,10 @@ $tooltip-bg:               #252a2f !default;
     border-style: solid;
   }
 }
+
+.trace-detail-chart-table .rk-tooltip-popper .rk-tooltip-inner  {
+  max-width: 500px;
+} 
 
 // Note: Deprecated .top-left, .top-right, .bottom-left, and .bottom-right as of v3.3.1
 .rk-tooltip-popper {

@@ -38,6 +38,7 @@ function setProperties(el: any, binding: any) {
   } else {
     el.popper._content = binding.expression;
   }
+  console.log(binding, '--------->>>>>>>>>>')
 }
 
 function setAttributes($inner: any, el: any) {
@@ -110,6 +111,11 @@ export default {
 
     const $inner = document.createElement('div');
     $inner.setAttribute('class', 'rk-tooltip-inner');
+
+    if(binding.modifiers.inTraceTable) {
+      $inner.setAttribute('class', 'rk-tooltip-inner trace-table-tooltip-inner');
+    }
+
     $content.appendChild($inner);
     $popper.appendChild($content);
     if (binding.value) {
