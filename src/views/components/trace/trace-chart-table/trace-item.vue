@@ -166,7 +166,8 @@
 <script type="text/javascript">
 import moment from 'dayjs';
 import Popper from 'popper.js';
-
+/* eslint-disable */
+/* tslint:disable */
 export default {
   name: 'item',
   props: ['data'],

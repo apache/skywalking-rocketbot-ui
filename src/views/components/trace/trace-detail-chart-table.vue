@@ -31,7 +31,8 @@
 <script>
 import Item from './trace-chart-table/trace-item';
 import TraceContainer from './trace-chart-table/trace-container';
-
+/* eslint-disable */
+/* tslint:disable */
 export default {
   components: {
     Item,
@@ -40,8 +41,6 @@ export default {
   props: ['data'],
   watch: {
     'data'(val) {
-      // console.log(val, 'data------>>>>')
-      // console.log(JSON.stringify(val))
       this.tableData = this.formatData(this.changeTree())
     }
   },
@@ -115,8 +114,6 @@ export default {
       this.segmentId.forEach((_, i) => {
         this.collapse(this.segmentId[i]);
       })
-      // console.log(this.segmentId, 'dddd')
-      // console.log('table页面的数据-------', this.segmentId)
       return this.segmentId;
     },
     collapse(d) {
