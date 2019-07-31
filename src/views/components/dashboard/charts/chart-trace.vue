@@ -19,7 +19,7 @@
   <div style="overflow: auto;height: 100%;" class="scroll_hide">
   <div class="rk-chart-slow clear">
     <div class="rk-chart-slow-i" v-for="(i, index) in data" :key="index">
-      <svg class="icon vm r grey link-hover cp" @click="handleClick(i.label)">
+      <svg class="icon vm r grey link-hover cp" @click="handleClick(i.traceIds)">
         <use xlink:href="#review-list"></use>
       </svg>
       <div class="mb-5 ell" v-tooltip:top.ellipsis="i.label || ''">

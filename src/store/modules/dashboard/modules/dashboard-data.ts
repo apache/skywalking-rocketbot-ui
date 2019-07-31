@@ -119,7 +119,7 @@ const actions: ActionTree<State, any> = {
     if (rocketOption.currentDatabase) { temp.database = rocketOption.currentDatabase; }
     context.commit('SET_GROUP_QUERY', temp);
     context.commit('SET_CURRENT_GROUP', index);
-    context.dispatch('rocketOption/SET_CURRENT_STATE', context.state.tree[index].query);
+    context.dispatch('SET_CURRENT_STATE', context.state.tree[index].query);
     context.dispatch('RUN_EVENTS', {}, {root: true});
   },
 } ;
