@@ -20,11 +20,8 @@
         </div>
         <div class="exec-ms">
          {{(data.endTime - data.startTime)?(data.endTime - data.startTime) : '0'}} 
-         <!-- {{( (data.endTime - data.startTime) && data.children && data.children.length > 0 ) || (data.level == 1) ?(data.endTime - data.startTime) + '' : '0'}}  -->
-
         </div>
         <div class="exec-percent">
-
           <div class="outer-progress_bar" :style="{width: outterPercent}">
               <div class="inner-progress_bar" :style="{width: innerPercent}"></div>
           </div>
@@ -37,8 +34,6 @@
         </div>
         <div class="application">
           <span v-tooltip:bottom="data.serviceCode||'-'">{{data.serviceCode}}</span>
-          
-
         </div>
       </div>      
     <div v-show="data.children && data.children.length > 0 && displayChildren" class="children-trace">
@@ -190,7 +185,6 @@ export default {
         return '100%';
       } else {
         let data = this.data
-        // let exec = ((data.endTime - data.startTime) && data.children && data.children.length > 0 ) ? (data.endTime - data.startTime) : 0
         let exec = (data.endTime - data.startTime) ? (data.endTime - data.startTime) : 0
         const result = (exec / data.totalExec * 100).toFixed(4) + '%'
         return result == '0.0000%' ? '0.9%' : result;
