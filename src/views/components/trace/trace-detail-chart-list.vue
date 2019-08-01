@@ -36,13 +36,9 @@
         <div class="mb-10 clear" v-for="i in this.currentSpan.tags" :key="i.key"><span class="g-sm-4 grey">{{i.key}}:</span><span class="g-sm-8 wba">{{i.value}}</span></div>
         <h5 class="mb-10" v-if="this.currentSpan.logs" v-show="this.currentSpan.logs.length">{{$t('logs')}}.</h5>
         <div v-for="(i, index) in this.currentSpan.logs" :key="index">
-          <div class="mb-10 sm">
-            <span class="mr-10">{{$t('time')}}:</span>
-            <span class="grey">{{i.time | dateformat}}</span>
-          </div>
+          <div class="mb-10 sm"><span class="mr-10">{{$t('time')}}:</span><span class="grey">{{i.time | dateformat}}</span></div>
           <div class="mb-15 clear" v-for="(_i, _index) in i.data" :key="_index">
-            <div class="mb-10">{{_i.key}}:</div>
-            <pre class="g-sm-8 mt-0 mb-0 sm" style="overflow:auto">{{_i.value}}</pre>
+            <div class="mb-10">{{_i.key}}:</div><pre class="g-sm-8 mt-0 mb-0 sm" style="overflow:auto">{{_i.value}}</pre>
           </div>
         </div>
       </div>
