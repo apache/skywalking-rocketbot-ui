@@ -29,7 +29,13 @@
           <option v-for="i in current.traceIds" :value="i" :key="i">{{i}}</option>
         </select>
       </div>
-      <a class="rk-btn sm r" :class="{'ghost':displayMode == 'tree'}" @click="displayMode = 'tree'">
+
+      <a class="rk-btn mr-5 sm r" :class="{'ghost':displayMode == 'table'}" @click="displayMode = 'table'">
+         <svg class="icon vm sm">
+          <use xlink:href="#list-bulleted"></use>
+        </svg>
+        {{$t('table')}}</a>          
+      <a class="rk-btn mr-5 sm r" :class="{'ghost':displayMode == 'tree'}" @click="displayMode = 'tree'">
         <svg class="icon vm sm">
           <use xlink:href="#issue-child"></use>
         </svg>
@@ -40,11 +46,7 @@
         </svg>
         {{$t('list')}}</a>
 
-      <a class="rk-btn mr-5 sm r" :class="{'ghost':displayMode == 'table'}" @click="displayMode = 'table'">
-         <svg class="icon vm sm">
-          <use xlink:href="#list-bulleted"></use>
-        </svg>
-        {{$t('table')}}</a>                
+            
       <div class="rk-tag mr-5">{{this.$t('start')}}</div><span class="mr-15 sm">{{parseInt(current.start) | dateformat}}</span>
       <div class="rk-tag mr-5">{{this.$t('duration')}}</div><span class="mr-15 sm">{{current.duration}} ms</span>
       <div class="rk-tag mr-5">{{this.$t('spans')}}</div><span class="sm">{{spans.length}}</span>
