@@ -31,8 +31,8 @@
       </div>
 
       <a class="rk-btn mr-5 sm r" :class="{'ghost':displayMode == 'table'}" @click="displayMode = 'table'">
-         <svg class="icon vm sm">
-          <use xlink:href="#list-bulleted"></use>
+         <svg class="icon vm sm rk-trace-table_svg-icon">
+          <use xlink:href="#table"></use>
         </svg>
         {{$t('table')}}</a>          
       <a class="rk-btn mr-5 sm r" :class="{'ghost':displayMode == 'tree'}" @click="displayMode = 'tree'">
@@ -113,5 +113,9 @@ export default class Header extends Vue {
   height:100px;
   margin: 0 auto;
   fill: rgba(46, 47, 51, 0.15);
+}
+.rk-trace-table_svg-icon {
+  width: 11px;
+  height: 11px;
 }
 </style>
