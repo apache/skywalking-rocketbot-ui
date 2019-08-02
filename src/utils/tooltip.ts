@@ -111,9 +111,6 @@ export default {
     const $inner = document.createElement('div');
     $inner.setAttribute('class', 'rk-tooltip-inner');
 
-    if (binding.modifiers.inTraceTable) {
-      $inner.setAttribute('class', 'rk-tooltip-inner trace-table-tooltip-inner');
-    }
 
     $content.appendChild($inner);
     $popper.appendChild($content);

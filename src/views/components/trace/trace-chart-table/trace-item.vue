@@ -1,14 +1,14 @@
 <template>
   <div>
       <div @click="showSelectSpan" :class="['trace-item', 'level'+( data.level - 1)]">
-        <div :class="['method', 'level'+( data.level - 1)]">
+        <div :class="['method', 'level'+( data.level - 1)]" :style="{'text-indent': (data.level - 1) * 10 + 'px' }">
           <span 
               v-if="data.children && data.children.length > 0" 
               @click.stop="toggle" 
               :class="['trace-table-toggle', displayChildren? 'collapse': 'expand']">
 
           </span>
-          <span v-tooltip:bottom.inTraceTable="data.endpointName">
+          <span v-tooltip:bottom="{content: data.endpointName, popperCls: ['trace-table-tooltip']}">
             {{data.endpointName}}
           </span>
         </div>
@@ -43,12 +43,6 @@
 
 </template>
 <style lang="scss" scoped>
-  @for $i from 0 through 20 {
-    .method.level#{$i} {
-      text-indent: #{$i * 10}px;
-    }
-  }
-
   .trace-item.level0{
       background: #DFF0D8;
       color: #1469EB;
@@ -161,15 +155,13 @@
 <script type="text/javascript">
 import moment from 'dayjs';
 import Popper from 'popper.js';
-/* eslint-disable */
-/* tslint:disable */
 export default {
   name: 'item',
   props: ['data'],
   data() {
     return {
       displayChildren: true,
-    }
+    };
   },
   computed: {
     selfTime() {
@@ -181,19 +173,24 @@ export default {
       return  (data.endTime - data.startTime) ? (data.endTime - data.startTime) : 0;
     },
     outterPercent() {
-      if (this.data.level == 1) {
+      if (this.data.level === 1) {
         return '100%';
       } else {
-        let data = this.data
-        let exec = (data.endTime - data.startTime) ? (data.endTime - data.startTime) : 0
-        const result = (exec / data.totalExec * 100).toFixed(4) + '%'
-        return result == '0.0000%' ? '0.9%' : result;
+        const data = this.data;
+        const exec = (data.endTime - data.startTime) ? (data.endTime - data.startTime) : 0;
+        let result = (exec / data.totalExec * 100);
+        result = result > 100 ? 100 : result;
+        result = result.toFixed(4) + '%';
+        return result === '0.0000%' ? '0.9%' : result;
       }
     },
     innerPercent() {
-      const result = (this.selfTime / this.execTime) * 100 .toFixed(4) + '%'
-      return result == '0.0000%' ? '0.9%' : result;
-    }
+      const result = (this.selfTime / this.execTime) * 100 .toFixed(4) + '%';
+      return result === '0.0000%' ? '0.9%' : result;
+    },
+    eventHub() {
+      return this.$store.getters.globalEventHub;
+    },
   },
   methods: {
     toggle() {
@@ -203,8 +200,8 @@ export default {
       return moment(timestamp).format('HH:mm:ss SSS');
     },
     showSelectSpan() {
-      this.$root.eventHub.$emit('HANDLE-SELECT-SPAN', this.data);
-    }
-  }
-}
+      this.eventHub.$emit('HANDLE-SELECT-SPAN', this.data);
+    },
+  },
+};
 </script>

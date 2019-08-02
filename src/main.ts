@@ -66,8 +66,5 @@ new Vue({
   i18n,
   router,
   store,
-  data: {
-    eventHub: new Vue(),
-  },
   render: (h) => h(App),
 }).$mount('#app');
