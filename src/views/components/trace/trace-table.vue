@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import { Action, Getter, Mutation, State } from 'vuex-class';
 @Component
 export default class Home extends Vue {
@@ -60,6 +60,12 @@ export default class Home extends Vue {
   @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
   @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
   private loading: boolean = false;
+  @Watch('rocketTrace.traceList')
+  private onTraceListChange() {
+    if (this.rocketTrace.traceList && this.rocketTrace.traceList.length > 0) {
+      this.selectTrace(this.rocketTrace.traceList[0]);
+    }
+  }
   private selectTrace(i: any) {
     this.SET_CURRENT_TRACE(i);
     if (i.traceIds.length) {
