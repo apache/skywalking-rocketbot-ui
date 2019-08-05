@@ -43,12 +43,13 @@
 
 </template>
 <style lang="scss" scoped>
+  @import './trace.scss';
   .trace-item.level0{
-      background: #DFF0D8;
-      color: #1469EB;
+      background: rgba(0, 0, 0, 0.04);;
+      color: #448dfe;
       &:hover {
-        background: #DFF0D8;
-        color: #1469EB;
+        background: rgba(0, 0, 0, 0.04);;
+        color: #448dfe;
       }
   }
 
@@ -81,39 +82,24 @@
     }
   }
   .trace-item.selected {
-    background: beige;
+    background: rgba(0, 0, 0, 0.04);
   }
 
   .trace-item:not(.level0):hover {
-    background: beige;
-    border-top: 1px solid white;
+    background: rgba(0, 0, 0, 0.04);
   }
 
 
   .trace-item>div {
-    padding: 0 4px;
-    padding-left: 10px;
+    padding: 0 5px;
     border: 1px solid transparent;
     border-right: 1px dotted silver;
     overflow: hidden;
     line-height: 30px;
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap
   }
-  .method {
-    width: 45%;
-  }
-  .argument {
-    width: 15%;
-  }
-  .start-time {
-    width: 5%;
-    min-width: 100px;
-  }
-  .gap {
-    width: 5%;
-  }
-  .exec-ms {
-    width: 6%;
+  .trace-item>div.method {
+    padding-left: 10px;
   }
   .trace-item div.exec-percent {
     width: 10%;
@@ -138,18 +124,7 @@
       top: 1px;
     }
   }
-  .self {
-    width: 5%;
-  }
-  .api {
-    width: 10%;
-  }
-  .agent {
-    width: 15%;
-  }
-  .application {
-    width: 15%;
-  }
+
 
 </style>
 <script type="text/javascript">

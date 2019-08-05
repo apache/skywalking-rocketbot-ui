@@ -30,17 +30,17 @@
         </select>
       </div>
 
-      <a class="rk-btn mr-5 sm r" :class="{'ghost':displayMode == 'table'}" @click="displayMode = 'table'">
+      <a class="rk-btn mr-5 sm r" :class="{'ghost':displayMode !== 'table'}" @click="displayMode = 'table'">
          <svg class="icon vm sm rk-trace-table_svg-icon">
           <use xlink:href="#table"></use>
         </svg>
         {{$t('table')}}</a>          
-      <a class="rk-btn mr-5 sm r" :class="{'ghost':displayMode == 'tree'}" @click="displayMode = 'tree'">
+      <a class="rk-btn mr-5 sm r" :class="{'ghost':displayMode !== 'tree'}" @click="displayMode = 'tree'">
         <svg class="icon vm sm">
           <use xlink:href="#issue-child"></use>
         </svg>
         {{$t('tree')}}</a>
-      <a class="rk-btn mr-5 sm r" :class="{'ghost':displayMode == 'list'}" @click="displayMode = 'list'">
+      <a class="rk-btn mr-5 sm r" :class="{'ghost':displayMode !== 'list'}" @click="displayMode = 'list'">
          <svg class="icon vm sm">
           <use xlink:href="#list-bulleted"></use>
         </svg>
