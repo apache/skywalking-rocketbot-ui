@@ -51,6 +51,14 @@
         background: rgba(0, 0, 0, 0.04);;
         color: #448dfe;
       }
+      &::before{
+        position: absolute;
+        content: '';
+        width: 5px;
+        height: 100%;
+        background: #448dfe;
+        left: 0;
+      }      
   }
 
   .trace-table-toggle {
@@ -72,14 +80,6 @@
   .trace-item {
     display: flex;
     position: relative;
-    &::before{
-      position: absolute;
-      content: '';
-      width: 5px;
-      height: 100%;
-      background: #cb7686;
-      left: 0;
-    }
   }
   .trace-item.selected {
     background: rgba(0, 0, 0, 0.04);
@@ -96,7 +96,9 @@
     border-right: 1px dotted silver;
     overflow: hidden;
     line-height: 30px;
-    overflow:hidden; text-overflow:ellipsis; white-space:nowrap
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap
   }
   .trace-item>div.method {
     padding-left: 10px;
@@ -109,14 +111,14 @@
       width: 100%;
       height: 6px;
       border-radius: 3px;
-      background: #5bc0de;
+      background: rgb(63, 177, 227);
       position: relative;
       margin-top: 11px;
       border: none;
     }
     .inner-progress_bar {
       position: absolute;
-      background: #4343C8;
+      background: rgb(110, 64, 170);
       height: 4px;
       border-radius: 2px;
       left: 0;

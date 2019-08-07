@@ -41,6 +41,7 @@
     display: flex;
     border-left: 0;
     border-right: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   .trace-header div {
