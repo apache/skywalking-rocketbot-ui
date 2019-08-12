@@ -193,7 +193,7 @@ const actions: ActionTree<State, any> = {
                 calls[j] = {
                   ...calls[j],
                   cpm: resInfo.cpmC.values[i].value,
-                  latency: resInfo.latencyC.values[i].value,
+                  latency: resInfo.latencyC.values[i] ? resInfo.latencyC.values[i].value : '',
                 };
               }
             }
