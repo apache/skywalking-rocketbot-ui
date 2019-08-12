@@ -110,6 +110,8 @@ export default {
 
     const $inner = document.createElement('div');
     $inner.setAttribute('class', 'rk-tooltip-inner');
+
+
     $content.appendChild($inner);
     $popper.appendChild($content);
     if (binding.value) {

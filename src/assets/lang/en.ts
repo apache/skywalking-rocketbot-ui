@@ -82,6 +82,7 @@ const m = {
   tags: 'Tags',
   logs: 'Logs',
   component: 'Component',
+  table: 'Table',
   list: 'List',
   tree: 'Tree',
   filterScope: 'Filter Scope',
