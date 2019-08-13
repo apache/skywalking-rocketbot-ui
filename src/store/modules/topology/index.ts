@@ -172,14 +172,14 @@ const actions: ActionTree<State, any> = {
               if (nodes[j].id === resInfo.sla.values[i].id) {
                 nodes[j] = {
                   ...nodes[j],
-                  sla: resInfo.sla.values[i].value / 100,
-                  cpm: resInfo.nodeCpm.values[i].value,
-                  latency: resInfo.nodeLatency.values[i].value,
-                  p50: resInfo.p50 ? resInfo.p50.values[i].value : 0,
-                  p75: resInfo.p75 ? resInfo.p75.values[i].value : 0,
-                  p90: resInfo.p90 ? resInfo.p90.values[i].value : 0,
-                  p95: resInfo.p95 ? resInfo.p95.values[i].value : 0,
-                  p99: resInfo.p95 ? resInfo.p95.values[i].value : 0,
+                  sla: resInfo.sla.values[i].value ? resInfo.sla.values[i].value / 100 : -1,
+                  cpm: resInfo.nodeCpm.values[i] ? resInfo.nodeCpm.values[i].value : -1,
+                  latency: resInfo.nodeLatency.values ? resInfo.nodeLatency.values[i].value : -1,
+                  p50: resInfo.p50 && resInfo.p50.values[i] ? resInfo.p50.values[i].value : 0,
+                  p75: resInfo.p75 && resInfo.p75.values[i] ? resInfo.p75.values[i].value : 0,
+                  p90: resInfo.p90 && resInfo.p90.values[i] ? resInfo.p90.values[i].value : 0,
+                  p95: resInfo.p95 && resInfo.p95.values[i] ? resInfo.p95.values[i].value : 0,
+                  p99: resInfo.p95 && resInfo.p95.values[i] ? resInfo.p95.values[i].value : 0,
                 };
               }
             }
@@ -192,8 +192,8 @@ const actions: ActionTree<State, any> = {
               if (calls[j].id === resInfo.cpmC.values[i].id) {
                 calls[j] = {
                   ...calls[j],
-                  cpm: resInfo.cpmC.values[i].value,
-                  latency: resInfo.latencyC.values[i].value,
+                  cpm: resInfo.cpmC.values[i] ? resInfo.cpmC.values[i].value : '',
+                  latency: resInfo.latencyC.values[i] ? resInfo.latencyC.values[i].value : '',
                 };
               }
             }
@@ -206,7 +206,7 @@ const actions: ActionTree<State, any> = {
               if (calls[j].id === resInfo.cpmS.values[i].id) {
                 calls[j] = {
                   ...calls[j],
-                  cpm: resInfo.cpmS.values[i].value,
+                  cpm: resInfo.cpmS.values[i] ? resInfo.cpmS.values[i].value : '',
                   latency: resInfo.latencyS.values[i] ? resInfo.latencyS.values[i].value : '',
                 };
               }
