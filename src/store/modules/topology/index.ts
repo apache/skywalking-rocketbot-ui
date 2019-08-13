@@ -174,7 +174,7 @@ const actions: ActionTree<State, any> = {
                   ...nodes[j],
                   sla: resInfo.sla.values[i].value ? resInfo.sla.values[i].value / 100 : -1,
                   cpm: resInfo.nodeCpm.values[i] ? resInfo.nodeCpm.values[i].value : -1,
-                  latency: resInfo.nodeLatency.values ? resInfo.nodeLatency.values[i].value : -1,
+                  latency: resInfo.nodeLatency.values[i] ? resInfo.nodeLatency.values[i].value : -1,
                   p50: resInfo.p50 && resInfo.p50.values[i] ? resInfo.p50.values[i].value : 0,
                   p75: resInfo.p75 && resInfo.p75.values[i] ? resInfo.p75.values[i].value : 0,
                   p90: resInfo.p90 && resInfo.p90.values[i] ? resInfo.p90.values[i].value : 0,
