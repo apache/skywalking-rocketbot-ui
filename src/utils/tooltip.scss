@@ -53,6 +53,10 @@ $tooltip-bg:               #252a2f !default;
   }
 }
 
+.trace-detail-chart-table .rk-tooltip-popper .rk-tooltip-inner  {
+  max-width: 500px;
+} 
+
 // Note: Deprecated .top-left, .top-right, .bottom-left, and .bottom-right as of v3.3.1
 .rk-tooltip-popper {
   &[x-placement^="top"] {

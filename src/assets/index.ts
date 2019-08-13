@@ -28,6 +28,7 @@ import './svg/clear.svg';
 import './svg/issue-child.svg';
 import './svg/package.svg';
 import './svg/list-bulleted.svg';
+import './svg/table.svg';
 
 import './svg/earth.svg';
 import './svg/epic.svg';
