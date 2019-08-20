@@ -16,7 +16,7 @@
  */
 
 import { Vue } from 'vue-property-decorator';
-export default (value:any) => {
+export default (value: any) => {
   const input = document.createElement('input');
   input.value = value;
   document.body.appendChild(input);
@@ -26,4 +26,4 @@ export default (value:any) => {
   }
   input.remove();
   Vue.prototype.$noty.success('Copied!', {timeout: 500});
-}
+};

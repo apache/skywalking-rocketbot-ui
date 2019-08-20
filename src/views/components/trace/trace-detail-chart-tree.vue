@@ -62,7 +62,7 @@
   </div>
 </template>
 <script lang="js">
-import copy from '@/utils/copy'
+import copy from '@/utils/copy';
 import * as d3 from 'd3';
 import Tree from './d3-trace-tree';
 /* eslint-disable */

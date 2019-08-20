@@ -35,7 +35,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
-import copy from '@/utils/copy'
+import copy from '@/utils/copy';
 
 @Component({})
 export default class RkTopSlow extends Vue {
@@ -49,7 +49,7 @@ export default class RkTopSlow extends Vue {
     return Math.max.apply(null, temp);
   }
   private handleClick(i: any) {
-    copy(i)
+    copy(i);
   }
 }
 </script>

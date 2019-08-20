@@ -44,7 +44,7 @@
 <script lang="ts">
 import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
 import { State, Mutation } from 'vuex-class';
-import copy from '@/utils/copy'
+import copy from '@/utils/copy';
 
 @Component
 export default class Comps extends Vue {
@@ -74,7 +74,7 @@ export default class Comps extends Vue {
     this.config = JSON.stringify(this.rocketComps.tree);
   }
   private handleCopy(i: any) {
-    copy(i)
+    copy(i);
   }
   private handleApply() {
     const r = confirm('');
