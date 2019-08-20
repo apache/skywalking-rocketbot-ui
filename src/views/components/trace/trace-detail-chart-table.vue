@@ -22,7 +22,7 @@
     <TraceContainer>
       <Item v-for="(item, index) in tableData"  :data="item"  :key="'key'+ index" />
     </TraceContainer>
-    <rk-sidebox :show.sync="showDetail" :title="$t('spanInfo')">
+    <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('spanInfo')">
       <div class="rk-trace-detail">
         <h5 class="mb-15">{{$t('tags')}}.</h5>
         <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('endpoint')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.label}}</span></div>
@@ -30,7 +30,15 @@
         <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('component')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.component}}</span></div>
         <div class="mb-10 clear"><span class="g-sm-4 grey">Peer:</span><span class="g-sm-8 wba">{{this.currentSpan.peer||'No Peer'}}</span></div>
         <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('error')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.isError}}</span></div>
-        <div class="mb-10 clear" v-for="i in this.currentSpan.tags" :key="i.key"><span class="g-sm-4 grey">{{i.key}}:</span><span class="g-sm-8 wba">{{i.value}}</span></div>
+        <div class="mb-10 clear" v-for="i in this.currentSpan.tags" :key="i.key">
+          <span class="g-sm-4 grey">{{i.key}}:</span>
+          <span class="g-sm-8 wba">
+            {{i.value}}
+            <svg v-if="i.key==='db.statement'" class="icon vm grey link-hover cp ml-5" @click="copy(i.value)">
+              <use xlink:href="#review-list"></use>
+            </svg>
+          </span>
+        </div>
         <h5 class="mb-10" v-if="this.currentSpan.logs" v-show="this.currentSpan.logs.length">{{$t('logs')}}.</h5>
         <div v-for="(i, index) in this.currentSpan.logs" :key="index">
           <div class="mb-10 sm">
@@ -39,7 +47,7 @@
           </div>
           <div class="mb-15 clear" v-for="(_i, _index) in i.data" :key="_index">
             <div class="mb-10">{{_i.key}}:</div>
-            <pre class="g-sm-8 mt-0 mb-0 sm" style="overflow:auto">{{_i.value}}</pre>
+            <pre class="pl-15 mt-0 mb-0 sm oa">{{_i.value}}</pre>
           </div>
         </div>
       </div>
@@ -53,6 +61,7 @@
 </style>
 
 <script>
+import copy from '@/utils/copy'
 import Item from './trace-chart-table/trace-item';
 import TraceContainer from './trace-chart-table/trace-container';
 /* eslint-disable */
@@ -87,6 +96,7 @@ export default {
     }
   },
   methods: {
+    copy,
     // 给增加层级关系
     formatData(arr, level = 1, totalExec = null) {
       for (const item of arr) {
