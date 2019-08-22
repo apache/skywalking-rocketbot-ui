@@ -44,6 +44,7 @@
 <script lang="ts">
 import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
 import { State, Mutation } from 'vuex-class';
+import copy from '@/utils/copy';
 
 @Component
 export default class Comps extends Vue {
@@ -73,15 +74,7 @@ export default class Comps extends Vue {
     this.config = JSON.stringify(this.rocketComps.tree);
   }
   private handleCopy(i: any) {
-    const input = document.createElement('input');
-    input.value = i;
-    document.body.appendChild(input);
-    input.select();
-    if (document.execCommand('Copy')) {
-        document.execCommand('Copy');
-    }
-    input.remove();
-    Vue.prototype.$noty.success('Copied!', {timeout: 500});
+    copy(i);
   }
   private handleApply() {
     const r = confirm('');

@@ -1,4 +1,3 @@
-
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -15,34 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-.method {
-  width: 45%;
-}
-.argument {
-  width: 15%;
-}
-.start-time {
-  width: 5%;
-  min-width: 100px;
-}
-.gap {
-  width: 5%;
-}
-.exec-ms {
-  width: 6%;
-}
-.exec-percent {
-  width: 10%;
-}
-.self {
-  width: 5%;
-}
-.api {
-  width: 10%;
-}
-.agent {
-  width: 15%;
-}
-.application {
-  width: 15%;
-}
+
+import { Vue } from 'vue-property-decorator';
+export default (value: any) => {
+  const input = document.createElement('input');
+  input.value = value;
+  document.body.appendChild(input);
+  input.select();
+  if (document.execCommand('Copy')) {
+      document.execCommand('Copy');
+  }
+  input.remove();
+  Vue.prototype.$noty.success('Copied!', {timeout: 500});
+};

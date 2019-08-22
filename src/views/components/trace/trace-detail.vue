@@ -28,6 +28,9 @@
         <select class="rk-trace-detail-ids" @change="GET_TRACE_SPANS({traceId: i})">
           <option v-for="i in current.traceIds" :value="i" :key="i">{{i}}</option>
         </select>
+        <svg class="icon vm grey link-hover cp ml-5" @click="handleClick(current.traceIds)">
+            <use xlink:href="#review-list"></use>
+        </svg>        
       </div>
 
       <a class="rk-btn mr-5 sm r" :class="{'ghost':displayMode !== 'table'}" @click="displayMode = 'table'">
@@ -70,6 +73,7 @@ import TraceDetailChartTree from './trace-detail-chart-tree.vue';
 import TraceDetailChartTable from './trace-detail-chart-table.vue';
 import { Trace, Span } from '@/types/trace';
 import { Action, State } from 'vuex-class';
+import copy from '@/utils/copy';
 
 @Component({ components: { TraceDetailChartList, TraceDetailChartTree, TraceDetailChartTable } })
 export default class Header extends Vue {
@@ -79,6 +83,15 @@ export default class Header extends Vue {
   @Prop() private current!: Trace;
   private mode: boolean = true;
   private displayMode: string = 'list';
+  private handleClick(ids: any) {
+    let copyValue = null;
+    if (ids.length === 1) {
+      copyValue = ids[0];
+    } else {
+      copyValue = ids.join(',');
+    }
+    copy(copyValue);
+  }
 }
 </script>
 
