@@ -24,10 +24,12 @@
 </div>
 </template>
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+ import { Vue, Component, Watch } from 'vue-property-decorator';
 import { State, Getter, Action } from 'vuex-class';
 import Axios, { AxiosResponse } from 'axios';
 import TopoSelect from './topo-select.vue';
+ import { DurationTime } from '@/types/global';
+ import compareObj from '@/utils/comparison';
 
 @Component({components: {TopoSelect}})
 export default class TopologyServices extends Vue {
@@ -36,7 +38,7 @@ export default class TopologyServices extends Vue {
   private services = [{key: 0, label: 'All services'}];
   private service = {key: 0, label: 'All services'};
   private fetchData() {
-    Axios.post('/graphql', {
+   Axios.post('/graphql', {
       query: `
       query queryServices($duration: Duration!) {
         services: getAllServices(duration: $duration) {
@@ -53,6 +55,11 @@ export default class TopologyServices extends Vue {
         :
         [{key: 0, label: 'All services'}];
       });
+  }
+  @Watch('durationTime')
+  watchDurationTime(newValue: DurationTime, oldValue: DurationTime){
+    // Avoid repeating fetchData() after enter the component for the first time.
+    compareObj(newValue, oldValue) && this.fetchData();
   }
   private handleChange(i: any) {
     this.service = i;
