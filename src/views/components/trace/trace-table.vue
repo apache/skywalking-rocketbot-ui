@@ -58,6 +58,7 @@ export default class Home extends Vue {
   @State('rocketbot') private rocketbot: any;
   @Mutation('rocketTrace/SET_TRACE_FORM_ITEM') private SET_TRACE_FORM_ITEM: any;
   @Mutation('rocketTrace/SET_CURRENT_TRACE') private SET_CURRENT_TRACE: any;
+  @Mutation('rocketTrace/SET_DEFAULT_EMPTY_TRACE') private SET_DEFAULT_EMPTY_TRACE: any;
   @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
   @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
   private loading: boolean = false;
@@ -66,6 +67,9 @@ export default class Home extends Vue {
   private onTraceListChange() {
     if (this.rocketTrace.traceList && this.rocketTrace.traceList.length > 0) {
       this.selectTrace(this.rocketTrace.traceList[0]);
+    }
+    if (this.rocketTrace.traceList && this.rocketTrace.traceList.length === 0) {
+      this.SET_DEFAULT_EMPTY_TRACE();
     }
   }
   private selectTrace(i: any) {
