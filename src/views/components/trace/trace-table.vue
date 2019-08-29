@@ -35,6 +35,7 @@
             <td class="rk-trace-td" :class="{
                 'rk-trace-success':!i.isError,
                 'rk-trace-error':i.isError,
+                'selected': selectedKey == i.key
                 }">
               <div class="ell mb-5" :class="{
                 'blue':!i.isError,
@@ -60,6 +61,7 @@ export default class Home extends Vue {
   @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
   @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
   private loading: boolean = false;
+  private selectedKey: string = '';
   @Watch('rocketTrace.traceList')
   private onTraceListChange() {
     if (this.rocketTrace.traceList && this.rocketTrace.traceList.length > 0) {
@@ -68,6 +70,7 @@ export default class Home extends Vue {
   }
   private selectTrace(i: any) {
     this.SET_CURRENT_TRACE(i);
+    this.selectedKey = i.key;
     if (i.traceIds.length) {
       this.GET_TRACE_SPANS({traceId: i.traceIds[0]});
     }
@@ -138,6 +141,9 @@ export default class Home extends Vue {
 .rk-trace-td {
   padding: 8px 10px;
   border-bottom: 1px solid rgba(0,0,0,.07);
+  &.selected {
+    background-color: floralwhite;
+  }
 }
 .rk-trace-success{
   border-left: 4px solid rgba(46, 47, 51, 0.1);
