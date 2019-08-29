@@ -63,6 +63,9 @@ export default class Home extends Vue {
   @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
   private loading: boolean = false;
   private selectedKey: string = '';
+  get eventHub() {
+    return this.$store.getters.globalEventHub;
+  }
   @Watch('rocketTrace.traceList')
   private onTraceListChange() {
     if (this.rocketTrace.traceList && this.rocketTrace.traceList.length > 0) {
@@ -88,6 +91,17 @@ export default class Home extends Vue {
     this.loading = true;
     this.SET_TRACE_FORM_ITEM({type: 'paging', data: { pageNum: p, pageSize: 15, needTotal: true}});
     this.GET_TRACELIST().then(() => {
+      this.loading = false;
+    });
+  }
+  private created() {
+    this.eventHub.$on('SET_LOADING_TRUE', (cb: any) => {
+      this.loading = true;
+      if (cb) {
+        cb();
+      }
+    });
+    this.eventHub.$on('SET_LOADING_FALSE', () => {
       this.loading = false;
     });
   }
