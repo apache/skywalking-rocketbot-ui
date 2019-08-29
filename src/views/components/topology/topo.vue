@@ -89,6 +89,7 @@ export default {
       SOLR: require('./assets/SOLR.png'),
       ZOOKEEPER: require('./assets/ZOOKEEPER.png'),
       CASSANDRA: require('./assets/CASSANDRA.png'),
+      PLAY: require('./assets/PLAY.png'),
       width: 600,
       height: 600,
       force: '',
