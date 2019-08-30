@@ -19,6 +19,11 @@
 <template>
 
   <div class="trace-detail-chart-table">
+    <div class="rk-trace-t-loading" v-show="loading">
+      <svg class="icon loading">
+        <use xlink:href="#spinner"></use>
+      </svg>
+    </div>
     <TraceContainer>
       <Item v-for="(item, index) in tableData"  :data="item"  :key="'key'+ index" />
     </TraceContainer>
@@ -58,6 +63,10 @@
   .rk-tooltip-popper.trace-table-tooltip .rk-tooltip-inner{
       max-width: 600px;
   }
+  .trace-detail-chart-table {
+    position: relative;
+    min-height: 150px;
+  }
 </style>
 
 <script>
@@ -78,6 +87,7 @@ export default {
         return;
       }
       this.tableData = this.formatData(this.changeTree());
+      this.loading = false;
     },
   },
   data() {
@@ -88,6 +98,7 @@ export default {
       showDetail: false,
       list: [],
       currentSpan: [],
+      loading: true,
     };
   },
   computed: {
@@ -189,9 +200,15 @@ export default {
       this.showDetail = true;
     },
   },
+  created() {
+    this.loading = true;
+  },
   mounted() {
     this.tableData = this.formatData(this.changeTree());
+    this.loading = false;
     this.eventHub.$on('HANDLE-SELECT-SPAN', this.handleSelectSpan);
+    this.eventHub.$on('TRACE-TABLE-LOADING', ()=>{ this.loading = true });
+
   },
 };
 </script>

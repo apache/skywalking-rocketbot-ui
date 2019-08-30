@@ -78,6 +78,8 @@ export default class Home extends Vue {
   private selectTrace(i: any) {
     this.SET_CURRENT_TRACE(i);
     this.selectedKey = i.key;
+    this.eventHub.$emit('TRACE-TABLE-LOADING');
+    this.eventHub.$emit('TRACE-LIST-LOADING');
     if (i.traceIds.length) {
       this.GET_TRACE_SPANS({traceId: i.traceIds[0]});
     }
