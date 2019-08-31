@@ -51,29 +51,12 @@
       <a class="rk-btn mr-5 sm" :class="auto?'blue':'ghost'" @click="handleAuto">
         <span class="vm">{{this.$t('auto')}}</span>
       </a>
-      <a class="rk-btn mr-15 sm ghost" @click="handleReload">
+      <a class="rk-btn sm ghost" @click="handleReload">
         <svg class="icon mr-5 vm" :class="{'loading': auto}">
           <use xlink:href="#retry"></use>
         </svg>
         <span class="vm">{{this.$t('reload')}}</span>
-      </a>
-      <a class="rk-header-user" v-clickout="handleHide">
-        <div @click="handleShow" class="rk-btn" :class="show? 'blue' : 'ghost'">
-          <svg class="icon vs">
-            <use xlink:href="#user"></use>
-          </svg>
-          <svg class="icon vs">
-            <use xlink:href="#arrow-down"></use>
-          </svg>
-        </div>
-        <div class="rk-header-user-menu" v-if="show">
-          <div class="rk-header-user-menu-i" @click="handleSignout">
-            <svg class="icon vs">
-              <use xlink:href="#issue-close"></use>
-            </svg>
-            {{this.$t('signout')}}</div>
-        </div>
-      </a>      
+      </a>   
   </div>
   </header>
 </template>

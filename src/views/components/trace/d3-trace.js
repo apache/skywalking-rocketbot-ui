@@ -86,8 +86,8 @@ export default class Trace {
     this.root.x0 = 0;
     this.root.y0 = 0;
   }
-  draw() {
-    this.update(this.root);
+  draw(callback) {
+    this.update(this.root, callback);
   }
   click(d, scope) {
     if (!d.data.type) return;
@@ -100,7 +100,7 @@ export default class Trace {
     }
     scope.update(d);
   }
-  update(source) {
+  update(source, callback) {
     const that = this;
     const nodes = this.root.descendants();
     let index = -1;
@@ -271,5 +271,8 @@ export default class Trace {
       d.x0 = d.x;
       d.y0 = d.y;
     });
+    if (callback) {
+      callback()
+    }
   }
 }
