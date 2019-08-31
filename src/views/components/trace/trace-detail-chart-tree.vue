@@ -122,7 +122,39 @@ export default {
       this.segmentId = [];
       const segmentGroup = {}
       const segmentIdGroup = []
-      this.data.forEach(i => {
+      const fixSpans = [];
+      const segmentHeaders = [];
+      this.data.forEach((span) => {
+        if (span.parentSpanId === -1) {
+          segmentHeaders.push(span);
+        } else {
+          const index = this.data.findIndex(i => (i.segmentId === span.segmentId && i.spanId === (span.spanId - 1)));
+          if (index === -1) {
+            fixSpans.push(
+              {
+                traceId: span.traceId, segmentId: span.segmentId, spanId: span.spanId - 1, parentSpanId: span.spanId - 2, refs: [], endpointName: `${span.segmentId}`, serviceCode: 'VirtualNode', type: 'Broken', peer: '', component: `VirtualNode: #${span.spanId - 1}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
+              },
+            );
+          }
+        }
+      });
+      segmentHeaders.forEach((span) => {
+        if (span.refs.length) {
+          span.refs.forEach((ref) => {
+            const index = this.data.findIndex(i => (ref.parentSegmentId === i.segmentId && ref.parentSpanId === i.spanId));
+            if (index === -1) {
+              for (let i = 0; i <= ref.parentSpanId; i += 1) {
+                fixSpans.push(
+                  {
+                    traceId: ref.traceId, segmentId: ref.parentSegmentId, spanId: i, parentSpanId: i - 1, refs: [], endpointName: `${ref.parentSegmentId}`, serviceCode: 'VirtualNode', type: 'Broken', peer: '', component: `VirtualNode: #${i}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
+                  },
+                );
+              }
+            }
+          });
+        }
+      });
+      [...fixSpans, ...this.data].forEach(i => {
         i.label=i.endpointName || 'no operation name';
         i.children = [];
         if(segmentGroup[i.segmentId] === undefined){

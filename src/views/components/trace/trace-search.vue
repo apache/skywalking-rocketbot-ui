@@ -89,6 +89,9 @@ export default class TraceTool extends Vue {
   private endpointName: string = '';
   private traceId: string = '';
   private traceState: Option  = {label: 'All', key: 'ALL'};
+  get eventHub() {
+    return this.$store.getters.globalEventHub;
+  }
   private dateFormate = (date: Date, step: string) => {
     const year = date.getFullYear();
     const monthTemp = date.getMonth() + 1;
@@ -160,7 +163,11 @@ export default class TraceTool extends Vue {
     if (this.endpointName) { temp.endpointName = this.endpointName; }
     if (this.traceId) { temp.traceId = this.traceId; }
     this.SET_TRACE_FORM(temp);
-    this.GET_TRACELIST();
+    this.eventHub.$emit('SET_LOADING_TRUE', () => {
+      this.GET_TRACELIST().then(() => {
+        this.eventHub.$emit('SET_LOADING_FALSE');
+      });
+    });
   }
   private mounted() {
     this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];

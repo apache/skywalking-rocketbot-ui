@@ -18,14 +18,14 @@
 <template>
 <div :class="`${pre}`">
   <div :class="`${pre}-head`">
-    <a :class="`${pre}-prev-decade-btn`" v-show="showYears" @click="year-=10"><svg class="icon sm cp" @click="pre">
+    <a :class="`${pre}-prev-decade-btn`" v-show="showYears" @click="year-=10"><svg class="icon sm cp">
       <use xlink:href="#angle-double-left"></use>
     </svg></a>
-    <a :class="`${pre}-prev-year-btn`" v-show="!showYears" @click="year--"><svg class="icon sm cp" @click="pre">
+    <a :class="`${pre}-prev-year-btn`" v-show="!showYears" @click="year--"><svg class="icon sm cp">
       <use xlink:href="#angle-double-left"></use>
     </svg></a>
     <a :class="`${pre}-prev-month-btn`" v-show="!showYears&&!showMonths" @click="pm">
-      <svg class="icon lg cp" @click="pre">
+      <svg class="icon lg cp">
       <use xlink:href="#chevron-left"></use>
     </svg></a>
     <a :class="`${pre}-year-select`" v-show="showYears">{{ys+'-'+ye}}</a>
@@ -38,13 +38,13 @@
       <a :class="`${pre}-year-select`" @click="showYears=!showYears" v-show="!showYears">{{year}}</a>
     </template>
     <a :class="`${pre}-next-month-btn`" v-show="!showYears&&!showMonths" @click="nm">
-      <svg class="icon lg cp" @click="pre">
+      <svg class="icon lg cp">
       <use xlink:href="#chevron-right"></use>
     </svg></a>
-    <a :class="`${pre}-next-year-btn`" v-show="!showYears" @click="year++"><svg class="icon sm cp" @click="pre">
+    <a :class="`${pre}-next-year-btn`" v-show="!showYears" @click="year++"><svg class="icon sm cp">
       <use xlink:href="#angle-double-right"></use>
     </svg></a>
-    <a :class="`${pre}-next-decade-btn`" v-show="showYears" @click="year+=10"><svg class="icon sm cp" @click="pre">
+    <a :class="`${pre}-next-decade-btn`" v-show="showYears" @click="year+=10"><svg class="icon sm cp">
       <use xlink:href="#angle-double-right"></use>
     </svg></a>
   </div>

@@ -1,4 +1,3 @@
-
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -19,6 +18,11 @@
 <template>
 
   <div class="trace-detail-chart-table">
+    <div class="rk-trace-t-loading" v-show="loading">
+      <svg class="icon loading">
+        <use xlink:href="#spinner"></use>
+      </svg>
+    </div>
     <TraceContainer>
       <Item v-for="(item, index) in tableData"  :data="item"  :key="'key'+ index" />
     </TraceContainer>
@@ -58,9 +62,13 @@
   .rk-tooltip-popper.trace-table-tooltip .rk-tooltip-inner{
       max-width: 600px;
   }
+  .trace-detail-chart-table {
+    position: relative;
+    min-height: 150px;
+  }
 </style>
 
-<script>
+<script lang="js">
 import copy from '@/utils/copy';
 import Item from './trace-chart-table/trace-item';
 import TraceContainer from './trace-chart-table/trace-container';
@@ -78,6 +86,7 @@ export default {
         return;
       }
       this.tableData = this.formatData(this.changeTree());
+      this.loading = false;
     },
   },
   data() {
@@ -88,6 +97,7 @@ export default {
       showDetail: false,
       list: [],
       currentSpan: [],
+      loading: true,
     };
   },
   computed: {
@@ -131,7 +141,39 @@ export default {
       this.segmentId = [];
       const segmentGroup = {};
       const segmentIdGroup = [];
-      this.data.forEach((i) => {
+      const fixSpans = [];
+      const segmentHeaders = [];
+      this.data.forEach((span) => {
+        if (span.parentSpanId === -1) {
+          segmentHeaders.push(span);
+        } else {
+          const index = this.data.findIndex(i => (i.segmentId === span.segmentId && i.spanId === (span.spanId - 1)));
+          if (index === -1) {
+            fixSpans.push(
+              {
+                traceId: span.traceId, segmentId: span.segmentId, spanId: span.spanId - 1, parentSpanId: span.spanId - 2, refs: [], endpointName: `VNode: ${span.segmentId}`, serviceCode: 'VirtualNode', type: 'Broken', peer: '', component: `VirtualNode: #${span.spanId - 1}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
+              },
+            );
+          }
+        }
+      });
+      segmentHeaders.forEach((span) => {
+        if (span.refs.length) {
+          span.refs.forEach((ref) => {
+            const index = this.data.findIndex(i => (ref.parentSegmentId === i.segmentId && ref.parentSpanId === i.spanId));
+            if (index === -1) {
+              for (let i = 0; i <= ref.parentSpanId; i += 1) {
+                fixSpans.push(
+                  {
+                    traceId: ref.traceId, segmentId: ref.parentSegmentId, spanId: i, parentSpanId: i - 1, refs: [], endpointName: `VNode: ${ref.parentSegmentId}`, serviceCode: 'VirtualNode', type: 'Broken', peer: '', component: `VirtualNode: #${i}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
+                  },
+                );
+              }
+            }
+          });
+        }
+      });
+      [...fixSpans, ...this.data].forEach(i => {
         i.label = i.endpointName || 'no operation name';
         i.children = [];
         if (segmentGroup[i.segmentId] === undefined) {
@@ -189,9 +231,15 @@ export default {
       this.showDetail = true;
     },
   },
+  created() {
+    this.loading = true;
+  },
   mounted() {
     this.tableData = this.formatData(this.changeTree());
+    this.loading = false;
     this.eventHub.$on('HANDLE-SELECT-SPAN', this.handleSelectSpan);
+    this.eventHub.$on('TRACE-TABLE-LOADING', ()=>{ this.loading = true });
+
   },
 };
 </script>
