@@ -107,7 +107,7 @@ export default [
   {
     o: 'ServiceEndpoint',
     d: 'endpointTraces',
-    c: 'ChartTrace',
+    c: 'ChartSlow',
     t: 'Endpoint Slow',
     w: 6,
     h: 250,
