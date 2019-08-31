@@ -30,7 +30,6 @@ export default class TraceMap {
     this.height = el.clientHeight - 28;
     this.body = d3
       .select(this.el)
-      .style('height', this.height + 'px')
       .append('svg')
       .attr('width', this.width)
       .attr('height', this.height);
