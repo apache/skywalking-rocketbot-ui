@@ -19,18 +19,15 @@
   <div>
       <div @click="showSelectSpan" :class="['trace-item', 'level'+( data.level - 1)]">
         <div :class="['method', 'level'+( data.level - 1)]" :style="{'text-indent': (data.level - 1) * 10 + 'px' }">
-          <span
-              v-if="data.children && data.children.length > 0"
-              @click.stop="toggle"
-              :class="['trace-table-toggle', displayChildren? 'collapse': 'expand']">
-
-          </span>
+          <svg class="icon vm cp trans" :style="!displayChildren?'transform: rotate(-90deg);':''" @click.stop="toggle" v-if="data.children && data.children.length > 0">
+            <use xlink:href="#arrow-down"></use>
+          </svg>
           <span v-tooltip:bottom="{content: data.endpointName, popperCls: ['trace-table-tooltip']}">
             {{data.endpointName}}
           </span>
         </div>
         <div class="start-time">
-          {{formatTime(data.startTime)}}
+          {{data.startTime | dateformat}}
         </div>
         <div class="gap">
           0
@@ -76,22 +73,6 @@
         background: #448dfe;
         left: 0;
       }
-  }
-
-  .trace-table-toggle {
-    cursor: pointer;
-    height: 12px;
-    width: 12px;
-    display: inline-block;
-    &.collapse {
-      background: url('./collapse.gif') no-repeat;
-      background-size: 12px 12px;
-    }
-
-    &.expand {
-      background: url('./expand.gif') no-repeat;
-      background-size: 12px 12px;
-    }
   }
 
   .trace-item {
@@ -146,9 +127,8 @@
 
 
 </style>
-<script type="text/javascript">
+<script lang="js">
 import moment from 'dayjs';
-import Popper from 'popper.js';
 export default {
   name: 'item',
   props: ['data'],
@@ -189,9 +169,6 @@ export default {
   methods: {
     toggle() {
       this.displayChildren = ! this.displayChildren;
-    },
-    formatTime(timestamp) {
-      return moment(timestamp).format('HH:mm:ss SSS');
     },
     showSelectSpan() {
       this.eventHub.$emit('HANDLE-SELECT-SPAN', this.data);

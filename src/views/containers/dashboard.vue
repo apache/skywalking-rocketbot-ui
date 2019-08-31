@@ -16,7 +16,7 @@
  */
 
 <template>
-  <div class="flex-v wrapper" style="flex-grow:1;">
+  <div class="flex-v wrapper" style="flex-grow:1;height: 100%;">
     <ToolGroup :rocketGlobal="rocketGlobal" :rocketComps="rocketComps"/>
     <ToolBar :rocketGlobal="rocketGlobal" :compType="compType" :durationTime="durationTime"  :stateDashboard='stateDashboardOption'/>
     <ToolNav :rocketGlobal="rocketGlobal" :rocketComps="rocketComps"/>
