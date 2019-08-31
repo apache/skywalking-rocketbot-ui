@@ -86,9 +86,13 @@ export default {
     }
   },
   mounted() {
+    window.addEventListener('resize', this.resize);
     this.changeTree();
-    this.tree = new Tree(this.$refs.traceTree, this)
+    this.tree = new Tree(this.$refs.traceTree, this);
     this.tree.init({label:`${this.traceId}`, children: this.segmentId}, this.data);
+  },
+  beforeDestroy() {
+      window.removeEventListener('resize', this.resize);
   },
   methods: {
     copy,
@@ -165,7 +169,10 @@ export default {
         d.dur = dur < 0 ? 0 : dur;
         d.children.forEach((i) => this.collapse(i));
       }
-    }
+    },
+    resize() {
+        this.tree.resize();
+    },
   }
 };
 </script>
