@@ -128,7 +128,7 @@ export default {
           if (index === -1) {
             fixSpans.push(
               {
-                traceId: span.traceId, segmentId: span.segmentId, spanId: span.spanId - 1, parentSpanId: span.spanId - 2, refs: [], endpointName: `${span.segmentId}`, serviceCode: '虚拟节点', type: 'Broken', peer: '', component: `虚拟节点: #${span.spanId - 1}`, isError: true, isBroken: true, layer: '断链', tags: [], logs: [],
+                traceId: span.traceId, segmentId: span.segmentId, spanId: span.spanId - 1, parentSpanId: span.spanId - 2, refs: [], endpointName: `${span.segmentId}`, serviceCode: 'VirtualNode', type: 'Broken', peer: '', component: `VirtualNode: #${span.spanId - 1}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
               },
             );
           }
@@ -142,7 +142,7 @@ export default {
               for (let i = 0; i <= ref.parentSpanId; i += 1) {
                 fixSpans.push(
                   {
-                    traceId: ref.traceId, segmentId: ref.parentSegmentId, spanId: i, parentSpanId: i - 1, refs: [], endpointName: `${ref.parentSegmentId}`, serviceCode: '虚拟节点', type: 'Broken', peer: '', component: `虚拟节点: #${i}`, isError: true, isBroken: true, layer: '断链', tags: [], logs: [],
+                    traceId: ref.traceId, segmentId: ref.parentSegmentId, spanId: i, parentSpanId: i - 1, refs: [], endpointName: `${ref.parentSegmentId}`, serviceCode: 'VirtualNode', type: 'Broken', peer: '', component: `VirtualNode: #${i}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
                   },
                 );
               }
