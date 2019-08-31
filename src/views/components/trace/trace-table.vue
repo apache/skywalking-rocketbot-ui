@@ -162,7 +162,7 @@ export default class Home extends Vue {
   padding: 8px 10px;
   border-bottom: 1px solid rgba(0,0,0,.07);
   &.selected {
-    background-color: floralwhite;
+    background-color:#ededed;
   }
 }
 .rk-trace-success{
