@@ -17,8 +17,12 @@
 
 <template>
   <aside class="link-topo-aside">
+    <Radial v-if="radioStatus" @showRadial="showRadial" :datas="{nodes:stateTopo.nodes,calls:stateTopo.calls}"/>
     <svg class="link-topo-aside-btn mb-10 icon cp lg" @click="show = !show" :style="`position:${show?'absolute':'initial'};left:${show?290:0}px;transform: rotate(${show?0 : 180}deg);`">
       <use xlink:href="#chevron-left"></use>
+    </svg>
+    <svg class="link-topo-aside-btn mb-10 icon cp lg" @click="showRadial(true)" :style="`position:absolute;left:290px;top:50px;`">
+      <use xlink:href="#issues"></use>
     </svg>
     <TopoService/>
     <div class="link-topo-aside-box mb-10" v-if="!stateTopo.currentNode.name && show">
@@ -75,8 +79,9 @@ import { State, Mutation, Getter, Action } from 'vuex-class';
 import TopoChart from './topo-chart.vue';
 import TopoService from './topo-services.vue';
 import ChartResponse from './topo-response.vue';
+import Radial from './radial.vue';
 
-@Component({components: {TopoChart, TopoService, ChartResponse}})
+@Component({components: {TopoChart, TopoService, ChartResponse, Radial}})
 export default class Topology extends Vue {
   @State('rocketTopo') public stateTopo!: topoState;
   @Getter('intervalTime') public intervalTime: any;
@@ -93,8 +98,12 @@ export default class Topology extends Vue {
     });
     return result;
   }
+  private radioStatus: boolean = false;
   private show: boolean = true;
   private showInfo: boolean = false;
+  private showRadial(status: boolean) {
+    this.radioStatus = status;
+  }
   private setMode(mode: boolean) {
     this.SET_MODE_STATUS(mode);
     this.stateTopo.callback();

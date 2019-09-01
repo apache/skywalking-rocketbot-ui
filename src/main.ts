@@ -27,6 +27,7 @@ import router from './router';
 import store from './store';
 import components from './components';
 import 'echarts/lib/chart/line';
+import 'echarts/lib/chart/graph';
 import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/scatter';
 import 'echarts/lib/chart/heatmap';

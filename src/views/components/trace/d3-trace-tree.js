@@ -146,15 +146,8 @@ export default class TraceMap {
       .attr("text-anchor", function(d) {
           return d.children || d._children ? "end" : "start";
       })
-      .text(d => d.data.label.length > 19 ? d.data.label.slice(0, 19) + '...' : d.data.label)
-      .style("fill", '#3d444f');
-    nodeEnter
-      .append('text')
-      .attr('x', -110)
-      .attr("dy", "-0.5em")
-      .attr('fill', '#E54C17')
-      .attr('font-size', 10)
-      .html(d => d.data.isError?'◉': '')
+      .text(d => d.data.label.length > 19 ? (d.data.isError?'◉ ': '') + d.data.label.slice(0, 19) + '...' :  (d.data.isError?'◉ ': '') + d.data.label)
+      .style("fill", d => !d.data.isError? '#3d444f': '#E54C17');
     nodeEnter.append('text')
       .attr('class','node-text')
       .attr("x", function(d) {
@@ -319,7 +312,7 @@ export default class TraceMap {
       .on('zoom', () => {
         g.attr(
           'transform',
-          `translate(${d3.event.transform.x},${d3.event.transform.y})scale(${d3.event.transform.k})`
+          `translate(${d3.event.transform.x + 120},${d3.event.transform.y})scale(${d3.event.transform.k})`
         );
       });
   }

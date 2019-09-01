@@ -15,23 +15,13 @@
  * limitations under the License.
  */
 
-module.exports = {
-  devServer: {
-    proxy: {
-      '/graphql': {
-        target: 'http://127.0.0.1:12800',
-        changeOrigin: true,
-      },
-    },
-  },
-  chainWebpack: config => {
-    const svgRule = config.module.rule('svg');
-    svgRule.uses.clear();
-    svgRule
-      .use('svg-sprite-loader')
-      .loader('svg-sprite-loader')
-      .options({
-        symbolId: '[name]',
-      });
-  },
+/**
+ * Shallow comparison of two objects.
+ * @param objA Object A to be compared
+ * @param objB Object B to be compared
+ */
+const compareObj = (objA: object, objB: object): boolean => {
+  return JSON.stringify(Object.entries(objA).sort(), null, 0) !== JSON.stringify(Object.entries(objB).sort(), null, 0);
 };
+
+export default compareObj;
