@@ -312,7 +312,7 @@ export default class TraceMap {
       .on('zoom', () => {
         g.attr(
           'transform',
-          `translate(${d3.event.transform.x},${d3.event.transform.y})scale(${d3.event.transform.k})`
+          `translate(${d3.event.transform.x + 120},${d3.event.transform.y})scale(${d3.event.transform.k})`
         );
       });
   }
