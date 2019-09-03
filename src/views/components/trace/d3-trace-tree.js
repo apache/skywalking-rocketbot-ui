@@ -30,7 +30,6 @@ export default class TraceMap {
     this.height = el.clientHeight - 28;
     this.body = d3
       .select(this.el)
-      .style('height', this.height + 'px')
       .append('svg')
       .attr('width', this.width)
       .attr('height', this.height);
@@ -44,6 +43,17 @@ export default class TraceMap {
       `);
       this.svg = this.body.append('g').attr('transform', d => `translate(120, 0)`);
       this.svg.call(this.tip);
+  }
+  resize() {
+    // reset svg size
+    this.width = this.el.clientWidth;
+    this.height = this.el.clientHeight - 28;
+    this.body.attr('width', this.width).attr('height', this.height);
+    this.body.select('g').attr('transform', d => `translate(160, 0)`);
+    // reset zoom function for translate
+    const transform = d3.zoomTransform(0)
+        .translate(0, 0);
+    d3.zoom().transform(this.body, transform);
   }
   init(data, row) {
     this.treemap = d3.tree().size([row.length * 35, this.width]);
