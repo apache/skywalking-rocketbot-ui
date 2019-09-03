@@ -18,7 +18,7 @@
 <template>
 <div class="rk-alarm-table clear">
   <div v-for="(i,index) in data" :key="index" class="mb-10 clear">
-    <div class="g-sm-3 grey sm hide-xs rk-alarm-time-line tc">{{parseInt(i.startTime) | dateformat}}</div>
+    <div class="g-sm-3 grey sm hide-xs rk-alarm-time-line tr">{{parseInt(i.startTime) | dateformat}}</div>
     <div class="rk-alarm-table-i g-sm-9">
       <div class="message mb-5 b"><span class="mr-10 sm">#{{i.key}}</span>{{i.message}}</div>
       <div class="rk-alarm-table-i-scope mr-10 l sm" :class="{
@@ -49,8 +49,9 @@ export default class AlarmTable extends Vue {
 
 }
 .rk-alarm-time-line{
-  padding: 20px 0;
+  padding: 14px 30px;
   min-height: 63px;
+  max-width: 132px
 }
 .rk-alarm-table-i{
   padding: 10px 15px;
