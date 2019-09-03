@@ -64,14 +64,24 @@ const mutations: MutationTree<State> = {
     state.instances = [{label: 'All', key: ''}].concat(data);
   },
   [types.SET_TRACE_FORM](state: State, data: any): void {
-    if (data.queryOrder && data.queryOrder !== '') {
-      localStorage.setItem('traceQueryOrder', data.queryOrder);
+    if (data.queryOrder) {
+      if (data.queryOrder === '') {
+        data.queryOrder = 'BY_DURATION';
+        localStorage.setItem('traceQueryOrder', 'BY_DURATION');
+      } else {
+        localStorage.setItem('traceQueryOrder', data.queryOrder);
+      }
     }
     state.traceForm = data;
   },
   [types.SET_TRACE_FORM_ITEM](state: State, params: any): void {
     if (params.type && params.type === 'queryOrder') {
-      localStorage.setItem('traceQueryOrder', params.data);
+      if (params.data === '') {
+        params.data = 'BY_DURATION';
+        localStorage.setItem('traceQueryOrder', 'BY_DURATION');
+      } else {
+        localStorage.setItem('traceQueryOrder', params.data);
+      }
     }
     state.traceForm[params.type] = params.data;
   },

@@ -72,7 +72,7 @@
 <script lang="ts">
   import { Duration, Option } from '@/types/global';
   import { Component, Vue, Watch } from 'vue-property-decorator';
-  import { Action, Getter, State } from 'vuex-class';
+  import { Action, Getter, Mutation, State } from 'vuex-class';
   import TraceSelect from './trace-select.vue';
 
   @Component({components: {TraceSelect}})
@@ -86,6 +86,7 @@
     @Action('rocketTrace/GET_INSTANCES') private GET_INSTANCES: any;
     @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
     @Action('rocketTrace/SET_TRACE_FORM') private SET_TRACE_FORM: any;
+    @Mutation('rocketTrace/SET_TRACE_FORM_ITEM') private SET_TRACE_FORM_ITEM: any;
 
     private time!: Date[];
     private status: boolean = true;
@@ -224,6 +225,8 @@
       this.traceId = '';
       localStorage.removeItem('traceId');
       this.traceState = {label: 'All', key: 'ALL'};
+      this.SET_TRACE_FORM_ITEM({type: 'queryOrder', data: ''});
+      this.getTraceList();
     }
 
     @Watch('rocketbotGlobal.durationRow')
