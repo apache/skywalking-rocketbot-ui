@@ -224,10 +224,8 @@ export default {
       }
     },
     showCurrentSpanDetail(title, text) {
-      console.log('xxx: ', title);
-
       const textLineNumber = text.split('\n').length;
-      let textHeight = textLineNumber * 14 + 15;
+      let textHeight = textLineNumber * 20.2 + 10;
       const tmpHeight = window.innerHeight * 0.9
       textHeight = textHeight >= tmpHeight ? tmpHeight : textHeight;
       this.$modal.show('dialog', {
