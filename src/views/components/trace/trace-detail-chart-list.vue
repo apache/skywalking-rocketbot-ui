@@ -296,5 +296,6 @@ export default {
 .dialog-c-text {
   white-space: pre;
   overflow: auto;
+  font-family: monospace;
 }
 </style>
