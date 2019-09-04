@@ -47,7 +47,7 @@ import { State, Mutation } from 'vuex-class';
 import copy from '@/utils/copy';
 
 @Component
-export default class Comps extends Vue {
+export default class DashboardComp extends Vue {
   @Prop() private rocketComps: any;
   @Prop() private compType: any;
   @Mutation('ADD_COMP') private ADD_COMP: any;

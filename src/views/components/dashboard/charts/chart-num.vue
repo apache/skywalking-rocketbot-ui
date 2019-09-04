@@ -25,7 +25,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
-export default class Request extends Vue {
+export default class ChartNum extends Vue {
   @Prop() private data!: any;
   @Prop() private i!: any;
   @Prop() private intervalTime!: any;

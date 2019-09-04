@@ -24,7 +24,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
 @Component
-export default class Nonheap extends Vue {
+export default class ChartSankey extends Vue {
   @Prop() private title!: string;
   @Prop() private data!: any;
   @Prop() private intervalTime!: any;

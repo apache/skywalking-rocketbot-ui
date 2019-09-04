@@ -37,7 +37,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import moment from 'dayjs';
 import { State } from 'vuex-class';
 @Component
-export default class Response extends Vue {
+export default class ChartInstance extends Vue {
   @State('rocketOption') private rocketOption!: any;
   @Prop() private intervalTime!: any;
 }

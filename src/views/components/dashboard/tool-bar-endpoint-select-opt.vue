@@ -26,9 +26,8 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { Action } from 'vuex-class';
 @Component
-export default class ToolBarSelectOpt extends Vue {
+export default class ToolBarEndpointSelectOpt extends Vue {
   @Prop() public data!: any;
   private show: boolean = false;
 }

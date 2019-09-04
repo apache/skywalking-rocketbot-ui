@@ -62,7 +62,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import moment from 'dayjs';
 @Component
-export default class Brief extends Vue {
+export default class ChartBrief extends Vue {
   @Prop() private data!: any;
   @Prop() private intervalTime!: any;
 }

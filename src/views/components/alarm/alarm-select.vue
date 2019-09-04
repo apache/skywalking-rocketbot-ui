@@ -43,7 +43,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 @Component
-export default class ToolBarSelect extends Vue {
+export default class AlarmSelect extends Vue {
   @Prop() public data!: any;
   @Prop() public value!: any;
   @Prop() public title!: string;
