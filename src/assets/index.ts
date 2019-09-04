@@ -64,3 +64,4 @@ import './svg/user.svg';
 import './svg/issue-close.svg';
 import './svg/list-bulleted.svg';
 import './svg/file-tree.svg';
+import './svg/magnify.svg';

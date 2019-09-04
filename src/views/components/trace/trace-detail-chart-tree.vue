@@ -51,11 +51,17 @@
         <div v-for="(i, index) in this.currentSpan.logs" :key="index">
           <div class="mb-10 sm"><span class="mr-10">{{$t('time')}}:</span><span class="grey">{{i.time | dateformat}}</span></div>
           <div class="mb-15 clear" v-for="(_i, _index) in i.data" :key="_index">
-            <div class="mb-10">{{_i.key}}:</div><pre class="pl-15 mt-0 mb-0 sm oa">{{_i.value}}</pre>
+            <div class="mb-10">{{_i.key}}:<span v-if="_i.key==='stack'" class="r rk-sidebox-magnify"
+                                                @click="showCurrentSpanDetail(_i.key, _i.value)">
+          <svg class="icon">
+            <use xlink:href="#magnify"></use>
+          </svg>
+        </span></div><pre class="pl-15 mt-0 mb-0 sm oa">{{_i.value}}</pre>
           </div>
         </div>
       </div>
     </rk-sidebox>
+    <v-dialog width="90%"/>
     <div class="trace-tree" style="height:100%">
       <div class="trace-tree-inner" ref="traceTree"></div>
     </div>
@@ -205,6 +211,27 @@ export default {
     resize() {
         this.tree.resize();
     },
+    showCurrentSpanDetail(title, text) {
+      const textLineNumber = text.split('\n').length;
+      let textHeight = textLineNumber * 14 + 15;
+      const tmpHeight = window.innerHeight * 0.9
+      textHeight = textHeight >= tmpHeight ? tmpHeight : textHeight;
+      this.$modal.show('dialog', {
+        title,
+        text: `<div style="height:${textHeight}px">${text}</div>`,
+        buttons: [
+          {
+            title: 'Copy',
+            handler: () => {
+              this.copy(text);
+            },
+          },
+          {
+            title: 'Close',
+          },
+        ],
+      })
+    },
   }
 };
 </script>
@@ -263,4 +290,8 @@ export default {
      fill: rgba(0,0,0,0.05)
    }
  }
+.dialog-c-text {
+  white-space: pre;
+  overflow: auto;
+}
 </style>
