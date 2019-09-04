@@ -32,6 +32,7 @@ export const SET_GROUP_QUERY = 'SET_GROUP_QUERY';
 
 // global
 export const SET_DURATION = 'SET_DURATION';
+export const RESET_DURATION = 'RESET_DURATION';
 export const SET_EVENTS = 'SET_EVENTS';
 export const RUN_EVENTS = 'RUN_EVENTS';
 export const SET_CHARTS = 'SET_CHARTS';

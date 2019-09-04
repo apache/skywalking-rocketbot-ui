@@ -20,6 +20,7 @@ export interface CompsContainer {
   database: CompsItem[];
   proxy: CompsItem[];
 }
+
 export interface CompsItem {
   o: string;
   comp: string;
@@ -28,10 +29,12 @@ export interface CompsItem {
   type?: string;
   w: number;
 }
+
 export interface CompsGroup {
   name: string;
   children: CompsItem[];
 }
+
 export interface CompQuery {
   service: Option;
   database: Option;
@@ -50,11 +53,13 @@ export interface Option {
   key: string;
   label: string;
 }
+
 export interface Duration {
   start: Date;
   end: Date;
   step: string;
 }
+
 export interface DurationTime {
   start: string;
   end: string;
