@@ -68,7 +68,7 @@ const m = {
   status: 'Status',
   endpointName: 'Endpoint Name',
   search: 'Search',
-  clear: 'clear',
+  clear: 'Clear',
   more: 'More',
   traceID: 'TraceID',
   range: 'Range',

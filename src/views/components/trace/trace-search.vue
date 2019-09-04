@@ -136,7 +136,7 @@
       if (step === 'MINUTE') {
         return `${year}-${month}-${day} ${hour}${minute}`;
       }
-    };
+    }
     private globalTimeFormat = (time: Date[]): any => {
       let step = 'MINUTE';
       const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
@@ -150,7 +150,7 @@
         step = 'MONTH';
       }
       return {start: this.dateFormat(time[0], step), end: this.dateFormat(time[1], step), step};
-    };
+    }
 
     private chooseService(i: any) {
       if (this.service.key === i.key) {
@@ -230,7 +230,7 @@
     }
 
     @Watch('rocketbotGlobal.durationRow')
-    durationRowWatch(value: Duration) {
+    private durationRowWatch(value: Duration) {
       this.time = [value.start, value.end];
     }
 
