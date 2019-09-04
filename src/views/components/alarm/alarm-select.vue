@@ -16,7 +16,7 @@
  */
 
 <template>
-  <div class="rk-alarm-bar-select cp flex-h" v-clickout="() => { visible = false;search = '';}" :class="{'active':visible}">
+  <div class="rk-alarm-select cp flex-h" v-clickout="() => { visible = false;search = '';}" :class="{'active':visible}">
     <div class="rk-alarm-bar-i flex-h" @click="visible = !visible">
       <div class="mr-15 rk-alarm-bar-i-text">
         <div class="sm grey">{{title}}</div>
@@ -64,7 +64,7 @@ export default class AlarmSelect extends Vue {
 </script>
 
 <style lang="scss" scoped>
- .rk-alarm-bar-select{
+ .rk-alarm-select{
   position: relative;
   z-index: 1;
   height: 100%;
