@@ -15,14 +15,30 @@
  * limitations under the License.
  */
 
+import { Duration } from '@/types/global';
+
 /**
- * Shallow comparison of two objects.
- * @param objA Object A to be compared
- * @param objB Object B to be compared
- * @return The same object return false, otherwise return true.
+ * init or generate durationRow Obj and save localStorage.
  */
-const compareObj = (objA: object, objB: object): boolean => {
-  return JSON.stringify(Object.entries(objA).sort(), null, 0) !== JSON.stringify(Object.entries(objB).sort(), null, 0);
+const getDurationRow = (): Duration => {
+  const durationRowString = localStorage.getItem('durationRow');
+  let durationRow: Duration;
+  if (durationRowString && durationRowString !== '') {
+    durationRow = JSON.parse(durationRowString);
+    durationRow = {
+      start: new Date(durationRow.start),
+      end: new Date(durationRow.end),
+      step: durationRow.step,
+    };
+  } else {
+    durationRow = {
+      start: new Date(new Date().getTime() - 900000),
+      end: new Date(),
+      step: 'MINUTE',
+    };
+    localStorage.setItem('durationRow', JSON.stringify(durationRow, null, 0));
+  }
+  return durationRow;
 };
 
-export default compareObj;
+export default getDurationRow;
