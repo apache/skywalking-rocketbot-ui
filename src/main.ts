@@ -34,10 +34,12 @@ import 'echarts/lib/chart/heatmap';
 import 'echarts/lib/chart/sankey';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/tooltip';
+import VModal from 'vue-js-modal';
 import './assets';
 
 Vue.use(VueI18n);
 Vue.use(components);
+Vue.use(VModal, {dialog: true});
 Vue.directive('clickout', clickout);
 Vue.directive('tooltip', tooltip);
 

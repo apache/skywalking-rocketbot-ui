@@ -95,4 +95,16 @@ export default {
     color: #3D92FF;
   }
 }
+.rk-sidebox-magnify{
+  cursor: pointer;
+  color: #D8D8D8;
+  transition: color .3s;
+  .icon{
+    width: 18px;
+    height: 20px;
+  }
+  &:hover{
+    color: #3D92FF;
+  }
+}
 </style>
