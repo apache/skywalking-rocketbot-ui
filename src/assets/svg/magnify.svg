@@ -1,0 +1,16 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. -->
+
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1567575641976" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3448" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><defs><style type="text/css"></style></defs><path d="M626.41 442.15H511.24V327a38.39 38.39 0 1 0-76.78 0v115.15H319.3a38.39 38.39 0 0 0 0 76.78h115.16v96a38.39 38.39 0 1 0 76.78 0v-96h115.17a38.39 38.39 0 1 0 0-76.78z" p-id="3449"></path><path d="M900.75 846.47L753.61 699.33a359.13 359.13 0 0 0 80.11-226.48c0-199-161.88-360.85-360.87-360.85S112 273.88 112 472.85s161.88 360.87 360.85 360.87a359.13 359.13 0 0 0 226.48-80.11l147.14 147.14a38.38 38.38 0 0 0 54.28-54.28z m-712-373.62c0-156.63 127.44-284.07 284.07-284.07s284.12 127.44 284.12 284.07-127.42 284.09-284.09 284.09-284.07-127.42-284.07-284.09z" p-id="3450"></path></svg>
