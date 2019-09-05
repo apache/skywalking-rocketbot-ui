@@ -40,7 +40,7 @@ import { State, Getter, Mutation } from 'vuex-class';
 import { Component, Prop } from 'vue-property-decorator';
 
 @Component
-export default class Response extends Vue {
+export default class ChartEdit extends Vue {
   @Mutation('EDIT_COMP') private EDIT_COMP: any;
   @Prop() private i!: any;
   @Prop() private index!: number;

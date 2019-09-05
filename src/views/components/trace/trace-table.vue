@@ -53,7 +53,7 @@
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 import { Action, Getter, Mutation, State } from 'vuex-class';
 @Component
-export default class Home extends Vue {
+export default class TraceTable extends Vue {
   @State('rocketTrace') private rocketTrace: any;
   @State('rocketbot') private rocketbot: any;
   @Mutation('rocketTrace/SET_TRACE_FORM_ITEM') private SET_TRACE_FORM_ITEM: any;

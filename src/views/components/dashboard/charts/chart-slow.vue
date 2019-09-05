@@ -39,7 +39,7 @@ import copy from '@/utils/copy';
 
 
 @Component({})
-export default class RkTopSlow extends Vue {
+export default class ChartSlow extends Vue {
   @Prop() private data!: any;
   @Prop() private intervalTime!: any;
   private appChange(i: any) {
