@@ -46,9 +46,9 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Action } from 'vuex-class';
-import EndpointOpt from './tool-bar-select-endpoint-opt.vue';
+import EndpointOpt from './tool-bar-endpoint-select-opt.vue';
 @Component({components: {EndpointOpt}})
-export default class ToolBarSelect extends Vue {
+export default class ToolBarEndpointSelect extends Vue {
   @Action('SEARCH_ENDPOINTS') public SEARCH_ENDPOINTS: any;
   @Prop() public data!: any;
   @Prop() public current!: any;

@@ -25,7 +25,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import 'echarts/lib/component/visualMap';
 import moment from 'dayjs';
 @Component
-export default class Heatmap extends Vue {
+export default class ChartHeatmap extends Vue {
   @Prop() private title!: string;
   @Prop() private type!: string;
   @Prop() private data!: any;

@@ -50,12 +50,18 @@
             <span class="grey">{{i.time | dateformat}}</span>
           </div>
           <div class="mb-15 clear" v-for="(_i, _index) in i.data" :key="_index">
-            <div class="mb-10">{{_i.key}}:</div>
+            <div class="mb-10">{{_i.key}}:<span v-if="_i.key==='stack'" class="r rk-sidebox-magnify"
+                                                @click="showCurrentSpanDetail(_i.key, _i.value)">
+          <svg class="icon">
+            <use xlink:href="#magnify"></use>
+          </svg>
+        </span></div>
             <pre class="pl-15 mt-0 mb-0 sm oa">{{_i.value}}</pre>
           </div>
         </div>
       </div>
     </rk-sidebox>
+    <v-dialog width="90%"/>
   </div>
 </template>
 <style lang="scss">
@@ -230,6 +236,27 @@ export default {
       this.currentSpan = data;
       this.showDetail = true;
     },
+    showCurrentSpanDetail(title, text) {
+      const textLineNumber = text.split('\n').length;
+      let textHeight = textLineNumber * 20.2 + 10;
+      const tmpHeight = window.innerHeight * 0.9
+      textHeight = textHeight >= tmpHeight ? tmpHeight : textHeight;
+      this.$modal.show('dialog', {
+        title,
+        text: `<div style="height:${textHeight}px">${text}</div>`,
+        buttons: [
+          {
+            title: 'Copy',
+            handler: () => {
+              this.copy(text);
+            },
+          },
+          {
+            title: 'Close',
+          },
+        ],
+      })
+    },
   },
   created() {
     this.loading = true;
@@ -243,3 +270,10 @@ export default {
   },
 };
 </script>
+<style>
+.dialog-c-text {
+  white-space: pre;
+  overflow: auto;
+  font-family: monospace;
+}
+</style>

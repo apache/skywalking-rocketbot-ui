@@ -51,7 +51,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import ToolBarSelect from './tool-bar-select.vue';
-import ToolBarEndpointSelect from './tool-bar-select-endpoint.vue';
+import ToolBarEndpointSelect from './tool-bar-endpoint-select.vue';
 import { State, Action, Mutation } from 'vuex-class';
 @Component({components: {ToolBarSelect, ToolBarEndpointSelect}})
 export default class ToolBar extends Vue {

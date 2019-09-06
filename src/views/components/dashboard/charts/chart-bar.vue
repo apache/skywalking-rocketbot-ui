@@ -22,7 +22,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
-export default class Request extends Vue {
+export default class ChartBar extends Vue {
     @Prop() private data!: any;
     @Prop() private intervalTime!: any;
     public resize() {

@@ -16,15 +16,15 @@
  */
 
  <template>
-  <div class="dashboard-item" :class="`g-sm-${i.w}`" :style="`height:${i.h}px;`"
-    draggable="true" @dragstart="$emit('dragStart', index)" @dragover="$event.preventDefault();" @drop="drop">
-    <div class="dashboard-item-title ell">
+  <div class="rk-dashboard-item" :class="`g-sm-${i.w}`" :style="`height:${i.h}px;`"
+       draggable="true" @dragstart="$emit('dragStart', index)" @dragover="$event.preventDefault();" @drop="drop">
+    <div class="rk-dashboard-item-title ell">
         <svg class="icon cp red r" v-if="rocketGlobal.edit" @click="DELETE_COMP(index)">
           <use xlink:href="#file-deletion"></use>
         </svg>
         <span>{{i.t}}</span>
     </div>
-    <div class="dashboard-item-body">
+    <div class="rk-dashboard-item-body">
       <div style="height:100%;">
         <component :is="rocketGlobal.edit ? 'ChartEdit' : i.c" ref="chart" :i="i" :index="index" :intervalTime="intervalTime" :data="rocketDashboard[i.d]"></component>
       </div>
@@ -56,7 +56,7 @@ export default class DashboardItem extends Vue {
 
 </script>
 <style lang="scss">
-.dashboard-item{
+.rk-dashboard-item{
   display: flex;
   height: 100%;
   flex-direction: column;
@@ -69,7 +69,7 @@ export default class DashboardItem extends Vue {
   border: 1px solid #448dfec0;
   border-radius: 4px;
 }
-.dashboard-item-title{
+.rk-dashboard-item-title{
   flex-shrink: 0;
   user-select: none;
   line-height: 16px;
@@ -98,7 +98,7 @@ export default class DashboardItem extends Vue {
   bottom: 0;
   cursor: se-resize;
 }
-.dashboard-item-body{
+.rk-dashboard-item-body{
   padding: 7px 10px;
   flex-grow:1;
   // height:100%;

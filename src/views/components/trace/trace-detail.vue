@@ -76,7 +76,7 @@ import { Action, State } from 'vuex-class';
 import copy from '@/utils/copy';
 
 @Component({ components: { TraceDetailChartList, TraceDetailChartTree, TraceDetailChartTable } })
-export default class Header extends Vue {
+export default class TraceDetail extends Vue {
   @State('rocketbot') private rocketbot: any;
   @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
   @Prop() private spans!: Span[];

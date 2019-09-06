@@ -26,7 +26,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 
 @Component
-export default class Response extends Vue {
+export default class ChartHeap extends Vue {
   @Prop() private title!: string;
   @Prop() private stateDashboard!: any;
   @Prop() private intervalTime!: any;

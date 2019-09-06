@@ -38,7 +38,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import copy from '@/utils/copy';
 
 @Component({})
-export default class RkTopSlow extends Vue {
+export default class ChartTrace extends Vue {
   @Prop() private intervalTime!: any;
   @Prop() private data!: any;
   private appChange(i: any) {

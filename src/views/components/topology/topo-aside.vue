@@ -82,7 +82,7 @@ import ChartResponse from './topo-response.vue';
 import Radial from './radial.vue';
 
 @Component({components: {TopoChart, TopoService, ChartResponse, Radial}})
-export default class Topology extends Vue {
+export default class TopoAside extends Vue {
   @State('rocketTopo') public stateTopo!: topoState;
   @Getter('intervalTime') public intervalTime: any;
   @Mutation('rocketTopo/SET_MODE_STATUS') public SET_MODE_STATUS: any;

@@ -32,7 +32,7 @@
   import TopoSelect from './topo-select.vue';
 
   @Component({components: {TopoSelect}})
-  export default class TopologyServices extends Vue {
+  export default class TopoServices extends Vue {
     @Getter('durationTime') public durationTime: any;
     @Action('rocketTopo/GET_TOPO') public GET_TOPO: any;
     private services = [{key: 0, label: 'All services'}];
