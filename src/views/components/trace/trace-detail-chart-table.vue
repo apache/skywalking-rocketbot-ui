@@ -78,6 +78,7 @@
 import copy from '@/utils/copy';
 import Item from './trace-chart-table/trace-item';
 import TraceContainer from './trace-chart-table/trace-container';
+import _ from 'lodash';
 /* eslint-disable */
 /* tslint:disable */
 export default {

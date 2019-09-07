@@ -71,6 +71,7 @@
   import copy from '@/utils/copy';
   import * as d3 from 'd3';
   import Tree from './d3-trace-tree';
+  import _ from 'lodash';
   /* eslint-disable */
   /* tslint:disable */
   export default {
