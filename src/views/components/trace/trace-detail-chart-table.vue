@@ -1,19 +1,19 @@
 /**
-* Licensed to the Apache Software Foundation (ASF) under one or more
-* contributor license agreements.  See the NOTICE file distributed with
-* this work for additional information regarding copyright ownership.
-* The ASF licenses this file to You under the Apache License, Version 2.0
-* (the "License"); you may not use this file except in compliance with
-* the License.  You may obtain a copy of the License at
-*
-*      http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 <template>
 
@@ -66,7 +66,7 @@
 </template>
 <style lang="scss">
   .rk-tooltip-popper.trace-table-tooltip .rk-tooltip-inner{
-    max-width: 600px;
+      max-width: 600px;
   }
   .trace-detail-chart-table {
     position: relative;
@@ -75,80 +75,80 @@
 </style>
 
 <script lang="js">
-  import copy from '@/utils/copy';
-  import Item from './trace-chart-table/trace-item';
-  import TraceContainer from './trace-chart-table/trace-container';
-  /* eslint-disable */
-  /* tslint:disable */
-  export default {
-    components: {
-      Item,
-      TraceContainer,
+import copy from '@/utils/copy';
+import Item from './trace-chart-table/trace-item';
+import TraceContainer from './trace-chart-table/trace-container';
+/* eslint-disable */
+/* tslint:disable */
+export default {
+  components: {
+    Item,
+    TraceContainer,
+  },
+  props: ['data', 'traceId'],
+  watch: {
+    data(val, oldVal) {
+      if (!this.data.length) {
+        return;
+      }
+      this.tableData = this.formatData(this.changeTree());
+      this.loading = false;
     },
-    props: ['data', 'traceId'],
-    watch: {
-      data(val, oldVal) {
-        if (!this.data.length) {
-          return;
+  },
+  data() {
+    return {
+      tableData: [],
+      diaplay: true,
+      // segmentId: [],
+      showDetail: false,
+      list: [],
+      currentSpan: [],
+      loading: true,
+    };
+  },
+  computed: {
+    eventHub() {
+      return this.$store.getters.globalEventHub
+    }
+  },
+  methods: {
+    copy,
+    // 给增加层级关系
+    formatData(arr, level = 1, totalExec = null) {
+      for (const item of arr) {
+        item.level = level;
+        totalExec = totalExec || (item.endTime - item.startTime);
+        item.totalExec = totalExec;
+        if (item.children && item.children.length > 0) {
+          this.formatData(item.children, level + 1, totalExec);
         }
-        this.tableData = this.formatData(this.changeTree());
-        this.loading = false;
-      },
+      }
+      return arr;
     },
-    data() {
-      return {
-        tableData: [],
-        diaplay: true,
-        // segmentId: [],
-        showDetail: false,
-        list: [],
-        currentSpan: [],
-        loading: true,
-      };
-    },
-    computed: {
-      eventHub() {
-        return this.$store.getters.globalEventHub
+    traverseTree(node, spanId, segmentId, data) {
+      if (!node) {
+        return;
+      }
+      if (node.spanId === spanId && node.segmentId === segmentId) {
+        node.children.push(data);
+        return;
+      }
+      if (node.children && node.children.length > 0) {
+        for (const item of node.children) {
+          this.traverseTree(item, spanId, segmentId, data);
+        }
       }
     },
-    methods: {
-      copy,
-      // 给增加层级关系
-      formatData(arr, level = 1, totalExec = null) {
-        for (const item of arr) {
-          item.level = level;
-          totalExec = totalExec || (item.endTime - item.startTime);
-          item.totalExec = totalExec;
-          if (item.children && item.children.length > 0) {
-            this.formatData(item.children, level + 1, totalExec);
-          }
-        }
-        return arr;
-      },
-      traverseTree(node, spanId, segmentId, data) {
-        if (!node) {
-          return;
-        }
-        if (node.spanId === spanId && node.segmentId === segmentId) {
-          node.children.push(data);
-          return;
-        }
-        if (node.children && node.children.length > 0) {
-          for (const item of node.children) {
-            this.traverseTree(item, spanId, segmentId, data);
-          }
-        }
-      },
-      changeTree() {
-        if (this.data.length === 0) {
-          return [];
-        }
-        this.list = Array.from(new Set(this.data.map((i) => i.serviceCode)));
-        this.segmentId = [];
-        const segmentGroup = {};
-        const segmentIdGroup = [];
-        const fixSpans = [];
-        const segmentHeaders = [];
+    changeTree() {
+      if (this.data.length === 0) {
+        return [];
+      }
+      this.list = Array.from(new Set(this.data.map((i) => i.serviceCode)));
+      this.segmentId = [];
+      const segmentGroup = {};
+      const segmentIdGroup = [];
+      const fixSpans = [];
+      const segmentHeaders = [];
         this.data.forEach((span) => {
           if (span.parentSpanId === -1) {
             segmentHeaders.push(span);
@@ -254,68 +254,68 @@
           })
           // if(segmentGroup[id].refs.length !==0 ) delete segmentGroup[id];
         })
-        for (const i in segmentGroup) {
-          if (segmentGroup[i].refs.length === 0) {
-            this.segmentId.push(segmentGroup[i]);
-          }
+      for (const i in segmentGroup) {
+        if (segmentGroup[i].refs.length === 0) {
+          this.segmentId.push(segmentGroup[i]);
         }
-        this.segmentId.forEach((_, i) => {
-          this.collapse(this.segmentId[i]);
+      }
+      this.segmentId.forEach((_, i) => {
+        this.collapse(this.segmentId[i]);
+      });
+      return this.segmentId;
+    },
+    collapse(d) {
+      if (d.children) {
+        let dur = d.endTime - d.startTime;
+        d.children.forEach((i) => {
+          dur -= (i.endTime - i.startTime);
         });
-        return this.segmentId;
-      },
-      collapse(d) {
-        if (d.children) {
-          let dur = d.endTime - d.startTime;
-          d.children.forEach((i) => {
-            dur -= (i.endTime - i.startTime);
-          });
-          d.dur = dur < 0 ? 0 : dur;
-          d.children.forEach((i) => this.collapse(i));
-        }
-      },
-      handleSelectSpan(data) {
-        this.currentSpan = data;
-        this.showDetail = true;
-      },
-      showCurrentSpanDetail(title, text) {
-        const textLineNumber = text.split('\n').length;
-        let textHeight = textLineNumber * 20.2 + 10;
-        const tmpHeight = window.innerHeight * 0.9
-        textHeight = textHeight >= tmpHeight ? tmpHeight : textHeight;
-        this.$modal.show('dialog', {
-          title,
-          text: `<div style="height:${textHeight}px">${text}</div>`,
-          buttons: [
-            {
-              title: 'Copy',
-              handler: () => {
-                this.copy(text);
-              },
-            },
-            {
-              title: 'Close',
-            },
-          ],
-        })
-      },
+        d.dur = dur < 0 ? 0 : dur;
+        d.children.forEach((i) => this.collapse(i));
+      }
     },
-    created() {
-      this.loading = true;
+    handleSelectSpan(data) {
+      this.currentSpan = data;
+      this.showDetail = true;
     },
-    mounted() {
-      this.tableData = this.formatData(this.changeTree());
-      this.loading = false;
-      this.eventHub.$on('HANDLE-SELECT-SPAN', this.handleSelectSpan);
-      this.eventHub.$on('TRACE-TABLE-LOADING', ()=>{ this.loading = true });
+    showCurrentSpanDetail(title, text) {
+      const textLineNumber = text.split('\n').length;
+      let textHeight = textLineNumber * 20.2 + 10;
+      const tmpHeight = window.innerHeight * 0.9
+      textHeight = textHeight >= tmpHeight ? tmpHeight : textHeight;
+      this.$modal.show('dialog', {
+        title,
+        text: `<div style="height:${textHeight}px">${text}</div>`,
+        buttons: [
+          {
+            title: 'Copy',
+            handler: () => {
+              this.copy(text);
+            },
+          },
+          {
+            title: 'Close',
+          },
+        ],
+      })
+    },
+  },
+  created() {
+    this.loading = true;
+  },
+  mounted() {
+    this.tableData = this.formatData(this.changeTree());
+    this.loading = false;
+    this.eventHub.$on('HANDLE-SELECT-SPAN', this.handleSelectSpan);
+    this.eventHub.$on('TRACE-TABLE-LOADING', ()=>{ this.loading = true });
 
-    },
-  };
+  },
+};
 </script>
 <style>
-  .dialog-c-text {
-    white-space: pre;
-    overflow: auto;
-    font-family: monospace;
-  }
+.dialog-c-text {
+  white-space: pre;
+  overflow: auto;
+  font-family: monospace;
+}
 </style>

@@ -1,19 +1,19 @@
 /**
-* Licensed to the Apache Software Foundation (ASF) under one or more
-* contributor license agreements.  See the NOTICE file distributed with
-* this work for additional information regarding copyright ownership.
-* The ASF licenses this file to You under the Apache License, Version 2.0
-* (the "License"); you may not use this file except in compliance with
-* the License.  You may obtain a copy of the License at
-*
-*      http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 <template>
   <div class="time-charts scroll_hide">
@@ -68,84 +68,83 @@
   </div>
 </template>
 <script lang="js">
-  import _ from 'lodash';
-  import copy from '@/utils/copy';
-  import * as d3 from 'd3';
-  import Trace from './d3-trace';
-  /* eslint-disable */
-  /* tslint:disable */
-  export default {
-    props: ['data', 'traceId'],
-    data(){
-      return {
-        segmentId:[],
-        showDetail: false,
-        list: [],
-        currentSpan: [],
-        loading: true,
-      };
-    },
-    watch: {
-      data() {
-        if(!this.data.length) {return;}
-        this.loading = true;
-        this.changeTree();
-        this.tree.init({label:`TRACE_ROOT`, children: this.segmentId}, this.data);
-        this.tree.draw(() => {
-          setTimeout(() => {
-            this.loading = false
-          }, 200);
-        })
-      }
-    },
-    computed: {
-      eventHub() {
-        return this.$store.getters.globalEventHub
-      }
-    },
-    beforeDestroy() {
-      d3.selectAll('.d3-tip').remove();
-    },
-    mounted() {
-      this.eventHub.$on('TRACE-LIST-LOADING', ()=>{ this.loading = true });
-      // this.loading = true;
+import copy from '@/utils/copy';
+import * as d3 from 'd3';
+import Trace from './d3-trace';
+/* eslint-disable */
+/* tslint:disable */
+export default {
+  props: ['data', 'traceId'],
+  data(){
+    return {
+      segmentId:[],
+      showDetail: false,
+      list: [],
+      currentSpan: [],
+      loading: true,
+    };
+  },
+  watch: {
+    data() {
+      if(!this.data.length) {return;}
+      this.loading = true;
       this.changeTree();
-      this.tree = new Trace(this.$refs.traceList, this)
       this.tree.init({label:`TRACE_ROOT`, children: this.segmentId}, this.data);
-      this.tree.draw()
-      this.loading = false;
-      // this.computedScale();
+      this.tree.draw(() => {
+        setTimeout(() => {
+          this.loading = false
+        }, 200);
+      })
+    }
+  },
+  computed: {
+    eventHub() {
+      return this.$store.getters.globalEventHub
+    }
+  },
+  beforeDestroy() {
+    d3.selectAll('.d3-tip').remove();
+  },
+  mounted() {
+    this.eventHub.$on('TRACE-LIST-LOADING', ()=>{ this.loading = true });
+    // this.loading = true;
+    this.changeTree();
+    this.tree = new Trace(this.$refs.traceList, this)
+    this.tree.init({label:`TRACE_ROOT`, children: this.segmentId}, this.data);
+    this.tree.draw()
+    this.loading = false;
+    // this.computedScale();
+  },
+  methods: {
+    copy,
+    handleSelectSpan(i) {
+      this.currentSpan = i.data;
+      this.showDetail = true;
     },
-    methods: {
-      copy,
-      handleSelectSpan(i) {
-        this.currentSpan = i.data;
-        this.showDetail = true;
-      },
-      traverseTree(node, spanId, segmentId, data){
-        if (!node) return;
-        if(node.spanId === spanId && node.segmentId === segmentId) {node.children.push(data);return;}
-        if (node.children && node.children.length > 0) {
-          for (let i = 0; i < node.children.length; i++) {
+    traverseTree(node, spanId, segmentId, data){
+      if (!node) return;
+      if(node.spanId == spanId && node.segmentId == segmentId) {node.children.push(data);return;}
+      if (node.children && node.children.length > 0) {
+        for (let i = 0; i < node.children.length; i++) {
             this.traverseTree(node.children[i],spanId,segmentId,data);
-          }
         }
-      },
-      computedScale(i) {
-        // Rainbow map
-        const sequentialScale = d3.scaleSequential()
-          .domain([0, this.list.length + 1])
-          .interpolator(d3.interpolateCool);
-        return sequentialScale(i);
-      },
-      changeTree(){
-        if (this.data.length === 0) return [];
-        this.list = Array.from(new Set(this.data.map(i => i.serviceCode)));
-        this.segmentId = [];
-        const segmentGroup = {};
-        const segmentIdGroup = [];
-        const fixSpans = [];
-        const segmentHeaders = [];
+      }
+    },
+    computedScale(i) {
+       // Rainbow map
+      const sequentialScale = d3.scaleSequential()
+      .domain([0, this.list.length + 1])
+      .interpolator(d3.interpolateCool);
+      return sequentialScale(i);
+    },
+    changeTree(){
+      if (this.data.length === 0) return [];
+      this.list = Array.from(new Set(this.data.map(i => i.serviceCode)));
+      this.segmentId = [];
+      const segmentGroup = {};
+      const segmentIdGroup = [];
+      const fixSpans = [];
+      const segmentHeaders = [];
         this.data.forEach((span) => {
           if (span.parentSpanId === -1) {
             segmentHeaders.push(span);
@@ -251,95 +250,95 @@
           })
           // if(segmentGroup[id].refs.length !==0 ) delete segmentGroup[id];
         })
-        for (let i in segmentGroup) {
-          if(segmentGroup[i].refs.length ===0 )
-            this.segmentId.push(segmentGroup[i]);
-        }
-        this.segmentId.forEach((_, i) => {
-          this.collapse(this.segmentId[i]);
+      for (let i in segmentGroup) {
+        if(segmentGroup[i].refs.length ===0 )
+        this.segmentId.push(segmentGroup[i]);
+      }
+      this.segmentId.forEach((_, i) => {
+        this.collapse(this.segmentId[i]);
+      })
+    },
+    collapse(d) {
+      if(d.children){
+        let dur = d.endTime - d.startTime;
+        d.children.forEach(i => {
+          dur -= (i.endTime - i.startTime);
         })
-      },
-      collapse(d) {
-        if(d.children){
-          let dur = d.endTime - d.startTime;
-          d.children.forEach(i => {
-            dur -= (i.endTime - i.startTime);
-          })
-          d.dur = dur < 0 ? 0 : dur;
-          d.children.forEach((i) => this.collapse(i));
-        }
-      },
-      showCurrentSpanDetail(title, text) {
-        const textLineNumber = text.split('\n').length;
-        let textHeight = textLineNumber * 20.2 + 10;
-        const tmpHeight = window.innerHeight * 0.9
-        textHeight = textHeight >= tmpHeight ? tmpHeight : textHeight;
-        this.$modal.show('dialog', {
-          title,
-          text: `<div style="height:${textHeight}px">${text}</div>`,
-          buttons: [
-            {
-              title: 'Copy',
-              handler: () => {
-                this.copy(text);
-              },
+        d.dur = dur < 0 ? 0 : dur;
+        d.children.forEach((i) => this.collapse(i));
+      }
+    },
+    showCurrentSpanDetail(title, text) {
+      const textLineNumber = text.split('\n').length;
+      let textHeight = textLineNumber * 20.2 + 10;
+      const tmpHeight = window.innerHeight * 0.9
+      textHeight = textHeight >= tmpHeight ? tmpHeight : textHeight;
+      this.$modal.show('dialog', {
+        title,
+        text: `<div style="height:${textHeight}px">${text}</div>`,
+        buttons: [
+          {
+            title: 'Copy',
+            handler: () => {
+              this.copy(text);
             },
-            {
-              title: 'Close',
-            },
-          ],
-        })
-      },
-    }
-  };
+          },
+          {
+            title: 'Close',
+          },
+        ],
+      })
+    },
+  }
+};
 </script>
 <style lang="scss">
-  .time-charts{
-    overflow: auto;
-    padding: 10px 30px;
-    position: relative;
-    min-height: 150px;
+.time-charts{
+  overflow: auto;
+  padding: 10px 30px;
+  position: relative;
+  min-height: 150px;  
+}
+.trace-node .group {
+  cursor: pointer;
+  fill-opacity: 0;
+}
+.trace-node-container{
+  fill: rgba(0, 0, 0, 0);
+  stroke-width: 5px;
+  cursor: pointer;
+  &:hover{
+    fill: rgba(0,0,0,0.05)
   }
-  .trace-node .group {
-    cursor: pointer;
-    fill-opacity: 0;
-  }
-  .trace-node-container{
-    fill: rgba(0, 0, 0, 0);
-    stroke-width: 5px;
-    cursor: pointer;
-    &:hover{
-      fill: rgba(0,0,0,0.05)
-    }
-  }
-  .trace-node  .node-text {
-    font: 12.5px sans-serif;
-    pointer-events: none;
-  }
-  .domain{display: none;}
-  .trace-link {
-    fill: none;
-    stroke: rgba(0,0,0,0.1);
-    stroke-width: 2px;
-  }
-  .time-charts-item{
-    display: inline-block;
-    padding: 2px 8px;
-    border: 1px solid;
-    font-size: 11px;
-    border-radius: 4px;
-  }
-  .trace-list{
-    fill: rgba(0,0,0,0)
-  }
-  .trace-list .trace-node rect{
-    &:hover{
-      fill: rgba(0,0,0,0.05)
-    }
-  }
-  .dialog-c-text {
-    white-space: pre;
-    overflow: auto;
-    font-family: monospace;
-  }
+}
+.trace-node  .node-text {
+  font: 12.5px sans-serif;
+  pointer-events: none;
+}
+.domain{display: none;}
+.trace-link {
+  fill: none;
+  stroke: rgba(0,0,0,0.1);
+  stroke-width: 2px;
+}
+.time-charts-item{
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid;
+  font-size: 11px;
+  border-radius: 4px;
+}
+ .trace-list{
+   fill: rgba(0,0,0,0)
+ }
+ .trace-list .trace-node rect{
+   &:hover{
+     fill: rgba(0,0,0,0.05)
+   }
+ }
+.dialog-c-text {
+  white-space: pre;
+  overflow: auto;
+  font-family: monospace;
+}
 </style>
