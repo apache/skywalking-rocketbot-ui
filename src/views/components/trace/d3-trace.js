@@ -151,8 +151,8 @@ export default class Trace {
           if(d.data.label === 'TRACE_ROOT') {
             return '';
           }
-          return   d.data.label.length > 30
-          ? `${d.data.label.slice(0, 30)}...`
+          return   d.data.label.length > 40
+          ? `${d.data.label.slice(0, 40)}...`
           : `${d.data.label}`
         }
       );

@@ -24,21 +24,16 @@
       </svg>
     </div>
     <TraceContainer>
-      <Item v-for="(item, index) in tableData" :data="item" :key="'key'+ index"/>
+      <Item v-for="(item, index) in tableData"  :data="item"  :key="'key'+ index" />
     </TraceContainer>
     <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('spanInfo')">
       <div class="rk-trace-detail">
         <h5 class="mb-15">{{$t('tags')}}.</h5>
-        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('endpoint')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.label}}</span>
-        </div>
-        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('spanType')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.type}}</span>
-        </div>
-        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('component')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.component}}</span>
-        </div>
-        <div class="mb-10 clear"><span class="g-sm-4 grey">Peer:</span><span class="g-sm-8 wba">{{this.currentSpan.peer||'No Peer'}}</span>
-        </div>
-        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('error')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.isError}}</span>
-        </div>
+        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('endpoint')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.label}}</span></div>
+        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('spanType')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.type}}</span></div>
+        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('component')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.component}}</span></div>
+        <div class="mb-10 clear"><span class="g-sm-4 grey">Peer:</span><span class="g-sm-8 wba">{{this.currentSpan.peer||'No Peer'}}</span></div>
+        <div class="mb-10 clear"><span class="g-sm-4 grey">{{$t('error')}}:</span><span class="g-sm-8 wba">{{this.currentSpan.isError}}</span></div>
         <div class="mb-10 clear" v-for="i in this.currentSpan.tags" :key="i.key">
           <span class="g-sm-4 grey">{{i.key}}:</span>
           <span class="g-sm-8 wba">
@@ -70,10 +65,9 @@
   </div>
 </template>
 <style lang="scss">
-  .rk-tooltip-popper.trace-table-tooltip .rk-tooltip-inner {
+  .rk-tooltip-popper.trace-table-tooltip .rk-tooltip-inner{
     max-width: 600px;
   }
-
   .trace-detail-chart-table {
     position: relative;
     min-height: 150px;
@@ -82,9 +76,8 @@
 
 <script lang="js">
   import copy from '@/utils/copy';
-  import _ from 'lodash';
-  import TraceContainer from './trace-chart-table/trace-container';
   import Item from './trace-chart-table/trace-item';
+  import TraceContainer from './trace-chart-table/trace-container';
   /* eslint-disable */
   /* tslint:disable */
   export default {
@@ -115,8 +108,8 @@
     },
     computed: {
       eventHub() {
-        return this.$store.getters.globalEventHub;
-      },
+        return this.$store.getters.globalEventHub
+      }
     },
     methods: {
       copy,
@@ -170,18 +163,7 @@
             if (index === -1 && !_.find(fixSpans, fixSpanKeyContent)) {
               fixSpans.push(
                 {
-                  ...fixSpanKeyContent,
-                  refs: [],
-                  endpointName: `VNode: ${span.segmentId}`,
-                  serviceCode: 'VirtualNode',
-                  type: `[Broken] ${span.type}`,
-                  peer: '',
-                  component: `VirtualNode: #${span.spanId - 1}`,
-                  isError: true,
-                  isBroken: true,
-                  layer: 'Broken',
-                  tags: [],
-                  logs: [],
+                  ...fixSpanKeyContent, refs: [], endpointName: `VNode: ${span.segmentId}`, serviceCode: 'VirtualNode', type: `[Broken] ${span.type}`, peer: '', component: `VirtualNode: #${span.spanId - 1}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
                 },
               );
             }
@@ -192,22 +174,36 @@
             span.refs.forEach((ref) => {
               const index = this.data.findIndex(i => (ref.parentSegmentId === i.segmentId && ref.parentSpanId === i.spanId));
               if (index === -1) {
-                for (let i = 0; i <= ref.parentSpanId; i += 1) {
-                  const fixSpanKeyContent = {
+                // create a known broken node.
+                const i = ref.parentSpanId;
+                const fixSpanKeyContent = {
+                  traceId: ref.traceId,
+                  segmentId: ref.parentSegmentId,
+                  spanId: i,
+                  parentSpanId: i > -1 ? 0 : -1,
+                };
+                !_.find(fixSpans, fixSpanKeyContent) && fixSpans.push(
+                  {
+                    ...fixSpanKeyContent, refs: [], endpointName: `VNode: ${ref.parentSegmentId}`, serviceCode: 'VirtualNode', type: `[Broken] ${ref.type}`, peer: '', component: `VirtualNode: #${i}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
+                  },
+                );
+                // if root broken node is not exist, create a root broken node.
+                if (fixSpanKeyContent.parentSpanId > -1) {
+                  const fixRootSpanKeyContent = {
                     traceId: ref.traceId,
                     segmentId: ref.parentSegmentId,
-                    spanId: i,
-                    parentSpanId: i - 1,
+                    spanId: 0,
+                    parentSpanId: -1,
                   };
-                  !_.find(fixSpans, fixSpanKeyContent) && fixSpans.push(
+                  !_.find(fixSpans, fixRootSpanKeyContent) && fixSpans.push(
                     {
-                      ...fixSpanKeyContent,
+                      ...fixRootSpanKeyContent,
                       refs: [],
                       endpointName: `VNode: ${ref.parentSegmentId}`,
                       serviceCode: 'VirtualNode',
-                      type: `[Broken] ${span.type}`,
+                      type: `[Broken] ${ref.type}`,
                       peer: '',
-                      component: `VirtualNode: #${i}`,
+                      component: `VirtualNode: #0`,
                       isError: true,
                       isBroken: true,
                       layer: 'Broken',
@@ -221,23 +217,25 @@
           }
         });
         [...fixSpans, ...this.data].forEach(i => {
-          i.label = i.endpointName || 'no operation name';
+          i.label=i.endpointName || 'no operation name';
           i.children = [];
-          if (segmentGroup[i.segmentId] === undefined) {
+          if(segmentGroup[i.segmentId] === undefined){
             segmentIdGroup.push(i.segmentId);
             segmentGroup[i.segmentId] = [];
             segmentGroup[i.segmentId].push(i);
-          } else {
+          }else{
             segmentGroup[i.segmentId].push(i);
           }
         });
-        segmentIdGroup.forEach((id) => {
-          const currentSegment = segmentGroup[id].sort((a, b) => b.parentSpanId - a.parentSpanId);
-          currentSegment.forEach((s) => {
-            const index = currentSegment.findIndex((i) => i.spanId === s.parentSpanId);
+        segmentIdGroup.forEach(id => {
+          let currentSegment = segmentGroup[id].sort((a,b) => b.parentSpanId-a.parentSpanId);
+          currentSegment.forEach(s =>{
+            let index = currentSegment.findIndex(i => i.spanId === s.parentSpanId);
             if (index !== -1) {
-              currentSegment[index].children.push(s);
-              currentSegment[index].children.sort((a, b) => a.spanId - b.spanId);
+              if ((currentSegment[index].isBroken && currentSegment[index].parentSpanId === -1) || !currentSegment[index].isBroken) {
+                currentSegment[index].children.push(s);
+                currentSegment[index].children.sort((a, b) => a.spanId - b.spanId);
+              }
             }
             if (s.isBroken) {
               const children = _.filter(this.data, (span) => {
@@ -245,19 +243,17 @@
               });
               children.length > 0 && s.children.push(...children);
             }
-          });
-          segmentGroup[id] = currentSegment[currentSegment.length - 1];
-        });
-        segmentIdGroup.forEach((id) => {
-          segmentGroup[id].refs.forEach((ref) => {
-            if (ref.traceId === this.traceId) {
-              this.traverseTree(segmentGroup[ref.parentSegmentId],
-                ref.parentSpanId,
-                ref.parentSegmentId,
-                segmentGroup[id]);
-            }
-          });
-        });
+          })
+          segmentGroup[id] = currentSegment[currentSegment.length-1]
+        })
+        segmentIdGroup.forEach(id => {
+          segmentGroup[id].refs.forEach(ref => {
+            if(ref.traceId === this.traceId) {
+              this.traverseTree(segmentGroup[ref.parentSegmentId],ref.parentSpanId,ref.parentSegmentId,segmentGroup[id])
+            };
+          })
+          // if(segmentGroup[id].refs.length !==0 ) delete segmentGroup[id];
+        })
         for (const i in segmentGroup) {
           if (segmentGroup[i].refs.length === 0) {
             this.segmentId.push(segmentGroup[i]);
@@ -285,7 +281,7 @@
       showCurrentSpanDetail(title, text) {
         const textLineNumber = text.split('\n').length;
         let textHeight = textLineNumber * 20.2 + 10;
-        const tmpHeight = window.innerHeight * 0.9;
+        const tmpHeight = window.innerHeight * 0.9
         textHeight = textHeight >= tmpHeight ? tmpHeight : textHeight;
         this.$modal.show('dialog', {
           title,
@@ -301,7 +297,7 @@
               title: 'Close',
             },
           ],
-        });
+        })
       },
     },
     created() {
@@ -311,9 +307,7 @@
       this.tableData = this.formatData(this.changeTree());
       this.loading = false;
       this.eventHub.$on('HANDLE-SELECT-SPAN', this.handleSelectSpan);
-      this.eventHub.$on('TRACE-TABLE-LOADING', () => {
-        this.loading = true;
-      });
+      this.eventHub.$on('TRACE-TABLE-LOADING', ()=>{ this.loading = true });
 
     },
   };
