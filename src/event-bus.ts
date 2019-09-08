@@ -1,4 +1,4 @@
-import Vue from 'Vue';
+import Vue from 'vue';
 
 type VueComponentVM = Vue & { _uid: string; };
 
