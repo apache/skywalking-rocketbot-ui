@@ -106,11 +106,6 @@ export default {
       loading: true,
     };
   },
-  computed: {
-    eventHub() {
-      return this.$store.getters.globalEventHub
-    }
-  },
   methods: {
     copy,
     // 给增加层级关系
@@ -264,8 +259,8 @@ export default {
   mounted() {
     this.tableData = this.formatData(this.changeTree());
     this.loading = false;
-    this.eventHub.$on('HANDLE-SELECT-SPAN', this.handleSelectSpan);
-    this.eventHub.$on('TRACE-TABLE-LOADING', ()=>{ this.loading = true });
+    this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
+    this.$eventBus.$on('TRACE-TABLE-LOADING', this, ()=>{ this.loading = true });
 
   },
 };

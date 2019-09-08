@@ -97,16 +97,11 @@ export default {
       })
     }
   },
-  computed: {
-    eventHub() {
-      return this.$store.getters.globalEventHub
-    }
-  },
   beforeDestroy() {
     d3.selectAll('.d3-tip').remove();
   },
   mounted() {
-    this.eventHub.$on('TRACE-LIST-LOADING', ()=>{ this.loading = true });
+    this.$eventBus.$on('TRACE-LIST-LOADING', this, ()=>{ this.loading = true });
     // this.loading = true;
     this.changeTree();
     this.tree = new Trace(this.$refs.traceList, this)

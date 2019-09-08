@@ -162,16 +162,13 @@ export default {
       const result = (this.selfTime / this.execTime) * 100 .toFixed(4) + '%';
       return result === '0.0000%' ? '0.9%' : result;
     },
-    eventHub() {
-      return this.$store.getters.globalEventHub;
-    },
   },
   methods: {
     toggle() {
       this.displayChildren = ! this.displayChildren;
     },
     showSelectSpan() {
-      this.eventHub.$emit('HANDLE-SELECT-SPAN', this.data);
+      this.$eventBus.$emit('HANDLE-SELECT-SPAN', this.data);
     },
   },
 };

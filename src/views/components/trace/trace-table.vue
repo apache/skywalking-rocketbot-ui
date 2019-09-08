@@ -63,9 +63,6 @@ export default class TraceTable extends Vue {
   @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
   private loading: boolean = false;
   private selectedKey: string = '';
-  get eventHub() {
-    return this.$store.getters.globalEventHub;
-  }
   @Watch('rocketTrace.traceList')
   private onTraceListChange() {
     if (this.rocketTrace.traceList && this.rocketTrace.traceList.length > 0) {
@@ -78,8 +75,8 @@ export default class TraceTable extends Vue {
   private selectTrace(i: any) {
     this.SET_CURRENT_TRACE(i);
     this.selectedKey = i.key;
-    this.eventHub.$emit('TRACE-TABLE-LOADING');
-    this.eventHub.$emit('TRACE-LIST-LOADING');
+    this.$eventBus.$emit('TRACE-TABLE-LOADING');
+    this.$eventBus.$emit('TRACE-LIST-LOADING');
     if (i.traceIds.length) {
       this.GET_TRACE_SPANS({traceId: i.traceIds[0]});
     }
@@ -97,13 +94,13 @@ export default class TraceTable extends Vue {
     });
   }
   private created() {
-    this.eventHub.$on('SET_LOADING_TRUE', (cb: any) => {
+    this.$eventBus.$on('SET_LOADING_TRUE', this, (cb: any) => {
       this.loading = true;
       if (cb) {
         cb();
       }
     });
-    this.eventHub.$on('SET_LOADING_FALSE', () => {
+    this.$eventBus.$on('SET_LOADING_FALSE', this, () => {
       this.loading = false;
     });
   }
