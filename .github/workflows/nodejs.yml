@@ -9,7 +9,8 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [8.x, 10.x, 12.x]
+        node-version: [8.x, 10.x]
+          - TEST_TYPE=build
 
     steps:
       - uses: actions/checkout@v1
