@@ -1,12 +1,15 @@
-import { Vue } from 'vue-property-decorator';
-import { VueConfiguration } from 'vue/types/vue';
+import Vue from 'Vue';
 
 type VueComponentVM = Vue & { _uid: string; };
+
+interface Handles {
+  [key: string]: any[];
+}
 
 export class EventBus {
   private readonly Vue: any;
   private readonly eventMapUid: any;
-  private handles: any;
+  private handles!: Handles;
 
   constructor(vue: Vue) {
     if (!this.handles) {
@@ -16,20 +19,17 @@ export class EventBus {
       });
     }
     this.Vue = vue;
-    // _uid和EventName的映射
+    // _uid and event name map
     this.eventMapUid = {};
   }
 
-  public setEventMapUid(uid: string, eventName: string) {
-    if (!this.eventMapUid[uid]) {
-      this.eventMapUid[uid] = [];
-    }
-    // 把每个_uid订阅的事件名字push到各自uid所属的数组里
-    this.eventMapUid[uid].push(eventName);
-  }
-
-  // vm是在组件内部使用时组件当前的this用于取_uid
-  public $on(eventName: string, vm: Vue, callback: (cb: any) => void) {
+  /**
+   * Map events and component relationships while listening for events.
+   * @param eventName
+   * @param vm vue component object or undefined, if is undefined, event not auto destroy.
+   * @param callback event callback
+   */
+  public $on(eventName: string, vm: Vue | undefined, callback: (cb: any) => void) {
     if (!this.handles[eventName]) {
       this.handles[eventName] = [];
     }
@@ -40,10 +40,12 @@ export class EventBus {
     }
   }
 
-  public $emit() {
-    const args = [...arguments];
-    const eventName = args[0];
-    const params = args.slice(1);
+  /**
+   * eventBus.$emit.
+   * @param eventName
+   * @param params
+   */
+  public $emit(eventName: string, ...params: any) {
     if (this.handles[eventName]) {
       const len = this.handles[eventName].length;
       for (let i = 0; i < len; i++) {
@@ -52,25 +54,38 @@ export class EventBus {
     }
   }
 
-  public $offVmEvent(uid: string) {
+  /**
+   * eventBus.$off.
+   * @param eventName
+   */
+  public $off(eventName: string) {
+    delete this.handles[eventName];
+  }
+
+  private setEventMapUid(uid: string, eventName: string) {
+    if (!this.eventMapUid[uid]) {
+      this.eventMapUid[uid] = [];
+    }
+    // Push the name of each _uid subscription to the array to which the respective uid belongs.
+    this.eventMapUid[uid].push(eventName);
+  }
+
+  private $offVmEvent(uid: string) {
     const currentEvents = this.eventMapUid[uid] || [];
     currentEvents.forEach((event: any) => {
       this.$off(event);
     });
   }
-
-  public $off(eventName: string) {
-    delete this.handles[eventName];
-  }
 }
 
-// 下面写成Vue插件形式，直接引入然后Vue.use($EventBus)进行使用
 const $EventBus = {
-  install: (vue: any, option: VueConfiguration) => {
+  install: (vue: any) => {
     vue.prototype.$eventBus = new EventBus(vue);
     vue.mixin({
+      deactivated() {
+        this.$eventBus.$offVmEvent(this._uid);
+      },
       beforeDestroy() {
-        // 拦截beforeDestroy钩子自动销毁自身所有订阅的事件
         this.$eventBus.$offVmEvent(this._uid);
       },
     });
