@@ -22,6 +22,7 @@ import tooltip from '@/utils/tooltip';
 import zh from '@/assets/lang/zh';
 import en from '@/assets/lang/en';
 import VueI18n from 'vue-i18n';
+import eventBus from './event-bus';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -37,6 +38,7 @@ import 'echarts/lib/component/tooltip';
 import VModal from 'vue-js-modal';
 import './assets';
 
+Vue.use(eventBus);
 Vue.use(VueI18n);
 Vue.use(components);
 Vue.use(VModal, {dialog: true});

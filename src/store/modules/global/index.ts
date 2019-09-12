@@ -110,7 +110,6 @@ export interface State {
   edit: boolean;
   lock: boolean;
   utc: string | number;
-  eventHub: any;
 }
 
 const initState: State = {
@@ -120,14 +119,10 @@ const initState: State = {
   edit: false,
   lock: true,
   utc: window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60),
-  eventHub: new Vue(),
 };
 
 // getters
 const getters = {
-  globalEventHub(state: State): any {
-    return state.eventHub;
-  },
   duration(state: State): Duration {
     return {
       start: getLocalTime(parseInt(state.utc + '', 10), state.durationRow.start),
