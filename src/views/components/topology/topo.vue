@@ -90,6 +90,7 @@ export default {
       ZOOKEEPER: require('./assets/ZOOKEEPER.png'),
       CASSANDRA: require('./assets/CASSANDRA.png'),
       LIGHT4J: require('./assets/LIGHT4J.png'),
+      PULSAR: require('./assets/PULSAR.png'),
       PLAY: require('./assets/PLAY.png'),
       width: 600,
       height: 600,
