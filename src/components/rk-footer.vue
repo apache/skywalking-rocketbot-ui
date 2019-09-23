@@ -49,7 +49,7 @@ export default class Footer extends Vue {
   private time: Date[] = [new Date(), new Date()];
   private utc: any = window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60);
   @Watch('rocketbotGlobal.durationRow')
-  private  durationRowWatch(newValue: Duration){
+  private  durationRowWatch(newValue: Duration) {
     this.time = [newValue.start, newValue.end];
   }
   @Watch('utc')
