@@ -74,7 +74,6 @@ export default class Footer extends Vue {
   }
   private beforeMount() {
     this.lang = window.localStorage.getItem('lang');
-    // this.$set(this.$data, 'time', [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end]);
     this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
   }
 }
