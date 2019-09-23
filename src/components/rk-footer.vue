@@ -48,9 +48,10 @@ export default class Footer extends Vue {
   private lang: any = '';
   private time: Date[] = [new Date(), new Date()];
   private utc: any = window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60);
-  @Watch('time')
-  private onTimeUpdate() {
-    this.SET_DURATION(timeFormat(this.time));
+  @Watch('rocketbotGlobal.durationRow')
+  private  durationRowWatch(newValue:any){
+    console.log('newValue: ', newValue);
+    this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
   }
   @Watch('utc')
   private onUtcUpdate() {
@@ -73,6 +74,7 @@ export default class Footer extends Vue {
   }
   private beforeMount() {
     this.lang = window.localStorage.getItem('lang');
+    // this.$set(this.$data, 'time', [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end]);
     this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
   }
 }
