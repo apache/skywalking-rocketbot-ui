@@ -49,6 +49,7 @@ export interface State {
   calls: Call[];
   nodes: Node[];
   detectPoints: string[];
+  selectedCallId: string;
   currentNode: any;
   current: Option;
   mode: boolean;
@@ -66,6 +67,7 @@ const initState: State = {
   callback: '',
   mode: true,
   detectPoints: [],
+  selectedCallId: '',
   calls: [],
   nodes: [],
   currentNode: {},
@@ -109,6 +111,7 @@ const mutations = {
     state.nodes = data.nodes;
   },
   [types.SET_TOPO_RELATION](state: State, data: any) {
+    state.selectedCallId = data.id;
     state.getResponseTimeTrend = data.getResponseTimeTrend ?
     data.getResponseTimeTrend.values.map((i: any) => i.value) : [];
     state.getSLATrend = data.getSLATrend ? data.getSLATrend.values.map((i: any) => i.value) : [];
@@ -134,7 +137,7 @@ const actions: ActionTree<State, any> = {
     .query('queryTopoServiceInfo')
     .params(params)
     .then((res: AxiosResponse) => {
-      context.commit('SET_TOPO_RELATION', res.data.data);
+      context.commit('SET_TOPO_RELATION', Object.assign(res.data.data, { id: params.id }));
     });
   },
   GET_TOPO_CLIENT_INFO(context: { commit: Commit; state: State; }, params: any) {
@@ -142,7 +145,7 @@ const actions: ActionTree<State, any> = {
     .query('queryTopoClientInfo')
     .params(params)
     .then((res: AxiosResponse) => {
-      context.commit('SET_TOPO_RELATION', res.data.data);
+      context.commit('SET_TOPO_RELATION', Object.assign(res.data.data, { id: params.id }));
     });
   },
   GET_TOPO(context: { commit: Commit; state: State; }, params: any) {
