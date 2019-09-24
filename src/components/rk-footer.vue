@@ -36,9 +36,9 @@
 </template>
 
 <script lang="ts">
+import { Duration } from '@/types/global';
 import { Vue, Component, Watch } from 'vue-property-decorator';
 import { State, Action, Mutation } from 'vuex-class';
-import timeFormat from '@/utils/timeFormat';
 
 @Component
 export default class Footer extends Vue {
@@ -48,9 +48,9 @@ export default class Footer extends Vue {
   private lang: any = '';
   private time: Date[] = [new Date(), new Date()];
   private utc: any = window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60);
-  @Watch('time')
-  private onTimeUpdate() {
-    this.SET_DURATION(timeFormat(this.time));
+  @Watch('rocketbotGlobal.durationRow')
+  private  durationRowWatch(newValue: Duration) {
+    this.time = [newValue.start, newValue.end];
   }
   @Watch('utc')
   private onUtcUpdate() {
