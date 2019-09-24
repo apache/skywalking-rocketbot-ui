@@ -59,21 +59,65 @@
         <span class="content">{{stateTopo.currentNode.latency}} ms</span>
       </div>
     </div>
-    <div class="link-topo-aside-box" style="width:280px;top:78px;position: fixed;right: 30px;">
+    <div :class="`link-topo-aside-box link-topo-aside-box-${isMini?'min':'max'}`"
+         :style="`top:106px;position: fixed;right: 30px;${showInfoCount === 0 ? 'animation: unset;': ''}`">
+      <svg v-if="stateTopo.selectedCallId"
+           :style="`position:absolute;left:-48px;top:11px;transform: rotate(${isMini?0 : 180}deg);`"
+           class="link-topo-aside-btn mb-10 icon cp lg"
+           @click="setShowInfo"
+      >
+        <use xlink:href="#chevron-left" />
+      </svg>
       <div class="mb-5 clear">
-        <span class="b dib mr-20 vm">{{$t('detectPoint')}}</span>
-        <span v-if="stateTopo.detectPoints.indexOf('CLIENT') !== -1" class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':!stateTopo.mode}" @click="setMode(false)">{{this.$t('client')}}</span>
-        <span v-if="stateTopo.detectPoints.indexOf('SERVER') !== -1" class="link-topo-aside-box-btn tc r sm cp b" :class="{'active':stateTopo.mode}" @click="setMode(true)">{{this.$t('server')}}</span>
+        <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
+        <span
+            v-if="stateTopo.detectPoints.indexOf('CLIENT') !== -1"
+            :class="{'active':!stateTopo.mode}"
+            class="link-topo-aside-box-btn tc r sm cp b"
+            @click="setMode(false)"
+        >{{ this.$t('client') }}</span>
+        <span
+            v-if="stateTopo.detectPoints.indexOf('SERVER') !== -1"
+            :class="{'active':stateTopo.mode}"
+            class="link-topo-aside-box-btn tc r sm cp b"
+            @click="setMode(true)"
+        >{{ this.$t('server') }}</span>
       </div>
-      <TopoChart v-if="stateTopo.getResponseTimeTrend.length" :title="$t('avgResponseTime')" unit="ms" :intervalTime="intervalTime" :data="stateTopo.getResponseTimeTrend"/>
-      <TopoChart v-if="stateTopo.getThroughputTrend.length" :title="$t('avgThroughput')" unit="cpm" :intervalTime="intervalTime" :data="stateTopo.getThroughputTrend"/>
-      <TopoChart v-if="stateTopo.getSLATrend.length" :title="$t('avgSLA')" unit="%" :intervalTime="intervalTime" :precent="true" :data="stateTopo.getSLATrend"/>
-      <ChartResponse v-if="stateTopo.p50.length" :title="$t('percentResponse')" :intervalTime="intervalTime" :data="stateTopo"/>
+      <div v-if="showInfo">
+        <TopoChart
+            v-if="stateTopo.getResponseTimeTrend.length"
+            :data="stateTopo.getResponseTimeTrend"
+            :intervalTime="intervalTime"
+            :title="$t('avgResponseTime')"
+            unit="ms"
+        />
+        <TopoChart
+            v-if="stateTopo.getThroughputTrend.length"
+            :data="stateTopo.getThroughputTrend"
+            :intervalTime="intervalTime"
+            :title="$t('avgThroughput')"
+            unit="cpm"
+        />
+        <TopoChart
+            v-if="stateTopo.getSLATrend.length"
+            :data="stateTopo.getSLATrend"
+            :intervalTime="intervalTime"
+            :precent="true"
+            :title="$t('avgSLA')"
+            unit="%"
+        />
+        <ChartResponse
+            v-if="stateTopo.p50.length"
+            :data="stateTopo"
+            :intervalTime="intervalTime"
+            :title="$t('percentResponse')"
+        />
+      </div>
     </div>
   </aside>
 </template>
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 import topo, { State as topoState} from '@/store/modules/topology';
 import { State, Mutation, Getter, Action } from 'vuex-class';
 import TopoChart from './topo-chart.vue';
@@ -101,12 +145,31 @@ export default class TopoAside extends Vue {
   private radioStatus: boolean = false;
   private show: boolean = true;
   private showInfo: boolean = false;
+  private isMini: boolean = true;
+  private showInfoCount: number = 0;
+  @Watch('stateTopo.selectedCallId')
+  private watchDetectPointNodeId(newValue: string) {
+    if (newValue) {
+      this.showInfo = true;
+    } else {
+      this.showInfo = false;
+      this.isMini = true;
+    }
+  }
   private showRadial(status: boolean) {
     this.radioStatus = status;
   }
   private setMode(mode: boolean) {
     this.SET_MODE_STATUS(mode);
     this.stateTopo.callback();
+  }
+  private setShowInfo() {
+    this.showInfo = false;
+    this.showInfoCount = 1;
+    this.isMini = !this.isMini;
+    setTimeout(() => {
+      this.showInfo = true;
+    }, 550);
   }
 }
 </script>
@@ -160,6 +223,40 @@ export default class TopoAside extends Vue {
     border-radius: 4px;
     background-color: #EE5B5B;
     margin-top: 6px;
+  }
+}
+.link-topo-aside-box {
+  p {
+    margin-block-start: auto !important;
+    margin-block-end: auto !important;
+  }
+}
+
+.link-topo-aside-box-min {
+  width: 280px;
+  animation: 0.5s linkTopoAsideBoxMin 1 running;
+}
+
+.link-topo-aside-box-max {
+  width: 60%;
+  animation: 0.5s linkTopoAsideBoxMax 1 running;
+}
+
+@keyframes linkTopoAsideBoxMax {
+  from {
+    width: 280px;
+  }
+  to {
+    width: 60%;
+  }
+}
+
+@keyframes linkTopoAsideBoxMin {
+  from {
+    width: 60%;
+  }
+  to {
+    width: 280px;
   }
 }
 </style>
