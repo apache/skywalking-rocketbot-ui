@@ -73,7 +73,7 @@ export const SetInstance = (state: State, params: any) => {
   if (params && params.nonheap && params.maxNonHeap) {
     state.instanceNonheap.Value = params.nonheap.values.map((i: Value) => (i.value / 1048576).toFixed(2));
     state.instanceNonheap.Free = params.maxNonHeap.values
-    .map((i: Value, index: number) => ( state.instanceNonheap.Value[index] - (i.value / 1048576 )).toFixed(2));
+    .map((i: Value, index: number) => ((i.value / 1048576 ) - state.instanceNonheap.Value[index]).toFixed(2));
   }
   if (params && params.clrHeap) {
     state.instanceClrHeap.Value = params.clrHeap.values.map((i: Value) => (i.value / 1048576 ).toFixed(2));
