@@ -24,8 +24,8 @@ export interface State {
   instanceCPU: { cpu: number[]; };
   instanceGC: { oldGC: number[], youngGC: number[] };
   instanceGCCount: { oldGC: number[], youngGC: number[] };
-  instanceHeap: { Value: number[], Free: number[], ValueUnlimited: boolean };
-  instanceNonheap: { Value: number[], Free: number[], ValueUnlimited: boolean };
+  instanceHeap: { Value: number[], Free: number[] };
+  instanceNonheap: { Value: number[], Free: number[] };
   instanceClrHeap: { Value: number[] };
   instanceClrCPU: { cpu: number[]; };
   instanceClrGC: { clrGCGen0: number[], clrGCGen1: number[], clrGCGen2: number[]};
@@ -38,8 +38,8 @@ export const initState: State = {
   instanceCPU: { cpu: [] },
   instanceGC: { oldGC: [], youngGC: [] },
   instanceGCCount: { oldGC: [], youngGC: [] },
-  instanceHeap: { Value: [], Free: [], ValueUnlimited: false },
-  instanceNonheap: { Value: [], Free: [], ValueUnlimited: false },
+  instanceHeap: { Value: [], Free: [] },
+  instanceNonheap: { Value: [], Free: [] },
   instanceClrHeap: { Value: [] },
   instanceClrCPU: { cpu: [] },
   instanceClrGC: { clrGCGen0: [], clrGCGen1: [], clrGCGen2: [] },
@@ -68,15 +68,16 @@ export const SetInstance = (state: State, params: any) => {
   if (params && params.heap && params.maxHeap) {
     state.instanceHeap.Value = params.heap.values.map((i: Value) => (i.value / 1048576).toFixed(2));
     state.instanceHeap.Free = params.maxHeap.values
-    .map((i: Value, index: number) => i.value > -1 ? ((i.value / 1048576 ) - state.instanceHeap.Value[index]).toFixed(2) : 0);
-    if (Math.max.apply(Math, params.maxHeap.values) === -1) { state.instanceHeap.ValueUnlimited = true; }
-
+    .map((i: Value, index: number) =>
+      i.value > -1 ? ((i.value / 1048576 ) - state.instanceHeap.Value[index]).toFixed(2) : 0);
+    // if (Math.max.apply(Math, params.maxHeap.values) === -1) { state.instanceHeap.ValueUnlimited = true; }
   }
   if (params && params.nonheap && params.maxNonHeap) {
     state.instanceNonheap.Value = params.nonheap.values.map((i: Value) => (i.value / 1048576).toFixed(2));
     state.instanceNonheap.Free = params.maxNonHeap.values
-    .map((i: Value, index: number) => i.value > -1 ? ((i.value / 1048576 ) - state.instanceNonheap.Value[index]).toFixed(2) : 0);
-    if (Math.max.apply(Math, params.maxNonHeap.values) === -1) { state.instanceNonheap.ValueUnlimited = true; }
+    .map((i: Value, index: number) =>
+      i.value > -1 ? ((i.value / 1048576 ) - state.instanceNonheap.Value[index]).toFixed(2) : 0);
+    // if (Math.max.apply(Math, params.maxNonHeap.values) === -1) { state.instanceNonheap.ValueUnlimited = true; }
   }
   if (params && params.clrHeap) {
     state.instanceClrHeap.Value = params.clrHeap.values.map((i: Value) => (i.value / 1048576 ).toFixed(2));
