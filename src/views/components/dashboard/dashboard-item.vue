@@ -23,6 +23,7 @@
           <use xlink:href="#file-deletion"></use>
         </svg>
         <span>{{i.t}}</span>
+        <span class="hint" v-if="rocketDashboard[i.d].Hint" >({{rocketDashboard[i.d].Hint}})</span>
     </div>
     <div class="rk-dashboard-item-body">
       <div style="height:100%;">
@@ -77,6 +78,10 @@ export default class DashboardItem extends Vue {
   background-color: rgba(196,200,225,.2);
   color: #9da5b2;
   padding: 6px 10px ;
+}
+.rk-dashboard-item-title .hint{
+  color: #FBB03B;
+  padding-left: 10px ;
 }
 .dashboard-item-title-input{
   border-style: unset;
