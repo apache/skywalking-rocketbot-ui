@@ -71,8 +71,8 @@ export interface State {
   instanceCPU: { cpu: number[]; };
   instanceGC: { oldGC: number[], youngGC: number[] };
   instanceGCCount: { oldGC: number[], youngGC: number[] };
-  instanceHeap: { Value: number[], Free: number[] };
-  instanceNonheap: { Value: number[], Free: number[] };
+  instanceHeap: { Value: number[], Free: number[], Hint: string };
+  instanceNonheap: { Value: number[], Free: number[], Hint: string };
   instanceClrHeap: { Value: number[] };
   instanceClrCPU: { cpu: number[]; };
   instanceClrGC: { clrGCGen0: number[], clrGCGen1: number[], clrGCGen2: number[]};
