@@ -31,7 +31,7 @@ export default class ChartLine extends Vue {
     }
   get option() {
     const temp: any = [];
-    const keys = Object.keys(this.data || {}).filter(i => Array.isArray(this.data[i]) && this.data[i].length);
+    const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
     keys.forEach((i: any, index: number) => {
       const serie: any = {
           data: this.data[i].map((item: any, itemIndex: number) => [
