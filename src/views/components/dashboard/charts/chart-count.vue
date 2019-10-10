@@ -19,10 +19,10 @@
 <div class="rk-chart-count">
   <div class="mb-10 pt-10 b"><span class="mr-10">YoungGC Count</span><span class="count r">{{data.youngGC.reduce(function (preValue,curValue,index,array) { 
     return preValue + curValue; 
-})}}</span></div>
+}, 0)}}</span></div>
   <div class="mb-10 pt-10 b"><span class="mr-10">OldGC Count</span><span class="count r">{{data.oldGC.reduce(function (preValue,curValue,index,array) { 
     return preValue + curValue; 
-})}}</span></div>
+}, 0)}}</span></div>
 </div>
 </template>
 
