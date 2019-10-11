@@ -73,7 +73,7 @@ export const SetEndpoint = (state: State, params: any) => {
     state.endpointSlowEndpoint = params.endpointSlowEndpoint;
   }
   if (params && params.endpointTopology) {
-    state.endpointTopology.nodes = params.endpointTopology.nodes;
+    state.endpointTopology.nodes = params.endpointTopology.nodes.map((n: any)=>{return {name:n.name,value:n.value+'-('+params.endpointTopology.endpoints.get(n.name)+')'}});
     state.endpointTopology.calls = params.endpointTopology.calls.map((i: Value) => ({...i, value: 1}));
   }
   if (params && params.endpointTraces) {
