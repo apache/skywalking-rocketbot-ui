@@ -96,6 +96,7 @@ const m = {
   monthCutTip: 'Last 1 month',
   serverZone: 'Server Zone',
   percentResponse: 'Percent Response',
+  download: 'Dowanload',
 };
 
 export default m;
