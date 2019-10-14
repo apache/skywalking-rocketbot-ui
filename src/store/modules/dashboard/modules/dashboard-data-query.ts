@@ -54,23 +54,24 @@ const actions: ActionTree<State, any> = {
       query: context.getters.Graphql,
       variables: variablesData,
     }, {cancelToken: cancelToken()}).then((res: AxiosResponse<any>) => {
-      var resData = res.data;
+      const resData = res.data;
       if (resData.data && resData.data.endpointTopology) {
-        let endpointIds = resData.data.endpointTopology.nodes.map((n: any) => n.name).filter(function onlyUnique(value: any, index: Number, self: any) {
-          return self.indexOf(value) === index;
-        });
+        const endpointIds = resData.data.endpointTopology.nodes.map((n: any) => n.name).filter(
+          function onlyUnique(value: any, index: number, self: any) {
+            return self.indexOf(value) === index;
+          }
+        );
         Promise.all(
           endpointIds.map((id: any) => {
             return axios.post('/graphql', {
               query: EndPointInfoGraphql,
-              variables: {"endpointId": `${id}`}
-            }).then((res: AxiosResponse<any>) => {
-              return res.data.data.endpointInfo;
-            })
-          })
-        ).then(endpointInfos => {
-          var endpointMap = new Map(endpointInfos.map((e: any) => [e.id, e.serviceName] as [string, string]));
-          resData.data.endpointTopology.endpoints = endpointMap;
+              variables: {endpointId: `${id}`},
+            }).then((endpointRes: AxiosResponse<any>) => {
+              return endpointRes.data.data.endpointInfo;
+            });
+          }),
+        ).then((endpointInfos) => {
+          resData.data.endpointTopology.endpoints = endpointInfos;
           context.dispatch('COOK_SOURCE', resData);
         });
       } else {

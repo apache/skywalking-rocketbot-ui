@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import { Value } from '@/types/dashboard';
-import { SlowItem } from '@/types/global';
+import {Value} from '@/types/dashboard';
+import {SlowItem} from '@/types/global';
 
 export interface State {
   endpointPercent: {
@@ -31,7 +31,7 @@ export interface State {
   endpointSLA: { SLA: number[]; };
   endpointSlowEndpoint: SlowItem[];
   endpointTraces: SlowItem[];
-  endpointTopology: { calls: any; nodes: any; };
+  endpointTopology: { calls: any; nodes: any; visualMap: any; };
 }
 
 export const initState: State = {
@@ -42,12 +42,12 @@ export const initState: State = {
     p95: [],
     p99: [],
   },
-  endpointResponseTime: { ResponseTime: [] },
-  endpointThroughput: { Throughput: [] },
-  endpointSLA: { SLA: [] },
+  endpointResponseTime: {ResponseTime: []},
+  endpointThroughput: {Throughput: []},
+  endpointSLA: {SLA: []},
   endpointSlowEndpoint: [],
   endpointTraces: [],
-  endpointTopology: { calls: [], nodes: [] },
+  endpointTopology: {calls: [], nodes: [], visualMap: []},
 };
 
 
@@ -73,8 +73,35 @@ export const SetEndpoint = (state: State, params: any) => {
     state.endpointSlowEndpoint = params.endpointSlowEndpoint;
   }
   if (params && params.endpointTopology) {
-    state.endpointTopology.nodes = params.endpointTopology.nodes.map((n: any)=>{return {name:n.name,value:n.value+'-('+params.endpointTopology.endpoints.get(n.name)+')'}});
-    state.endpointTopology.calls = params.endpointTopology.calls.map((i: Value) => ({...i, value: 1}));
+    const serviceIdxMap = params.endpointTopology.endpoints.map((e: any) => (e.serviceName)).filter(
+      function onlyUnique(value: any, index: number, self: any) {
+        return self.indexOf(value) === index;
+      }
+    ).map((serviceName: string, index: number) => ({serviceName: serviceName, serviceIdx: index}));
+    state.endpointTopology.nodes = params.endpointTopology.nodes.map(
+      (n: any) => {
+        const serviceName = params.endpointTopology.endpoints.find((v: any) => v.id === n.name).serviceName;
+        return {
+          name: n.name,
+          content: n.value,
+          tip: serviceName,
+          value: serviceIdxMap.find((value: any) => (
+            value.serviceName === serviceName
+          )).serviceIdx,
+        }
+      });
+    state.endpointTopology.calls = params.endpointTopology.calls.map((i: any) => {
+      let sourceServiceName = params.endpointTopology.endpoints.find((v: any) => v.id === i.source).serviceName;
+      let targetServiceName = params.endpointTopology.endpoints.find((v: any) => v.id === i.target).serviceName;
+      return {...i, value: 1, tip: sourceServiceName + "->" + targetServiceName}
+    });
+    state.endpointTopology.visualMap = [{
+      type: 'piecewise',
+      dimension: 0,
+      pieces: serviceIdxMap.map((val: any) => ({value: val.serviceIdx, label: val.serviceName})),
+      categories: serviceIdxMap.map((val: any) => (val.serviceName)),
+      orient: 'horizontal',
+    }]
   }
   if (params && params.endpointTraces) {
     state.endpointTraces = params.endpointTraces.traces.map((i: any) => ({
