@@ -59,7 +59,7 @@ const actions: ActionTree<State, any> = {
         const endpointIds = resData.data.endpointTopology.nodes.map((n: any) => n.name).filter(
           function onlyUnique(value: any, index: number, self: any) {
             return self.indexOf(value) === index;
-          }
+          },
         );
         Promise.all(
           endpointIds.map((id: any) => {

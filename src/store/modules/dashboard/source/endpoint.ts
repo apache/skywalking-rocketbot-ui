@@ -76,8 +76,8 @@ export const SetEndpoint = (state: State, params: any) => {
     const serviceIdxMap = params.endpointTopology.endpoints.map((e: any) => (e.serviceName)).filter(
       function onlyUnique(value: any, index: number, self: any) {
         return self.indexOf(value) === index;
-      }
-    ).map((serviceName: string, index: number) => ({serviceName: serviceName, serviceIdx: index}));
+      },
+    ).map((serviceName: string, index: number) => ({serviceName, serviceIdx: index}));
     state.endpointTopology.nodes = params.endpointTopology.nodes.map(
       (n: any) => {
         const serviceName = params.endpointTopology.endpoints.find((v: any) => v.id === n.name).serviceName;
@@ -88,12 +88,12 @@ export const SetEndpoint = (state: State, params: any) => {
           value: serviceIdxMap.find((value: any) => (
             value.serviceName === serviceName
           )).serviceIdx,
-        }
+        };
       });
     state.endpointTopology.calls = params.endpointTopology.calls.map((i: any) => {
-      let sourceServiceName = params.endpointTopology.endpoints.find((v: any) => v.id === i.source).serviceName;
-      let targetServiceName = params.endpointTopology.endpoints.find((v: any) => v.id === i.target).serviceName;
-      return {...i, value: 1, tip: sourceServiceName + "->" + targetServiceName}
+      const sourceServiceName = params.endpointTopology.endpoints.find((v: any) => v.id === i.source).serviceName;
+      const targetServiceName = params.endpointTopology.endpoints.find((v: any) => v.id === i.target).serviceName;
+      return {...i, value: 1, tip: sourceServiceName + '->' + targetServiceName};
     });
     state.endpointTopology.visualMap = [{
       type: 'piecewise',
@@ -101,7 +101,7 @@ export const SetEndpoint = (state: State, params: any) => {
       pieces: serviceIdxMap.map((val: any) => ({value: val.serviceIdx, label: val.serviceName})),
       categories: serviceIdxMap.map((val: any) => (val.serviceName)),
       orient: 'horizontal',
-    }]
+    }];
   }
   if (params && params.endpointTraces) {
     state.endpointTraces = params.endpointTraces.traces.map((i: any) => ({
