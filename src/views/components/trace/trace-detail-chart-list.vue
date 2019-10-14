@@ -22,7 +22,7 @@
         <use xlink:href="#spinner"></use>
       </svg>
     </div>
-    <transition-group name="fade" tag="div" class="mb-5">
+    <transition-group name="fade" tag="a" class="mb-5">
       <span class="time-charts-item mr-10" v-for="(i,index) in list" :key="i" :style="`color:${computedScale(index)}`">
          <svg class="icon vm mr-5 sm">
             <use xlink:href="#issue-open-m"></use>
@@ -30,6 +30,7 @@
         <span>{{i}}</span>
       </span>
     </transition-group>
+    <a class="rk-btn r vm  tc" @click="downloadTrace">{{$t('download')}}</a>
     <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('spanInfo')">
       <div class="rk-trace-detail">
         <h5 class="mb-15">{{$t('tags')}}.</h5>
@@ -285,6 +286,28 @@ export default {
         ],
       })
     },
+    downloadTrace() {
+      let serializer = new XMLSerializer();
+      let svgNode = d3.select('.trace-list-dowanload').node();
+      let width = d3.select('.trace-list-dowanload')._groups[0][0].clientWidth;
+      let height = d3.select('.trace-list-dowanload')._groups[0][0].clientHeight;
+      let source = serializer.serializeToString(svgNode); 
+      source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+      let url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);  
+      let canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height; 
+      let context = canvas.getContext("2d");
+      let image = new Image;
+      image.src = url;
+      image.onload = function() {
+          context.drawImage(image, 0, 0);
+          var a = document.createElement("a");
+          a.download = "trace-list.png";
+          a.href = canvas.toDataURL("image/png");
+          a.click();
+      }
+    }
   }
 };
 </script>
@@ -312,11 +335,6 @@ export default {
   pointer-events: none;
 }
 .domain{display: none;}
-.trace-link {
-  fill: none;
-  stroke: rgba(0,0,0,0.1);
-  stroke-width: 2px;
-}
 .time-charts-item{
   display: inline-block;
   padding: 2px 8px;
