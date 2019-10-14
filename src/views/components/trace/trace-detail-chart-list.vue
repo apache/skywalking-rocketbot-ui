@@ -335,11 +335,6 @@ export default {
   pointer-events: none;
 }
 .domain{display: none;}
-// .trace-link {
-//   fill: none;
-//   stroke: rgba(0,0,0,0.1);
-//   stroke-width: 2px;
-// }
 .time-charts-item{
   display: inline-block;
   padding: 2px 8px;
