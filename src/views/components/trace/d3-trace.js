@@ -37,6 +37,7 @@ export default class Trace {
     this.svg = d3
       .select(this.el)
       .append('svg')
+      .attr('class', 'trace-list-dowanload')
       .attr('width', this.width)
       .attr('height', this.height);
     this.treemap = d3.tree().size([this.height * 0.7, this.width]);
@@ -76,6 +77,7 @@ export default class Trace {
     this.svg
     .append('g')
     .attr('class','trace-xaxis')
+    
     .attr('transform', `translate(${this.width * 0.618 -20 },${30})`)
     .call(this.xAxis);
     this.sequentialScale = d3
@@ -133,7 +135,8 @@ export default class Trace {
       .attr('rx',2)
       .attr('y', -22)
       .attr('x', 20)
-      .attr('width', '100%');
+      .attr('width', '100%')
+      .attr('fill', 'rgba(0,0,0,0)');
     nodeEnter
       .append('text')
       .attr('x', 13)
@@ -204,7 +207,7 @@ export default class Trace {
       .attr('fill', d =>
         d._children
           ? `${this.sequentialScale(this.list.indexOf(d.data.serviceCode))}`
-          : ''
+          : 'rbga(0,0,0,0)'
       )
       .style(
         'stroke',
@@ -245,6 +248,9 @@ export default class Trace {
       .enter()
       .insert('path', 'g')
       .attr('class', 'trace-link')
+      .attr('fill', 'rgba(0,0,0,0)')
+      .attr('stroke', 'rgba(0, 0, 0, 0.1)')
+      .attr('stroke-width', 2)
       .attr('d', d => {
         const o = { x: source.x0 + 35, y: source.y0 };
         return this.diagonal({ source: o, target: o });
