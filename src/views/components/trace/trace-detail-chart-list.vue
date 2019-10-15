@@ -30,7 +30,7 @@
         <span>{{i}}</span>
       </span>
     </transition-group>
-    <a class="rk-btn r vm  tc" @click="downloadTrace">{{$t('download')}}</a>
+    <a class="rk-btn r vm  tc" @click="downloadTrace">{{$t('exportImage')}}</a>
     <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('spanInfo')">
       <div class="rk-trace-detail">
         <h5 class="mb-15">{{$t('tags')}}.</h5>
@@ -73,13 +73,11 @@ import copy from '@/utils/copy';
 import * as d3 from 'd3';
 import Trace from './d3-trace';
 import _ from 'lodash';
-/* eslint-disable */
-/* tslint:disable */
 export default {
   props: ['data', 'traceId'],
-  data(){
+  data() {
     return {
-      segmentId:[],
+      segmentId: [],
       showDetail: false,
       list: [],
       currentSpan: [],
@@ -88,27 +86,27 @@ export default {
   },
   watch: {
     data() {
-      if(!this.data.length) {return;}
+      if (!this.data.length) { return; }
       this.loading = true;
       this.changeTree();
-      this.tree.init({label:`TRACE_ROOT`, children: this.segmentId}, this.data);
+      this.tree.init({label: 'TRACE_ROOT', children: this.segmentId}, this.data);
       this.tree.draw(() => {
         setTimeout(() => {
-          this.loading = false
+          this.loading = false;
         }, 200);
-      })
-    }
+      });
+    },
   },
   beforeDestroy() {
     d3.selectAll('.d3-tip').remove();
   },
   mounted() {
-    this.$eventBus.$on('TRACE-LIST-LOADING', this, ()=>{ this.loading = true });
+    this.$eventBus.$on('TRACE-LIST-LOADING', this, () => { this.loading = true; });
     // this.loading = true;
     this.changeTree();
-    this.tree = new Trace(this.$refs.traceList, this)
-    this.tree.init({label:`TRACE_ROOT`, children: this.segmentId}, this.data);
-    this.tree.draw()
+    this.tree = new Trace(this.$refs.traceList, this);
+    this.tree.init({label: 'TRACE_ROOT', children: this.segmentId}, this.data);
+    this.tree.draw();
     this.loading = false;
     // this.computedScale();
   },
@@ -118,13 +116,16 @@ export default {
       this.currentSpan = i.data;
       this.showDetail = true;
     },
-    traverseTree(node, spanId, segmentId, data){
-      if (!node) return;
-      if(node.spanId == spanId && node.segmentId == segmentId) {node.children.push(data);return;}
+    traverseTree(node, spanId, segmentId, data) {
+      if (!node) { return; }
+      if (node.spanId === spanId && node.segmentId === segmentId) {
+        node.children.push(data);
+        return;
+      }
       if (node.children && node.children.length > 0) {
-        for (let i = 0; i < node.children.length; i++) {
-            this.traverseTree(node.children[i],spanId,segmentId,data);
-        }
+        node.children.forEach((nodeItem) => {
+          this.traverseTree(nodeItem, spanId, segmentId, data);
+        });
       }
     },
     computedScale(i) {
@@ -134,133 +135,164 @@ export default {
       .interpolator(d3.interpolateCool);
       return sequentialScale(i);
     },
-    changeTree(){
-      if (this.data.length === 0) return [];
-      this.list = Array.from(new Set(this.data.map(i => i.serviceCode)));
+    changeTree() {
+      if (this.data.length === 0) {
+        return [];
+      }
+      this.list = Array.from(new Set(this.data.map((i) => i.serviceCode)));
       this.segmentId = [];
       const segmentGroup = {};
       const segmentIdGroup = [];
       const fixSpans = [];
       const segmentHeaders = [];
-        this.data.forEach((span) => {
-          if (span.parentSpanId === -1) {
-            segmentHeaders.push(span);
-          } else {
-            const index = this.data.findIndex(i => (i.segmentId === span.segmentId && i.spanId === (span.spanId - 1)));
-            const fixSpanKeyContent = {
-              traceId: span.traceId,
-              segmentId: span.segmentId,
-              spanId: span.spanId - 1,
-              parentSpanId: span.spanId - 2,
-            };
-            if (index === -1 && !_.find(fixSpans, fixSpanKeyContent)) {
-              fixSpans.push(
-                {
-                  ...fixSpanKeyContent, refs: [], endpointName: `VNode: ${span.segmentId}`, serviceCode: 'VirtualNode', type: `[Broken] ${span.type}`, peer: '', component: `VirtualNode: #${span.spanId - 1}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
-                },
-              );
-            }
+      this.data.forEach((span) => {
+        if (span.parentSpanId === -1) {
+          segmentHeaders.push(span);
+        } else {
+          const index = this.data.findIndex((i) => (
+            i.segmentId === span.segmentId
+            &&
+            i.spanId === (span.spanId - 1)
+          ));
+          const fixSpanKeyContent = {
+            traceId: span.traceId,
+            segmentId: span.segmentId,
+            spanId: span.spanId - 1,
+            parentSpanId: span.spanId - 2,
+          };
+          if (index === -1 && !_.find(fixSpans, fixSpanKeyContent)) {
+            fixSpans.push(
+              {
+                ...fixSpanKeyContent,
+                refs: [],
+                endpointName: `VNode: ${span.segmentId}`,
+                serviceCode: 'VirtualNode',
+                type: `[Broken] ${span.type}`,
+                peer: '',
+                component: `VirtualNode: #${span.spanId - 1}`,
+                isError: true,
+                isBroken: true,
+                layer: 'Broken',
+                tags: [],
+                logs: [],
+              },
+            );
           }
-        });
-        segmentHeaders.forEach((span) => {
-          if (span.refs.length) {
-            span.refs.forEach((ref) => {
-              const index = this.data.findIndex(i => (ref.parentSegmentId === i.segmentId && ref.parentSpanId === i.spanId));
-              if (index === -1) {
-                // create a known broken node.
-                const i = ref.parentSpanId;
-                const fixSpanKeyContent = {
+        }
+      });
+      segmentHeaders.forEach((span) => {
+        if (span.refs.length) {
+          span.refs.forEach((ref) => {
+            const index = this.data.findIndex((i) => (
+              ref.parentSegmentId === i.segmentId
+              &&
+              ref.parentSpanId === i.spanId
+            ));
+            if (index === -1) {
+              // create a known broken node.
+              const i = ref.parentSpanId;
+              const fixSpanKeyContent = {
+                traceId: ref.traceId,
+                segmentId: ref.parentSegmentId,
+                spanId: i,
+                parentSpanId: i > -1 ? 0 : -1,
+              };
+              if (!_.find(fixSpans, fixSpanKeyContent)) {
+                fixSpans.push({
+                    ...fixSpanKeyContent, refs: [], endpointName: `VNode: ${ref.parentSegmentId}`, serviceCode: 'VirtualNode', type: `[Broken] ${ref.type}`, peer: '', component: `VirtualNode: #${i}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
+                });
+              }
+              // if root broken node is not exist, create a root broken node.
+              if (fixSpanKeyContent.parentSpanId > -1) {
+                const fixRootSpanKeyContent = {
                   traceId: ref.traceId,
                   segmentId: ref.parentSegmentId,
-                  spanId: i,
-                  parentSpanId: i > -1 ? 0 : -1,
+                  spanId: 0,
+                  parentSpanId: -1,
                 };
-                !_.find(fixSpans, fixSpanKeyContent) && fixSpans.push(
-                  {
-                    ...fixSpanKeyContent, refs: [], endpointName: `VNode: ${ref.parentSegmentId}`, serviceCode: 'VirtualNode', type: `[Broken] ${ref.type}`, peer: '', component: `VirtualNode: #${i}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
-                  },
-                );
-                // if root broken node is not exist, create a root broken node.
-                if (fixSpanKeyContent.parentSpanId > -1) {
-                  const fixRootSpanKeyContent = {
-                    traceId: ref.traceId,
-                    segmentId: ref.parentSegmentId,
-                    spanId: 0,
-                    parentSpanId: -1,
-                  };
-                  !_.find(fixSpans, fixRootSpanKeyContent) && fixSpans.push(
-                    {
-                      ...fixRootSpanKeyContent,
-                      refs: [],
-                      endpointName: `VNode: ${ref.parentSegmentId}`,
-                      serviceCode: 'VirtualNode',
-                      type: `[Broken] ${ref.type}`,
-                      peer: '',
-                      component: `VirtualNode: #0`,
-                      isError: true,
-                      isBroken: true,
-                      layer: 'Broken',
-                      tags: [],
-                      logs: [],
-                    },
-                  );
+                if (!_.find(fixSpans, fixRootSpanKeyContent)) {
+                  fixSpans.push({
+                    ...fixRootSpanKeyContent,
+                    refs: [],
+                    endpointName: `VNode: ${ref.parentSegmentId}`,
+                    serviceCode: 'VirtualNode',
+                    type: `[Broken] ${ref.type}`,
+                    peer: '',
+                    component: `VirtualNode: #0`,
+                    isError: true,
+                    isBroken: true,
+                    layer: 'Broken',
+                    tags: [],
+                    logs: [],
+                  });
                 }
               }
+            }
+          });
+        }
+      });
+      [...fixSpans, ...this.data].forEach((i) => {
+        i.label = i.endpointName || 'no operation name';
+        i.children = [];
+        if (segmentGroup[i.segmentId] === undefined) {
+          segmentIdGroup.push(i.segmentId);
+          segmentGroup[i.segmentId] = [];
+          segmentGroup[i.segmentId].push(i);
+        } else {
+          segmentGroup[i.segmentId].push(i);
+        }
+      });
+      segmentIdGroup.forEach((id) => {
+        const currentSegment = segmentGroup[id].sort((a, b) => b.parentSpanId - a.parentSpanId);
+        currentSegment.forEach((s) => {
+          const index = currentSegment.findIndex((i) => i.spanId === s.parentSpanId);
+          if (index !== -1) {
+            if (
+              (currentSegment[index].isBroken && currentSegment[index].parentSpanId === -1)
+              ||
+              !currentSegment[index].isBroken
+            ) {
+              currentSegment[index].children.push(s);
+              currentSegment[index].children.sort((a, b) => a.spanId - b.spanId);
+            }
+          }
+          if (s.isBroken) {
+            const children = _.filter(this.data, (span) => {
+              return _.find(span.refs, {traceId: s.traceId, parentSegmentId: s.segmentId, parentSpanId: s.spanId});
             });
+            if (children.length > 0) {
+              s.children.push(...children);
+            }
           }
         });
-        [...fixSpans, ...this.data].forEach(i => {
-          i.label=i.endpointName || 'no operation name';
-          i.children = [];
-          if(segmentGroup[i.segmentId] === undefined){
-            segmentIdGroup.push(i.segmentId);
-            segmentGroup[i.segmentId] = [];
-            segmentGroup[i.segmentId].push(i);
-          }else{
-            segmentGroup[i.segmentId].push(i);
+        segmentGroup[id] = currentSegment[currentSegment.length - 1];
+      });
+      segmentIdGroup.forEach((id) => {
+        segmentGroup[id].refs.forEach((ref) => {
+          if (ref.traceId === this.traceId) {
+            this.traverseTree(
+              segmentGroup[ref.parentSegmentId],
+              ref.parentSpanId,
+              ref.parentSegmentId,
+              segmentGroup[id]);
           }
         });
-        segmentIdGroup.forEach(id => {
-          let currentSegment = segmentGroup[id].sort((a,b) => b.parentSpanId-a.parentSpanId);
-          currentSegment.forEach(s =>{
-            let index = currentSegment.findIndex(i => i.spanId === s.parentSpanId);
-            if (index !== -1) {
-              if ((currentSegment[index].isBroken && currentSegment[index].parentSpanId === -1) || !currentSegment[index].isBroken) {
-                currentSegment[index].children.push(s);
-                currentSegment[index].children.sort((a, b) => a.spanId - b.spanId);
-              }
-            }
-            if (s.isBroken) {
-              const children = _.filter(this.data, (span) => {
-                return _.find(span.refs, {traceId: s.traceId, parentSegmentId: s.segmentId, parentSpanId: s.spanId});
-              });
-              children.length > 0 && s.children.push(...children);
-            }
-          })
-          segmentGroup[id] = currentSegment[currentSegment.length-1]
-        })
-        segmentIdGroup.forEach(id => {
-          segmentGroup[id].refs.forEach(ref => {
-            if(ref.traceId === this.traceId) {
-              this.traverseTree(segmentGroup[ref.parentSegmentId],ref.parentSpanId,ref.parentSegmentId,segmentGroup[id])
-            };
-          })
-          // if(segmentGroup[id].refs.length !==0 ) delete segmentGroup[id];
-        })
-      for (let i in segmentGroup) {
-        if(segmentGroup[i].refs.length ===0 )
-        this.segmentId.push(segmentGroup[i]);
+      });
+      for (const i in segmentGroup) {
+        if (segmentGroup[i].refs.length === 0 ) {
+          this.segmentId.push(segmentGroup[i]);
+        }
       }
-      this.segmentId.forEach((_, i) => {
-        this.collapse(this.segmentId[i]);
-      })
+      this.segmentId.forEach((i) => {
+        this.collapse(i);
+      });
     },
     collapse(d) {
-      if(d.children){
+      if (d.children) {
         let dur = d.endTime - d.startTime;
-        d.children.forEach(i => {
+        d.children.forEach((i) => {
           dur -= (i.endTime - i.startTime);
-        })
+        });
         d.dur = dur < 0 ? 0 : dur;
         d.children.forEach((i) => this.collapse(i));
       }
@@ -268,7 +300,7 @@ export default {
     showCurrentSpanDetail(title, text) {
       const textLineNumber = text.split('\n').length;
       let textHeight = textLineNumber * 20.2 + 10;
-      const tmpHeight = window.innerHeight * 0.9
+      const tmpHeight = window.innerHeight * 0.9;
       textHeight = textHeight >= tmpHeight ? tmpHeight : textHeight;
       this.$modal.show('dialog', {
         title,
@@ -284,31 +316,29 @@ export default {
             title: 'Close',
           },
         ],
-      })
+      });
     },
     downloadTrace() {
-      let serializer = new XMLSerializer();
-      let svgNode = d3.select('.trace-list-dowanload').node();
-      let width = d3.select('.trace-list-dowanload')._groups[0][0].clientWidth;
-      let height = d3.select('.trace-list-dowanload')._groups[0][0].clientHeight;
-      let source = serializer.serializeToString(svgNode); 
-      source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
-      let url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);  
-      let canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height; 
-      let context = canvas.getContext("2d");
-      let image = new Image;
-      image.src = url;
-      image.onload = function() {
-          context.drawImage(image, 0, 0);
-          var a = document.createElement("a");
-          a.download = "trace-list.png";
-          a.href = canvas.toDataURL("image/png");
-          a.click();
-      }
-    }
-  }
+      const serializer = new XMLSerializer();
+      const svgNode = d3.select('.trace-list-dowanload').node();
+      const source = `<?xml version="1.0" standalone="no"?>\r\n${serializer.serializeToString(svgNode)}`;
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      canvas.width = d3.select('.trace-list-dowanload')._groups[0][0].clientWidth;
+      canvas.height = d3.select('.trace-list-dowanload')._groups[0][0].clientHeight;
+      context.fillStyle = '#fff';
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      const image = new Image();
+      image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(source)}`;
+      image.onload = () => {
+        context.drawImage(image, 0, 0);
+        const tagA = document.createElement('a');
+        tagA.download = 'trace-list.png';
+        tagA.href = canvas.toDataURL('image/png');
+        tagA.click();
+      };
+    },
+  },
 };
 </script>
 <style lang="scss">
