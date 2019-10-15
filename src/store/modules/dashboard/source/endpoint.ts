@@ -99,7 +99,6 @@ export const SetEndpoint = (state: State, params: any) => {
       type: 'piecewise',
       dimension: 0,
       pieces: serviceIdxMap.map((val: any) => ({value: val.serviceIdx, label: val.serviceName})),
-      categories: serviceIdxMap.map((val: any) => (val.serviceName)),
       orient: 'horizontal',
     }];
   }
