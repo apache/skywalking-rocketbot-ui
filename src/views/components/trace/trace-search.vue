@@ -30,7 +30,7 @@
         </svg>
         <span class="vm">{{this.$t('search')}}</span>
       </a>
-      <a class="rk-trace-clear-btn bg-warning r mr-10" @click="clearSearch">
+      <a class="rk-trace-clear-btn r mr-10" @click="clearSearch">
         <svg class="icon mr-5 vm">
           <use xlink:href="#clear"></use>
         </svg>

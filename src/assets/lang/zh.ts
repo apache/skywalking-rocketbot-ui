@@ -96,7 +96,7 @@ const m = {
   monthCutTip: '最近1月',
   serverZone: '服务器时区',
   percentResponse: '百分比响应',
-  download: '导出为图片',
+  exportImage: '导出为图片',
 };
 
 export default m;
