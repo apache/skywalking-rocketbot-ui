@@ -100,6 +100,7 @@ export const SetEndpoint = (state: State, params: any) => {
       dimension: 0,
       pieces: serviceIdxMap.map((val: any) => ({value: val.serviceIdx, label: val.serviceName})),
       orient: 'horizontal',
+      top: 'top',
     }];
   }
   if (params && params.endpointTraces) {
