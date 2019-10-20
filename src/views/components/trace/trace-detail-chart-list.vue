@@ -199,7 +199,9 @@ export default {
               };
               if (!_.find(fixSpans, fixSpanKeyContent)) {
                 fixSpans.push({
-                    ...fixSpanKeyContent, refs: [], endpointName: `VNode: ${ref.parentSegmentId}`, serviceCode: 'VirtualNode', type: `[Broken] ${ref.type}`, peer: '', component: `VirtualNode: #${i}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
+                    ...fixSpanKeyContent, refs: [], endpointName: `VNode: ${ref.parentSegmentId}`,
+                  serviceCode: 'VirtualNode', type: `[Broken] ${ref.type}`, peer: '', component: `VirtualNode: #${i}`,
+                  isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
                 });
               }
               // if root broken node is not exist, create a root broken node.
