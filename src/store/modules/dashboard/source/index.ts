@@ -76,7 +76,7 @@ export interface State {
   instanceClrHeap: { Value: number[] };
   instanceClrCPU: { cpu: number[]; };
   instanceClrGC: { clrGCGen0: number[], clrGCGen1: number[], clrGCGen2: number[]};
-  endpointTopology: { calls: any; nodes: any; };
+  endpointTopology: { calls: any; nodes: any; visualMap: any };
   databaseResponseTime: { ResponseTime: number[]; };
   databaseSLA: { SLA: number[]; };
   databasePercent: {

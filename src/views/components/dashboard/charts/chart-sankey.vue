@@ -37,7 +37,7 @@ export default class ChartSankey extends Vue {
         textStyle: {
           fontSize: 13,
         },
-        formatter: (a: any) => a.value,
+        formatter: (a: any) => a.data.tip,
       },
       series: [{
         type: 'sankey',
@@ -45,7 +45,7 @@ export default class ChartSankey extends Vue {
         top: '20px',
         bottom: '20px',
         label: {
-          formatter: (a: any) => a.value,
+          formatter: (a: any) => a.data.content,
         },
         animation: false,
          color: [
@@ -73,6 +73,7 @@ export default class ChartSankey extends Vue {
           },
         },
       }],
+      visualMap: this.data.visualMap,
     };
   }
 }

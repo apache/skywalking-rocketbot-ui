@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-import { Commit, ActionTree, MutationTree, Dispatch } from 'vuex';
-import axios, { AxiosPromise, AxiosResponse } from 'axios';
-import { cancelToken } from '@/utils/cancelToken';
-import { State } from './dashboard-data';
+import {Commit, ActionTree, MutationTree, Dispatch} from 'vuex';
+import axios, {AxiosPromise, AxiosResponse} from 'axios';
+import {cancelToken} from '@/utils/cancelToken';
+import {State} from './dashboard-data';
 import fragmentAll from '@/store/modules/dashboard/fragments';
 // getters
 const getters = {
@@ -36,9 +36,16 @@ const getters = {
     });
     const fragments = Array.from(new Set(fragmentsArr)).join('');
     const variables = Array.from(new Set(variablesArr)).join(',');
-    return  `query queryData(${variables}) {${fragments}}`;
+    return `query queryData(${variables}) {${fragments}}`;
   },
 };
+const EndPointInfoGraphql = `
+query getEndpointInfo($endpointId: ID!) {
+        endpointInfo: getEndpointInfo(endpointId: $endpointId) {
+            serviceName
+            id
+    }}
+`;
 
 // actions
 const actions: ActionTree<State, any> = {
@@ -46,8 +53,30 @@ const actions: ActionTree<State, any> = {
     return axios.post('/graphql', {
       query: context.getters.Graphql,
       variables: variablesData,
-    }, { cancelToken: cancelToken() }).then((res: AxiosResponse<any>) => {
-      context.dispatch('COOK_SOURCE', res.data);
+    }, {cancelToken: cancelToken()}).then((res: AxiosResponse<any>) => {
+      const resData = res.data;
+      if (resData.data && resData.data.endpointTopology) {
+        const endpointIds = resData.data.endpointTopology.nodes.map((n: any) => n.name).filter(
+          function onlyUnique(value: any, index: number, self: any) {
+            return self.indexOf(value) === index;
+          },
+        );
+        Promise.all(
+          endpointIds.map((id: any) => {
+            return axios.post('/graphql', {
+              query: EndPointInfoGraphql,
+              variables: {endpointId: `${id}`},
+            }).then((endpointRes: AxiosResponse<any>) => {
+              return endpointRes.data.data.endpointInfo;
+            });
+          }),
+        ).then((endpointInfos) => {
+          resData.data.endpointTopology.endpoints = endpointInfos;
+          context.dispatch('COOK_SOURCE', resData);
+        });
+      } else {
+        context.dispatch('COOK_SOURCE', resData);
+      }
       return res;
     });
   },
