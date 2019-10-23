@@ -48,6 +48,7 @@ export const Instances = {
     getServiceInstances(duration: $duration, serviceId: $serviceId) {
       key: id
       label: name
+      language
       attributes {
         name
         value
