@@ -33,11 +33,11 @@
     components: {
       ConparisonConfig,
       ConparisonCharts,
-    }
+    },
   })
   export default class Comparison extends Vue {
 
-  }
+    }
 </script>
 
 <style lang="scss">
