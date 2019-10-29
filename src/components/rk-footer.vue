@@ -19,15 +19,9 @@
   <footer class="rk-footer trans" :class="{'rk-footer-dark': $route.path === '/topology'}">
     <div class="rk-footer-inner">
       <div class="flex-h">
-        <!-- <div class="mr-15 sm red">
-          <svg class="vm icon mr-5">
-            <use xlink:href="#warning"></use>
-          </svg>
-          <span class="vm">Connect Error</span>
-        </div> -->
       </div>
       <div class="sm flex-h">
-        <RkDate class="mr-10" v-model="time" position="top" format="YYYY-MM-DD HH:mm:ss"/>
+        <RkFooterTime/>
         <span class="mr-15 cp" @click="setLang">{{lang === 'zh' ? '中' : 'En'}}</span>
         <span>{{$t('serverZone')}} UTC {{utc >= 0 ? '+' : ''}}</span><input v-model="utc" min='-12' max="14" class="rk-footer-utc" type="number">
       </div>
@@ -39,19 +33,15 @@
 import { Duration } from '@/types/global';
 import { Vue, Component, Watch } from 'vue-property-decorator';
 import { State, Action, Mutation } from 'vuex-class';
+import timeFormat from '@/utils/timeFormat';
 
 @Component
-export default class Footer extends Vue {
+export default class Footerssd extends Vue {
   @State('rocketbot') private rocketbotGlobal: any;
   @Action('SET_DURATION') private SET_DURATION: any;
-  @Mutation('SET_UTC') private SET_UTC: any;
+  @Action('SET_UTC') private SET_UTC: any;
   private lang: any = '';
-  private time: Date[] = [new Date(), new Date()];
   private utc: any = window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60);
-  @Watch('rocketbotGlobal.durationRow')
-  private  durationRowWatch(newValue: Duration) {
-    this.time = [newValue.start, newValue.end];
-  }
   @Watch('utc')
   private onUtcUpdate() {
     if (this.utc < -12) { this.utc = -12; }
@@ -73,7 +63,6 @@ export default class Footer extends Vue {
   }
   private beforeMount() {
     this.lang = window.localStorage.getItem('lang');
-    this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
   }
 }
 </script>
