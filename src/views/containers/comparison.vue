@@ -22,13 +22,13 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import Component from 'vue-class-component';
-  import { State, Action, Getter } from 'vuex-class';
+    import Vue from 'vue';
+    import Component from 'vue-class-component';
+    import { State, Action, Getter } from 'vuex-class';
 
-  export default class Comparison extends Vue {
+    export default class Comparison extends Vue {
 
-  }
+    }
 </script>
 
 <style lang="scss">
