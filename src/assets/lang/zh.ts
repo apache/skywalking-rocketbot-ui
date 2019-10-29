@@ -97,6 +97,7 @@ const m = {
   serverZone: '服务器时区',
   percentResponse: '百分比响应',
   exportImage: '导出为图片',
+  comparison: '指标对比',
 };
 
 export default m;

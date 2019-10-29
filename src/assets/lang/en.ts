@@ -97,6 +97,7 @@ const m = {
   serverZone: 'Server Zone',
   percentResponse: 'Percent Response',
   exportImage: 'Export image',
+  comparison: 'Metrics Comparison',
 };
 
 export default m;
