@@ -16,9 +16,8 @@
  */
 
 <template>
-  <div class="rk-comparison flex-h">
-    <ConparisonConfig />
-    <ConparisonCharts />
+  <div class="rk-comparison-charts">
+    charts
   </div>
 </template>
 
@@ -26,22 +25,17 @@
   import { Component, Vue } from 'vue-property-decorator';
   import { State, Action, Getter } from 'vuex-class';
 
-  import ConparisonConfig from '../components/comparison/comparison-config.vue';
-  import ConparisonCharts from '../components/comparison/comparison-charts.vue';
-
-  @Component({
-    components: {
-      ConparisonConfig,
-      ConparisonCharts,
-    }
-  })
-  export default class Comparison extends Vue {
+  @Component
+  export default class ComparisonCharts extends Vue {
 
   }
 </script>
 
 <style lang="scss">
-  .rk-comparison {
+  .rk-comparison-charts {
+    flex-grow: 3;
     height: 100%;
+    padding: 20px;
+    border: 1px solid #ddd;
   }
 </style>
