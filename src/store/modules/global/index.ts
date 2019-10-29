@@ -199,6 +199,10 @@ const mutations: MutationTree<State> = {
 
 // actions
 const actions: ActionTree<State, any> = {
+  SET_UTC(context: { commit: Commit }, data: number): void {
+    context.commit(types.SET_UTC, data);
+    context.commit(types.RUN_EVENTS);
+  },
   SET_DURATION(context: { commit: Commit }, data: Duration): void {
     context.commit(types.SET_DURATION, data);
     context.commit(types.RUN_EVENTS);
