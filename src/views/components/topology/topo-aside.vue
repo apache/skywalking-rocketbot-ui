@@ -17,11 +17,11 @@
 
 <template>
   <aside class="link-topo-aside">
-    <Radial v-if="radioStatus" @showRadial="showRadial" :datas="{nodes:stateTopo.nodes,calls:stateTopo.calls}"/>
+    <Radial v-if="radioStatus" :datas="{nodes:stateTopo.nodes,calls:stateTopo.calls}"/>
     <svg class="link-topo-aside-btn mb-10 icon cp lg" @click="show = !show" :style="`position:${show?'absolute':'initial'};left:${show?290:0}px;transform: rotate(${show?0 : 180}deg);`">
       <use xlink:href="#chevron-left"></use>
     </svg>
-    <svg class="link-topo-aside-btn mb-10 icon cp lg" @click="showRadial(true)" :style="`position:absolute;left:290px;top:50px;`">
+    <svg class="link-topo-aside-btn mb-10 icon cp lg" @click="showRadial()" :style="`position:absolute;left:290px;top:50px;`">
       <use xlink:href="#issues"></use>
     </svg>
     <TopoService/>
@@ -156,8 +156,8 @@ export default class TopoAside extends Vue {
       this.isMini = true;
     }
   }
-  private showRadial(status: boolean) {
-    this.radioStatus = status;
+  private showRadial() {
+    this.radioStatus = !this.radioStatus;
   }
   private setMode(mode: boolean) {
     this.SET_MODE_STATUS(mode);
