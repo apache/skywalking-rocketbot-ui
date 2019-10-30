@@ -18,14 +18,14 @@
 <template>
   <aside class="link-topo-aside">
     <Radial v-if="radioStatus" :datas="{nodes:stateTopo.nodes,calls:stateTopo.calls}"/>
-    <svg class="link-topo-aside-btn mb-10 icon cp lg" @click="show = !show" :style="`position:${show?'absolute':'initial'};left:${show?290:0}px;transform: rotate(${show?0 : 180}deg);`">
-      <use xlink:href="#chevron-left"></use>
-    </svg>
-    <svg class="link-topo-aside-btn mb-10 icon cp lg" @click="showRadial()" :style="`position:absolute;left:290px;top:50px;`">
+    <svg class="link-topo-aside-btn icon cp lg" @click="showRadial()" :style="`position:absolute;left:290px;`">
       <use xlink:href="#issues"></use>
     </svg>
+    <svg class="link-topo-aside-btn icon cp lg" @click="show = !show" :style="`position:absolute;left:290px;transform: rotate(${show?0 : 180}deg);top:50px;`">
+      <use xlink:href="#chevron-left"></use>
+    </svg>
     <TopoService/>
-    <div class="link-topo-aside-box mb-10" v-if="!stateTopo.currentNode.name && show">
+    <div class="link-topo-aside-box" style="top:50px" v-if="!stateTopo.currentNode.name && show">
       <div class="mb-20">
         <span class="b dib mr-20">{{$t('allServices')}}</span>
       </div>
@@ -34,7 +34,7 @@
         <span class="grey">{{key}}</span>
       </div>
     </div>
-    <div class="link-topo-aside-box mb-10" v-else-if="show">
+    <div class="link-topo-aside-box" style="top:50px" v-else-if="show">
       <div class="mb-20">
         <span class="b dib mr-20">{{$t('serviceDetail')}}</span>
       </div>
@@ -60,10 +60,10 @@
       </div>
     </div>
     <div :class="`link-topo-aside-box link-topo-aside-box-${isMini?'min':'max'}`"
-         :style="`top:106px;position: fixed;right: 30px;${showInfoCount === 0 ? 'animation: unset;': ''}`">
+         :style="`top:80px;position: fixed;right: 30px;${showInfoCount === 0 ? 'animation: unset;': ''}`">
       <svg v-if="stateTopo.selectedCallId"
-           :style="`position:absolute;left:-48px;top:11px;transform: rotate(${isMini?0 : 180}deg);`"
-           class="link-topo-aside-btn mb-10 icon cp lg"
+           :style="`position:absolute;left:-48px;top:0;transform: rotate(${isMini?0 : 180}deg);`"
+           class="link-topo-aside-btn icon cp lg"
            @click="setShowInfo"
       >
         <use xlink:href="#chevron-left" />
@@ -202,9 +202,13 @@ export default class TopoAside extends Vue {
   border-radius: 4px 4px 4px 4px;
   text-align: center;
   padding: 10px;
+  z-index: 101;
 }
 .link-topo-aside-box{
   border-radius: 4px;
+  position: absolute;
+  width: 280px;
+  z-index: 101;
   color: #ddd;
   background-color: #252a2f9a;
   padding: 15px 20px 10px;

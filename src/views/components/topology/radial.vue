@@ -132,9 +132,8 @@ export default {
   height: 100%;
   position: fixed;
   top: 48px;
-  left: 350px;
   background-color: #333840;
-  width: calc(100% - 350px);
+  width: 100%;
   z-index: 100;
   text-align: center;
 }

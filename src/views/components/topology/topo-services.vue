@@ -16,11 +16,8 @@
 */
 
 <template>
-  <div class="link-topo-aside-box mb-10" style="padding:0">
-    <TopoSelect class="mb-5" :current="service" :data="services" @onChoose="handleChange"/>
-    <!-- <select v-model="service" class="mr10 topo-aside-server mb-5" style="width: 100%;" @change="handleChange">
-      <option v-for="item in services" :value="item.key" :label="item.label" :key="item.key"></option>
-    </select> -->
+  <div class="link-topo-aside-box" style="padding:0;z-index:102;">
+    <TopoSelect :current="service" :data="services" @onChoose="handleChange"/>
   </div>
 </template>
 <script lang="ts">
