@@ -17,8 +17,8 @@
 
 <template>
   <div class="micro-radil-chart">
-    <div class="micro-radil-chart-btn rk-btn ghost cp" @click="$emit('showRadial', false)">X</div>
-    <RkEcharts height="100%" :option="responseConfig" />
+    <!-- <div class="micro-radil-chart-btn rk-btn ghost cp" @click="$emit('showRadial', false)">X</div> -->
+    <RkEcharts height="100%" :option="responseConfig" ref="radial" />
   </div>
 </template>
 <script lang="js">
@@ -52,7 +52,6 @@ export default {
       });
       graph.nodes.forEach((node) => {
         nodes.push({
-          value: 20,
           id: node.id,
           name: node.name,
           label: {
@@ -115,6 +114,17 @@ export default {
       };
     },
   },
+  mounted() {
+    const myChart = this.$refs.radial.myChart;
+    myChart.on('click', (params) => {
+      const currentNode = this.datas.nodes.find((item) => item.id === params.data.id);
+      if (currentNode) {
+        this.$store.commit('rocketTopo/SET_NODE', currentNode);
+      } else {
+        this.$store.commit('rocketTopo/SET_NODE', {});
+      }
+    });
+  },
 };
 </script>
 <style lang="scss">
@@ -122,10 +132,9 @@ export default {
   height: 100%;
   position: fixed;
   top: 48px;
-  left: 0;;
   background-color: #333840;
   width: 100%;
-  z-index:  100;
+  z-index: 100;
   text-align: center;
 }
 .micro-radil-chart-btn{
