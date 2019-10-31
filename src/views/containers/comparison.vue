@@ -17,8 +17,8 @@
 
 <template>
   <div class="rk-comparison flex-h">
-    <ConparisonConfig />
     <ConparisonCharts />
+    <ConparisonConfig />
   </div>
 </template>
 
@@ -26,8 +26,8 @@
   import { Component, Vue } from 'vue-property-decorator';
   import { State, Action, Getter } from 'vuex-class';
 
-  import ConparisonConfig from '../components/comparison/comparison-config.vue';
-  import ConparisonCharts from '../components/comparison/comparison-charts.vue';
+  import { comparisonConfig } from '@/store/modules/comparison';
+  import { ConparisonConfig, ConparisonCharts } from '../components/comparison';
 
   @Component({
     components: {
@@ -37,7 +37,13 @@
   })
   export default class Comparison extends Vue {
 
+    private beforeCreate() {
+      this.$store.registerModule('comparisonStore', comparisonConfig);
     }
+    private beforeDestroy() {
+      this.$store.unregisterModule('comparisonStore');
+    }
+  }
 </script>
 
 <style lang="scss">

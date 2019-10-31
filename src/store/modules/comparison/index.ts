@@ -14,27 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import comparisonConfig from './comparison-config';
 
-<template>
-  <div class="rk-comparison-charts">
-    charts
-  </div>
-</template>
-
-<script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator';
-  import { State, Action, Getter } from 'vuex-class';
-
-  @Component
-  export default class ComparisonCharts extends Vue {
-
-  }
-</script>
-
-<style lang="scss">
-  .rk-comparison-charts {
-    flex-grow: 5;
-    height: 100%;
-    padding: 20px;
-  }
-</style>
+export { comparisonConfig };
