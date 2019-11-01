@@ -16,11 +16,12 @@
  */
 
 import { Commit, ActionTree } from 'vuex';
-import Axios, { AxiosPromise, AxiosResponse } from 'axios';
+
 import graph from '@/graph';
 import * as types from '../../mutation-types';
 import { DurationTime } from '@/types/global';
-import { ICurrentOptions, DataSourceType, IOption } from '@/types/comparison';
+import fragmentAll from '@/store/modules/dashboard/fragments';
+import { ICurrentOptions, DataSourceType } from '@/types/comparison';
 import { ComparisonOption, InitSource } from './comparison-const';
 
 interface Option {
@@ -57,14 +58,14 @@ const mutations = {
 
 // actions
 const actions: ActionTree<State, ActionsParamType> = {
-  GET_SERVICES(context: { commit: Commit }, params: {duration: DurationTime}): Promise<void> {
-    return graph
-      .query('queryServices')
-      .params(params)
-      .then((res: AxiosResponse) => {
-        context.commit(types.SET_SERVICES, res.data.data.services);
-      });
-  },
+  // GET_SERVICES(context: { commit: Commit }, params: {duration: DurationTime}): Promise<void> {
+  //   return graph
+  //     .query('queryServices')
+  //     .params(params)
+  //     .then((res: any) => {
+  //       context.commit(types.SET_SERVICES, res.data.data.services);
+  //     });
+  // },
 };
 
 export default {

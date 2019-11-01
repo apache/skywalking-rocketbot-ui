@@ -17,16 +17,21 @@
 
 <template>
   <div class="rk-comparison flex-h">
-    <ConparisonCharts />
-    <ConparisonConfig />
+    <ConparisonCharts :currentOptions="currentOptions" :optSource="optSource"/>
+    <ConparisonConfig :currentOptions="currentOptions" :optSource="optSource" />
   </div>
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator';
+  import { Component, Vue, Watch } from 'vue-property-decorator';
   import { State, Action, Getter } from 'vuex-class';
 
+  import { ICurrentOptions, DataSourceType, IOption } from '@/types/comparison';
+  import { ComparisonType, ComparisonOption, InitSource, ChangeType, MetricsSource } from '../components/comparison/comparison-const';
+  import { comparisonStore } from '@/store/modules/comparison';
   import { ConparisonConfig, ConparisonCharts } from '../components/comparison';
+  import { DurationTime } from '@/types/global';
+  import compareObj from '@/utils/comparison';
 
   @Component({
     components: {
@@ -34,7 +39,54 @@
       ConparisonCharts,
     },
   })
-  export default class Comparison extends Vue {}
+  export default class Comparison extends Vue {
+    @Action('GET_SERVICES') private GET_SERVICES: any;
+    @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
+    @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
+    @Getter('durationTime') private durationTime: any;
+    private changeType = ChangeType;
+    private optSource = InitSource as DataSourceType;
+    private currentOptions = ComparisonOption as ICurrentOptions;
+
+    private beforeCreate() {
+      // this.$store.registerModule('comparisonStore', comparisonStore);
+    }
+
+    private created() {
+      this.getService();
+    }
+
+    private async getService() {
+      await this.GET_SERVICES({duration: this.durationTime, isUpdate: true});
+      const { services } = this.$store.state.rocketOption;
+      this.optSource.preServiceSource = services;
+      this.optSource.nextServiceSource = services;
+      this.currentOptions.preService = services[0];
+      this.currentOptions.nextService = services[0];
+      const type = this.currentOptions.preType.label;
+      this.optSource.preMetricsSource = MetricsSource[type];
+      this.currentOptions.preMetrics = MetricsSource[type][0];
+      this.optSource.nextMetricsSource = MetricsSource[type];
+      this.currentOptions.nextMetrics = MetricsSource[type][0];
+      await this.GET_SERVICE_ENDPOINTS({duration: this.durationTime});
+      const { endpoints } = this.$store.state.rocketOption;
+      this.optSource.preObjectSource = endpoints;
+      this.optSource.nextObjectSource = endpoints;
+      this.currentOptions.preObject = endpoints[0];
+      this.currentOptions.nextObject = endpoints[0];
+    }
+
+    @Watch('durationTime')
+    private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
+      if (compareObj(newValue, oldValue)) {
+        // this.GET_SERVICES({durationTime: this.durationTime});
+      }
+    }
+
+    private beforeDestroy() {
+      // this.$store.unregisterModule('comparisonStore');
+    }
+  }
 </script>
 
 <style lang="scss">
