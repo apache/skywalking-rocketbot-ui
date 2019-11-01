@@ -16,34 +16,34 @@
  */
 
 <template>
-  <div class="rk-comparison-config">
+  <div class="rk-comparison-config" v-if="currentOptions && optSource">
     <h4>Previous Service</h4>
     <label>Service</label>
     <RkSelect
       class="mb-5"
       :current="currentOptions.preService"
-      :data="dataSource.preServiceSource"
+      :data="optSource.preServiceSource"
       @onChoose="(item) => changOption(item, changeType.PreService)"
     />
     <label>Type</label>
     <RkSelect
       class="mb-5"
       :current="currentOptions.preType"
-      :data="dataSource.preTypeSource"
+      :data="optSource.preTypeSource"
       @onChoose="(item) => changOption(item, changeType.PreType)"
     />
     <label>Object</label>
     <RkSelect
       class="mb-5"
       :current="currentOptions.preObject"
-      :data="dataSource.preObjectSource"
+      :data="optSource.preObjectSource"
       @onChoose="(item) => changOption(item, changeType.PreObject)"
     />
     <label>Metrics</label>
     <RkSelect
       class="mb-5"
       :current="currentOptions.preMetrics"
-      :data="dataSource.preMetricsSource"
+      :data="optSource.preMetricsSource"
       @onChoose="(item) => changOption(item, changeType.PreMetrics)"
     />
     <h4>Next Service</h4>
@@ -51,86 +51,78 @@
     <RkSelect
       class="mb-5"
       :current="currentOptions.nextService"
-      :data="dataSource.nextServiceSource"
+      :data="optSource.nextServiceSource"
       @onChoose="(item) => changOption(item, changeType.NextService)"
     />
     <label>Type</label>
     <RkSelect
       class="mb-5"
       :current="currentOptions.nextType"
-      :data="dataSource.nextTypeSource"
+      :data="optSource.nextTypeSource"
       @onChoose="(item) => changOption(item, changeType.NextType)"
     />
     <label>Object</label>
     <RkSelect
       class="mb-5"
       :current="currentOptions.nextObject"
-      :data="dataSource.nextObjectSource"
+      :data="optSource.nextObjectSource"
       @onChoose="(item) => changOption(item, changeType.NextObject)"
     />
     <label>Metrics</label>
     <RkSelect
       class="mb-5"
       :current="currentOptions.nextMetrics"
-      :data="dataSource.nextMetricsSource"
+      :data="optSource.nextMetricsSource"
       @onChoose="(item) => changOption(item, changeType.NextMetrics)"
     />
   </div>
 </template>
 <script lang="ts">
-  import { Component, Vue, Watch } from 'vue-property-decorator';
-  import { State, Action, Getter } from 'vuex-class';
+  import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
+  import { State, Action, Getter, Mutation } from 'vuex-class';
+  import { ActionTree } from 'vuex';
   import Axios, { AxiosResponse, AxiosPromise } from 'axios';
 
-  import { ICurrentOptions, DataSourceType, IOption } from './comparison-metrics';
+  import { ICurrentOptions, DataSourceType, IOption } from '@/types/comparison';
   import { ComparisonType, ComparisonOption, InitSource, ChangeType } from './comparison-const';
   import { DurationTime } from '@/types/global';
   import compareObj from '@/utils/comparison';
 
   @Component
   export default class ComparisonConfig extends Vue {
-    @Action('comparisonStore/GET_SERVICE') public GET_SERVICE: any;
-    @Getter('durationTime') public durationTime: any;
-    private currentOptions = ComparisonOption as ICurrentOptions;
-    private dataSource = InitSource as DataSourceType;
+    @Action('GET_SERVICES') private GET_SERVICES: any;
+    @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
+    @Getter('durationTime') private durationTime: any;
+
     private changeType = ChangeType;
+    private optSource = InitSource as DataSourceType;
+    private currentOptions = ComparisonOption as ICurrentOptions;
 
     private created() {
-      this.initService();
+      this.getService();
     }
 
-    private fetchServices() {
-      return Axios.post('/graphql', {
-        query: `
-      query queryServices($duration: Duration!) {
-        services: getAllServices(duration: $duration) {
-          key: id
-          label: name
-        }
-      }`,
-        variables: {
-          duration: this.durationTime,
-        },
-      });
-    }
+    private async getService() {
+      await this.GET_SERVICES({duration: this.durationTime, isUpdate: true});
+      const { services } = this.$store.state.rocketOption;
 
-    private initService() {
-      this.fetchServices().then((res: AxiosResponse) => {
-        const { services } = res.data.data;
-        if (!services) {
-          return;
-        }
-        this.dataSource.preServiceSource = services;
-        this.dataSource.nextServiceSource = services;
-        this.currentOptions.preService = services[0];
-        this.currentOptions.nextService = services[0];
-      });
+      this.optSource.preServiceSource = services;
+      this.optSource.nextServiceSource = services;
+      this.currentOptions.preService = services[0];
+      this.currentOptions.nextService = services[0];
+      await this.GET_SERVICE_ENDPOINTS({duration: this.durationTime});
+      const { endpoints } = this.$store.state.rocketOption;
+
+      this.optSource.preObjectSource = endpoints;
+      this.optSource.nextObjectSource = endpoints;
+      this.currentOptions.preObject = endpoints[0];
+      this.currentOptions.nextObject = endpoints[0];
     }
 
     @Watch('durationTime')
     private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
       if (compareObj(newValue, oldValue)) {
-        this.initService();
+        this.GET_SERVICES({durationTime: this.durationTime});
       }
     }
 

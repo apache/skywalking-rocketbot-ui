@@ -19,18 +19,27 @@ import { Commit, ActionTree } from 'vuex';
 import Axios, { AxiosPromise, AxiosResponse } from 'axios';
 import graph from '@/graph';
 import * as types from '../../mutation-types';
+import { DurationTime } from '@/types/global';
+import { ICurrentOptions, DataSourceType, IOption } from '@/types/comparison';
+import { ComparisonOption, InitSource } from './comparison-const';
 
 interface Option {
-  key: string;
+  key: number;
   label: string;
 }
 
 export interface State {
-  services: Option[];
+  currentOptions: ICurrentOptions;
+  dataSource: DataSourceType;
+}
+
+interface ActionsParamType {
+  duration: DurationTime;
 }
 
 const initState: State = {
-  services: [],
+  currentOptions: ComparisonOption,
+  dataSource: InitSource,
 };
 
 // getters
@@ -39,13 +48,16 @@ const getters = {};
 // mutations
 const mutations = {
   [types.SET_SERVICES](state: State, data: Option[]): void {
-    state.services = data;
+    state.dataSource.preServiceSource = data;
+    state.dataSource.nextServiceSource = data;
+    state.currentOptions.preService = data[0];
+    state.currentOptions.nextService = data[0];
   },
 };
 
 // actions
-const actions: ActionTree<State, any> = {
-  GET_SERVICES(context: { commit: Commit }, params: any): Promise<void> {
+const actions: ActionTree<State, ActionsParamType> = {
+  GET_SERVICES(context: { commit: Commit }, params: {duration: DurationTime}): Promise<void> {
     return graph
       .query('queryServices')
       .params(params)

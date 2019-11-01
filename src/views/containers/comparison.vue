@@ -26,7 +26,6 @@
   import { Component, Vue } from 'vue-property-decorator';
   import { State, Action, Getter } from 'vuex-class';
 
-  import { comparisonConfig } from '@/store/modules/comparison';
   import { ConparisonConfig, ConparisonCharts } from '../components/comparison';
 
   @Component({
@@ -35,15 +34,7 @@
       ConparisonCharts,
     },
   })
-  export default class Comparison extends Vue {
-
-    private beforeCreate() {
-      this.$store.registerModule('comparisonStore', comparisonConfig);
-    }
-    private beforeDestroy() {
-      this.$store.unregisterModule('comparisonStore');
-    }
-  }
+  export default class Comparison extends Vue {}
 </script>
 
 <style lang="scss">
