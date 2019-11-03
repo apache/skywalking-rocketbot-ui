@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { IType, ICurrentOptions, DataSourceType } from '@/types/comparison';
+import { IOption, ICurrentOptions, DataSourceType } from '@/types/comparison';
 
-export const ComparisonType: IType[] = [
+export const ComparisonType: IOption[] = [
   {key: 0, label: 'Service'},
   {key: 1, label: 'Instance'},
   {key: 2, label: 'Endpoint'},

@@ -15,11 +15,14 @@
  * limitations under the License.
  */
 
-import { Commit, ActionTree } from 'vuex';
+import { Commit, ActionTree, Dispatch } from 'vuex';
+import axios, {AxiosPromise, AxiosResponse} from 'axios';
 
 import graph from '@/graph';
+import {cancelToken} from '@/utils/cancelToken';
 import * as types from '../../mutation-types';
 import { DurationTime } from '@/types/global';
+import { queryChartData } from '@/utils/queryChartData';
 import fragmentAll from '@/store/modules/dashboard/fragments';
 import { ICurrentOptions, DataSourceType } from '@/types/comparison';
 import { ComparisonOption, InitSource } from './comparison-const';
@@ -31,7 +34,7 @@ interface Option {
 
 export interface State {
   currentOptions: ICurrentOptions;
-  dataSource: DataSourceType;
+  // dataSource: DataSourceType;
 }
 
 interface ActionsParamType {
@@ -40,32 +43,40 @@ interface ActionsParamType {
 
 const initState: State = {
   currentOptions: ComparisonOption,
-  dataSource: InitSource,
+  // dataSource: InitSource,
 };
 
 // getters
-const getters = {};
+const getters = {
+  Graphqls(state: State, source: any) {
+    const { currentOptions } = state;
+    const type = currentOptions.preType.key;
+    const metric = currentOptions.preMetrics.key;
+    const item = queryChartData.service.filter((
+      opt: {o: string; c: string; d: string},
+    ) => opt.d === metric && opt.o === type && opt.c === 'ChartLine')[0] || {};
+    const param = (fragmentAll as any)[item.d];
+    return `query queryData(${param.variable.join(',')}) {${param.fragment}}`;
+  },
+};
 
 // mutations
 const mutations = {
-  [types.SET_SERVICES](state: State, data: Option[]): void {
-    state.dataSource.preServiceSource = data;
-    state.dataSource.nextServiceSource = data;
-    state.currentOptions.preService = data[0];
-    state.currentOptions.nextService = data[0];
+  ['UPDATESOURCE'](state: State, data: State) {
+    state.currentOptions = data.currentOptions;
   },
 };
 
 // actions
 const actions: ActionTree<State, ActionsParamType> = {
-  // GET_SERVICES(context: { commit: Commit }, params: {duration: DurationTime}): Promise<void> {
-  //   return graph
-  //     .query('queryServices')
-  //     .params(params)
-  //     .then((res: any) => {
-  //       context.commit(types.SET_SERVICES, res.data.data.services);
-  //     });
-  // },
+  GET_COMPARISON(context: { commit: Commit, dispatch: Dispatch, getters: any }, variablesData: any) {
+    return axios.post('/graphql', {
+      query: context.getters.Graphqls,
+      variables: variablesData,
+    }, {cancelToken: cancelToken()}).then((res: AxiosResponse<any>) => {
+        return res.data.data;
+    });
+  },
 };
 
 export default {

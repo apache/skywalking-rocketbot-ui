@@ -14,21 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { IType, ICurrentOptions, DataSourceType } from '@/types/comparison';
+import { IOption, ICurrentOptions, DataSourceType } from '@/types/comparison';
 
-export const ComparisonType: IType[] = [
-  {key: 0, label: 'Service'},
-  {key: 1, label: 'Instance'},
-  {key: 2, label: 'Endpoint'},
+export const ComparisonType: IOption[] = [
+  {key: 'Service', label: 'Service'},
+  {key: 'ServiceInstance', label: 'Service Instance'},
+  {key: 'ServiceEndpoint', label: 'Service Endpoint'},
 ];
 
 export const ComparisonOption: ICurrentOptions = {
   preService: {key: 0, label: ''},
-  preType: {key: 2, label: 'Endpoint'},
+  preType: {key: 'ServiceEndpoint', label: 'Service Endpoint'},
   preObject: {key: 0, label: '/projectB/{name}'},
   preMetrics: {key: 0, label: 'avg'},
   nextService: {key: 0, label: ''},
-  nextType: {key: 2, label: 'Endpoint'},
+  nextType: {key: 'ServiceEndpoint', label: 'Service Endpoint'},
   nextObject: {key: 0, label: '/projectA/{name}'},
   nextMetrics: {key: 0, label: 'avg'},
 };
@@ -66,8 +66,8 @@ export const MetricsSource: any = {
     {label: 'service_p75', key: 6},
     {label: 'service_p50', key: 7},
   ],
-  Endpoint: [
-    {label: 'endpoint_resp_time', key: 0},
+  ServiceEndpoint: [
+    {label: 'Endpoint Avg ResponseTime', key: 'endpointResponseTime'},
     {label: 'endpoint_sla', key: 1},
     {label: 'endpoint_cpm', key: 2},
     {label: 'endpoint_p99', key: 3},

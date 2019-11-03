@@ -14,12 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export interface IType {
-  key: number;
-  label: string;
-}
 export type IOption = {
-  key: number;
+  key: number | string;
   label: string;
 }
 export interface ICurrentOptions {

@@ -17,7 +17,7 @@
 
 <template>
   <div class="rk-comparison-charts">
-    charts
+    <ChartLine :intervalTime="intervalTime" :data="chartSource" />
   </div>
 </template>
 
@@ -25,14 +25,33 @@
   import { Component, Vue, Prop } from 'vue-property-decorator';
   import { State, Action, Getter } from 'vuex-class';
 
-  @Component
-  export default class ComparisonCharts extends Vue {
-    @Prop() private currentOptions: any;
-    @Prop() private optSource: any;
+  import ChartLine from '../dashboard/charts/chart-line.vue';
 
-    private created() {
-      // console.log(this.$store);
-    }
+  @Component({
+    components: { ChartLine },
+  })
+  export default class ComparisonCharts extends Vue {
+    // @Prop() private currentOptions: any;
+    @Prop() private chartSource: any;
+    @Getter('intervalTime') private intervalTime: any;
+    @Getter('durationTime') private durationTime: any;
+    // @Action('comparisonStore/GET_COMPARISON') private GET_COMPARISON: any;
+
+    // private async queryChart() {
+    //   console.log(this.currentOptions);
+    //   await this.$store.commit('comparisonStore/UPDATESOURCE', {
+    //     currentOptions: this.currentOptions,
+    //     dataSource: this.optSource,
+    //   });
+    //   this.GET_COMPARISON({
+    //     serviceId: this.currentOptions.preService.key || '',
+    //     endpointId: this.currentOptions.preObject.key || '',
+    //     endpointName: this.currentOptions.preObject.label || '',
+    //     // instanceId: this.currentOptions.currentInstance.key || '',
+    //     // databaseId: this.currentOptions.currentDatabase.key || '',
+    //     duration: this.durationTime,
+    //   });
+    // }
   }
 </script>
 

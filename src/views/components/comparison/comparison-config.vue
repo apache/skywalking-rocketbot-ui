@@ -131,6 +131,7 @@
     height: 100%;
     padding: 20px;
     border: 1px solid #ddd;
+    overflow: auto;
     h4 {
       margin: 0;
     }

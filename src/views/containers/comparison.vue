@@ -17,7 +17,7 @@
 
 <template>
   <div class="rk-comparison flex-h">
-    <ConparisonCharts :currentOptions="currentOptions" :optSource="optSource"/>
+    <ConparisonCharts :chartSource="chartSource" />
     <ConparisonConfig :currentOptions="currentOptions" :optSource="optSource" />
   </div>
 </template>
@@ -40,16 +40,20 @@
     },
   })
   export default class Comparison extends Vue {
+    @State('comparisonStore') private comparisonStore: any;
     @Action('GET_SERVICES') private GET_SERVICES: any;
     @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Getter('durationTime') private durationTime: any;
+    @Action('comparisonStore/GET_COMPARISON') private GET_COMPARISON: any;
+
     private changeType = ChangeType;
     private optSource = InitSource as DataSourceType;
     private currentOptions = ComparisonOption as ICurrentOptions;
+    private chartSource = {};
 
     private beforeCreate() {
-      // this.$store.registerModule('comparisonStore', comparisonStore);
+      this.$store.registerModule('comparisonStore', comparisonStore);
     }
 
     private created() {
@@ -59,21 +63,45 @@
     private async getService() {
       await this.GET_SERVICES({duration: this.durationTime, isUpdate: true});
       const { services } = this.$store.state.rocketOption;
+
       this.optSource.preServiceSource = services;
       this.optSource.nextServiceSource = services;
       this.currentOptions.preService = services[0];
       this.currentOptions.nextService = services[0];
-      const type = this.currentOptions.preType.label;
+
+      const type = this.currentOptions.preType.key;
+
       this.optSource.preMetricsSource = MetricsSource[type];
       this.currentOptions.preMetrics = MetricsSource[type][0];
       this.optSource.nextMetricsSource = MetricsSource[type];
       this.currentOptions.nextMetrics = MetricsSource[type][0];
       await this.GET_SERVICE_ENDPOINTS({duration: this.durationTime});
+  
       const { endpoints } = this.$store.state.rocketOption;
+
       this.optSource.preObjectSource = endpoints;
       this.optSource.nextObjectSource = endpoints;
       this.currentOptions.preObject = endpoints[0];
       this.currentOptions.nextObject = endpoints[0];
+      await this.$store.commit('comparisonStore/UPDATESOURCE', {
+        currentOptions: this.currentOptions,
+        dataSource: this.optSource,
+      });
+      this.GET_COMPARISON({
+        serviceId: this.currentOptions.preService.key || '',
+        endpointId: this.currentOptions.preObject.key || '',
+        endpointName: this.currentOptions.preObject.label || '',
+        // instanceId: this.currentOptions.currentInstance.key || '',
+        // databaseId: this.currentOptions.currentDatabase.key || '',
+        duration: this.durationTime,
+      })
+      .then((data: any) => {
+        const value = (Object as any).values(data)[0].values.map((d: {value: number}) => d.value);
+        const obj = {
+          [Object.keys(data)[0]]: value,
+        };
+        this.chartSource = obj;
+      });
     }
 
     @Watch('durationTime')
@@ -84,7 +112,7 @@
     }
 
     private beforeDestroy() {
-      // this.$store.unregisterModule('comparisonStore');
+      this.$store.unregisterModule('comparisonStore');
     }
   }
 </script>
