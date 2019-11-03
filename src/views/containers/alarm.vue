@@ -17,7 +17,7 @@
 
 <template>
   <div class="rk-alarm flex-v">
-    <AlarmTool :durationTime="durationTime" :total="rocketAlarm.total" :alarmScope="alarmScope" :isDrawer="isDrawer" :keyword="keyword"/>
+    <AlarmTool :durationTime="durationTime" :total="rocketAlarm.total" :alarmScope="alarmScope" :inTopo="inTopo" :keyword="keyword"/>
     <div style="flex-grow: 1;overflow: auto;height: 100%;">
       <AlarmTable :data="rocketAlarm.alarmService"/>
     </div>
@@ -42,7 +42,7 @@ export default class Alarm extends Vue {
   @Prop({default: {label: 'All', key: ''}})
   public alarmScope: any;
   @Prop({default: false, type: Boolean})
-  public isDrawer!: boolean;
+  public inTopo!: boolean;
   @Prop({default: ''})
   public keyword!: string;
   private beforeCreate() {

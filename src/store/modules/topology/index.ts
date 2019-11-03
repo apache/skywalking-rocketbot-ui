@@ -112,7 +112,7 @@ const mutations = {
   [types.SET_SHOW_INSTANCES_DIALOG](state: State, isShow: boolean) {
     state.showInstancesDialog = isShow;
   },
-  [types.SET_SHOW_INSTANCES_DIALOG](state: State, isShow: boolean) {
+  [types.SET_SHOW_ENDPOINT_DIALOG](state: State, isShow: boolean) {
     state.showEndpointDialog = isShow;
   },
   [types.SET_CALLBACK](state: State, data: any) {

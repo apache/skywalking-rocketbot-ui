@@ -17,10 +17,10 @@
 
 <template>
   <nav class="rk-alarm-tool flex-h">
-    <AlarmSelect v-show="!isDrawer" :title="this.$t('filterScope')" :value="alarmScope" @input="handleFilter" :data="alarmOptions"/>
+    <AlarmSelect v-show="!inTopo" :title="this.$t('filterScope')" :value="alarmScope" @input="handleFilter" :data="alarmOptions"/>
     <div class="mr-10" style="padding: 3px 15px 0">
       <div class="sm grey">{{this.$t('searchKeyword')}}</div>
-      <input :disabled="isDrawer" type="text" v-model="keyword" class="rk-alarm-tool-input" @input="handleRefresh(1)">
+      <input :disabled="inTopo" type="text" v-model="keyword" class="rk-alarm-tool-input" @input="handleRefresh(1)">
     </div>
     <RkPage class="mt-15" :currentSize="20" :currentPage="pageNum" @changePage="handlePage" :total="total"/>
   </nav>
@@ -42,7 +42,7 @@ export default class AlarmTool extends Vue {
   @Prop({default: {label: 'All', key: ''}})
   public alarmScope: any;
   @Prop({default: false, type: Boolean})
-  public isDrawer!: boolean;
+  public inTopo!: boolean;
   private alarmOptions: any = [
     {label: 'All', key: ''},
     {label: 'Service', key: 'Service'},

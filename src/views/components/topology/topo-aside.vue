@@ -122,7 +122,7 @@
     >
       <alarm-containers :style="`height: ${drawerMainBodyHeight}`"
                         :alarmScope="{label: 'Service', key: 'Service'}"
-                        isDrawer
+                        inTopo
                         :keyword="stateTopo.honeycombNode.name"
       ></alarm-containers>
     </el-drawer>
@@ -137,12 +137,15 @@
                         inTopo
       ></trace-containers>
     </el-drawer>
-    <el-drawer
-        title="Instances"
-        size="75%"
-        destroy-on-close
-        :visible.sync="stateTopo.showInstancesDialog"
-    ></el-drawer>
+<!--    <el-drawer-->
+<!--        title="Instances"-->
+<!--        size="75%"-->
+<!--        destroy-on-close-->
+<!--        :visible.sync="stateTopo.showInstancesDialog"-->
+<!--    ></el-drawer>-->
+    <instances-survey-window
+        :isShow.sync="stateTopo.showInstancesDialog"
+    ></instances-survey-window>
     <el-drawer
         title="Endpoints"
         size="75%"
@@ -161,8 +164,9 @@ import ChartResponse from './topo-response.vue';
 import Radial from './radial.vue';
 import AlarmContainers from '@/views/containers/alarm.vue';
 import TraceContainers from '@/views/containers/trace.vue';
+import InstancesSurveyWindow from '@/views/containers/instances-survey-window.vue';
 
-@Component({components: {TopoChart, TopoService, ChartResponse, Radial, AlarmContainers, TraceContainers}})
+@Component({components: {TopoChart, TopoService, ChartResponse, Radial, AlarmContainers, TraceContainers, InstancesSurveyWindow}})
 export default class TopoAside extends Vue {
   @State('rocketTopo') public stateTopo!: topoState;
   @Getter('intervalTime') public intervalTime: any;

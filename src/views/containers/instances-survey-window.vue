@@ -1,0 +1,144 @@
+/**
+* Licensed to the Apache Software Foundation (ASF) under one or more
+* contributor license agreements.  See the NOTICE file distributed with
+* this work for additional information regarding copyright ownership.
+* The ASF licenses this file to You under the Apache License, Version 2.0
+* (the "License"); you may not use this file except in compliance with
+* the License.  You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
+<template>
+  <div>
+    <el-drawer
+      v-loading="tabsLoading"
+      :destroy-on-close="true"
+      title="实例概览"
+      :visible.sync="isShowSync"
+      direction="rtl"
+      size="82%">
+      <div class="ml-10">
+        <el-tag>所属应用: {{ applicationName }}</el-tag>
+        <el-tag>所属集群: {{ clusterName }}</el-tag>
+      </div>
+      <el-tabs v-model="instanceName" @tab-click="selectInstance">
+        <el-tab-pane v-for="(instance) in instances" :key="instance.key"
+                     :label="instance.name" :name="instance.name" :lazy="true"
+        >
+          <instances-survey v-if="!rocketComps.loading" :style="`overflow: auto; height: ${instancesSurveyHeight}`" />
+        </el-tab-pane>
+      </el-tabs>
+    </el-drawer>
+  </div>
+</template>
+
+<script lang="ts">
+  import InstancesSurvey from '@/views/components/topology/instances-survey.vue';
+  import _ from 'lodash';
+  import Vue from 'vue';
+  import { Component, PropSync, Watch } from 'vue-property-decorator';
+  import { Action, Getter, State } from 'vuex-class';
+
+  interface Instance {
+    label: string,
+    key: string,
+    name?: string
+  }
+
+  @Component({
+    components: {
+      InstancesSurvey,
+    },
+  })
+  export default class InstancesSurveyWindow extends Vue {
+    @State('rocketOption') private stateDashboardOption!: any;
+    @State('rocketData') private rocketComps!: any;
+    @Getter('durationTime') private durationTime: any;
+    @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
+    @Action('MIXHANDLE_CHANGE_GROUP') private MIXHANDLE_CHANGE_GROUP: any;
+    @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+    @Action('GET_QUERY') private GET_QUERY: any;
+    @PropSync('isShow', { default: false })
+    isShowSync!: boolean;
+    instancesSurveyHeight = '100%';
+
+    tabsLoading = true;
+    instanceName!: string;
+    instances: any[] = [];
+
+    applicationName!: string;
+    clusterName!: string;
+
+    private dragIndex: number = NaN;
+
+    public dragStart(index: number) {
+      this.dragIndex = index;
+    }
+
+    private selectInstance(tab: any) {
+      const instance = _.find(this.stateDashboardOption.instances, { name: tab.name });
+      if (instance) {
+        this.SELECT_INSTANCE({ instance, duration: this.durationTime });
+        this.instanceName = tab.name;
+      }
+    }
+
+    private handleRefresh() {
+      this.GET_QUERY({
+        serviceId: this.stateDashboardOption.currentService.key || '',
+        duration: this.durationTime,
+      });
+    }
+
+    private handleOption() {
+      this.MIXHANDLE_CHANGE_GROUP({ index: 0, current: 3 });
+      return this.MIXHANDLE_GET_OPTION({ compType: 'service', duration: this.durationTime })
+      .then(() => {
+        this.handleRefresh();
+      });
+    }
+
+    @Watch('stateDashboardOption.instances')
+    watchInstances(instances: Instance[]) {
+      _.forEach(instances, instance => {
+        instance.name = instance.label.includes('@') ? instance.label.split('@')[1] : instance.label;
+      });
+      this.instances = instances;
+      if (instances.length > 0 && (this.instanceName = '0')) {
+        this.SELECT_INSTANCE({ instance: instances[0], duration: this.durationTime });
+        instances[0].name && (this.instanceName = instances[0].name);
+      }
+      this.tabsLoading = false;
+    }
+
+    beforeMount() {
+      this.applicationName = this.stateDashboardOption.currentService.label;
+      this.clusterName = '';
+      this.handleOption();
+    }
+
+    mounted(){
+      this.resize();
+      window.addEventListener('resize', this.resize);
+    }
+
+    resize() {
+      this.instancesSurveyHeight = `${document.body.clientHeight - 145}px`;
+    }
+
+    beforeDestroy(){
+      window.removeEventListener('resize', this.resize);
+    }
+  }
+</script>
+
+<style lang="less" scoped>
+
+</style>
