@@ -38,7 +38,7 @@
       </a>
       <div class="flex-h">
         <TraceSelect :hasSearch="true" :title="this.$t('service')" :value="service" @input="chooseService"
-                     :data="rocketTrace.services"/>
+                     :data="rocketTrace.services" :readonly="inTopo"/>
         <TraceSelect :hasSearch="true" :title="this.$t('instance')" v-model="instance" :data="rocketTrace.instances"/>
         <TraceSelect :title="this.$t('status')" :value="traceState" @input="chooseStatus"
                      :data="[{label:'All', key: 'ALL'}, {label:'Success', key: 'SUCCESS'}, {label:'Error', key: 'ERROR'}]"/>
@@ -71,7 +71,7 @@
 
 <script lang="ts">
   import { Duration, Option } from '@/types/global';
-  import { Component, Vue, Watch } from 'vue-property-decorator';
+  import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import TraceSelect from './trace-select.vue';
 
@@ -92,11 +92,14 @@
     private status: boolean = true;
     private maxTraceDuration: string = localStorage.getItem('maxTraceDuration') || '';
     private minTraceDuration: string = localStorage.getItem('minTraceDuration') || '';
-    private service: Option = {label: 'All', key: ''};
+    @Prop({default:{label: 'All', key: ''}})
+    public service!: Option;
     private instance: Option = {label: 'All', key: ''};
     private endpointName: string = localStorage.getItem('endpointName') || '';
     private traceId: string = localStorage.getItem('traceId') || '';
     private traceState: Option = {label: 'All', key: 'ALL'};
+    @Prop({default: false, type: Boolean})
+    public inTopo!: boolean;
 
     private dateFormat = (date: Date, step: string) => {
       const year = date.getFullYear();
@@ -177,6 +180,8 @@
         paging: {pageNum: 1, pageSize: 15, needTotal: true},
         queryOrder: this.rocketTrace.traceForm.queryOrder,
       };
+      console.log('this.service: ', this.service);
+
       if (this.service.key) {
         temp.serviceId = this.service.key;
       }

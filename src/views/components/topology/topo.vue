@@ -19,9 +19,10 @@
   <div class="micro-topo-chart"></div>
 </template>
 <script lang="js">
-import * as d3 from 'd3';
-import d3tip from 'd3-tip';
-/* tslint:disable */
+ import CssHelper from '@/utils/cssHelper';
+ import * as d3 from 'd3';
+ import d3tip from 'd3-tip';
+ /* tslint:disable */
 const diagonal = d3.linkHorizontal()
   .x(function (d) { return d.x })
   .y(function (d) { return d.y });
@@ -136,6 +137,27 @@ export default {
     'datas.nodes': 'draw',
   },
   methods: {
+   switchNativeContextMenu(enable) {
+    document.oncontextmenu = () => {
+     return enable;
+    };
+   },
+   removeHoneycomb(that) {
+    const appGovernTopoHoneycombFrames = d3.select('#app-govern-topo-honeycomb-frames');
+    appGovernTopoHoneycombFrames.nodes().forEach((node) => {
+     const childrenArray = Array.from(node.children).reverse();
+     _.forEach(childrenArray, (ele, index) => {
+      ele.classList.toggle('reverse');
+      setTimeout(() => {
+       ele.remove();
+      }, 130 * index);
+     });
+    });
+    setTimeout(() => {
+     appGovernTopoHoneycombFrames.remove();
+     that.switchNativeContextMenu(true);
+    }, 780);
+   },
     draw() {
       const codeId = this.datas.nodes.map(i => i.id);
       for (let i = 0; i < this.datas.calls.length; i += 1) {
@@ -196,6 +218,43 @@ export default {
         .on('mouseover', function(d, i) {
            that.tipName.show(d, this);
         })
+          .on('contextmenu', function (d) {
+           if (d.isReal) {
+            const honeycombFrames = d3.select('#honeycomb-selector_honeycomb-frames');
+            const appGovernTopoHoneycombFrames = that.graph.append('g')
+                .attr('id', 'app-govern-topo-honeycomb-frames')
+                .attr('style', honeycombFrames.attr('style'))
+                .attr('stroke', honeycombFrames.attr('stroke')).html(honeycombFrames.html())
+                .on('mouseleave', function () {
+                 that.removeHoneycomb(that);
+                });
+            const nodeTranslate = CssHelper.translateSerialization(this.getAttribute('transform'));
+            const appGovernTopoHoneycombFramesTranslate = CssHelper.matrixSerialization(honeycombFrames.attr('transform'));
+            appGovernTopoHoneycombFramesTranslate.tx = nodeTranslate.x - 83;
+            appGovernTopoHoneycombFramesTranslate.ty = nodeTranslate.y + 72;
+            appGovernTopoHoneycombFrames.attr('transform', CssHelper.matrixDeserialization(appGovernTopoHoneycombFramesTranslate));
+
+            that.switchNativeContextMenu(false);
+            that.$store.commit('rocketTopo/SET_HONEYCOMB_NODE', d);
+
+            d3.selectAll('#honeycomb-selector_honeycomb-group-top-right').on('click', () => {
+             that.$store.commit('rocketTopo/SET_SHOW_ALARM_DIALOG', true);
+             that.removeHoneycomb(that);
+            });
+            d3.selectAll('#honeycomb-selector_honeycomb-group-below-right').on('click', () => {
+             that.$store.commit('rocketTopo/SET_SHOW_TRACE_DIALOG', true);
+             that.removeHoneycomb(that);
+            });
+            d3.selectAll('#honeycomb-selector_honeycomb-group-below-left').on('click', () => {
+             that.$store.commit('rocketTopo/SET_SHOW_INSTANCES_DIALOG', true);
+             that.removeHoneycomb(that);
+            });
+            d3.selectAll('#honeycomb-selector_honeycomb-group-top-left').on('click', () => {
+             that.$store.commit('rocketTopo/SET_SHOW_ENDPOINT_DIALOG', true);
+             that.removeHoneycomb(that);
+            });
+           }
+          })
         .on('mouseout', function(d, i) {
           that.tipName.hide(d, this);
         })
@@ -273,7 +332,7 @@ export default {
         .attr('ry', 3)
         .attr('fill', d => d.cpm ? '#217EF299' : '#6a6d7799')
         .on('click', function(d, i) {
-          that.$store.commit('rocketTopo/SET_MODE', d.detectPoints) 
+          that.$store.commit('rocketTopo/SET_MODE', d.detectPoints)
           event.stopPropagation();
           that.tip.hide({}, this);
           that.tip.show(d, this);
@@ -303,7 +362,7 @@ export default {
     if (currNode.id === node.id) {
         return true;
     }
-    return this.datas.calls.filter(i => 
+    return this.datas.calls.filter(i =>
       (i.source.id === currNode.id || i.target.id === currNode.id) &&
       (i.source.id === node.id || i.target.id === node.id)
     ).length;
@@ -453,5 +512,146 @@ toggleLineText(lineText, currNode, isHover) {
     stroke-width: 6px;
     stroke: rgba(255, 255, 255, 0);
   }
+
+ #honeycomb-selector_honeycomb-group-background {
+  opacity: 0.6;
+  animation: honeycombXTopBackground 0.1s linear;
+ }
+
+ #honeycomb-selector_honeycomb-group-top {
+  opacity: 1;
+  animation: honeycombXTop 0.2s linear;
+ }
+
+ #honeycomb-selector_honeycomb-group-top-right {
+  opacity: 1;
+  animation: honeycombXTop 0.3s linear;
+ }
+
+ #honeycomb-selector_honeycomb-group-below-right {
+  opacity: 1;
+  animation: honeycombXTop 0.4s linear;
+ }
+
+ #honeycomb-selector_honeycomb-group-below {
+  opacity: 1;
+  animation: honeycombXTop 0.5s linear;
+ }
+
+ #honeycomb-selector_honeycomb-group-below-left {
+  opacity: 1;
+  animation: honeycombXTop 0.6s linear;
+ }
+
+ #honeycomb-selector_honeycomb-group-top-left {
+  opacity: 1;
+  animation: honeycombXTop 0.7s linear;
+ }
+
+ #honeycomb-selector_honeycomb-group-background.reverse {
+  opacity: 0;
+  animation: honeycombXTopBackgroundReverse 0.7s linear;
+ }
+
+ #honeycomb-selector_honeycomb-group-top.reverse {
+  opacity: 0;
+  animation: honeycombXTopReverse 0.6s linear;
+ }
+
+ #honeycomb-selector_honeycomb-group-top-right.reverse {
+  opacity: 0;
+  animation: honeycombXTopReverse 0.5s linear;
+ }
+
+ #honeycomb-selector_honeycomb-group-below-right.reverse {
+  opacity: 0;
+  animation: honeycombXTopReverse 0.4s linear;
+ }
+
+ #honeycomb-selector_honeycomb-group-below.reverse {
+  opacity: 0;
+  animation: honeycombXTopReverse 0.3s linear;
+ }
+
+ #honeycomb-selector_honeycomb-group-below-left.reverse {
+  opacity: 0;
+  animation: honeycombXTopReverse 0.2s linear;
+ }
+
+ #honeycomb-selector_honeycomb-group-top-left.reverse {
+  opacity: 0;
+  animation: honeycombXTopReverse 0.1s linear;
+ }
+
+ #honeycomb-selector_honeycomb-select-top-left {
+  opacity: 0.1;
+ }
+
+ /*#honeycomb-selector_honeycomb-group-top:hover,*/
+ #honeycomb-selector_honeycomb-group-top-right:hover,
+ /*#honeycomb-selector_honeycomb-group-below:hover,*/
+ #honeycomb-selector_honeycomb-group-below-left:hover,
+ #honeycomb-selector_honeycomb-group-top-left:hover {
+  fill: #0ae;
+ }
+
+ #honeycomb-selector_honeycomb-group-below-right:hover {
+  fill: #24c1ab;
+ }
+
+ @keyframes honeycombXTop {
+  from {
+   opacity: 0;
+  }
+  to {
+   opacity: 1;
+  }
+ }
+
+ @keyframes honeycombXTopBackground {
+  from {
+   opacity: 0;
+  }
+  to {
+   opacity: 0.2;
+  }
+ }
+
+ @keyframes honeycombXTopReverse {
+  from {
+   opacity: 1;
+  }
+  to {
+   opacity: 0;
+  }
+ }
+
+ @keyframes honeycombXTopBackgroundReverse {
+  from {
+   opacity: 1;
+  }
+  to {
+   opacity: 0;
+  }
+ }
+
+ #honeycomb-selector_honeycomb-group-top #honeycomb-selector_honeycomb-text-top,
+ #honeycomb-selector_honeycomb-group-top-right #honeycomb-selector_honeycomb-text-top-right,
+ #honeycomb-selector_honeycomb-group-below-right #honeycomb-selector_honeycomb-text-below-right,
+ #honeycomb-selector_honeycomb-group-below #honeycomb-selector_honeycomb-text-below,
+ #honeycomb-selector_honeycomb-group-below-left #honeycomb-selector_honeycomb-text-below-left,
+ #honeycomb-selector_honeycomb-group-top-left #honeycomb-selector_honeycomb-text-top-left {
+  display: none;
+ }
+
+ #honeycomb-selector_honeycomb-group-top:hover #honeycomb-selector_honeycomb-text-top,
+ #honeycomb-selector_honeycomb-group-top-right:hover #honeycomb-selector_honeycomb-text-top-right,
+ #honeycomb-selector_honeycomb-group-below-right:hover #honeycomb-selector_honeycomb-text-below-right,
+ #honeycomb-selector_honeycomb-group-below:hover #honeycomb-selector_honeycomb-text-below,
+ #honeycomb-selector_honeycomb-group-below-left:hover #honeycomb-selector_honeycomb-text-below-left,
+ #honeycomb-selector_honeycomb-group-top-left:hover #honeycomb-selector_honeycomb-text-top-left {
+  display: block;
+ }
+
 }
 </style>

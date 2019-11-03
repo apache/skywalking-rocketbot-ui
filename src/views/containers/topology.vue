@@ -22,7 +22,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 import { State, Action, Getter, Mutation } from 'vuex-class';
 import { AxiosResponse } from 'axios';
 import Topo from '../components/topology/topo.vue';
@@ -38,8 +38,10 @@ export default class Topology extends Vue {
   @Action('rocketTopo/CLEAR_TOPO') private CLEAR_TOPO: any;
   @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
   @Getter('durationTime') private durationTime: any;
+
   private beforeMount(): void {
-    this.SET_EVENTS([this.getTopo]);
+    // this.SET_EVENTS([this.getTopo]);
+    this.SET_EVENTS([]);
   }
   private mounted() {
     this.getTopo();

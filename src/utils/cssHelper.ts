@@ -13,9 +13,9 @@ export interface CssTranslate {
 }
 
 class CssHelper {
-  matrixSerialization(matrixString: string): CssMatrix {
+  public matrixSerialization(matrixString: string): CssMatrix {
     const matrixArray = matrixString.replace('matrix(', '')
-    .replace(')', '').split(',');
+      .replace(')', '').split(',');
     // const matrixNumberArray = [];
     const matrixNumberArray = matrixArray.map((value) => {
       return parseFloat(value);
@@ -30,7 +30,7 @@ class CssHelper {
     };
   }
 
-  translateDeserialization(translate: CssTranslate) {
+  public translateDeserialization(translate: CssTranslate) {
     let translateString = '';
     const translateEntries = Object.entries(translate);
     translateEntries.forEach(value => {
@@ -40,9 +40,9 @@ class CssHelper {
     return `translate(${translateString})`;
   }
 
-  translateSerialization(translateString: string): CssTranslate {
+  public translateSerialization(translateString: string): CssTranslate {
     const translateArray = translateString.replace('translate(', '')
-    .replace(')', '').split(',');
+      .replace(')', '').split(',');
     // const translateNumberArray = [];
     const translateNumberArray = translateArray.map((value) => {
       return parseFloat(value);
@@ -53,7 +53,7 @@ class CssHelper {
     };
   }
 
-  matrixDeserialization(cssMatrix: CssMatrix) {
+  public matrixDeserialization(cssMatrix: CssMatrix) {
     let matrixString = '';
     const matrixEntries = Object.entries(cssMatrix);
     matrixEntries.forEach(value => {

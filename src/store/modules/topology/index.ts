@@ -61,6 +61,11 @@ export interface State {
   p90: number[];
   p95: number[];
   p99: number[];
+  honeycombNode: any;
+  showAlarmDialog: boolean;
+  showTraceDialog: boolean;
+  showInstancesDialog: boolean;
+  showEndpointDialog: boolean;
 }
 
 const initState: State = {
@@ -83,6 +88,11 @@ const initState: State = {
   p90: [],
   p95: [],
   p99: [],
+  honeycombNode: {},
+  showAlarmDialog: false,
+  showTraceDialog: false,
+  showInstancesDialog: false,
+  showEndpointDialog: false,
 };
 
 // getters
@@ -90,6 +100,21 @@ const getters = {};
 
 // mutations
 const mutations = {
+  [types.SET_HONEYCOMB_NODE](state: State, data: any) {
+    state.honeycombNode = data;
+  },
+  [types.SET_SHOW_ALARM_DIALOG](state: State, isShow: boolean) {
+    state.showAlarmDialog = isShow;
+  },
+  [types.SET_SHOW_TRACE_DIALOG](state: State, isShow: boolean) {
+    state.showTraceDialog = isShow;
+  },
+  [types.SET_SHOW_INSTANCES_DIALOG](state: State, isShow: boolean) {
+    state.showInstancesDialog = isShow;
+  },
+  [types.SET_SHOW_INSTANCES_DIALOG](state: State, isShow: boolean) {
+    state.showEndpointDialog = isShow;
+  },
   [types.SET_CALLBACK](state: State, data: any) {
     state.callback = data;
   },

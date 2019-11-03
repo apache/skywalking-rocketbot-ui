@@ -114,6 +114,41 @@
         />
       </div>
     </div>
+    <el-drawer
+        title="Alarm"
+        size="75%"
+        destroy-on-close
+        :visible.sync="stateTopo.showAlarmDialog"
+    >
+      <alarm-containers :style="`height: ${drawerMainBodyHeight}`"
+                        :alarmScope="{label: 'Service', key: 'Service'}"
+                        isDrawer
+                        :keyword="stateTopo.honeycombNode.name"
+      ></alarm-containers>
+    </el-drawer>
+    <el-drawer
+        title="Trace"
+        size="75%"
+        destroy-on-close
+        :visible.sync="stateTopo.showTraceDialog"
+    >
+      <trace-containers :style="`height: ${drawerMainBodyHeight}`"
+                        :service="{label: stateTopo.honeycombNode.name, key: stateTopo.honeycombNode.id}"
+                        inTopo
+      ></trace-containers>
+    </el-drawer>
+    <el-drawer
+        title="Instances"
+        size="75%"
+        destroy-on-close
+        :visible.sync="stateTopo.showInstancesDialog"
+    ></el-drawer>
+    <el-drawer
+        title="Endpoints"
+        size="75%"
+        destroy-on-close
+        :visible.sync="stateTopo.showEndpointDialog"
+    ></el-drawer>
   </aside>
 </template>
 <script lang="ts">
@@ -124,13 +159,31 @@ import TopoChart from './topo-chart.vue';
 import TopoService from './topo-services.vue';
 import ChartResponse from './topo-response.vue';
 import Radial from './radial.vue';
+import AlarmContainers from '@/views/containers/alarm.vue';
+import TraceContainers from '@/views/containers/trace.vue';
 
-@Component({components: {TopoChart, TopoService, ChartResponse, Radial}})
+@Component({components: {TopoChart, TopoService, ChartResponse, Radial, AlarmContainers, TraceContainers}})
 export default class TopoAside extends Vue {
   @State('rocketTopo') public stateTopo!: topoState;
   @Getter('intervalTime') public intervalTime: any;
   @Mutation('rocketTopo/SET_MODE_STATUS') public SET_MODE_STATUS: any;
   @Action('rocketTopo/CLEAR_TOPO_INFO') public CLEAR_TOPO_INFO: any;
+
+  private drawerMainBodyHeight = '100%';
+
+  private resize() {
+    this.drawerMainBodyHeight = `${document.body.clientHeight - 120}px`;
+  }
+
+  private mounted() {
+    this.resize();
+    window.addEventListener('resize', this.resize);
+  }
+
+  private beforeDestroy() {
+    window.removeEventListener('resize', this.resize);
+  }
+
   get types() {
     const result: any = {};
     this.stateTopo.nodes.forEach((i: any) => {
