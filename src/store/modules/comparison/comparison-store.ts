@@ -27,11 +27,6 @@ import fragmentAll from '@/store/modules/dashboard/fragments';
 import { ICurrentOptions, DataSourceType } from '@/types/comparison';
 import { ComparisonOption, InitSource, MetricsSource } from './comparison-const';
 
-interface Option {
-  key: number;
-  label: string;
-}
-
 export interface State {
   currentOptions: ICurrentOptions;
   dataSource: DataSourceType;
@@ -56,13 +51,17 @@ const getters = {
     const preMetric = currentOptions.preMetrics.key;
     const nextType = currentOptions.nextType.key;
     const nextMetric =  currentOptions.nextMetrics.key;
-    const preItem = queryChartData.service.filter((
-      opt: {o: string; c: string; d: string},
-    ) => opt.d === preMetric && opt.o === preType && opt.c !== 'ChartNum')[0] || {};
+    const preItem = queryChartData.service.filter((opt: {
+      o: string;
+      c: string;
+      d: string
+    }) => opt.d === preMetric && opt.o === preType && opt.c !== 'ChartNum')[0] || {};
     const preParam = (fragmentAll as any)[preItem.d];
-    const nextItem = queryChartData.service.filter((
-      opt: {o: string; c: string; d: string},
-    ) => opt.d === nextMetric && opt.o === nextType && opt.c !== 'ChartNum')[0] || {};
+    const nextItem = queryChartData.service.filter((opt: {
+      o: string;
+      c: string;
+      d: string
+    }) => opt.d === nextMetric && opt.o === nextType && opt.c !== 'ChartNum')[0] || {};
     const nextParam = (fragmentAll as any)[nextItem.d];
     const variables = [...preParam.variable, ...nextParam.variable];
 
@@ -75,9 +74,6 @@ const getters = {
 
 // mutations
 const mutations = {
-  // ['UPDATESOURCE'](state: State, data: State) {
-  //   state.currentOptions = data.currentOptions;
-  // },
   [types.SET_SERVICES](state: State, data: any) {
     const { services } = data;
     if (!services.length) { return; }
@@ -101,14 +97,21 @@ const mutations = {
     state.currentOptions.preObject = data[0];
     state.currentOptions.nextObject = data[0];
   },
-  ['SET_CHARTVAL'](state: State, data: any) {
-    state.chartSource = data;
+  [types.SET_CHARTVAL](state: State, data: any) {
+    const keys = Object.keys(data);
+    const obj = {} as any;
+    for (const key of keys) {
+      const value = data[key].values.map((d: {value: number}) => d.value);
+      const strKey = `${state.currentOptions.preService.label}-${state.currentOptions.preObject.label}-${key}`;
+      obj[strKey] = value;
+    }
+    state.chartSource = obj;
   },
 };
 
 // actions
 const actions: ActionTree<State, ActionsParamType> = {
-  GET_SERVICES(context: { commit: Commit, dispatch: Dispatch, rootState: any  }, params: any) {
+  GET_SERVICES(context: { commit: Commit, dispatch: Dispatch, rootState: any  }, params: {duration: string}) {
     return graph.query('queryServices').params(params)
       .then((res: AxiosResponse) => {
         context.commit(types.SET_SERVICES, {services: res.data.data.services});
@@ -143,14 +146,8 @@ const actions: ActionTree<State, ActionsParamType> = {
       variables: variablesData,
     }, {cancelToken: cancelToken()}).then((res: AxiosResponse<any>) => {
         const data = res.data.data;
-        const keys = Object.keys(data);
-        const obj = {} as any;
-        for (const key of keys) {
-          const value = data[key].values.map((d: {value: number}) => d.value);
-          const strKey = `${currentOptions.preService.label}-${currentOptions.preObject.label}-${key}`;
-          obj[strKey] = value;
-        }
-        context.commit('SET_CHARTVAL', obj);
+
+        context.commit('SET_CHARTVAL', data);
     });
   },
 };
