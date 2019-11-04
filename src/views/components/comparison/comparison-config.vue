@@ -78,26 +78,18 @@
   </div>
 </template>
 <script lang="ts">
-  import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
-  import { State, Action, Getter, Mutation } from 'vuex-class';
-  import { ActionTree } from 'vuex';
-  import Axios, { AxiosResponse, AxiosPromise } from 'axios';
-
-  import { ICurrentOptions, DataSourceType, IOption } from '@/types/comparison';
-  import { ComparisonType, ComparisonOption, InitSource, ChangeType, MetricsSource } from './comparison-const';
-  import { DurationTime } from '@/types/global';
-  import compareObj from '@/utils/comparison';
+  import { Component, Vue, Prop } from 'vue-property-decorator';
+  import { IOption } from '@/types/comparison';
 
   @Component
   export default class ComparisonConfig extends Vue {
-    @Prop() private currentOptions = ComparisonOption as ICurrentOptions;
-    @Prop() private optSource = InitSource as DataSourceType;
-    private changeType = ChangeType;
+    @Prop() private currentOptions: any;
+    @Prop() private optSource: any;
+    private changeType: any;
 
     private async changOption(item: IOption, type: string) {
       if (this.changeType.PreService === type) {
         this.currentOptions.preService = item;
-        // await this.SELECT_SERVICE({duration: this.durationTime, service: item});
       }
       if (this.changeType.PreType === type) {
         this.currentOptions.preType = item;
@@ -120,7 +112,6 @@
       if (this.changeType.NextObject === type) {
         this.currentOptions.nextObject = item;
       }
-      // console.log(this.$store);
     }
   }
 </script>

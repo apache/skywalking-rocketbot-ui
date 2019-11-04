@@ -17,17 +17,16 @@
 
 <template>
   <div class="rk-comparison flex-h">
-    <ConparisonCharts :chartSource="chartSource" />
-    <ConparisonConfig :currentOptions="currentOptions" :optSource="optSource" />
+    <ConparisonCharts :chartSource="comparison.chartSource" />
+    <ConparisonConfig :currentOptions="comparison.currentOptions" :optSource="comparison.dataSource" />
   </div>
 </template>
 
 <script lang="ts">
   import { Component, Vue, Watch } from 'vue-property-decorator';
-  import { State, Action, Getter } from 'vuex-class';
+  import { State, Getter } from 'vuex-class';
 
-  import { ICurrentOptions, DataSourceType, IOption } from '@/types/comparison';
-  import { ComparisonType, ComparisonOption, InitSource, ChangeType, MetricsSource } from '../components/comparison/comparison-const';
+  // import { ICurrentOptions, DataSourceType, IOption } from '@/types/comparison';
   import { comparisonStore } from '@/store/modules/comparison';
   import { ConparisonConfig, ConparisonCharts } from '../components/comparison';
   import { DurationTime } from '@/types/global';
@@ -40,78 +39,21 @@
     },
   })
   export default class Comparison extends Vue {
-    @State('comparisonStore') private comparisonStore: any;
-    @Action('GET_SERVICES') private GET_SERVICES: any;
-    @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
-    @Action('GET_SERVICE_INSTANCES') private GET_SERVICE_INSTANCES: any;
-    @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
+    @State('comparisonStore') private comparison: any;
     @Getter('durationTime') private durationTime: any;
-    @Action('comparisonStore/GET_COMPARISON') private GET_COMPARISON: any;
-
-    private changeType = ChangeType;
-    private optSource = InitSource as DataSourceType;
-    private currentOptions = ComparisonOption as ICurrentOptions;
-    private chartSource = {};
 
     private beforeCreate() {
       this.$store.registerModule('comparisonStore', comparisonStore);
     }
 
     private created() {
-      this.getService();
-    }
-
-    private async getService() {
-      await this.GET_SERVICES({duration: this.durationTime, isUpdate: true});
-      const { services } = this.$store.state.rocketOption;
-
-      this.optSource.preServiceSource = services;
-      this.optSource.nextServiceSource = services;
-      this.currentOptions.preService = services[0];
-      this.currentOptions.nextService = services[0];
-
-      const type = this.currentOptions.preType.key;
-
-      this.optSource.preMetricsSource = MetricsSource[type];
-      this.currentOptions.preMetrics = MetricsSource[type][0];
-      this.optSource.nextMetricsSource = MetricsSource[type];
-      this.currentOptions.nextMetrics = MetricsSource[type][1];
-      await this.GET_SERVICE_ENDPOINTS({duration: this.durationTime});
-
-      const { endpoints } = this.$store.state.rocketOption;
-
-      this.optSource.preObjectSource = endpoints;
-      this.optSource.nextObjectSource = endpoints;
-      this.currentOptions.preObject = endpoints[0];
-      this.currentOptions.nextObject = endpoints[0];
-      await this.$store.commit('comparisonStore/UPDATESOURCE', {
-        currentOptions: this.currentOptions,
-        dataSource: this.optSource,
-      });
-      this.GET_COMPARISON({
-        serviceId: this.currentOptions.preService.key || '',
-        endpointId: this.currentOptions.preObject.key || '',
-        endpointName: this.currentOptions.preObject.label || '',
-        // instanceId: this.currentOptions.currentInstance.key || '',
-        // databaseId: this.currentOptions.currentDatabase.key || '',
-        duration: this.durationTime,
-      })
-      .then((data: any) => {
-        const keys = Object.keys(data);
-        const obj = {} as any;
-        for (const key of keys) {
-          const value = data[key].values.map((d: {value: number}) => d.value);
-          const strKey = `${this.currentOptions.preService.label}-${this.currentOptions.preObject.label}-${key}`;
-          obj[strKey] = value;
-        }
-        this.chartSource = obj;
-      });
+      this.$store.dispatch('comparisonStore/GET_SERVICES', {duration: this.durationTime});
     }
 
     @Watch('durationTime')
     private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
       if (compareObj(newValue, oldValue)) {
-        // this.GET_SERVICES({durationTime: this.durationTime});
+        this.$store.dispatch('comparisonStore/GET_SERVICES', {duration: this.durationTime});
       }
     }
 

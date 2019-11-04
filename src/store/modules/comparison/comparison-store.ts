@@ -25,7 +25,7 @@ import { DurationTime } from '@/types/global';
 import { queryChartData } from '@/utils/queryChartData';
 import fragmentAll from '@/store/modules/dashboard/fragments';
 import { ICurrentOptions, DataSourceType } from '@/types/comparison';
-import { ComparisonOption, InitSource } from './comparison-const';
+import { ComparisonOption, InitSource, MetricsSource } from './comparison-const';
 
 interface Option {
   key: number;
@@ -34,7 +34,8 @@ interface Option {
 
 export interface State {
   currentOptions: ICurrentOptions;
-  // dataSource: DataSourceType;
+  dataSource: DataSourceType;
+  chartSource: any;
 }
 
 interface ActionsParamType {
@@ -43,7 +44,8 @@ interface ActionsParamType {
 
 const initState: State = {
   currentOptions: ComparisonOption,
-  // dataSource: InitSource,
+  dataSource: InitSource,
+  chartSource: {},
 };
 
 // getters
@@ -66,23 +68,89 @@ const getters = {
 
     return `query queryData(${variables.join(',')}) {${preParam.fragment} ${nextParam.fragment}}`;
   },
+  currentOptions(state: State) {
+    return state.currentOptions;
+  },
 };
 
 // mutations
 const mutations = {
-  ['UPDATESOURCE'](state: State, data: State) {
-    state.currentOptions = data.currentOptions;
+  // ['UPDATESOURCE'](state: State, data: State) {
+  //   state.currentOptions = data.currentOptions;
+  // },
+  [types.SET_SERVICES](state: State, data: any) {
+    const { services } = data;
+    if (!services.length) { return; }
+    state.dataSource.preServiceSource = services;
+    state.dataSource.nextServiceSource = services;
+    state.currentOptions.preService = services[0];
+    state.currentOptions.nextService = services[0];
+    const type = state.currentOptions.preType.key;
+
+    state.dataSource.preMetricsSource = MetricsSource[type];
+    state.currentOptions.preMetrics = MetricsSource[type][0];
+    state.dataSource.nextMetricsSource = MetricsSource[type];
+    state.currentOptions.nextMetrics = MetricsSource[type][1];
+  },
+  [types.SET_ENDPOINTS](state: State, data: any) {
+    if (!data.length) {
+      return;
+    }
+    state.dataSource.preObjectSource = data;
+    state.dataSource.nextObjectSource = data;
+    state.currentOptions.preObject = data[0];
+    state.currentOptions.nextObject = data[0];
+  },
+  ['SET_CHARTVAL'](state: State, data: any) {
+    state.chartSource = data;
   },
 };
 
 // actions
 const actions: ActionTree<State, ActionsParamType> = {
-  GET_COMPARISON(context: { commit: Commit, dispatch: Dispatch, getters: any }, variablesData: any) {
+  GET_SERVICES(context: { commit: Commit, dispatch: Dispatch, rootState: any  }, params: any) {
+    return graph.query('queryServices').params(params)
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_SERVICES, {services: res.data.data.services});
+      }).then(() => {
+        context.dispatch('GET_SERVICE_ENDPOINTS', params.duration);
+      });
+  },
+  async GET_SERVICE_ENDPOINTS(context: { commit: Commit, state: State, dispatch: Dispatch }, date: string) {
+    if (!context.state.currentOptions.preService.key) {
+      return new Promise((resolve) => resolve());
+    }
+    await graph
+      .query('queryEndpoints')
+      .params({serviceId: context.state.currentOptions.preService.key, keyword: ''})
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
+      });
+    await context.dispatch('GET_COMPARISON', date);
+  },
+  GET_COMPARISON(context: { commit: Commit, state: State, dispatch: Dispatch, getters: any }, date: string) {
+    const { currentOptions } = context.getters;
+    const variablesData = {
+      serviceId: currentOptions.preService.key || '',
+      endpointId: currentOptions.preObject.key || '',
+      endpointName: currentOptions.preObject.label || '',
+      // instanceId: this.currentOptions.currentInstance.key || '',
+      // databaseId: this.currentOptions.currentDatabase.key || '',
+      duration: date,
+    };
     return axios.post('/graphql', {
       query: context.getters.Graphqls,
       variables: variablesData,
     }, {cancelToken: cancelToken()}).then((res: AxiosResponse<any>) => {
-        return res.data.data;
+        const data = res.data.data;
+        const keys = Object.keys(data);
+        const obj = {} as any;
+        for (const key of keys) {
+          const value = data[key].values.map((d: {value: number}) => d.value);
+          const strKey = `${currentOptions.preService.label}-${currentOptions.preObject.label}-${key}`;
+          obj[strKey] = value;
+        }
+        context.commit('SET_CHARTVAL', obj);
     });
   },
 };

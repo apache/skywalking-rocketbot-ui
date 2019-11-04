@@ -17,18 +17,18 @@
 import { IOption, ICurrentOptions, DataSourceType } from '@/types/comparison';
 
 export const ComparisonType: IOption[] = [
-  {key: 0, label: 'Service'},
-  {key: 1, label: 'Instance'},
-  {key: 2, label: 'Endpoint'},
+  {key: 'Service', label: 'Service'},
+  {key: 'ServiceInstance', label: 'Service Instance'},
+  {key: 'ServiceEndpoint', label: 'Service Endpoint'},
 ];
 
 export const ComparisonOption: ICurrentOptions = {
   preService: {key: 0, label: ''},
-  preType: {key: 0, label: 'Endpoint'},
+  preType: {key: 'ServiceEndpoint', label: 'Service Endpoint'},
   preObject: {key: 0, label: '/projectB/{name}'},
   preMetrics: {key: 0, label: 'avg'},
   nextService: {key: 0, label: ''},
-  nextType: {key: 0, label: 'Endpoint'},
+  nextType: {key: 'ServiceEndpoint', label: 'Service Endpoint'},
   nextObject: {key: 0, label: '/projectA/{name}'},
   nextMetrics: {key: 0, label: 'avg'},
 };
@@ -54,3 +54,30 @@ export enum ChangeType {
   NextObject = 'nextObject',
   NextMetrics = 'nextMetrics',
 }
+
+export const MetricsSource: any = {
+  Service: [
+    {label: 'service_resp_time', key: 0},
+    {label: 'service_sla', key: 1},
+    {label: 'service_cpm', key: 2},
+    {label: 'service_p99', key: 3},
+    {label: 'service_p95', key: 4},
+    {label: 'service_p90', key: 5},
+    {label: 'service_p75', key: 6},
+    {label: 'service_p50', key: 7},
+  ],
+  ServiceEndpoint: [
+    {label: 'Endpoint Avg ResponseTime', key: 'endpointResponseTime'},
+    {label: 'Endpoint SLA', key: 'endpointSLA'},
+    {label: 'endpoint_cpm', key: 2},
+    {label: 'endpoint_p99', key: 3},
+    {label: 'endpoint_p95', key: 4},
+    {label: 'endpoint_p90', key: 5},
+    {label: 'endpoint_p75', key: 7},
+    {label: 'endpoint_p50', key: 8},
+  ],
+  // Instance: ['service_instance_resp_time', 'service_instan_sla', 'service_instan_cpm'],
+  // Database: ['database_access_resp_time', 'database_access_sla', 'database_access_cpm',
+  //  'database_access_p99', 'database_access_p95',
+  //   'database_access_p90', 'database_access_p75', 'database_access_p50'],
+};
