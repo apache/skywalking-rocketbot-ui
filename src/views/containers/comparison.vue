@@ -43,6 +43,7 @@
     @State('comparisonStore') private comparisonStore: any;
     @Action('GET_SERVICES') private GET_SERVICES: any;
     @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
+    @Action('GET_SERVICE_INSTANCES') private GET_SERVICE_INSTANCES: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Getter('durationTime') private durationTime: any;
     @Action('comparisonStore/GET_COMPARISON') private GET_COMPARISON: any;
@@ -74,9 +75,9 @@
       this.optSource.preMetricsSource = MetricsSource[type];
       this.currentOptions.preMetrics = MetricsSource[type][0];
       this.optSource.nextMetricsSource = MetricsSource[type];
-      this.currentOptions.nextMetrics = MetricsSource[type][0];
+      this.currentOptions.nextMetrics = MetricsSource[type][1];
       await this.GET_SERVICE_ENDPOINTS({duration: this.durationTime});
-  
+
       const { endpoints } = this.$store.state.rocketOption;
 
       this.optSource.preObjectSource = endpoints;
@@ -96,10 +97,13 @@
         duration: this.durationTime,
       })
       .then((data: any) => {
-        const value = (Object as any).values(data)[0].values.map((d: {value: number}) => d.value);
-        const obj = {
-          [Object.keys(data)[0]]: value,
-        };
+        const keys = Object.keys(data);
+        const obj = {} as any;
+        for (const key of keys) {
+          const value = data[key].values.map((d: {value: number}) => d.value);
+          const strKey = `${this.currentOptions.preService.label}-${this.currentOptions.preObject.label}-${key}`;
+          obj[strKey] = value;
+        }
         this.chartSource = obj;
       });
     }

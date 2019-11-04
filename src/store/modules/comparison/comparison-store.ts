@@ -48,15 +48,23 @@ const initState: State = {
 
 // getters
 const getters = {
-  Graphqls(state: State, source: any) {
+  Graphqls(state: State) {
     const { currentOptions } = state;
-    const type = currentOptions.preType.key;
-    const metric = currentOptions.preMetrics.key;
-    const item = queryChartData.service.filter((
+    const preType = currentOptions.preType.key;
+    const preMetric = currentOptions.preMetrics.key;
+    const nextType = currentOptions.nextType.key;
+    const nextMetric =  currentOptions.nextMetrics.key;
+    const preItem = queryChartData.service.filter((
       opt: {o: string; c: string; d: string},
-    ) => opt.d === metric && opt.o === type && opt.c === 'ChartLine')[0] || {};
-    const param = (fragmentAll as any)[item.d];
-    return `query queryData(${param.variable.join(',')}) {${param.fragment}}`;
+    ) => opt.d === preMetric && opt.o === preType && opt.c !== 'ChartNum')[0] || {};
+    const preParam = (fragmentAll as any)[preItem.d];
+    const nextItem = queryChartData.service.filter((
+      opt: {o: string; c: string; d: string},
+    ) => opt.d === nextMetric && opt.o === nextType && opt.c !== 'ChartNum')[0] || {};
+    const nextParam = (fragmentAll as any)[nextItem.d];
+    const variables = [...preParam.variable, ...nextParam.variable];
+
+    return `query queryData(${variables.join(',')}) {${preParam.fragment} ${nextParam.fragment}}`;
   },
 };
 

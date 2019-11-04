@@ -68,7 +68,7 @@ export const MetricsSource: any = {
   ],
   ServiceEndpoint: [
     {label: 'Endpoint Avg ResponseTime', key: 'endpointResponseTime'},
-    {label: 'endpoint_sla', key: 1},
+    {label: 'endpoint SLA', key: 'endpointSLA'},
     {label: 'endpoint_cpm', key: 2},
     {label: 'endpoint_p99', key: 3},
     {label: 'endpoint_p95', key: 4},
