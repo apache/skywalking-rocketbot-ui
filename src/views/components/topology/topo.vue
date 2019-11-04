@@ -246,10 +246,12 @@ export default {
              that.removeHoneycomb(that);
             });
             d3.selectAll('#honeycomb-selector_honeycomb-group-below-left').on('click', () => {
+             that.$store.commit('SET_CURRENT_SERVICE', { key: d.id, label: d.name });
              that.$store.commit('rocketTopo/SET_SHOW_INSTANCES_DIALOG', true);
              that.removeHoneycomb(that);
             });
             d3.selectAll('#honeycomb-selector_honeycomb-group-top-left').on('click', () => {
+             that.$store.commit('SET_CURRENT_SERVICE', { key: d.id, label: d.name });
              that.$store.commit('rocketTopo/SET_SHOW_ENDPOINT_DIALOG', true);
              that.removeHoneycomb(that);
             });

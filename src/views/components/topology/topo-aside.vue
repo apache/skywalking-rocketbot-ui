@@ -137,21 +137,16 @@
                         inTopo
       ></trace-containers>
     </el-drawer>
-<!--    <el-drawer-->
-<!--        title="Instances"-->
-<!--        size="75%"-->
-<!--        destroy-on-close-->
-<!--        :visible.sync="stateTopo.showInstancesDialog"-->
-<!--    ></el-drawer>-->
     <instances-survey-window
-        :isShow.sync="stateTopo.showInstancesDialog"
+        v-if="stateTopo.showInstancesDialog"
+        :is-show.sync="stateTopo.showInstancesDialog"
+        :instances="stateDashboardOption.instances"
     ></instances-survey-window>
-    <el-drawer
-        title="Endpoints"
-        size="75%"
-        destroy-on-close
-        :visible.sync="stateTopo.showEndpointDialog"
-    ></el-drawer>
+    <endpoint-survey-window
+        v-if="stateTopo.showEndpointDialog"
+        :is-show.sync="stateTopo.showEndpointDialog"
+        :endpoints="stateDashboardOption.endpoints"
+    ></endpoint-survey-window>
   </aside>
 </template>
 <script lang="ts">
@@ -165,11 +160,16 @@ import Radial from './radial.vue';
 import AlarmContainers from '@/views/containers/alarm.vue';
 import TraceContainers from '@/views/containers/trace.vue';
 import InstancesSurveyWindow from '@/views/containers/instances-survey-window.vue';
+import EndpointSurveyWindow from '@/views/containers/endpoint-survey-window.vue';
 
-@Component({components: {TopoChart, TopoService, ChartResponse, Radial, AlarmContainers, TraceContainers, InstancesSurveyWindow}})
+@Component({components: {TopoChart, TopoService, ChartResponse, Radial, AlarmContainers, TraceContainers, InstancesSurveyWindow, EndpointSurveyWindow}})
 export default class TopoAside extends Vue {
   @State('rocketTopo') public stateTopo!: topoState;
+  @State('rocketOption') private stateDashboardOption!: any;
   @Getter('intervalTime') public intervalTime: any;
+  @Getter('durationTime') private durationTime: any;
+  @Action('rocketTopo/GET_TOPO') private GET_TOPO: any;
+  @Action('rocketTopo/CLEAR_TOPO') private CLEAR_TOPO: any;
   @Mutation('rocketTopo/SET_MODE_STATUS') public SET_MODE_STATUS: any;
   @Action('rocketTopo/CLEAR_TOPO_INFO') public CLEAR_TOPO_INFO: any;
 
@@ -179,13 +179,28 @@ export default class TopoAside extends Vue {
     this.drawerMainBodyHeight = `${document.body.clientHeight - 120}px`;
   }
 
+  private beforeCreate() {
+    this.$store.registerModule('rocketTopo', topo);
+  }
+
+  async created() {
+    this.getTopo();
+  }
+
   private mounted() {
     this.resize();
     window.addEventListener('resize', this.resize);
   }
 
+  private getTopo() {
+    this.GET_TOPO({ duration: this.durationTime });
+  }
+
   private beforeDestroy() {
     window.removeEventListener('resize', this.resize);
+    this.CLEAR_TOPO_INFO();
+    this.CLEAR_TOPO();
+    this.$store.unregisterModule('rocketTopo');
   }
 
   get types() {
@@ -204,6 +219,12 @@ export default class TopoAside extends Vue {
   private showInfo: boolean = false;
   private isMini: boolean = true;
   private showInfoCount: number = 0;
+
+  @Watch('durationTime')
+  watchDurationTime() {
+    this.getTopo();
+  }
+
   @Watch('stateTopo.selectedCallId')
   private watchDetectPointNodeId(newValue: string) {
     if (newValue) {

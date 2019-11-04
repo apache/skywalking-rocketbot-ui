@@ -19,18 +19,18 @@
   <div>
     <el-drawer
       :destroy-on-close="true"
-      title="Instance survey"
+      title="实例概览"
       :visible.sync="isShowSync"
       direction="rtl"
       size="80%">
       <div class="ml-10">
         <el-tag>Service Name: {{ serviceName }}</el-tag>
       </div>
-      <el-tabs v-model="instanceName" @tab-click="selectInstance">
-        <el-tab-pane v-for="(instance) in instances" :key="instance.key"
-                     :label="instance.name" :name="instance.name" :lazy="true"
+      <el-tabs v-model="endpointName" @tab-click="selectInstance">
+        <el-tab-pane v-for="(endpoint) in endpoints" :key="endpoint.key"
+                     :label="endpoint.name" :name="endpoint.name" :lazy="true"
         >
-          <instances-survey v-if="!rocketComps.loading" :style="`overflow: auto; height: ${instancesSurveyHeight}`" />
+          <endpoints-survey v-if="!rocketComps.loading" :style="`overflow: auto; height: ${instancesSurveyHeight}`" />
         </el-tab-pane>
       </el-tabs>
     </el-drawer>
@@ -38,13 +38,13 @@
 </template>
 
 <script lang="ts">
-  import InstancesSurvey from '@/views/components/topology/instances-survey.vue';
+  import EndpointsSurvey from '@/views/components/topology/endpoints-survey.vue';
   import _ from 'lodash';
   import Vue from 'vue';
   import { Component, PropSync, Watch } from 'vue-property-decorator';
   import { Action, Getter, State } from 'vuex-class';
 
-  interface Instance {
+  interface Endpoint {
     label: string,
     key: string,
     name?: string
@@ -52,14 +52,14 @@
 
   @Component({
     components: {
-      InstancesSurvey,
+      EndpointsSurvey,
     },
   })
   export default class InstancesSurveyWindow extends Vue {
     @State('rocketOption') private stateDashboardOption!: any;
     @State('rocketData') private rocketComps!: any;
     @Getter('durationTime') private durationTime: any;
-    @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
+    @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('GET_QUERY') private GET_QUERY: any;
@@ -68,8 +68,9 @@
     instancesSurveyHeight = '100%';
 
     tabsLoading = true;
-    instanceName: string = '0';
-    instances: any[] = [];
+    endpointName: string = '0';
+    endpointKey: string = '0';
+    endpoints: any[] = [];
 
     serviceName!: string;
     clusterName!: string;
@@ -81,42 +82,45 @@
     }
 
     private selectInstance(tab: any) {
-      const instance = _.find(this.stateDashboardOption.instances, { name: tab.name });
-      if (instance) {
-        this.SELECT_INSTANCE({ instance, duration: this.durationTime });
-        this.instanceName = tab.name;
+      const endpoint = _.find(this.stateDashboardOption.endpoints, { name: tab.name });
+      if (endpoint) {
+        this.SELECT_ENDPOINT({ endpoint, duration: this.durationTime });
+        this.endpointName = tab.name;
       }
     }
 
     private handleRefresh() {
       this.GET_QUERY({
         serviceId: this.stateDashboardOption.currentService.key || '',
+        endpointId: this.endpointKey || '',
+        endpointName: this.endpointName || '',
         duration: this.durationTime,
       });
     }
 
     private handleOption() {
-      this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 3 });
+      this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 2 });
       return this.MIXHANDLE_GET_OPTION({ compType: 'service', duration: this.durationTime })
       .then(() => {
         this.handleRefresh();
       });
     }
 
-    @Watch('stateDashboardOption.instances')
-    watchInstances(instances: Instance[]) {
-      _.forEach(instances, instance => {
-        instance.name = instance.label.includes('@') ? instance.label.split('@')[1] : instance.label;
+    @Watch('stateDashboardOption.endpoints')
+    watchInstances(endpoints: Endpoint[]) {
+      _.forEach(endpoints, endpoint => {
+        endpoint.name = endpoint.label;
       });
-      this.instances = instances;
-      if (instances.length > 0 && (this.instanceName = '0')) {
-        this.SELECT_INSTANCE({ instance: instances[0], duration: this.durationTime });
-        instances[0].name && (this.instanceName = instances[0].name);
+      this.endpoints = endpoints;
+      if (endpoints.length > 0 && (this.endpointName = '0')) {
+        this.SELECT_ENDPOINT({ endpoint: endpoints[0], duration: this.durationTime });
+        endpoints[0].name && (this.endpointName = endpoints[0].name) && (this.endpointKey = endpoints[0].key);
       }
       this.tabsLoading = false;
     }
 
     beforeMount() {
+      this.serviceName = this.stateDashboardOption.currentService.label;
       this.serviceName = this.stateDashboardOption.currentService.label;
       this.clusterName = '';
       this.handleOption();

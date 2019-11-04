@@ -79,6 +79,10 @@ const mutations: MutationTree<State> = {
     state.group = current;
     state.current = 0;
   },
+  [types.SET_CURRENT_GROUP_WITH_CURRENT](state: State, { index, current = 0 }: { index: number, current: number }) {
+    state.group = index;
+    state.current = current;
+  },
   [types.ADD_COMPS_GROUP](state: State, params: any) {
     if (!params.name) {return; }
     switch (params.template) {
