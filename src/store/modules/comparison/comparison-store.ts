@@ -25,12 +25,17 @@ import { DurationTime } from '@/types/global';
 import { queryChartData } from '@/utils/queryChartData';
 import fragmentAll from '@/store/modules/dashboard/fragments';
 import { ICurrentOptions, DataSourceType } from '@/types/comparison';
-import { ComparisonOption, InitSource, MetricsSource } from './comparison-const';
+import { ComparisonOption, InitSource, MetricsSource, ObjectType, ServiceType } from './comparison-const';
 
+type GenericIdentityFn<T> = (arg: T) => T;
+
+function identity<T>(arg: T): T {
+  return arg;
+}
 export interface State {
   currentOptions: ICurrentOptions;
   dataSource: DataSourceType;
-  chartSource: any;
+  chartSource: GenericIdentityFn<string>;
 }
 
 interface ActionsParamType {
@@ -40,35 +45,73 @@ interface ActionsParamType {
 const initState: State = {
   currentOptions: ComparisonOption,
   dataSource: InitSource,
-  chartSource: {},
+  chartSource: identity,
 };
 
 // getters
 const getters = {
-  Graphqls(state: State) {
+  queryPreValue(state: State) {
     const { currentOptions } = state;
     const preType = currentOptions.preType.key;
     const preMetric = currentOptions.preMetrics.key;
-    const nextType = currentOptions.nextType.key;
-    const nextMetric =  currentOptions.nextMetrics.key;
     const preItem = queryChartData.service.filter((opt: {
       o: string;
       c: string;
       d: string
     }) => opt.d === preMetric && opt.o === preType && opt.c !== 'ChartNum')[0] || {};
     const preParam = (fragmentAll as any)[preItem.d];
+
+    return `query queryData(${preParam.variable.join(',')}) {${preParam.fragment}}`;
+  },
+  queryNextValue(state: State) {
+    const { currentOptions } = state;
+    const nextType = currentOptions.nextType.key;
+    const nextMetric =  currentOptions.nextMetrics.key;
     const nextItem = queryChartData.service.filter((opt: {
       o: string;
       c: string;
       d: string
     }) => opt.d === nextMetric && opt.o === nextType && opt.c !== 'ChartNum')[0] || {};
     const nextParam = (fragmentAll as any)[nextItem.d];
-    const variables = [...preParam.variable, ...nextParam.variable];
 
-    return `query queryData(${variables.join(',')}) {${preParam.fragment} ${nextParam.fragment}}`;
+    return `query queryData(${nextParam.variable.join(',')}) {${nextParam.fragment}}`;
   },
   currentOptions(state: State) {
     return state.currentOptions;
+  },
+  preConfig(state: State) {
+    const { currentOptions } = state;
+    const variablesData = {
+      serviceId: currentOptions.preService.key || '',
+    } as any;
+    const { key } = currentOptions.preType;
+    if (key === ObjectType.ServiceEndpoint) {
+        variablesData.endpointId = currentOptions.preObject.key || '';
+        variablesData.endpointName = currentOptions.preObject.label || '';
+    } else if (key === ObjectType.ServiceInstance) {
+      variablesData.instanceId = currentOptions.preObject.key || '';
+    } else if (key === ObjectType.Database) {
+      variablesData.databaseId = currentOptions.preObject.key || '';
+    }
+
+    return variablesData;
+  },
+  nextConfig(state: State) {
+    const { currentOptions } = state;
+    const variablesData = {
+      serviceId: currentOptions.nextService.key || '',
+    } as any;
+    const { key } = currentOptions.nextType;
+    if (key === ObjectType.ServiceEndpoint) {
+        variablesData.endpointId = currentOptions.nextObject.key || '';
+        variablesData.endpointName = currentOptions.nextObject.label || '';
+    } else if (key === ObjectType.ServiceInstance) {
+      variablesData.instanceId = currentOptions.nextObject.key || '';
+    } else if (key === ObjectType.Database) {
+      variablesData.databaseId = currentOptions.nextObject.key || '';
+    }
+
+    return variablesData;
   },
 };
 
@@ -105,7 +148,10 @@ const mutations = {
       const strKey = `${state.currentOptions.preService.label}-${state.currentOptions.preObject.label}-${key}`;
       obj[strKey] = value;
     }
-    state.chartSource = obj;
+    state.chartSource = {
+      ...obj,
+      ...state.chartSource,
+    };
   },
 };
 
@@ -129,20 +175,31 @@ const actions: ActionTree<State, ActionsParamType> = {
       .then((res: AxiosResponse) => {
         context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
       });
-    await context.dispatch('GET_COMPARISON', date);
+    context.dispatch('GET_COMPARISON', {duration: date, type: ServiceType.PREVIOUS});
+    context.dispatch('GET_COMPARISON', {duration: date, type: ServiceType.NEXT});
   },
-  GET_COMPARISON(context: { commit: Commit, state: State, dispatch: Dispatch, getters: any }, date: string) {
-    const { currentOptions } = context.getters;
-    const variablesData = {
-      serviceId: currentOptions.preService.key || '',
-      endpointId: currentOptions.preObject.key || '',
-      endpointName: currentOptions.preObject.label || '',
-      // instanceId: this.currentOptions.currentInstance.key || '',
-      // databaseId: this.currentOptions.currentDatabase.key || '',
-      duration: date,
-    };
+  GET_COMPARISON(
+    context: {commit: Commit, state: State, dispatch: Dispatch, getters: any}, param: {duration: string, type: string},
+  ) {
+    let variablesData = {
+      duration: param.duration,
+    } as any;
+    let queryVal = '';
+    if (param.type === ServiceType.PREVIOUS) {
+      variablesData = {
+        ...variablesData,
+        ...context.getters.preConfig,
+      };
+      queryVal = context.getters.queryPreValue;
+    } else {
+      variablesData = {
+        ...variablesData,
+        ...context.getters.nextConfig,
+      };
+      queryVal = context.getters.queryNextValue;
+    }
     return axios.post('/graphql', {
-      query: context.getters.Graphqls,
+      query: queryVal,
       variables: variablesData,
     }, {cancelToken: cancelToken()}).then((res: AxiosResponse<any>) => {
         const data = res.data.data;

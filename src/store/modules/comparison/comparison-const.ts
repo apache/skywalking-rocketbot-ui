@@ -20,7 +20,20 @@ export const ComparisonType: IOption[] = [
   {key: 'Service', label: 'Service'},
   {key: 'ServiceInstance', label: 'Service Instance'},
   {key: 'ServiceEndpoint', label: 'Service Endpoint'},
+  {key: 'Database', label: 'Database'},
 ];
+
+export enum ObjectType {
+  Service = 'Service',
+  ServiceInstance = 'ServiceInstance',
+  ServiceEndpoint = 'ServiceEndpoint',
+  Database = 'Database',
+}
+
+export enum ServiceType {
+  PREVIOUS = 'PREVIOUS',
+  NEXT = 'NEXT',
+}
 
 export const ComparisonOption: ICurrentOptions = {
   preService: {key: 0, label: ''},
