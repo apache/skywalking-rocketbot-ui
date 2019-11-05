@@ -50,10 +50,10 @@ const getters = {
 // mutations
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: any) {
-    const { services, isUpdate } = data;
+    const { services } = data;
     if (!services.length) { return; }
     state.services = services;
-    if ((!state.currentService.key || isUpdate) && services.length) {
+    if (!state.currentService.key && services.length) {
       state.currentService = services[0];
     }
   },
@@ -119,7 +119,7 @@ const actions: ActionTree<State, any> = {
   GET_SERVICES(context: { commit: Commit, rootState: any  }, params: any) {
     return graph.query('queryServices').params(params)
       .then((res: AxiosResponse) => {
-        context.commit(types.SET_SERVICES, {services: res.data.data.services, isUpdate: params.isUpdate});
+        context.commit(types.SET_SERVICES, {services: res.data.data.services});
       });
   },
   GET_SERVICE_ENDPOINTS(context: { commit: Commit, state: any }) {

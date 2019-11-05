@@ -24,8 +24,8 @@ import * as types from '../../mutation-types';
 import { DurationTime } from '@/types/global';
 import { queryChartData } from '@/utils/queryChartData';
 import fragmentAll from '@/store/modules/dashboard/fragments';
-import { ICurrentOptions, DataSourceType } from '@/types/comparison';
-import { ComparisonOption, InitSource, MetricsSource, ObjectType, ServiceType } from './comparison-const';
+import { ICurrentOptions, DataSourceType, ISelectConfig } from '@/types/comparison';
+import { ComparisonOption, InitSource, MetricsSource, ObjectType, ServiceType, ChangeType } from './comparison-const';
 
 type GenericIdentityFn<T> = (arg: T) => T;
 
@@ -113,6 +113,19 @@ const getters = {
 
     return variablesData;
   },
+  ChangeType() {
+
+    return {
+      PreService: 'preService',
+      PreType: 'preType',
+      PreObject: 'preObject',
+      PreMetrics: 'preMetrics',
+      NextService: 'nextService',
+      NextType: 'nextType',
+      NextObject: 'nextObject',
+      NextMetrics: 'nextMetrics',
+    };
+  },
 };
 
 // mutations
@@ -153,11 +166,17 @@ const mutations = {
       ...state.chartSource,
     };
   },
+  [types.UPDATE_CONFIG](state: any, data: ISelectConfig) {
+    const {type, option} = data;
+    const {preType} = state.currentOptions;
+
+    state.currentOptions[type] = option;
+  },
 };
 
 // actions
 const actions: ActionTree<State, ActionsParamType> = {
-  GET_SERVICES(context: { commit: Commit, dispatch: Dispatch, rootState: any  }, params: {duration: string}) {
+  GET_SERVICES(context: {commit: Commit, dispatch: Dispatch}, params: {duration: string}) {
     return graph.query('queryServices').params(params)
       .then((res: AxiosResponse) => {
         context.commit(types.SET_SERVICES, {services: res.data.data.services});
@@ -204,8 +223,15 @@ const actions: ActionTree<State, ActionsParamType> = {
     }, {cancelToken: cancelToken()}).then((res: AxiosResponse<any>) => {
         const data = res.data.data;
 
-        context.commit('SET_CHARTVAL', data);
+        context.commit(types.SET_CHARTVAL, data);
     });
+  },
+  SELECT_CONFIG(context: {commit: Commit, state: State, dispatch: Dispatch}, params: ISelectConfig) {
+    context.commit(types.UPDATE_CONFIG, params);
+    // context.dispatch('MIXHANDLE_GET_OPTION', {...param, compType: 'service'})
+    // .then(() => {
+    //   context.dispatch('RUN_EVENTS', {}, {root: true});
+    // });
   },
 };
 

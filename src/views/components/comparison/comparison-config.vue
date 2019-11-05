@@ -75,43 +75,27 @@
       :data="optSource.nextMetricsSource"
       @onChoose="(item) => changOption(item, changeType.NextMetrics)"
     />
+    <!-- <a class="rk-btn mr ghost">数据查询</a> -->
   </div>
 </template>
 <script lang="ts">
   import { Component, Vue, Prop } from 'vue-property-decorator';
+  import { State, Action, Getter } from 'vuex-class';
   import { IOption } from '@/types/comparison';
 
   @Component
   export default class ComparisonConfig extends Vue {
     @Prop() private currentOptions: any;
     @Prop() private optSource: any;
-    private changeType: any;
+    @Getter('durationTime') private durationTime: any;
+    @Getter('comparisonStore/ChangeType') private changeType: any;
 
-    private async changOption(item: IOption, type: string) {
-      if (this.changeType.PreService === type) {
-        this.currentOptions.preService = item;
-      }
-      if (this.changeType.PreType === type) {
-        this.currentOptions.preType = item;
-      }
-      if (this.changeType.PreObject === type) {
-        this.currentOptions.preObject = item;
-      }
-      if (this.changeType.PreObject === type) {
-        this.currentOptions.preObject = item;
-      }
-      if (this.changeType.NextService === type) {
-        this.currentOptions.nextService = item;
-      }
-      if (this.changeType.NextType === type) {
-        this.currentOptions.nextType = item;
-      }
-      if (this.changeType.NextObject === type) {
-        this.currentOptions.nextObject = item;
-      }
-      if (this.changeType.NextObject === type) {
-        this.currentOptions.nextObject = item;
-      }
+    private changOption(item: IOption, key: string) {
+      this.$store.dispatch('comparisonStore/SELECT_CONFIG', {
+        duration: this.durationTime,
+        type: key,
+        option: item,
+      });
     }
   }
 </script>

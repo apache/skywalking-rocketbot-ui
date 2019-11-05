@@ -38,3 +38,8 @@ export interface DataSourceType {
   nextObjectSource: IOption[];
   nextMetricsSource: IOption[];
 }
+export interface ISelectConfig {
+  option: IOption;
+  type: string;
+  duration: string
+}

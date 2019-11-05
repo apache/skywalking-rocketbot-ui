@@ -82,3 +82,4 @@ export const SET_MODE_STATUS = 'SET_MODE_STATUS';
 
 // comparison
 export const SET_CHARTVAL = 'SET_CHARTVAL';
+export const UPDATE_CONFIG = 'UPDATE_CONFIG';

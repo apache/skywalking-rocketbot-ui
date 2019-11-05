@@ -57,17 +57,6 @@ export const InitSource: DataSourceType = {
   nextMetricsSource: [],
 };
 
-export enum ChangeType {
-  PreService = 'preService',
-  PreType = 'preType',
-  PreObject = 'preObject',
-  PreMetrics = 'preMetrics',
-  NextService = 'nextService',
-  NextType = 'nextType',
-  NextObject = 'nextObject',
-  NextMetrics = 'nextMetrics',
-}
-
 export const MetricsSource: any = {
   Service: [
     {label: 'service_resp_time', key: 0},
@@ -94,3 +83,14 @@ export const MetricsSource: any = {
   //  'database_access_p99', 'database_access_p95',
   //   'database_access_p90', 'database_access_p75', 'database_access_p50'],
 };
+
+export enum ChangeType {
+  PreService = 'preService',
+  PreType = 'preType',
+  PreObject = 'preObject',
+  PreMetrics = 'preMetrics',
+  NextService = 'nextService',
+  NextType = 'nextType',
+  NextObject = 'nextObject',
+  NextMetrics = 'nextMetrics',
+}
