@@ -481,11 +481,11 @@ toggleLineText(lineText, currNode, isHover) {
   }
   .link {
     stroke-linecap: round;
-    stroke-width: 1.3px;
+    stroke-width: 1.3px !important;
     fill: none;
-    animation: dash 1s linear infinite;
+    animation: topo-dash 1s linear infinite !important;
   }
-  @keyframes dash {
+  @keyframes topo-dash {
     from {
       stroke-dashoffset: 20;
     }

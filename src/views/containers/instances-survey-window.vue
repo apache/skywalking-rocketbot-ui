@@ -30,7 +30,7 @@
         <el-tab-pane v-for="(instance) in instances" :key="instance.key"
                      :label="instance.name" :name="instance.name" :lazy="true"
         >
-          <instances-survey v-if="!rocketComps.loading" :style="`overflow: auto; height: ${instancesSurveyHeight}`" />
+          <instances-survey v-if="isShowSync" :style="`overflow: auto; height: ${instancesSurveyHeight}`" />
         </el-tab-pane>
       </el-tabs>
     </el-drawer>
