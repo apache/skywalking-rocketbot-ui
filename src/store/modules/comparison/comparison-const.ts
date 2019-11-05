@@ -59,8 +59,8 @@ export const InitSource: DataSourceType = {
 
 export const MetricsSource: any = {
   Service: [
-    {label: 'service_resp_time', key: 0},
-    {label: 'service_sla', key: 1},
+    {label: 'Service Response Time', key: 'serviceResponseTime'},
+    {label: 'Service SLA', key: 'serviceSLA'},
     {label: 'service_cpm', key: 2},
     {label: 'service_p99', key: 3},
     {label: 'service_p95', key: 4},
@@ -78,10 +78,14 @@ export const MetricsSource: any = {
     {label: 'endpoint_p75', key: 7},
     {label: 'endpoint_p50', key: 8},
   ],
-  // Instance: ['service_instance_resp_time', 'service_instan_sla', 'service_instan_cpm'],
-  // Database: ['database_access_resp_time', 'database_access_sla', 'database_access_cpm',
-  //  'database_access_p99', 'database_access_p95',
-  //   'database_access_p90', 'database_access_p75', 'database_access_p50'],
+  ServiceInstance: [
+    {label: 'Instance ResponseTime', key: 'instanceResponseTime'},
+    {label: 'Instance SLA', key: 'instanceSLA'},
+    {label: 'service_instan_cpm', key: 2},
+  ],
+  Database: ['database_access_resp_time', 'database_access_sla', 'database_access_cpm',
+   'database_access_p99', 'database_access_p95',
+    'database_access_p90', 'database_access_p75', 'database_access_p50'],
 };
 
 export enum ChangeType {
@@ -93,4 +97,10 @@ export enum ChangeType {
   NextType = 'nextType',
   NextObject = 'nextObject',
   NextMetrics = 'nextMetrics',
+}
+
+export enum StatusType {
+  Init = 'init',
+  Pre = 'pre',
+  Next = 'next',
 }

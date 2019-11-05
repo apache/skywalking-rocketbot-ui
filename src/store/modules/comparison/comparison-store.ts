@@ -19,13 +19,17 @@ import { Commit, ActionTree, Dispatch } from 'vuex';
 import axios, {AxiosPromise, AxiosResponse} from 'axios';
 
 import graph from '@/graph';
-import {cancelToken} from '@/utils/cancelToken';
+import { cancelToken } from '@/utils/cancelToken';
 import * as types from '../../mutation-types';
 import { DurationTime } from '@/types/global';
 import { queryChartData } from '@/utils/queryChartData';
 import fragmentAll from '@/store/modules/dashboard/fragments';
 import { ICurrentOptions, DataSourceType, ISelectConfig } from '@/types/comparison';
-import { ComparisonOption, InitSource, MetricsSource, ObjectType, ServiceType, ChangeType } from './comparison-const';
+import {
+  ComparisonOption, InitSource, MetricsSource,
+  ObjectType, ServiceType, ChangeType,
+  StatusType,
+} from './comparison-const';
 
 type GenericIdentityFn<T> = (arg: T) => T;
 
@@ -36,6 +40,7 @@ export interface State {
   currentOptions: ICurrentOptions;
   dataSource: DataSourceType;
   chartSource: GenericIdentityFn<string>;
+  isPrevious: StatusType;
 }
 
 interface ActionsParamType {
@@ -46,6 +51,7 @@ const initState: State = {
   currentOptions: ComparisonOption,
   dataSource: InitSource,
   chartSource: identity,
+  isPrevious: StatusType.Init,
 };
 
 // getters
@@ -130,36 +136,58 @@ const getters = {
 
 // mutations
 const mutations = {
+  ['SET_ISPREVIOUS'](state: State, data: StatusType) {
+    state.isPrevious = data;
+  },
   [types.SET_SERVICES](state: State, data: any) {
     const { services } = data;
-    if (!services.length) { return; }
+
     state.dataSource.preServiceSource = services;
     state.dataSource.nextServiceSource = services;
     state.currentOptions.preService = services[0];
     state.currentOptions.nextService = services[0];
-    const type = state.currentOptions.preType.key;
-
-    state.dataSource.preMetricsSource = MetricsSource[type];
-    state.currentOptions.preMetrics = MetricsSource[type][0];
-    state.dataSource.nextMetricsSource = MetricsSource[type];
-    state.currentOptions.nextMetrics = MetricsSource[type][1];
   },
   [types.SET_ENDPOINTS](state: State, data: any) {
-    if (!data.length) {
-      return;
+    const { isPrevious, currentOptions } = state;
+    const type = isPrevious === StatusType.Pre ? currentOptions.preType.key : currentOptions.nextType.key;
+
+    if (isPrevious === StatusType.Pre) {
+      state.dataSource.preObjectSource = data;
+      state.currentOptions.preObject = data[0];
+      state.dataSource.preMetricsSource = MetricsSource[type];
+      state.currentOptions.preMetrics = MetricsSource[type][0];
+    } else if (isPrevious === StatusType.Next) {
+      state.dataSource.nextObjectSource = data;
+      state.currentOptions.nextObject = data[0];
+      state.dataSource.nextMetricsSource = MetricsSource[type];
+      state.currentOptions.nextMetrics = MetricsSource[type][1];
+    } else {
+      state.dataSource.nextObjectSource = data;
+      state.currentOptions.nextObject = data[0];
+      state.dataSource.preObjectSource = data;
+      state.currentOptions.preObject = data[0];
+      state.dataSource.preMetricsSource = MetricsSource[type];
+      state.currentOptions.preMetrics = MetricsSource[type][0];
+      state.dataSource.nextMetricsSource = MetricsSource[type];
+      state.currentOptions.nextMetrics = MetricsSource[type][1];
     }
-    state.dataSource.preObjectSource = data;
-    state.dataSource.nextObjectSource = data;
-    state.currentOptions.preObject = data[0];
-    state.currentOptions.nextObject = data[0];
   },
   [types.SET_CHARTVAL](state: State, data: any) {
     const keys = Object.keys(data);
     const obj = {} as any;
     for (const key of keys) {
       const value = data[key].values.map((d: {value: number}) => d.value);
-      const strKey = `${state.currentOptions.preService.label}-${state.currentOptions.preObject.label}-${key}`;
-      obj[strKey] = value;
+      if (key === state.currentOptions.preMetrics.key) {
+        const { preObject } = state.currentOptions;
+        const str = `-${preObject.label}`;
+        const strKeyPre = `${state.currentOptions.preService.label}${preObject.key ? str : ''}-${key}`;
+        obj[strKeyPre] = value;
+      } else {
+        const { nextObject } = state.currentOptions;
+        const str = `-${nextObject.label}`;
+        const strKeyNext = `${state.currentOptions.nextService.label}${nextObject.key ? str : ''}-${key}`;
+        obj[strKeyNext] = value;
+      }
     }
     state.chartSource = {
       ...obj,
@@ -168,9 +196,34 @@ const mutations = {
   },
   [types.UPDATE_CONFIG](state: any, data: ISelectConfig) {
     const {type, option} = data;
-    const {preType} = state.currentOptions;
 
     state.currentOptions[type] = option;
+  },
+  [types.CLEAR_CHART_VAL](state: State) {
+    state.chartSource = {} as any;
+  },
+  [types.SELECT_TYPE_SERVICES](state: State) {
+    const { preType } = state.currentOptions;
+
+    state.currentOptions.preObject = {label: 'No Data' , value: null} as any;
+    state.dataSource.preObjectSource = [];
+    state.dataSource.preMetricsSource = MetricsSource[preType.key];
+    state.currentOptions.preMetrics = MetricsSource[preType.key][0];
+  },
+  [types.SELECT_TYPE_INSTANCE](state: State, data: any) {
+    const { preType, nextType } = state.currentOptions;
+    const { isPrevious } = state;
+    if (isPrevious === StatusType.Pre) {
+      state.dataSource.preMetricsSource = MetricsSource[preType.key];
+      state.currentOptions.preMetrics = MetricsSource[preType.key][0];
+      state.dataSource.preObjectSource = data;
+      state.currentOptions.preObject = data[0];
+    } else if (isPrevious === StatusType.Next) {
+      state.dataSource.nextMetricsSource = MetricsSource[nextType.key];
+      state.currentOptions.nextMetrics = MetricsSource[nextType.key][0];
+      state.dataSource.nextObjectSource = data;
+      state.currentOptions.nextObject = data[0];
+    }
   },
 };
 
@@ -188,14 +241,68 @@ const actions: ActionTree<State, ActionsParamType> = {
     if (!context.state.currentOptions.preService.key) {
       return new Promise((resolve) => resolve());
     }
+    const { isPrevious, currentOptions } = context.state;
+    const servicesId = isPrevious === StatusType.Pre ? currentOptions.preService.key : currentOptions.nextService.key;
     await graph
       .query('queryEndpoints')
-      .params({serviceId: context.state.currentOptions.preService.key, keyword: ''})
+      .params({serviceId: servicesId, keyword: ''})
       .then((res: AxiosResponse) => {
         context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
       });
+    if (isPrevious === StatusType.Init) {
+      context.dispatch('RENDER_CHART', date);
+    }
+  },
+  GET_SERVICE_INSTANCES(context: { commit: Commit, state: State }, params) {
+    const { isPrevious, currentOptions } = context.state;
+    params.serviceId = isPrevious === StatusType.Pre ? currentOptions.preService.key : currentOptions.nextService.key;
+    return graph
+      .query('queryInstances')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        context.commit(types.SELECT_TYPE_INSTANCE, res.data.data.getServiceInstances);
+      });
+  },
+  RENDER_CHART(context: {dispatch: Dispatch, commit: Commit}, date: string) {
+    context.commit('CLEAR_CHART_VAL');
     context.dispatch('GET_COMPARISON', {duration: date, type: ServiceType.PREVIOUS});
     context.dispatch('GET_COMPARISON', {duration: date, type: ServiceType.NEXT});
+  },
+  SELECT_CONFIG(context: {commit: Commit, state: State, dispatch: Dispatch}, params: any) {
+    const isPrevious = params.type.includes(StatusType.Next) ? StatusType.Next : StatusType.Pre;
+
+    context.commit('SET_ISPREVIOUS', isPrevious);
+    context.commit(types.UPDATE_CONFIG, params);
+
+    const { currentOptions } = context.state;
+    const objType = isPrevious === StatusType.Next ? currentOptions.nextType : currentOptions.preType;
+    const services = [ChangeType.PreService, ChangeType.NextService];
+    const typeList = [ChangeType.PreType, ChangeType.NextType];
+
+    if (services.includes(params.type)) {
+      if (objType.key === ObjectType.Service) {
+        context.commit(types.SELECT_TYPE_SERVICES);
+      } else if (objType.key === ObjectType.ServiceInstance) {
+        const data = {
+          duration: params.duration,
+        };
+        context.dispatch('GET_SERVICE_INSTANCES', data);
+      } else if (objType.key === ObjectType.ServiceEndpoint) {
+        context.dispatch('GET_SERVICE_ENDPOINTS', params.duration);
+      }
+    }
+    if (typeList.includes(params.type)) {
+      if (objType.key === ObjectType.Service) {
+        context.commit(types.SELECT_TYPE_SERVICES);
+      } else if (objType.key === ObjectType.ServiceInstance) {
+        const data = {
+          duration: params.duration,
+        };
+        context.dispatch('GET_SERVICE_INSTANCES', data);
+      } else if (objType.key === ObjectType.ServiceEndpoint) {
+        context.dispatch('GET_SERVICE_ENDPOINTS', params.duration);
+      }
+    }
   },
   GET_COMPARISON(
     context: {commit: Commit, state: State, dispatch: Dispatch, getters: any}, param: {duration: string, type: string},
@@ -225,13 +332,6 @@ const actions: ActionTree<State, ActionsParamType> = {
 
         context.commit(types.SET_CHARTVAL, data);
     });
-  },
-  SELECT_CONFIG(context: {commit: Commit, state: State, dispatch: Dispatch}, params: ISelectConfig) {
-    context.commit(types.UPDATE_CONFIG, params);
-    // context.dispatch('MIXHANDLE_GET_OPTION', {...param, compType: 'service'})
-    // .then(() => {
-    //   context.dispatch('RUN_EVENTS', {}, {root: true});
-    // });
   },
 };
 

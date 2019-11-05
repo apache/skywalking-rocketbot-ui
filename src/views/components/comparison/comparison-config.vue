@@ -75,7 +75,9 @@
       :data="optSource.nextMetricsSource"
       @onChoose="(item) => changOption(item, changeType.NextMetrics)"
     />
-    <!-- <a class="rk-btn mr ghost">数据查询</a> -->
+    <div class="mb-5 query-data" @click="updateChart">
+      <a>数据查询</a>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -97,6 +99,10 @@
         option: item,
       });
     }
+
+    private updateChart() {
+      this.$store.dispatch('comparisonStore/RENDER_CHART', this.durationTime);
+    }
   }
 </script>
 
@@ -117,6 +123,23 @@
       display: inline-block;
       margin: 10px 0;
       font-weight: bold;
+    }
+    .query-data {
+      margin-top: 70px;
+      // position: fixed;
+      // bottom: 40px;
+      // right: 20px;
+    }
+    a {
+      display: block;
+      width: 340px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      font-size: 14px;
+      background: #448dfe;
+      color: #fff;
+      border-radius: 4px;
     }
   }
 </style>
