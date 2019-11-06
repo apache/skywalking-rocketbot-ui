@@ -43,3 +43,10 @@ export interface ISelectConfig {
   type: string;
   duration: string
 }
+
+export interface MetricsType {
+  Service: IOption[];
+  ServiceEndpoint: IOption[];
+  ServiceInstance: IOption[];
+  Database: IOption[];
+}

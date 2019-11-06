@@ -16,7 +16,7 @@
  */
 
 import { Commit, ActionTree, Dispatch } from 'vuex';
-import axios, { AxiosPromise, AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import graph from '@/graph';
 import { cancelToken } from '@/utils/cancelToken';
@@ -24,11 +24,10 @@ import * as types from '../../mutation-types';
 import { DurationTime } from '@/types/global';
 import { queryChartData } from '@/utils/queryChartData';
 import fragmentAll from '@/store/modules/dashboard/fragments';
-import { ICurrentOptions, DataSourceType, ISelectConfig } from '@/types/comparison';
+import { ICurrentOptions, DataSourceType, ISelectConfig, MetricsType } from '@/types/comparison';
 import {
-  ComparisonOption, InitSource, MetricsSource,
-  ObjectType, ServiceType, ChangeType,
-  StatusType,
+  ComparisonOption, InitSource, LinearType,
+  ObjectType, ServiceType, ChangeType, StatusType,
 } from './comparison-const';
 
 type GenericIdentityFn<T> = (arg: T) => T;
@@ -41,6 +40,7 @@ export interface State {
   dataSource: DataSourceType;
   chartSource: GenericIdentityFn<string>;
   isPrevious: StatusType;
+  metricSource: MetricsType;
 }
 
 interface ActionsParamType {
@@ -52,33 +52,22 @@ const initState: State = {
   dataSource: InitSource,
   chartSource: identity,
   isPrevious: StatusType.Init,
+  metricSource: {} as any,
 };
 
 // getters
 const getters = {
   queryPreValue(state: State) {
     const { currentOptions } = state;
-    const preType = currentOptions.preType.key;
     const preMetric = currentOptions.preMetrics.key;
-    const preItem =  [...queryChartData.service, ...queryChartData.database].filter((opt: {
-      o: string;
-      c: string;
-      d: string
-    }) => opt.d === preMetric && opt.o === preType && opt.c !== 'ChartNum')[0] || {};
-    const preParam = (fragmentAll as any)[preItem.d] || {};
+    const preParam = (fragmentAll as any)[preMetric] || {};
 
     return `query queryData(${preParam.variable.join(',')}) {${preParam.fragment}}`;
   },
   queryNextValue(state: State) {
     const { currentOptions } = state;
-    const nextType = currentOptions.nextType.key;
     const nextMetric =  currentOptions.nextMetrics.key;
-    const nextItem = [...queryChartData.service, ...queryChartData.database].filter((opt: {
-      o: string;
-      c: string;
-      d: string
-    }) => opt.d === nextMetric && opt.o === nextType && opt.c !== 'ChartNum')[0] || {};
-    const nextParam = (fragmentAll as any)[nextItem.d] || {};
+    const nextParam = (fragmentAll as any)[nextMetric] || {};
 
     return `query queryData(${nextParam.variable.join(',')}) {${nextParam.fragment}}`;
   },
@@ -90,13 +79,13 @@ const getters = {
     const { key } = currentOptions.preType;
 
     if (key === ObjectType.ServiceEndpoint) {
-        variablesData.endpointId = currentOptions.preObject.key || '';
-        variablesData.endpointName = currentOptions.preObject.label || '';
+        variablesData.endpointId = currentOptions.preObject.key;
+        variablesData.endpointName = currentOptions.preObject.label;
     } else if (key === ObjectType.ServiceInstance) {
-      variablesData.instanceId = currentOptions.preObject.key || '';
+      variablesData.instanceId = currentOptions.preObject.key;
     } else if (key === ObjectType.Database) {
       delete variablesData.serviceId;
-      variablesData.databaseId = currentOptions.preObject.key || '';
+      variablesData.databaseId = currentOptions.preObject.key;
     }
 
     return variablesData;
@@ -107,20 +96,19 @@ const getters = {
     const { key } = currentOptions.nextType;
 
     if (key === ObjectType.ServiceEndpoint) {
-        variablesData.serviceId = currentOptions.nextService.key || '';
-        variablesData.endpointId = currentOptions.nextObject.key || '';
-        variablesData.endpointName = currentOptions.nextObject.label || '';
+        variablesData.serviceId = currentOptions.nextService.key;
+        variablesData.endpointId = currentOptions.nextObject.key;
+        variablesData.endpointName = currentOptions.nextObject.label;
     } else if (key === ObjectType.ServiceInstance) {
-      variablesData.serviceId = currentOptions.nextService.key || '';
-      variablesData.instanceId = currentOptions.nextObject.key || '';
+      variablesData.serviceId = currentOptions.nextService.key;
+      variablesData.instanceId = currentOptions.nextObject.key;
     } else if (key === ObjectType.Database) {
-      variablesData.databaseId = currentOptions.nextObject.key || '';
+      variablesData.databaseId = currentOptions.nextObject.key;
     }
 
     return variablesData;
   },
   ChangeType() {
-
     return {
       PreService: ChangeType.PreService,
       PreType: ChangeType.PreType,
@@ -132,12 +120,59 @@ const getters = {
       NextMetrics: ChangeType.NextMetrics,
     };
   },
+  AllMetrics() {
+    const { service, database } = queryChartData;
+    const MetricsObj = {
+      Service: [],
+      ServiceEndpoint: [],
+      ServiceInstance: [],
+      Database: [],
+    } as MetricsType;
+
+    for (const item of service) {
+      if (!LinearType.includes(item.c)) {
+        continue;
+      }
+      if (item.o === ObjectType.Service) {
+        MetricsObj.Service.push({
+          label: item.t,
+          key: item.d,
+        });
+      } else if (item.o === ObjectType.ServiceInstance) {
+        MetricsObj.ServiceInstance.push({
+          label: item.t,
+          key: item.d,
+        });
+      } else if (item.o === ObjectType.ServiceEndpoint) {
+        MetricsObj.ServiceEndpoint.push({
+          label: item.t,
+          key: item.d,
+        });
+      }
+    }
+    for (const data of database) {
+      if (!LinearType.includes(data.c)) {
+        continue;
+      }
+      if (data.o === ObjectType.Database) {
+        MetricsObj.Database.push({
+          label: data.t,
+          key: data.d,
+        });
+      }
+    }
+
+    return MetricsObj;
+  },
 };
 
 // mutations
 const mutations = {
   [types.SET_ISPREVIOUS](state: State, data: StatusType) {
     state.isPrevious = data;
+  },
+  [types.SET_METRICSOURCE](state: State, source: any) {
+    state.metricSource = source;
   },
   [types.SET_SERVICES](state: State, data: any) {
     const { services } = data;
@@ -148,37 +183,37 @@ const mutations = {
     state.currentOptions.nextService = services[0];
   },
   [types.SET_ENDPOINTS](state: State, data: any) {
-    const { isPrevious, currentOptions } = state;
+    const { isPrevious, currentOptions, metricSource } = state as any;
     const type = isPrevious === StatusType.Pre ? currentOptions.preType.key : currentOptions.nextType.key;
 
     if (isPrevious === StatusType.Pre) {
       state.dataSource.preObjectSource = data;
       state.currentOptions.preObject = data[0];
-      state.dataSource.preMetricsSource = MetricsSource[type];
-      state.currentOptions.preMetrics = MetricsSource[type][0];
+      state.dataSource.preMetricsSource = metricSource[type];
+      state.currentOptions.preMetrics = metricSource[type][0];
     } else if (isPrevious === StatusType.Next) {
       state.dataSource.nextObjectSource = data;
       state.currentOptions.nextObject = data[0];
-      state.dataSource.nextMetricsSource = MetricsSource[type];
-      state.currentOptions.nextMetrics = MetricsSource[type][1];
+      state.dataSource.nextMetricsSource = metricSource[type];
+      state.currentOptions.nextMetrics = metricSource[type][1];
     } else {
       state.dataSource.nextObjectSource = data;
       state.currentOptions.nextObject = data[0];
       state.dataSource.preObjectSource = data;
       state.currentOptions.preObject = data[0];
-      state.dataSource.preMetricsSource = MetricsSource[type];
-      state.currentOptions.preMetrics = MetricsSource[type][0];
-      state.dataSource.nextMetricsSource = MetricsSource[type];
-      state.currentOptions.nextMetrics = MetricsSource[type][1];
+      state.dataSource.preMetricsSource = metricSource[type];
+      state.currentOptions.preMetrics = metricSource[type][0];
+      state.dataSource.nextMetricsSource = metricSource[type];
+      state.currentOptions.nextMetrics = metricSource[type][1];
     }
   },
-  [types.SET_CHARTVAL](state: State, data: any) {
-    const keys = Object.keys(data);
+  [types.SET_CHARTVAL](state: State, data: {value: any, type: string}) {
+    const keys = Object.keys(data.value);
     const obj = {} as any;
     for (const key of keys) {
-      const value = data[key].values.map((d: {value: number}) => d.value);
-      if (key === state.currentOptions.preMetrics.key) {
-        const { preObject,  preService, preType } = state.currentOptions;
+      const value = data.value[key].values.map((d: {value: number}) => d.value);
+      if (data.type === ServiceType.PREVIOUS) {
+        const { preObject, preService, preType } = state.currentOptions;
         const str = `${preObject.label}`;
         const strKeyPre = `${preType.key === ObjectType.Database ? '' : preService.label}${preType.key === ObjectType.Service ? '' : str}-${key}`;
         obj[strKeyPre] = value;
@@ -205,38 +240,40 @@ const mutations = {
   },
   [types.SELECT_TYPE_SERVICES](state: State) {
     const { preType } = state.currentOptions;
+    const metricSource = state.metricSource as any;
 
     state.dataSource.preObjectSource = [];
-    state.dataSource.preMetricsSource = MetricsSource[preType.key];
-    state.currentOptions.preMetrics = MetricsSource[preType.key][0];
+    state.dataSource.preMetricsSource = metricSource[preType.key];
+    state.currentOptions.preMetrics = metricSource[preType.key][0];
   },
   [types.SELECT_TYPE_INSTANCE](state: State, data: any) {
     const { preType, nextType } = state.currentOptions;
-    const { isPrevious } = state;
+    const { isPrevious, metricSource } = state as any;
 
     if (isPrevious === StatusType.Pre) {
-      state.dataSource.preMetricsSource = MetricsSource[preType.key];
-      state.currentOptions.preMetrics = MetricsSource[preType.key][0];
+      state.dataSource.preMetricsSource = metricSource[preType.key];
+      state.currentOptions.preMetrics = metricSource[preType.key][0];
       state.dataSource.preObjectSource = data;
       state.currentOptions.preObject = data[0];
     } else if (isPrevious === StatusType.Next) {
-      state.dataSource.nextMetricsSource = MetricsSource[nextType.key];
-      state.currentOptions.nextMetrics = MetricsSource[nextType.key][0];
+      state.dataSource.nextMetricsSource = metricSource[nextType.key];
+      state.currentOptions.nextMetrics = metricSource[nextType.key][0];
       state.dataSource.nextObjectSource = data;
       state.currentOptions.nextObject = data[0];
     }
   },
   [types.SELECT_TYPE_DATABASE](state: State, data: any) {
     const { preType, nextType } = state.currentOptions;
+    const metricSource = state.metricSource as any;
 
     if (state.isPrevious === StatusType.Next) {
-      state.dataSource.nextMetricsSource = MetricsSource[nextType.key];
-      state.currentOptions.nextMetrics = MetricsSource[nextType.key][0];
+      state.dataSource.nextMetricsSource = metricSource[nextType.key];
+      state.currentOptions.nextMetrics = metricSource[nextType.key][0];
       state.currentOptions.nextObject = data[0];
       state.dataSource.nextObjectSource = data;
     } else {
-      state.dataSource.preMetricsSource = MetricsSource[preType.key];
-      state.currentOptions.preMetrics = MetricsSource[preType.key][0];
+      state.dataSource.preMetricsSource = metricSource[preType.key];
+      state.currentOptions.preMetrics = metricSource[preType.key][0];
       state.currentOptions.preObject = data[0];
       state.dataSource.preObjectSource = data;
     }
@@ -245,29 +282,37 @@ const mutations = {
 
 // actions
 const actions: ActionTree<State, ActionsParamType> = {
-  GET_SERVICES(context: {commit: Commit, dispatch: Dispatch}, params: {duration: string}) {
+  GET_SERVICES(context: {commit: Commit, dispatch: Dispatch, getters: any}, params: {duration: string}) {
+    context.commit(types.SET_METRICSOURCE, context.getters.AllMetrics);
     return graph.query('queryServices').params(params)
       .then((res: AxiosResponse) => {
+        if (!res.data) {
+          return;
+        }
         context.commit(types.SET_SERVICES, {services: res.data.data.services});
       }).then(() => {
         context.dispatch('GET_SERVICE_ENDPOINTS', params.duration);
       });
   },
-  async GET_SERVICE_ENDPOINTS(context: { commit: Commit, state: State, dispatch: Dispatch }, date: string) {
+  GET_SERVICE_ENDPOINTS(context: { commit: Commit, state: State, dispatch: Dispatch }, date: string) {
     if (!context.state.currentOptions.preService.key) {
       return new Promise((resolve) => resolve());
     }
     const { isPrevious, currentOptions } = context.state;
     const servicesId = isPrevious === StatusType.Pre ? currentOptions.preService.key : currentOptions.nextService.key;
-    await graph
+    graph
       .query('queryEndpoints')
       .params({serviceId: servicesId, keyword: ''})
       .then((res: AxiosResponse) => {
+        if (!res.data) {
+          return;
+        }
         context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
+      }).then(() => {
+        if (isPrevious === StatusType.Init) {
+          context.dispatch('RENDER_CHART', date);
+        }
       });
-    if (isPrevious === StatusType.Init) {
-      context.dispatch('RENDER_CHART', date);
-    }
   },
   GET_SERVICE_INSTANCES(context: { commit: Commit, state: State }, params) {
     const { isPrevious, currentOptions } = context.state;
@@ -276,6 +321,9 @@ const actions: ActionTree<State, ActionsParamType> = {
       .query('queryInstances')
       .params(params)
       .then((res: AxiosResponse) => {
+        if (!res.data) {
+          return;
+        }
         context.commit(types.SELECT_TYPE_INSTANCE, res.data.data.getServiceInstances);
       });
   },
@@ -284,6 +332,9 @@ const actions: ActionTree<State, ActionsParamType> = {
       .query('queryDatabases')
       .params(params)
       .then((res: AxiosResponse) => {
+        if (!res.data) {
+          return;
+        }
         context.commit(types.SELECT_TYPE_DATABASE, res.data.data.services);
       });
   },
@@ -341,8 +392,10 @@ const actions: ActionTree<State, ActionsParamType> = {
       variables: variablesData,
     }, {cancelToken: cancelToken()}).then((res: AxiosResponse<any>) => {
         const data = res.data.data;
-
-        context.commit(types.SET_CHARTVAL, data);
+        if (!data) {
+          return;
+        }
+        context.commit(types.SET_CHARTVAL, {value: data, type: param.type});
     });
   },
 };

@@ -58,49 +58,6 @@ export const InitSource: DataSourceType = {
   nextMetricsSource: [],
 };
 
-export const MetricsSource: any = {
-  Service: [
-    {label: 'Service Response Time', key: 'serviceResponseTime'},
-    {label: 'Service SLA', key: 'serviceSLA'},
-    {label: 'service Throughput', key: 'serviceThroughput'},
-    {label: 'service Percent Response', key: 'servicePercent'},
-    {label: 'service_p99', key: 3},
-    {label: 'service_p95', key: 4},
-    {label: 'service_p90', key: 5},
-    {label: 'service_p75', key: 6},
-    {label: 'service_p50', key: 7},
-  ],
-  // { o: 'Service', d: 'serviceInstanceThroughput', c: 'ChartTrace', t: 'Running ServiceInstance', w: 3, h: 250 },
-  // { o: 'Service', d: 'servicePercent', c: 'ChartLine', t: 'Service Percent Response', w: 3, h: 250 },
-  // { o: 'Service', d: 'serviceSlowEndpoint', c: 'ChartSlow', t: 'Service Slow Endpoint', w: 3, h: 250 },
-  ServiceEndpoint: [
-    {label: 'Endpoint Avg ResponseTime', key: 'endpointResponseTime'},
-    {label: 'Endpoint SLA', key: 'endpointSLA'},
-    {label: 'endpoint_cpm', key: 2},
-    {label: 'endpoint_p99', key: 3},
-    {label: 'endpoint_p95', key: 4},
-    {label: 'endpoint_p90', key: 5},
-    {label: 'endpoint_p75', key: 7},
-    {label: 'endpoint_p50', key: 8},
-  ],
-  ServiceInstance: [
-    {label: 'Instance ResponseTime', key: 'instanceResponseTime'},
-    {label: 'Instance SLA', key: 'instanceSLA'},
-    {label: 'service_instan_cpm', key: 2},
-  ],
-  Database: [
-    {label: 'Database ResponseTime', key: 'databaseResponseTime'},
-    {label: 'Database Throughput', key: 'databaseThroughput'},
-    {label: 'database_access_sla', key: 'database_access_sla'},
-    {label: 'database_access_cpm', key: 'database_access_cpm'},
-    {label: 'database_access_p99', key: 'database_access_p99'},
-    {label: 'database_access_p95', key: 'database_access_p95'},
-    {label: 'database_access_p90', key: 'database_access_p90'},
-    {label: 'database_access_p75', key: 'database_access_p75'},
-    {label: 'database_access_p50', key: 'database_access_p50'},
-  ],
-};
-
 export enum ChangeType {
   PreService = 'preService',
   PreType = 'preType',
@@ -117,3 +74,5 @@ export enum StatusType {
   Pre = 'pre',
   Next = 'next',
 }
+
+export const LinearType = ['ChartBar', 'ChartLine'];
