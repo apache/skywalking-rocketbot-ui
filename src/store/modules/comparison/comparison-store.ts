@@ -52,7 +52,7 @@ const initState: State = {
   dataSource: InitSource,
   chartSource: identity,
   isPrevious: StatusType.Init,
-  metricSource: {} as any,
+  metricSource: {} as MetricsType,
 };
 
 // getters
@@ -171,7 +171,7 @@ const mutations = {
   [types.SET_ISPREVIOUS](state: State, data: StatusType) {
     state.isPrevious = data;
   },
-  [types.SET_METRICSOURCE](state: State, source: any) {
+  [types.SET_METRICSOURCE](state: State, source: MetricsType) {
     state.metricSource = source;
   },
   [types.SET_SERVICES](state: State, data: any) {
