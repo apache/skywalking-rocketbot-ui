@@ -16,7 +16,7 @@
  */
 
 import { Commit, ActionTree, Dispatch } from 'vuex';
-import axios, {AxiosPromise, AxiosResponse} from 'axios';
+import axios, { AxiosPromise, AxiosResponse } from 'axios';
 
 import graph from '@/graph';
 import { cancelToken } from '@/utils/cancelToken';
@@ -60,12 +60,12 @@ const getters = {
     const { currentOptions } = state;
     const preType = currentOptions.preType.key;
     const preMetric = currentOptions.preMetrics.key;
-    const preItem = queryChartData.service.filter((opt: {
+    const preItem =  [...queryChartData.service, ...queryChartData.database].filter((opt: {
       o: string;
       c: string;
       d: string
     }) => opt.d === preMetric && opt.o === preType && opt.c !== 'ChartNum')[0] || {};
-    const preParam = (fragmentAll as any)[preItem.d];
+    const preParam = (fragmentAll as any)[preItem.d] || {};
 
     return `query queryData(${preParam.variable.join(',')}) {${preParam.fragment}}`;
   },
@@ -73,30 +73,29 @@ const getters = {
     const { currentOptions } = state;
     const nextType = currentOptions.nextType.key;
     const nextMetric =  currentOptions.nextMetrics.key;
-    const nextItem = queryChartData.service.filter((opt: {
+    const nextItem = [...queryChartData.service, ...queryChartData.database].filter((opt: {
       o: string;
       c: string;
       d: string
     }) => opt.d === nextMetric && opt.o === nextType && opt.c !== 'ChartNum')[0] || {};
-    const nextParam = (fragmentAll as any)[nextItem.d];
+    const nextParam = (fragmentAll as any)[nextItem.d] || {};
 
     return `query queryData(${nextParam.variable.join(',')}) {${nextParam.fragment}}`;
   },
-  currentOptions(state: State) {
-    return state.currentOptions;
-  },
   preConfig(state: State) {
-    const { currentOptions } = state;
+    const { currentOptions, isPrevious } = state;
     const variablesData = {
-      serviceId: currentOptions.preService.key || '',
+      serviceId: isPrevious === StatusType.Next ? currentOptions.preService.key : currentOptions.nextService.key,
     } as any;
     const { key } = currentOptions.preType;
+
     if (key === ObjectType.ServiceEndpoint) {
         variablesData.endpointId = currentOptions.preObject.key || '';
         variablesData.endpointName = currentOptions.preObject.label || '';
     } else if (key === ObjectType.ServiceInstance) {
       variablesData.instanceId = currentOptions.preObject.key || '';
     } else if (key === ObjectType.Database) {
+      delete variablesData.serviceId;
       variablesData.databaseId = currentOptions.preObject.key || '';
     }
 
@@ -104,14 +103,15 @@ const getters = {
   },
   nextConfig(state: State) {
     const { currentOptions } = state;
-    const variablesData = {
-      serviceId: currentOptions.nextService.key || '',
-    } as any;
+    const variablesData = {} as any;
     const { key } = currentOptions.nextType;
+
     if (key === ObjectType.ServiceEndpoint) {
+        variablesData.serviceId = currentOptions.nextService.key || '';
         variablesData.endpointId = currentOptions.nextObject.key || '';
         variablesData.endpointName = currentOptions.nextObject.label || '';
     } else if (key === ObjectType.ServiceInstance) {
+      variablesData.serviceId = currentOptions.nextService.key || '';
       variablesData.instanceId = currentOptions.nextObject.key || '';
     } else if (key === ObjectType.Database) {
       variablesData.databaseId = currentOptions.nextObject.key || '';
@@ -136,7 +136,7 @@ const getters = {
 
 // mutations
 const mutations = {
-  ['SET_ISPREVIOUS'](state: State, data: StatusType) {
+  [types.SET_ISPREVIOUS](state: State, data: StatusType) {
     state.isPrevious = data;
   },
   [types.SET_SERVICES](state: State, data: any) {
@@ -178,14 +178,15 @@ const mutations = {
     for (const key of keys) {
       const value = data[key].values.map((d: {value: number}) => d.value);
       if (key === state.currentOptions.preMetrics.key) {
-        const { preObject } = state.currentOptions;
-        const str = `-${preObject.label}`;
-        const strKeyPre = `${state.currentOptions.preService.label}${preObject.key ? str : ''}-${key}`;
+        const { preObject,  preService } = state.currentOptions;
+        const str = `${preObject.label}`;
+        const strKeyPre = `${preService.key ? preService.label : ''}${preObject.key ? str : ''}-${key}`;
         obj[strKeyPre] = value;
       } else {
-        const { nextObject } = state.currentOptions;
-        const str = `-${nextObject.label}`;
-        const strKeyNext = `${state.currentOptions.nextService.label}${nextObject.key ? str : ''}-${key}`;
+        const { nextObject, nextService } = state.currentOptions;
+        const str = `${nextObject.label}`;
+        const servicesLabel =  `${nextService.label}-`;
+        const strKeyNext = `${nextService.key ? servicesLabel : ''}${nextObject.key ? str : ''}-${key}`;
         obj[strKeyNext] = value;
       }
     }
@@ -213,6 +214,7 @@ const mutations = {
   [types.SELECT_TYPE_INSTANCE](state: State, data: any) {
     const { preType, nextType } = state.currentOptions;
     const { isPrevious } = state;
+
     if (isPrevious === StatusType.Pre) {
       state.dataSource.preMetricsSource = MetricsSource[preType.key];
       state.currentOptions.preMetrics = MetricsSource[preType.key][0];
@@ -223,6 +225,23 @@ const mutations = {
       state.currentOptions.nextMetrics = MetricsSource[nextType.key][0];
       state.dataSource.nextObjectSource = data;
       state.currentOptions.nextObject = data[0];
+    }
+  },
+  [types.SELECT_TYPE_DATABASE](state: State, data: any) {
+    const { preType, nextType } = state.currentOptions;
+
+    if (state.isPrevious === StatusType.Next) {
+      state.dataSource.nextMetricsSource = MetricsSource[nextType.key];
+      state.currentOptions.nextMetrics = MetricsSource[nextType.key][0];
+      state.currentOptions.nextService = {label: 'No Data', value: null} as any;
+      state.currentOptions.nextObject = data[0];
+      state.dataSource.nextObjectSource = data;
+    } else {
+      state.dataSource.preMetricsSource = MetricsSource[preType.key];
+      state.currentOptions.preMetrics = MetricsSource[preType.key][0];
+      state.currentOptions.preService = {label: 'No Data', value: null} as any;
+      state.currentOptions.preObject = data[0];
+      state.dataSource.preObjectSource = data;
     }
   },
 };
@@ -263,44 +282,40 @@ const actions: ActionTree<State, ActionsParamType> = {
         context.commit(types.SELECT_TYPE_INSTANCE, res.data.data.getServiceInstances);
       });
   },
+  GET_DATABASES(context: { commit: Commit, state: State  }, params: {duration: string}) {
+    return graph
+      .query('queryDatabases')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        context.commit(types.SELECT_TYPE_DATABASE, res.data.data.services);
+      });
+  },
   RENDER_CHART(context: {dispatch: Dispatch, commit: Commit}, date: string) {
-    context.commit('CLEAR_CHART_VAL');
+    context.commit(types.CLEAR_CHART_VAL);
     context.dispatch('GET_COMPARISON', {duration: date, type: ServiceType.PREVIOUS});
     context.dispatch('GET_COMPARISON', {duration: date, type: ServiceType.NEXT});
   },
   SELECT_CONFIG(context: {commit: Commit, state: State, dispatch: Dispatch}, params: any) {
     const isPrevious = params.type.includes(StatusType.Next) ? StatusType.Next : StatusType.Pre;
 
-    context.commit('SET_ISPREVIOUS', isPrevious);
+    context.commit(types.SET_ISPREVIOUS, isPrevious);
     context.commit(types.UPDATE_CONFIG, params);
 
     const { currentOptions } = context.state;
     const objType = isPrevious === StatusType.Next ? currentOptions.nextType : currentOptions.preType;
-    const services = [ChangeType.PreService, ChangeType.NextService];
-    const typeList = [ChangeType.PreType, ChangeType.NextType];
+    const typeList = [ChangeType.PreService, ChangeType.NextService, ChangeType.PreType, ChangeType.NextType];
 
-    if (services.includes(params.type)) {
-      if (objType.key === ObjectType.Service) {
-        context.commit(types.SELECT_TYPE_SERVICES);
-      } else if (objType.key === ObjectType.ServiceInstance) {
-        const data = {
-          duration: params.duration,
-        };
-        context.dispatch('GET_SERVICE_INSTANCES', data);
-      } else if (objType.key === ObjectType.ServiceEndpoint) {
-        context.dispatch('GET_SERVICE_ENDPOINTS', params.duration);
-      }
-    }
     if (typeList.includes(params.type)) {
       if (objType.key === ObjectType.Service) {
         context.commit(types.SELECT_TYPE_SERVICES);
       } else if (objType.key === ObjectType.ServiceInstance) {
-        const data = {
+        context.dispatch('GET_SERVICE_INSTANCES', {
           duration: params.duration,
-        };
-        context.dispatch('GET_SERVICE_INSTANCES', data);
+        });
       } else if (objType.key === ObjectType.ServiceEndpoint) {
         context.dispatch('GET_SERVICE_ENDPOINTS', params.duration);
+      } else if (objType.key === ObjectType.Database) {
+        context.dispatch('GET_DATABASES', {duration: params.duration});
       }
     }
   },

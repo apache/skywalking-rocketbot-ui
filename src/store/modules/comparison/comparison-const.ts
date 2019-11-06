@@ -33,17 +33,18 @@ export enum ObjectType {
 export enum ServiceType {
   PREVIOUS = 'PREVIOUS',
   NEXT = 'NEXT',
+  INIT = 'INIT',
 }
 
 export const ComparisonOption: ICurrentOptions = {
   preService: {key: 0, label: ''},
   preType: {key: 'ServiceEndpoint', label: 'Service Endpoint'},
   preObject: {key: 0, label: '/projectB/{name}'},
-  preMetrics: {key: 0, label: 'avg'},
+  preMetrics: {key: 0, label: ''},
   nextService: {key: 0, label: ''},
   nextType: {key: 'ServiceEndpoint', label: 'Service Endpoint'},
   nextObject: {key: 0, label: '/projectA/{name}'},
-  nextMetrics: {key: 0, label: 'avg'},
+  nextMetrics: {key: 0, label: ''},
 };
 
 export const InitSource: DataSourceType = {
@@ -83,9 +84,17 @@ export const MetricsSource: any = {
     {label: 'Instance SLA', key: 'instanceSLA'},
     {label: 'service_instan_cpm', key: 2},
   ],
-  Database: ['database_access_resp_time', 'database_access_sla', 'database_access_cpm',
-   'database_access_p99', 'database_access_p95',
-    'database_access_p90', 'database_access_p75', 'database_access_p50'],
+  Database: [
+    {label: 'Database ResponseTime', key: 'databaseResponseTime'},
+    {label: 'Database Throughput', key: 'databaseThroughput'},
+    {label: 'database_access_sla', key: 'database_access_sla'},
+    {label: 'database_access_cpm', key: 'database_access_cpm'},
+    {label: 'database_access_p99', key: 'database_access_p99'},
+    {label: 'database_access_p95', key: 'database_access_p95'},
+    {label: 'database_access_p90', key: 'database_access_p90'},
+    {label: 'database_access_p75', key: 'database_access_p75'},
+    {label: 'database_access_p50', key: 'database_access_p50'},
+  ],
 };
 
 export enum ChangeType {
