@@ -98,6 +98,11 @@ const m = {
   percentResponse: 'Percent Response',
   exportImage: 'Export image',
   comparison: 'Metrics Comparison',
+  queryData: 'Query',
+  previousService: 'Previous Service',
+  nextService: 'Next Service',
+  object: 'Object',
+  metrics: 'Metrics',
 };
 
 export default m;

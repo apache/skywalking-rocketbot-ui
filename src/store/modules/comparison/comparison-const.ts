@@ -62,13 +62,17 @@ export const MetricsSource: any = {
   Service: [
     {label: 'Service Response Time', key: 'serviceResponseTime'},
     {label: 'Service SLA', key: 'serviceSLA'},
-    {label: 'service_cpm', key: 2},
+    {label: 'service Throughput', key: 'serviceThroughput'},
+    {label: 'service Percent Response', key: 'servicePercent'},
     {label: 'service_p99', key: 3},
     {label: 'service_p95', key: 4},
     {label: 'service_p90', key: 5},
     {label: 'service_p75', key: 6},
     {label: 'service_p50', key: 7},
   ],
+  // { o: 'Service', d: 'serviceInstanceThroughput', c: 'ChartTrace', t: 'Running ServiceInstance', w: 3, h: 250 },
+  // { o: 'Service', d: 'servicePercent', c: 'ChartLine', t: 'Service Percent Response', w: 3, h: 250 },
+  // { o: 'Service', d: 'serviceSlowEndpoint', c: 'ChartSlow', t: 'Service Slow Endpoint', w: 3, h: 250 },
   ServiceEndpoint: [
     {label: 'Endpoint Avg ResponseTime', key: 'endpointResponseTime'},
     {label: 'Endpoint SLA', key: 'endpointSLA'},

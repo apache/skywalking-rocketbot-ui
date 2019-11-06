@@ -17,9 +17,9 @@
 
 <template>
   <div class="rk-comparison-config" v-if="currentOptions">
-    <h4>Previous Service</h4>
+    <h4>{{this.$t("previousService")}}</h4>
     <div v-if="currentOptions.preType.key !== 'Database'">
-      <label>Service</label>
+      <label>{{this.$t("service")}}</label>
       <RkSelect
         class="mb-5"
         :current="currentOptions.preService"
@@ -27,7 +27,7 @@
         @onChoose="(item) => changOption(item, changeType.PreService)"
       />
     </div>
-    <label>Type</label>
+    <label>{{this.$t("type")}}</label>
     <RkSelect
       class="mb-5"
       :current="currentOptions.preType"
@@ -35,7 +35,7 @@
       @onChoose="(item) => changOption(item, changeType.PreType)"
     />
     <div v-if="currentOptions.preType.key !== 'Service'">
-      <label>Object</label>
+      <label>{{this.$t("object")}}</label>
       <RkSelect
         class="mb-5"
         :current="currentOptions.preObject"
@@ -43,16 +43,16 @@
         @onChoose="(item) => changOption(item, changeType.PreObject)"
       />
     </div>
-    <label>Metrics</label>
+    <label>{{this.$t("metrics")}}</label>
     <RkSelect
       class="mb-5"
       :current="currentOptions.preMetrics"
       :data="optSource.preMetricsSource"
       @onChoose="(item) => changOption(item, changeType.PreMetrics)"
     />
-    <h4>Next Service</h4>
+    <h4>{{this.$t("nextService")}}</h4>
     <div v-if="currentOptions.nextType.key !== 'Database'">
-      <label>Service</label>
+      <label>{{this.$t("service")}}</label>
       <RkSelect
         class="mb-5"
         :current="currentOptions.nextService"
@@ -60,7 +60,7 @@
         @onChoose="(item) => changOption(item, changeType.NextService)"
       />
     </div>
-    <label>Type</label>
+    <label>{{this.$t("type")}}</label>
     <RkSelect
       class="mb-5"
       :current="currentOptions.nextType"
@@ -68,7 +68,7 @@
       @onChoose="(item) => changOption(item, changeType.NextType)"
     />
     <div v-if="currentOptions.nextType.key !== 'Service'">
-      <label>Object</label>
+      <label>{{this.$t("object")}}</label>
       <RkSelect
         class="mb-5"
         :current="currentOptions.nextObject"
@@ -76,7 +76,7 @@
         @onChoose="(item) => changOption(item, changeType.NextObject)"
       />
     </div>
-    <label>Metrics</label>
+    <label>{{this.$t("metrics")}}</label>
     <RkSelect
       class="mb-5"
       :current="currentOptions.nextMetrics"
@@ -84,7 +84,7 @@
       @onChoose="(item) => changOption(item, changeType.NextMetrics)"
     />
     <div class="mb-5 query-data" @click="updateChart">
-      <a>数据查询</a>
+      <a>{{this.$t("queryData")}}</a>
     </div>
   </div>
 </template>
