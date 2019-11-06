@@ -26,7 +26,6 @@
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { State, Getter } from 'vuex-class';
 
-  // import { ICurrentOptions, DataSourceType, IOption } from '@/types/comparison';
   import { comparisonStore } from '@/store/modules/comparison';
   import { ConparisonConfig, ConparisonCharts } from '../components/comparison';
   import { DurationTime } from '@/types/global';

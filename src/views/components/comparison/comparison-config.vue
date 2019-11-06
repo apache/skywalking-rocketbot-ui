@@ -16,15 +16,17 @@
  */
 
 <template>
-  <div class="rk-comparison-config" v-if="currentOptions && optSource">
+  <div class="rk-comparison-config" v-if="currentOptions">
     <h4>Previous Service</h4>
-    <label>Service</label>
-    <RkSelect
-      class="mb-5"
-      :current="currentOptions.preService"
-      :data="optSource.preServiceSource"
-      @onChoose="(item) => changOption(item, changeType.PreService)"
-    />
+    <div v-if="currentOptions.preType.key !== 'Database'">
+      <label>Service</label>
+      <RkSelect
+        class="mb-5"
+        :current="currentOptions.preService"
+        :data="optSource.preServiceSource"
+        @onChoose="(item) => changOption(item, changeType.PreService)"
+      />
+    </div>
     <label>Type</label>
     <RkSelect
       class="mb-5"
@@ -32,13 +34,15 @@
       :data="optSource.preTypeSource"
       @onChoose="(item) => changOption(item, changeType.PreType)"
     />
-    <label>Object</label>
-    <RkSelect
-      class="mb-5"
-      :current="currentOptions.preObject"
-      :data="optSource.preObjectSource"
-      @onChoose="(item) => changOption(item, changeType.PreObject)"
-    />
+    <div v-if="currentOptions.preType.key !== 'Service'">
+      <label>Object</label>
+      <RkSelect
+        class="mb-5"
+        :current="currentOptions.preObject"
+        :data="optSource.preObjectSource"
+        @onChoose="(item) => changOption(item, changeType.PreObject)"
+      />
+    </div>
     <label>Metrics</label>
     <RkSelect
       class="mb-5"
@@ -47,13 +51,15 @@
       @onChoose="(item) => changOption(item, changeType.PreMetrics)"
     />
     <h4>Next Service</h4>
-    <label>Service</label>
-    <RkSelect
-      class="mb-5"
-      :current="currentOptions.nextService"
-      :data="optSource.nextServiceSource"
-      @onChoose="(item) => changOption(item, changeType.NextService)"
-    />
+    <div v-if="currentOptions.nextType.key !== 'Database'">
+      <label>Service</label>
+      <RkSelect
+        class="mb-5"
+        :current="currentOptions.nextService"
+        :data="optSource.nextServiceSource"
+        @onChoose="(item) => changOption(item, changeType.NextService)"
+      />
+    </div>
     <label>Type</label>
     <RkSelect
       class="mb-5"
@@ -61,13 +67,15 @@
       :data="optSource.nextTypeSource"
       @onChoose="(item) => changOption(item, changeType.NextType)"
     />
-    <label>Object</label>
-    <RkSelect
-      class="mb-5"
-      :current="currentOptions.nextObject"
-      :data="optSource.nextObjectSource"
-      @onChoose="(item) => changOption(item, changeType.NextObject)"
-    />
+    <div v-if="currentOptions.nextType.key !== 'Service'">
+      <label>Object</label>
+      <RkSelect
+        class="mb-5"
+        :current="currentOptions.nextObject"
+        :data="optSource.nextObjectSource"
+        @onChoose="(item) => changOption(item, changeType.NextObject)"
+      />
+    </div>
     <label>Metrics</label>
     <RkSelect
       class="mb-5"
@@ -126,9 +134,6 @@
     }
     .query-data {
       margin-top: 70px;
-      // position: fixed;
-      // bottom: 40px;
-      // right: 20px;
     }
     a {
       display: block;

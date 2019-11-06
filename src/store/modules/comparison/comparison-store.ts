@@ -122,14 +122,14 @@ const getters = {
   ChangeType() {
 
     return {
-      PreService: 'preService',
-      PreType: 'preType',
-      PreObject: 'preObject',
-      PreMetrics: 'preMetrics',
-      NextService: 'nextService',
-      NextType: 'nextType',
-      NextObject: 'nextObject',
-      NextMetrics: 'nextMetrics',
+      PreService: ChangeType.PreService,
+      PreType: ChangeType.PreType,
+      PreObject: ChangeType.PreObject,
+      PreMetrics: ChangeType.PreMetrics,
+      NextService: ChangeType.NextService,
+      NextType: ChangeType.NextType,
+      NextObject: ChangeType.NextObject,
+      NextMetrics: ChangeType.NextMetrics,
     };
   },
 };
@@ -178,15 +178,15 @@ const mutations = {
     for (const key of keys) {
       const value = data[key].values.map((d: {value: number}) => d.value);
       if (key === state.currentOptions.preMetrics.key) {
-        const { preObject,  preService } = state.currentOptions;
+        const { preObject,  preService, preType } = state.currentOptions;
         const str = `${preObject.label}`;
-        const strKeyPre = `${preService.key ? preService.label : ''}${preObject.key ? str : ''}-${key}`;
+        const strKeyPre = `${preType.key === ObjectType.Database ? '' : preService.label}${preType.key === ObjectType.Service ? '' : str}-${key}`;
         obj[strKeyPre] = value;
       } else {
-        const { nextObject, nextService } = state.currentOptions;
+        const { nextObject, nextService, nextType } = state.currentOptions;
         const str = `${nextObject.label}`;
         const servicesLabel =  `${nextService.label}-`;
-        const strKeyNext = `${nextService.key ? servicesLabel : ''}${nextObject.key ? str : ''}-${key}`;
+        const strKeyNext = `${nextType.key === ObjectType.Database ? '' : servicesLabel}${nextType.key === ObjectType.Service ? '' : str}-${key}`;
         obj[strKeyNext] = value;
       }
     }
@@ -206,7 +206,6 @@ const mutations = {
   [types.SELECT_TYPE_SERVICES](state: State) {
     const { preType } = state.currentOptions;
 
-    state.currentOptions.preObject = {label: 'No Data' , value: null} as any;
     state.dataSource.preObjectSource = [];
     state.dataSource.preMetricsSource = MetricsSource[preType.key];
     state.currentOptions.preMetrics = MetricsSource[preType.key][0];
@@ -233,13 +232,11 @@ const mutations = {
     if (state.isPrevious === StatusType.Next) {
       state.dataSource.nextMetricsSource = MetricsSource[nextType.key];
       state.currentOptions.nextMetrics = MetricsSource[nextType.key][0];
-      state.currentOptions.nextService = {label: 'No Data', value: null} as any;
       state.currentOptions.nextObject = data[0];
       state.dataSource.nextObjectSource = data;
     } else {
       state.dataSource.preMetricsSource = MetricsSource[preType.key];
       state.currentOptions.preMetrics = MetricsSource[preType.key][0];
-      state.currentOptions.preService = {label: 'No Data', value: null} as any;
       state.currentOptions.preObject = data[0];
       state.dataSource.preObjectSource = data;
     }
