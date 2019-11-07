@@ -81,10 +81,6 @@ export default class RkSelect extends Vue {
   height: 100%;
   width: 100%;
   padding: 5px 15px;
-  &.active,&:hover{
-    // background-color: #40454e;
-    // border: 1px solid #40454e;
-  }
 }
 .rk-sel{
   position: absolute;
@@ -106,10 +102,6 @@ export default class RkSelect extends Vue {
 }
 .rk-opt{
   padding: 7px 15px;
-  &.active,&:hover{
-    // background-color: #40454e;
-    // border: 1px solid #ddd;
-  }
 }
 .rk-sel-search{
   width: calc(100% - 4px);
