@@ -97,23 +97,23 @@ const getters = {
     return variablesData;
   },
   nextConfig(state: State) {
-    const { currentOptions } = state;
-    let variablesData = {} as any;
-    const { key } = currentOptions.nextType;
+    const { currentOptions, isPrevious } = state;
+    const { nextType, preService, nextService, nextObject } = currentOptions;
+    let variablesData = {serviceId: isPrevious === StatusType.Next ? preService.key : nextService.key} as any;
 
-    if (key === ObjectType.ServiceEndpoint) {
+    if (nextType.key === ObjectType.ServiceEndpoint) {
       variablesData = {
-        serviceId: currentOptions.nextService.key,
-        endpointId: currentOptions.nextObject.key,
-        endpointName: currentOptions.nextObject.label,
+        ...variablesData,
+        endpointId: nextObject.key,
+        endpointName: nextObject.label,
       };
-    } else if (key === ObjectType.ServiceInstance) {
+    } else if (nextType.key === ObjectType.ServiceInstance) {
       variablesData = {
-        serviceId: currentOptions.nextService.key,
-        instanceId: currentOptions.nextObject.key,
+        ...variablesData,
+        instanceId: nextObject.key,
       };
-    } else if (key === ObjectType.Database) {
-      variablesData.databaseId = currentOptions.nextObject.key;
+    } else if (nextType.key === ObjectType.Database) {
+      variablesData.databaseId = nextObject.key;
     }
 
     return variablesData;
@@ -227,8 +227,8 @@ const mutations = {
       const value = data.value[key].values.map((d: {value: number}) => d.value);
       if (data.type === ServiceType.PREVIOUS) {
         const { preObject, preService, preType } = state.currentOptions;
-        const str = `${preObject.label}`;
-        const strKeyPre = `${preType.key === ObjectType.Database ? '' : preService.label}${preType.key === ObjectType.Service ? '' : str}-${key}`;
+        const str = `${preService.label}-`;
+        const strKeyPre = `${preType.key === ObjectType.Database ? '' : str}${preType.key === ObjectType.Service ? '' : preObject.label}-${key}`;
         obj[strKeyPre] = value;
       } else {
         const { nextObject, nextService, nextType } = state.currentOptions;
@@ -252,12 +252,16 @@ const mutations = {
     state.chartSource = {} as any;
   },
   [types.SELECT_TYPE_SERVICES](state: State) {
-    const { preType } = state.currentOptions;
-    const metricSource = state.metricSource as any;
+    const { preType, nextType } = state.currentOptions;
+    const { isPrevious, metricSource } = state as any;
 
-    state.dataSource.preObjectSource = [];
-    state.dataSource.preMetricsSource = metricSource[preType.key];
-    state.currentOptions.preMetrics = metricSource[preType.key][0];
+    if (isPrevious === StatusType.Pre) {
+      state.dataSource.preMetricsSource = metricSource[preType.key] || [];
+      state.currentOptions.preMetrics = metricSource[preType.key][0];
+    } else {
+      state.dataSource.nextMetricsSource = metricSource[nextType.key] || [];
+      state.currentOptions.nextMetrics = metricSource[nextType.key][0];
+    }
   },
   [types.SELECT_TYPE_INSTANCE](state: State, data: any) {
     const { preType, nextType } = state.currentOptions;
