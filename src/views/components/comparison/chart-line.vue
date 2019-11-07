@@ -44,37 +44,19 @@ export default class ChartLine extends Vue {
           barMaxWidth: 10,
           lineStyle: {
             width: 1.5,
-            type: keys.length !== 5 ? 'solid' : 'dotted',
+            type: 'solid',
           },
       };
-      if (keys.length === 2) {
-        serie.areaStyle = {};
-      }
       temp.push(serie);
     });
-    let color: string[] = [];
-    switch (keys.length) {
-      case 2:
-      color = [
-        '#a3a0e6',
-        '#a0b1e6',
-      ];
-      break;
-      case 1:
-      color = [
-        '#3f96e3',
-      ];
-      break;
-      default:
-        color = [
-          '#6be6c1',
-          '#626c91',
-          '#a0a7e6',
-          '#96dee8',
-          '#3f96e3',
-        ];
-        break;
-    }
+    const color: string[] = [
+      '#6be6c1',
+      '#626c91',
+      '#a0a7e6',
+      '#96dee8',
+      '#3f96e3',
+    ];
+
     return {
       color,
       tooltip: {
@@ -85,7 +67,7 @@ export default class ChartLine extends Vue {
         },
       },
       legend: {
-        show: keys.length === 1 ? false : true,
+        show: true,
         icon: 'circle',
         top: 0,
         left: 0,

@@ -60,15 +60,21 @@ const getters = {
   queryPreValue(state: State) {
     const { currentOptions } = state;
     const preMetric = currentOptions.preMetrics.key;
-    const preParam = (fragmentAll as any)[preMetric] || {};
+    const preParam = (fragmentAll as any)[preMetric];
+    if (!preParam) {
+      return;
+    }
 
     return `query queryData(${preParam.variable.join(',')}) {${preParam.fragment}}`;
   },
   queryNextValue(state: State) {
     const { currentOptions } = state;
     const nextMetric =  currentOptions.nextMetrics.key;
-    const nextParam = (fragmentAll as any)[nextMetric] || {};
+    const nextParam = (fragmentAll as any)[nextMetric];
 
+    if (!nextParam) {
+      return;
+    }
     return `query queryData(${nextParam.variable.join(',')}) {${nextParam.fragment}}`;
   },
   preConfig(state: State) {
@@ -181,6 +187,9 @@ const mutations = {
   [types.SET_SERVICES](state: State, data: any) {
     const { services } = data;
 
+    if (!services.length) {
+      return;
+    }
     state.dataSource.preServiceSource = services;
     state.dataSource.nextServiceSource = services;
     state.currentOptions.preService = services[0];
@@ -295,7 +304,7 @@ const actions: ActionTree<State, ActionsParamType> = {
     context.commit(types.SET_METRICSOURCE, context.getters.AllMetrics);
     return graph.query('queryServices').params(params)
       .then((res: AxiosResponse) => {
-        if (!res.data) {
+        if (!res.data.data) {
           return;
         }
         context.commit(types.SET_SERVICES, {services: res.data.data.services});
@@ -304,7 +313,7 @@ const actions: ActionTree<State, ActionsParamType> = {
       });
   },
   GET_SERVICE_ENDPOINTS(context: { commit: Commit, state: State, dispatch: Dispatch }, date: string) {
-    if (!context.state.currentOptions.preService.key) {
+    if (!context.state.currentOptions.preService) {
       return new Promise((resolve) => resolve());
     }
     const { isPrevious, currentOptions } = context.state;
@@ -313,7 +322,7 @@ const actions: ActionTree<State, ActionsParamType> = {
       .query('queryEndpoints')
       .params({serviceId: servicesId, keyword: ''})
       .then((res: AxiosResponse) => {
-        if (!res.data) {
+        if (!res.data.data) {
           return;
         }
         context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
