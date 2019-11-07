@@ -23,8 +23,8 @@
 </template>
 
 <script lang="ts">
-  import { Component, Vue, Watch } from 'vue-property-decorator';
-  import { State, Getter } from 'vuex-class';
+  import { Component, Vue } from 'vue-property-decorator';
+  import { State, Getter, Mutation } from 'vuex-class';
 
   import { comparisonStore } from '@/store/modules/comparison';
   import { ConparisonConfig, ConparisonCharts } from '../components/comparison';
@@ -40,20 +40,20 @@
   export default class Comparison extends Vue {
     @State('comparisonStore') private comparison: any;
     @Getter('durationTime') private durationTime: any;
+    @Mutation('SET_EVENTS') private SET_EVENTS: any;
+    @Mutation('comparisonStore/SET_ISPREVIOUS') private SET_ISPREVIOUS: any;
 
     private beforeCreate() {
       this.$store.registerModule('comparisonStore', comparisonStore);
     }
 
-    private created() {
+    private beforeMount() {
       this.$store.dispatch('comparisonStore/GET_SERVICES', {duration: this.durationTime});
+      this.SET_EVENTS([this.getService]);
     }
 
-    @Watch('durationTime')
-    private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
-      if (compareObj(newValue, oldValue)) {
-        this.$store.dispatch('comparisonStore/GET_SERVICES', {duration: this.durationTime});
-      }
+    private getService() {
+      this.$store.dispatch('comparisonStore/GET_SERVICES', {duration: this.durationTime, isLoad: Boolean});
     }
 
     private beforeDestroy() {

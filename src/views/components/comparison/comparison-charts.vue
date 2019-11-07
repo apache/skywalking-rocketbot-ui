@@ -25,7 +25,7 @@
   import { Component, Vue, Prop } from 'vue-property-decorator';
   import { State, Action, Getter } from 'vuex-class';
 
-  import ChartLine from '../dashboard/charts/chart-line.vue';
+  import ChartLine from './chart-line.vue';
 
   @Component({
     components: { ChartLine },

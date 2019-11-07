@@ -33,7 +33,6 @@ export enum ObjectType {
 export enum ServiceType {
   PREVIOUS = 'PREVIOUS',
   NEXT = 'NEXT',
-  INIT = 'INIT',
 }
 
 export const ComparisonOption: ICurrentOptions = {

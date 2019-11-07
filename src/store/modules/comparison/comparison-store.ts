@@ -38,7 +38,7 @@ function identity<T>(arg: T): T {
 export interface State {
   currentOptions: ICurrentOptions;
   dataSource: DataSourceType;
-  chartSource: GenericIdentityFn<string>;
+  chartSource: GenericIdentityFn<any>;
   isPrevious: StatusType;
   metricSource: MetricsType;
 }
@@ -92,16 +92,20 @@ const getters = {
   },
   nextConfig(state: State) {
     const { currentOptions } = state;
-    const variablesData = {} as any;
+    let variablesData = {} as any;
     const { key } = currentOptions.nextType;
 
     if (key === ObjectType.ServiceEndpoint) {
-        variablesData.serviceId = currentOptions.nextService.key;
-        variablesData.endpointId = currentOptions.nextObject.key;
-        variablesData.endpointName = currentOptions.nextObject.label;
+      variablesData = {
+        serviceId: currentOptions.nextService.key,
+        endpointId: currentOptions.nextObject.key,
+        endpointName: currentOptions.nextObject.label,
+      };
     } else if (key === ObjectType.ServiceInstance) {
-      variablesData.serviceId = currentOptions.nextService.key;
-      variablesData.instanceId = currentOptions.nextObject.key;
+      variablesData = {
+        serviceId: currentOptions.nextService.key,
+        instanceId: currentOptions.nextObject.key,
+      };
     } else if (key === ObjectType.Database) {
       variablesData.databaseId = currentOptions.nextObject.key;
     }
@@ -282,7 +286,12 @@ const mutations = {
 
 // actions
 const actions: ActionTree<State, ActionsParamType> = {
-  GET_SERVICES(context: {commit: Commit, dispatch: Dispatch, getters: any}, params: {duration: string}) {
+  GET_SERVICES(context: {commit: Commit, dispatch: Dispatch, getters: any, state: State}, params: {
+    duration: string; isLoad?: boolean
+  }) {
+    if (context.state.isPrevious !== StatusType.Init && !params.isLoad) {
+      return;
+    }
     context.commit(types.SET_METRICSOURCE, context.getters.AllMetrics);
     return graph.query('queryServices').params(params)
       .then((res: AxiosResponse) => {
