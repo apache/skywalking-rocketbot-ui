@@ -57,6 +57,12 @@
       <a class="rk-btn mr-5 sm" :class="auto?'blue':'ghost'" @click="handleAuto">
         <span class="vm">{{this.$t('auto')}}</span>
       </a>
+      <div class="auto-time">
+        <span class="rk-auto-select">
+          <input v-model="autoTime" type="number" @change="changeAutoTime" min="1">
+        </span>
+        {{this.$t('second')}}
+      </div>
       <a class="rk-btn sm ghost" @click="handleReload">
         <svg class="icon mr-5 vm" :class="{'loading': auto}">
           <use xlink:href="#retry"></use>
@@ -78,6 +84,7 @@ export default class Header extends Vue {
   @Action('SET_DURATION') private SET_DURATION: any;
   private show: boolean = false;
   private auto: boolean = false;
+  private autoTime: number = 6;
   private timer: any = null;
   private handleReload() {
     const gap = this.duration.end.getTime() - this.duration.start.getTime();
@@ -89,7 +96,7 @@ export default class Header extends Vue {
     this.auto = !this.auto;
     if (this.auto) {
       this.handleReload();
-      this.timer = setInterval(this.handleReload, 6000);
+      this.timer = setInterval(this.handleReload, this.autoTime * 1000);
     } else {
       clearInterval(this.timer);
     }
@@ -103,6 +110,13 @@ export default class Header extends Vue {
   private handleSignout() {
     localStorage.removeItem('skywalking-authority');
     this.$router.push('/login');
+  }
+  private changeAutoTime() {
+    clearInterval(this.timer);
+    if (this.auto) {
+      this.handleReload();
+      this.timer = setInterval(this.handleReload, this.autoTime * 1000);
+    }
   }
 }
 </script>

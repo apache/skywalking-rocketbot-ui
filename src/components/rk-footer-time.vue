@@ -15,25 +15,28 @@
  * limitations under the License.
  */
 
-import RkHeader from './rk-header.vue';
-import RkFooter from './rk-footer.vue';
-import RkFooterTime from './rk-footer-time.vue';
-import RkProgress from './rk-progress.vue';
-import RkPage from './rk-page.vue';
-import RkDate from './rk-date.vue';
-import RkPanel from './rk-panel.vue';
-import RkSidebox from './rk-sidebox.vue';
-import RkEcharts from './rk-echarts.vue';
-import noty from './noty';
-import RkSelect from './rk-select.vue';
+<template>
+  <RkDate class="mr-10" v-model="time" position="top" format="YYYY-MM-DD HH:mm:ss"/>
+</template>
 
-const components: any = {
-  RkHeader, RkFooter, RkProgress, RkDate, RkPanel, RkEcharts, RkPage, RkSidebox, RkFooterTime,
+<script lang="ts">
+import timeFormat from '@/utils/timeFormat';
+
+export default {
+  computed: {
+    time: {
+      get() {
+        const that: any = this;
+        return [that.$store.state.rocketbot.durationRow.start, that.$store.state.rocketbot.durationRow.end];
+      },
+      set(val: Date[]) {
+        const that: any = this;
+        that.$store.dispatch('SET_DURATION', timeFormat(val));
+      },
+    },
+  },
 };
-const componentsName: string[] = Object.keys(components);
-export default {install: (vue: any) => {
-  componentsName.forEach((i) => {
-    vue.component(i, components[i]);
-  });
-  vue.use(noty);
-}};
+</script>
+
+<style scoped>
+</style>
