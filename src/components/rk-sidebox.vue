@@ -18,7 +18,7 @@
 <template>
   <div>
     <div class="rk-sidebox-backdrop" v-show="show" @click="handleHide"></div>
-    <aside class="rk-sidebox" :style="show?`width:${width};left:0`:`width:${width};left:-${width}`">
+    <aside class="rk-sidebox" :style="show?`width:${width};${right ? 'right:0' : 'left:0'}`:`width:${width};${right ? 'right' : 'left'}:-${width}`">
       <h3 class="rk-sidebox-title">{{this.title}}
         <div class="r rk-sidebox-close" @click="handleHide">
           <svg class="icon">
@@ -39,6 +39,9 @@ export default {
     show: {},
     title: {
       default: '',
+    },
+    right: {
+      default: false,
     },
     width: {
       default: '550px',
@@ -64,8 +67,7 @@ export default {
 }
 .rk-sidebox{
   overflow-y: auto;
-  will-change: left;
-  transition:left .3s;
+  transition: all .3s;
   position: fixed;
   right: 0;
   top: 50px;
