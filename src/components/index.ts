@@ -28,7 +28,7 @@ import noty from './noty';
 import RkSelect from './rk-select.vue';
 
 const components: any = {
-  RkHeader, RkFooter, RkProgress, RkDate, RkPanel, RkEcharts, RkPage, RkSidebox, RkFooterTime,
+  RkHeader, RkFooter, RkProgress, RkDate, RkPanel, RkEcharts, RkPage, RkSidebox, RkFooterTime, RkSelect,
 };
 const componentsName: string[] = Object.keys(components);
 export default {install: (vue: any) => {
