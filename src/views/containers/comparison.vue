@@ -53,7 +53,7 @@
     }
 
     private getService() {
-      this.$store.dispatch('comparisonStore/GET_SERVICES', {duration: this.durationTime, isLoad: Boolean});
+      this.$store.dispatch('comparisonStore/GET_SERVICES', {duration: this.durationTime, isLoad: true});
     }
 
     private beforeDestroy() {

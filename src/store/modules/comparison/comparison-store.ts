@@ -26,7 +26,7 @@ import { queryChartData } from '@/utils/queryChartData';
 import fragmentAll from '@/store/modules/dashboard/fragments';
 import { ICurrentOptions, DataSourceType, ISelectConfig, MetricsType } from '@/types/comparison';
 import {
-  ComparisonOption, InitSource, LinearType,
+  ComparisonOption, InitSource, LinearType, ComparisonType,
   ObjectType, ServiceType, ChangeType, StatusType,
 } from './comparison-const';
 
@@ -184,7 +184,7 @@ const mutations = {
   [types.SET_METRICSOURCE](state: State, source: MetricsType) {
     state.metricSource = source;
   },
-  [types.SET_SERVICES](state: State, data: any) {
+  [types.SET_SERVICES](state: State, data: {services: any[]}) {
     const { services } = data;
 
     if (!services.length) {
@@ -195,7 +195,7 @@ const mutations = {
     state.currentOptions.preService = services[0];
     state.currentOptions.nextService = services[0];
   },
-  [types.SET_ENDPOINTS](state: State, data: any) {
+  [types.SET_CONFIG](state: State, data: any[]) {
     const { isPrevious, currentOptions, metricSource } = state as any;
     const type = isPrevious === StatusType.Pre ? currentOptions.preType.key : currentOptions.nextType.key;
 
@@ -210,14 +210,22 @@ const mutations = {
       state.dataSource.nextMetricsSource = metricSource[type];
       state.currentOptions.nextMetrics = metricSource[type][1];
     } else {
-      state.dataSource.nextObjectSource = data;
-      state.currentOptions.nextObject = data[0];
-      state.dataSource.preObjectSource = data;
-      state.currentOptions.preObject = data[0];
-      state.dataSource.preMetricsSource = metricSource[type];
-      state.currentOptions.preMetrics = metricSource[type][0];
-      state.dataSource.nextMetricsSource = metricSource[type];
-      state.currentOptions.nextMetrics = metricSource[type][1];
+      state.currentOptions = {
+        ...state.currentOptions,
+        nextObject: data[0],
+        preObject: data[0],
+        preMetrics: metricSource[type][0],
+        nextMetrics: metricSource[type][1],
+        preType: ComparisonType[2],
+        nextType: ComparisonType[2],
+      };
+      state.dataSource = {
+        ...state.dataSource,
+        nextObjectSource: data,
+        preObjectSource: data,
+        preMetricsSource: metricSource[type],
+        nextMetricsSource: metricSource[type],
+      };
     }
   },
   [types.SET_CHARTVAL](state: State, data: {value: any, type: string}) {
@@ -306,6 +314,7 @@ const actions: ActionTree<State, ActionsParamType> = {
       return;
     }
     context.commit(types.SET_METRICSOURCE, context.getters.AllMetrics);
+    context.commit(types.SET_ISPREVIOUS, StatusType.Init);
     return graph.query('queryServices').params(params)
       .then((res: AxiosResponse) => {
         if (!res.data.data) {
@@ -329,7 +338,7 @@ const actions: ActionTree<State, ActionsParamType> = {
         if (!res.data.data) {
           return;
         }
-        context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
+        context.commit(types.SET_CONFIG, res.data.data.getEndpoints);
       }).then(() => {
         if (isPrevious === StatusType.Init) {
           context.dispatch('RENDER_CHART', date);
