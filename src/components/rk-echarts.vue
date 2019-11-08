@@ -44,9 +44,9 @@ export default class RkEcharts extends Vue {
   private onoptionChanged(newVal: any, oldVal: any): void {
     if (this.myChart) {
       if (newVal) {
-        this.myChart.setOption(newVal);
+        this.myChart.setOption(newVal, true); // clear cache
       } else {
-        this.myChart.setOption(oldVal);
+        this.myChart.setOption(oldVal, true);
       }
     } else {
       this.drawEcharts();
