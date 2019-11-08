@@ -49,11 +49,11 @@
 
     private beforeMount() {
       this.$store.dispatch('comparisonStore/GET_SERVICES', {duration: this.durationTime});
-      this.SET_EVENTS([this.getService]);
+      this.SET_EVENTS([this.reloadConfig]);
     }
 
-    private getService() {
-      this.$store.dispatch('comparisonStore/GET_SERVICES', {duration: this.durationTime, isLoad: true});
+    private reloadConfig() {
+      this.$store.dispatch('comparisonStore/RENDER_CHART', this.durationTime);
     }
 
     private beforeDestroy() {

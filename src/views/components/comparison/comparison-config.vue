@@ -83,8 +83,9 @@
       :data="optSource.nextMetricsSource"
       @onChoose="(item) => changOption(item, changeType.NextMetrics)"
     />
-    <div class="mb-5 query-data" @click="updateChart">
-      <a>{{this.$t("queryData")}}</a>
+    <div class="mb-5 query-data">
+      <a @click="updateChart">{{this.$t("queryData")}}</a>
+      <a @click="resetService">{{this.$t("reset")}}</a>
     </div>
   </div>
 </template>
@@ -111,6 +112,11 @@
     private updateChart() {
       this.$store.dispatch('comparisonStore/RENDER_CHART', this.durationTime);
     }
+
+    private resetService() {
+      this.$store.commit('comparisonStore/SET_ISPREVIOUS', 'init');
+      this.$store.dispatch('comparisonStore/GET_SERVICES', {duration: this.durationTime});
+    }
   }
 </script>
 
@@ -132,12 +138,21 @@
       margin: 10px 0;
       font-weight: bold;
     }
-    .query-data {
-      margin-top: 70px;
+    .reload {
+      background: #fff;
+      color: #333;
+      position: absolute;
+      top: 3px;
+    }
+    .reload-icon {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 20px;
     }
     a {
-      display: block;
-      width: 340px;
+      display: inline-block;
+      width: 78px;
       height: 40px;
       line-height: 40px;
       text-align: center;
@@ -145,6 +160,13 @@
       background: #448dfe;
       color: #fff;
       border-radius: 4px;
+    }
+    .query-data {
+      margin-top: 70px;
+      :first-child {
+        border-right: 1px solid #fff;
+        width: 260px;
+      }
     }
   }
 </style>

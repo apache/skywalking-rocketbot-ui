@@ -78,9 +78,9 @@ const getters = {
     return `query queryData(${nextParam.variable.join(',')}) {${nextParam.fragment}}`;
   },
   preConfig(state: State) {
-    const { currentOptions, isPrevious } = state;
+    const { currentOptions } = state;
     const variablesData = {
-      serviceId: isPrevious === StatusType.Next ? currentOptions.preService.key : currentOptions.nextService.key,
+      serviceId: currentOptions.preService.key,
     } as any;
     const { key } = currentOptions.preType;
 
@@ -97,9 +97,9 @@ const getters = {
     return variablesData;
   },
   nextConfig(state: State) {
-    const { currentOptions, isPrevious } = state;
-    const { nextType, preService, nextService, nextObject } = currentOptions;
-    let variablesData = {serviceId: isPrevious === StatusType.Next ? preService.key : nextService.key} as any;
+    const { currentOptions } = state;
+    const { nextType, nextService, nextObject } = currentOptions;
+    let variablesData = {serviceId: nextService.key} as any;
 
     if (nextType.key === ObjectType.ServiceEndpoint) {
       variablesData = {
@@ -308,11 +308,12 @@ const mutations = {
 // actions
 const actions: ActionTree<State, ActionsParamType> = {
   GET_SERVICES(context: {commit: Commit, dispatch: Dispatch, getters: any, state: State}, params: {
-    duration: string; isLoad?: boolean
+    duration: string;
   }) {
-    if (context.state.isPrevious !== StatusType.Init && !params.isLoad) {
+    if (context.state.isPrevious !== StatusType.Init) {
       return;
     }
+
     context.commit(types.SET_METRICSOURCE, context.getters.AllMetrics);
     context.commit(types.SET_ISPREVIOUS, StatusType.Init);
     return graph.query('queryServices').params(params)

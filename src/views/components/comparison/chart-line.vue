@@ -23,12 +23,12 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
 export default class ChartLine extends Vue {
-    @Prop() private data!: any;
-    @Prop() private intervalTime!: any;
-    public resize() {
-      const chart: any = this.$refs.chart;
-      chart.myChart.resize();
-    }
+  @Prop() private data!: any;
+  @Prop() private intervalTime!: any;
+  public resize() {
+    const chart: any = this.$refs.chart;
+    chart.myChart.resize();
+  }
   get option() {
     const temp: any = [];
     const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
