@@ -427,8 +427,65 @@ const actions: ActionTree<State, ActionsParamType> = {
         if (!data) {
           return;
         }
-        context.commit(types.SET_CHARTVAL, {value: data, type: param.type});
+        context.dispatch('FORMAT_VALUE', {value: data, type: param.type});
     });
+  },
+  FORMAT_VALUE(context: {commit: Commit, state: State, dispatch: Dispatch}, params: {value: any, type: string}) {
+    if (!(params && params.value)) {
+      return;
+    }
+    if (params.value.endpointSLA) {
+      params.value.endpointSLA.values = params.value.endpointSLA.values.map((i: any) => {
+        return {value: i.value / 100};
+      });
+    }
+    if (params.value.databaseSLA) {
+      params.value.databaseSLA.values = params.value.databaseSLA.values.map((i: any) => {
+        return {value: i.value / 100};
+    });
+    }
+    if (params.value.serviceSLA) {
+      params.value.serviceSLA.values = params.value.serviceSLA.values.map((i: any) => {
+        return {value: i.value / 100};
+      });
+    }
+    if (params.value.instanceSLA) {
+      params.value.instanceSLA.values = params.value.instanceSLA.values.map((i: any) => {
+        return {value: i.value / 100};
+      });
+    }
+    if (params.value.heap && params.value.maxHeap) {
+      params.value.heap.values = params.value.heap.values.map((i: any) => {
+        return {value: (i.value / 1048576).toFixed(2)};
+      });
+      params.value.maxHeap.values = params.value.maxHeap.values.map((i: any, index: number) => {
+        const val = i.value > -1 ? ((i.value / 1048576) - params.value.heap.values[index].value).toFixed(2) : 0;
+        return {value: val};
+      });
+      if (Math.max.apply(Math, params.value.maxHeap.values) === -1) {
+        params.value.maxHeap.values = 'Max Heap Unlimited';
+      }
+    }
+    if (params.value.nonheap && params.value.maxNonHeap) {
+      params.value.nonheap.values = params.value.nonheap.values.map((i: any) => {
+        return {value : (i.value / 1048576).toFixed(2)};
+      });
+      params.value.maxNonHeap.values = params.value.maxNonHeap.values
+        .map((i: any, index: number) => {
+          const val = i.value > -1 ? ((i.value / 1048576) - params.value.nonheap.values[index].value).toFixed(2) : 0;
+          return {value: val};
+        });
+      if (Math.max.apply(Math, params.value.maxNonHeap.values) === -1) {
+        params.value.maxNonHeap.values = 'Max NonHeap Unlimited';
+      }
+    }
+    if (params.value.clrHeap) {
+      params.value.clrHeap.values =
+      params.value.clrHeap.values.map((i: any) => {
+        return { value: (i.value / 1048576 ).toFixed(2)};
+      });
+    }
+    context.commit(types.SET_CHARTVAL, params);
   },
 };
 
