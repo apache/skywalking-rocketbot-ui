@@ -261,7 +261,7 @@
     border-radius: 3px;
   }
 
-  .rk-trace-search-range {
+  .rk-trace-search-range,.rk-auto-select {
     border-radius: 3px;
     background-color: #fff;
     padding: 1px;
