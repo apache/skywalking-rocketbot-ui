@@ -15,25 +15,31 @@
  * limitations under the License.
  */
 
-import RkHeader from './rk-header.vue';
-import RkFooter from './rk-footer.vue';
-import RkFooterTime from './rk-footer-time.vue';
-import RkProgress from './rk-progress.vue';
-import RkPage from './rk-page.vue';
-import RkDate from './rk-date.vue';
-import RkPanel from './rk-panel.vue';
-import RkSidebox from './rk-sidebox.vue';
-import RkEcharts from './rk-echarts.vue';
-import noty from './noty';
-import RkSelect from './rk-select.vue';
+<template>
+  <div class="rk-comparison-charts">
+    <ChartLine :intervalTime="intervalTime" :data="chartSource" />
+  </div>
+</template>
 
-const components: any = {
-  RkHeader, RkFooter, RkProgress, RkDate, RkPanel, RkEcharts, RkPage, RkSidebox, RkFooterTime, RkSelect,
-};
-const componentsName: string[] = Object.keys(components);
-export default {install: (vue: any) => {
-  componentsName.forEach((i) => {
-    vue.component(i, components[i]);
-  });
-  vue.use(noty);
-}};
+<script lang="ts">
+  import { Component, Vue, Prop } from 'vue-property-decorator';
+  import { State, Action, Getter } from 'vuex-class';
+
+  import ChartLine from './chart-line.vue';
+
+  @Component({
+    components: { ChartLine },
+  })
+  export default class ComparisonCharts extends Vue {
+    @Prop() private chartSource: any;
+    @Getter('intervalTime') private intervalTime: any;
+  }
+</script>
+
+<style lang="scss">
+  .rk-comparison-charts {
+    flex-grow: 5;
+    height: 100%;
+    padding: 20px;
+  }
+</style>
