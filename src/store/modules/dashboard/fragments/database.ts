@@ -17,7 +17,7 @@
 
 
 export const databaseResponseTime =  {
-  variable: ['$duration: Duration!'],
+  variable: ['$databaseId: ID!', '$duration: Duration!'],
   fragment: `
   databaseResponseTime: getLinearIntValues(metric: {
     name: "database_access_resp_time"
@@ -50,6 +50,46 @@ export const databaseSLA =  {
       value
     }
   }`,
+};
+export const databaseP99 =  {
+  variable: ['$databaseId: ID!', '$duration: Duration!'],
+  fragment: `
+  databaseP99: getLinearIntValues(metric: {
+    name: "database_access_p99"
+    id: $databaseId
+  }, duration: $duration) { values { value } }`,
+};
+export const databaseP95 =  {
+  variable: ['$databaseId: ID!', '$duration: Duration!'],
+  fragment: `
+  databaseP99: getLinearIntValues(metric: {
+    name: "database_access_p95"
+    id: $databaseId
+  }, duration: $duration) { values { value } }`,
+};
+export const databaseP90 =  {
+  variable: ['$databaseId: ID!', '$duration: Duration!'],
+  fragment: `
+  databaseP99: getLinearIntValues(metric: {
+    name: "database_access_p90"
+    id: $databaseId
+  }, duration: $duration) { values { value } }`,
+};
+export const databaseP75 =  {
+  variable: ['$databaseId: ID!', '$duration: Duration!'],
+  fragment: `
+  databaseP99: getLinearIntValues(metric: {
+    name: "database_access_p75"
+    id: $databaseId
+  }, duration: $duration) { values { value } }`,
+};
+export const databaseP50 =  {
+  variable: ['$databaseId: ID!', '$duration: Duration!'],
+  fragment: `
+  databaseP99: getLinearIntValues(metric: {
+    name: "database_access_p50"
+    id: $databaseId
+  }, duration: $duration) { values { value } }`,
 };
 export const databasePercent =  {
   variable: ['$databaseId: ID!', '$duration: Duration!'],
