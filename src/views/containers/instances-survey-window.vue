@@ -50,16 +50,16 @@
   import { Action, Getter, State } from 'vuex-class';
 
   interface Instance {
-    label: string,
-    key: string,
-    name?: string
+    label: string;
+    key: string;
+    name?: string;
   }
 
   @Component({
     components: {
       InstancesSurvey,
       ToolBarSelect,
-      ToolBarEndpointSelect
+      ToolBarEndpointSelect,
     },
   })
   export default class InstancesSurveyWindow extends Vue {
@@ -71,15 +71,12 @@
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @PropSync('isShow', { default: false })
-    isShowSync!: boolean;
-    instancesSurveyHeight = '100%';
+    private isShowSync!: boolean;
+    private instancesSurveyHeight = '100%';
 
-    tabsLoading = true;
-    instanceName: string = '0';
-    instances: any[] = [];
-
-    serviceName!: string;
-    clusterName!: string;
+    private tabsLoading = true;
+    private instanceName: string = '0';
+    private instances: any[] = [];
 
     private dragIndex: number = NaN;
 
@@ -87,12 +84,8 @@
       this.dragIndex = index;
     }
 
-    private selectInstance(tab: any) {
-      const instance = _.find(this.stateDashboardOption.instances, { name: tab.name });
-      if (instance) {
-        this.SELECT_INSTANCE({ instance, duration: this.durationTime });
-        this.instanceName = tab.name;
-      }
+    private selectInstance(i: any) {
+      this.SELECT_INSTANCE({instance: i, duration: this.durationTime});
     }
 
     private handleRefresh() {
@@ -111,34 +104,34 @@
     }
 
     @Watch('stateDashboardOption.instances')
-    watchInstances(instances: Instance[]) {
-      _.forEach(instances, instance => {
+    private watchInstances(instances: Instance[]) {
+      _.forEach(instances, (instance) => {
         instance.name = instance.label.includes('@') ? instance.label.split('@')[1] : instance.label;
       });
       this.instances = instances;
-      if (instances.length > 0 && (this.instanceName = '0')) {
+      if (instances.length > 0 && (this.instanceName === '0')) {
         this.SELECT_INSTANCE({ instance: instances[0], duration: this.durationTime });
-        instances[0].name && (this.instanceName = instances[0].name);
+        if (instances[0].name) {
+          this.instanceName = instances[0].name;
+        }
       }
       this.tabsLoading = false;
     }
 
-    beforeMount() {
-      this.serviceName = this.stateDashboardOption.currentService.label;
-      this.clusterName = '';
+    private beforeMount() {
       this.handleOption();
     }
 
-    mounted(){
+    private mounted() {
       this.resize();
       window.addEventListener('resize', this.resize);
     }
 
-    resize() {
+    private resize() {
       this.instancesSurveyHeight = `${document.body.clientHeight - 101}px`;
     }
 
-    beforeDestroy(){
+    private beforeDestroy() {
       window.removeEventListener('resize', this.resize);
     }
   }

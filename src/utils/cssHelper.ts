@@ -33,7 +33,7 @@ class CssHelper {
   public translateDeserialization(translate: CssTranslate) {
     let translateString = '';
     const translateEntries = Object.entries(translate);
-    translateEntries.forEach(value => {
+    translateEntries.forEach((value) => {
       translateString += value[1] + ',';
     });
     translateString = translateString.slice(0, translateString.length - 1);
@@ -56,7 +56,7 @@ class CssHelper {
   public matrixDeserialization(cssMatrix: CssMatrix) {
     let matrixString = '';
     const matrixEntries = Object.entries(cssMatrix);
-    matrixEntries.forEach(value => {
+    matrixEntries.forEach((value) => {
       matrixString += value[1] + ',';
     });
     matrixString = matrixString.slice(0, matrixString.length - 1);

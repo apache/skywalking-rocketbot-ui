@@ -123,7 +123,8 @@ const actions: ActionTree<State, any> = {
     context.dispatch('RUN_EVENTS', {}, {root: true});
   },
   MIXHANDLE_CHANGE_GROUP_WITH_CURRENT(
-    context: { commit: Commit, dispatch: Dispatch, state: State, rootState: any }, { index, current = 0 }: { index: number, current: number }): void {
+    context: { commit: Commit, dispatch: Dispatch, state: State, rootState: any },
+    { index, current = 0 }: { index: number, current: number }): void {
     const rocketOption = context.rootState.rocketOption;
     const temp: any = {};
     if (rocketOption.currentService) {

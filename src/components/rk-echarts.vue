@@ -38,7 +38,9 @@ export default class RkEcharts extends Vue {
 
   }
   private beforeDestroy(): void {
-   this.myChart.dispose && this.myChart.dispose();
+   if (this.myChart.dispose) {
+     this.myChart.dispose();
+   }
    window.removeEventListener('resize', this.myChart.resize);
   }
   @Watch('option', { deep: true })

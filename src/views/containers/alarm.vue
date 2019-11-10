@@ -40,11 +40,11 @@ export default class Alarm extends Vue {
   @State('rocketAlarm') private rocketAlarm!: any;
   @Getter('durationTime') private durationTime: any;
   @Prop({default: {label: 'All', key: ''}})
-  public alarmScope: any;
+  private alarmScope: any;
   @Prop({default: false, type: Boolean})
-  public inTopo!: boolean;
+  private inTopo!: boolean;
   @Prop({default: ''})
-  public keyword!: string;
+  private keyword!: string;
   private beforeCreate() {
     this.$store.registerModule('rocketAlarm', alarm);
   }

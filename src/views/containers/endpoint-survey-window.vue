@@ -29,7 +29,7 @@
             :current="stateDashboardOption.currentService"
             :data="stateDashboardOption.services"
             icon="package"/>
-        <ToolBarEndpointSelect @onChoose="selectInstance" :title="$t('currentEndpoint')"
+        <ToolBarEndpointSelect @onChoose="selectEndpoint" :title="$t('currentEndpoint')"
                                :current="stateDashboardOption.currentEndpoint" :data="endpoints" icon="code">
         </ToolBarEndpointSelect>
       </div>
@@ -48,16 +48,16 @@
   import { Action, Getter, State } from 'vuex-class';
 
   interface Endpoint {
-    label: string,
-    key: string,
-    name?: string
+    label: string;
+    key: string;
+    name?: string;
   }
 
   @Component({
     components: {
       EndpointsSurvey,
       ToolBarSelect,
-      ToolBarEndpointSelect
+      ToolBarEndpointSelect,
     },
   })
   export default class InstancesSurveyWindow extends Vue {
@@ -69,16 +69,13 @@
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @PropSync('isShow', { default: false })
-    isShowSync!: boolean;
-    endpointsSurveyHeight = '100%';
+    private isShowSync!: boolean;
+    private endpointsSurveyHeight = '100%';
 
-    tabsLoading = true;
-    endpointName: string = '0';
-    endpointKey: string = '0';
-    endpoints: any[] = [];
-
-    serviceName!: string;
-    clusterName!: string;
+    private tabsLoading = true;
+    private endpointName: string = '0';
+    private endpointKey: string = '0';
+    private endpoints: any[] = [];
 
     private dragIndex: number = NaN;
 
@@ -86,12 +83,8 @@
       this.dragIndex = index;
     }
 
-    private selectInstance(tab: any) {
-      const endpoint = _.find(this.stateDashboardOption.endpoints, { name: tab.name });
-      if (endpoint) {
-        this.SELECT_ENDPOINT({ endpoint, duration: this.durationTime });
-        this.endpointName = tab.name;
-      }
+    private selectEndpoint(i: any) {
+      this.SELECT_ENDPOINT({endpoint: i, duration: this.durationTime});
     }
 
     private handleRefresh() {
@@ -111,40 +104,36 @@
       });
     }
 
-    private selectEndpoint(i: any) {
-      this.SELECT_ENDPOINT({endpoint: i, duration: this.durationTime});
-    }
-
     @Watch('stateDashboardOption.endpoints')
-    watchInstances(endpoints: Endpoint[]) {
-      _.forEach(endpoints, endpoint => {
+    private watchInstances(endpoints: Endpoint[]) {
+      _.forEach(endpoints, (endpoint) => {
         endpoint.name = endpoint.label;
       });
       this.endpoints = endpoints;
-      if (endpoints.length > 0 && (this.endpointName = '0')) {
+      if (endpoints.length > 0 && (this.endpointName === '0')) {
         this.SELECT_ENDPOINT({ endpoint: endpoints[0], duration: this.durationTime });
-        endpoints[0].name && (this.endpointName = endpoints[0].name) && (this.endpointKey = endpoints[0].key);
+        if (endpoints[0].name) {
+          this.endpointName = endpoints[0].name;
+          this.endpointKey = endpoints[0].key;
+        }
       }
       this.tabsLoading = false;
     }
 
-    beforeMount() {
-      this.serviceName = this.stateDashboardOption.currentService.label;
-      this.serviceName = this.stateDashboardOption.currentService.label;
-      this.clusterName = '';
+    private beforeMount() {
       this.handleOption();
     }
 
-    mounted(){
+    private mounted() {
       this.resize();
       window.addEventListener('resize', this.resize);
     }
 
-    resize() {
+    private resize() {
       this.endpointsSurveyHeight = `${document.body.clientHeight - 101}px`;
     }
 
-    beforeDestroy(){
+    private beforeDestroy() {
       window.removeEventListener('resize', this.resize);
     }
   }

@@ -44,11 +44,11 @@ export default class Trace extends Vue {
   @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
   @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
 
-  @Prop({default:{label: 'All', key: ''}})
-  public service!: Option;
+  @Prop({default: {label: 'All', key: ''}})
+  private service!: Option;
 
   @Prop({default: false, type: Boolean})
-  public inTopo!: boolean;
+  private inTopo!: boolean;
 
   private show: boolean = true;
   private beforeCreate() {

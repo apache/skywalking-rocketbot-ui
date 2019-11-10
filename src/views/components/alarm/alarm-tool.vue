@@ -40,9 +40,9 @@ export default class AlarmTool extends Vue {
   @Prop() private total!: number;
   private pageNum: number = 1;
   @Prop({default: {label: 'All', key: ''}})
-  public alarmScope: any;
+  private alarmScope: any;
   @Prop({default: false, type: Boolean})
-  public inTopo!: boolean;
+  private inTopo!: boolean;
   private alarmOptions: any = [
     {label: 'All', key: ''},
     {label: 'Service', key: 'Service'},
@@ -50,7 +50,7 @@ export default class AlarmTool extends Vue {
     {label: 'Endpoint', key: 'Endpoint'},
   ];
   @Prop({default: ''})
-  public keyword!: string;
+  private keyword!: string;
 
   private handlePage(pageNum: number) {
     this.handleRefresh(pageNum);

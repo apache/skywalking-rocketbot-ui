@@ -165,20 +165,26 @@ import InstancesSurveyWindow from '@/views/containers/instances-survey-window.vu
 import EndpointSurveyWindow from '@/views/containers/endpoint-survey-window.vue';
 import { initState } from '@/store/modules/dashboard/modules/dashboard-data-layout';
 
-@Component({components: {TopoChart, TopoService, ChartResponse, Radial, AlarmContainers, TraceContainers, InstancesSurveyWindow, EndpointSurveyWindow}})
+@Component({components: {TopoChart, TopoService, ChartResponse, Radial, AlarmContainers,
+    TraceContainers, InstancesSurveyWindow, EndpointSurveyWindow}})
 export default class TopoAside extends Vue {
-  @State('rocketTopo') public stateTopo!: topoState;
+  @State('rocketTopo') private stateTopo!: topoState;
   @State('rocketOption') private stateDashboardOption!: any;
-  @Getter('intervalTime') public intervalTime: any;
+  @Getter('intervalTime') private intervalTime: any;
   @Getter('durationTime') private durationTime: any;
   @Action('rocketTopo/GET_TOPO') private GET_TOPO: any;
   @Action('rocketTopo/CLEAR_TOPO') private CLEAR_TOPO: any;
-  @Mutation('rocketTopo/SET_MODE_STATUS') public SET_MODE_STATUS: any;
-  @Action('rocketTopo/CLEAR_TOPO_INFO') public CLEAR_TOPO_INFO: any;
+  @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
+  @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
   @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
 
   private drawerMainBodyHeight = '100%';
   private initState = initState;
+  private radioStatus: boolean = false;
+  private show: boolean = true;
+  private showInfo: boolean = false;
+  private isMini: boolean = true;
+  private showInfoCount: number = 0;
 
   private resize() {
     this.drawerMainBodyHeight = `${document.body.clientHeight - 50}px`;
@@ -188,9 +194,9 @@ export default class TopoAside extends Vue {
     this.$store.registerModule('rocketTopo', topo);
   }
 
-  async created() {
+  private async created() {
     this.getTopo();
-    this.SET_COMPS_TREE(this.initState.tree)
+    this.SET_COMPS_TREE(this.initState.tree);
   }
 
   private mounted() {
@@ -220,14 +226,9 @@ export default class TopoAside extends Vue {
     });
     return result;
   }
-  private radioStatus: boolean = false;
-  private show: boolean = true;
-  private showInfo: boolean = false;
-  private isMini: boolean = true;
-  private showInfoCount: number = 0;
 
   @Watch('durationTime')
-  watchDurationTime() {
+  private watchDurationTime() {
     this.getTopo();
   }
 

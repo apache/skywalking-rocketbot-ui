@@ -93,13 +93,13 @@
     private maxTraceDuration: string = localStorage.getItem('maxTraceDuration') || '';
     private minTraceDuration: string = localStorage.getItem('minTraceDuration') || '';
     @Prop({default: {label: 'All', key: ''}})
-    public service!: Option;
+    private service!: Option;
     private instance: Option = {label: 'All', key: ''};
     private endpointName: string = localStorage.getItem('endpointName') || '';
     private traceId: string = localStorage.getItem('traceId') || '';
     private traceState: Option = {label: 'All', key: 'ALL'};
     @Prop({default: false, type: Boolean})
-    public inTopo!: boolean;
+    private inTopo!: boolean;
 
     private dateFormat = (date: Date, step: string) => {
       const year = date.getFullYear();
@@ -135,7 +135,8 @@
       if (step === 'MINUTE') {
         return `${year}-${month}-${day} ${hour}${minute}`;
       }
-    };
+    }
+
     private globalTimeFormat = (time: Date[]): any => {
       let step = 'MINUTE';
       const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
@@ -149,7 +150,7 @@
         step = 'MONTH';
       }
       return {start: this.dateFormat(time[0], step), end: this.dateFormat(time[1], step), step};
-    };
+    }
 
     private chooseService(i: any) {
       if (this.service.key === i.key) {
@@ -174,13 +175,12 @@
           new Date(this.time[0].getTime() +
             (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000),
           new Date(this.time[1].getTime() +
-            (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000)
+            (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000),
         ]),
         traceState: this.traceState.key,
         paging: {pageNum: 1, pageSize: 15, needTotal: true},
-        queryOrder: this.rocketTrace.traceForm.queryOrder
+        queryOrder: this.rocketTrace.traceForm.queryOrder,
       };
-      console.log('this.service: ', this.service);
 
       if (this.service.key) {
         temp.serviceId = this.service.key;
