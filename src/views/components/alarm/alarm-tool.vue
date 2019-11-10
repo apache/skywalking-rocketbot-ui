@@ -74,8 +74,7 @@ export default class AlarmTool extends Vue {
     this.GET_ALARM(params);
   }
   private beforeMount() {
-    // this.SET_EVENTS([() => { this.handleRefresh(1); } ]);
-    this.handleRefresh(1);
+    this.SET_EVENTS([() => { this.handleRefresh(1); } ]);
   }
 }
 </script>

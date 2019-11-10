@@ -16,29 +16,34 @@
 */
 
 <template>
-  <div>
+  <div class="performance-metrics-window">
     <el-drawer
       :destroy-on-close="true"
-      title="Instance survey"
+      title="Instances"
       :visible.sync="isShowSync"
       direction="rtl"
       size="80%">
-      <div class="ml-10">
-        <el-tag>Service Name: {{ serviceName }}</el-tag>
+      <div class="rk-dashboard-bar flex-h">
+        <ToolBarSelect
+            :selectable="false"
+            :title="this.$t('currentService')"
+            :current="stateDashboardOption.currentService"
+            :data="stateDashboardOption.services" icon="package"/>
+        <ToolBarSelect
+            @onChoose="selectInstance"
+            :title="$t('currentInstance')"
+            :current="stateDashboardOption.currentInstance"
+            :data="instances" icon="disk"/>
       </div>
-      <el-tabs v-model="instanceName" @tab-click="selectInstance">
-        <el-tab-pane v-for="(instance) in instances" :key="instance.key"
-                     :label="instance.name" :name="instance.name" :lazy="true"
-        >
-          <instances-survey v-if="isShowSync" :style="`overflow: auto; height: ${instancesSurveyHeight}`" />
-        </el-tab-pane>
-      </el-tabs>
+      <instances-survey v-if="isShowSync" :style="`overflow: auto; height: ${instancesSurveyHeight}`" />
     </el-drawer>
   </div>
 </template>
 
 <script lang="ts">
   import InstancesSurvey from '@/views/components/topology/instances-survey.vue';
+  import ToolBarSelect from '@/views/components/dashboard/tool-bar-select.vue';
+  import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar-endpoint-select.vue';
   import _ from 'lodash';
   import Vue from 'vue';
   import { Component, PropSync, Watch } from 'vue-property-decorator';
@@ -53,6 +58,8 @@
   @Component({
     components: {
       InstancesSurvey,
+      ToolBarSelect,
+      ToolBarEndpointSelect
     },
   })
   export default class InstancesSurveyWindow extends Vue {

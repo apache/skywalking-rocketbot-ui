@@ -34,7 +34,7 @@ export interface State {
   tree: CompsTree[];
 }
 
-const initState: State = {
+export const initState: State = {
   current: 0,
   group: 0,
   index: 0,

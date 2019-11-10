@@ -71,7 +71,7 @@
 
 <script lang="ts">
   import { Duration, Option } from '@/types/global';
-  import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
+  import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import TraceSelect from './trace-select.vue';
 
@@ -92,7 +92,7 @@
     private status: boolean = true;
     private maxTraceDuration: string = localStorage.getItem('maxTraceDuration') || '';
     private minTraceDuration: string = localStorage.getItem('minTraceDuration') || '';
-    @Prop({default:{label: 'All', key: ''}})
+    @Prop({default: {label: 'All', key: ''}})
     public service!: Option;
     private instance: Option = {label: 'All', key: ''};
     private endpointName: string = localStorage.getItem('endpointName') || '';
@@ -135,7 +135,7 @@
       if (step === 'MINUTE') {
         return `${year}-${month}-${day} ${hour}${minute}`;
       }
-    }
+    };
     private globalTimeFormat = (time: Date[]): any => {
       let step = 'MINUTE';
       const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
@@ -149,7 +149,7 @@
         step = 'MONTH';
       }
       return {start: this.dateFormat(time[0], step), end: this.dateFormat(time[1], step), step};
-    }
+    };
 
     private chooseService(i: any) {
       if (this.service.key === i.key) {
@@ -174,11 +174,11 @@
           new Date(this.time[0].getTime() +
             (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000),
           new Date(this.time[1].getTime() +
-            (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000),
+            (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000)
         ]),
         traceState: this.traceState.key,
         paging: {pageNum: 1, pageSize: 15, needTotal: true},
-        queryOrder: this.rocketTrace.traceForm.queryOrder,
+        queryOrder: this.rocketTrace.traceForm.queryOrder
       };
       console.log('this.service: ', this.service);
 
@@ -241,6 +241,9 @@
 
     private mounted() {
       this.getTraceList();
+      if (this.service && this.service.key) {
+        this.GET_INSTANCES({duration: this.durationTime, serviceId: this.service.key});
+      }
     }
   }
 </script>
@@ -261,7 +264,7 @@
     border-radius: 3px;
   }
 
-  .rk-trace-search-range,.rk-auto-select {
+  .rk-trace-search-range, .rk-auto-select {
     border-radius: 3px;
     background-color: #fff;
     padding: 1px;

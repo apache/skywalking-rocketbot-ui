@@ -115,7 +115,8 @@
       </div>
     </div>
     <el-drawer
-        title="Alarm"
+        v-if="stateTopo.showAlarmDialog"
+        custom-class="performance-metrics-window"
         size="75%"
         destroy-on-close
         :visible.sync="stateTopo.showAlarmDialog"
@@ -127,7 +128,8 @@
       ></alarm-containers>
     </el-drawer>
     <el-drawer
-        title="Trace"
+        custom-class="performance-metrics-window"
+        v-if="stateTopo.showTraceDialog"
         size="75%"
         destroy-on-close
         :visible.sync="stateTopo.showTraceDialog"
@@ -161,6 +163,7 @@ import AlarmContainers from '@/views/containers/alarm.vue';
 import TraceContainers from '@/views/containers/trace.vue';
 import InstancesSurveyWindow from '@/views/containers/instances-survey-window.vue';
 import EndpointSurveyWindow from '@/views/containers/endpoint-survey-window.vue';
+import { initState } from '@/store/modules/dashboard/modules/dashboard-data-layout';
 
 @Component({components: {TopoChart, TopoService, ChartResponse, Radial, AlarmContainers, TraceContainers, InstancesSurveyWindow, EndpointSurveyWindow}})
 export default class TopoAside extends Vue {
@@ -172,8 +175,10 @@ export default class TopoAside extends Vue {
   @Action('rocketTopo/CLEAR_TOPO') private CLEAR_TOPO: any;
   @Mutation('rocketTopo/SET_MODE_STATUS') public SET_MODE_STATUS: any;
   @Action('rocketTopo/CLEAR_TOPO_INFO') public CLEAR_TOPO_INFO: any;
+  @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
 
   private drawerMainBodyHeight = '100%';
+  private initState = initState;
 
   private resize() {
     this.drawerMainBodyHeight = `${document.body.clientHeight - 120}px`;
@@ -185,6 +190,8 @@ export default class TopoAside extends Vue {
 
   async created() {
     this.getTopo();
+    // debugger
+    this.SET_COMPS_TREE(this.initState.tree)
   }
 
   private mounted() {
@@ -322,6 +329,20 @@ export default class TopoAside extends Vue {
 .link-topo-aside-box-max {
   width: 60%;
   animation: 0.5s linkTopoAsideBoxMax 1 running;
+}
+
+.performance-metrics-window {
+  .el-drawer__header {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    color: #72767b;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 22px;
+    padding: unset;
+  }
 }
 
 @keyframes linkTopoAsideBoxMax {

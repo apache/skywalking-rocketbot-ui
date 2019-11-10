@@ -16,29 +16,39 @@
 */
 
 <template>
-  <div>
+  <div class="performance-metrics-window">
     <el-drawer
       :destroy-on-close="true"
-      title="实例概览"
       :visible.sync="isShowSync"
       direction="rtl"
       size="80%">
-      <div class="ml-10">
-        <el-tag>Service Name: {{ serviceName }}</el-tag>
+      <div class="rk-dashboard-bar flex-h">
+        <ToolBarSelect
+            :selectable="false"
+            :title="this.$t('currentService')"
+            :current="stateDashboardOption.currentService"
+            :data="stateDashboardOption.services"
+            icon="package"/>
+        <ToolBarEndpointSelect @onChoose="selectInstance" :title="$t('currentEndpoint')"
+                               :current="stateDashboardOption.currentEndpoint" :data="endpoints" icon="code">
+        </ToolBarEndpointSelect>
       </div>
-      <el-tabs v-model="endpointName" @tab-click="selectInstance">
-        <el-tab-pane v-for="(endpoint) in endpoints" :key="endpoint.key"
-                     :label="endpoint.name" :name="endpoint.name" :lazy="true"
-        >
-          <endpoints-survey v-if="!rocketComps.loading" :style="`overflow: auto; height: ${instancesSurveyHeight}`" />
-        </el-tab-pane>
-      </el-tabs>
+      <endpoints-survey v-if="!rocketComps.loading" :style="`overflow: auto; height: ${instancesSurveyHeight}`" />
+<!--      <el-tabs v-model="endpointName" @tab-click="selectInstance">-->
+<!--        <el-tab-pane v-for="(endpoint) in endpoints" :key="endpoint.key"-->
+<!--                     :label="endpoint.name" :name="endpoint.name" :lazy="true"-->
+<!--        >-->
+<!--          <endpoints-survey v-if="!rocketComps.loading" :style="`overflow: auto; height: ${instancesSurveyHeight}`" />-->
+<!--        </el-tab-pane>-->
+<!--      </el-tabs>-->
     </el-drawer>
   </div>
 </template>
 
 <script lang="ts">
   import EndpointsSurvey from '@/views/components/topology/endpoints-survey.vue';
+  import ToolBarSelect from '@/views/components/dashboard/tool-bar-select.vue';
+  import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar-endpoint-select.vue';
   import _ from 'lodash';
   import Vue from 'vue';
   import { Component, PropSync, Watch } from 'vue-property-decorator';
@@ -53,6 +63,8 @@
   @Component({
     components: {
       EndpointsSurvey,
+      ToolBarSelect,
+      ToolBarEndpointSelect
     },
   })
   export default class InstancesSurveyWindow extends Vue {
@@ -106,6 +118,10 @@
       });
     }
 
+    private selectEndpoint(i: any) {
+      this.SELECT_ENDPOINT({endpoint: i, duration: this.durationTime});
+    }
+
     @Watch('stateDashboardOption.endpoints')
     watchInstances(endpoints: Endpoint[]) {
       _.forEach(endpoints, endpoint => {
@@ -141,6 +157,10 @@
   }
 </script>
 
-<style lang="less" scoped>
-
+<style lang="scss">
+  .rk-dashboard-bar {
+    flex-shrink: 0;
+    color: #efefef;
+    background-color: #333840;
+  }
 </style>

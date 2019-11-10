@@ -40,8 +40,7 @@ export default class Topology extends Vue {
   @Getter('durationTime') private durationTime: any;
 
   private beforeMount(): void {
-    // this.SET_EVENTS([this.getTopo]);
-    this.SET_EVENTS([]);
+    this.SET_EVENTS([this.getTopo]);
   }
   private mounted() {
     this.getTopo();
