@@ -45,8 +45,6 @@ export default class ChartTrace extends Vue {
     const temp = { key: `${i.key}`, label: i.label };
   }
   get maxValue() {
-    console.log('data: ', this.data);
-
     const temp: number[] = this.data.map((i: any) => i.value);
     return Math.max.apply(null, temp);
   }
