@@ -34,13 +34,6 @@
         </ToolBarEndpointSelect>
       </div>
       <endpoints-survey v-if="!rocketComps.loading" :style="`overflow: auto; height: ${instancesSurveyHeight}`" />
-<!--      <el-tabs v-model="endpointName" @tab-click="selectInstance">-->
-<!--        <el-tab-pane v-for="(endpoint) in endpoints" :key="endpoint.key"-->
-<!--                     :label="endpoint.name" :name="endpoint.name" :lazy="true"-->
-<!--        >-->
-<!--          <endpoints-survey v-if="!rocketComps.loading" :style="`overflow: auto; height: ${instancesSurveyHeight}`" />-->
-<!--        </el-tab-pane>-->
-<!--      </el-tabs>-->
     </el-drawer>
   </div>
 </template>

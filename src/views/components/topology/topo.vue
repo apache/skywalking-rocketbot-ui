@@ -158,7 +158,12 @@ export default {
      that.switchNativeContextMenu(true);
     }, 780);
    },
-    draw() {
+    draw(value, oldValue) {
+      // Avoid unnecessary repetitive rendering
+      const diffNodes = _.difference(_.sortBy(value, 'id'), _.sortBy(oldValue, 'id'));
+      if(value && value.length > 0 && diffNodes && diffNodes.length <=0){
+        return null;
+      }
       const codeId = this.datas.nodes.map(i => i.id);
       for (let i = 0; i < this.datas.calls.length; i += 1) {
         const element = this.datas.calls[i];

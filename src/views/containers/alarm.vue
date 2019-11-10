@@ -50,6 +50,7 @@ export default class Alarm extends Vue {
   }
   private beforeDestroy() {
     this.$store.unregisterModule('rocketAlarm');
+
   }
 }
 </script>

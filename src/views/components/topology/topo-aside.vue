@@ -190,7 +190,6 @@ export default class TopoAside extends Vue {
 
   async created() {
     this.getTopo();
-    // debugger
     this.SET_COMPS_TREE(this.initState.tree)
   }
 
