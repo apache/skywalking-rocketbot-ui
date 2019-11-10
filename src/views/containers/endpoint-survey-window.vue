@@ -33,7 +33,7 @@
                                :current="stateDashboardOption.currentEndpoint" :data="endpoints" icon="code">
         </ToolBarEndpointSelect>
       </div>
-      <endpoints-survey v-if="!rocketComps.loading" :style="`overflow: auto; height: ${instancesSurveyHeight}`" />
+      <endpoints-survey v-if="!rocketComps.loading" :style="`overflow: auto; height: ${endpointsSurveyHeight}`" />
     </el-drawer>
   </div>
 </template>
@@ -70,7 +70,7 @@
     @Action('GET_QUERY') private GET_QUERY: any;
     @PropSync('isShow', { default: false })
     isShowSync!: boolean;
-    instancesSurveyHeight = '100%';
+    endpointsSurveyHeight = '100%';
 
     tabsLoading = true;
     endpointName: string = '0';
@@ -141,7 +141,7 @@
     }
 
     resize() {
-      this.instancesSurveyHeight = `${document.body.clientHeight - 145}px`;
+      this.endpointsSurveyHeight = `${document.body.clientHeight - 101}px`;
     }
 
     beforeDestroy(){

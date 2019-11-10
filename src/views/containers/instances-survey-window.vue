@@ -135,7 +135,7 @@
     }
 
     resize() {
-      this.instancesSurveyHeight = `${document.body.clientHeight - 145}px`;
+      this.instancesSurveyHeight = `${document.body.clientHeight - 101}px`;
     }
 
     beforeDestroy(){

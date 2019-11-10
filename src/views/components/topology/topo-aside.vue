@@ -181,7 +181,7 @@ export default class TopoAside extends Vue {
   private initState = initState;
 
   private resize() {
-    this.drawerMainBodyHeight = `${document.body.clientHeight - 120}px`;
+    this.drawerMainBodyHeight = `${document.body.clientHeight - 50}px`;
   }
 
   private beforeCreate() {
