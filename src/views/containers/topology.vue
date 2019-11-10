@@ -22,7 +22,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component, Watch } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import { State, Action, Getter, Mutation } from 'vuex-class';
 import { AxiosResponse } from 'axios';
 import Topo from '../components/topology/topo.vue';
