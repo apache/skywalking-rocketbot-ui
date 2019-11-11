@@ -21,7 +21,7 @@ export const queryChartData = {
     {
       o: 'Global', d: 'globalHeatmap', c: 'ChartHeatmap', t: 'Global Heatmap', w: 3, h: 250,
     }, {
-      o: 'Global', d: 'globalPercent', c: 'ChartLine', t: 'Global Percent Response', w: 3, h: 250,
+      o: 'Global', d: 'globalPercent', c: 'ChartLine', t: 'Global Response Time Percentile', w: 3, h: 250,
     }, {
       o: 'Global', d: 'globalBrief', c: 'ChartBrief', t: 'Global Brief', w: 3, h: 250,
     }, {
@@ -37,7 +37,7 @@ export const queryChartData = {
     { o: 'Service', d: 'serviceThroughput', c: 'ChartLine', t: 'Service Throughput', w: 3, h: 250 },
     { o: 'Service', d: 'serviceSLA', c: 'ChartBar', t: 'Service SLA', w: 3, h: 250 },
     { o: 'Service', d: 'serviceInstanceThroughput', c: 'ChartTrace', t: 'Running ServiceInstance', w: 3, h: 250 },
-    { o: 'Service', d: 'servicePercent', c: 'ChartLine', t: 'Service Percent Response', w: 3, h: 250 },
+    { o: 'Service', d: 'servicePercent', c: 'ChartLine', t: 'Service Response Time Percentile', w: 3, h: 250 },
     { o: 'Service', d: 'serviceSlowEndpoint', c: 'ChartSlow', t: 'Service Slow Endpoint', w: 3, h: 250 },
     // Endpoint
     { o: 'ServiceEndpoint', d: 'endpointResponseTime', c: 'ChartNum', t: 'Endpoint Avg ResponseTime', w: 3, h: 250 },
@@ -46,7 +46,8 @@ export const queryChartData = {
     { o: 'ServiceEndpoint', d: 'endpointResponseTime', c: 'ChartLine', t: 'Endpoint ResponseTime', w: 3, h: 250 },
     { o: 'ServiceEndpoint', d: 'endpointThroughput', c: 'ChartLine', t: 'Endpoint Throughput', w: 3, h: 250 },
     { o: 'ServiceEndpoint', d: 'endpointSLA', c: 'ChartBar', t: 'Endpoint SLA', w: 3, h: 250 },
-    { o: 'ServiceEndpoint', d: 'endpointPercent', c: 'ChartLine', t: 'Endpoint Percent Response', w: 3, h: 250 },
+    { o: 'ServiceEndpoint', d: 'endpointPercent', c: 'ChartLine',
+      t: 'Endpoint Response Time Percentile', w: 3, h: 250},
     { o: 'ServiceEndpoint', d: 'endpointTraces', c: 'ChartSlow', t: 'Endpoint Slow', w: 3, h: 250 },
     { o: 'ServiceEndpoint', d: 'endpointTopology', c: 'ChartSankey', t: 'Dependency Map', w: 3, h: 250 },
     // instance
@@ -70,7 +71,7 @@ export const queryChartData = {
   database: [
       // global
       { o: 'Global', d: 'globalHeatmap', c: 'ChartHeatmap', t: 'Global Heatmap', w: 3, h: 250 },
-      { o: 'Global', d: 'globalPercent', c: 'ChartLine', t: 'Global Percent Response', w: 3, h: 250 },
+      { o: 'Global', d: 'globalPercent', c: 'ChartLine', t: 'Global Response Time Percentile', w: 3, h: 250 },
       { o: 'Global', d: 'globalBrief', c: 'ChartBrief', t: 'Global Brief', w: 3, h: 250 },
       { o: 'Global', d: 'globalThroughput', c: 'ChartTrace', t: 'Global Top Throughput', w: 3, h: 250 },
       { o: 'Global', d: 'globalSlow', c: 'ChartSlow', t: 'Global Top Slow Endpoint', w: 3, h: 250 },
@@ -81,7 +82,7 @@ export const queryChartData = {
       { o: 'Database', d: 'databaseResponseTime', c: 'ChartLine', t: 'Database ResponseTime', w: 3, h: 250 },
       { o: 'Database', d: 'databaseThroughput', c: 'ChartLine', t: 'Database Throughput', w: 3, h: 250 },
       { o: 'Database', d: 'databaseSLA', c: 'ChartBar', t: 'Database SLA', w: 3, h: 250 },
-      { o: 'Database', d: 'databasePercent', c: 'ChartLine', t: 'Database Percent', w: 3, h: 250 },
+      { o: 'Database', d: 'databasePercent', c: 'ChartLine', t: 'Database Response Time Percentile', w: 3, h: 250 },
       { o: 'Database', d: 'databaseTopNRecords', c: 'ChartSlow', t: 'Database TopN Records', w: 3, h: 250 },
   ],
 };
