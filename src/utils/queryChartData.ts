@@ -48,7 +48,7 @@ export const queryChartData = {
     { o: 'ServiceEndpoint', d: 'endpointSLA', c: 'ChartBar', t: 'Endpoint SLA', w: 3, h: 250 },
     { o: 'ServiceEndpoint', d: 'endpointPercent', c: 'ChartLine',
       t: 'Endpoint Response Time Percentile', w: 3, h: 250},
-    { o: 'ServiceEndpoint', d: 'endpointTraces', c: 'ChartSlow', t: 'Endpoint Slow', w: 3, h: 250 },
+    { o: 'ServiceEndpoint', d: 'endpointTraces', c: 'ChartSlow', t: 'Slow Traces', w: 3, h: 250 },
     { o: 'ServiceEndpoint', d: 'endpointTopology', c: 'ChartSankey', t: 'Dependency Map', w: 3, h: 250 },
     // instance
     { o: 'ServiceInstance', d: 'globalBrief', c: 'ChartInstance', t: 'Instance Info', w: 3, h: 250 },
