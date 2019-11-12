@@ -49,7 +49,7 @@
     overflow: auto;
     .chart-item {
       width: 100%;
-      height: 300px;
+      height: 200px;
     }
     .component-item {
       width: 100%;
