@@ -16,8 +16,9 @@
  */
 
 <template>
-  <div class="rk-dashboard-bar-select cp flex-h" v-clickout="() => { visible = false;search = '';}" :class="{'active':visible}">
-    <div class="rk-dashboard-bar-i flex-h" @click="visible = !visible">
+  <div class="rk-dashboard-bar-select flex-h" v-clickout="() => { visible = false;search = '';}"
+       :class="{'active':visible, 'cp': selectable, 'cd': !selectable}">
+    <div class="rk-dashboard-bar-i flex-h" @click="selectable && (visible = !visible)">
       <svg class="icon lg mr-15">
         <use :xlink:href="`#${icon}`"></use>
       </svg>
@@ -25,11 +26,11 @@
         <div class="sm grey">{{title}}</div>
         <div class="ell" v-tooltip:right.ellipsis="current.label || ''">{{current.label}}</div>
       </div>
-      <svg class="icon lg trans" :style="`transform: rotate(${visible?180:0}deg)`">
+      <svg v-if="selectable" class="icon lg trans" :style="`transform: rotate(${visible?180:0}deg)`">
         <use xlink:href="#arrow-down"></use>
       </svg>
     </div>
-    <div class="rk-dashboard-sel" v-if="visible">
+    <div class="rk-dashboard-sel" v-if="visible && selectable">
       <div>
         <input type="text" class="rk-dashboard-sel-search" v-model="search">
         <svg class="icon sm close" @click="search = ''" v-if="search">
@@ -51,6 +52,7 @@ export default class ToolBarSelect extends Vue {
   @Prop() public current!: any;
   @Prop() public title!: string;
   @Prop() public icon!: string;
+  @Prop({type: Boolean, default: true}) public selectable!: boolean;
   public search: string = '';
   public visible: boolean = false;
   get filterData() {
