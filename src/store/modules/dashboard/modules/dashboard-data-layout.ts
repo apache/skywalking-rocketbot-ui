@@ -34,7 +34,7 @@ export interface State {
   tree: CompsTree[];
 }
 
-const initState: State = {
+export const initState: State = {
   current: 0,
   group: 0,
   index: 0,
@@ -78,6 +78,10 @@ const mutations: MutationTree<State> = {
   [types.SET_CURRENT_GROUP](state: State, current: number) {
     state.group = current;
     state.current = 0;
+  },
+  [types.SET_CURRENT_GROUP_WITH_CURRENT](state: State, { index, current = 0 }: { index: number, current: number }) {
+    state.group = index;
+    state.current = current;
   },
   [types.ADD_COMPS_GROUP](state: State, params: any) {
     if (!params.name) {return; }

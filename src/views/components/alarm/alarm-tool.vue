@@ -17,10 +17,10 @@
 
 <template>
   <nav class="rk-alarm-tool flex-h">
-    <AlarmSelect :title="this.$t('filterScope')" :value="alarmScope" @input="handleFilter" :data="alarmOptions"/>
+    <AlarmSelect v-show="!inTopo" :title="this.$t('filterScope')" :value="alarmScope" @input="handleFilter" :data="alarmOptions"/>
     <div class="mr-10" style="padding: 3px 15px 0">
       <div class="sm grey">{{this.$t('searchKeyword')}}</div>
-      <input type="text" v-model="keyword" class="rk-alarm-tool-input" @input="handleRefresh(1)">
+      <input :disabled="inTopo" type="text" v-model="keyword" class="rk-alarm-tool-input" @input="handleRefresh(1)">
     </div>
     <RkPage class="mt-15" :currentSize="20" :currentPage="pageNum" @changePage="handlePage" :total="total"/>
   </nav>
@@ -39,14 +39,18 @@ export default class AlarmTool extends Vue {
   @Prop() private durationTime: any;
   @Prop() private total!: number;
   private pageNum: number = 1;
-  private alarmScope: any = {label: 'All', key: ''};
+  @Prop({default: {label: 'All', key: ''}})
+  private alarmScope: any;
+  @Prop({default: false, type: Boolean})
+  private inTopo!: boolean;
   private alarmOptions: any = [
     {label: 'All', key: ''},
     {label: 'Service', key: 'Service'},
     {label: 'ServiceInstance', key: 'ServiceInstance'},
     {label: 'Endpoint', key: 'Endpoint'},
   ];
-  private keyword: string = '';
+  @Prop({default: ''})
+  private keyword!: string;
 
   private handlePage(pageNum: number) {
     this.handleRefresh(pageNum);
@@ -71,7 +75,6 @@ export default class AlarmTool extends Vue {
   }
   private beforeMount() {
     this.SET_EVENTS([() => { this.handleRefresh(1); } ]);
-    this.handleRefresh(1);
   }
 }
 </script>
