@@ -46,6 +46,7 @@
     <label>{{this.$t("metrics")}}</label>
     <RkSelect
       class="mb-5"
+      :mode="'multiple'"
       :current="currentOptions.preMetrics"
       :data="optSource.preMetricsSource"
       @onChoose="(item) => changOption(item, changeType.PreMetrics)"
@@ -79,6 +80,7 @@
     <label>{{this.$t("metrics")}}</label>
     <RkSelect
       class="mb-5"
+      :mode="'multiple'"
       :current="currentOptions.nextMetrics"
       :data="optSource.nextMetricsSource"
       @onChoose="(item) => changOption(item, changeType.NextMetrics)"

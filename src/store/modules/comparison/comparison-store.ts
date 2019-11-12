@@ -58,24 +58,26 @@ const initState: State = {
 // getters
 const getters = {
   queryPreValue(state: State) {
-    const { currentOptions } = state;
-    const preMetric = currentOptions.preMetrics.key;
-    const preParam = (fragmentAll as any)[preMetric];
-    if (!preParam) {
-      return;
-    }
-
-    return `query queryData(${preParam.variable.join(',')}) {${preParam.fragment}}`;
+    const { preMetrics } = state.currentOptions;
+    const queryFragment = preMetrics.map((metric: any) => {
+      const preMetric = metric.key;
+      const preParam = (fragmentAll as any)[preMetric];
+      if (preParam) {
+        return `query queryData(${preParam.variable.join(',')}) {${preParam.fragment}}`;
+      }
+    });
+    return queryFragment;
   },
   queryNextValue(state: State) {
-    const { currentOptions } = state;
-    const nextMetric =  currentOptions.nextMetrics.key;
-    const nextParam = (fragmentAll as any)[nextMetric];
-
-    if (!nextParam) {
-      return;
-    }
-    return `query queryData(${nextParam.variable.join(',')}) {${nextParam.fragment}}`;
+    const { nextMetrics } = state.currentOptions;
+    const queryFragment = nextMetrics.map((metric: any) => {
+      const nextMetric =  metric.key;
+      const nextParam = (fragmentAll as any)[nextMetric];
+      if (nextParam) {
+        return `query queryData(${nextParam.variable.join(',')}) {${nextParam.fragment}}`;
+      }
+    });
+    return queryFragment;
   },
   preConfig(state: State) {
     const { currentOptions } = state;
@@ -203,19 +205,19 @@ const mutations = {
       state.dataSource.preObjectSource = data;
       state.currentOptions.preObject = data[0];
       state.dataSource.preMetricsSource = metricSource[type];
-      state.currentOptions.preMetrics = metricSource[type][0];
+      state.currentOptions.preMetrics = [metricSource[type][0]];
     } else if (isPrevious === StatusType.Next) {
       state.dataSource.nextObjectSource = data;
       state.currentOptions.nextObject = data[0];
       state.dataSource.nextMetricsSource = metricSource[type];
-      state.currentOptions.nextMetrics = metricSource[type][1];
+      state.currentOptions.nextMetrics = [metricSource[type][1]];
     } else {
       state.currentOptions = {
         ...state.currentOptions,
         nextObject: data[0],
         preObject: data[0],
-        preMetrics: metricSource[type][0],
-        nextMetrics: metricSource[type][1],
+        preMetrics: [metricSource[type][0]],
+        nextMetrics: [metricSource[type][1]],
         preType: ComparisonType[2],
         nextType: ComparisonType[2],
       };
@@ -254,7 +256,17 @@ const mutations = {
   [types.UPDATE_CONFIG](state: any, data: ISelectConfig) {
     const {type, option} = data;
 
-    state.currentOptions[type] = option;
+    if (type === ChangeType.NextMetrics || type === ChangeType.PreMetrics) {
+      const metrics = state.currentOptions[type];
+      const item = metrics.findIndex((d: any) => d.key === option.key);
+      if (item > -1) {
+        state.currentOptions[type] = metrics.filter((d: any) => d.key !== option.key);
+      } else {
+        state.currentOptions[type].push(option);
+      }
+    } else {
+      state.currentOptions[type] = option;
+    }
   },
   [types.CLEAR_CHART_VAL](state: State) {
     state.chartSource = {} as any;
@@ -268,7 +280,7 @@ const mutations = {
       state.currentOptions.preMetrics = metricSource[preType.key][0];
     } else {
       state.dataSource.nextMetricsSource = metricSource[nextType.key] || [];
-      state.currentOptions.nextMetrics = metricSource[nextType.key][0];
+      state.currentOptions.nextMetrics = [metricSource[nextType.key][0]];
     }
   },
   [types.SELECT_TYPE_INSTANCE](state: State, data: any) {
@@ -282,7 +294,7 @@ const mutations = {
       state.currentOptions.preObject = data[0];
     } else if (isPrevious === StatusType.Next) {
       state.dataSource.nextMetricsSource = metricSource[nextType.key];
-      state.currentOptions.nextMetrics = metricSource[nextType.key][0];
+      state.currentOptions.nextMetrics = [metricSource[nextType.key][0]];
       state.dataSource.nextObjectSource = data;
       state.currentOptions.nextObject = data[0];
     }
@@ -293,7 +305,7 @@ const mutations = {
 
     if (state.isPrevious === StatusType.Next) {
       state.dataSource.nextMetricsSource = metricSource[nextType.key];
-      state.currentOptions.nextMetrics = metricSource[nextType.key][0];
+      state.currentOptions.nextMetrics = [metricSource[nextType.key][0]];
       state.currentOptions.nextObject = data[0];
       state.dataSource.nextObjectSource = data;
     } else {

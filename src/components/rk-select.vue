@@ -47,8 +47,10 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
+const Multiple = 'multiple';
 @Component
 export default class RkSelect extends Vue {
+  @Prop() public mode: any;
   @Prop() public data!: any;
   @Prop() public current!: any;
   public search: string = '';
@@ -59,8 +61,7 @@ export default class RkSelect extends Vue {
   }
 
   get selectedOpt() {
-    const isArray = Array.isArray(this.current);
-    return isArray ? this.current.map((item: any) => item.key) : [this.current.key];
+    return this.mode === Multiple ? this.current.map((item: any) => item.key) : [this.current.key];
   }
 
   public handleOpen() {
@@ -68,8 +69,7 @@ export default class RkSelect extends Vue {
   }
 
   public handleSelect(i: any) {
-    const isArray = Array.isArray(this.current);
-    const selected = isArray ? this.current.map((item: any) => item.key) : [this.current.key];
+    const selected = this.mode === Multiple ? this.current.map((item: any) => item.key) : [this.current.key];
     if (selected.includes(i.key)) {
       return;
     }
@@ -78,7 +78,9 @@ export default class RkSelect extends Vue {
   }
 
   private removeSelected(item: any) {
-    const isArray = Array.isArray(this.current);
+    if (this.mode === Multiple) {
+      this.$emit('onChoose', item);
+    }
   }
 }
 </script>
