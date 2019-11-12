@@ -50,9 +50,13 @@ export default class ChartLine extends Vue {
       temp.push(serie);
     });
     const color: string[] = [
+      '#30A4EB',
+      '#45BFC0',
+      '#FFCC55',
+      '#FF6A84',
+      '#a0a7e6',
       '#6be6c1',
       '#626c91',
-      '#a0a7e6',
       '#96dee8',
       '#3f96e3',
     ];
