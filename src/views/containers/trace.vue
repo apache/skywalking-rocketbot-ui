@@ -17,7 +17,7 @@
 
 <template>
   <div class="rk-trace flex-v">
-    <TraceSearch/>
+    <TraceSearch :service="service" :inTopo="inTopo"/>
     <div class="rk-trace-inner">
       <TraceTable/>
       <TraceDetail :current="stateTrace.currentTrace" :spans="stateTrace.traceSpans"/>
@@ -26,7 +26,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Option } from '@/types/global';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import { State, Action, Mutation } from 'vuex-class';
 import TraceSearch from '@/views/components/trace/trace-search.vue';
 import TraceTable from '@/views/components/trace/trace-table.vue';
@@ -42,6 +43,13 @@ export default class Trace extends Vue {
   @Mutation('SET_EVENTS') private SET_EVENTS: any;
   @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
   @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
+
+  @Prop({default: {label: 'All', key: ''}})
+  private service!: Option;
+
+  @Prop({default: false, type: Boolean})
+  private inTopo!: boolean;
+
   private show: boolean = true;
   private beforeCreate() {
     this.$store.registerModule('rocketTrace', trace);
