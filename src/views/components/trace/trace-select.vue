@@ -16,13 +16,14 @@
  */
 
 <template>
-  <div class="rk-trace-sel-wrapper cp flex-h" v-clickout="() => { visible = false;search = '';}" :class="{'active':visible}">
-    <div class="rk-trace-bar-i flex-h" @click="visible = !visible">
+  <div class="rk-trace-sel-wrapper flex-h" v-clickout="() => { visible = false;search = '';}"
+       :class="{'cp':!readonly,'active':visible}">
+    <div class="rk-trace-bar-i flex-h" @click="visible = !visible&&!readonly">
       <div class="mr-15 rk-trace-bar-i-text">
         <div class="sm grey">{{title}}</div>
         <div class="ell" v-tooltip:right.ellipsis="value.label || ''">{{value.label  || ''}}</div>
       </div>
-      <svg class="icon lg trans" :style="`transform: rotate(${visible?180:0}deg)`">
+      <svg v-if="!readonly" class="icon lg trans" :style="`transform: rotate(${visible?180:0}deg)`">
         <use xlink:href="#arrow-down"></use>
       </svg>
     </div>
@@ -48,6 +49,8 @@ export default class TraceSelect extends Vue {
   @Prop() public value!: any;
   @Prop() public title!: string;
   @Prop({default: false}) public hasSearch!: boolean;
+  @Prop({default: false})
+  public readonly!: boolean;
   public search: string = '';
   public visible: boolean = false;
   get filterData() {
