@@ -22,11 +22,11 @@ export interface ICurrentOptions {
   preService: IOption;
   preType: IOption;
   preObject: IOption;
-  preMetrics: IOption;
+  preMetrics: IOption[];
   nextService: IOption;
   nextType: IOption;
   nextObject: IOption;
-  nextMetrics: IOption;
+  nextMetrics: IOption[];
 }
 export interface DataSourceType {
   preServiceSource: IOption[];

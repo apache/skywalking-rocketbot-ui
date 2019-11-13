@@ -65,5 +65,6 @@
 <style lang="scss">
   .rk-comparison {
     height: 100%;
+    overflow: auto;
   }
 </style>

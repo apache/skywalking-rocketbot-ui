@@ -39,11 +39,11 @@ export const ComparisonOption: ICurrentOptions = {
   preService: {key: 0, label: ''},
   preType: {key: 'ServiceEndpoint', label: 'Service Endpoint'},
   preObject: {key: 0, label: '/projectB/{name}'},
-  preMetrics: {key: 0, label: ''},
+  preMetrics: [{key: 0, label: ''}],
   nextService: {key: 0, label: ''},
   nextType: {key: 'ServiceEndpoint', label: 'Service Endpoint'},
   nextObject: {key: 0, label: '/projectA/{name}'},
-  nextMetrics: {key: 0, label: ''},
+  nextMetrics: [{key: 0, label: ''}],
 };
 
 export const InitSource: DataSourceType = {

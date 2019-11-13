@@ -18,6 +18,13 @@
 <template>
   <div class="rk-comparison-config" v-if="currentOptions">
     <h4>{{this.$t("previousService")}}</h4>
+    <label>{{this.$t("type")}}</label>
+    <RkSelect
+      class="mb-5"
+      :current="currentOptions.preType"
+      :data="optSource.preTypeSource"
+      @onChoose="(item) => changOption(item, changeType.PreType)"
+    />
     <div v-if="currentOptions.preType.key !== 'Database'">
       <label>{{this.$t("service")}}</label>
       <RkSelect
@@ -27,13 +34,6 @@
         @onChoose="(item) => changOption(item, changeType.PreService)"
       />
     </div>
-    <label>{{this.$t("type")}}</label>
-    <RkSelect
-      class="mb-5"
-      :current="currentOptions.preType"
-      :data="optSource.preTypeSource"
-      @onChoose="(item) => changOption(item, changeType.PreType)"
-    />
     <div v-if="currentOptions.preType.key !== 'Service'">
       <label>{{this.$t("object")}}</label>
       <RkSelect
@@ -46,11 +46,19 @@
     <label>{{this.$t("metrics")}}</label>
     <RkSelect
       class="mb-5"
+      :mode="'multiple'"
       :current="currentOptions.preMetrics"
       :data="optSource.preMetricsSource"
       @onChoose="(item) => changOption(item, changeType.PreMetrics)"
     />
     <h4>{{this.$t("nextService")}}</h4>
+    <label>{{this.$t("type")}}</label>
+    <RkSelect
+      class="mb-5"
+      :current="currentOptions.nextType"
+      :data="optSource.nextTypeSource"
+      @onChoose="(item) => changOption(item, changeType.NextType)"
+    />
     <div v-if="currentOptions.nextType.key !== 'Database'">
       <label>{{this.$t("service")}}</label>
       <RkSelect
@@ -60,13 +68,6 @@
         @onChoose="(item) => changOption(item, changeType.NextService)"
       />
     </div>
-    <label>{{this.$t("type")}}</label>
-    <RkSelect
-      class="mb-5"
-      :current="currentOptions.nextType"
-      :data="optSource.nextTypeSource"
-      @onChoose="(item) => changOption(item, changeType.NextType)"
-    />
     <div v-if="currentOptions.nextType.key !== 'Service'">
       <label>{{this.$t("object")}}</label>
       <RkSelect
@@ -79,6 +80,7 @@
     <label>{{this.$t("metrics")}}</label>
     <RkSelect
       class="mb-5"
+      :mode="'multiple'"
       :current="currentOptions.nextMetrics"
       :data="optSource.nextMetricsSource"
       @onChoose="(item) => changOption(item, changeType.NextMetrics)"
