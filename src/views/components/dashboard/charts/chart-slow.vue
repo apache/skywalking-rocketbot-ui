@@ -49,7 +49,7 @@ export default class ChartSlow extends Vue {
     const temp: number[] = this.data.map((i: any) => i.value);
     return Math.max.apply(null, temp);
   }
-  getTraceId(i: any){
+  private getTraceId(i: any) {
     return i.traceIds && i.traceIds[0] ? ` - ${i.traceIds[0]}` : '';
   }
   private handleClick(i: any) {

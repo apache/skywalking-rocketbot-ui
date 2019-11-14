@@ -17,7 +17,12 @@
 
 <template>
   <div class="rk-comparison-charts">
-    <ChartLine :intervalTime="intervalTime" :data="chartSource" />
+    <div class="component-item" v-for="item of Object.keys(chartSource)" :key="item">
+      <div class="title">{{item}}</div>
+      <div class="chart-item">
+        <ChartLine :intervalTime="intervalTime" :data="{[item]: chartSource[item]}" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -41,5 +46,21 @@
     flex-grow: 5;
     height: 100%;
     padding: 20px;
+    overflow: auto;
+    .chart-item {
+      width: 100%;
+      height: 200px;
+    }
+    .component-item {
+      width: 100%;
+      .title {
+        height: 30px;
+        line-height: 30px;
+        margin: 10px 0;
+        padding-left: 10px;
+        background-color: rgba(196,200,225,.2);
+        color: #9da5b2;
+      }
+    }
   }
 </style>
