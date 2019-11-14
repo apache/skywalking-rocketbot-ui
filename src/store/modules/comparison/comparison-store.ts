@@ -23,6 +23,7 @@ import { cancelToken } from '@/utils/cancelToken';
 import * as types from '../../mutation-types';
 import { DurationTime } from '@/types/global';
 import { queryChartData } from '@/utils/queryChartData';
+import { queryTopoClientInfo, queryTopoServiceInfo } from '@/graph/query/topology';
 import fragmentAll from '@/store/modules/dashboard/fragments';
 import { ICurrentOptions, DataSourceType, ISelectConfig, MetricsType } from '@/types/comparison';
 import {
@@ -58,10 +59,18 @@ const initState: State = {
 // getters
 const getters = {
   queryPreValue(state: State) {
-    const { preMetrics } = state.currentOptions;
+    const { preMetrics, preType } = state.currentOptions;
     const fragments = [];
     let variable = null;
 
+    if (preType.key === ObjectType.ServiceDependency) {
+      let param = null;
+
+      for (const metric of preMetrics) {
+        param = metric.key === 'TopoServiceInfo' ? queryTopoServiceInfo : queryTopoClientInfo;
+      }
+      return param;
+    }
     for (const metric of preMetrics) {
       const preMetric = metric.key;
       const preParam = (fragmentAll as any)[preMetric];
@@ -73,10 +82,18 @@ const getters = {
     return `query queryData(${variable}) {${fragments.join(',')}}`;
   },
   queryNextValue(state: State) {
-    const { nextMetrics } = state.currentOptions;
+    const { nextMetrics, nextType } = state.currentOptions;
     const fragments = [];
     let variable = null;
 
+    if (nextType.key === ObjectType.ServiceDependency) {
+      let param = null;
+
+      for (const metric of nextMetrics) {
+        param = metric.key === 'TopoServiceInfo' ? queryTopoServiceInfo : queryTopoClientInfo;
+      }
+      return param;
+    }
     for (const metric of nextMetrics) {
       const nextParam = (fragmentAll as any)[metric.key];
       if (nextParam) {
@@ -101,6 +118,9 @@ const getters = {
     } else if (key === ObjectType.Database) {
       delete variablesData.serviceId;
       variablesData.databaseId = currentOptions.preObject.key;
+    } else {
+      delete variablesData.serviceId;
+      variablesData.id = currentOptions.preObject.key;
     }
 
     return variablesData;
@@ -122,7 +142,11 @@ const getters = {
         instanceId: nextObject.key,
       };
     } else if (nextType.key === ObjectType.Database) {
+      delete variablesData.serviceId;
       variablesData.databaseId = nextObject.key;
+    } else {
+      delete variablesData.serviceId;
+      variablesData.id = nextObject.key;
     }
 
     return variablesData;
@@ -146,6 +170,7 @@ const getters = {
       ServiceEndpoint: [],
       ServiceInstance: [],
       Database: [],
+      ServiceDependency: [],
     } as MetricsType;
 
     for (const item of service) {
@@ -164,6 +189,11 @@ const getters = {
         });
       } else if (item.o === ObjectType.ServiceEndpoint) {
         MetricsObj.ServiceEndpoint.push({
+          label: item.t,
+          key: item.d,
+        });
+      } else if (item.o === ObjectType.ServiceDependency) {
+        MetricsObj.ServiceDependency.push({
           label: item.t,
           key: item.d,
         });
@@ -264,10 +294,18 @@ const mutations = {
   },
   [types.UPDATE_CONFIG](state: any, data: ISelectConfig) {
     const {type, option} = data;
+    const { currentOptions, isPrevious } = state;
+    const { nextType, preType } = currentOptions;
 
     if (type === ChangeType.NextMetrics || type === ChangeType.PreMetrics) {
-      const metrics = state.currentOptions[type];
+      const metrics = currentOptions[type];
       const item = metrics.findIndex((d: any) => d.key === option.key);
+      const objectType = isPrevious === StatusType.Next ? nextType.key : preType.key;
+
+      if (objectType === ObjectType.ServiceDependency) {
+        state.currentOptions[type] = [option];
+        return;
+      }
       if (item > -1) {
         state.currentOptions[type] = metrics.filter((d: any) => d.key !== option.key);
       } else {
@@ -322,6 +360,39 @@ const mutations = {
       state.currentOptions.preMetrics = [metricSource[preType.key][0]];
       state.currentOptions.preObject = data[0];
       state.dataSource.preObjectSource = data;
+    }
+  },
+  [types.SET_SERVICE_TOPOLOGY](state: State, data: any) {
+    const { calls, nodes } = data;
+    const { preType, nextType } = state.currentOptions;
+    const { metricSource } = state as any;
+    for (const call of calls) {
+      for (const node of nodes) {
+        if (node.id === call.source) {
+          call.sourceLabel = node.name;
+        }
+        if (node.id === call.target) {
+          call.targetLabel = node.name;
+        }
+      }
+    }
+    const objectSource = calls.map((call: any) => {
+      return {
+        key: call.id,
+        label: `${call.sourceLabel}-${call.targetLabel}`,
+        detectPoints: call.detectPoints,
+      };
+    });
+    if (state.isPrevious === StatusType.Next) {
+      state.dataSource.nextMetricsSource = metricSource[nextType.key] || [];
+      state.currentOptions.nextMetrics = [metricSource[nextType.key][0]];
+      state.currentOptions.nextObject = objectSource[0];
+      state.dataSource.nextObjectSource = objectSource;
+    } else {
+      state.dataSource.preMetricsSource = metricSource[preType.key] || [];
+      state.currentOptions.preMetrics = [metricSource[preType.key][0]];
+      state.currentOptions.preObject = objectSource[0];
+      state.dataSource.preObjectSource = objectSource;
     }
   },
 };
@@ -391,6 +462,19 @@ const actions: ActionTree<State, ActionsParamType> = {
         context.commit(types.SELECT_TYPE_DATABASE, res.data.data.services);
       });
   },
+  GET_SERVICE_TOPOLOGY(context: { commit: Commit, state: State  }, params) {
+    const { isPrevious, currentOptions } = context.state;
+    params.serviceId = isPrevious === StatusType.Pre ? currentOptions.preService.key : currentOptions.nextService.key;
+    return graph
+      .query('queryServiceTopo')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        if (!res.data.data) {
+          return;
+        }
+        context.commit(types.SET_SERVICE_TOPOLOGY, res.data.data.topo);
+      });
+  },
   RENDER_CHART(context: {dispatch: Dispatch, commit: Commit}, date: string) {
     context.commit(types.CLEAR_CHART_VAL);
     context.dispatch('GET_COMPARISON', {duration: date, type: ServiceType.PREVIOUS});
@@ -417,6 +501,8 @@ const actions: ActionTree<State, ActionsParamType> = {
         context.dispatch('GET_SERVICE_ENDPOINTS', params.duration);
       } else if (objType.key === ObjectType.Database) {
         context.dispatch('GET_DATABASES', {duration: params.duration});
+      } else if (objType.key === ObjectType.ServiceDependency) {
+        context.dispatch('GET_SERVICE_TOPOLOGY', {duration: params.duration});
       }
     }
   },

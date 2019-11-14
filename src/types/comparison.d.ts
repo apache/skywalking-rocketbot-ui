@@ -49,4 +49,5 @@ export interface MetricsType {
   ServiceEndpoint: IOption[];
   ServiceInstance: IOption[];
   Database: IOption[];
+  ServiceDependency: IOption[];
 }

@@ -21,6 +21,7 @@ export const ComparisonType: IOption[] = [
   {key: 'ServiceInstance', label: 'Service Instance'},
   {key: 'ServiceEndpoint', label: 'Service Endpoint'},
   {key: 'Database', label: 'Database'},
+  {key: 'ServiceDependency', label: 'Service Dependency'},
 ];
 
 export enum ObjectType {
@@ -28,6 +29,7 @@ export enum ObjectType {
   ServiceInstance = 'ServiceInstance',
   ServiceEndpoint = 'ServiceEndpoint',
   Database = 'Database',
+  ServiceDependency = 'ServiceDependency',
 }
 
 export enum ServiceType {
