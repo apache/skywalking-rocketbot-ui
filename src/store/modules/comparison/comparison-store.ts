@@ -245,13 +245,15 @@ const mutations = {
       if (data.type === ServiceType.PREVIOUS) {
         const { preObject, preService, preType } = state.currentOptions;
         const str = `${preService.label}-`;
-        const strKeyPre = `${preType.key === ObjectType.Database ? '' : str}${preType.key === ObjectType.Service ? '' : preObject.label}-${key}`;
+        const strKeyPre = `${preType.key === ObjectType.Database ?
+          '' : str}${preType.key === ObjectType.Service ? '' : preObject.label}-${key}`;
         obj[strKeyPre] = value;
       } else {
         const { nextObject, nextService, nextType } = state.currentOptions;
         const str = `${nextObject.label}`;
         const servicesLabel =  `${nextService.label}-`;
-        const strKeyNext = `${nextType.key === ObjectType.Database ? '' : servicesLabel}${nextType.key === ObjectType.Service ? '' : str}-${key}`;
+        const strKeyNext = `${nextType.key === ObjectType.Database ?
+          '' : servicesLabel}${nextType.key === ObjectType.Service ? '' : str}-${key}`;
         obj[strKeyNext] = value;
       }
     }
