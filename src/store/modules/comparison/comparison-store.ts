@@ -279,17 +279,33 @@ const mutations = {
     for (const key of keys) {
       const value = data.value[key].values.map((d: {value: number}) => d.value);
       if (data.type === ServiceType.PREVIOUS) {
-        const { preObject, preService, preType } = state.currentOptions;
-        const str = `${preService.label}-`;
+        const { preObject, preService, preType, preMetrics } = state.currentOptions;
+        let metricLabel = key;
+        if (preType.key === ObjectType.ServiceDependency) {
+          if (preMetrics[0].key === 'TopoServiceInfo') {
+            metricLabel = `Server_${key}`;
+          } else {
+            metricLabel = `Client_${key}`;
+          }
+        }
+        const str = `${preService.label}_`;
         const strKeyPre = `${preType.key === ObjectType.Database ?
-          '' : str}${preType.key === ObjectType.Service ? '' : preObject.label}-${key}`;
+          '' : str}${preType.key === ObjectType.Service ? '' : preObject.label}_${metricLabel}`;
         obj[strKeyPre] = value;
       } else {
-        const { nextObject, nextService, nextType } = state.currentOptions;
+        const { nextObject, nextService, nextType, nextMetrics } = state.currentOptions;
+        let metricLabel = key;
+        if (nextType.key === ObjectType.ServiceDependency) {
+          if (nextMetrics[0].key === 'TopoServiceInfo') {
+            metricLabel = `Server_${key}`;
+          } else {
+            metricLabel = `Client_${key}`;
+          }
+        }
         const str = `${nextObject.label}`;
-        const servicesLabel =  `${nextService.label}-`;
+        const servicesLabel =  `${nextService.label}_`;
         const strKeyNext = `${nextType.key === ObjectType.Database ?
-          '' : servicesLabel}${nextType.key === ObjectType.Service ? '' : str}-${key}`;
+          '' : servicesLabel}${nextType.key === ObjectType.Service ? '' : str}_${metricLabel}`;
         obj[strKeyNext] = value;
       }
     }
