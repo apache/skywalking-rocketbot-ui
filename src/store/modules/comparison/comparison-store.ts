@@ -370,7 +370,6 @@ const mutations = {
   },
   [types.SET_SERVICE_TOPOLOGY](state: State, data: any) {
     const { calls, nodes } = data;
-    const { preType, nextType } = state.currentOptions;
     const { metricSource } = state as any;
     for (const call of calls) {
       for (const node of nodes) {
@@ -383,22 +382,40 @@ const mutations = {
       }
     }
     const objectSource = calls.map((call: any) => {
+      const sourceData = call.detectPoints.map((points: any) => {
+        if (points === 'CLIENT') {
+          return metricSource.ServiceDependency[1];
+        } else {
+          return metricSource.ServiceDependency[0];
+        }
+      });
       return {
         key: call.id,
         label: `${call.sourceLabel}-${call.targetLabel}`,
-        detectPoints: call.detectPoints,
+        sources: sourceData,
       };
     });
     if (state.isPrevious === StatusType.Next) {
-      state.dataSource.nextMetricsSource = metricSource[nextType.key] || [];
-      state.currentOptions.nextMetrics = [metricSource[nextType.key][0]];
+      state.dataSource.nextMetricsSource = objectSource[0].sources || [];
+      state.currentOptions.nextMetrics = [objectSource[0].sources[0]];
       state.currentOptions.nextObject = objectSource[0];
       state.dataSource.nextObjectSource = objectSource;
     } else {
-      state.dataSource.preMetricsSource = metricSource[preType.key] || [];
-      state.currentOptions.preMetrics = [metricSource[preType.key][0]];
+      state.dataSource.preMetricsSource = objectSource[0].sources || [];
+      state.currentOptions.preMetrics = [objectSource[0].sources[0]];
       state.currentOptions.preObject = objectSource[0];
       state.dataSource.preObjectSource = objectSource;
+    }
+  },
+  [types.SET_METRICS](state: State) {
+    const { currentOptions, isPrevious  } = state;
+    const { nextObject, preObject } = currentOptions;
+    if (isPrevious === StatusType.Next) {
+      state.currentOptions.nextMetrics = [nextObject.sources[0]];
+      state.dataSource.nextMetricsSource = nextObject.sources;
+    } else {
+      state.currentOptions.preMetrics = [preObject.sources[0]];
+      state.dataSource.preMetricsSource = preObject.sources;
     }
   },
 };
@@ -499,6 +516,7 @@ const actions: ActionTree<State, ActionsParamType> = {
     const { currentOptions } = context.state;
     const objType = isPrevious === StatusType.Next ? currentOptions.nextType : currentOptions.preType;
     const typeList = [ChangeType.PreService, ChangeType.NextService, ChangeType.PreType, ChangeType.NextType];
+    const objectType = [ChangeType.NextObject, ChangeType.PreObject];
 
     if (typeList.includes(params.type)) {
       if (objType.key === ObjectType.Service) {
@@ -514,6 +532,9 @@ const actions: ActionTree<State, ActionsParamType> = {
       } else if (objType.key === ObjectType.ServiceDependency) {
         context.dispatch('GET_SERVICE_TOPOLOGY', {duration: params.duration});
       }
+    }
+    if (objectType.includes(params.type)) {
+      context.commit(types.SET_METRICS);
     }
   },
   GET_COMPARISON(

@@ -17,6 +17,7 @@
 export type IOption = {
   key: number | string;
   label: string;
+  sources?: any;
 }
 export interface ICurrentOptions {
   preService: IOption;
