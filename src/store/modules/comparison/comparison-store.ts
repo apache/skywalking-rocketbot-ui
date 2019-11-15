@@ -28,7 +28,7 @@ import fragmentAll from '@/store/modules/dashboard/fragments';
 import { ICurrentOptions, DataSourceType, ISelectConfig, MetricsType } from '@/types/comparison';
 import {
   ComparisonOption, InitSource, LinearType, ComparisonType,
-  ObjectType, ServiceType, ChangeType, StatusType,
+  ObjectType, ServiceType, ChangeType, StatusType, PercentileType,
 } from './comparison-const';
 
 type GenericIdentityFn<T> = (arg: T) => T;
@@ -274,39 +274,39 @@ const mutations = {
     }
   },
   [types.SET_CHARTVAL](state: State, data: {value: any, type: string}) {
-    const keys = Object.keys(data.value);
+    const { preObject, preService, preType, preMetrics } = state.currentOptions;
+    const { nextObject, nextService, nextType, nextMetrics } = state.currentOptions;
+    const metrics = data.type === ServiceType.PREVIOUS ? preMetrics : nextMetrics;
     const obj = {} as any;
-    for (const key of keys) {
+    for (const key of Object.keys(data.value)) {
       const value = data.value[key].values.map((d: {value: number}) => d.value);
-      if (data.type === ServiceType.PREVIOUS) {
-        const { preObject, preService, preType, preMetrics } = state.currentOptions;
-        let metricLabel = key;
-        if (preType.key === ObjectType.ServiceDependency) {
-          if (preMetrics[0].key === 'TopoServiceInfo') {
-            metricLabel = `Server_${key}`;
-          } else {
-            metricLabel = `Client_${key}`;
-          }
+      obj[key] = value;
+    }
+    for (const metric of metrics) {
+      const title = metric.key;
+      const percentile = PercentileType[title];
+      if (percentile) {
+        obj[metric.label] = {};
+        for (const item of percentile) {
+          obj[metric.label][item] = obj[item];
+          delete obj[item];
         }
+      }
+    }
+    for (const key of Object.keys(obj)) {
+      if (data.type === ServiceType.PREVIOUS) {
         const str = `${preService.label}_`;
         const strKeyPre = `${preType.key === ObjectType.Database ?
-          '' : str}${preType.key === ObjectType.Service ? '' : preObject.label}_${metricLabel}`;
-        obj[strKeyPre] = value;
+          '' : str}${preType.key === ObjectType.Service ? '' : preObject.label}_${key}`;
+        obj[strKeyPre] = obj[key];
+        delete obj[key];
       } else {
-        const { nextObject, nextService, nextType, nextMetrics } = state.currentOptions;
-        let metricLabel = key;
-        if (nextType.key === ObjectType.ServiceDependency) {
-          if (nextMetrics[0].key === 'TopoServiceInfo') {
-            metricLabel = `Server_${key}`;
-          } else {
-            metricLabel = `Client_${key}`;
-          }
-        }
         const str = `${nextObject.label}`;
         const servicesLabel =  `${nextService.label}_`;
         const strKeyNext = `${nextType.key === ObjectType.Database ?
-          '' : servicesLabel}${nextType.key === ObjectType.Service ? '' : str}_${metricLabel}`;
-        obj[strKeyNext] = value;
+          '' : servicesLabel}${nextType.key === ObjectType.Service ? '' : str}_${key}`;
+        obj[strKeyNext] = obj[key];
+        delete obj[key];
       }
     }
     state.chartSource = {

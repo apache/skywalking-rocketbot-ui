@@ -20,7 +20,8 @@
     <div class="component-item" v-for="item of Object.keys(chartSource)" :key="item">
       <div class="title">{{item}}</div>
       <div class="chart-item">
-        <ChartLine :intervalTime="intervalTime" :data="{[item]: chartSource[item]}" />
+        <ChartLine v-if="Array.isArray(chartSource[item])" :intervalTime="intervalTime" :data="{[item]: chartSource[item]}" />
+        <ChartLine v-else :intervalTime="intervalTime" :data="chartSource[item]" />
       </div>
     </div>
   </div>
