@@ -81,6 +81,6 @@ export const PercentileType: any = {
   servicePercent: ['serviceP50', 'serviceP75', 'serviceP90', 'serviceP95', 'serviceP99'],
   endpointPercent: ['endpointP50', 'endpointP75', 'endpointP90', 'endpointP95', 'endpointP99'],
   databasePercent: ['databaseP50', 'databaseP75', 'databaseP90', 'databaseP95', 'databaseP99'],
-  TopoServiceInfo: ['p50', 'p75', 'p90', 'p95', 'p99', 'getThroughputTrend', 'getSLATrend', 'getResponseTimeTrend'],
-  TopoClientInfo: ['p50', 'p75', 'p90', 'p95', 'p99', 'getThroughputTrend', 'getSLATrend', 'getResponseTimeTrend'],
+  comparisonServerInfo: ['p50', 'p75', 'p90', 'p95', 'p99'],
+  comparisonClientInfo: ['p50', 'p75', 'p90', 'p95', 'p99'],
 };

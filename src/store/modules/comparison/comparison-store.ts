@@ -23,7 +23,7 @@ import { cancelToken } from '@/utils/cancelToken';
 import * as types from '../../mutation-types';
 import { DurationTime } from '@/types/global';
 import { queryChartData } from '@/utils/queryChartData';
-import { queryTopoClientInfo, queryTopoServiceInfo } from '@/graph/query/topology';
+import { queryComparisonClientInfo, queryComparisonServerInfo } from '@/graph/query/comparison';
 import fragmentAll from '@/store/modules/dashboard/fragments';
 import { ICurrentOptions, DataSourceType, ISelectConfig, MetricsType } from '@/types/comparison';
 import {
@@ -67,7 +67,7 @@ const getters = {
       let param = null;
 
       for (const metric of preMetrics) {
-        param = metric.key === 'TopoServiceInfo' ? queryTopoServiceInfo : queryTopoClientInfo;
+        param = metric.key === 'comparisonServerInfo' ? queryComparisonServerInfo : queryComparisonClientInfo;
       }
       return param;
     }
@@ -90,7 +90,7 @@ const getters = {
       let param = null;
 
       for (const metric of nextMetrics) {
-        param = metric.key === 'TopoServiceInfo' ? queryTopoServiceInfo : queryTopoClientInfo;
+        param = metric.key === 'comparisonServerInfo' ? queryComparisonServerInfo : queryComparisonClientInfo;
       }
       return param;
     }
