@@ -118,7 +118,7 @@ const getters = {
     } else if (key === ObjectType.Database) {
       delete variablesData.serviceId;
       variablesData.databaseId = currentOptions.preObject.key;
-    } else {
+    } else if (key === ObjectType.ServiceDependency) {
       delete variablesData.serviceId;
       variablesData.id = currentOptions.preObject.key;
     }
@@ -144,7 +144,7 @@ const getters = {
     } else if (nextType.key === ObjectType.Database) {
       delete variablesData.serviceId;
       variablesData.databaseId = nextObject.key;
-    } else {
+    } else if (nextType.key === ObjectType.ServiceDependency) {
       delete variablesData.serviceId;
       variablesData.id = nextObject.key;
     }
@@ -235,6 +235,12 @@ const mutations = {
     state.currentOptions.nextService = services[0];
   },
   [types.SET_CONFIG](state: State, data: any[]) {
+    if (!data.length) {
+      data = [{
+        key: '',
+        label: '',
+      }];
+    }
     const { isPrevious, currentOptions, metricSource } = state as any;
     const type = isPrevious === StatusType.Pre ? currentOptions.preType.key : currentOptions.nextType.key;
 
@@ -432,7 +438,11 @@ const actions: ActionTree<State, ActionsParamType> = {
           return;
         }
         context.commit(types.SET_CONFIG, res.data.data.getEndpoints);
-      }).then(() => {
+        return res.data.data;
+      }).then((data) => {
+        if (!data.getEndpoints) {
+          return;
+        }
         if (isPrevious === StatusType.Init) {
           context.dispatch('RENDER_CHART', date);
         }
