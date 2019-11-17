@@ -26,7 +26,7 @@ export default [
   {
     d: 'globalPercent',
     c: 'ChartLine',
-    t: 'Global Percent Response',
+    t: 'Global Response Time Percentile',
     w: 6,
     h: 250,
   },

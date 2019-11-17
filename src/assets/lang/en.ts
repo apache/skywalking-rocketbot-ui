@@ -2,6 +2,7 @@ const m = {
   hourTip: 'Select Hour',
   minuteTip: 'Select Minute',
   secondTip: 'Select Second',
+  second: 's',
   yearSuffix: 'Year',
   monthsHead: 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec',
   months: 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec',
@@ -95,8 +96,14 @@ const m = {
   weekCutTip: 'Last 1 week',
   monthCutTip: 'Last 1 month',
   serverZone: 'Server Zone',
-  percentResponse: 'Percent Response',
+  percentResponse: 'Response Time Percentile',
   exportImage: 'Export image',
+  comparison: 'Metrics Comparison',
+  queryData: 'Query',
+  previousService: 'Previous Service',
+  nextService: 'Next Service',
+  object: 'Object',
+  metrics: 'Metrics',
 };
 
 export default m;

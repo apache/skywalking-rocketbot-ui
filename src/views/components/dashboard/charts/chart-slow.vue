@@ -19,12 +19,12 @@
   <div style="overflow: auto;height: 100%;" class="scroll_hide">
     <div class="rk-chart-slow clear">
       <div class="rk-chart-slow-i" v-for="(i, index) in data" :key="index">
-        <svg class="icon vm r grey link-hover cp" @click="handleClick(i.label)">
+        <svg class="icon vm r grey link-hover cp" @click="handleClick(i.traceIds && i.traceIds[0] || i.label)">
           <use xlink:href="#review-list"></use>
         </svg>
         <div class="mb-5 ell" v-tooltip:top.ellipsis="i.label || ''">
           <span class="calls sm mr-10">{{i.value}} ms</span>
-          <span class="cp link-hover"  @click="appChange(i)">{{i.label}}</span>
+          <span class="cp link-hover"  @click="appChange(i)">{{i.label + getTraceId(i)}}</span>
         </div>
         <RkProgress :precent="i.value/maxValue*100" color="#bf99f8"/>
       </div>
@@ -48,6 +48,9 @@ export default class ChartSlow extends Vue {
   get maxValue() {
     const temp: number[] = this.data.map((i: any) => i.value);
     return Math.max.apply(null, temp);
+  }
+  private getTraceId(i: any) {
+    return i.traceIds && i.traceIds[0] ? ` - ${i.traceIds[0]}` : '';
   }
   private handleClick(i: any) {
     copy(i);

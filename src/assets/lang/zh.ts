@@ -2,6 +2,7 @@ const m = {
   hourTip: '选择小时',
   minuteTip: '选择分钟',
   secondTip: '选择秒数',
+  second: '秒',
   yearSuffix: '年',
   monthsHead: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月',
   months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月',
@@ -97,6 +98,12 @@ const m = {
   serverZone: '服务器时区',
   percentResponse: '百分比响应',
   exportImage: '导出为图片',
+  comparison: '指标对比',
+  queryData: '数据查询',
+  previousService: '上一个服务',
+  nextService: '下一个服务',
+  object: '粒度',
+  metrics: '指标',
 };
 
 export default m;

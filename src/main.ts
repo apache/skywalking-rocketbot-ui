@@ -37,25 +37,27 @@ import 'echarts/lib/component/legend';
 import 'echarts/lib/component/tooltip';
 import VModal from 'vue-js-modal';
 import './assets';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.use(eventBus);
 Vue.use(VueI18n);
 Vue.use(components);
+Vue.use(ElementUI);
 Vue.use(VModal, {dialog: true});
 Vue.directive('clickout', clickout);
 Vue.directive('tooltip', tooltip);
 
 Vue.filter('dateformat', (dataStr: any, pattern: string = 'YYYY-MM-DD HH:mm:ss') => moment(dataStr).format(pattern));
-const saveLang = window.localStorage.getItem('lang');
-let language = navigator.language;
-if (!saveLang) {
-  window.localStorage.setItem('lang', language.split('-')[0]);
-} else {
-  language = saveLang;
+
+const savedLanguage = window.localStorage.getItem('lang');
+let language = navigator.language.split('-')[0];
+if (!savedLanguage) {
+  window.localStorage.setItem('lang', language);
 }
+language = savedLanguage ? savedLanguage : language;
 
 const i18n = new VueI18n({
-  // locale: 'en-us',
   locale: language,
   messages: {
     zh,

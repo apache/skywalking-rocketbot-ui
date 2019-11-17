@@ -17,15 +17,15 @@
 
 <template>
   <aside class="link-topo-aside">
-    <Radial v-if="radioStatus" @showRadial="showRadial" :datas="{nodes:stateTopo.nodes,calls:stateTopo.calls}"/>
-    <svg class="link-topo-aside-btn mb-10 icon cp lg" @click="show = !show" :style="`position:${show?'absolute':'initial'};left:${show?290:0}px;transform: rotate(${show?0 : 180}deg);`">
-      <use xlink:href="#chevron-left"></use>
-    </svg>
-    <svg class="link-topo-aside-btn mb-10 icon cp lg" @click="showRadial(true)" :style="`position:absolute;left:290px;top:50px;`">
+    <Radial v-if="radioStatus" :datas="{nodes:stateTopo.nodes,calls:stateTopo.calls}"/>
+    <svg class="link-topo-aside-btn icon cp lg" @click="showRadial()" :style="`position:absolute;left:290px;`">
       <use xlink:href="#issues"></use>
     </svg>
+    <svg class="link-topo-aside-btn icon cp lg" @click="show = !show" :style="`position:absolute;left:290px;transform: rotate(${show?0 : 180}deg);top:50px;`">
+      <use xlink:href="#chevron-left"></use>
+    </svg>
     <TopoService/>
-    <div class="link-topo-aside-box mb-10" v-if="!stateTopo.currentNode.name && show">
+    <div class="link-topo-aside-box" style="top:50px" v-if="!stateTopo.currentNode.name && show">
       <div class="mb-20">
         <span class="b dib mr-20">{{$t('allServices')}}</span>
       </div>
@@ -34,7 +34,7 @@
         <span class="grey">{{key}}</span>
       </div>
     </div>
-    <div class="link-topo-aside-box mb-10" v-else-if="show">
+    <div class="link-topo-aside-box" style="top:50px" v-else-if="show">
       <div class="mb-20">
         <span class="b dib mr-20">{{$t('serviceDetail')}}</span>
       </div>
@@ -60,10 +60,10 @@
       </div>
     </div>
     <div :class="`link-topo-aside-box link-topo-aside-box-${isMini?'min':'max'}`"
-         :style="`top:106px;position: fixed;right: 30px;${showInfoCount === 0 ? 'animation: unset;': ''}`">
+         :style="`top:80px;position: fixed;right: 30px;${showInfoCount === 0 ? 'animation: unset;': ''}`">
       <svg v-if="stateTopo.selectedCallId"
-           :style="`position:absolute;left:-48px;top:11px;transform: rotate(${isMini?0 : 180}deg);`"
-           class="link-topo-aside-btn mb-10 icon cp lg"
+           :style="`position:absolute;left:-48px;top:0;transform: rotate(${isMini?0 : 180}deg);`"
+           class="link-topo-aside-btn icon cp lg"
            @click="setShowInfo"
       >
         <use xlink:href="#chevron-left" />
@@ -114,6 +114,41 @@
         />
       </div>
     </div>
+    <el-drawer
+        v-if="stateTopo.showAlarmDialog"
+        custom-class="performance-metrics-window"
+        size="75%"
+        destroy-on-close
+        :visible.sync="stateTopo.showAlarmDialog"
+    >
+      <alarm-containers :style="`height: ${drawerMainBodyHeight}`"
+                        :alarmScope="{label: 'Service', key: 'Service'}"
+                        inTopo
+                        :keyword="stateTopo.honeycombNode.name"
+      ></alarm-containers>
+    </el-drawer>
+    <el-drawer
+        custom-class="performance-metrics-window"
+        v-if="stateTopo.showTraceDialog"
+        size="75%"
+        destroy-on-close
+        :visible.sync="stateTopo.showTraceDialog"
+    >
+      <trace-containers :style="`height: ${drawerMainBodyHeight}`"
+                        :service="{label: stateTopo.honeycombNode.name, key: stateTopo.honeycombNode.id}"
+                        inTopo
+      ></trace-containers>
+    </el-drawer>
+    <instances-survey-window
+        v-if="stateTopo.showInstancesDialog"
+        :is-show.sync="stateTopo.showInstancesDialog"
+        :instances="stateDashboardOption.instances"
+    ></instances-survey-window>
+    <endpoint-survey-window
+        v-if="stateTopo.showEndpointDialog"
+        :is-show.sync="stateTopo.showEndpointDialog"
+        :endpoints="stateDashboardOption.endpoints"
+    ></endpoint-survey-window>
   </aside>
 </template>
 <script lang="ts">
@@ -124,13 +159,62 @@ import TopoChart from './topo-chart.vue';
 import TopoService from './topo-services.vue';
 import ChartResponse from './topo-response.vue';
 import Radial from './radial.vue';
+import AlarmContainers from '@/views/containers/alarm.vue';
+import TraceContainers from '@/views/containers/trace.vue';
+import InstancesSurveyWindow from '@/views/containers/instances-survey-window.vue';
+import EndpointSurveyWindow from '@/views/containers/endpoint-survey-window.vue';
+import { initState } from '@/store/modules/dashboard/modules/dashboard-data-layout';
 
-@Component({components: {TopoChart, TopoService, ChartResponse, Radial}})
+@Component({components: {TopoChart, TopoService, ChartResponse, Radial, AlarmContainers,
+    TraceContainers, InstancesSurveyWindow, EndpointSurveyWindow}})
 export default class TopoAside extends Vue {
-  @State('rocketTopo') public stateTopo!: topoState;
-  @Getter('intervalTime') public intervalTime: any;
-  @Mutation('rocketTopo/SET_MODE_STATUS') public SET_MODE_STATUS: any;
-  @Action('rocketTopo/CLEAR_TOPO_INFO') public CLEAR_TOPO_INFO: any;
+  @State('rocketTopo') private stateTopo!: topoState;
+  @State('rocketOption') private stateDashboardOption!: any;
+  @Getter('intervalTime') private intervalTime: any;
+  @Getter('durationTime') private durationTime: any;
+  @Action('rocketTopo/GET_TOPO') private GET_TOPO: any;
+  @Action('rocketTopo/CLEAR_TOPO') private CLEAR_TOPO: any;
+  @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
+  @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
+  @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
+
+  private drawerMainBodyHeight = '100%';
+  private initState = initState;
+  private radioStatus: boolean = false;
+  private show: boolean = true;
+  private showInfo: boolean = false;
+  private isMini: boolean = true;
+  private showInfoCount: number = 0;
+
+  private resize() {
+    this.drawerMainBodyHeight = `${document.body.clientHeight - 50}px`;
+  }
+
+  private beforeCreate() {
+    this.$store.registerModule('rocketTopo', topo);
+  }
+
+  private async created() {
+    this.getTopo();
+    this.SET_COMPS_TREE(this.initState.tree);
+  }
+
+  private mounted() {
+    this.resize();
+    window.addEventListener('resize', this.resize);
+  }
+
+  private getTopo() {
+    this.GET_TOPO({ duration: this.durationTime });
+  }
+
+  private beforeDestroy() {
+    window.removeEventListener('resize', this.resize);
+    this.CLEAR_TOPO_INFO();
+    this.CLEAR_TOPO();
+    this.$store.unregisterModule('rocketTopo');
+  }
+
   get types() {
     const result: any = {};
     this.stateTopo.nodes.forEach((i: any) => {
@@ -142,11 +226,12 @@ export default class TopoAside extends Vue {
     });
     return result;
   }
-  private radioStatus: boolean = false;
-  private show: boolean = true;
-  private showInfo: boolean = false;
-  private isMini: boolean = true;
-  private showInfoCount: number = 0;
+
+  @Watch('durationTime')
+  private watchDurationTime() {
+    this.getTopo();
+  }
+
   @Watch('stateTopo.selectedCallId')
   private watchDetectPointNodeId(newValue: string) {
     if (newValue) {
@@ -156,8 +241,8 @@ export default class TopoAside extends Vue {
       this.isMini = true;
     }
   }
-  private showRadial(status: boolean) {
-    this.radioStatus = status;
+  private showRadial() {
+    this.radioStatus = !this.radioStatus;
   }
   private setMode(mode: boolean) {
     this.SET_MODE_STATUS(mode);
@@ -202,9 +287,13 @@ export default class TopoAside extends Vue {
   border-radius: 4px 4px 4px 4px;
   text-align: center;
   padding: 10px;
+  z-index: 101;
 }
 .link-topo-aside-box{
   border-radius: 4px;
+  position: absolute;
+  width: 280px;
+  z-index: 101;
   color: #ddd;
   background-color: #252a2f9a;
   padding: 15px 20px 10px;
@@ -240,6 +329,20 @@ export default class TopoAside extends Vue {
 .link-topo-aside-box-max {
   width: 60%;
   animation: 0.5s linkTopoAsideBoxMax 1 running;
+}
+
+.performance-metrics-window {
+  .el-drawer__header {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    color: #72767b;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 22px;
+    padding: unset;
+  }
 }
 
 @keyframes linkTopoAsideBoxMax {

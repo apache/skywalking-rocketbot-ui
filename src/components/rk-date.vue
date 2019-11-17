@@ -203,9 +203,8 @@ export default {
       this.show = this.$el.contains(e.target) && !this.disabled;
     },
     quickPick(type){
-      const utc = window.localStorage.getItem('utc'); // get UTC
-      const end = getLocalTime(utc, new Date());
-      const start = getLocalTime(utc, new Date());
+      const end = new Date();
+      const start = new Date();
       switch (type) {
         case 'quarter':
           start.setTime(start.getTime() - 60 * 15 * 1000);//15 mins
@@ -228,7 +227,6 @@ export default {
         default:
           break;
       }
-      console.log()
       this.dates = [start, end];
       this.$emit('input', this.get());
     },
