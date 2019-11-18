@@ -21,6 +21,7 @@ export const ComparisonType: IOption[] = [
   {key: 'ServiceInstance', label: 'Service Instance'},
   {key: 'ServiceEndpoint', label: 'Service Endpoint'},
   {key: 'Database', label: 'Database'},
+  {key: 'ServiceDependency', label: 'Service Dependency'},
 ];
 
 export enum ObjectType {
@@ -28,6 +29,7 @@ export enum ObjectType {
   ServiceInstance = 'ServiceInstance',
   ServiceEndpoint = 'ServiceEndpoint',
   Database = 'Database',
+  ServiceDependency = 'ServiceDependency',
 }
 
 export enum ServiceType {
@@ -38,11 +40,11 @@ export enum ServiceType {
 export const ComparisonOption: ICurrentOptions = {
   preService: {key: 0, label: ''},
   preType: {key: 'ServiceEndpoint', label: 'Service Endpoint'},
-  preObject: {key: 0, label: '/projectB/{name}'},
+  preObject: {key: 0, label: ''},
   preMetrics: [{key: 0, label: ''}],
   nextService: {key: 0, label: ''},
   nextType: {key: 'ServiceEndpoint', label: 'Service Endpoint'},
-  nextObject: {key: 0, label: '/projectA/{name}'},
+  nextObject: {key: 0, label: ''},
   nextMetrics: [{key: 0, label: ''}],
 };
 
@@ -75,3 +77,10 @@ export enum StatusType {
 }
 
 export const LinearType = ['ChartBar', 'ChartLine'];
+export const PercentileType: any = {
+  servicePercent: ['serviceP50', 'serviceP75', 'serviceP90', 'serviceP95', 'serviceP99'],
+  endpointPercent: ['endpointP50', 'endpointP75', 'endpointP90', 'endpointP95', 'endpointP99'],
+  databasePercent: ['databaseP50', 'databaseP75', 'databaseP90', 'databaseP95', 'databaseP99'],
+  comparisonServerInfo: ['p50', 'p75', 'p90', 'p95', 'p99'],
+  comparisonClientInfo: ['p50', 'p75', 'p90', 'p95', 'p99'],
+};

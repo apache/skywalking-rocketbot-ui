@@ -17,6 +17,7 @@
 export type IOption = {
   key: number | string;
   label: string;
+  sources?: any;
 }
 export interface ICurrentOptions {
   preService: IOption;
@@ -49,4 +50,5 @@ export interface MetricsType {
   ServiceEndpoint: IOption[];
   ServiceInstance: IOption[];
   Database: IOption[];
+  ServiceDependency: IOption[];
 }

@@ -66,6 +66,10 @@ export const queryChartData = {
     { o: 'ServiceInstance', d: 'instanceClrCPU', c: 'ChartLine', t: 'CLR CPU (%)', w: 3, h: 250 },
     { o: 'ServiceInstance', d: 'instanceClrGC', c: 'ChartLine', t: 'CLR GC (Count)', w: 3, h: 250 },
     { o: 'ServiceInstance', d: 'instanceClrHeap', c: 'ChartLine', t: 'CLR HeapMemory (MB)', w: 3, h: 250 },
+    {o: 'ServiceDependency', d: 'comparisonServerInfo',
+      c: 'ChartLine', t: 'Server Response Time Percentile', w: 3, h: 250},
+    {o: 'ServiceDependency', d: 'comparisonClientInfo',
+    c: 'ChartLine', t: 'Client Response Time Percentile', w: 3, h: 250},
   ],
   proxy: [],
   database: [
