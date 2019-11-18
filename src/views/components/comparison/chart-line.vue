@@ -71,7 +71,7 @@ export default class ChartLine extends Vue {
         },
       },
       legend: {
-        show: false,
+        show: keys.length === 1 ? false : true,
         icon: 'circle',
         top: 0,
         left: 0,

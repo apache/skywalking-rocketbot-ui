@@ -22,7 +22,7 @@
         <div v-if="Array.isArray(current)">
           <span class="selected" v-for="item in current" :key="item.key">
             <span>{{item.label}}</span>
-            <span class="remove-icon" @click="removeSelected(item)">×</span>
+            <span class="remove-icon" v-if="current.length!==1" @click="removeSelected(item)">×</span>
           </span>
         </div>
         <div class="ell" v-else v-tooltip:right.ellipsis="current.label || ''">{{current.label}}</div>
