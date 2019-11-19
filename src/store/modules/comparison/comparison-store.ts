@@ -470,7 +470,8 @@ const actions: ActionTree<State, ActionsParamType> = {
         if (!res.data.data) {
           return;
         }
-        context.commit(types.SET_CONFIG, res.data.data.getEndpoints);
+        context.commit(types.SET_CONFIG,
+          res.data.data.getEndpoints ? res.data.data.getEndpoints : [] );
         return res.data.data;
       }).then((data) => {
         if (!data.getEndpoints) {
