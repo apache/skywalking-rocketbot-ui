@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+import noty from './noty';
 import RkHeader from './rk-header.vue';
 import RkFooter from './rk-footer.vue';
 import RkFooterTime from './rk-footer-time.vue';
@@ -24,11 +25,13 @@ import RkDate from './rk-date.vue';
 import RkPanel from './rk-panel.vue';
 import RkSidebox from './rk-sidebox.vue';
 import RkEcharts from './rk-echarts.vue';
-import noty from './noty';
 import RkSelect from './rk-select.vue';
+import RkPopper from './rk-popper.vue';
+import RkDropdown from './rk-dropdown.vue';
 
 const components: any = {
-  RkHeader, RkFooter, RkProgress, RkDate, RkPanel, RkEcharts, RkPage, RkSidebox, RkFooterTime, RkSelect,
+  RkHeader, RkFooter, RkProgress, RkDate, RkPanel, RkEcharts, RkPage, RkSidebox, RkFooterTime, RkSelect, RkPopper,
+  RkDropdown,
 };
 const componentsName: string[] = Object.keys(components);
 export default {install: (vue: any) => {
