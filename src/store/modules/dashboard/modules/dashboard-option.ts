@@ -143,6 +143,9 @@ const actions: ActionTree<State, any> = {
       .query('queryEndpoints')
       .params({serviceId: context.state.currentService.key, keyword: params})
       .then((res: AxiosResponse) => {
+        if (!res.data.data) {
+          return;
+        }
         context.commit(types.SET_SEARCH_ENDPOINTS,
           res.data.data.getEndpoints ? res.data.data.getEndpoints : []);
       });
