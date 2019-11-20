@@ -36,6 +36,10 @@ export default class ChartHeatmap extends Vue {
   }
   get option() {
     const w: any = window;
+    const source = this.data.map((d: any) => d[2]);
+    const maxSource = Math.max(...source);
+    const minSource = Math.min(...source);
+
     return {
       tooltip: {
         position: 'top',
@@ -56,7 +60,7 @@ export default class ChartHeatmap extends Vue {
         type: 'category',
         data: this.intervalTime,
         axisTick: {
-          lineStyle: { color: '#c1c5ca41' },
+          lineStyle: { color: '#c1c5ca' },
           alignWithLabel: true,
         },
         splitLine: { show: false },
@@ -65,15 +69,17 @@ export default class ChartHeatmap extends Vue {
       },
       visualMap: [
         {
-          min: 0,
-          max: 25,
+          min: minSource,
+          max: maxSource,
           show: false,
           calculable: true,
+          realtime: false,
           orient: 'horizontal',
           left: 'center',
           bottom: '0',
           inRange: {
-            color: ['#fff', '#3f96e3'],
+            color: ['#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf',
+            '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026'],
           },
         },
       ],
@@ -81,7 +87,7 @@ export default class ChartHeatmap extends Vue {
         type: 'value',
         axisLine: { show: false },
         axisTick: { show: false },
-        splitLine: { lineStyle: { color: '#c1c5ca41', type: 'dashed' } },
+        splitLine: { lineStyle: { color: '#c1c5ca', type: 'dashed' } },
         axisLabel: { color: '#9da5b2', fontSize: '11', formatter: (a: number) => `${a * 100}ms`},
       },
       series: [
