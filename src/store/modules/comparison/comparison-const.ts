@@ -81,6 +81,6 @@ export const PercentileType: any = {
   servicePercent: ['serviceP50', 'serviceP75', 'serviceP90', 'serviceP95', 'serviceP99'],
   endpointPercent: ['endpointP50', 'endpointP75', 'endpointP90', 'endpointP95', 'endpointP99'],
   databasePercent: ['databaseP50', 'databaseP75', 'databaseP90', 'databaseP95', 'databaseP99'],
-  dependencyServerPercentile: ['p50', 'p75', 'p90', 'p95', 'p99'],
-  dependencyClientPercentile: ['p50', 'p75', 'p90', 'p95', 'p99'],
+  dependencyServerPercentile: ['serverSideP50', 'serverSideP75', 'serverSideP90', 'serverSideP95', 'serverSideP99'],
+  dependencyClientPercentile: ['clientSideP50', 'clientSideP75', 'clientSideP90', 'clientSideP95', 'clientSideP99'],
 };

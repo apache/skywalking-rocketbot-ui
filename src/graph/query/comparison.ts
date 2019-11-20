@@ -15,10 +15,16 @@
  * limitations under the License.
  */
 
-import { DependencyServerPercentile, DependencyClientPercentile } from '../fragments/comparison';
+import * as service from '@/store/modules/dashboard/fragments/service';
+import * as endpoint from '@/store/modules/dashboard/fragments/endpoint';
+import * as instance from '@/store/modules/dashboard/fragments/instance';
+import * as database from '@/store/modules/dashboard/fragments/database';
+import * as dependency from '../fragments/comparison';
 
-export const queryDependencyServerPercentile =
-  `query queryTopoServiceInfo(${DependencyServerPercentile.variable}) {${DependencyServerPercentile.query}}`;
-
-export const queryDependencyClientPercentile =
-  `query queryTopoClientInfo(${DependencyClientPercentile.variable}) {${DependencyClientPercentile.query}}`;
+export default {
+  ...service,
+  ...endpoint,
+  ...instance,
+  ...database,
+  ...dependency,
+};
