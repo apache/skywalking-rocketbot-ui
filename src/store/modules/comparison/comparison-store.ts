@@ -23,7 +23,7 @@ import { cancelToken } from '@/utils/cancelToken';
 import * as types from '../../mutation-types';
 import { DurationTime } from '@/types/global';
 import { queryChartData } from '@/utils/queryChartData';
-import { queryComparisonClientInfo, queryComparisonServerInfo } from '@/graph/query/comparison';
+import { queryDependencyClientPercentile, queryDependencyServerPercentile } from '@/graph/query/comparison';
 import fragmentAll from '@/store/modules/dashboard/fragments';
 import { ICurrentOptions, DataSourceType, ISelectConfig, MetricsType } from '@/types/comparison';
 import {
@@ -67,7 +67,8 @@ const getters = {
       let param = null;
 
       for (const metric of preMetrics) {
-        param = metric.key === 'comparisonServerInfo' ? queryComparisonServerInfo : queryComparisonClientInfo;
+        param = metric.key === 'dependencyServerPercentile' ?
+        queryDependencyServerPercentile : queryDependencyClientPercentile;
       }
       return param;
     }
@@ -90,7 +91,8 @@ const getters = {
       let param = null;
 
       for (const metric of nextMetrics) {
-        param = metric.key === 'comparisonServerInfo' ? queryComparisonServerInfo : queryComparisonClientInfo;
+        param = metric.key === 'dependencyServerPercentile' ?
+        queryDependencyServerPercentile : queryDependencyClientPercentile;
       }
       return param;
     }

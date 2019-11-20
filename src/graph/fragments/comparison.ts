@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-export const ComparisonServerInfo = {
+export const DependencyServerPercentile = {
   variable: '$duration: Duration!, $id: ID!',
   query: `
     p50: getLinearIntValues(metric: {
@@ -60,7 +60,7 @@ export const ComparisonServerInfo = {
     }
 `};
 
-export const ComparisonClientInfo = {
+export const DependencyClientPercentile = {
   variable: '$duration: Duration!, $id: ID!',
   query: `
     p50: getLinearIntValues(metric: {

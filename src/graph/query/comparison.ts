@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-import { ComparisonServerInfo, ComparisonClientInfo } from '../fragments/comparison';
+import { DependencyServerPercentile, DependencyClientPercentile } from '../fragments/comparison';
 
-export const queryComparisonServerInfo =
-  `query queryTopoServiceInfo(${ComparisonServerInfo.variable}) {${ComparisonServerInfo.query}}`;
+export const queryDependencyServerPercentile =
+  `query queryTopoServiceInfo(${DependencyServerPercentile.variable}) {${DependencyServerPercentile.query}}`;
 
-export const queryComparisonClientInfo =
-  `query queryTopoClientInfo(${ComparisonClientInfo.variable}) {${ComparisonClientInfo.query}}`;
+export const queryDependencyClientPercentile =
+  `query queryTopoClientInfo(${DependencyClientPercentile.variable}) {${DependencyClientPercentile.query}}`;
