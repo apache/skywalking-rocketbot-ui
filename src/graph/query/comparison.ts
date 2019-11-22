@@ -15,10 +15,16 @@
  * limitations under the License.
  */
 
-import { ComparisonServerInfo, ComparisonClientInfo } from '../fragments/comparison';
+import * as service from '@/store/modules/dashboard/fragments/service';
+import * as endpoint from '@/store/modules/dashboard/fragments/endpoint';
+import * as instance from '@/store/modules/dashboard/fragments/instance';
+import * as database from '@/store/modules/dashboard/fragments/database';
+import * as dependency from '../fragments/comparison';
 
-export const queryComparisonServerInfo =
-  `query queryTopoServiceInfo(${ComparisonServerInfo.variable}) {${ComparisonServerInfo.query}}`;
-
-export const queryComparisonClientInfo =
-  `query queryTopoClientInfo(${ComparisonClientInfo.variable}) {${ComparisonClientInfo.query}}`;
+export default {
+  ...service,
+  ...endpoint,
+  ...instance,
+  ...database,
+  ...dependency,
+};
