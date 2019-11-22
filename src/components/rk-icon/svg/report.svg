@@ -1,0 +1,18 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<title>report</title>
+<path d="M12.984 12.984v-6h-1.969v6h1.969zM12 17.297q0.516 0 0.914-0.398t0.398-0.914-0.398-0.891-0.914-0.375-0.914 0.375-0.398 0.891 0.398 0.914 0.914 0.398zM15.75 3l5.25 5.25v7.5l-5.25 5.25h-7.5l-5.25-5.25v-7.5l5.25-5.25h7.5z"></path>
+</svg>

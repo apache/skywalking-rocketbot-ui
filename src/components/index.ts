@@ -28,10 +28,11 @@ import RkEcharts from './rk-echarts.vue';
 import RkSelect from './rk-select.vue';
 import RkPopper from './rk-popper.vue';
 import RkDropdown from './rk-dropdown.vue';
+import RkIcon from './rk-icon/index.vue';
 
 const components: any = {
   RkHeader, RkFooter, RkProgress, RkDate, RkPanel, RkEcharts, RkPage, RkSidebox, RkFooterTime, RkSelect, RkPopper,
-  RkDropdown,
+  RkDropdown, RkIcon,
 };
 const componentsName: string[] = Object.keys(components);
 export default {install: (vue: any) => {

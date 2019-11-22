@@ -1,0 +1,18 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<title>timeline</title>
+<path d="M23.016 8.016q0 0.797-0.609 1.383t-1.406 0.586h-0.047q-0.328 0-0.469-0.047l-3.563 3.563q0.094 0.281 0.094 0.516 0 0.797-0.609 1.383t-1.406 0.586-1.406-0.586-0.609-1.383q0-0.234 0.094-0.516l-2.578-2.578q-0.281 0.094-0.516 0.094t-0.516-0.094l-4.547 4.547q0.094 0.281 0.094 0.516 0 0.797-0.609 1.406t-1.406 0.609-1.406-0.609-0.609-1.406 0.609-1.383 1.406-0.586q0.375 0 0.516 0.047l4.547-4.547q-0.047-0.141-0.047-0.516 0-0.797 0.586-1.406t1.383-0.609 1.406 0.609 0.609 1.406q0 0.375-0.047 0.516l2.531 2.531q0.141-0.047 0.516-0.047t0.516 0.047l3.563-3.516q-0.094-0.281-0.094-0.516 0-0.797 0.609-1.406t1.406-0.609 1.406 0.609 0.609 1.406z"></path>
+</svg>
