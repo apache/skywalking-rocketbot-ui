@@ -16,7 +16,7 @@
  */
 
 <template>
-  <a class="rk-back" :class="{size, 'ghost': ghost}" @click="$emit('click')">
+  <a class="rk-btn" :class="{size, 'ghost': ghost}" @click="$emit('click')">
     <svg class="icon"><use xlink:href="#chevron-left"></use></svg>
   </a>
 </template>
