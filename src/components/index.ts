@@ -26,9 +26,10 @@ import RkSidebox from './rk-sidebox.vue';
 import RkEcharts from './rk-echarts.vue';
 import noty from './noty';
 import RkSelect from './rk-select.vue';
+import RkButton from './rk-button.vue';
 
 const components: any = {
-  RkHeader, RkFooter, RkProgress, RkDate, RkPanel, RkEcharts, RkPage, RkSidebox, RkFooterTime, RkSelect,
+  RkHeader, RkFooter, RkProgress, RkDate, RkPanel, RkEcharts, RkPage, RkSidebox, RkFooterTime, RkSelect, RkButton,
 };
 const componentsName: string[] = Object.keys(components);
 export default {install: (vue: any) => {
