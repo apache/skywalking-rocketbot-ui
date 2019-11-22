@@ -35,16 +35,16 @@ export default class ChartHeatmap extends Vue {
     chart.myChart.resize();
   }
   get option() {
-    const w: any = window;
     const source = this.data.map((d: any) => d[2]);
-    const maxSource = Math.max(...source);
-    const minSource = Math.min(...source);
-
+    const maxItem = Math.max(...source);
+    const minItem = Math.min(...source);
+    const colorBox = ['#fff', '#ffffbf', '#FFE9BB', '#FFD1A7', '#FFBB95', '#FFA383', '#FF8D70', '#FF745C',
+      '#FF5C4A', '#FF4638', '#FF2E26', '#FF1812', '#f46d43', '#d73027', '#a50026',
+    ];
     return {
       tooltip: {
         position: 'top',
         formatter: (a: any) => `${a.data[1] * 100}ms  [ ${a.data[2]} ]`,
-        backgroundColor: 'rgb(50,50,50)',
         textStyle: {
           fontSize: 13,
         },
@@ -69,18 +69,12 @@ export default class ChartHeatmap extends Vue {
       },
       visualMap: [
         {
-          min: minSource,
-          max: maxSource,
+          min: minItem,
+          max: maxItem,
           show: false,
+          type: 'piecewise',
           calculable: true,
-          realtime: false,
-          orient: 'horizontal',
-          left: 'center',
-          bottom: '0',
-          inRange: {
-            color: ['#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf',
-            '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026'],
-          },
+          pieces: this.generatePieces(maxItem, colorBox),
         },
       ],
       yAxis: {
@@ -94,10 +88,44 @@ export default class ChartHeatmap extends Vue {
         {
           type: 'heatmap',
           data: this.data,
-          symbolSize: (d: any) => d[2] ? 7 : 0,
+          itemStyle: {
+            emphasis: {
+              shadowBlur: 10,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
         },
       ],
     };
+  }
+  private generatePieces(maxValue: number, colorBox: string[]) {
+    const pieces = [];
+    let quotient = 1;
+    let temp = {} as any;
+    temp.max = 1;
+    temp.min = 0;
+    temp.color = colorBox[0];
+    pieces.push(temp);
+    if (maxValue && maxValue >= 14) {
+      quotient = Math.floor(maxValue / 14);
+      for (let i = 1; i <= 14; i++) {
+        temp = {} as any;
+        if (i === 1) {
+          temp.min = 1;
+        } else {
+          temp.min = quotient * (i - 1);
+        }
+        temp.max = quotient * i;
+        temp.color = colorBox[i];
+        pieces.push(temp);
+      }
+    }
+    const length = pieces.length;
+    if (length) {
+      const item  = pieces[length - 1];
+      item.max = maxValue;
+    }
+    return pieces;
   }
 }
 </script>

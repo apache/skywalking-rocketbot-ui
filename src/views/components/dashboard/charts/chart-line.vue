@@ -44,7 +44,7 @@ export default class ChartLine extends Vue {
           barMaxWidth: 10,
           lineStyle: {
             width: 1.5,
-            type: keys.length !== 5 ? 'solid' : 'dotted',
+            type: 'solid',
           },
       };
       if (keys.length === 2) {
