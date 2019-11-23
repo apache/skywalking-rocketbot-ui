@@ -29,10 +29,11 @@ import RkSelect from './rk-select.vue';
 import RkPopper from './rk-popper.vue';
 import RkDropdown from './rk-dropdown.vue';
 import RkBack from './rk-back.vue';
+import RkButton from './rk-button.vue';
 
 const components: any = {
   RkHeader, RkFooter, RkProgress, RkDate, RkPanel, RkEcharts, RkPage, RkSidebox, RkFooterTime, RkSelect,
-  RkPopper, RkDropdown, RkBack,
+  RkPopper, RkDropdown, RkBack, RkButton
 };
 
 const componentsName: string[] = Object.keys(components);
