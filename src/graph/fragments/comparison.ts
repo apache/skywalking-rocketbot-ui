@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-export const ComparisonServerInfo = {
+export const dependencyServerPercentile = {
   variable: '$duration: Duration!, $id: ID!',
-  query: `
-    p50: getLinearIntValues(metric: {
+  fragment: `
+  serverSideP50: getLinearIntValues(metric: {
       name: "service_relation_server_p50"
       id: $id
     }, duration: $duration) {
@@ -26,7 +26,7 @@ export const ComparisonServerInfo = {
         value
       }
     }
-    p75: getLinearIntValues(metric: {
+    serverSideP75: getLinearIntValues(metric: {
       name: "service_relation_server_p75"
       id: $id
     }, duration: $duration) {
@@ -34,7 +34,7 @@ export const ComparisonServerInfo = {
         value
       }
     }
-    p90: getLinearIntValues(metric: {
+    serverSideP90: getLinearIntValues(metric: {
       name: "service_relation_server_p90"
       id: $id
     }, duration: $duration) {
@@ -42,7 +42,7 @@ export const ComparisonServerInfo = {
         value
       }
     }
-    p95: getLinearIntValues(metric: {
+    serverSideP95: getLinearIntValues(metric: {
       name: "service_relation_server_p95"
       id: $id
     }, duration: $duration) {
@@ -50,7 +50,7 @@ export const ComparisonServerInfo = {
         value
       }
     }
-    p99: getLinearIntValues(metric: {
+    serverSideP99: getLinearIntValues(metric: {
       name: "service_relation_server_p99"
       id: $id
     }, duration: $duration) {
@@ -60,10 +60,88 @@ export const ComparisonServerInfo = {
     }
 `};
 
-export const ComparisonClientInfo = {
+export const dependencyServerResponseTimeTrend = {
   variable: '$duration: Duration!, $id: ID!',
-  query: `
-    p50: getLinearIntValues(metric: {
+  fragment: `
+  serverSideResponseTimeTrend: getLinearIntValues(metric: {
+      name: "service_relation_server_resp_time"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+`};
+
+export const dependencyServerThroughputTrend = {
+  variable: '$duration: Duration!, $id: ID!',
+  fragment: `
+  serverSideThroughputTrend: getLinearIntValues(metric: {
+      name: "service_relation_server_cpm"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+`};
+
+export const dependencyServerSLATrend = {
+  variable: '$duration: Duration!, $id: ID!',
+  fragment: `
+  serverSideSLATrend: getLinearIntValues(metric: {
+      name: "service_relation_server_call_sla"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+`};
+
+export const dependencyClientResponseTimeTrend = {
+  variable: '$duration: Duration!, $id: ID!',
+  fragment: `
+  clientSideResponseTimeTrend: getLinearIntValues(metric: {
+      name: "service_relation_client_resp_time"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+`};
+
+export const dependencyClientThroughputTrend = {
+  variable: '$duration: Duration!, $id: ID!',
+  fragment: `
+  clientSideThroughputTrend: getLinearIntValues(metric: {
+      name: "service_relation_client_cpm"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+`};
+
+export const dependencyClientSLATrend = {
+  variable: '$duration: Duration!, $id: ID!',
+  fragment: `
+  clientSideSLATrend: getLinearIntValues(metric: {
+      name: "service_relation_client_call_sla"
+      id: $id
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+`};
+
+export const dependencyClientPercentile = {
+  variable: '$duration: Duration!, $id: ID!',
+  fragment: `
+  clientSideP50: getLinearIntValues(metric: {
       name: "service_relation_client_p50"
       id: $id
     }, duration: $duration) {
@@ -71,7 +149,7 @@ export const ComparisonClientInfo = {
         value
       }
     }
-    p75: getLinearIntValues(metric: {
+    clientSideP75: getLinearIntValues(metric: {
       name: "service_relation_client_p75"
       id: $id
     }, duration: $duration) {
@@ -79,7 +157,7 @@ export const ComparisonClientInfo = {
         value
       }
     }
-    p90: getLinearIntValues(metric: {
+    clientSideP90: getLinearIntValues(metric: {
       name: "service_relation_client_p90"
       id: $id
     }, duration: $duration) {
@@ -87,7 +165,7 @@ export const ComparisonClientInfo = {
         value
       }
     }
-    p95: getLinearIntValues(metric: {
+    clientSideP95: getLinearIntValues(metric: {
       name: "service_relation_client_p95"
       id: $id
     }, duration: $duration) {
@@ -95,7 +173,7 @@ export const ComparisonClientInfo = {
         value
       }
     }
-    p99: getLinearIntValues(metric: {
+    clientSideP99: getLinearIntValues(metric: {
       name: "service_relation_client_p99"
       id: $id
     }, duration: $duration) {

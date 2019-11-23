@@ -15,16 +15,40 @@
  * limitations under the License.
  */
 
-import * as service from '@/store/modules/dashboard/fragments/service';
-import * as endpoint from '@/store/modules/dashboard/fragments/endpoint';
-import * as instance from '@/store/modules/dashboard/fragments/instance';
-import * as database from '@/store/modules/dashboard/fragments/database';
-import * as dependency from '../fragments/comparison';
+<template>
+  <a class="rk-btn" :class="{size, 'ghost': ghost}" @click="$emit('click')">
+    <svg class="icon"><use xlink:href="#chevron-left"></use></svg>
+  </a>
+</template>
+<script lang="ts">
+import Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
 
-export default {
-  ...service,
-  ...endpoint,
-  ...instance,
-  ...database,
-  ...dependency,
-};
+@Component
+export default class RkBtn extends Vue {
+  @Prop({ default: '' }) private size!: string;
+  @Prop({ default: false }) private ghost!: boolean;
+}
+</script>
+<style lang="scss">
+.rk-btn{
+  line-height: 26px;
+  padding: 0 7px;
+  background-color: #448dfe;
+  border-radius: 4px;
+  color: #fff;
+  transition: background-color .3s;
+  &.sm{
+    line-height: 24px;
+  }
+  &.lg{
+    line-height: 30px;
+  }
+  &.ghost{
+    background-color: #555b6b66;
+  }
+  &:hover{
+    background-color: #357de9;
+  }
+}
+</style>
