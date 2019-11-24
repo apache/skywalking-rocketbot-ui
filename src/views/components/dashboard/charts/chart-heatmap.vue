@@ -35,11 +35,12 @@ export default class ChartHeatmap extends Vue {
     chart.myChart.resize();
   }
   get option() {
-    const source = this.data.map((d: any) => d[2]);
+    const source = this.data.map((d: number[]) => d[2]);
     const maxItem = Math.max(...source);
     const minItem = Math.min(...source);
-    const colorBox = ['#fff', '#ffffbf', '#FFE9BB', '#FFD1A7', '#FFBB95', '#FFA383', '#FF8D70', '#FF745C',
-      '#FF5C4A', '#FF4638', '#FF2E26', '#FF1812', '#f46d43', '#d73027', '#a50026',
+    const colorBox = ['#fff', '#FDF0F0', '#FAE2E2', '#F8D3D3', '#F6C4C4', '#F4B5B5', '#F1A7A7', '#EF9898', '#E86C6C',
+      '#E44E4E', '#E23F3F', '#DF3131', '#DD2222', '#CE2020', '#C01D1D', '#B11B1B', '#A21919', '#851414',
+      '#761212', '#671010',
     ];
     return {
       tooltip: {
@@ -74,7 +75,7 @@ export default class ChartHeatmap extends Vue {
           show: false,
           type: 'piecewise',
           calculable: true,
-          pieces: this.generatePieces(maxItem, colorBox),
+          pieces: this.generatePieces(maxItem, colorBox, minItem),
         },
       ],
       yAxis: {
@@ -98,20 +99,20 @@ export default class ChartHeatmap extends Vue {
       ],
     };
   }
-  private generatePieces(maxValue: number, colorBox: string[]) {
+  private generatePieces(maxValue: number, colorBox: string[], minItem: number) {
     const pieces = [];
     let quotient = 1;
     let temp = {} as any;
-    temp.max = 1;
-    temp.min = 0;
+    temp.max = minItem;
+    temp.min = minItem;
     temp.color = colorBox[0];
     pieces.push(temp);
-    if (maxValue && maxValue >= 14) {
-      quotient = Math.floor(maxValue / 14);
-      for (let i = 1; i <= 14; i++) {
+    if (maxValue && maxValue >= 19) {
+      quotient = Math.floor(maxValue / 19);
+      for (let i = 1; i < 20; i++) {
         temp = {} as any;
         if (i === 1) {
-          temp.min = 1;
+          temp.min = minItem;
         } else {
           temp.min = quotient * (i - 1);
         }
