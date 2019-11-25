@@ -1,0 +1,18 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<title>donut_small</title>
+<path d="M12.984 14.859q1.266-0.375 1.875-1.875h7.125q-0.375 3.609-2.836 6.141t-6.164 2.859v-7.125zM14.859 11.016q-0.563-1.5-1.875-1.875v-7.125q3.703 0.328 6.164 2.859t2.836 6.141h-7.125zM11.016 9.141q-0.797 0.328-1.406 1.125t-0.609 1.734 0.609 1.734 1.406 1.125v7.125q-3.797-0.375-6.398-3.234t-2.602-6.75 2.602-6.75 6.398-3.234v7.125z"></path>
+</svg>

@@ -1,0 +1,1863 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. -->
+
+<!doctype html>
+<html>
+
+<head>
+    <title>IcoMoon - SVG Icons</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .icon {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            stroke-width: 0;
+            stroke: currentColor;
+            fill: currentColor;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: sans-serif;
+            font-size: 1em;
+            line-height: 1.5;
+            color: #555;
+            background: #fff;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            font-weight: normal;
+            box-shadow: 0 1px #ddd, 0 2px #fff, 0 3px #ddd;
+        }
+
+        small {
+            font-size: .66666667em;
+        }
+
+        a {
+            color: #e74c3c;
+            text-decoration: none;
+        }
+
+        a:hover,
+        a:focus {
+            box-shadow: 0 1px #e74c3c;
+        }
+
+        .bshadow0,
+        input {
+            box-shadow: inset 0 -2px #e7e7e7;
+        }
+
+        input:hover {
+            box-shadow: inset 0 -2px #ccc;
+        }
+
+        input,
+        fieldset {
+            font-size: 1em;
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        input {
+            color: inherit;
+            line-height: 1.5;
+            height: 1.5em;
+            padding: .25em 0;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: inset 0 -2px #449fdb;
+        }
+
+        .glyph {
+            font-size: 16px;
+            margin-right: 1.5em;
+            float: left;
+            width: 12em;
+        }
+
+        svg {
+            color: #000;
+        }
+
+        .liga {
+            width: 80%;
+            width: calc(100% - 2.5em);
+        }
+
+        .talign-right {
+            text-align: right;
+        }
+
+        .talign-center {
+            text-align: center;
+        }
+
+        .bgc1 {
+            background: #f1f1f1;
+        }
+
+        .fgc0 {
+            color: #000;
+        }
+
+        .fgc1 {
+            color: #999;
+        }
+
+        p {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+
+        .mvm {
+            margin-top: .75em;
+            margin-bottom: .75em;
+        }
+
+        .mtn {
+            margin-top: 0;
+        }
+
+        .mtl,
+        .mal {
+            margin-top: 1.5em;
+        }
+
+        .mbl,
+        .mal {
+            margin-bottom: 1.5em;
+        }
+
+        .mal,
+        .mhl {
+            margin-left: 1.5em;
+            margin-right: 1.5em;
+        }
+
+        .mhmm {
+            margin-left: 1em;
+            margin-right: 1em;
+        }
+
+        .ptl {
+            padding-top: 1.5em;
+        }
+
+        .pbs,
+        .pvs {
+            padding-bottom: .25em;
+        }
+
+        .pvs,
+        .pts {
+            padding-top: .25em;
+        }
+
+        .unit {
+            float: left;
+        }
+
+        .unitRight {
+            float: right;
+        }
+
+        .size1of2 {
+            width: 50%;
+        }
+
+        .size1of1 {
+            width: 100%;
+        }
+
+        .clearfix:before,
+        .clearfix:after {
+            content: " ";
+            display: table;
+        }
+
+        .clearfix:after {
+            clear: both;
+        }
+
+        .hidden-true {
+            display: none;
+        }
+
+        .textbox0 {
+            width: 3em;
+            background: #f1f1f1;
+            padding: .25em .5em;
+            line-height: 1.5;
+            height: 1.5em;
+        }
+
+        .fs0 {
+            font-size: 16px;
+        }
+
+        .fs1 {
+            font-size: 24px;
+        }
+
+        .name {
+            font-size: 0.5em;
+            margin-left: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1"
+        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+            <symbol id="icon-error" viewBox="0 0 24 24">
+                <title>error</title>
+                <path
+                    d="M12.984 12.984v-6h-1.969v6h1.969zM12.984 17.016v-2.016h-1.969v2.016h1.969zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93z">
+                </path>
+            </symbol>
+            <symbol id="icon-error_outline" viewBox="0 0 24 24">
+                <title>error_outline</title>
+                <path
+                    d="M12 20.016q3.281 0 5.648-2.367t2.367-5.648-2.367-5.648-5.648-2.367-5.648 2.367-2.367 5.648 2.367 5.648 5.648 2.367zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93zM11.016 6.984h1.969v6h-1.969v-6zM11.016 15h1.969v2.016h-1.969v-2.016z">
+                </path>
+            </symbol>
+            <symbol id="icon-warningreport_problem" viewBox="0 0 24 24">
+                <title>warningreport_problem</title>
+                <path
+                    d="M12.984 14.016v-4.031h-1.969v4.031h1.969zM12.984 18v-2.016h-1.969v2.016h1.969zM0.984 21l11.016-18.984 11.016 18.984h-22.031z">
+                </path>
+            </symbol>
+            <symbol id="icon-notification_important" viewBox="0 0 24 24">
+                <title>notification_important</title>
+                <path
+                    d="M12 21.984q-0.844 0-1.43-0.563t-0.586-1.406h4.031q0 0.797-0.609 1.383t-1.406 0.586zM12.984 12v-3.984h-1.969v3.984h1.969zM12.984 15.984v-1.969h-1.969v1.969h1.969zM18 15.984l2.016 2.016v0.984h-16.031v-0.984l2.016-2.016v-4.969q0-2.344 1.195-4.078t3.305-2.25v-0.703q0-0.609 0.422-1.055t1.078-0.445 1.078 0.445 0.422 1.055v0.703q2.109 0.516 3.305 2.25t1.195 4.078v4.969z">
+                </path>
+            </symbol>
+            <symbol id="icon-av_timer" viewBox="0 0 24 24">
+                <title>av_timer</title>
+                <path
+                    d="M6 12q0-0.422 0.281-0.703t0.703-0.281 0.727 0.281 0.305 0.703-0.305 0.703-0.727 0.281-0.703-0.281-0.281-0.703zM18 12q0 0.422-0.281 0.703t-0.703 0.281-0.727-0.281-0.305-0.703 0.305-0.703 0.727-0.281 0.703 0.281 0.281 0.703zM11.016 3h0.984q3.75 0 6.375 2.625t2.625 6.375-2.625 6.375-6.375 2.625-6.375-2.625-2.625-6.375q0-4.5 3.609-7.172v-0.047l6.797 6.797-1.406 1.406-5.438-5.391q-1.547 1.922-1.547 4.406 0 2.906 2.039 4.945t4.945 2.039 4.945-2.039 2.039-4.945q0-2.625-1.734-4.594t-4.266-2.344v1.922h-1.969v-3.984zM11.016 17.016q0-0.422 0.281-0.727t0.703-0.305 0.703 0.305 0.281 0.727-0.281 0.703-0.703 0.281-0.703-0.281-0.281-0.703z">
+                </path>
+            </symbol>
+            <symbol id="icon-equalizer" viewBox="0 0 24 24">
+                <title>equalizer</title>
+                <path
+                    d="M15.984 9h4.031v11.016h-4.031v-11.016zM3.984 20.016v-8.016h4.031v8.016h-4.031zM9.984 20.016v-16.031h4.031v16.031h-4.031z">
+                </path>
+            </symbol>
+            <symbol id="icon-loopsync" viewBox="0 0 24 24">
+                <title>loopsync</title>
+                <path
+                    d="M12 18v-3l3.984 3.984-3.984 4.031v-3q-3.281 0-5.648-2.367t-2.367-5.648q0-2.344 1.266-4.266l1.453 1.453q-0.703 1.266-0.703 2.813 0 2.484 1.758 4.242t4.242 1.758zM12 3.984q3.281 0 5.648 2.367t2.367 5.648q0 2.344-1.266 4.266l-1.453-1.453q0.703-1.266 0.703-2.813 0-2.484-1.758-4.242t-4.242-1.758v3l-3.984-3.984 3.984-4.031v3z">
+                </path>
+            </symbol>
+            <symbol id="icon-library_addqueueadd_to_photos" viewBox="0 0 24 24">
+                <title>library_addqueueadd_to_photos</title>
+                <path
+                    d="M18.984 11.016v-2.016h-3.984v-3.984h-2.016v3.984h-3.984v2.016h3.984v3.984h2.016v-3.984h3.984zM20.016 2.016q0.797 0 1.383 0.586t0.586 1.383v12q0 0.797-0.586 1.406t-1.383 0.609h-12q-0.797 0-1.406-0.609t-0.609-1.406v-12q0-0.797 0.609-1.383t1.406-0.586h12zM3.984 6v14.016h14.016v1.969h-14.016q-0.797 0-1.383-0.586t-0.586-1.383v-14.016h1.969z">
+                </path>
+            </symbol>
+            <symbol id="icon-library_books" viewBox="0 0 24 24">
+                <title>library_books</title>
+                <path
+                    d="M18.984 6.984v-1.969h-9.984v1.969h9.984zM15 15v-2.016h-6v2.016h6zM18.984 11.016v-2.016h-9.984v2.016h9.984zM20.016 2.016q0.797 0 1.383 0.586t0.586 1.383v12q0 0.797-0.586 1.406t-1.383 0.609h-12q-0.797 0-1.406-0.609t-0.609-1.406v-12q0-0.797 0.609-1.383t1.406-0.586h12zM3.984 6v14.016h14.016v1.969h-14.016q-0.797 0-1.383-0.586t-0.586-1.383v-14.016h1.969z">
+                </path>
+            </symbol>
+            <symbol id="icon-not_interesteddo_not_disturb" viewBox="0 0 24 24">
+                <title>not_interesteddo_not_disturb</title>
+                <path
+                    d="M18.328 16.922q1.688-2.109 1.688-4.922 0-3.281-2.367-5.648t-5.648-2.367q-1.125 0-2.578 0.492t-2.344 1.195zM12 20.016q1.125 0 2.578-0.492t2.344-1.195l-11.25-11.25q-1.688 2.109-1.688 4.922 0 3.281 2.367 5.648t5.648 2.367zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93z">
+                </path>
+            </symbol>
+            <symbol id="icon-playlist_add" viewBox="0 0 24 24">
+                <title>playlist_add</title>
+                <path
+                    d="M2.016 15.984v-1.969h7.969v1.969h-7.969zM18 14.016h3.984v1.969h-3.984v4.031h-2.016v-4.031h-3.984v-1.969h3.984v-4.031h2.016v4.031zM14.016 6v2.016h-12v-2.016h12zM14.016 9.984v2.016h-12v-2.016h12z">
+                </path>
+            </symbol>
+            <symbol id="icon-repeat" viewBox="0 0 24 24">
+                <title>repeat</title>
+                <path
+                    d="M17.016 17.016v-4.031h1.969v6h-12v3l-3.984-3.984 3.984-3.984v3h10.031zM6.984 6.984v4.031h-1.969v-6h12v-3l3.984 3.984-3.984 3.984v-3h-10.031z">
+                </path>
+            </symbol>
+            <symbol id="icon-replay" viewBox="0 0 24 24">
+                <title>replay</title>
+                <path
+                    d="M12 5.016q3.328 0 5.672 2.344t2.344 5.625q0 3.328-2.367 5.672t-5.648 2.344-5.648-2.344-2.367-5.672h2.016q0 2.484 1.758 4.242t4.242 1.758 4.242-1.758 1.758-4.242-1.758-4.242-4.242-1.758v4.031l-5.016-5.016 5.016-5.016v4.031z">
+                </path>
+            </symbol>
+            <symbol id="icon-slow_motion_video" viewBox="0 0 24 24">
+                <title>slow_motion_video</title>
+                <path
+                    d="M21.984 12q0 3.844-2.578 6.703t-6.375 3.234v-2.016q2.953-0.375 4.969-2.648t2.016-5.273-2.016-5.273-4.969-2.648v-2.016q3.797 0.375 6.375 3.234t2.578 6.703zM5.672 19.734l1.406-1.406q1.688 1.313 3.938 1.594v2.016q-1.266-0.141-2.836-0.797t-2.508-1.406zM4.078 12.984q0.234 2.203 1.594 3.891l-1.406 1.453q-1.922-2.391-2.203-5.344h2.016zM5.672 7.078q-1.313 1.734-1.594 3.938h-2.016q0.141-1.266 0.797-2.836t1.406-2.508zM11.016 4.078q-2.25 0.281-3.938 1.594l-1.406-1.406q2.391-1.922 5.344-2.203v2.016zM13.031 9.797l2.953 2.203q-2.953 2.203-6 4.5z">
+                </path>
+            </symbol>
+            <symbol id="icon-import_export" viewBox="0 0 24 24">
+                <title>import_export</title>
+                <path
+                    d="M15.984 17.016h3l-3.984 3.984-3.984-3.984h3v-7.031h1.969v7.031zM9 3l3.984 3.984h-3v7.031h-1.969v-7.031h-3z">
+                </path>
+            </symbol>
+            <symbol id="icon-location_onplaceroom" viewBox="0 0 24 24">
+                <title>location_onplaceroom</title>
+                <path
+                    d="M12 11.484q1.031 0 1.758-0.727t0.727-1.758-0.727-1.758-1.758-0.727-1.758 0.727-0.727 1.758 0.727 1.758 1.758 0.727zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z">
+                </path>
+            </symbol>
+            <symbol id="icon-vpn_key" viewBox="0 0 24 24">
+                <title>vpn_key</title>
+                <path
+                    d="M6.984 14.016q0.797 0 1.406-0.609t0.609-1.406-0.609-1.406-1.406-0.609-1.383 0.609-0.586 1.406 0.586 1.406 1.383 0.609zM12.656 9.984h10.359v4.031h-2.016v3.984h-3.984v-3.984h-4.359q-0.609 1.641-2.273 2.813t-3.398 1.172q-2.484 0-4.242-1.758t-1.758-4.242 1.758-4.242 4.242-1.758q1.734 0 3.398 1.172t2.273 2.813z">
+                </path>
+            </symbol>
+            <symbol id="icon-import_contacts" viewBox="0 0 24 24">
+                <title>import_contacts</title>
+                <path
+                    d="M21 18.516v-11.531q-1.547-0.469-3.516-0.469-3.047 0-5.484 1.5v11.484q2.438-1.5 5.484-1.5 1.828 0 3.516 0.516zM17.484 4.5q3.563 0 5.531 1.5v14.578q0 0.188-0.164 0.352t-0.352 0.164q-0.141 0-0.234-0.047-1.922-1.031-4.781-1.031-3.047 0-5.484 1.5-2.016-1.5-5.484-1.5-2.531 0-4.781 1.078-0.047 0-0.117 0.023t-0.117 0.023q-0.188 0-0.352-0.141t-0.164-0.328v-14.672q2.016-1.5 5.531-1.5 3.469 0 5.484 1.5 2.016-1.5 5.484-1.5z">
+                </path>
+            </symbol>
+            <symbol id="icon-mail_outline" viewBox="0 0 24 24">
+                <title>mail_outline</title>
+                <path
+                    d="M12 11.016l8.016-5.016h-16.031zM20.016 18v-9.984l-8.016 4.969-8.016-4.969v9.984h16.031zM20.016 3.984q0.797 0 1.383 0.609t0.586 1.406v12q0 0.797-0.586 1.406t-1.383 0.609h-16.031q-0.797 0-1.383-0.609t-0.586-1.406v-12q0-0.797 0.586-1.406t1.383-0.609h16.031z">
+                </path>
+            </symbol>
+            <symbol id="icon-sentiment_satisfied_alt" viewBox="0 0 24 24">
+                <title>sentiment_satisfied_alt</title>
+                <path
+                    d="M12 17.484q-1.734 0-3.117-0.961t-1.992-2.508h1.641q1.172 1.969 3.469 1.969t3.469-1.969h1.641q-0.609 1.547-1.992 2.508t-3.117 0.961zM12 20.016q3.281 0 5.648-2.367t2.367-5.648-2.367-5.648-5.648-2.367-5.648 2.367-2.367 5.648 2.367 5.648 5.648 2.367zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93zM8.484 11.016q-0.609 0-1.055-0.445t-0.445-1.055 0.445-1.055 1.055-0.445 1.055 0.445 0.445 1.055-0.445 1.055-1.055 0.445zM15.516 11.016q-0.609 0-1.055-0.445t-0.445-1.055 0.445-1.055 1.055-0.445 1.055 0.445 0.445 1.055-0.445 1.055-1.055 0.445z">
+                </path>
+            </symbol>
+            <symbol id="icon-lightbulb" viewBox="0 0 24 24">
+                <title>lightbulb</title>
+                <path
+                    d="M12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 3.516-3 5.719v2.297q0 0.422-0.281 0.703t-0.703 0.281h-6q-0.422 0-0.703-0.281t-0.281-0.703v-2.297q-3-2.063-3-5.719 0-2.906 2.039-4.945t4.945-2.039zM9 21v-0.984h6v0.984q0 0.422-0.281 0.703t-0.703 0.281h-4.031q-0.422 0-0.703-0.281t-0.281-0.703z">
+                </path>
+            </symbol>
+            <symbol id="icon-add" viewBox="0 0 24 24">
+                <title>add</title>
+                <path d="M18.984 12.984h-6v6h-1.969v-6h-6v-1.969h6v-6h1.969v6h6v1.969z"></path>
+            </symbol>
+            <symbol id="icon-add_box" viewBox="0 0 24 24">
+                <title>add_box</title>
+                <path
+                    d="M17.016 12.984v-1.969h-4.031v-4.031h-1.969v4.031h-4.031v1.969h4.031v4.031h1.969v-4.031h4.031zM18.984 3q0.797 0 1.406 0.609t0.609 1.406v13.969q0 0.797-0.609 1.406t-1.406 0.609h-13.969q-0.844 0-1.43-0.586t-0.586-1.43v-13.969q0-0.844 0.586-1.43t1.43-0.586h13.969z">
+                </path>
+            </symbol>
+            <symbol id="icon-add_circle" viewBox="0 0 24 24">
+                <title>add_circle</title>
+                <path
+                    d="M17.016 12.984v-1.969h-4.031v-4.031h-1.969v4.031h-4.031v1.969h4.031v4.031h1.969v-4.031h4.031zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93z">
+                </path>
+            </symbol>
+            <symbol id="icon-add_circle_outlinecontrol_point" viewBox="0 0 24 24">
+                <title>add_circle_outlinecontrol_point</title>
+                <path
+                    d="M12 20.016q3.281 0 5.648-2.367t2.367-5.648-2.367-5.648-5.648-2.367-5.648 2.367-2.367 5.648 2.367 5.648 5.648 2.367zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93zM12.984 6.984v4.031h4.031v1.969h-4.031v4.031h-1.969v-4.031h-4.031v-1.969h4.031v-4.031h1.969z">
+                </path>
+            </symbol>
+            <symbol id="icon-backspace" viewBox="0 0 24 24">
+                <title>backspace</title>
+                <path
+                    d="M18.984 15.609l-3.563-3.609 3.563-3.609-1.406-1.406-3.563 3.609-3.609-3.609-1.406 1.406 3.609 3.609-3.609 3.609 1.406 1.406 3.609-3.609 3.563 3.609zM21.984 3q0.797 0 1.406 0.609t0.609 1.406v13.969q0 0.797-0.609 1.406t-1.406 0.609h-15q-0.938 0-1.594-0.891l-5.391-8.109 5.391-8.109q0.656-0.891 1.594-0.891h15z">
+                </path>
+            </symbol>
+            <symbol id="icon-clearclose" viewBox="0 0 24 24">
+                <title>clearclose</title>
+                <path
+                    d="M18.984 6.422l-5.578 5.578 5.578 5.578-1.406 1.406-5.578-5.578-5.578 5.578-1.406-1.406 5.578-5.578-5.578-5.578 1.406-1.406 5.578 5.578 5.578-5.578z">
+                </path>
+            </symbol>
+            <symbol id="icon-content_copy" viewBox="0 0 24 24">
+                <title>content_copy</title>
+                <path
+                    d="M18.984 21v-14.016h-10.969v14.016h10.969zM18.984 5.016q0.797 0 1.406 0.586t0.609 1.383v14.016q0 0.797-0.609 1.406t-1.406 0.609h-10.969q-0.797 0-1.406-0.609t-0.609-1.406v-14.016q0-0.797 0.609-1.383t1.406-0.586h10.969zM15.984 0.984v2.016h-12v14.016h-1.969v-14.016q0-0.797 0.586-1.406t1.383-0.609h12z">
+                </path>
+            </symbol>
+            <symbol id="icon-content_cut" viewBox="0 0 24 24">
+                <title>content_cut</title>
+                <path
+                    d="M18.984 3h3v0.984l-6.984 7.031-2.016-2.016zM12 12.516q0.516 0 0.516-0.516t-0.516-0.516-0.516 0.516 0.516 0.516zM6 20.016q0.797 0 1.406-0.586t0.609-1.43-0.609-1.43-1.406-0.586-1.406 0.586-0.609 1.43 0.609 1.43 1.406 0.586zM6 8.016q0.797 0 1.406-0.586t0.609-1.43-0.609-1.43-1.406-0.586-1.406 0.586-0.609 1.43 0.609 1.43 1.406 0.586zM9.656 7.641l12.328 12.375v0.984h-3l-6.984-6.984-2.344 2.344q0.328 0.703 0.328 1.641 0 1.641-1.172 2.813t-2.813 1.172-2.813-1.172-1.172-2.813 1.172-2.813 2.813-1.172q0.938 0 1.641 0.328l2.344-2.344-2.344-2.344q-0.703 0.328-1.641 0.328-1.641 0-2.813-1.172t-1.172-2.813 1.172-2.813 2.813-1.172 2.813 1.172 1.172 2.813q0 0.938-0.328 1.641z">
+                </path>
+            </symbol>
+            <symbol id="icon-content_paste" viewBox="0 0 24 24">
+                <title>content_paste</title>
+                <path
+                    d="M18.984 20.016v-16.031h-1.969v3h-10.031v-3h-1.969v16.031h13.969zM12 2.016q-0.422 0-0.703 0.281t-0.281 0.703 0.281 0.703 0.703 0.281 0.703-0.281 0.281-0.703-0.281-0.703-0.703-0.281zM18.984 2.016q0.797 0 1.406 0.586t0.609 1.383v16.031q0 0.797-0.609 1.383t-1.406 0.586h-13.969q-0.797 0-1.406-0.586t-0.609-1.383v-16.031q0-0.797 0.609-1.383t1.406-0.586h4.172q0.328-0.891 1.078-1.453t1.734-0.563 1.734 0.563 1.078 1.453h4.172z">
+                </path>
+            </symbol>
+            <symbol id="icon-createmode_editedit" viewBox="0 0 24 24">
+                <title>createmode_editedit</title>
+                <path
+                    d="M20.719 7.031l-1.828 1.828-3.75-3.75 1.828-1.828q0.281-0.281 0.703-0.281t0.703 0.281l2.344 2.344q0.281 0.281 0.281 0.703t-0.281 0.703zM3 17.25l11.063-11.063 3.75 3.75-11.063 11.063h-3.75v-3.75z">
+                </path>
+            </symbol>
+            <symbol id="icon-inbox" viewBox="0 0 24 24">
+                <title>inbox</title>
+                <path
+                    d="M18.984 15v-9.984h-14.016v9.984h4.031q0 1.219 0.891 2.109t2.109 0.891 2.109-0.891 0.891-2.109h3.984zM18.984 3q0.844 0 1.43 0.586t0.586 1.43v13.969q0 0.797-0.609 1.406t-1.406 0.609h-14.016q-0.844 0-1.406-0.586t-0.563-1.43v-13.969q0-0.844 0.563-1.43t1.406-0.586h14.016z">
+                </path>
+            </symbol>
+            <symbol id="icon-linkinsert_link" viewBox="0 0 24 24">
+                <title>linkinsert_link</title>
+                <path
+                    d="M17.016 6.984q2.063 0 3.516 1.477t1.453 3.539-1.453 3.539-3.516 1.477h-4.031v-1.922h4.031q1.266 0 2.18-0.914t0.914-2.18-0.914-2.18-2.18-0.914h-4.031v-1.922h4.031zM8.016 12.984v-1.969h7.969v1.969h-7.969zM3.891 12q0 1.266 0.914 2.18t2.18 0.914h4.031v1.922h-4.031q-2.063 0-3.516-1.477t-1.453-3.539 1.453-3.539 3.516-1.477h4.031v1.922h-4.031q-1.266 0-2.18 0.914t-0.914 2.18z">
+                </path>
+            </symbol>
+            <symbol id="icon-redo" viewBox="0 0 24 24">
+                <title>redo</title>
+                <path
+                    d="M18.422 10.594l3.563-3.609v9h-9l3.656-3.609q-2.25-1.875-5.156-1.875-2.391 0-4.617 1.594t-2.977 3.891l-2.344-0.75q1.031-3.188 3.773-5.203t6.164-2.016q3.984 0 6.938 2.578z">
+                </path>
+            </symbol>
+            <symbol id="icon-remove" viewBox="0 0 24 24">
+                <title>remove</title>
+                <path d="M18.984 12.984h-13.969v-1.969h13.969v1.969z"></path>
+            </symbol>
+            <symbol id="icon-remove_circledo_not_disturb_on" viewBox="0 0 24 24">
+                <title>remove_circledo_not_disturb_on</title>
+                <path
+                    d="M17.016 12.984v-1.969h-10.031v1.969h10.031zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93z">
+                </path>
+            </symbol>
+            <symbol id="icon-remove_circle_outline" viewBox="0 0 24 24">
+                <title>remove_circle_outline</title>
+                <path
+                    d="M12 20.016q3.281 0 5.648-2.367t2.367-5.648-2.367-5.648-5.648-2.367-5.648 2.367-2.367 5.648 2.367 5.648 5.648 2.367zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93zM6.984 11.016h10.031v1.969h-10.031v-1.969z">
+                </path>
+            </symbol>
+            <symbol id="icon-reply" viewBox="0 0 24 24">
+                <title>reply</title>
+                <path
+                    d="M9.984 9q4.875 0.703 7.523 3.727t3.492 7.289q-3.609-5.109-11.016-5.109v4.078l-6.984-6.984 6.984-6.984v3.984z">
+                </path>
+            </symbol>
+            <symbol id="icon-reply_all" viewBox="0 0 24 24">
+                <title>reply_all</title>
+                <path
+                    d="M12.984 9q4.875 0.703 7.523 3.727t3.492 7.289q-3.609-5.109-11.016-5.109v4.078l-6.984-6.984 6.984-6.984v3.984zM6.984 8.016l-3.984 3.984 3.984 3.984v3l-6.984-6.984 6.984-6.984v3z">
+                </path>
+            </symbol>
+            <symbol id="icon-report" viewBox="0 0 24 24">
+                <title>report</title>
+                <path
+                    d="M12.984 12.984v-6h-1.969v6h1.969zM12 17.297q0.516 0 0.914-0.398t0.398-0.914-0.398-0.891-0.914-0.375-0.914 0.375-0.398 0.891 0.398 0.914 0.914 0.398zM15.75 3l5.25 5.25v7.5l-5.25 5.25h-7.5l-5.25-5.25v-7.5l5.25-5.25h7.5z">
+                </path>
+            </symbol>
+            <symbol id="icon-save" viewBox="0 0 24 24">
+                <title>save</title>
+                <path
+                    d="M15 9v-3.984h-9.984v3.984h9.984zM12 18.984q1.219 0 2.109-0.891t0.891-2.109-0.891-2.109-2.109-0.891-2.109 0.891-0.891 2.109 0.891 2.109 2.109 0.891zM17.016 3l3.984 3.984v12q0 0.797-0.609 1.406t-1.406 0.609h-13.969q-0.844 0-1.43-0.586t-0.586-1.43v-13.969q0-0.844 0.586-1.43t1.43-0.586h12z">
+                </path>
+            </symbol>
+            <symbol id="icon-link_off" viewBox="0 0 24 24">
+                <title>link_off</title>
+                <path
+                    d="M2.016 4.266l1.266-1.266 16.734 16.734-1.266 1.266-4.031-3.984h-1.734v-1.734l-2.25-2.297h-2.719v-1.969h0.703l-2.063-2.063q-1.172 0.141-1.969 1.008t-0.797 2.039q0 1.266 0.914 2.18t2.18 0.914h4.031v1.922h-4.031q-2.063 0-3.516-1.477t-1.453-3.539q0-1.406 0.891-2.766t2.203-1.875zM15.984 11.016v1.969h-0.188l-1.969-1.969h2.156zM17.016 6.984q2.063 0 3.516 1.477t1.453 3.539q0 3.047-2.719 4.453l-1.453-1.453q0.984-0.234 1.641-1.078t0.656-1.922q0-1.266-0.914-2.18t-2.18-0.914h-4.031v-1.922h4.031z">
+                </path>
+            </symbol>
+            <symbol id="icon-save_alt" viewBox="0 0 24 24">
+                <title>save_alt</title>
+                <path
+                    d="M12.984 12.656l2.625-2.578 1.406 1.406-5.016 5.016-5.016-5.016 1.406-1.406 2.625 2.578v-9.656h1.969v9.656zM18.984 12h2.016v6.984q0 0.797-0.609 1.406t-1.406 0.609h-13.969q-0.797 0-1.406-0.609t-0.609-1.406v-6.984h2.016v6.984h13.969v-6.984z">
+                </path>
+            </symbol>
+            <symbol id="icon-add_link" viewBox="0 0 24 24">
+                <title>add_link</title>
+                <path
+                    d="M18.984 12v3h3v2.016h-3v3h-1.969v-3h-3v-2.016h3v-3h1.969zM3.891 12q0 1.266 0.914 2.18t2.18 0.914h4.031v1.922h-4.031q-2.063 0-3.516-1.477t-1.453-3.539 1.453-3.539 3.516-1.477h4.031v1.922h-4.031q-1.266 0-2.18 0.914t-0.914 2.18zM20.109 12q0-1.266-0.914-2.18t-2.18-0.914h-4.031v-1.922h4.031q2.063 0 3.516 1.477t1.453 3.539h-1.875zM8.016 11.016h7.969v1.969h-7.969v-1.969z">
+                </path>
+            </symbol>
+            <symbol id="icon-access_timequery_builderschedule" viewBox="0 0 24 24">
+                <title>access_timequery_builderschedule</title>
+                <path
+                    d="M12.516 6.984v5.25l4.5 2.672-0.75 1.266-5.25-3.188v-6h1.5zM12 20.016q3.281 0 5.648-2.367t2.367-5.648-2.367-5.648-5.648-2.367-5.648 2.367-2.367 5.648 2.367 5.648 5.648 2.367zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93z">
+                </path>
+            </symbol>
+            <symbol id="icon-data_usage" viewBox="0 0 24 24">
+                <title>data_usage</title>
+                <path
+                    d="M12 18.984q1.359 0 2.953-0.773t2.484-1.852l2.625 1.547q-3 4.078-8.063 4.078-4.125 0-7.055-2.93t-2.93-7.055q0-3.891 2.602-6.727t6.398-3.211v3q-2.531 0.375-4.266 2.344t-1.734 4.594q0 2.906 2.039 4.945t4.945 2.039zM12.984 2.063q3.797 0.375 6.398 3.211t2.602 6.727q0 2.25-0.844 4.078l-2.625-1.547q0.469-1.313 0.469-2.531 0-2.625-1.734-4.594t-4.266-2.344v-3z">
+                </path>
+            </symbol>
+            <symbol id="icon-storage" viewBox="0 0 24 24">
+                <title>storage</title>
+                <path
+                    d="M3.984 11.016v1.969h2.016v-1.969h-2.016zM2.016 14.016v-4.031h19.969v4.031h-19.969zM6 6.984v-1.969h-2.016v1.969h2.016zM2.016 3.984h19.969v4.031h-19.969v-4.031zM3.984 17.016v1.969h2.016v-1.969h-2.016zM2.016 20.016v-4.031h19.969v4.031h-19.969z">
+                </path>
+            </symbol>
+            <symbol id="icon-signal_cellular_alt" viewBox="0 0 24 24">
+                <title>signal_cellular_alt</title>
+                <path d="M11.016 9h3v11.016h-3v-11.016zM5.016 14.016h3v6h-3v-6zM17.016 3.984h3v16.031h-3v-16.031z">
+                </path>
+            </symbol>
+            <symbol id="icon-border_color" viewBox="0 0 24 24">
+                <title>border_color</title>
+                <path
+                    d="M0 20.016h24v3.984h-24v-3.984zM20.719 4.031l-1.969 1.969-3.75-3.75 1.969-1.969q0.281-0.281 0.703-0.281t0.703 0.281l2.344 2.344q0.281 0.281 0.281 0.703t-0.281 0.703zM17.766 6.984l-10.031 10.031h-3.75v-3.75l10.031-10.031z">
+                </path>
+            </symbol>
+            <symbol id="icon-format_indent_decrease" viewBox="0 0 24 24">
+                <title>format_indent_decrease</title>
+                <path
+                    d="M11.016 12.984v-1.969h9.984v1.969h-9.984zM11.016 9v-2.016h9.984v2.016h-9.984zM3 3h18v2.016h-18v-2.016zM3 21v-2.016h18v2.016h-18zM3 12l3.984-3.984v7.969zM11.016 17.016v-2.016h9.984v2.016h-9.984z">
+                </path>
+            </symbol>
+            <symbol id="icon-format_indent_increase" viewBox="0 0 24 24">
+                <title>format_indent_increase</title>
+                <path
+                    d="M11.016 12.984v-1.969h9.984v1.969h-9.984zM11.016 9v-2.016h9.984v2.016h-9.984zM3 3h18v2.016h-18v-2.016zM11.016 17.016v-2.016h9.984v2.016h-9.984zM3 8.016l3.984 3.984-3.984 3.984v-7.969zM3 21v-2.016h18v2.016h-18z">
+                </path>
+            </symbol>
+            <symbol id="icon-insert_chartpollassessment" viewBox="0 0 24 24">
+                <title>insert_chartpollassessment</title>
+                <path
+                    d="M17.016 17.016v-4.031h-2.016v4.031h2.016zM12.984 17.016v-10.031h-1.969v10.031h1.969zM9 17.016v-7.031h-2.016v7.031h2.016zM18.984 3q0.797 0 1.406 0.609t0.609 1.406v13.969q0 0.797-0.609 1.406t-1.406 0.609h-13.969q-0.797 0-1.406-0.609t-0.609-1.406v-13.969q0-0.797 0.609-1.406t1.406-0.609h13.969z">
+                </path>
+            </symbol>
+            <symbol id="icon-insert_drive_file" viewBox="0 0 24 24">
+                <title>insert_drive_file</title>
+                <path
+                    d="M12.984 9h5.531l-5.531-5.484v5.484zM6 2.016h8.016l6 6v12q0 0.797-0.609 1.383t-1.406 0.586h-12q-0.797 0-1.406-0.586t-0.609-1.383l0.047-16.031q0-0.797 0.586-1.383t1.383-0.586z">
+                </path>
+            </symbol>
+            <symbol id="icon-insert_photoimagephoto" viewBox="0 0 24 24">
+                <title>insert_photoimagephoto</title>
+                <path
+                    d="M8.484 13.5l-3.469 4.5h13.969l-4.5-6-3.469 4.5zM21 18.984q0 0.797-0.609 1.406t-1.406 0.609h-13.969q-0.797 0-1.406-0.609t-0.609-1.406v-13.969q0-0.797 0.609-1.406t1.406-0.609h13.969q0.797 0 1.406 0.609t0.609 1.406v13.969z">
+                </path>
+            </symbol>
+            <symbol id="icon-publish" viewBox="0 0 24 24">
+                <title>publish</title>
+                <path
+                    d="M5.016 14.016l6.984-7.031 6.984 7.031h-3.984v6h-6v-6h-3.984zM5.016 3.984h13.969v2.016h-13.969v-2.016z">
+                </path>
+            </symbol>
+            <symbol id="icon-linear_scale" viewBox="0 0 24 24">
+                <title>linear_scale</title>
+                <path
+                    d="M19.5 9.516q1.031 0 1.758 0.727t0.727 1.758-0.727 1.758-1.758 0.727q-1.688 0-2.297-1.5h-2.906q-0.609 1.5-2.297 1.5t-2.297-1.5h-2.906q-0.609 1.5-2.297 1.5-1.031 0-1.758-0.727t-0.727-1.758 0.727-1.758 1.758-0.727q1.688 0 2.297 1.5h2.906q0.609-1.5 2.297-1.5t2.297 1.5h2.906q0.609-1.5 2.297-1.5z">
+                </path>
+            </symbol>
+            <symbol id="icon-scatter_plot" viewBox="0 0 24 24">
+                <title>scatter_plot</title>
+                <path
+                    d="M13.594 17.578q0-1.219 0.891-2.109t2.109-0.891 2.109 0.891 0.891 2.109-0.891 2.109-2.109 0.891-2.109-0.891-0.891-2.109zM8.016 6q0-1.219 0.891-2.109t2.109-0.891 2.109 0.891 0.891 2.109-0.891 2.109-2.109 0.891-2.109-0.891-0.891-2.109zM3.984 14.016q0-1.219 0.891-2.109t2.109-0.891 2.109 0.891 0.891 2.109-0.891 2.109-2.109 0.891-2.109-0.891-0.891-2.109z">
+                </path>
+            </symbol>
+            <symbol id="icon-bar_chart" viewBox="0 0 24 24">
+                <title>bar_chart</title>
+                <path
+                    d="M16.219 12.984h2.766v6h-2.766v-6zM10.594 5.016h2.813v13.969h-2.813v-13.969zM5.016 9.188h3v9.797h-3v-9.797z">
+                </path>
+            </symbol>
+            <symbol id="icon-cloud_queue" viewBox="0 0 24 24">
+                <title>cloud_queue</title>
+                <path
+                    d="M18.984 18q1.219 0 2.109-0.891t0.891-2.109-0.891-2.109-2.109-0.891h-1.5v-0.516q0-2.297-1.594-3.891t-3.891-1.594q-1.875 0-3.328 1.125t-1.969 2.859h-0.703q-1.641 0-2.813 1.195t-1.172 2.836 1.172 2.813 2.813 1.172h12.984zM19.359 10.031q1.922 0.141 3.281 1.57t1.359 3.398q0 2.063-1.477 3.539t-3.539 1.477h-12.984q-2.484 0-4.242-1.758t-1.758-4.242q0-2.203 1.57-3.961t3.773-1.992q0.984-1.828 2.766-2.953t3.891-1.125q2.531 0 4.711 1.781t2.648 4.266z">
+                </path>
+            </symbol>
+            <symbol id="icon-file_downloadget_app" viewBox="0 0 24 24">
+                <title>file_downloadget_app</title>
+                <path d="M5.016 18h13.969v2.016h-13.969v-2.016zM18.984 9l-6.984 6.984-6.984-6.984h3.984v-6h6v6h3.984z">
+                </path>
+            </symbol>
+            <symbol id="icon-file_upload" viewBox="0 0 24 24">
+                <title>file_upload</title>
+                <path
+                    d="M5.016 18h13.969v2.016h-13.969v-2.016zM9 15.984v-6h-3.984l6.984-6.984 6.984 6.984h-3.984v6h-6z">
+                </path>
+            </symbol>
+            <symbol id="icon-folder" viewBox="0 0 24 24">
+                <title>folder</title>
+                <path
+                    d="M9.984 3.984l2.016 2.016h8.016q0.797 0 1.383 0.609t0.586 1.406v9.984q0 0.797-0.586 1.406t-1.383 0.609h-16.031q-0.797 0-1.383-0.609t-0.586-1.406v-12q0-0.797 0.586-1.406t1.383-0.609h6z">
+                </path>
+            </symbol>
+            <symbol id="icon-folder_open" viewBox="0 0 24 24">
+                <title>folder_open</title>
+                <path
+                    d="M20.016 18v-9.984h-16.031v9.984h16.031zM20.016 6q0.797 0 1.383 0.609t0.586 1.406v9.984q0 0.797-0.586 1.406t-1.383 0.609h-16.031q-0.797 0-1.383-0.609t-0.586-1.406v-12q0-0.797 0.586-1.406t1.383-0.609h6l2.016 2.016h8.016z">
+                </path>
+            </symbol>
+            <symbol id="icon-create_new_folder" viewBox="0 0 24 24">
+                <title>create_new_folder</title>
+                <path
+                    d="M18.984 14.016v-2.016h-3v-3h-1.969v3h-3v2.016h3v3h1.969v-3h3zM20.016 6q0.844 0 1.406 0.586t0.563 1.43v9.984q0 0.844-0.563 1.43t-1.406 0.586h-16.031q-0.844 0-1.406-0.586t-0.563-1.43v-12q0-0.844 0.563-1.43t1.406-0.586h6l2.016 2.016h8.016z">
+                </path>
+            </symbol>
+            <symbol id="icon-keyboard_arrow_down" viewBox="0 0 24 24">
+                <title>keyboard_arrow_down</title>
+                <path d="M7.406 8.578l4.594 4.594 4.594-4.594 1.406 1.406-6 6-6-6z"></path>
+            </symbol>
+            <symbol id="icon-keyboard_arrow_left" viewBox="0 0 24 24">
+                <title>keyboard_arrow_left</title>
+                <path d="M15.422 16.594l-1.406 1.406-6-6 6-6 1.406 1.406-4.594 4.594z"></path>
+            </symbol>
+            <symbol id="icon-keyboard_arrow_right" viewBox="0 0 24 24">
+                <title>keyboard_arrow_right</title>
+                <path d="M8.578 16.594l4.594-4.594-4.594-4.594 1.406-1.406 6 6-6 6z"></path>
+            </symbol>
+            <symbol id="icon-keyboard_arrow_up" viewBox="0 0 24 24">
+                <title>keyboard_arrow_up</title>
+                <path d="M7.406 15.422l-1.406-1.406 6-6 6 6-1.406 1.406-4.594-4.594z"></path>
+            </symbol>
+            <symbol id="icon-keyboard_backspace" viewBox="0 0 24 24">
+                <title>keyboard_backspace</title>
+                <path d="M21 11.016v1.969h-14.156l3.563 3.609-1.406 1.406-6-6 6-6 1.406 1.406-3.563 3.609h14.156z">
+                </path>
+            </symbol>
+            <symbol id="icon-keyboard_return" viewBox="0 0 24 24">
+                <title>keyboard_return</title>
+                <path
+                    d="M18.984 6.984h2.016v6h-15.188l3.609 3.609-1.406 1.406-6-6 6-6 1.406 1.406-3.609 3.609h13.172v-4.031z">
+                </path>
+            </symbol>
+            <symbol id="icon-keyboard_tab" viewBox="0 0 24 24">
+                <title>keyboard_tab</title>
+                <path
+                    d="M20.016 6h1.969v12h-1.969v-12zM11.578 7.406l1.406-1.406 6 6-6 6-1.406-1.406 3.609-3.609h-14.203v-1.969h14.203z">
+                </path>
+            </symbol>
+            <symbol id="icon-device_hub" viewBox="0 0 24 24">
+                <title>device_hub</title>
+                <path
+                    d="M17.016 15.984h3.984v5.016h-5.016v-3.047l-3.984-4.219-3.984 4.219v3.047h-5.016v-5.016h3.984l4.031-3.984v-3.188q-0.891-0.328-1.453-1.078t-0.563-1.734q0-1.219 0.891-2.109t2.109-0.891 2.109 0.891 0.891 2.109q0 0.984-0.563 1.734t-1.453 1.078v3.188z">
+                </path>
+            </symbol>
+            <symbol id="icon-arrow_drop_down" viewBox="0 0 24 24">
+                <title>arrow_drop_down</title>
+                <path d="M6.984 9.984h10.031l-5.016 5.016z"></path>
+            </symbol>
+            <symbol id="icon-arrow_drop_up" viewBox="0 0 24 24">
+                <title>arrow_drop_up</title>
+                <path d="M6.984 14.016l5.016-5.016 5.016 5.016h-10.031z"></path>
+            </symbol>
+            <symbol id="icon-cancel" viewBox="0 0 24 24">
+                <title>cancel</title>
+                <path
+                    d="M17.016 15.609l-3.609-3.609 3.609-3.609-1.406-1.406-3.609 3.609-3.609-3.609-1.406 1.406 3.609 3.609-3.609 3.609 1.406 1.406 3.609-3.609 3.609 3.609zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93z">
+                </path>
+            </symbol>
+            <symbol id="icon-keyboard_control" viewBox="0 0 24 24">
+                <title>keyboard_control</title>
+                <path
+                    d="M12 9.984q0.797 0 1.406 0.609t0.609 1.406-0.609 1.406-1.406 0.609-1.406-0.609-0.609-1.406 0.609-1.406 1.406-0.609zM18 9.984q0.797 0 1.406 0.609t0.609 1.406-0.609 1.406-1.406 0.609-1.406-0.609-0.609-1.406 0.609-1.406 1.406-0.609zM6 9.984q0.797 0 1.406 0.609t0.609 1.406-0.609 1.406-1.406 0.609-1.406-0.609-0.609-1.406 0.609-1.406 1.406-0.609z">
+                </path>
+            </symbol>
+            <symbol id="icon-refresh" viewBox="0 0 24 24">
+                <title>refresh</title>
+                <path
+                    d="M17.672 6.328l2.344-2.344v7.031h-7.031l3.234-3.234q-1.781-1.781-4.219-1.781-2.484 0-4.242 1.758t-1.758 4.242 1.758 4.242 4.242 1.758q1.734 0 3.398-1.172t2.273-2.813h2.063q-0.656 2.625-2.813 4.313t-4.922 1.688q-3.281 0-5.625-2.344t-2.344-5.672 2.344-5.672 5.625-2.344q1.406 0 3.070 0.68t2.602 1.664z">
+                </path>
+            </symbol>
+            <symbol id="icon-unfold_more" viewBox="0 0 24 24">
+                <title>unfold_more</title>
+                <path
+                    d="M12 18.188l3.188-3.188 1.406 1.406-4.594 4.594-4.594-4.594 1.406-1.406zM12 5.813l-3.188 3.188-1.406-1.406 4.594-4.594 4.594 4.594-1.406 1.406z">
+                </path>
+            </symbol>
+            <symbol id="icon-arrow_left" viewBox="0 0 24 24">
+                <title>arrow_left</title>
+                <path d="M14.016 6.984v10.031l-5.016-5.016z"></path>
+            </symbol>
+            <symbol id="icon-arrow_right" viewBox="0 0 24 24">
+                <title>arrow_right</title>
+                <path d="M9.984 17.016v-10.031l5.016 5.016z"></path>
+            </symbol>
+            <symbol id="icon-arrow_back_ios" viewBox="0 0 24 24">
+                <title>arrow_back_ios</title>
+                <path d="M11.672 3.891l-8.109 8.109 8.109 8.109-1.781 1.781-9.891-9.891 9.891-9.891z"></path>
+            </symbol>
+            <symbol id="icon-arrow_forward_ios" viewBox="0 0 24 24">
+                <title>arrow_forward_ios</title>
+                <path d="M5.859 4.125l2.156-2.109 9.984 9.984-9.984 9.984-2.156-2.109 7.922-7.875z"></path>
+            </symbol>
+            <symbol id="icon-notifications" viewBox="0 0 24 24">
+                <title>notifications</title>
+                <path
+                    d="M18 15.984l2.016 2.016v0.984h-16.031v-0.984l2.016-2.016v-4.969q0-2.344 1.195-4.078t3.305-2.25v-0.703q0-0.609 0.422-1.055t1.078-0.445 1.078 0.445 0.422 1.055v0.703q2.109 0.516 3.305 2.25t1.195 4.078v4.969zM12 21.984q-0.844 0-1.43-0.563t-0.586-1.406h4.031q0 0.797-0.609 1.383t-1.406 0.586z">
+                </path>
+            </symbol>
+            <symbol id="icon-notifications_none" viewBox="0 0 24 24">
+                <title>notifications_none</title>
+                <path
+                    d="M15.984 17.016v-6q0-1.922-1.078-3.211t-2.906-1.289-2.906 1.289-1.078 3.211v6h7.969zM18 15.984l2.016 2.016v0.984h-16.031v-0.984l2.016-2.016v-4.969q0-2.344 1.195-4.078t3.305-2.25v-0.703q0-0.609 0.422-1.055t1.078-0.445 1.078 0.445 0.422 1.055v0.703q2.109 0.516 3.305 2.25t1.195 4.078v4.969zM12 21.984q-0.797 0-1.406-0.586t-0.609-1.383h4.031q0 0.797-0.609 1.383t-1.406 0.586z">
+                </path>
+            </symbol>
+            <symbol id="icon-notifications_off" viewBox="0 0 24 24">
+                <title>notifications_off</title>
+                <path
+                    d="M18 14.672l-8.953-9.422q0.141-0.047 0.375-0.164l0.328-0.164h0.047l0.281-0.141q0.047 0 0.188-0.047t0.234-0.047v-0.703q0-0.609 0.422-1.055t1.078-0.445 1.078 0.445 0.422 1.055v0.703q2.109 0.516 3.305 2.25t1.195 4.078v3.656zM12 21.984q-0.844 0-1.43-0.563t-0.586-1.406h4.031q0 0.844-0.586 1.406t-1.43 0.563zM7.828 6.141q1.125 1.172 5.883 6.047t7.289 7.547l-1.266 1.266-2.016-2.016h-13.734v-0.984l2.016-2.016v-5.016q0-1.922 0.797-3.422l-2.813-2.766 1.266-1.313z">
+                </path>
+            </symbol>
+            <symbol id="icon-check_box" viewBox="0 0 24 24">
+                <title>check_box</title>
+                <path
+                    d="M9.984 17.016l9-9-1.406-1.453-7.594 7.594-3.563-3.563-1.406 1.406zM18.984 3q0.844 0 1.43 0.586t0.586 1.43v13.969q0 0.844-0.586 1.43t-1.43 0.586h-13.969q-0.844 0-1.43-0.586t-0.586-1.43v-13.969q0-0.844 0.586-1.43t1.43-0.586h13.969z">
+                </path>
+            </symbol>
+            <symbol id="icon-check_box_outline_blank" viewBox="0 0 24 24">
+                <title>check_box_outline_blank</title>
+                <path
+                    d="M18.984 3q0.797 0 1.406 0.609t0.609 1.406v13.969q0 0.797-0.609 1.406t-1.406 0.609h-13.969q-0.797 0-1.406-0.609t-0.609-1.406v-13.969q0-0.797 0.609-1.406t1.406-0.609h13.969zM18.984 5.016h-13.969v13.969h13.969v-13.969z">
+                </path>
+            </symbol>
+            <symbol id="icon-assignment" viewBox="0 0 24 24">
+                <title>assignment</title>
+                <path
+                    d="M17.016 9v-2.016h-10.031v2.016h10.031zM17.016 12.984v-1.969h-10.031v1.969h10.031zM14.016 17.016v-2.016h-7.031v2.016h7.031zM12 3q-0.422 0-0.703 0.281t-0.281 0.703 0.281 0.727 0.703 0.305 0.703-0.305 0.281-0.727-0.281-0.703-0.703-0.281zM18.984 3q0.797 0 1.406 0.609t0.609 1.406v13.969q0 0.797-0.609 1.406t-1.406 0.609h-13.969q-0.797 0-1.406-0.609t-0.609-1.406v-13.969q0-0.797 0.609-1.406t1.406-0.609h4.172q0.328-0.891 1.078-1.453t1.734-0.563 1.734 0.563 1.078 1.453h4.172z">
+                </path>
+            </symbol>
+            <symbol id="icon-cached" viewBox="0 0 24 24">
+                <title>cached</title>
+                <path
+                    d="M6 12h3l-3.984 3.984-4.031-3.984h3q0-3.281 2.367-5.648t5.648-2.367q2.344 0 4.266 1.266l-1.453 1.453q-1.266-0.703-2.813-0.703-2.484 0-4.242 1.758t-1.758 4.242zM18.984 8.016l4.031 3.984h-3q0 3.281-2.367 5.648t-5.648 2.367q-2.344 0-4.266-1.266l1.453-1.453q1.313 0.703 2.813 0.703 2.484 0 4.242-1.758t1.758-4.242h-3z">
+                </path>
+            </symbol>
+            <symbol id="icon-code" viewBox="0 0 24 24">
+                <title>code</title>
+                <path
+                    d="M14.578 16.594l4.641-4.594-4.641-4.594 1.406-1.406 6 6-6 6zM9.422 16.594l-1.406 1.406-6-6 6-6 1.406 1.406-4.641 4.594z">
+                </path>
+            </symbol>
+            <symbol id="icon-description" viewBox="0 0 24 24">
+                <title>description</title>
+                <path
+                    d="M12.984 9h5.531l-5.531-5.484v5.484zM15.984 14.016v-2.016h-7.969v2.016h7.969zM15.984 18v-2.016h-7.969v2.016h7.969zM14.016 2.016l6 6v12q0 0.797-0.609 1.383t-1.406 0.586h-12q-0.797 0-1.406-0.586t-0.609-1.383l0.047-16.031q0-0.797 0.586-1.383t1.383-0.586h8.016z">
+                </path>
+            </symbol>
+            <symbol id="icon-dns" viewBox="0 0 24 24">
+                <title>dns</title>
+                <path
+                    d="M6.984 9q0.797 0 1.406-0.609t0.609-1.406-0.609-1.383-1.406-0.586-1.383 0.586-0.586 1.383 0.586 1.406 1.383 0.609zM20.016 3q0.422 0 0.703 0.281t0.281 0.703v6q0 0.422-0.281 0.727t-0.703 0.305h-16.031q-0.422 0-0.703-0.305t-0.281-0.727v-6q0-0.422 0.281-0.703t0.703-0.281h16.031zM6.984 18.984q0.797 0 1.406-0.586t0.609-1.383-0.609-1.406-1.406-0.609-1.383 0.609-0.586 1.406 0.586 1.383 1.383 0.586zM20.016 12.984q0.422 0 0.703 0.305t0.281 0.727v6q0 0.422-0.281 0.703t-0.703 0.281h-16.031q-0.422 0-0.703-0.281t-0.281-0.703v-6q0-0.422 0.281-0.727t0.703-0.305h16.031z">
+                </path>
+            </symbol>
+            <symbol id="icon-help" viewBox="0 0 24 24">
+                <title>help</title>
+                <path
+                    d="M15.047 11.25q0.938-0.938 0.938-2.25 0-1.641-1.172-2.813t-2.813-1.172-2.813 1.172-1.172 2.813h1.969q0-0.797 0.609-1.406t1.406-0.609 1.406 0.609 0.609 1.406-0.609 1.406l-1.219 1.266q-1.172 1.266-1.172 2.813v0.516h1.969q0-1.547 1.172-2.813zM12.984 18.984v-1.969h-1.969v1.969h1.969zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93z">
+                </path>
+            </symbol>
+            <symbol id="icon-highlight_remove" viewBox="0 0 24 24">
+                <title>highlight_remove</title>
+                <path
+                    d="M12 20.016q3.281 0 5.648-2.367t2.367-5.648-2.367-5.648-5.648-2.367-5.648 2.367-2.367 5.648 2.367 5.648 5.648 2.367zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93zM14.578 8.016l1.406 1.406-2.578 2.578 2.578 2.578-1.406 1.406-2.578-2.578-2.578 2.578-1.406-1.406 2.578-2.578-2.578-2.578 1.406-1.406 2.578 2.578z">
+                </path>
+            </symbol>
+            <symbol id="icon-info" viewBox="0 0 24 24">
+                <title>info</title>
+                <path
+                    d="M12.984 9v-2.016h-1.969v2.016h1.969zM12.984 17.016v-6h-1.969v6h1.969zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93z">
+                </path>
+            </symbol>
+            <symbol id="icon-info_outline" viewBox="0 0 24 24">
+                <title>info_outline</title>
+                <path
+                    d="M11.016 9v-2.016h1.969v2.016h-1.969zM12 20.016q3.281 0 5.648-2.367t2.367-5.648-2.367-5.648-5.648-2.367-5.648 2.367-2.367 5.648 2.367 5.648 5.648 2.367zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93zM11.016 17.016v-6h1.969v6h-1.969z">
+                </path>
+            </symbol>
+            <symbol id="icon-language" viewBox="0 0 24 24">
+                <title>language</title>
+                <path
+                    d="M16.359 14.016h3.375q0.281-1.313 0.281-2.016t-0.281-2.016h-3.375q0.141 0.984 0.141 2.016t-0.141 2.016zM14.578 19.547q1.172-0.375 2.438-1.43t1.922-2.133h-2.953q-0.469 1.875-1.406 3.563zM14.344 14.016q0.141-0.984 0.141-2.016t-0.141-2.016h-4.688q-0.141 0.984-0.141 2.016t0.141 2.016h4.688zM12 19.969q1.313-1.922 1.922-3.984h-3.844q0.609 2.063 1.922 3.984zM8.016 8.016q0.563-2.016 1.406-3.563-1.172 0.375-2.461 1.43t-1.898 2.133h2.953zM5.063 15.984q0.609 1.078 1.898 2.133t2.461 1.43q-0.938-1.688-1.406-3.563h-2.953zM4.266 14.016h3.375q-0.141-0.984-0.141-2.016t0.141-2.016h-3.375q-0.281 1.313-0.281 2.016t0.281 2.016zM12 4.031q-1.313 1.922-1.922 3.984h3.844q-0.609-2.063-1.922-3.984zM18.938 8.016q-0.656-1.078-1.922-2.133t-2.438-1.43q0.844 1.547 1.406 3.563h2.953zM12 2.016q4.125 0 7.055 2.93t2.93 7.055-2.93 7.055-7.055 2.93-7.055-2.93-2.93-7.055 2.93-7.055 7.055-2.93z">
+                </path>
+            </symbol>
+            <symbol id="icon-lock_open" viewBox="0 0 24 24">
+                <title>lock_open</title>
+                <path
+                    d="M18 20.016v-10.031h-12v10.031h12zM18 8.016q0.797 0 1.406 0.586t0.609 1.383v10.031q0 0.797-0.609 1.383t-1.406 0.586h-12q-0.797 0-1.406-0.586t-0.609-1.383v-10.031q0-0.797 0.609-1.383t1.406-0.586h9.094v-2.016q0-1.266-0.914-2.18t-2.18-0.914-2.18 0.914-0.914 2.18h-1.922q0-2.063 1.477-3.539t3.539-1.477 3.539 1.477 1.477 3.539v2.016h0.984zM12 17.016q-0.797 0-1.406-0.609t-0.609-1.406 0.609-1.406 1.406-0.609 1.406 0.609 0.609 1.406-0.609 1.406-1.406 0.609z">
+                </path>
+            </symbol>
+            <symbol id="icon-lock_outline" viewBox="0 0 24 24">
+                <title>lock_outline</title>
+                <path
+                    d="M18 20.016v-10.031h-12v10.031h12zM8.906 6v2.016h6.188v-2.016q0-1.266-0.914-2.18t-2.18-0.914-2.18 0.914-0.914 2.18zM18 8.016q0.797 0 1.406 0.586t0.609 1.383v10.031q0 0.797-0.609 1.383t-1.406 0.586h-12q-0.797 0-1.406-0.586t-0.609-1.383v-10.031q0-0.797 0.609-1.383t1.406-0.586h0.984v-2.016q0-2.063 1.477-3.539t3.539-1.477 3.539 1.477 1.477 3.539v2.016h0.984zM12 17.016q-0.797 0-1.406-0.609t-0.609-1.406 0.609-1.406 1.406-0.609 1.406 0.609 0.609 1.406-0.609 1.406-1.406 0.609z">
+                </path>
+            </symbol>
+            <symbol id="icon-search" viewBox="0 0 24 24">
+                <title>search</title>
+                <path
+                    d="M9.516 14.016q1.875 0 3.188-1.313t1.313-3.188-1.313-3.188-3.188-1.313-3.188 1.313-1.313 3.188 1.313 3.188 3.188 1.313zM15.516 14.016l4.969 4.969-1.5 1.5-4.969-4.969v-0.797l-0.281-0.281q-1.781 1.547-4.219 1.547-2.719 0-4.617-1.875t-1.898-4.594 1.898-4.617 4.617-1.898 4.594 1.898 1.875 4.617q0 0.984-0.469 2.227t-1.078 1.992l0.281 0.281h0.797z">
+                </path>
+            </symbol>
+            <symbol id="icon-settings" viewBox="0 0 24 24">
+                <title>settings</title>
+                <path
+                    d="M12 15.516q1.453 0 2.484-1.031t1.031-2.484-1.031-2.484-2.484-1.031-2.484 1.031-1.031 2.484 1.031 2.484 2.484 1.031zM19.453 12.984l2.109 1.641q0.328 0.234 0.094 0.656l-2.016 3.469q-0.188 0.328-0.609 0.188l-2.484-0.984q-0.984 0.703-1.688 0.984l-0.375 2.625q-0.094 0.422-0.469 0.422h-4.031q-0.375 0-0.469-0.422l-0.375-2.625q-0.891-0.375-1.688-0.984l-2.484 0.984q-0.422 0.141-0.609-0.188l-2.016-3.469q-0.234-0.422 0.094-0.656l2.109-1.641q-0.047-0.328-0.047-0.984t0.047-0.984l-2.109-1.641q-0.328-0.234-0.094-0.656l2.016-3.469q0.188-0.328 0.609-0.188l2.484 0.984q0.984-0.703 1.688-0.984l0.375-2.625q0.094-0.422 0.469-0.422h4.031q0.375 0 0.469 0.422l0.375 2.625q0.891 0.375 1.688 0.984l2.484-0.984q0.422-0.141 0.609 0.188l2.016 3.469q0.234 0.422-0.094 0.656l-2.109 1.641q0.047 0.328 0.047 0.984t-0.047 0.984z">
+                </path>
+            </symbol>
+            <symbol id="icon-settings_ethernet" viewBox="0 0 24 24">
+                <title>settings_ethernet</title>
+                <path
+                    d="M17.766 5.484l5.438 6.516-5.438 6.516-1.547-1.266 4.359-5.25-4.359-5.25zM11.016 12.984v-1.969h1.969v1.969h-1.969zM17.016 11.016v1.969h-2.016v-1.969h2.016zM6.984 12.984v-1.969h2.016v1.969h-2.016zM7.781 6.75l-4.359 5.25 4.359 5.25-1.547 1.266-5.438-6.516 5.438-6.516z">
+                </path>
+            </symbol>
+            <symbol id="icon-donut_small" viewBox="0 0 24 24">
+                <title>donut_small</title>
+                <path
+                    d="M12.984 14.859q1.266-0.375 1.875-1.875h7.125q-0.375 3.609-2.836 6.141t-6.164 2.859v-7.125zM14.859 11.016q-0.563-1.5-1.875-1.875v-7.125q3.703 0.328 6.164 2.859t2.836 6.141h-7.125zM11.016 9.141q-0.797 0.328-1.406 1.125t-0.609 1.734 0.609 1.734 1.406 1.125v7.125q-3.797-0.375-6.398-3.234t-2.602-6.75 2.602-6.75 6.398-3.234v7.125z">
+                </path>
+            </symbol>
+            <symbol id="icon-timeline" viewBox="0 0 24 24">
+                <title>timeline</title>
+                <path
+                    d="M23.016 8.016q0 0.797-0.609 1.383t-1.406 0.586h-0.047q-0.328 0-0.469-0.047l-3.563 3.563q0.094 0.281 0.094 0.516 0 0.797-0.609 1.383t-1.406 0.586-1.406-0.586-0.609-1.383q0-0.234 0.094-0.516l-2.578-2.578q-0.281 0.094-0.516 0.094t-0.516-0.094l-4.547 4.547q0.094 0.281 0.094 0.516 0 0.797-0.609 1.406t-1.406 0.609-1.406-0.609-0.609-1.406 0.609-1.383 1.406-0.586q0.375 0 0.516 0.047l4.547-4.547q-0.047-0.141-0.047-0.516 0-0.797 0.586-1.406t1.383-0.609 1.406 0.609 0.609 1.406q0 0.375-0.047 0.516l2.531 2.531q0.141-0.047 0.516-0.047t0.516 0.047l3.563-3.516q-0.094-0.281-0.094-0.516 0-0.797 0.609-1.406t1.406-0.609 1.406 0.609 0.609 1.406z">
+                </path>
+            </symbol>
+            <symbol id="icon-account_tree" viewBox="0 0 24 24">
+                <title>account_tree</title>
+                <path
+                    d="M21.984 11.016h-6.984v-3h-2.016v7.969h2.016v-3h6.984v8.016h-6.984v-3h-3.984v-9.984h-2.016v3h-6.984v-8.016h6.984v3h6v-3h6.984v8.016z">
+                </path>
+            </symbol>
+            <symbol id="icon-all_inbox" viewBox="0 0 24 24">
+                <title>all_inbox</title>
+                <path
+                    d="M15 15.984h6v3q0 0.797-0.609 1.406t-1.406 0.609h-13.969q-0.797 0-1.406-0.609t-0.609-1.406v-3h6q0 1.219 0.891 2.109t2.109 0.891 2.109-0.891 0.891-2.109zM18.984 9v-3.984h-13.969v3.984h3.984q0 1.219 0.891 2.109t2.109 0.891 2.109-0.891 0.891-2.109h3.984zM18.984 3q0.797 0 1.406 0.609t0.609 1.406v6.984q0 0.797-0.609 1.406t-1.406 0.609h-13.969q-0.797 0-1.406-0.609t-0.609-1.406v-6.984q0-0.797 0.609-1.406t1.406-0.609h13.969z">
+                </path>
+            </symbol>
+            <symbol id="icon-dashboard_customize" viewBox="0 0 24 24">
+                <title>dashboard_customize</title>
+                <path
+                    d="M18 12.984v3h3v2.016h-3v3h-2.016v-3h-3v-2.016h3v-3h2.016zM3 12.984h8.016v8.016h-8.016v-8.016zM12.984 3h8.016v8.016h-8.016v-8.016zM3 3h8.016v8.016h-8.016v-8.016z">
+                </path>
+            </symbol>
+            <symbol id="icon-speed" viewBox="0 0 24 24">
+                <title>speed</title>
+                <path
+                    d="M12 15.984q-0.797 0-1.406-0.586t-0.609-1.383q0-0.844 0.609-1.453l8.484-5.625-5.672 8.484q-0.563 0.563-1.406 0.563zM20.391 8.578q0.656 1.031 1.125 2.625t0.469 2.813q0 2.766-1.313 4.969-0.609 1.031-1.734 1.031h-13.875q-1.125 0-1.734-1.031-1.313-2.203-1.313-4.969 0-4.125 2.93-7.055t7.102-2.93q1.219 0 2.789 0.469t2.602 1.125l-1.875 1.219q-1.688-0.844-3.563-0.844-3.281 0-5.648 2.344t-2.367 5.672q0 2.156 1.078 3.984h13.875q1.078-1.828 1.078-3.984 0-1.922-0.844-3.609z">
+                </path>
+            </symbol>
+            <symbol id="icon-sync_alt" viewBox="0 0 24 24">
+                <title>sync_alt</title>
+                <path d="M2.016 15.984l3.984-3.984v3h15v2.016h-15v3zM21.984 8.016l-3.984 3.984v-3h-15v-2.016h15v-3z">
+                </path>
+            </symbol>
+        </defs>
+    </svg>
+    <div class="clearfix mhl ptl">
+        <h1 class="mvm mtn fgc1">Grid Size: 24</h1>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-error">
+                    <use xlink:href="#icon-error"></use>
+                </svg><span class="name"> error</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-error_outline">
+                    <use xlink:href="#icon-error_outline"></use>
+                </svg><span class="name"> error_outline</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-warningreport_problem">
+                    <use xlink:href="#icon-warningreport_problem"></use>
+                </svg><span class="name"> warningreport_problem</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-notification_important">
+                    <use xlink:href="#icon-notification_important"></use>
+                </svg><span class="name"> notification_important</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-av_timer">
+                    <use xlink:href="#icon-av_timer"></use>
+                </svg><span class="name"> av_timer</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-equalizer">
+                    <use xlink:href="#icon-equalizer"></use>
+                </svg><span class="name"> equalizer</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-loopsync">
+                    <use xlink:href="#icon-loopsync"></use>
+                </svg><span class="name"> loopsync</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-library_addqueueadd_to_photos">
+                    <use xlink:href="#icon-library_addqueueadd_to_photos"></use>
+                </svg><span class="name"> library_addqueueadd_to_photos</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-library_books">
+                    <use xlink:href="#icon-library_books"></use>
+                </svg><span class="name"> library_books</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-not_interesteddo_not_disturb">
+                    <use xlink:href="#icon-not_interesteddo_not_disturb"></use>
+                </svg><span class="name"> not_interesteddo_not_disturb</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-playlist_add">
+                    <use xlink:href="#icon-playlist_add"></use>
+                </svg><span class="name"> playlist_add</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-repeat">
+                    <use xlink:href="#icon-repeat"></use>
+                </svg><span class="name"> repeat</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-replay">
+                    <use xlink:href="#icon-replay"></use>
+                </svg><span class="name"> replay</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-slow_motion_video">
+                    <use xlink:href="#icon-slow_motion_video"></use>
+                </svg><span class="name"> slow_motion_video</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-import_export">
+                    <use xlink:href="#icon-import_export"></use>
+                </svg><span class="name"> import_export</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-location_onplaceroom">
+                    <use xlink:href="#icon-location_onplaceroom"></use>
+                </svg><span class="name"> location_onplaceroom</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-vpn_key">
+                    <use xlink:href="#icon-vpn_key"></use>
+                </svg><span class="name"> vpn_key</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-import_contacts">
+                    <use xlink:href="#icon-import_contacts"></use>
+                </svg><span class="name"> import_contacts</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-mail_outline">
+                    <use xlink:href="#icon-mail_outline"></use>
+                </svg><span class="name"> mail_outline</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-sentiment_satisfied_alt">
+                    <use xlink:href="#icon-sentiment_satisfied_alt"></use>
+                </svg><span class="name"> sentiment_satisfied_alt</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-lightbulb">
+                    <use xlink:href="#icon-lightbulb"></use>
+                </svg><span class="name"> lightbulb</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-add">
+                    <use xlink:href="#icon-add"></use>
+                </svg><span class="name"> add</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-add_box">
+                    <use xlink:href="#icon-add_box"></use>
+                </svg><span class="name"> add_box</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-add_circle">
+                    <use xlink:href="#icon-add_circle"></use>
+                </svg><span class="name"> add_circle</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-add_circle_outlinecontrol_point">
+                    <use xlink:href="#icon-add_circle_outlinecontrol_point"></use>
+                </svg><span class="name"> add_circle_outlinecontrol_point</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-backspace">
+                    <use xlink:href="#icon-backspace"></use>
+                </svg><span class="name"> backspace</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-clearclose">
+                    <use xlink:href="#icon-clearclose"></use>
+                </svg><span class="name"> clearclose</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-content_copy">
+                    <use xlink:href="#icon-content_copy"></use>
+                </svg><span class="name"> content_copy</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-content_cut">
+                    <use xlink:href="#icon-content_cut"></use>
+                </svg><span class="name"> content_cut</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-content_paste">
+                    <use xlink:href="#icon-content_paste"></use>
+                </svg><span class="name"> content_paste</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-createmode_editedit">
+                    <use xlink:href="#icon-createmode_editedit"></use>
+                </svg><span class="name"> createmode_editedit</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-inbox">
+                    <use xlink:href="#icon-inbox"></use>
+                </svg><span class="name"> inbox</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-linkinsert_link">
+                    <use xlink:href="#icon-linkinsert_link"></use>
+                </svg><span class="name"> linkinsert_link</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-redo">
+                    <use xlink:href="#icon-redo"></use>
+                </svg><span class="name"> redo</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-remove">
+                    <use xlink:href="#icon-remove"></use>
+                </svg><span class="name"> remove</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-remove_circledo_not_disturb_on">
+                    <use xlink:href="#icon-remove_circledo_not_disturb_on"></use>
+                </svg><span class="name"> remove_circledo_not_disturb_on</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-remove_circle_outline">
+                    <use xlink:href="#icon-remove_circle_outline"></use>
+                </svg><span class="name"> remove_circle_outline</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-reply">
+                    <use xlink:href="#icon-reply"></use>
+                </svg><span class="name"> reply</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-reply_all">
+                    <use xlink:href="#icon-reply_all"></use>
+                </svg><span class="name"> reply_all</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-report">
+                    <use xlink:href="#icon-report"></use>
+                </svg><span class="name"> report</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-save">
+                    <use xlink:href="#icon-save"></use>
+                </svg><span class="name"> save</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-link_off">
+                    <use xlink:href="#icon-link_off"></use>
+                </svg><span class="name"> link_off</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-save_alt">
+                    <use xlink:href="#icon-save_alt"></use>
+                </svg><span class="name"> save_alt</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-add_link">
+                    <use xlink:href="#icon-add_link"></use>
+                </svg><span class="name"> add_link</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-access_timequery_builderschedule">
+                    <use xlink:href="#icon-access_timequery_builderschedule"></use>
+                </svg><span class="name"> access_timequery_builderschedule</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-data_usage">
+                    <use xlink:href="#icon-data_usage"></use>
+                </svg><span class="name"> data_usage</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-storage">
+                    <use xlink:href="#icon-storage"></use>
+                </svg><span class="name"> storage</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-signal_cellular_alt">
+                    <use xlink:href="#icon-signal_cellular_alt"></use>
+                </svg><span class="name"> signal_cellular_alt</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-border_color">
+                    <use xlink:href="#icon-border_color"></use>
+                </svg><span class="name"> border_color</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-format_indent_decrease">
+                    <use xlink:href="#icon-format_indent_decrease"></use>
+                </svg><span class="name"> format_indent_decrease</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-format_indent_increase">
+                    <use xlink:href="#icon-format_indent_increase"></use>
+                </svg><span class="name"> format_indent_increase</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-insert_chartpollassessment">
+                    <use xlink:href="#icon-insert_chartpollassessment"></use>
+                </svg><span class="name"> insert_chartpollassessment</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-insert_drive_file">
+                    <use xlink:href="#icon-insert_drive_file"></use>
+                </svg><span class="name"> insert_drive_file</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-insert_photoimagephoto">
+                    <use xlink:href="#icon-insert_photoimagephoto"></use>
+                </svg><span class="name"> insert_photoimagephoto</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-publish">
+                    <use xlink:href="#icon-publish"></use>
+                </svg><span class="name"> publish</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-linear_scale">
+                    <use xlink:href="#icon-linear_scale"></use>
+                </svg><span class="name"> linear_scale</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-scatter_plot">
+                    <use xlink:href="#icon-scatter_plot"></use>
+                </svg><span class="name"> scatter_plot</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-bar_chart">
+                    <use xlink:href="#icon-bar_chart"></use>
+                </svg><span class="name"> bar_chart</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-cloud_queue">
+                    <use xlink:href="#icon-cloud_queue"></use>
+                </svg><span class="name"> cloud_queue</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-file_downloadget_app">
+                    <use xlink:href="#icon-file_downloadget_app"></use>
+                </svg><span class="name"> file_downloadget_app</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-file_upload">
+                    <use xlink:href="#icon-file_upload"></use>
+                </svg><span class="name"> file_upload</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-folder">
+                    <use xlink:href="#icon-folder"></use>
+                </svg><span class="name"> folder</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-folder_open">
+                    <use xlink:href="#icon-folder_open"></use>
+                </svg><span class="name"> folder_open</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-create_new_folder">
+                    <use xlink:href="#icon-create_new_folder"></use>
+                </svg><span class="name"> create_new_folder</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-keyboard_arrow_down">
+                    <use xlink:href="#icon-keyboard_arrow_down"></use>
+                </svg><span class="name"> keyboard_arrow_down</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-keyboard_arrow_left">
+                    <use xlink:href="#icon-keyboard_arrow_left"></use>
+                </svg><span class="name"> keyboard_arrow_left</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-keyboard_arrow_right">
+                    <use xlink:href="#icon-keyboard_arrow_right"></use>
+                </svg><span class="name"> keyboard_arrow_right</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-keyboard_arrow_up">
+                    <use xlink:href="#icon-keyboard_arrow_up"></use>
+                </svg><span class="name"> keyboard_arrow_up</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-keyboard_backspace">
+                    <use xlink:href="#icon-keyboard_backspace"></use>
+                </svg><span class="name"> keyboard_backspace</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-keyboard_return">
+                    <use xlink:href="#icon-keyboard_return"></use>
+                </svg><span class="name"> keyboard_return</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-keyboard_tab">
+                    <use xlink:href="#icon-keyboard_tab"></use>
+                </svg><span class="name"> keyboard_tab</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-device_hub">
+                    <use xlink:href="#icon-device_hub"></use>
+                </svg><span class="name"> device_hub</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-arrow_drop_down">
+                    <use xlink:href="#icon-arrow_drop_down"></use>
+                </svg><span class="name"> arrow_drop_down</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-arrow_drop_up">
+                    <use xlink:href="#icon-arrow_drop_up"></use>
+                </svg><span class="name"> arrow_drop_up</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-cancel">
+                    <use xlink:href="#icon-cancel"></use>
+                </svg><span class="name"> cancel</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-keyboard_control">
+                    <use xlink:href="#icon-keyboard_control"></use>
+                </svg><span class="name"> keyboard_control</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-refresh">
+                    <use xlink:href="#icon-refresh"></use>
+                </svg><span class="name"> refresh</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-unfold_more">
+                    <use xlink:href="#icon-unfold_more"></use>
+                </svg><span class="name"> unfold_more</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-arrow_left">
+                    <use xlink:href="#icon-arrow_left"></use>
+                </svg><span class="name"> arrow_left</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-arrow_right">
+                    <use xlink:href="#icon-arrow_right"></use>
+                </svg><span class="name"> arrow_right</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-arrow_back_ios">
+                    <use xlink:href="#icon-arrow_back_ios"></use>
+                </svg><span class="name"> arrow_back_ios</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-arrow_forward_ios">
+                    <use xlink:href="#icon-arrow_forward_ios"></use>
+                </svg><span class="name"> arrow_forward_ios</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-notifications">
+                    <use xlink:href="#icon-notifications"></use>
+                </svg><span class="name"> notifications</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-notifications_none">
+                    <use xlink:href="#icon-notifications_none"></use>
+                </svg><span class="name"> notifications_none</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-notifications_off">
+                    <use xlink:href="#icon-notifications_off"></use>
+                </svg><span class="name"> notifications_off</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-check_box">
+                    <use xlink:href="#icon-check_box"></use>
+                </svg><span class="name"> check_box</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-check_box_outline_blank">
+                    <use xlink:href="#icon-check_box_outline_blank"></use>
+                </svg><span class="name"> check_box_outline_blank</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-assignment">
+                    <use xlink:href="#icon-assignment"></use>
+                </svg><span class="name"> assignment</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-cached">
+                    <use xlink:href="#icon-cached"></use>
+                </svg><span class="name"> cached</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-code">
+                    <use xlink:href="#icon-code"></use>
+                </svg><span class="name"> code</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-description">
+                    <use xlink:href="#icon-description"></use>
+                </svg><span class="name"> description</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-dns">
+                    <use xlink:href="#icon-dns"></use>
+                </svg><span class="name"> dns</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-help">
+                    <use xlink:href="#icon-help"></use>
+                </svg><span class="name"> help</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-highlight_remove">
+                    <use xlink:href="#icon-highlight_remove"></use>
+                </svg><span class="name"> highlight_remove</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-info">
+                    <use xlink:href="#icon-info"></use>
+                </svg><span class="name"> info</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-info_outline">
+                    <use xlink:href="#icon-info_outline"></use>
+                </svg><span class="name"> info_outline</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-language">
+                    <use xlink:href="#icon-language"></use>
+                </svg><span class="name"> language</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-lock_open">
+                    <use xlink:href="#icon-lock_open"></use>
+                </svg><span class="name"> lock_open</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-lock_outline">
+                    <use xlink:href="#icon-lock_outline"></use>
+                </svg><span class="name"> lock_outline</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-search">
+                    <use xlink:href="#icon-search"></use>
+                </svg><span class="name"> search</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-settings">
+                    <use xlink:href="#icon-settings"></use>
+                </svg><span class="name"> settings</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-settings_ethernet">
+                    <use xlink:href="#icon-settings_ethernet"></use>
+                </svg><span class="name"> settings_ethernet</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-donut_small">
+                    <use xlink:href="#icon-donut_small"></use>
+                </svg><span class="name"> donut_small</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-timeline">
+                    <use xlink:href="#icon-timeline"></use>
+                </svg><span class="name"> timeline</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-account_tree">
+                    <use xlink:href="#icon-account_tree"></use>
+                </svg><span class="name"> account_tree</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-all_inbox">
+                    <use xlink:href="#icon-all_inbox"></use>
+                </svg><span class="name"> all_inbox</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-dashboard_customize">
+                    <use xlink:href="#icon-dashboard_customize"></use>
+                </svg><span class="name"> dashboard_customize</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-speed">
+                    <use xlink:href="#icon-speed"></use>
+                </svg><span class="name"> speed</span>
+            </div>
+        </div>
+        <div class="glyph fs1">
+            <div class="clearfix pbs">
+                <svg class="icon icon-sync_alt">
+                    <use xlink:href="#icon-sync_alt"></use>
+                </svg><span class="name"> sync_alt</span>
+            </div>
+        </div>
+    </div>
+    <script defer>
+        /*!
+         * @copyright Copyright (c) 2017 IcoMoon.io
+         * @license   Licensed under MIT license
+         *            See https://github.com/Keyamoon/svgxuse
+         * @version   1.2.6
+         */
+        /*jslint browser: true */
+        /*global XDomainRequest, MutationObserver, window */
+        (function () {
+            "use strict";
+            if (typeof window !== "undefined" && window.addEventListener) {
+                var cache = Object.create(null); // holds xhr objects to prevent multiple requests
+                var checkUseElems;
+                var tid; // timeout id
+                var debouncedCheck = function () {
+                    clearTimeout(tid);
+                    tid = setTimeout(checkUseElems, 100);
+                };
+                var unobserveChanges = function () {
+                    return;
+                };
+                var observeChanges = function () {
+                    var observer;
+                    window.addEventListener("resize", debouncedCheck, false);
+                    window.addEventListener("orientationchange", debouncedCheck, false);
+                    if (window.MutationObserver) {
+                        observer = new MutationObserver(debouncedCheck);
+                        observer.observe(document.documentElement, {
+                            childList: true,
+                            subtree: true,
+                            attributes: true
+                        });
+                        unobserveChanges = function () {
+                            try {
+                                observer.disconnect();
+                                window.removeEventListener("resize", debouncedCheck, false);
+                                window.removeEventListener("orientationchange", debouncedCheck, false);
+                            } catch (ignore) { }
+                        };
+                    } else {
+                        document.documentElement.addEventListener("DOMSubtreeModified", debouncedCheck, false);
+                        unobserveChanges = function () {
+                            document.documentElement.removeEventListener("DOMSubtreeModified", debouncedCheck, false);
+                            window.removeEventListener("resize", debouncedCheck, false);
+                            window.removeEventListener("orientationchange", debouncedCheck, false);
+                        };
+                    }
+                };
+                var createRequest = function (url) {
+                    // In IE 9, cross origin requests can only be sent using XDomainRequest.
+                    // XDomainRequest would fail if CORS headers are not set.
+                    // Therefore, XDomainRequest should only be used with cross origin requests.
+                    function getOrigin(loc) {
+                        var a;
+                        if (loc.protocol !== undefined) {
+                            a = loc;
+                        } else {
+                            a = document.createElement("a");
+                            a.href = loc;
+                        }
+                        return a.protocol.replace(/:/g, "") + a.host;
+                    }
+                    var Request;
+                    var origin;
+                    var origin2;
+                    if (window.XMLHttpRequest) {
+                        Request = new XMLHttpRequest();
+                        origin = getOrigin(location);
+                        origin2 = getOrigin(url);
+                        if (Request.withCredentials === undefined && origin2 !== "" && origin2 !== origin) {
+                            Request = XDomainRequest || undefined;
+                        } else {
+                            Request = XMLHttpRequest;
+                        }
+                    }
+                    return Request;
+                };
+                var xlinkNS = "http://www.w3.org/1999/xlink";
+                checkUseElems = function () {
+                    var base;
+                    var bcr;
+                    var fallback = ""; // optional fallback URL in case no base path to SVG file was given and no symbol definition was found.
+                    var hash;
+                    var href;
+                    var i;
+                    var inProgressCount = 0;
+                    var isHidden;
+                    var Request;
+                    var url;
+                    var uses;
+                    var xhr;
+                    function observeIfDone() {
+                        // If done with making changes, start watching for chagnes in DOM again
+                        inProgressCount -= 1;
+                        if (inProgressCount === 0) { // if all xhrs were resolved
+                            unobserveChanges(); // make sure to remove old handlers
+                            observeChanges(); // watch for changes to DOM
+                        }
+                    }
+                    function attrUpdateFunc(spec) {
+                        return function () {
+                            if (cache[spec.base] !== true) {
+                                spec.useEl.setAttributeNS(xlinkNS, "xlink:href", "#" + spec.hash);
+                                if (spec.useEl.hasAttribute("href")) {
+                                    spec.useEl.setAttribute("href", "#" + spec.hash);
+                                }
+                            }
+                        };
+                    }
+                    function onloadFunc(xhr) {
+                        return function () {
+                            var body = document.body;
+                            var x = document.createElement("x");
+                            var svg;
+                            xhr.onload = null;
+                            x.innerHTML = xhr.responseText;
+                            svg = x.getElementsByTagName("svg")[0];
+                            if (svg) {
+                                svg.setAttribute("aria-hidden", "true");
+                                svg.style.position = "absolute";
+                                svg.style.width = 0;
+                                svg.style.height = 0;
+                                svg.style.overflow = "hidden";
+                                body.insertBefore(svg, body.firstChild);
+                            }
+                            observeIfDone();
+                        };
+                    }
+                    function onErrorTimeout(xhr) {
+                        return function () {
+                            xhr.onerror = null;
+                            xhr.ontimeout = null;
+                            observeIfDone();
+                        };
+                    }
+                    unobserveChanges(); // stop watching for changes to DOM
+                    // find all use elements
+                    uses = document.getElementsByTagName("use");
+                    for (i = 0; i < uses.length; i += 1) {
+                        try {
+                            bcr = uses[i].getBoundingClientRect();
+                        } catch (ignore) {
+                            // failed to get bounding rectangle of the use element
+                            bcr = false;
+                        }
+                        href = uses[i].getAttribute("href")
+                            || uses[i].getAttributeNS(xlinkNS, "href")
+                            || uses[i].getAttribute("xlink:href");
+                        if (href && href.split) {
+                            url = href.split("#");
+                        } else {
+                            url = ["", ""];
+                        }
+                        base = url[0];
+                        hash = url[1];
+                        isHidden = bcr && bcr.left === 0 && bcr.right === 0 && bcr.top === 0 && bcr.bottom === 0;
+                        if (bcr && bcr.width === 0 && bcr.height === 0 && !isHidden) {
+                            // the use element is empty
+                            // if there is a reference to an external SVG, try to fetch it
+                            // use the optional fallback URL if there is no reference to an external SVG
+                            if (fallback && !base.length && hash && !document.getElementById(hash)) {
+                                base = fallback;
+                            }
+                            if (uses[i].hasAttribute("href")) {
+                                uses[i].setAttributeNS(xlinkNS, "xlink:href", href);
+                            }
+                            if (base.length) {
+                                // schedule updating xlink:href
+                                xhr = cache[base];
+                                if (xhr !== true) {
+                                    // true signifies that prepending the SVG was not required
+                                    setTimeout(attrUpdateFunc({
+                                        useEl: uses[i],
+                                        base: base,
+                                        hash: hash
+                                    }), 0);
+                                }
+                                if (xhr === undefined) {
+                                    Request = createRequest(base);
+                                    if (Request !== undefined) {
+                                        xhr = new Request();
+                                        cache[base] = xhr;
+                                        xhr.onload = onloadFunc(xhr);
+                                        xhr.onerror = onErrorTimeout(xhr);
+                                        xhr.ontimeout = onErrorTimeout(xhr);
+                                        xhr.open("GET", base);
+                                        xhr.send();
+                                        inProgressCount += 1;
+                                    }
+                                }
+                            }
+                        } else {
+                            if (!isHidden) {
+                                if (cache[base] === undefined) {
+                                    // remember this URL if the use element was not empty and no request was sent
+                                    cache[base] = true;
+                                } else if (cache[base].onload) {
+                                    // if it turns out that prepending the SVG is not necessary,
+                                    // abort the in-progress xhr.
+                                    cache[base].abort();
+                                    delete cache[base].onload;
+                                    cache[base] = true;
+                                }
+                            } else if (base.length && cache[base]) {
+                                setTimeout(attrUpdateFunc({
+                                    useEl: uses[i],
+                                    base: base,
+                                    hash: hash
+                                }), 0);
+                            }
+                        }
+                    }
+                    uses = "";
+                    inProgressCount += 1;
+                    observeIfDone();
+                };
+                var winLoad;
+                winLoad = function () {
+                    window.removeEventListener("load", winLoad, false); // to prevent memory leaks
+                    tid = setTimeout(checkUseElems, 0);
+                };
+                if (document.readyState !== "complete") {
+                    // The load event fires when all resources have finished loading, which allows detecting whether SVG use elements are empty.
+                    window.addEventListener("load", winLoad, false);
+                } else {
+                    // No need to add a listener if the document is already loaded, initialize immediately.
+                    winLoad();
+                }
+            }
+        }());
+
+    </script>
+</body>
+
+</html>
