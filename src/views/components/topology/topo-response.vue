@@ -115,10 +115,10 @@ export default class TopoResponse extends Vue {
     return {
       color: [
         '#30A4EB',
-          '#45BFC0',
-          '#FFCC55',
-          '#FF6A84',
-          '#a0a7e6',
+        '#45BFC0',
+        '#FFCC55',
+        '#FF6A84',
+        '#a0a7e6',
       ],
       tooltip: {
         trigger: 'axis',
