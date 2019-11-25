@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import './svg';
+import '../assets/icons/index';
 
 @Component
 export default class RkIcon extends Vue {
