@@ -1,0 +1,18 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<title>slow_motion_video</title>
+<path d="M21.984 12q0 3.844-2.578 6.703t-6.375 3.234v-2.016q2.953-0.375 4.969-2.648t2.016-5.273-2.016-5.273-4.969-2.648v-2.016q3.797 0.375 6.375 3.234t2.578 6.703zM5.672 19.734l1.406-1.406q1.688 1.313 3.938 1.594v2.016q-1.266-0.141-2.836-0.797t-2.508-1.406zM4.078 12.984q0.234 2.203 1.594 3.891l-1.406 1.453q-1.922-2.391-2.203-5.344h2.016zM5.672 7.078q-1.313 1.734-1.594 3.938h-2.016q0.141-1.266 0.797-2.836t1.406-2.508zM11.016 4.078q-2.25 0.281-3.938 1.594l-1.406-1.406q2.391-1.922 5.344-2.203v2.016zM13.031 9.797l2.953 2.203q-2.953 2.203-6 4.5z"></path>
+</svg>

@@ -1,0 +1,18 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+<title>content_cut</title>
+<path d="M18.984 3h3v0.984l-6.984 7.031-2.016-2.016zM12 12.516q0.516 0 0.516-0.516t-0.516-0.516-0.516 0.516 0.516 0.516zM6 20.016q0.797 0 1.406-0.586t0.609-1.43-0.609-1.43-1.406-0.586-1.406 0.586-0.609 1.43 0.609 1.43 1.406 0.586zM6 8.016q0.797 0 1.406-0.586t0.609-1.43-0.609-1.43-1.406-0.586-1.406 0.586-0.609 1.43 0.609 1.43 1.406 0.586zM9.656 7.641l12.328 12.375v0.984h-3l-6.984-6.984-2.344 2.344q0.328 0.703 0.328 1.641 0 1.641-1.172 2.813t-2.813 1.172-2.813-1.172-1.172-2.813 1.172-2.813 2.813-1.172q0.938 0 1.641 0.328l2.344-2.344-2.344-2.344q-0.703 0.328-1.641 0.328-1.641 0-2.813-1.172t-1.172-2.813 1.172-2.813 2.813-1.172 2.813 1.172 1.172 2.813q0 0.938-0.328 1.641z"></path>
+</svg>
