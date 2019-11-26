@@ -35,12 +35,17 @@ export default class ChartHeatmap extends Vue {
     chart.myChart.resize();
   }
   get option() {
-    const w: any = window;
+    const source = this.data.map((d: number[]) => d[2]);
+    const maxItem = Math.max(...source);
+    const minItem = Math.min(...source);
+    const colorBox = ['#fff', '#FDF0F0', '#FAE2E2', '#F8D3D3', '#F6C4C4', '#F4B5B5', '#F1A7A7', '#EF9898', '#E86C6C',
+      '#E44E4E', '#E23F3F', '#DF3131', '#DD2222', '#CE2020', '#C01D1D', '#B11B1B', '#A21919', '#851414',
+      '#761212', '#671010',
+    ];
     return {
       tooltip: {
         position: 'top',
         formatter: (a: any) => `${a.data[1] * 100}ms  [ ${a.data[2]} ]`,
-        backgroundColor: 'rgb(50,50,50)',
         textStyle: {
           fontSize: 13,
         },
@@ -56,7 +61,7 @@ export default class ChartHeatmap extends Vue {
         type: 'category',
         data: this.intervalTime,
         axisTick: {
-          lineStyle: { color: '#c1c5ca41' },
+          lineStyle: { color: '#c1c5ca' },
           alignWithLabel: true,
         },
         splitLine: { show: false },
@@ -65,33 +70,63 @@ export default class ChartHeatmap extends Vue {
       },
       visualMap: [
         {
-          min: 0,
-          max: 25,
+          min: minItem,
+          max: maxItem,
           show: false,
+          type: 'piecewise',
           calculable: true,
-          orient: 'horizontal',
-          left: 'center',
-          bottom: '0',
-          inRange: {
-            color: ['#fff', '#3f96e3'],
-          },
+          pieces: this.generatePieces(maxItem, colorBox, minItem),
         },
       ],
       yAxis: {
         type: 'value',
         axisLine: { show: false },
         axisTick: { show: false },
-        splitLine: { lineStyle: { color: '#c1c5ca41', type: 'dashed' } },
+        splitLine: { lineStyle: { color: '#c1c5ca', type: 'dashed' } },
         axisLabel: { color: '#9da5b2', fontSize: '11', formatter: (a: number) => `${a * 100}ms`},
       },
       series: [
         {
           type: 'heatmap',
           data: this.data,
-          symbolSize: (d: any) => d[2] ? 7 : 0,
+          itemStyle: {
+            emphasis: {
+              shadowBlur: 10,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
         },
       ],
     };
+  }
+  private generatePieces(maxValue: number, colorBox: string[], minItem: number) {
+    const pieces = [];
+    let quotient = 1;
+    let temp = {} as any;
+    temp.max = minItem;
+    temp.min = minItem;
+    temp.color = colorBox[0];
+    pieces.push(temp);
+    if (maxValue && maxValue >= 19) {
+      quotient = Math.floor(maxValue / 19);
+      for (let i = 1; i < 20; i++) {
+        temp = {} as any;
+        if (i === 1) {
+          temp.min = minItem;
+        } else {
+          temp.min = quotient * (i - 1);
+        }
+        temp.max = quotient * i;
+        temp.color = colorBox[i];
+        pieces.push(temp);
+      }
+    }
+    const length = pieces.length;
+    if (length) {
+      const item  = pieces[length - 1];
+      item.max = maxValue;
+    }
+    return pieces;
   }
 }
 </script>
