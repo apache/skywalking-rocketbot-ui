@@ -19,7 +19,7 @@
   <div>
     <div class="grey sm mb-5">{{title}}</div>
     <h5 class="mt-0 mb-0">{{content.toFixed(2)}} {{unit}}</h5>
-    <RkEcharts height="32px" :option="responseConfig"/>
+    <RkEcharts height="100px" :option="responseConfig"/>
   </div>
 
 </template>
@@ -65,17 +65,20 @@ export default class TopoChart extends Vue {
       },
       xAxis: {
         type: 'category',
-        axisTick: { show: false },
+        axisTick: {
+          lineStyle: { color: '#c1c5ca41' },
+          alignWithLabel: true,
+        },
         splitLine: { show: false },
-        axisLine: { show: false },
-        axisLabel: { show: false },
+        axisLine: { lineStyle: { color: 'rgba(0,0,0,0)' } },
+        axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
       yAxis: {
         type: 'value',
         axisLine: { show: false },
         axisTick: { show: false },
-        splitLine: { lineStyle: { color: '#c1c5ca08', type: 'dashed' } },
-        axisLabel: { show: false },
+        splitLine: { lineStyle: { color: '#c1c5ca41', type: 'dashed' } },
+        axisLabel: { color: '#9da5b2', fontSize: '11' },
       },
       series: [
         {
