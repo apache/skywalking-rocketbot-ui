@@ -295,7 +295,7 @@ export default class TopoAside extends Vue {
   width: 280px;
   z-index: 101;
   color: #ddd;
-  background-color: #252a2f9a;
+  background-color: #333;
   padding: 15px 20px 10px;
   .label{
     display: inline-block;
