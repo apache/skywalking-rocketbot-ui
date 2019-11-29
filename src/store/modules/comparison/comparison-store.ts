@@ -548,6 +548,11 @@ const actions: ActionTree<State, ActionsParamType> = {
         return {value: i.value / 100};
       });
     }
+    if (params.value.serviceApdexScore) {
+      params.value.serviceApdexScore.values = params.value.serviceApdexScore.values.map((i: any) => {
+        return {value: (i.value / 10000).toFixed(2)};
+      });
+    }
     if (params.value.heap && params.value.maxHeap) {
       params.value.heap.values = params.value.heap.values.map((i: any) => {
         return {value: (i.value / 1048576).toFixed(2)};
