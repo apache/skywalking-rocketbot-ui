@@ -24,9 +24,9 @@
       <div class="rk-dashboard-bar-reload">
         <svg class="icon lg vm cp rk-btn ghost" @click="handleOption"><use xlink:href="#retry"></use></svg>
       </div>
-      <ToolBarSelect @onChoose="selectService" :title="this.$t('currentService')" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
-      <ToolBarEndpointSelect @onChoose="selectEndpoint" :title="this.$t('currentEndpoint')" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
-      <ToolBarSelect @onChoose="selectInstance" :title="this.$t('currentInstance')" :current="stateDashboard.currentInstance" :data="stateDashboard.instances" icon="disk"/>
+      <ToolBarSelect :disabled="isDisabledService" @onChoose="selectService" :title="this.$t('currentService')" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
+      <ToolBarEndpointSelect :disabled="isDisabledEndpoint" @onChoose="selectEndpoint" :title="this.$t('currentEndpoint')" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>
+      <ToolBarSelect :disabled="isDisabledInstacnce" @onChoose="selectInstance" :title="this.$t('currentInstance')" :current="stateDashboard.currentInstance" :data="stateDashboard.instances" icon="disk"/>
     </div>
     <div class="rk-dashboard-bar flex-h" v-if="compType === 'proxy'">
       <div class="rk-dashboard-bar-reload">
@@ -43,7 +43,7 @@
       <div class="rk-dashboard-bar-reload">
         <svg class="icon lg vm cp rk-btn ghost" @click="handleOption"><use xlink:href="#retry"></use></svg>
       </div>
-      <ToolBarSelect @onChoose="SELECT_DATABASE" :title="this.$t('currentDatabase')" :current="stateDashboard.currentDatabase" :data="stateDashboard.databases" icon="epic"/>
+      <ToolBarSelect :disabled="isDisabledDatabse" @onChoose="SELECT_DATABASE" :title="this.$t('currentDatabase')" :current="stateDashboard.currentDatabase" :data="stateDashboard.databases" icon="epic"/>
     </div>
   </div>
 </template>
@@ -56,6 +56,7 @@ import { State, Action, Mutation } from 'vuex-class';
 @Component({components: {ToolBarSelect, ToolBarEndpointSelect}})
 export default class ToolBar extends Vue {
   @Prop() private compType!: any;
+  @Prop() private compIndex!: any;
   @Prop() private stateDashboard!: any;
   @Prop() private rocketGlobal!: any;
   @Prop() private rocketComps!: any;
@@ -67,6 +68,33 @@ export default class ToolBar extends Vue {
   @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
   @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
   @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+  private compServiceIndexMap :any = {
+    'Global': 0,
+    'Service': 1,
+    'Endpoint': 2,
+    'Instance': 3
+  }
+  private compDatabaseIndexMap: any = {
+    'Global': 0,
+    'Database': 1,
+  }
+  get isDisabledService() {
+    let { Global: globalIndex } = this.compServiceIndexMap
+    console.log([globalIndex].includes(this.compIndex), globalIndex, this.compIndex, 'kevinkang--->>>>')
+    return [globalIndex].includes(this.compIndex)
+  }
+  get isDisabledEndpoint() {
+    let { Global: globalIndex, Service: serviceIndex } = this.compServiceIndexMap
+    return [globalIndex, serviceIndex].includes(this.compIndex)
+  }
+  get isDisabledInstacnce() {
+    let { Global: globalIndex, Service: serviceIndex, Endpoint: endpointIndex } = this.compServiceIndexMap
+    return [globalIndex, serviceIndex, endpointIndex].includes(this.compIndex)
+  }
+  get isDisabledDatabse() {
+    let { Global: globalIndex} = this.compDatabaseIndexMap
+    return [globalIndex].includes(this.compIndex)
+  }
   get lastKey() {
     const current = this.rocketComps.tree[this.rocketComps.group]
     .children[this.rocketComps.current].children;

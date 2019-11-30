@@ -18,7 +18,7 @@
 <template>
   <div class="flex-v wrapper" style="flex-grow:1;height: 100%;">
     <ToolGroup :rocketGlobal="rocketGlobal" :rocketComps="rocketComps"/>
-    <ToolBar :rocketGlobal="rocketGlobal" :compType="compType" :durationTime="durationTime"  :stateDashboard='stateDashboardOption'/>
+    <ToolBar :rocketGlobal="rocketGlobal" :compIndex="rocketComps.current" :compType="compType" :durationTime="durationTime"  :stateDashboard='stateDashboardOption'/>
     <ToolNav :rocketGlobal="rocketGlobal" :rocketComps="rocketComps"/>
     <div class="dashboard-container clear">
       <DashboardItem
@@ -96,6 +96,8 @@ export default class Dashboard extends Vue {
     }
     this.handleOption();
     this.SET_EVENTS([this.handleRefresh]);
+
+    console.log(this.rocketComps, 'kevinkang---')
   }
   // private beforeDestroy() {
   //   this.$store.unregisterModule('rocketDashboard');

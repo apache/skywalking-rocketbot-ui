@@ -17,8 +17,8 @@
 
 <template>
   <div class="rk-dashboard-bar-select flex-h" v-clickout="() => { visible = false;search = '';}"
-       :class="{'active':visible, 'cp': selectable, 'cd': !selectable}">
-    <div class="rk-dashboard-bar-i flex-h" @click="selectable && (visible = !visible)">
+       :class="{'active':visible, 'cp': selectable, 'cd': !selectable, 'disable-select': disabled}">
+    <div class="rk-dashboard-bar-i flex-h" @click="clickEvent">
       <svg class="icon lg mr-15">
         <use :xlink:href="`#${icon}`"></use>
       </svg>
@@ -52,6 +52,7 @@ export default class ToolBarSelect extends Vue {
   @Prop() public current!: any;
   @Prop() public title!: string;
   @Prop() public icon!: string;
+  @Prop() public disabled: any;
   @Prop({type: Boolean, default: true}) public selectable!: boolean;
   public search: string = '';
   public visible: boolean = false;
@@ -65,10 +66,22 @@ export default class ToolBarSelect extends Vue {
     this.$emit('onChoose', i);
     this.visible = false;
   }
+  public clickEvent() {
+    if (this.disabled) {
+      return
+    }
+    if (this.selectable) {
+      this.visible = !this.visible
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
+.disable-select {
+  cursor: not-allowed;
+  color: #a7aebb;
+}
 .rk-dashboard-bar-select {
   position: relative;
   z-index: 1;

@@ -16,8 +16,8 @@
  */
 
 <template>
-  <div class="rk-dashboard-bar-select cp flex-h" v-clickout="() => {search = ''; visible = false;}" :class="{'active':visible}">
-    <div class="rk-dashboard-bar-i flex-h" @click="visible = !visible;SEARCH_ENDPOINTS('');">
+  <div class="rk-dashboard-bar-select cp flex-h" v-clickout="() => {search = ''; visible = false;}" :class="{'active':visible, 'disable-select': disabled}">
+    <div class="rk-dashboard-bar-i flex-h" @click="clickEvent">
       <svg class="icon lg mr-15">
         <use :xlink:href="`#${icon}`"></use>
       </svg>
@@ -54,6 +54,7 @@ export default class ToolBarEndpointSelect extends Vue {
   @Prop() public current!: any;
   @Prop() public title!: string;
   @Prop() public icon!: string;
+  @Prop() public disabled!: string; 
   public search: string = '';
   public visible: boolean = false;
   public handleSearch() {
@@ -66,10 +67,21 @@ export default class ToolBarEndpointSelect extends Vue {
     this.$emit('onChoose', i);
     this.visible = false;
   }
+  public clickEvent() {
+    if (this.disabled) {
+      return 
+    }
+    this.visible = !this.visible;
+    this.SEARCH_ENDPOINTS('');
+  }
 }
 </script>
 
 <style lang="scss" scoped>
+.disable-select {
+  cursor: not-allowed;
+  color: #a7aebb;
+}
 .rk-dashboard-bar-select {
   position: relative;
   z-index: 1;
