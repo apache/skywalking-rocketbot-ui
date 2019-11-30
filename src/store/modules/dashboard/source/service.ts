@@ -19,6 +19,7 @@ import { SlowItem } from '@/types/global';
 import { Value } from '@/types/dashboard';
 
 export interface State {
+  serviceApdexScore: {ApdexScore: number[]};
   serviceResponseTime: { ResponseTime: number[]; };
   serviceInstanceThroughput: SlowItem[];
   serviceSLA: { SLA: number[]; };
@@ -34,6 +35,7 @@ export interface State {
 }
 
 export const initState: State = {
+  serviceApdexScore: { ApdexScore: [] },
   serviceResponseTime: { ResponseTime: [] },
   serviceInstanceThroughput: [],
   serviceSLA: { SLA: [] },
@@ -70,5 +72,9 @@ export const SetService = (state: State, params: any) => {
   }
   if (params && params.serviceThroughput) {
     state.serviceThroughput.Throughput = params.serviceThroughput.values.map((i: Value) => i.value);
+  }
+  if (params && params.serviceApdexScore) {
+    state.serviceApdexScore.ApdexScore =
+      params.serviceApdexScore.values.map((i: any) => Number((i.value / 10000).toFixed(2)));
   }
 };

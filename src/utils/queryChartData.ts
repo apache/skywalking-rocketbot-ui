@@ -39,7 +39,8 @@ export const queryChartData = {
     { o: 'Service', d: 'serviceInstanceThroughput', c: 'ChartTrace', t: 'Running ServiceInstance', w: 3, h: 250 },
     { o: 'Service', d: 'servicePercent', c: 'ChartLine', t: 'Service Response Time Percentile', w: 3, h: 250 },
     { o: 'Service', d: 'serviceSlowEndpoint', c: 'ChartSlow', t: 'Service Slow Endpoint', w: 3, h: 250 },
-    { o: 'Service', d: 'serviceApdexScore', c: 'ChartLine', t: 'Service Apdex Score', w: 3, h: 250},
+    { o: 'Service', d: 'serviceApdexScore', c: 'ChartLine', t: 'Service ApdexScore', w: 3, h: 250},
+    { o: 'Service', d: 'serviceApdexScore', c: 'ChartNum', t: 'Service Avg ApdexScore', w: 3, h: 250},
     // Endpoint
     { o: 'ServiceEndpoint', d: 'endpointResponseTime', c: 'ChartNum', t: 'Endpoint Avg ResponseTime', w: 3, h: 250 },
     { o: 'ServiceEndpoint', d: 'endpointThroughput', c: 'ChartNum', t: 'Endpoint Avg Throughput', w: 3, h: 250 },
