@@ -66,7 +66,7 @@ export default class DashboardComp extends Vue {
       Database: [],
     };
     this.rocketComps.data[this.compType].forEach((i: any) => {
-      temp[i.o].push(i);
+      temp[i.o] && temp[i.o].push(i);
     });
     return temp;
   }
