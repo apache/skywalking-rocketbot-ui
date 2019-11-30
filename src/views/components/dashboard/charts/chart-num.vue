@@ -34,7 +34,7 @@ export default class ChartNum extends Vue {
     return data.reduce((acc: number, val: number) => acc + val, 0) / data.length;
   }
   get unit() {
-    let unit = 'ms';
+    let unit = 'ms' as string | null;
     if (
       this.i.d === 'databaseThroughput' ||
       this.i.d === 'serviceThroughput' ||
@@ -50,6 +50,9 @@ export default class ChartNum extends Vue {
       this.i.d === 'endpointSLA'
     ) {
       unit = '%';
+    }
+    if (this.i.d === 'serviceApdexScore') {
+      unit = null;
     }
     return unit;
   }
