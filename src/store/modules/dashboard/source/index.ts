@@ -40,6 +40,7 @@ export interface State {
   globalHeatmap: number[][];
   globalSlow: SlowItem[];
   globalThroughput: SlowItem[];
+  serviceApdexScore: { ApdexScore: number[]; };
   serviceResponseTime: { ResponseTime: number[]; };
   serviceInstanceThroughput: SlowItem[];
   serviceSLA: { SLA: number[]; };

@@ -107,3 +107,14 @@ export const serviceInstanceThroughput =  {
     value
   }`,
 };
+
+export const serviceApdexScore =  {
+  variable: ['$serviceId: ID!', '$duration: Duration!'],
+  fragment: `
+  serviceApdexScore: getLinearIntValues(metric: {
+    name: "service_apdex"
+    id: $serviceId
+  }, duration: $duration) {
+    values {value}
+  }`,
+};

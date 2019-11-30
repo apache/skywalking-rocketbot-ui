@@ -17,12 +17,12 @@
 
 export default [
   {
-    o: 'Global',
-    d: 'globalBrief',
-    c: 'ChartBrief',
-    t: 'Global Brief',
+    o: 'Service',
+    d: 'serviceApdexScore',
+    c: 'ChartNum',
+    t: 'Service Avg ApdexScore',
     w: 3,
-    h: 250,
+    h: 80,
   },
   {
     o: 'Service',
@@ -47,6 +47,14 @@ export default [
     t: 'Service Avg SLA',
     w: 3,
     h: 80,
+  },
+  {
+    o: 'Service',
+    d: 'serviceApdexScore',
+    c: 'ChartLine',
+    t: 'Service ApdexScore',
+    w: 3,
+    h: 170,
   },
   {
     o: 'Service',
