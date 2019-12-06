@@ -86,9 +86,6 @@ export default class Dashboard extends Vue {
     return this.MIXHANDLE_GET_OPTION({compType: this.compType, duration: this.durationTime})
       .then(() => {this.handleRefresh(); });
   }
-  // private beforeCreate() {
-  //   this.$store.registerModule('rocketDashboard', dashboard);
-  // }
   private beforeMount() {
     if (window.localStorage.getItem('dashboard')) {
       const data: string = `${window.localStorage.getItem('dashboard')}`;
@@ -97,9 +94,6 @@ export default class Dashboard extends Vue {
     this.handleOption();
     this.SET_EVENTS([this.handleRefresh]);
   }
-  // private beforeDestroy() {
-  //   this.$store.unregisterModule('rocketDashboard');
-  // }
 }
 </script>
 <style lang="scss">

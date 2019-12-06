@@ -18,11 +18,12 @@
 <template>
   <div>
     <div class="rk-dashboard-bar flex-h" v-if="compType === 'service'">
+      <RkBack v-if="$route.query.from" class="ml-5"/>
       <div class="rk-dashboard-bar-reload">
-        <svg class="icon lg vm cp rk-btn ghost" :style="`color:${!rocketGlobal.edit? '' :'#ffc107'}`" @click="handleSetEdit"><use :xlink:href="!rocketGlobal.edit?'#lock':'#lock-open'"></use></svg>
+        <rk-button :icon="!rocketGlobal.edit?'#lock':'#lock-open'" :size="'lg'" :ghost="true" @click="handleSetEdit"></rk-button>
       </div>
       <div class="rk-dashboard-bar-reload">
-        <svg class="icon lg vm cp rk-btn ghost" @click="handleOption"><use xlink:href="#retry"></use></svg>
+        <rk-button icon="#retry" :size="'lg'" :ghost="true" @click="handleOption"></rk-button>
       </div>
       <ToolBarSelect @onChoose="selectService" :title="this.$t('currentService')" :current="stateDashboard.currentService" :data="stateDashboard.services" icon="package"/>
       <ToolBarEndpointSelect @onChoose="selectEndpoint" :title="this.$t('currentEndpoint')" :current="stateDashboard.currentEndpoint" :data="stateDashboard.endpoints" icon="code"/>

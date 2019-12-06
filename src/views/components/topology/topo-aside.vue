@@ -114,41 +114,6 @@
         />
       </div>
     </div>
-    <el-drawer
-        v-if="stateTopo.showAlarmDialog"
-        custom-class="performance-metrics-window"
-        size="75%"
-        destroy-on-close
-        :visible.sync="stateTopo.showAlarmDialog"
-    >
-      <alarm-containers :style="`height: ${drawerMainBodyHeight}`"
-                        :alarmScope="{label: 'Service', key: 'Service'}"
-                        inTopo
-                        :keyword="stateTopo.honeycombNode.name"
-      ></alarm-containers>
-    </el-drawer>
-    <el-drawer
-        custom-class="performance-metrics-window"
-        v-if="stateTopo.showTraceDialog"
-        size="75%"
-        destroy-on-close
-        :visible.sync="stateTopo.showTraceDialog"
-    >
-      <trace-containers :style="`height: ${drawerMainBodyHeight}`"
-                        :service="{label: stateTopo.honeycombNode.name, key: stateTopo.honeycombNode.id}"
-                        inTopo
-      ></trace-containers>
-    </el-drawer>
-    <instances-survey-window
-        v-if="stateTopo.showInstancesDialog"
-        :is-show.sync="stateTopo.showInstancesDialog"
-        :instances="stateDashboardOption.instances"
-    ></instances-survey-window>
-    <endpoint-survey-window
-        v-if="stateTopo.showEndpointDialog"
-        :is-show.sync="stateTopo.showEndpointDialog"
-        :endpoints="stateDashboardOption.endpoints"
-    ></endpoint-survey-window>
   </aside>
 </template>
 <script lang="ts">
@@ -159,14 +124,9 @@ import TopoChart from './topo-chart.vue';
 import TopoService from './topo-services.vue';
 import ChartResponse from './topo-response.vue';
 import Radial from './radial.vue';
-import AlarmContainers from '@/views/containers/alarm.vue';
-import TraceContainers from '@/views/containers/trace.vue';
-import InstancesSurveyWindow from '@/views/containers/instances-survey-window.vue';
-import EndpointSurveyWindow from '@/views/containers/endpoint-survey-window.vue';
 import { initState } from '@/store/modules/dashboard/modules/dashboard-data-layout';
 
-@Component({components: {TopoChart, TopoService, ChartResponse, Radial, AlarmContainers,
-    TraceContainers, InstancesSurveyWindow, EndpointSurveyWindow}})
+@Component({components: {TopoChart, TopoService, ChartResponse, Radial}})
 export default class TopoAside extends Vue {
   @State('rocketTopo') private stateTopo!: topoState;
   @State('rocketOption') private stateDashboardOption!: any;
@@ -178,7 +138,6 @@ export default class TopoAside extends Vue {
   @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
   @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
 
-  private drawerMainBodyHeight = '100%';
   private initState = initState;
   private radioStatus: boolean = false;
   private show: boolean = true;
@@ -186,22 +145,9 @@ export default class TopoAside extends Vue {
   private isMini: boolean = true;
   private showInfoCount: number = 0;
 
-  private resize() {
-    this.drawerMainBodyHeight = `${document.body.clientHeight - 50}px`;
-  }
-
-  private beforeCreate() {
-    this.$store.registerModule('rocketTopo', topo);
-  }
-
   private async created() {
     this.getTopo();
     this.SET_COMPS_TREE(this.initState.tree);
-  }
-
-  private mounted() {
-    this.resize();
-    window.addEventListener('resize', this.resize);
   }
 
   private getTopo() {
@@ -209,10 +155,8 @@ export default class TopoAside extends Vue {
   }
 
   private beforeDestroy() {
-    window.removeEventListener('resize', this.resize);
     this.CLEAR_TOPO_INFO();
     this.CLEAR_TOPO();
-    this.$store.unregisterModule('rocketTopo');
   }
 
   get types() {
@@ -295,7 +239,7 @@ export default class TopoAside extends Vue {
   width: 280px;
   z-index: 101;
   color: #ddd;
-  background-color: #333;
+  background-color: #252a2f;
   padding: 15px 20px 10px;
   .label{
     display: inline-block;
