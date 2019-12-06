@@ -29,8 +29,8 @@ export default class RkBack extends Vue {
   @Prop({ default: '' }) private size!: string;
   private handleBack() {
     const query = this.$route.query as any;
-    if (query.form) {
-      this.$router.push(query.form);
+    if (query.from) {
+      this.$router.push(query.from);
     } else {
       this.$emit('back');
     }

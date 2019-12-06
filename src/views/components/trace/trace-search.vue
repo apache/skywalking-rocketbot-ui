@@ -17,7 +17,7 @@
 
 <template>
   <div class="rk-trace-search">
-    <div>
+    <div class="clear">
       <a class="rk-trace-clear-btn r" @click="status = !status">
         <span class="mr-5 vm">{{this.$t('more')}}</span>
         <svg class="icon trans vm" :style="`transform: rotate(${status?180:0}deg);`">
@@ -37,6 +37,7 @@
         <span class="vm">{{this.$t('clear')}}</span>
       </a>
       <div class="flex-h">
+        <RkBack v-if="$route.query.from"/>
         <TraceSelect :hasSearch="true" :title="this.$t('service')" :value="service" @input="chooseService"
                      :data="rocketTrace.services" :readonly="inTopo"/>
         <TraceSelect :hasSearch="true" :title="this.$t('instance')" v-model="instance" :data="rocketTrace.instances"/>
@@ -92,7 +93,7 @@
     private status: boolean = true;
     private maxTraceDuration: string = localStorage.getItem('maxTraceDuration') || '';
     private minTraceDuration: string = localStorage.getItem('minTraceDuration') || '';
-    @Prop({default: {label: 'All', key: ''}})
+    @Prop({default: () => ({label: 'All', key: ''})})
     private service!: Option;
     private instance: Option = {label: 'All', key: ''};
     private endpointName: string = localStorage.getItem('endpointName') || '';
