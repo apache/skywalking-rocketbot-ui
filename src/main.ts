@@ -15,26 +15,31 @@
  * limitations under the License.
  */
 
-import en from '@/assets/lang/en';
-import zh from '@/assets/lang/zh';
-import clickout from '@/utils/clickout';
-import { queryOAPTimeInfo } from '@/utils/localtime';
-import tooltip from '@/utils/tooltip';
+import Vue from 'vue';
 import moment from 'dayjs';
-import 'echarts/lib/chart/bar';
-import 'echarts/lib/chart/graph';
-import 'echarts/lib/chart/heatmap';
+import clickout from '@/utils/clickout';
+import tooltip from '@/utils/tooltip';
+import zh from '@/assets/lang/zh';
+import en from '@/assets/lang/en';
+import VueI18n from 'vue-i18n';
+import eventBus from './event-bus';
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import components from './components';
 import 'echarts/lib/chart/line';
-import 'echarts/lib/chart/sankey';
+import 'echarts/lib/chart/graph';
+import 'echarts/lib/chart/bar';
 import 'echarts/lib/chart/scatter';
+import 'echarts/lib/chart/heatmap';
+import 'echarts/lib/chart/sankey';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/tooltip';
-import Vue from 'vue';
-import VueI18n from 'vue-i18n';
 import VModal from 'vue-js-modal';
 import './assets';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import { queryOAPTimeInfo } from './utils/localtime';
 
 Vue.use(eventBus);
 Vue.use(VueI18n);
@@ -57,13 +62,11 @@ const i18n = new VueI18n({
   locale: language,
   messages: {
     zh,
-    en
-  }
+    en,
+  },
 });
 
-if (!window.Promise) {
-  window.Promise = Promise;
-}
+if (!window.Promise) { window.Promise = Promise; }
 
 Vue.config.productionTip = false;
 
