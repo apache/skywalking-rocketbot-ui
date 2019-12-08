@@ -97,12 +97,6 @@ const dateFormatTime = (date: Date, step: string): string => {
   return '';
 };
 
-let utc = window.localStorage.getItem('utc');
-if (!utc) {
-  utc = (-(new Date().getTimezoneOffset() / 60)).toString();
-  window.localStorage.setItem('utc', utc);
-}
-
 export interface State {
   durationRow: Duration;
   eventStack: any;

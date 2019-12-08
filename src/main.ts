@@ -39,6 +39,7 @@ import VModal from 'vue-js-modal';
 import './assets';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import { queryOAPTimeInfo } from './utils/localtime';
 
 Vue.use(eventBus);
 Vue.use(VueI18n);
@@ -69,9 +70,13 @@ if (!window.Promise) { window.Promise = Promise; }
 
 Vue.config.productionTip = false;
 
-new Vue({
-  i18n,
-  router,
-  store,
-  render: (h) => h(App),
-}).$mount('#app');
+queryOAPTimeInfo().then(() => {
+  new Vue({
+    i18n,
+    router,
+    store,
+    render: (h) => h(App)
+  }).$mount('#app');
+});
+
+
