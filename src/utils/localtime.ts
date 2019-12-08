@@ -1,3 +1,6 @@
+import graph from '@/graph';
+import { AxiosResponse } from 'axios';
+
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -21,6 +24,25 @@ const getLocalTime = (i: number, t: Date | number) => {
   const offset = d.getTimezoneOffset() * 60000;
   const utcTime = len + offset;
   return new Date(utcTime + (3600000 * i));
+};
+
+const setTimezoneOffset = () => {
+  window.localStorage.setItem('utc', -(new Date().getTimezoneOffset() / 60) + '');
+};
+
+export const queryOAPTimeInfo = async () => {
+  let utc = window.localStorage.getItem('utc');
+  if (!utc) {
+    const res: AxiosResponse = await graph
+      .query('queryOAPTimeInfo')
+      .params({});
+    if (!res.data) {
+      debugger
+      setTimezoneOffset();
+    }
+    utc = (res.data.data.getTimeInfo.timezone / 100) + '';
+    window.localStorage.setItem('utc', utc);
+  }
 };
 
 export default getLocalTime;
