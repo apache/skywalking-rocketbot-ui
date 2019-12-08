@@ -281,7 +281,8 @@ export default {
           delete copyD.fx;
           delete copyD.fy;
           delete copyD.index;
-          that.$store.commit('rocketTopo/SET_NODE', copyD);
+         that.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
+         that.$store.commit('rocketTopo/SET_NODE', copyD);
           that.toggleNode(that.node, d, true);
           that.toggleLine(that.line, d, true);
           that.toggleLine(that.lineNode, d, true);
@@ -342,7 +343,9 @@ export default {
         .attr('ry', 3)
         .attr('fill', d => d.cpm ? '#217EF299' : '#6a6d7799')
         .on('click', function(d, i) {
-          that.$store.commit('rocketTopo/SET_MODE', d.detectPoints)
+         that.$store.commit('rocketTopo/SET_NODE', {});
+         that.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
+         that.$store.commit('rocketTopo/SET_MODE', d.detectPoints);
           event.stopPropagation();
           that.tip.hide({}, this);
           that.tip.show(d, this);
