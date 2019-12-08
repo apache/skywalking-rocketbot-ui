@@ -87,7 +87,7 @@ export default class Footerssd extends Vue {
   border-top: 1px solid #448dfe;
 }
 .rk-footer-utc{
-  color:inherit;background: 0;border: 0;outline: none; width:35px;padding-bottom: 0;
+  color:inherit;background: 0;border: 0;outline: none; width:27px;padding-bottom: 0;
 }
 .rk-footer-inner{
   justify-content: space-between;

@@ -16,9 +16,8 @@
  */
 
 <template>
-  <a class="rk-btn" :class="`${size} ${ghost?'ghost':''}`" @click="$emit('click')">
-    <rk-icon v-if="icon" :icon="icon" :offset="true"/>
-    <slot/>
+  <a class="rk-btn" :class="{size, 'ghost': ghost}" @click="$emit('click')">
+    <svg class="icon"><use xlink:href="#chevron-left"></use></svg>
   </a>
 </template>
 <script lang="ts">
@@ -28,7 +27,6 @@ import { Component, Prop } from 'vue-property-decorator';
 @Component
 export default class RkBtn extends Vue {
   @Prop({ default: '' }) private size!: string;
-  @Prop({ default: '' }) private icon!: string;
   @Prop({ default: false }) private ghost!: boolean;
 }
 </script>
@@ -39,7 +37,6 @@ export default class RkBtn extends Vue {
   background-color: #448dfe;
   border-radius: 4px;
   color: #fff;
-  display: inline-block;
   transition: background-color .3s;
   &.sm{
     line-height: 24px;
