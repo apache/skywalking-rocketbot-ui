@@ -110,7 +110,6 @@ export default {
     this.tip.hide({}, this);
     window.removeEventListener('resize', this.resize);
     d3.selectAll('.d3-tip-grey').remove();
-    this.removeHoneycomb(this);
     // this.$store.commit('skywalking/setCurrentNode', []);
   },
   mounted() {
@@ -199,7 +198,6 @@ export default {
         this.toggleNode(this.node, d, false);
         this.toggleLine(this.line, d, false);
         this.toggleLine(this.lineNode, d, false);
-        that.removeHoneycomb(that);
       });
       this.defs = this.graph.append('defs');
       this.arrowMarker = this.defs
@@ -228,11 +226,49 @@ export default {
         .on('mouseover', function(d, i) {
            that.tipName.show(d, this);
         })
+          .on('contextmenu', function (d) {
+           if (d.isReal) {
+            const honeycombFrames = d3.select('#honeycomb-selector_honeycomb-frames');
+            const appGovernTopoHoneycombFrames = that.graph.append('g')
+                .attr('id', 'app-govern-topo-honeycomb-frames')
+                .attr('style', honeycombFrames.attr('style'))
+                .attr('stroke', honeycombFrames.attr('stroke')).html(honeycombFrames.html())
+                .on('mouseleave', function () {
+                 that.removeHoneycomb(that);
+                });
+            const nodeTranslate = CssHelper.translateSerialization(this.getAttribute('transform'));
+            const appGovernTopoHoneycombFramesTranslate = CssHelper.matrixSerialization(honeycombFrames.attr('transform'));
+            appGovernTopoHoneycombFramesTranslate.tx = nodeTranslate.x - 83;
+            appGovernTopoHoneycombFramesTranslate.ty = nodeTranslate.y + 72;
+            appGovernTopoHoneycombFrames.attr('transform', CssHelper.matrixDeserialization(appGovernTopoHoneycombFramesTranslate));
+
+            that.switchNativeContextMenu(false);
+            that.$store.commit('rocketTopo/SET_HONEYCOMB_NODE', d);
+
+            d3.selectAll('#honeycomb-selector_honeycomb-group-top-right').on('click', () => {
+             that.$store.commit('rocketTopo/SET_SHOW_ALARM_DIALOG', true);
+             that.removeHoneycomb(that);
+            });
+            d3.selectAll('#honeycomb-selector_honeycomb-group-below-right').on('click', () => {
+             that.$store.commit('rocketTopo/SET_SHOW_TRACE_DIALOG', true);
+             that.removeHoneycomb(that);
+            });
+            d3.selectAll('#honeycomb-selector_honeycomb-group-below-left').on('click', () => {
+             that.$store.commit('SET_CURRENT_SERVICE', { key: d.id, label: d.name });
+             that.$store.commit('rocketTopo/SET_SHOW_INSTANCES_DIALOG', true);
+             that.removeHoneycomb(that);
+            });
+            d3.selectAll('#honeycomb-selector_honeycomb-group-top-left').on('click', () => {
+             that.$store.commit('SET_CURRENT_SERVICE', { key: d.id, label: d.name });
+             that.$store.commit('rocketTopo/SET_SHOW_ENDPOINT_DIALOG', true);
+             that.removeHoneycomb(that);
+            });
+           }
+          })
         .on('mouseout', function(d, i) {
           that.tipName.hide(d, this);
         })
         .on('click', function(d, i) {
-          that.removeHoneycomb(that);
           event.stopPropagation();
           that.tip.hide({}, this);
           that.node.attr('class', '');
@@ -249,36 +285,6 @@ export default {
           that.toggleNode(that.node, d, true);
           that.toggleLine(that.line, d, true);
           that.toggleLine(that.lineNode, d, true);
-          if (d.isReal) {
-            const honeycombFrames = d3.select('#honeycomb-selector_honeycomb-frames');
-            const appGovernTopoHoneycombFrames = that.graph.append('g')
-                .attr('id', 'app-govern-topo-honeycomb-frames')
-                .attr('style', honeycombFrames.attr('style'))
-                .attr('stroke', honeycombFrames.attr('stroke')).html(honeycombFrames.html());
-            const nodeTranslate = CssHelper.translateSerialization(this.getAttribute('transform'));
-            const appGovernTopoHoneycombFramesTranslate = CssHelper.matrixSerialization(honeycombFrames.attr('transform'));
-            appGovernTopoHoneycombFramesTranslate.tx = nodeTranslate.x - 83;
-            appGovernTopoHoneycombFramesTranslate.ty = nodeTranslate.y + 72;
-            appGovernTopoHoneycombFrames.attr('transform', CssHelper.matrixDeserialization(appGovernTopoHoneycombFramesTranslate));
-
-            that.switchNativeContextMenu(false);
-            that.$store.commit('rocketTopo/SET_HONEYCOMB_NODE', d);
-
-            d3.selectAll('#honeycomb-selector_honeycomb-group-top-right').on('click', () => {
-              that.$router.push({path: '/alarm', query: { from: '/topology' , keyword: d.name}})
-            });
-            d3.selectAll('#honeycomb-selector_honeycomb-group-below-right').on('click', () => {
-              that.$router.push({path: '/trace', query: { from: '/topology', scope: JSON.stringify({ key: d.id, label: d.name }) }})
-            });
-            d3.selectAll('#honeycomb-selector_honeycomb-group-below-left').on('click', () => {
-             that.$store.commit('SET_CURRENT_SERVICE', { key: d.id, label: d.name });
-             that.$router.push({path: '/', query: { from: '/topology' }})
-            });
-            d3.selectAll('#honeycomb-selector_honeycomb-group-top-left').on('click', () => {
-             that.$store.commit('SET_CURRENT_SERVICE', { key: d.id, label: d.name });
-             that.$router.push({path: '/', query: { from: '/topology' }})
-            });
-           }
         });
       this.node
         .append('image')

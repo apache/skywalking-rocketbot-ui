@@ -17,7 +17,6 @@
 
 <template>
   <nav class="rk-alarm-tool flex-h">
-    <RkBack v-if="$route.query.from"/>
     <AlarmSelect v-show="!inTopo" :title="this.$t('filterScope')" :value="alarmScope" @input="handleFilter" :data="alarmOptions"/>
     <div class="mr-10" style="padding: 3px 15px 0">
       <div class="sm grey">{{this.$t('searchKeyword')}}</div>
@@ -40,7 +39,7 @@ export default class AlarmTool extends Vue {
   @Prop() private durationTime: any;
   @Prop() private total!: number;
   private pageNum: number = 1;
-  @Prop({default: () => ({label: 'All', key: ''})})
+  @Prop({default: {label: 'All', key: ''}})
   private alarmScope: any;
   @Prop({default: false, type: Boolean})
   private inTopo!: boolean;
@@ -76,7 +75,6 @@ export default class AlarmTool extends Vue {
   }
   private beforeMount() {
     this.SET_EVENTS([() => { this.handleRefresh(1); } ]);
-    this.handleRefresh(1);
   }
 }
 </script>

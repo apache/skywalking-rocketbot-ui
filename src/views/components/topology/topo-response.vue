@@ -18,7 +18,7 @@
 <template>
   <div>
     <div class="grey sm mb-5">{{title}}</div>
-    <RkEcharts height="80px" :option="responseConfig"/>
+    <RkEcharts height="120px" :option="responseConfig"/>
   </div>
 </template>
 

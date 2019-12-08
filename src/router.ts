@@ -33,6 +33,11 @@ const router = new Router({
   base: process.env.BASE_URL,
   linkActiveClass: 'active',
   routes: [
+    // {
+    //   path: '/login',
+    //   component: Login,
+    //   meta: { login: true },
+    // },
     {
       path: '/',
       component: Index,
@@ -48,9 +53,6 @@ const router = new Router({
         {
           path: 'topology',
           component: Topology,
-          meta: {
-            keepAlive: true,
-          },
         },
         {
           path: 'alarm',
@@ -73,6 +75,15 @@ router.beforeEach((to, from, next) => {
     }
     window.axiosCancel = [];
   }
+  // if (to.meta.login && (token === null || token === 'guest')) {
+  //   next();
+  // } else if (token === null || token === 'guest') {
+  //   next('/login');
+  // } else if (to.meta.login) {
+  //   next(from.path);
+  // } else {
+  //   next();
+  // }
   next();
 });
 
