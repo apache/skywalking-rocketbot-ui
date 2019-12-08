@@ -37,7 +37,6 @@ export const queryOAPTimeInfo = async () => {
       .query('queryOAPTimeInfo')
       .params({});
     if (!res.data) {
-      debugger
       setTimezoneOffset();
     }
     utc = (res.data.data.getTimeInfo.timezone / 100) + '';

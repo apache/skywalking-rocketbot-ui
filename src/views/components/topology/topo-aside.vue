@@ -195,8 +195,8 @@
   @Component({
     components: {
       TopoChart, TopoService, ChartResponse, Radial, AlarmContainers,
-      TraceContainers, InstancesSurveyWindow, EndpointSurveyWindow
-    }
+      TraceContainers, InstancesSurveyWindow, EndpointSurveyWindow,
+    },
   })
   export default class TopoAside extends Vue {
     @State('rocketTopo') private stateTopo!: topoState;
@@ -292,7 +292,7 @@
           .then(() => {
             this.GET_QUERY({
               serviceId: service.id || '',
-              duration: this.durationTime
+              duration: this.durationTime,
             });
           });
       }
