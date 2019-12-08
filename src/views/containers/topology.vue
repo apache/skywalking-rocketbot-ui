@@ -28,7 +28,7 @@ import { AxiosResponse } from 'axios';
 import Topo from '../components/topology/topo.vue';
 import TopoDate from '../components/topology/topo-date.vue';
 import TopoAside from '../components/topology/topo-aside.vue';
-import { State as topoState} from '@/store/modules/topology';
+import topo, { State as topoState} from '@/store/modules/topology';
 
 @Component({components: {Topo, TopoAside, TopoDate}})
 export default class Topology extends Vue {
@@ -48,9 +48,13 @@ export default class Topology extends Vue {
   private getTopo() {
     this.GET_TOPO({duration: this.durationTime});
   }
+  private beforeCreate() {
+    this.$store.registerModule('rocketTopo', topo);
+  }
   private beforeDestroy() {
     this.CLEAR_TOPO_INFO();
     this.CLEAR_TOPO();
+    this.$store.unregisterModule('rocketTopo');
   }
 }
 

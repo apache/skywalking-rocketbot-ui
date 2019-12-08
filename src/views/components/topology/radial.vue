@@ -17,6 +17,7 @@
 
 <template>
   <div class="micro-radil-chart">
+    <!-- <div class="micro-radil-chart-btn rk-btn ghost cp" @click="$emit('showRadial', false)">X</div> -->
     <RkEcharts height="100%" :option="responseConfig" ref="radial" />
   </div>
 </template>
