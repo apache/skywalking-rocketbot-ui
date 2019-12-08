@@ -1,6 +1,3 @@
-import graph from '@/graph';
-import { AxiosResponse } from 'axios';
-
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -17,6 +14,9 @@ import { AxiosResponse } from 'axios';
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import graph from '@/graph';
+import { AxiosResponse } from 'axios';
 
 const getLocalTime = (i: number, t: Date | number) => {
   const d = new Date(t);
