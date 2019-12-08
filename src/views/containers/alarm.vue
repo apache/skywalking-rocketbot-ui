@@ -17,7 +17,7 @@
 
 <template>
   <div class="rk-alarm flex-v">
-    <AlarmTool :durationTime="durationTime" :total="rocketAlarm.total" :alarmScope="alarmScope" :inTopo="inTopo" :keyword="keyword"/>
+    <AlarmTool :durationTime="durationTime" :total="rocketAlarm.total" :alarmScope="alarmScope" :inTopo="inTopo" :prop-keyword="keyword"/>
     <div style="flex-grow: 1;overflow: auto;height: 100%;">
       <AlarmTable :data="rocketAlarm.alarmService"/>
     </div>
