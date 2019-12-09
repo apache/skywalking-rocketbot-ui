@@ -237,8 +237,10 @@ export default {
           // if(segmentGroup[id].refs.length !==0 ) delete segmentGroup[id];
         })
       for (let i in segmentGroup) {
-        if(segmentGroup[i].refs.length ===0 )
+        segmentGroup[i].children.sort((a, b) => a.startTime - b.startTime);
+        if(segmentGroup[i].refs.length ===0 ) {
         this.segmentId.push(segmentGroup[i]);
+        }
       }
       this.segmentId.forEach((_, i) => {
         this.collapse(this.segmentId[i]);

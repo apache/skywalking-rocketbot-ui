@@ -251,6 +251,7 @@ export default {
           // if(segmentGroup[id].refs.length !==0 ) delete segmentGroup[id];
         })
       for (const i in segmentGroup) {
+        segmentGroup[i].children.sort((a, b) => a.startTime - b.startTime);
         if (segmentGroup[i].refs.length === 0) {
           this.segmentId.push(segmentGroup[i]);
         }
