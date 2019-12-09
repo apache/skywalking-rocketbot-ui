@@ -95,18 +95,11 @@
     @Prop({default: {label: 'All', key: ''}})
     private service!: Option;
     private instance: Option = {label: 'All', key: ''};
-    private endpointName: string = this.getUrlKey('endpointname') || localStorage.getItem('endpointName') || '';
-    private traceId: string = this.getUrlKey('traceid') || localStorage.getItem('traceId') || '';
+    private endpointName: string = localStorage.getItem('endpointName') || '';
+    private traceId: string = localStorage.getItem('traceId') || '';
     private traceState: Option = {label: 'All', key: 'ALL'};
     @Prop({default: false, type: Boolean})
     private inTopo!: boolean;
-
-    private getUrlKey(name : any) {
-      const regex:RegExp = new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)');
-      return (
-      decodeURIComponent((regex.exec(location.href)! || [, ''])[1].replace(/\+/g, '%20')) || null
-      );
-    }
   
     private dateFormat = (date: Date, step: string) => {
       const year = date.getFullYear();
@@ -243,6 +236,10 @@
     }
 
     private created() {
+      const endpoint: any = this.$route.query.endpointname || this.endpointName;
+      const traceid: any = this.$route.query.traceid || this.traceId;
+      this.endpointName = endpoint;
+      this.traceId = traceid;
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     }
 
