@@ -55,3 +55,11 @@ export const Instances = {
       }
     }
   `};
+
+export const OAPTimeInfo = {
+  query: `
+    getTimeInfo {
+      timezone
+      currentTimestamp
+    }
+  `};
