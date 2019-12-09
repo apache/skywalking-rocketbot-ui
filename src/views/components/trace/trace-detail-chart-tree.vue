@@ -239,7 +239,7 @@ export default {
       for (let i in segmentGroup) {
         segmentGroup[i].children.sort((a, b) => a.startTime - b.startTime);
         if(segmentGroup[i].refs.length ===0 ) {
-        this.segmentId.push(segmentGroup[i]);
+          this.segmentId.push(segmentGroup[i]);
         }
       }
       this.segmentId.forEach((_, i) => {
