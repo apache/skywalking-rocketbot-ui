@@ -234,10 +234,6 @@
       this.drawerMainBodyHeight = `${document.body.clientHeight - 50}px`;
     }
 
-    // private beforeCreate() {
-    //   this.$store.registerModule('rocketTopo', topo);
-    // }
-
     private created() {
       this.SET_EVENTS([]);
       this.SET_COMPS_TREE(this.initState.tree);
