@@ -20,6 +20,7 @@
     <el-drawer
       :destroy-on-close="true"
       :visible.sync="isShowSync"
+      :modal-append-to-body="false"
       direction="rtl"
       size="80%">
       <div class="rk-dashboard-bar flex-h">
