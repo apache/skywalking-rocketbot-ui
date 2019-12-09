@@ -147,6 +147,7 @@
         size="75%"
         destroy-on-close
         :visible.sync="stateTopo.showAlarmDialog"
+        :modal-append-to-body="false"
     >
       <alarm-containers :style="`height: ${drawerMainBodyHeight}`"
                         :alarmScope="{label: 'Service', key: 'Service'}"
@@ -160,6 +161,7 @@
         size="75%"
         destroy-on-close
         :visible.sync="stateTopo.showTraceDialog"
+        :modal-append-to-body="false"
     >
       <trace-containers :style="`height: ${drawerMainBodyHeight}`"
                         :service="{label: stateTopo.honeycombNode.name, key: stateTopo.honeycombNode.id}"

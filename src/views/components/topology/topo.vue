@@ -140,11 +140,6 @@ export default {
     'datas.nodes': 'draw',
   },
   methods: {
-   switchNativeContextMenu(enable) {
-    document.oncontextmenu = () => {
-     return enable;
-    };
-   },
    removeHoneycomb(that) {
     const appGovernTopoHoneycombFrames = d3.select('#app-govern-topo-honeycomb-frames');
     appGovernTopoHoneycombFrames.nodes().forEach((node) => {
@@ -158,7 +153,6 @@ export default {
     });
     setTimeout(() => {
      appGovernTopoHoneycombFrames.remove();
-     that.switchNativeContextMenu(true);
     }, 780);
    },
     draw(value, oldValue) {
@@ -226,23 +220,42 @@ export default {
         .on('mouseover', function(d, i) {
            that.tipName.show(d, this);
         })
-          .on('contextmenu', function (d) {
-           if (d.isReal) {
+        .on('mouseout', function(d, i) {
+          that.tipName.hide(d, this);
+        })
+        .on('click', function(d, i) {
+          event.stopPropagation();
+          that.tip.hide({}, this);
+          that.node.attr('class', '');
+          d3.select(this).attr('class', 'node-active');
+          const copyD = JSON.parse(JSON.stringify(d));
+          delete copyD.x;
+          delete copyD.y;
+          delete copyD.vx;
+          delete copyD.vy;
+          delete copyD.fx;
+          delete copyD.fy;
+          delete copyD.index;
+          that.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
+          that.$store.commit('rocketTopo/SET_NODE', copyD);
+          that.toggleNode(that.node, d, true);
+          that.toggleLine(that.line, d, true);
+          that.toggleLine(that.lineNode, d, true);
+          if (d.isReal) {
             const honeycombFrames = d3.select('#honeycomb-selector_honeycomb-frames');
             const appGovernTopoHoneycombFrames = that.graph.append('g')
-                .attr('id', 'app-govern-topo-honeycomb-frames')
-                .attr('style', honeycombFrames.attr('style'))
-                .attr('stroke', honeycombFrames.attr('stroke')).html(honeycombFrames.html())
-                .on('mouseleave', function () {
-                 that.removeHoneycomb(that);
-                });
+              .attr('id', 'app-govern-topo-honeycomb-frames')
+              .attr('style', honeycombFrames.attr('style'))
+              .attr('stroke', honeycombFrames.attr('stroke')).html(honeycombFrames.html())
+              .on('mouseleave', function () {
+                that.removeHoneycomb(that);
+              });
             const nodeTranslate = CssHelper.translateSerialization(this.getAttribute('transform'));
             const appGovernTopoHoneycombFramesTranslate = CssHelper.matrixSerialization(honeycombFrames.attr('transform'));
             appGovernTopoHoneycombFramesTranslate.tx = nodeTranslate.x - 83;
             appGovernTopoHoneycombFramesTranslate.ty = nodeTranslate.y + 72;
             appGovernTopoHoneycombFrames.attr('transform', CssHelper.matrixDeserialization(appGovernTopoHoneycombFramesTranslate));
 
-            that.switchNativeContextMenu(false);
             that.$store.commit('rocketTopo/SET_HONEYCOMB_NODE', d);
 
             d3.selectAll('#honeycomb-selector_honeycomb-group-top-right').on('click', () => {
@@ -263,29 +276,7 @@ export default {
              that.$store.commit('rocketTopo/SET_SHOW_ENDPOINT_DIALOG', true);
              that.removeHoneycomb(that);
             });
-           }
-          })
-        .on('mouseout', function(d, i) {
-          that.tipName.hide(d, this);
-        })
-        .on('click', function(d, i) {
-          event.stopPropagation();
-          that.tip.hide({}, this);
-          that.node.attr('class', '');
-          d3.select(this).attr('class', 'node-active');
-          const copyD = JSON.parse(JSON.stringify(d));
-          delete copyD.x;
-          delete copyD.y;
-          delete copyD.vx;
-          delete copyD.vy;
-          delete copyD.fx;
-          delete copyD.fy;
-          delete copyD.index;
-         that.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
-         that.$store.commit('rocketTopo/SET_NODE', copyD);
-          that.toggleNode(that.node, d, true);
-          that.toggleLine(that.line, d, true);
-          that.toggleLine(that.lineNode, d, true);
+          }
         });
       this.node
         .append('image')

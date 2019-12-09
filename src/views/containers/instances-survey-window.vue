@@ -22,6 +22,7 @@
       title="Instances"
       :visible.sync="isShowSync"
       direction="rtl"
+      :modal-append-to-body="false"
       size="80%">
       <div class="rk-dashboard-bar flex-h">
         <ToolBarSelect
