@@ -214,6 +214,7 @@
     @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
     @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
+    @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @State('rocketDashboard') private rocketDashboard: any;
 
 
@@ -233,12 +234,8 @@
       this.drawerMainBodyHeight = `${document.body.clientHeight - 50}px`;
     }
 
-    private beforeCreate() {
-      this.$store.registerModule('rocketTopo', topo);
-    }
-
-    private async created() {
-      this.getTopo();
+    private created() {
+      this.SET_EVENTS([]);
       this.SET_COMPS_TREE(this.initState.tree);
     }
 
