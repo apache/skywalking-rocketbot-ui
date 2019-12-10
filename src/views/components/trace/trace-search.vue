@@ -100,7 +100,7 @@
     private traceState: Option = {label: 'All', key: 'ALL'};
     @Prop({default: false, type: Boolean})
     private inTopo!: boolean;
-
+  
     private dateFormat = (date: Date, step: string) => {
       const year = date.getFullYear();
       const monthTemp = date.getMonth() + 1;
@@ -236,6 +236,8 @@
     }
 
     private created() {
+      this.endpointName = this.$route.query.endpointname? this.$route.query.endpointname.toString() : this.endpointName;
+      this.traceId = this.$route.query.traceid? this.$route.query.traceid.toString() : this.traceId;
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     }
 
