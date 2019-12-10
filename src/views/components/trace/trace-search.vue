@@ -236,10 +236,8 @@
     }
 
     private created() {
-      const endpoint: any = this.$route.query.endpointname || this.endpointName;
-      const traceid: any = this.$route.query.traceid || this.traceId;
-      this.endpointName = endpoint;
-      this.traceId = traceid;
+      this.endpointName = this.$route.query.endpointname? this.$route.query.endpointname.toString() : this.endpointName;
+      this.traceId = this.$route.query.traceid? this.$route.query.traceid.toString() : this.traceId;
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     }
 
