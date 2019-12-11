@@ -236,8 +236,8 @@
     }
 
     private created() {
-      this.endpointName = this.$route.query.endpointname? this.$route.query.endpointname.toString() : this.endpointName;
-      this.traceId = this.$route.query.traceid? this.$route.query.traceid.toString() : this.traceId;
+      this.endpointName = this.$route.query.endpointname ? this.$route.query.endpointname.toString() : this.endpointName;
+      this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     }
 

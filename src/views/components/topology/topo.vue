@@ -45,6 +45,7 @@ export default {
   data() {
     return {
       LOCAL: require('./assets/Local2.png'),
+      ARMERIA: require('./assets/ARMERIA.png'),
       CUBE: require('./assets/cube22.png'),
       CUBEERROR: require('./assets/cube21.png'),
       USER: require('./assets/USER.png'),
