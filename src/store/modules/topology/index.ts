@@ -19,6 +19,8 @@ import { Commit, ActionTree, Dispatch } from 'vuex';
 import graph from '@/graph';
 import * as types from '../../mutation-types';
 import { AxiosResponse } from 'axios';
+import deepClone from '@/utils/deepclone';
+
 interface Option {
   key: string;
   label: string;
@@ -167,11 +169,12 @@ const mutations = {
   },
   [types.SET_INSTANCE_DEPENDENCY](state: State, data: any) {
     state.instanceDependency = {
-      nodes: data.nodes,
-      calls: [],
+      ...data,
       type: 'instance_dependency',
     };
-    state.instanceDependencySource = data;
+  },
+  [types.SET_INSTANCE_DEPENDENCY_SOURCE](state: State, data: any) {
+    state.instanceDependencySource = deepClone(data);
   },
 };
 
@@ -182,6 +185,17 @@ const actions: ActionTree<State, any> = {
   },
   CLEAR_TOPO_INFO(context: { commit: Commit; state: State; }) {
     context.commit(types.SET_TOPO_RELATION, {});
+  },
+  HANDLE_INSTANCE_DEPENDENCY(context: { commit: Commit; state: State }, params: any) {
+    const { instanceDependencySource } = context.state;
+    const calls = instanceDependencySource.calls.filter((call: any) =>
+      call.source === params.id || call.target === params.id,
+    );
+    const data = {
+      nodes: instanceDependencySource.nodes,
+      calls: deepClone(calls),
+    };
+    context.commit(types.SET_INSTANCE_DEPENDENCY, data);
   },
   GET_TOPO_SERVICE_INFO(context: { commit: Commit; state: State; }, params: any) {
     return graph
@@ -276,7 +290,12 @@ const actions: ActionTree<State, any> = {
     graph.query('queryTopoInstanceDependency').params(params)
       .then((res: any) => {
         if (res.data && res.data.data) {
-          context.commit(types.SET_INSTANCE_DEPENDENCY, res.data.data.topo);
+          const data = {
+            nodes: res.data.data.topo.nodes,
+            calls: [],
+          };
+          context.commit(types.SET_INSTANCE_DEPENDENCY, data);
+          context.commit(types.SET_INSTANCE_DEPENDENCY_SOURCE, deepClone(res.data.data.topo));
         }
       });
   },

@@ -19,16 +19,17 @@
   <div class="micro-topo-chart"></div>
 </template>
 <script lang="js">
- import CssHelper from '@/utils/cssHelper';
- import * as d3 from 'd3';
- import d3tip from 'd3-tip';
+  import { TOPOTYPE } from './topo-constant';
+  import CssHelper from '@/utils/cssHelper';
+  import * as d3 from 'd3';
+  import d3tip from 'd3-tip';
  /* tslint:disable */
-const diagonal = d3.linkHorizontal()
-  .x(function (d) { return d.x })
-  .y(function (d) { return d.y });
-const diagonalvertical = d3.linkVertical()
-  .x(function (d) { return d.x })
-  .y(function (d) { return d.y });
+  const diagonal = d3.linkHorizontal()
+    .x(function (d) { return d.x })
+    .y(function (d) { return d.y });
+  const diagonalvertical = d3.linkVertical()
+    .x(function (d) { return d.x })
+    .y(function (d) { return d.y });
 
 export default {
   props: {
@@ -158,8 +159,9 @@ export default {
     draw(value, oldValue) {
       // Avoid unnecessary repetitive rendering
       const diffNodes = _.difference(_.sortBy(value, 'id'), _.sortBy(oldValue, 'id'));
-      if(value && value.length > 0 && diffNodes && diffNodes.length <=0){
-        return null;
+      if(value && value.length > 0 && diffNodes && diffNodes.length <=0
+        && this.datas.type !== TOPOTYPE.INSTANCE_DEPENDENCY) {
+        return;
       }
       const codeId = this.datas.nodes.map(i => i.id);
       for (let i = 0; i < this.datas.calls.length; i += 1) {
@@ -168,7 +170,7 @@ export default {
           this.datas.calls[i].target = this.datas.calls[i].source;
         }
       }
-      this.svg.select('.graph').remove();
+      this.svg.select(`.graph_${this.datas.type}`).remove();
       this.force = d3
         .forceSimulation(this.datas.nodes)
         .force('collide', d3.forceCollide().radius(() => 65))
@@ -179,11 +181,14 @@ export default {
         .force('center', d3.forceCenter(window.innerWidth / 2 + 100, this.height / 2))
         .on('tick', this.tick)
         .stop();
-      this.graph = this.svg.append('g').attr('class', 'graph');
+      this.graph = this.svg.append('g').attr('class', `graph_${this.datas.type}`);
       this.svg.call(this.getZoomBehavior(this.graph));
       this.graph.call(this.tip);
       this.graph.call(this.tipName);
       this.svg.on('click', (d, i) => {
+        if (this.datas.type === TOPOTYPE.INSTANCE_DEPENDENCY) {
+          return;
+        }
         event.stopPropagation();
         event.preventDefault();
         this.$store.commit('rocketTopo/SET_NODE', {});
@@ -225,7 +230,8 @@ export default {
         })
         .on('click', function(d, i) {
           event.stopPropagation();
-          if (that.datas.type) {
+          if (that.datas.type === TOPOTYPE.INSTANCE_DEPENDENCY) {
+            that.$store.dispatch('rocketTopo/HANDLE_INSTANCE_DEPENDENCY', d);
             return;
           }
           // active selected nodes and disable another nodes of non-relations
@@ -291,6 +297,9 @@ export default {
         .attr('ry', 3)
         .attr('fill', d => d.cpm ? '#217EF299' : '#6a6d7799')
         .on('click', function(d, i) {
+          if (that.datas.type === TOPOTYPE.INSTANCE_DEPENDENCY) {
+            return;
+          }
          that.$store.commit('rocketTopo/SET_NODE', {});
          that.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
          that.$store.commit('rocketTopo/SET_MODE', d.detectPoints);

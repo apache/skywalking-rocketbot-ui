@@ -147,6 +147,8 @@
             :title="$t('InstanceDependencyTitle')"
             :visible.sync="dialogTopoVisible"
             :modal-append-to-body="false"
+            :close-on-click-modal="false"
+            destroy-on-close
           >
             <TopoInstanceDependency :selectedCallId="stateTopo.selectedCallId" />
           </el-dialog>
