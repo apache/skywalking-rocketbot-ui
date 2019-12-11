@@ -170,7 +170,7 @@ export default {
           this.datas.calls[i].target = this.datas.calls[i].source;
         }
       }
-      this.svg.select(`.graph_${this.datas.type}`).remove();
+      this.svg.select(`.graph_${this.datas.type || ''}`).remove();
       this.force = d3
         .forceSimulation(this.datas.nodes)
         .force('collide', d3.forceCollide().radius(() => 65))
@@ -181,7 +181,7 @@ export default {
         .force('center', d3.forceCenter(window.innerWidth / 2 + 100, this.height / 2))
         .on('tick', this.tick)
         .stop();
-      this.graph = this.svg.append('g').attr('class', `graph_${this.datas.type}`);
+      this.graph = this.svg.append('g').attr('class', `graph_${this.datas.type || ''}`);
       this.svg.call(this.getZoomBehavior(this.graph));
       this.graph.call(this.tip);
       this.graph.call(this.tipName);

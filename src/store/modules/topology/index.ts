@@ -19,7 +19,7 @@ import { Commit, ActionTree, Dispatch } from 'vuex';
 import graph from '@/graph';
 import * as types from '../../mutation-types';
 import { AxiosResponse } from 'axios';
-import deepClone from '@/utils/deepclone';
+import deepClone from '@/utils/deepClone';
 
 interface Option {
   key: string;
