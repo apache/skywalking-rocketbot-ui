@@ -225,57 +225,14 @@ export default {
         })
         .on('click', function(d, i) {
           event.stopPropagation();
-          that.tip.hide({}, this);
-          that.node.attr('class', '');
-          d3.select(this).attr('class', 'node-active');
-          const copyD = JSON.parse(JSON.stringify(d));
-          delete copyD.x;
-          delete copyD.y;
-          delete copyD.vx;
-          delete copyD.vy;
-          delete copyD.fx;
-          delete copyD.fy;
-          delete copyD.index;
-          that.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
-          that.$store.commit('rocketTopo/SET_NODE', copyD);
-          that.toggleNode(that.node, d, true);
-          that.toggleLine(that.line, d, true);
-          that.toggleLine(that.lineNode, d, true);
+          if (that.datas.type) {
+            return;
+          }
+          // active selected nodes and disable another nodes of non-relations
+          that.clickNodesToUpdate(d, this);
           if (d.isReal) {
-            const honeycombFrames = d3.select('#honeycomb-selector_honeycomb-frames');
-            const appGovernTopoHoneycombFrames = that.graph.append('g')
-              .attr('id', 'app-govern-topo-honeycomb-frames')
-              .attr('style', honeycombFrames.attr('style'))
-              .attr('stroke', honeycombFrames.attr('stroke')).html(honeycombFrames.html())
-              .on('mouseleave', function () {
-                that.removeHoneycomb(that);
-              });
-            const nodeTranslate = CssHelper.translateSerialization(this.getAttribute('transform'));
-            const appGovernTopoHoneycombFramesTranslate = CssHelper.matrixSerialization(honeycombFrames.attr('transform'));
-            appGovernTopoHoneycombFramesTranslate.tx = nodeTranslate.x - 83;
-            appGovernTopoHoneycombFramesTranslate.ty = nodeTranslate.y + 72;
-            appGovernTopoHoneycombFrames.attr('transform', CssHelper.matrixDeserialization(appGovernTopoHoneycombFramesTranslate));
-
-            that.$store.commit('rocketTopo/SET_HONEYCOMB_NODE', d);
-
-            d3.selectAll('#honeycomb-selector_honeycomb-group-top-right').on('click', () => {
-             that.$store.commit('rocketTopo/SET_SHOW_ALARM_DIALOG', true);
-             that.removeHoneycomb(that);
-            });
-            d3.selectAll('#honeycomb-selector_honeycomb-group-below-right').on('click', () => {
-             that.$store.commit('rocketTopo/SET_SHOW_TRACE_DIALOG', true);
-             that.removeHoneycomb(that);
-            });
-            d3.selectAll('#honeycomb-selector_honeycomb-group-below-left').on('click', () => {
-             that.$store.commit('SET_CURRENT_SERVICE', { key: d.id, label: d.name });
-             that.$store.commit('rocketTopo/SET_SHOW_INSTANCES_DIALOG', true);
-             that.removeHoneycomb(that);
-            });
-            d3.selectAll('#honeycomb-selector_honeycomb-group-top-left').on('click', () => {
-             that.$store.commit('SET_CURRENT_SERVICE', { key: d.id, label: d.name });
-             that.$store.commit('rocketTopo/SET_SHOW_ENDPOINT_DIALOG', true);
-             that.removeHoneycomb(that);
-            });
+            // show some entrance icons for service nodes, such as alarm, instance, endpoint
+            that.dashboardEntranceIcons(d, this);
           }
         });
       this.node
@@ -328,8 +285,8 @@ export default {
         that.tip.hide({}, this);
       }
       this.lineNode = this.link.append('rect').attr('class', 'link-node cp')
-        .attr('width', 6)
-        .attr('height', 6)
+        .attr('width', 10)
+        .attr('height', 10)
         .attr('rx', 3)
         .attr('ry', 3)
         .attr('fill', d => d.cpm ? '#217EF299' : '#6a6d7799')
@@ -361,8 +318,63 @@ export default {
           this.tick();
         }
       });
-    },
-    isLinkNode(currNode, node) {
+  },
+  clickNodesToUpdate(d, that) {
+    this.tip.hide({}, that);
+    this.node.attr('class', '');
+    d3.select(that).attr('class', 'node-active');
+    const copyD = JSON.parse(JSON.stringify(d));
+    delete copyD.x;
+    delete copyD.y;
+    delete copyD.vx;
+    delete copyD.vy;
+    delete copyD.fx;
+    delete copyD.fy;
+    delete copyD.index;
+    this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
+    this.$store.commit('rocketTopo/SET_NODE', copyD);
+    this.toggleNode(this.node, d, true);
+    this.toggleLine(this.line, d, true);
+    this.toggleLine(this.lineNode, d, true);
+  },
+  dashboardEntranceIcons(d, context) {
+    const that = this;
+    const honeycombFrames = d3.select('#honeycomb-selector_honeycomb-frames');
+    const appGovernTopoHoneycombFrames = this.graph.append('g')
+      .attr('id', 'app-govern-topo-honeycomb-frames')
+      .attr('style', honeycombFrames.attr('style'))
+      .attr('stroke', honeycombFrames.attr('stroke')).html(honeycombFrames.html())
+      .on('mouseleave', function () {
+        that.removeHoneycomb(that);
+      });
+    const nodeTranslate = CssHelper.translateSerialization(context.getAttribute('transform'));
+    const appGovernTopoHoneycombFramesTranslate = CssHelper.matrixSerialization(honeycombFrames.attr('transform'));
+    appGovernTopoHoneycombFramesTranslate.tx = nodeTranslate.x - 83;
+    appGovernTopoHoneycombFramesTranslate.ty = nodeTranslate.y + 72;
+    appGovernTopoHoneycombFrames.attr('transform', CssHelper.matrixDeserialization(appGovernTopoHoneycombFramesTranslate));
+
+    that.$store.commit('rocketTopo/SET_HONEYCOMB_NODE', d);
+
+    d3.selectAll('#honeycomb-selector_honeycomb-group-top-right').on('click', () => {
+      that.$store.commit('rocketTopo/SET_SHOW_ALARM_DIALOG', true);
+      that.removeHoneycomb(that);
+    });
+    d3.selectAll('#honeycomb-selector_honeycomb-group-below-right').on('click', () => {
+      this.$store.commit('rocketTopo/SET_SHOW_TRACE_DIALOG', true);
+      that.removeHoneycomb(that);
+    });
+    d3.selectAll('#honeycomb-selector_honeycomb-group-below-left').on('click', () => {
+      that.$store.commit('SET_CURRENT_SERVICE', { key: d.id, label: d.name });
+      that.$store.commit('rocketTopo/SET_SHOW_INSTANCES_DIALOG', true);
+      that.removeHoneycomb(that);
+    });
+    d3.selectAll('#honeycomb-selector_honeycomb-group-top-left').on('click', () => {
+      that.$store.commit('SET_CURRENT_SERVICE', { key: d.id, label: d.name });
+      that.$store.commit('rocketTopo/SET_SHOW_ENDPOINT_DIALOG', true);
+      that.removeHoneycomb(that);
+    });
+  },
+  isLinkNode(currNode, node) {
     if (currNode.id === node.id) {
         return true;
     }
@@ -371,7 +383,7 @@ export default {
       (i.source.id === node.id || i.target.id === node.id)
     ).length;
   },
-    toggleNode(nodeCircle, currNode, isHover) {
+  toggleNode(nodeCircle, currNode, isHover) {
     if (isHover) {
       nodeCircle.sort((a, b) => a.id === currNode.id ? 1 : -1);
       nodeCircle

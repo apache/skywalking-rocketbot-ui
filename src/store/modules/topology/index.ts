@@ -66,6 +66,15 @@ export interface State {
   showTraceDialog: boolean;
   showInstancesDialog: boolean;
   showEndpointDialog: boolean;
+  instanceDependency: {
+    calls: Call[];
+    nodes: Node[];
+    type: string;
+  };
+  instanceDependencySource: {
+    calls: Call[];
+    nodes: Node[];
+  };
 }
 
 const initState: State = {
@@ -93,6 +102,15 @@ const initState: State = {
   showTraceDialog: false,
   showInstancesDialog: false,
   showEndpointDialog: false,
+  instanceDependency: {
+    calls: [],
+    nodes: [],
+    type: 'instance_denpendency',
+  },
+  instanceDependencySource: {
+    calls: [],
+    nodes: [],
+  },
 };
 
 // getters
@@ -146,6 +164,14 @@ const mutations = {
     state.p90 = data.p90 ? data.p90.values.map((i: any) => i.value) : [];
     state.p95 = data.p95 ? data.p95.values.map((i: any) => i.value) : [];
     state.p99 = data.p99 ? data.p99.values.map((i: any) => i.value) : [];
+  },
+  [types.SET_INSTANCE_DEPENDENCY](state: State, data: any) {
+    state.instanceDependency = {
+      nodes: data.nodes,
+      calls: [],
+      type: 'instance_dependency',
+    };
+    state.instanceDependencySource = data;
   },
 };
 
@@ -243,6 +269,16 @@ const actions: ActionTree<State, any> = {
           context.commit(types.SET_TOPO, {calls, nodes});
         });
     });
+  },
+  GET_TOPO_INSTANCE_DEPENDENCY(context: { commit: Commit; state: State; }, params: {
+    clientServiceId: string, serverServiceId: string, duration: string}) {
+
+    graph.query('queryTopoInstanceDependency').params(params)
+      .then((res: any) => {
+        if (res.data && res.data.data) {
+          context.commit(types.SET_INSTANCE_DEPENDENCY, res.data.data.topo);
+        }
+      });
   },
 };
 

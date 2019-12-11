@@ -139,6 +139,18 @@
             />
           </div>
         </div>
+        <div class="show-dependency" v-if="stateTopo.selectedCallId">
+          <a class="rk-btn lg" @click="dialogTopoVisible=true">{{$t('ShowInstanceDependency')}}</a>
+          <el-dialog
+            class="instance-dependency" 
+            :width="'90%'"
+            :title="$t('InstanceDependencyTitle')"
+            :visible.sync="dialogTopoVisible"
+            :modal-append-to-body="false"
+          >
+            <TopoInstanceDependency :selectedCallId="stateTopo.selectedCallId" />
+          </el-dialog>
+        </div>
       </div>
     </div>
     <el-drawer
@@ -193,11 +205,13 @@
   import TopoChart from './topo-chart.vue';
   import ChartResponse from './topo-response.vue';
   import TopoService from './topo-services.vue';
+  import TopoInstanceDependency from './topo-instance-dependency.vue';
 
   @Component({
     components: {
       TopoChart, TopoService, ChartResponse, Radial, AlarmContainers,
       TraceContainers, InstancesSurveyWindow, EndpointSurveyWindow,
+      TopoInstanceDependency,
     },
   })
   export default class TopoAside extends Vue {
@@ -217,7 +231,7 @@
     @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @State('rocketDashboard') private rocketDashboard: any;
 
-
+    private dialogTopoVisible = false;
     private drawerMainBodyHeight = '100%';
     private initState = initState;
     private radioStatus: boolean = false;
@@ -346,6 +360,24 @@
 
     &.active {
       color: #448dfe;
+    }
+  }
+  .show-dependency {
+    margin: 20px 0;
+    .rk-btn {
+      display: block;
+      text-align: center;
+    }
+    .el-dialog__header{
+      background: #333;
+      .el-dialog__title{
+        color: #efeff1;
+      }
+    }
+    .el-dialog__body{
+      background: #333;
+      color: #efeff1;
+      height: 650px;
     }
   }
 
