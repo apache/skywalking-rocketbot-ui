@@ -97,7 +97,7 @@
             />
           </div>
         </div>
-        <div class="show-dependency" v-if="stateTopo.selectedCallId && instanceBtnIsShow">
+        <div class="show-dependency" v-if="stateTopo.selectedCallId">
           <a class="rk-btn lg" @click="dialogTopoVisible=true">{{$t('ShowInstanceDependency')}}</a>
           <el-dialog
             class="instance-dependency" 
@@ -131,13 +131,11 @@
     @State('rocketTopo') private stateTopo!: topoState;
     @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
-    // @State('rocketDashboard') private rocketDashboard: any;
-    @Prop() private rocketDashboard: any;
-    @Prop() private instanceBtnIsShow: boolean = false;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
+    @State('rocketDashboard') private rocketDashboard: any;
 
     private isMini: boolean = true;
     private showInfoCount: number = 0;

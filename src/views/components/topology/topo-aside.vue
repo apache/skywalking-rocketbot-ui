@@ -58,7 +58,7 @@
           />
         </div>
       </div>
-      <TopoDetectPoint :rocketDashboard="rocketDashboard" :instanceBtnIsShow="true"/>
+      <TopoDetectPoint />
     </div>
     <el-drawer
         v-if="stateTopo.showAlarmDialog"
