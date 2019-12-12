@@ -1,6 +1,7 @@
-import Vue from 'vue';
+import Vue, { VueConstructor  } from 'vue';
 
 type VueComponentVM = Vue & { _uid: string; };
+
 
 interface Handles {
   [key: string]: any[];
@@ -11,14 +12,14 @@ export class EventBus {
   private readonly eventMapUid: any;
   private handles!: Handles;
 
-  constructor(vue: Vue) {
+  constructor(vue: VueConstructor) {
     if (!this.handles) {
       Object.defineProperty(this, 'handles', {
         value: {},
         enumerable: false,
       });
     }
-    this.Vue = vue;
+    this.Vue = Vue;
     // _uid and event name map
     this.eventMapUid = {};
   }
@@ -62,6 +63,17 @@ export class EventBus {
     delete this.handles[eventName];
   }
 
+  /**
+   * eventBus.$offVmEvent.
+   * @param uid uid of VueComponentVM
+   */
+  public $offVmEvent(uid: string) {
+    const currentEvents = this.eventMapUid[uid] || [];
+    currentEvents.forEach((event: any) => {
+      this.$off(event);
+    });
+  }
+
   private setEventMapUid(uid: string, eventName: string) {
     if (!this.eventMapUid[uid]) {
       this.eventMapUid[uid] = [];
@@ -69,24 +81,17 @@ export class EventBus {
     // Push the name of each _uid subscription to the array to which the respective uid belongs.
     this.eventMapUid[uid].push(eventName);
   }
-
-  private $offVmEvent(uid: string) {
-    const currentEvents = this.eventMapUid[uid] || [];
-    currentEvents.forEach((event: any) => {
-      this.$off(event);
-    });
-  }
 }
 
 const $EventBus = {
-  install: (vue: any) => {
+  install: (vue: VueConstructor) => {
     vue.prototype.$eventBus = new EventBus(vue);
     vue.mixin({
       deactivated() {
-        this.$eventBus.$offVmEvent(this._uid);
+        (this as VueComponentVM).$eventBus.$offVmEvent((this as VueComponentVM)._uid);
       },
       beforeDestroy() {
-        this.$eventBus.$offVmEvent(this._uid);
+        (this as VueComponentVM).$eventBus.$offVmEvent((this as VueComponentVM)._uid);
       },
     });
   },
