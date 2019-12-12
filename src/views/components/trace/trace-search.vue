@@ -92,7 +92,7 @@
     private status: boolean = true;
     private maxTraceDuration: string = localStorage.getItem('maxTraceDuration') || '';
     private minTraceDuration: string = localStorage.getItem('minTraceDuration') || '';
-    @Prop({default: {label: 'All', key: ''}})
+    @Prop({default: () => ({label: 'All', key: ''})})
     private service!: Option;
     private instance: Option = {label: 'All', key: ''};
     private endpointName: string = localStorage.getItem('endpointName') || '';
@@ -100,7 +100,7 @@
     private traceState: Option = {label: 'All', key: 'ALL'};
     @Prop({default: false, type: Boolean})
     private inTopo!: boolean;
-  
+
     private dateFormat = (date: Date, step: string) => {
       const year = date.getFullYear();
       const monthTemp = date.getMonth() + 1;

@@ -44,7 +44,7 @@ export default class Trace extends Vue {
   @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
   @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
 
-  @Prop({default: {label: 'All', key: ''}})
+  @Prop({default: () => ({label: 'All', key: ''})})
   private service!: Option;
 
   @Prop({default: false, type: Boolean})
