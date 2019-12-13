@@ -29,8 +29,9 @@ interface Call {
   avgResponseTime: number;
   cpm: number;
   isAlert: boolean;
-  source: string;
-  target: string;
+  source: string | any;
+  target: string | any;
+  id: string;
 }
 interface Node {
   apdex: number;
@@ -51,7 +52,7 @@ export interface State {
   calls: Call[];
   nodes: Node[];
   detectPoints: string[];
-  selectedCallId: string;
+  selectedServiceCall: Call | null;
   currentNode: any;
   current: Option;
   mode: boolean;
@@ -86,7 +87,7 @@ const initState: State = {
   callback: '',
   mode: true,
   detectPoints: [],
-  selectedCallId: '',
+  selectedServiceCall: null,
   calls: [],
   nodes: [],
   currentNode: {},
@@ -161,8 +162,10 @@ const mutations = {
     state.calls = data.calls;
     state.nodes = data.nodes;
   },
+  [types.SET_SELECTED_CALL](state: State, data: any) {
+    state.selectedServiceCall = data;
+  },
   [types.SET_TOPO_RELATION](state: State, data: any) {
-    state.selectedCallId = data.id;
     state.getResponseTimeTrend = data.getResponseTimeTrend ?
     data.getResponseTimeTrend.values.map((i: any) => i.value) : [];
     state.getSLATrend = data.getSLATrend ? data.getSLATrend.values.map((i: any) => i.value) : [];
@@ -210,6 +213,7 @@ const actions: ActionTree<State, any> = {
   },
   CLEAR_TOPO_INFO(context: { commit: Commit; state: State; }) {
     context.commit(types.SET_TOPO_RELATION, {});
+    context.commit(types.SET_SELECTED_CALL, null);
   },
   HANDLE_INSTANCE_DEPENDENCY(context: { commit: Commit; state: State }, params: any) {
     const { instanceDependencySource } = context.state;
@@ -240,9 +244,13 @@ const actions: ActionTree<State, any> = {
   GET_TOPO_SERVICE_INFO(context: { commit: Commit; state: State; }, params: any) {
     return graph
     .query('queryTopoServiceInfo')
-    .params(params)
+    .params({
+      id: params.id,
+      duration: params.duration,
+    })
     .then((res: AxiosResponse) => {
-      context.commit('SET_TOPO_RELATION', Object.assign(res.data.data, { id: params.id }));
+      context.commit('SET_TOPO_RELATION', res.data.data);
+      context.commit(types.SET_SELECTED_CALL, params);
     });
   },
   GET_TOPO_CLIENT_INFO(context: { commit: Commit; state: State; }, params: any) {
@@ -250,7 +258,8 @@ const actions: ActionTree<State, any> = {
     .query('queryTopoClientInfo')
     .params(params)
     .then((res: AxiosResponse) => {
-      context.commit('SET_TOPO_RELATION', Object.assign(res.data.data, { id: params.id }));
+      context.commit('SET_TOPO_RELATION', res.data.data);
+      context.commit(types.SET_SELECTED_CALL, params);
     });
   },
   GET_TOPO(context: { commit: Commit; state: State; }, params: any) {

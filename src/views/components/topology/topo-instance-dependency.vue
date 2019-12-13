@@ -93,13 +93,12 @@ export default class TopoInstanceDependency extends Vue {
   private showInfo: boolean = true;
 
   private created() {
-    if (!this.stateTopo.selectedCallId) {
+    if (!(this.stateTopo.selectedServiceCall && this.stateTopo.selectedServiceCall.source)) {
       return;
     }
-    const selectedIds = this.stateTopo.selectedCallId.split('_');
     this.GET_INSTANCE_DEPENDENCY({
-      serverServiceId: selectedIds[0],
-      clientServiceId: selectedIds[1],
+      serverServiceId: this.stateTopo.selectedServiceCall.source.id,
+      clientServiceId: this.stateTopo.selectedServiceCall.target.id,
       duration: this.durationTime,
     });
   }

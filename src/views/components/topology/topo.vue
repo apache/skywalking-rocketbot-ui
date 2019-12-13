@@ -281,7 +281,8 @@ export default {
         .attr('text-anchor', 'middle')
         .attr('x', 22)
         .attr('y', 70)
-        .text(d => d.name.length > 12 ? `${d.name.substring(0,12)}...`: d.name)
+        // .text(d => d.name)
+        .text(d => d.name.length > 20 ? `${d.name.substring(0, 20)}...`: d.name)
       this.glink = this.graph.append('g').selectAll('.link');
       this.link = this.glink.data(this.datas.calls).enter();
       this.line = this.link.append('path').attr('class', 'link')
@@ -328,11 +329,11 @@ export default {
     event.stopPropagation();
     this.tip.hide({}, that);
     this.tip.show(d, that);
-    this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', {id:d.id,duration: this.$store.getters.durationTime});
+    this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', {...d,duration: this.$store.getters.durationTime});
     this.$store.commit('rocketTopo/SET_CALLBACK', () => {
       this.tip.hide({}, that);
       this.tip.show(d, that);
-      this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', {id:d.id,duration: this.$store.getters.durationTime});
+      this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', {...d,duration: this.$store.getters.durationTime});
     })
   },
   clickNodesToUpdate(d, that) {

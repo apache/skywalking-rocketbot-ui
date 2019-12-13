@@ -28,7 +28,7 @@
     </svg>
     <TopoService/>
     <div v-if="show">
-      <div class="link-topo-aside-box" style="top:50px" v-if="!stateTopo.selectedCallId && showServerInfo">
+      <div class="link-topo-aside-box" style="top:50px" v-if="!stateTopo.selectedServiceCall && showServerInfo">
         <div class="mb-20">
           <span class="b dib mr-20">{{$t('serviceDetail')}}</span>
         </div>

@@ -16,7 +16,7 @@
 */
 
 <template>
-  <div v-if="stateTopo.selectedCallId || showServerInfo"
+  <div v-if="stateTopo.selectedServiceCall || showServerInfo"
            :class="`link-topo-aside-box link-topo-aside-box-${isMini?'min':'max'}`"
            :style="`top:80px;position: fixed;right: 30px;${showInfoCount === 0 ? 'animation: unset;': ''}`">
         <svg
@@ -27,7 +27,7 @@
           <use xlink:href="#chevron-left"/>
         </svg>
         <div class="mb-5 clear">
-          <span v-if="stateTopo.selectedCallId" class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
+          <span v-if="stateTopo.selectedServiceCall" class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
           <span v-else-if="showServerInfo" class="b dib mr-20 vm">{{ $t('serviceDetail') }}</span>
           <span
               v-if="stateTopo.detectPoints.indexOf('CLIENT') !== -1"
@@ -43,7 +43,7 @@
           >{{ this.$t('server') }}</span>
         </div>
         <div v-if="showInfo">
-          <div v-if="stateTopo.selectedCallId">
+          <div v-if="stateTopo.selectedServiceCall">
             <TopoChart
                 v-if="stateTopo.getResponseTimeTrend.length"
                 :data="stateTopo.getResponseTimeTrend"
@@ -97,18 +97,18 @@
             />
           </div>
         </div>
-        <div class="show-dependency" v-if="stateTopo.selectedCallId">
+        <div class="show-dependency" v-if="stateTopo.selectedServiceCall">
           <a class="rk-btn lg" @click="dialogTopoVisible=true">{{$t('ShowInstanceDependency')}}</a>
           <el-dialog
             class="instance-dependency" 
             :width="'90%'"
-            :title="stateTopo.selectedInstanceCall"
+            :title="`${stateTopo.selectedServiceCall.source.name} -> ${stateTopo.selectedServiceCall.target.name} Instance Dependency`"
             :visible.sync="dialogTopoVisible"
             :modal-append-to-body="false"
             :close-on-click-modal="false"
             :destroy-on-close="true"
           >
-            <TopoInstanceDependency :selectedCallId="stateTopo.selectedCallId" />
+            <TopoInstanceDependency />
           </el-dialog>
         </div>
       </div>
@@ -146,7 +146,7 @@
       return this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal;
     }
 
-    @Watch('stateTopo.selectedCallId')
+    @Watch('stateTopo.selectedServiceCall')
     private watchDetectPointNodeId(newValue: string) {
       if (newValue || this.stateTopo.currentNode.isReal) {
         this.showInfo = true;
@@ -169,7 +169,7 @@
             });
           });
       }
-      if (newValue || this.stateTopo.selectedCallId) {
+      if (newValue || this.stateTopo.selectedServiceCall) {
         this.showInfo = true;
       } else {
         this.showInfo = false;
