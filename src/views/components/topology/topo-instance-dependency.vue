@@ -17,74 +17,50 @@
 
 <template>
   <div class="rk-topo-instance-dependency">
-    <div v-if="showInfo" class="rk-instance-dependency-metrics">
+    <div v-if="stateTopo.selectedInstanceCall" class="rk-instance-dependency-metrics">
       <div class="mb-5 clear">
-        <span v-if="stateTopo.selectedCallId" class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
-        <span v-else-if="showServerInfo" class="b dib mr-20 vm">{{ $t('serviceDetail') }}</span>
+        <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
         <span
-            v-if="stateTopo.detectPoints.indexOf('CLIENT') !== -1"
-            :class="{'active':!stateTopo.mode}"
+            v-if="stateTopo.selectedInstanceCall.detectPoints.includes('CLIENT')"
             class="link-topo-aside-box-btn tc r sm cp b"
-            @click="setMode(false)"
+            :class="{'active':stateTopo.queryInstanceMetricsType==='CLIENT'}"
+            @click="setMode('CLIENT')"
         >{{ this.$t('client') }}</span>
         <span
-            v-if="stateTopo.detectPoints.indexOf('SERVER') !== -1"
-            :class="{'active':stateTopo.mode}"
+            v-if="stateTopo.selectedInstanceCall.detectPoints.includes('SERVER')"
             class="link-topo-aside-box-btn tc r sm cp b"
-            @click="setMode(true)"
+            :class="{'active':stateTopo.queryInstanceMetricsType==='SERVER' }"
+            @click="setMode('SERVER')"
         >{{ this.$t('server') }}</span>
       </div>
-      <div v-if="stateTopo.selectedCallId">
+      <div v-if="stateTopo.selectedInstanceCall">
         <TopoChart
-            v-if="stateTopo.getResponseTimeTrend.length"
-            :data="stateTopo.getResponseTimeTrend"
+            v-if="stateTopo.instanceDependencyMetrics.getResponseTimeTrend"
+            :data="stateTopo.instanceDependencyMetrics.getResponseTimeTrend"
             :intervalTime="intervalTime"
             :title="$t('avgResponseTime')"
             unit="ms"
         />
         <TopoChart
-            v-if="stateTopo.getThroughputTrend.length"
-            :data="stateTopo.getThroughputTrend"
+            v-if="stateTopo.instanceDependencyMetrics.getThroughputTrend"
+            :data="stateTopo.instanceDependencyMetrics.getThroughputTrend"
             :intervalTime="intervalTime"
             :title="$t('avgThroughput')"
             unit="cpm"
         />
         <TopoChart
-            v-if="stateTopo.getSLATrend.length"
-            :data="stateTopo.getSLATrend"
+            v-if="stateTopo.instanceDependencyMetrics.getSLATrend"
+            :data="stateTopo.instanceDependencyMetrics.getSLATrend"
             :intervalTime="intervalTime"
             :precent="true"
             :title="$t('avgSLA')"
             unit="%"
         />
         <ChartResponse
-            v-if="stateTopo.p50.length"
-            :data="stateTopo"
+            v-if="stateTopo.instanceDependencyMetrics.p50"
+            :data="stateTopo.instanceDependencyMetrics"
             :intervalTime="intervalTime"
             :title="$t('percentResponse')"
-        />
-      </div>
-      <div v-else-if="showServerInfo">
-        <TopoChart
-            v-if="rocketDashboard.instanceResponseTime.ResponseTime.length"
-            :data="rocketDashboard.instanceResponseTime.ResponseTime"
-            :intervalTime="intervalTime"
-            title="Service ResponseTime"
-            unit="ms"
-        />
-        <TopoChart
-            v-if="rocketDashboard.instanceThroughput.Throughput.length"
-            :data="rocketDashboard.instanceThroughput.Throughput"
-            :intervalTime="intervalTime"
-            title="Service Throughput"
-            unit="cpm"
-        />
-        <ChartResponse
-            v-if="rocketDashboard.instancePercent.p50.length"
-            :data="rocketDashboard.instancePercent"
-            :intervalTime="intervalTime"
-            title="Service Response Time Percentile"
-            unit="ms"
         />
       </div>
     </div>
@@ -111,6 +87,8 @@ export default class TopoInstanceDependency extends Vue {
   @State('rocketTopo') private stateTopo!: topoState;
   @State('rocketDashboard') private rocketDashboard: any;
   @Getter('intervalTime') private intervalTime: any;
+  @Mutation('rocketTopo/SET_INSTANCE_DEPEDENCE_TYPE') private SET_MODE_STATUS: any;
+  @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL') private SET_SELECTED_INSTANCE_CALL: any;
 
   private showInfo: boolean = true;
 
@@ -124,6 +102,12 @@ export default class TopoInstanceDependency extends Vue {
       clientServiceId: selectedIds[1],
       duration: this.durationTime,
     });
+  }
+  private setMode(mode: boolean) {
+    this.SET_MODE_STATUS(mode);
+  }
+  private beforeDestroy() {
+    this.SET_SELECTED_INSTANCE_CALL(null);
   }
 }
 

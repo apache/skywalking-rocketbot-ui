@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Topo, ServiceTopo, TopoMetric, TopoInstanceDependency,
+import { Topo, ServiceTopo, TopoMetric, TopoInstanceDependency, TopoInstanceClientInfo, TopoInstanceServerInfo,
   TopoServiceMetric, TopoClientMetric, TopoServiceInfo, TopoClientInfo } from '../fragments/topology';
 
 export const queryTopo =
@@ -44,3 +44,9 @@ export const queryTopoClientInfo =
 
 export const queryTopoInstanceDependency =
   `query queryTopoInstanceDependency(${TopoInstanceDependency.variable}) {${TopoInstanceDependency.query}}`;
+
+export const queryTopoInstanceServerInfo =
+  `query queryTopoInstanceServerInfo(${TopoInstanceServerInfo.variable}) {${TopoInstanceServerInfo.query}}`;
+
+export const queryTopoInstanceClientInfo =
+  `query queryTopoInstanceClientInfo(${TopoInstanceClientInfo.variable}) {${TopoInstanceClientInfo.query}}`;

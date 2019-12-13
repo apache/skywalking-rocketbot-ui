@@ -141,21 +141,21 @@ export default {
     'datas.nodes': 'draw',
   },
   methods: {
-   removeHoneycomb(that) {
-    const appGovernTopoHoneycombFrames = d3.select('#app-govern-topo-honeycomb-frames');
-    appGovernTopoHoneycombFrames.nodes().forEach((node) => {
-     const childrenArray = Array.from(node.children).reverse();
-     _.forEach(childrenArray, (ele, index) => {
-      ele.classList.toggle('reverse');
+    removeHoneycomb(that) {
+      const appGovernTopoHoneycombFrames = d3.select('#app-govern-topo-honeycomb-frames');
+      appGovernTopoHoneycombFrames.nodes().forEach((node) => {
+      const childrenArray = Array.from(node.children).reverse();
+      _.forEach(childrenArray, (ele, index) => {
+        ele.classList.toggle('reverse');
+        setTimeout(() => {
+        ele.remove();
+        }, 130 * index);
+      });
+      });
       setTimeout(() => {
-       ele.remove();
-      }, 130 * index);
-     });
-    });
-    setTimeout(() => {
-     appGovernTopoHoneycombFrames.remove();
-    }, 780);
-   },
+      appGovernTopoHoneycombFrames.remove();
+      }, 780);
+    },
     draw(value, oldValue) {
       // Avoid unnecessary repetitive rendering
       const diffNodes = _.difference(_.sortBy(value, 'id'), _.sortBy(oldValue, 'id'));
@@ -298,20 +298,13 @@ export default {
         .attr('fill', d => d.cpm ? '#217EF299' : '#6a6d7799')
         .on('click', function(d, i) {
           if (that.datas.type === TOPOTYPE.INSTANCE_DEPENDENCY) {
+            that.$store.dispatch('rocketTopo/GET_INSTANCE_DEPENDENCY_METRICS', {
+              ...d,
+              durationTime: that.$store.getters.durationTime,
+            });
             return;
           }
-         that.$store.commit('rocketTopo/SET_NODE', {});
-         that.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
-         that.$store.commit('rocketTopo/SET_MODE', d.detectPoints);
-          event.stopPropagation();
-          that.tip.hide({}, this);
-          that.tip.show(d, this);
-          that.$store.dispatch(that.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', {id:d.id,duration: that.$store.getters.durationTime});
-          that.$store.commit('rocketTopo/SET_CALLBACK', function() {
-            that.tip.hide({}, this);
-            that.tip.show(d, this);
-            that.$store.dispatch(that.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', {id:d.id,duration: that.$store.getters.durationTime});
-          })
+          that.clickLinkNodes(d, this);
         });
       d3.timeout(() => {
         for (
@@ -327,6 +320,20 @@ export default {
           this.tick();
         }
       });
+  },
+  clickLinkNodes(d, that) {
+    this.$store.commit('rocketTopo/SET_NODE', {});
+    this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
+    this.$store.commit('rocketTopo/SET_MODE', d.detectPoints);
+    event.stopPropagation();
+    this.tip.hide({}, that);
+    this.tip.show(d, that);
+    this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', {id:d.id,duration: this.$store.getters.durationTime});
+    this.$store.commit('rocketTopo/SET_CALLBACK', () => {
+      this.tip.hide({}, that);
+      this.tip.show(d, that);
+      this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', {id:d.id,duration: this.$store.getters.durationTime});
+    })
   },
   clickNodesToUpdate(d, that) {
     this.tip.hide({}, that);

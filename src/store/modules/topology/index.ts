@@ -77,6 +77,9 @@ export interface State {
     calls: Call[];
     nodes: Node[];
   };
+  selectedInstanceCall: Call | null;
+  instanceDependencyMetrics: {[key: string]: any};
+  queryInstanceMetricsType: string;
 }
 
 const initState: State = {
@@ -113,6 +116,9 @@ const initState: State = {
     calls: [],
     nodes: [],
   },
+  selectedInstanceCall: null,
+  instanceDependencyMetrics: {},
+  queryInstanceMetricsType: '',
 };
 
 // getters
@@ -176,6 +182,25 @@ const mutations = {
   [types.SET_INSTANCE_DEPENDENCY_SOURCE](state: State, data: any) {
     state.instanceDependencySource = deepClone(data);
   },
+  [types.SET_SELECTED_INSTANCE_CALL](state: State, data: Call) {
+    state.selectedInstanceCall = data;
+  },
+  [types.SET_INSTANCE_DEPEDENCE_METRICS](state: State, data: any) {
+    state.instanceDependencyMetrics.getResponseTimeTrend = data.getResponseTimeTrend ?
+    data.getResponseTimeTrend.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.getSLATrend = data.getSLATrend ?
+    data.getSLATrend.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.getThroughputTrend = data.getThroughputTrend ?
+    data.getThroughputTrend.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.p50 = data.p50 ? data.p50.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.p75 = data.p75 ? data.p75.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.p90 = data.p90 ? data.p90.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.p95 = data.p95 ? data.p95.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.p99 = data.p99 ? data.p99.values.map((i: any) => i.value) : [];
+  },
+  [types.SET_INSTANCE_DEPEDENCE_TYPE](state: State, data: string) {
+    state.queryInstanceMetricsType = data;
+  },
 };
 
 // actions
@@ -196,6 +221,21 @@ const actions: ActionTree<State, any> = {
       calls: deepClone(calls),
     };
     context.commit(types.SET_INSTANCE_DEPENDENCY, data);
+  },
+  GET_INSTANCE_DEPENDENCY_METRICS(
+    context: { commit: Commit; state: State, dispatch: Dispatch, getters: any}, params: any,
+  ) {
+    if (!params.detectPoints) {
+      return;
+    }
+    if (params.detectPoints[0] === 'SERVER') {
+      params.queryType = 'queryTopoInstanceServerInfo';
+      context.dispatch('INSTANCE_RELATION_INFO', params);
+    }
+    if (params.detectPoints[0] === 'CLIENT') {
+      params.queryType = 'queryTopoInstanceClientInfo';
+      context.dispatch('INSTANCE_RELATION_INFO', params);
+    }
   },
   GET_TOPO_SERVICE_INFO(context: { commit: Commit; state: State; }, params: any) {
     return graph
@@ -288,16 +328,29 @@ const actions: ActionTree<State, any> = {
     clientServiceId: string, serverServiceId: string, duration: string}) {
 
     graph.query('queryTopoInstanceDependency').params(params)
-      .then((res: any) => {
+      .then((res: AxiosResponse) => {
         if (res.data && res.data.data) {
           const data = {
             nodes: res.data.data.topo.nodes,
             calls: [],
           };
           context.commit(types.SET_INSTANCE_DEPENDENCY, data);
-          context.commit(types.SET_INSTANCE_DEPENDENCY_SOURCE, deepClone(res.data.data.topo));
+          context.commit(types.SET_INSTANCE_DEPENDENCY_SOURCE, res.data.data.topo);
         }
       });
+  },
+  INSTANCE_RELATION_INFO(context: { commit: Commit; state: State; }, params: any) {
+    graph.query(params.queryType).params({
+      id: params.id,
+      duration: params.durationTime,
+    }).then((res: AxiosResponse) => {
+      if (!(res.data && res.data.data)) {
+        return;
+      }
+      context.commit(types.SET_SELECTED_INSTANCE_CALL, params);
+      context.commit(types.SET_INSTANCE_DEPEDENCE_TYPE, params.detectPoints[0]);
+      context.commit(types.SET_INSTANCE_DEPEDENCE_METRICS, res.data.data);
+    });
   },
 };
 
