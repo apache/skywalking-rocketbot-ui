@@ -19,7 +19,6 @@ import graph from '@/graph';
 import * as types from '@/store/mutation-types';
 import { Option } from '@/types/global';
 import { Span, Trace } from '@/types/topo';
-import { AxiosResponse } from 'axios';
 import { ActionTree, Commit, Dispatch, MutationTree } from 'vuex';
 
 export interface State {
@@ -115,7 +114,7 @@ const actions: ActionTree<State, any> = {
     return graph
       .query('queryServices')
       .params(params)
-      .then((res: AxiosResponse) => {
+      .then((res) => {
         context.commit(types.SET_SERVICES, res.data.data.services);
       });
   },
@@ -123,7 +122,7 @@ const actions: ActionTree<State, any> = {
     return graph
       .query('queryServiceInstance')
       .params(params)
-      .then((res: AxiosResponse) => {
+      .then((res) => {
         context.commit(types.SET_INSTANCES, res.data.data.instanceId);
       });
   },
@@ -135,7 +134,7 @@ const actions: ActionTree<State, any> = {
     return graph
       .query('queryTraces')
       .params({condition: context.state.traceForm})
-      .then((res: AxiosResponse) => {
+      .then((res) => {
         context.commit(types.SET_TRACELIST, res.data.data.traces.data);
         context.commit(types.SET_TRACELIST_TOTAL, res.data.data.traces.total);
       });
@@ -145,7 +144,7 @@ const actions: ActionTree<State, any> = {
     return graph
       .query('queryTrace')
       .params(params)
-      .then((res: AxiosResponse) => {
+      .then((res) => {
         context.commit(types.SET_TRACE_SPANS, res.data.data.trace.spans);
       });
   },

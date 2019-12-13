@@ -23,7 +23,7 @@
 <script lang="ts">
   import { DurationTime } from '@/types/global';
   import compareObj from '@/utils/comparison';
-  import Axios, { AxiosResponse } from 'axios';
+  import Axios from 'axios';
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter } from 'vuex-class';
   import TopoSelect from './topo-select.vue';
@@ -47,7 +47,7 @@
         variables: {
           duration: this.durationTime,
         },
-      }).then((res: AxiosResponse) => {
+      }).then((res) => {
         this.services = res.data.data.services
           ?
           [{key: 0, label: 'All services'}, ...res.data.data.services]

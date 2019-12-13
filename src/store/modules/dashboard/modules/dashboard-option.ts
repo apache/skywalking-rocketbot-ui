@@ -17,7 +17,6 @@
 
 import { Commit, ActionTree, MutationTree, Dispatch } from 'vuex';
 import * as types from '../mutation-types';
-import { AxiosResponse } from 'axios';
 import graph from '@/graph';
 
 
@@ -117,7 +116,7 @@ const mutations: MutationTree<State> = {
 const actions: ActionTree<State, any> = {
   GET_SERVICES(context: { commit: Commit, rootState: any  }, params: any) {
     return graph.query('queryServices').params(params)
-      .then((res: AxiosResponse) => {
+      .then((res) => {
         context.commit(types.SET_SERVICES, res.data.data.services);
       });
   },
@@ -128,13 +127,13 @@ const actions: ActionTree<State, any> = {
     return graph
       .query('queryEndpoints')
       .params({serviceId: context.state.currentService.key, keyword: ''})
-      .then((res: AxiosResponse) => {
+      .then((res) => {
         context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
       });
   },
   GET_ENDPOINTS(context: { commit: Commit }, params: any) {
     return graph.query('queryEndpoints').params(params)
-    .then((res: AxiosResponse) => {
+    .then((res) => {
       context.commit(types.SET_ENDPOINTS, res.data.data.endpoints);
     });
   },
@@ -142,7 +141,7 @@ const actions: ActionTree<State, any> = {
     return graph
       .query('queryEndpoints')
       .params({serviceId: context.state.currentService.key, keyword: params})
-      .then((res: AxiosResponse) => {
+      .then((res) => {
         context.commit(types.SET_SEARCH_ENDPOINTS, res.data.data.getEndpoints);
       });
   },
@@ -153,7 +152,7 @@ const actions: ActionTree<State, any> = {
     return graph
       .query('queryInstances')
       .params({serviceId: context.state.currentService.key, ...params})
-      .then((res: AxiosResponse) => {
+      .then((res) => {
         context.commit(types.SET_INSTANCES, res.data.data.getServiceInstances);
       });
   },
@@ -161,7 +160,7 @@ const actions: ActionTree<State, any> = {
     return graph
     .query('queryInstances')
     .params(params)
-    .then((res: AxiosResponse) => {
+    .then((res) => {
       context.commit(types.SET_INSTANCES, res.data.data);
     });
   },
@@ -169,7 +168,7 @@ const actions: ActionTree<State, any> = {
     return graph
       .query('queryDatabases')
       .params(params)
-      .then((res: AxiosResponse) => {
+      .then((res) => {
         context.commit(types.SET_DATABASES, res.data.data.services);
       });
   },

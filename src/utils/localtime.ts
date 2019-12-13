@@ -16,7 +16,6 @@
  */
 
 import graph from '@/graph';
-import { AxiosResponse } from 'axios';
 
 const getLocalTime = (i: number, t: Date | number) => {
   const d = new Date(t);
@@ -33,7 +32,7 @@ const setTimezoneOffset = () => {
 export const queryOAPTimeInfo = async () => {
   let utc = window.localStorage.getItem('utc');
   if (!utc) {
-    const res: AxiosResponse = await graph
+    const res = await graph
       .query('queryOAPTimeInfo')
       .params({});
     if (!res.data) {

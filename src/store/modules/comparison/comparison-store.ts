@@ -16,7 +16,7 @@
  */
 
 import { Commit, ActionTree, Dispatch } from 'vuex';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 
 import graph from '@/graph';
 import { cancelToken } from '@/utils/cancelToken';
@@ -392,7 +392,7 @@ const actions: ActionTree<State, ActionsParamType> = {
     context.commit(types.SET_METRICSOURCE, context.getters.AllMetrics);
     context.commit(types.SET_ISPREVIOUS, StatusType.Init);
     return graph.query('queryServices').params(params)
-      .then((res: AxiosResponse) => {
+      .then((res) => {
         if (!res.data.data) {
           return;
         }
@@ -410,7 +410,7 @@ const actions: ActionTree<State, ActionsParamType> = {
     graph
       .query('queryEndpoints')
       .params({serviceId: servicesId, keyword: ''})
-      .then((res: AxiosResponse) => {
+      .then((res) => {
         if (!res.data.data) {
           return;
         }
@@ -431,7 +431,7 @@ const actions: ActionTree<State, ActionsParamType> = {
     return graph
       .query('queryInstances')
       .params(params)
-      .then((res: AxiosResponse) => {
+      .then((res) => {
         if (!res.data) {
           return;
         }
@@ -442,7 +442,7 @@ const actions: ActionTree<State, ActionsParamType> = {
     return graph
       .query('queryDatabases')
       .params(params)
-      .then((res: AxiosResponse) => {
+      .then((res) => {
         if (!res.data) {
           return;
         }
@@ -455,7 +455,7 @@ const actions: ActionTree<State, ActionsParamType> = {
     return graph
       .query('queryServiceTopo')
       .params(params)
-      .then((res: AxiosResponse) => {
+      .then((res) => {
         if (!res.data.data) {
           return;
         }
@@ -516,7 +516,7 @@ const actions: ActionTree<State, ActionsParamType> = {
     return axios.post('/graphql', {
       query: queryVal,
       variables: variablesData,
-    }, {cancelToken: cancelToken()}).then((res: AxiosResponse<any>) => {
+    }, {cancelToken: cancelToken()}).then((res) => {
         const data = res.data.data;
         if (!data) {
           return;

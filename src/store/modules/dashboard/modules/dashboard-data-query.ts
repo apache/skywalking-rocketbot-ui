@@ -16,7 +16,7 @@
  */
 
 import {Commit, ActionTree, MutationTree, Dispatch} from 'vuex';
-import axios, {AxiosPromise, AxiosResponse} from 'axios';
+import axios, {AxiosPromise} from 'axios';
 import {cancelToken} from '@/utils/cancelToken';
 import {State} from './dashboard-data';
 import fragmentAll from '@/store/modules/dashboard/fragments';
@@ -53,7 +53,7 @@ const actions: ActionTree<State, any> = {
     return axios.post('/graphql', {
       query: context.getters.Graphql,
       variables: variablesData,
-    }, {cancelToken: cancelToken()}).then((res: AxiosResponse<any>) => {
+    }, {cancelToken: cancelToken()}).then((res) => {
       const resData = res.data;
       if (resData.data && resData.data.endpointTopology) {
         const endpointIds = resData.data.endpointTopology.nodes.map((n: any) => n.name).filter(
@@ -66,7 +66,7 @@ const actions: ActionTree<State, any> = {
             return axios.post('/graphql', {
               query: EndPointInfoGraphql,
               variables: {endpointId: `${id}`},
-            }).then((endpointRes: AxiosResponse<any>) => {
+            }).then((endpointRes) => {
               return endpointRes.data.data.endpointInfo;
             });
           }),

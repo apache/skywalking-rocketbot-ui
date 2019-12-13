@@ -45,7 +45,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'vue-property-decorator';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 
 interface Account {
   userName: string;
@@ -77,7 +77,7 @@ export default class Login extends Vue {
       }
       this.$router.push('/');
     } else {
-      axios.post('/login/account', this.accountInfo).then((res: AxiosResponse) => {
+      axios.post('/login/account', this.accountInfo).then((res) => {
         window.localStorage.setItem('skywalking-authority', res.data.currentAuthority);
         this.$router.push('/');
       }).catch(() => {

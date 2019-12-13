@@ -18,7 +18,6 @@
 import { Commit, ActionTree, Dispatch } from 'vuex';
 import graph from '@/graph';
 import * as types from '../../mutation-types';
-import { AxiosResponse } from 'axios';
 interface Option {
   key: string;
   label: string;
@@ -161,7 +160,7 @@ const actions: ActionTree<State, any> = {
     return graph
     .query('queryTopoServiceInfo')
     .params(params)
-    .then((res: AxiosResponse) => {
+    .then((res) => {
       context.commit('SET_TOPO_RELATION', Object.assign(res.data.data, { id: params.id }));
     });
   },
@@ -169,7 +168,7 @@ const actions: ActionTree<State, any> = {
     return graph
     .query('queryTopoClientInfo')
     .params(params)
-    .then((res: AxiosResponse) => {
+    .then((res) => {
       context.commit('SET_TOPO_RELATION', Object.assign(res.data.data, { id: params.id }));
     });
   },
@@ -181,7 +180,7 @@ const actions: ActionTree<State, any> = {
     return graph
     .query(query)
     .params(params)
-    .then((res: AxiosResponse) => {
+    .then((res) => {
       const calls = res.data.data.topo.calls;
       const nodes = res.data.data.topo.nodes;
       const ids = nodes.map((i: any) => i.id);
@@ -190,7 +189,7 @@ const actions: ActionTree<State, any> = {
       return graph
         .query('queryTopoInfo')
         .params({...params, ids, idsC, idsS})
-        .then((info: AxiosResponse) => {
+        .then((info) => {
           const resInfo = info.data.data;
           if (!resInfo.sla) {
             return context.commit(types.SET_TOPO, {calls, nodes});

@@ -17,7 +17,6 @@
 
 import { Commit, ActionTree, MutationTree } from 'vuex';
 import * as types from '@/store/mutation-types';
-import { AxiosResponse } from 'axios';
 import graph from '@/graph';
 import { Alarm, AlarmParams } from '@/types/alarm';
 
@@ -53,7 +52,7 @@ const actions: ActionTree<State, any> = {
     return graph
       .query('queryAlarms')
       .params(params)
-      .then((res: AxiosResponse<any>) => {
+      .then((res) => {
         if (res.data.data.getAlarm.items) {
           context.commit(types.SET_ALARM, res.data.data.getAlarm.items);
           context.commit(types.SET_ALARM_TOTAL, res.data.data.getAlarm.total);

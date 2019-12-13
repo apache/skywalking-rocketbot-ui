@@ -24,7 +24,6 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { State, Action, Getter, Mutation } from 'vuex-class';
-import { AxiosResponse } from 'axios';
 import Topo from '../components/topology/topo.vue';
 import TopoDate from '../components/topology/topo-date.vue';
 import TopoAside from '../components/topology/topo-aside.vue';
