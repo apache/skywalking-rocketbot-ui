@@ -89,6 +89,7 @@ export default class TopoInstanceDependency extends Vue {
   @Getter('intervalTime') private intervalTime: any;
   @Mutation('rocketTopo/SET_INSTANCE_DEPEDENCE_TYPE') private SET_MODE_STATUS: any;
   @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL') private SET_SELECTED_INSTANCE_CALL: any;
+  @Action('rocketTopo/GET_INSTANCE_DEPENDENCY_METRICS') private GET_INSTANCE_DEPENDENCY_METRICS: any;
 
   private showInfo: boolean = true;
 
@@ -102,8 +103,12 @@ export default class TopoInstanceDependency extends Vue {
       duration: this.durationTime,
     });
   }
-  private setMode(mode: boolean) {
-    this.SET_MODE_STATUS(mode);
+  private setMode(mode: string) {
+    this.GET_INSTANCE_DEPENDENCY_METRICS({
+      ...this.stateTopo.selectedInstanceCall,
+      durationTime: this.durationTime,
+      mode,
+    })
   }
   private beforeDestroy() {
     this.SET_SELECTED_INSTANCE_CALL(null);

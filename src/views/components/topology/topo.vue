@@ -186,11 +186,14 @@ export default {
       this.graph.call(this.tip);
       this.graph.call(this.tipName);
       this.svg.on('click', (d, i) => {
-        if (this.datas.type === TOPOTYPE.INSTANCE_DEPENDENCY) {
-          return;
-        }
         event.stopPropagation();
         event.preventDefault();
+        if (this.datas.type === TOPOTYPE.INSTANCE_DEPENDENCY) {
+          if (event.target.nodeName === 'svg') {
+            this.$store.dispatch('rocketTopo/CLEAR_INSTANCE_METRICS');
+          }
+          return;
+        }
         this.$store.commit('rocketTopo/SET_NODE', {});
         this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
         that.tip.hide({}, this);
@@ -302,6 +305,7 @@ export default {
             that.$store.dispatch('rocketTopo/GET_INSTANCE_DEPENDENCY_METRICS', {
               ...d,
               durationTime: that.$store.getters.durationTime,
+              mode: d.detectPoints[0],
             });
             return;
           }

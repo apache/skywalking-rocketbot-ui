@@ -226,17 +226,23 @@ const actions: ActionTree<State, any> = {
     };
     context.commit(types.SET_INSTANCE_DEPENDENCY, data);
   },
+  CLEAR_INSTANCE_METRICS(context: { commit: Commit; state: State; }) {
+    const { instanceDependencySource } = context.state;
+    const data = {
+      nodes: instanceDependencySource.nodes,
+      calls: [],
+    };
+    context.commit(types.SET_SELECTED_INSTANCE_CALL, null);
+    context.commit(types.SET_INSTANCE_DEPENDENCY, data);
+  },
   GET_INSTANCE_DEPENDENCY_METRICS(
     context: { commit: Commit; state: State, dispatch: Dispatch, getters: any}, params: any,
   ) {
-    if (!params.detectPoints) {
-      return;
-    }
-    if (params.detectPoints[0] === 'SERVER') {
+    if (params.mode === 'SERVER') {
       params.queryType = 'queryTopoInstanceServerInfo';
       context.dispatch('INSTANCE_RELATION_INFO', params);
     }
-    if (params.detectPoints[0] === 'CLIENT') {
+    if (params.mode === 'CLIENT') {
       params.queryType = 'queryTopoInstanceClientInfo';
       context.dispatch('INSTANCE_RELATION_INFO', params);
     }
@@ -357,7 +363,7 @@ const actions: ActionTree<State, any> = {
         return;
       }
       context.commit(types.SET_SELECTED_INSTANCE_CALL, params);
-      context.commit(types.SET_INSTANCE_DEPEDENCE_TYPE, params.detectPoints[0]);
+      context.commit(types.SET_INSTANCE_DEPEDENCE_TYPE, params.mode);
       context.commit(types.SET_INSTANCE_DEPEDENCE_METRICS, res.data.data);
     });
   },
