@@ -19,7 +19,6 @@
   <div class="micro-topo-chart"></div>
 </template>
 <script lang="js">
-  import { TOPOTYPE } from './topo-constant';
   import CssHelper from '@/utils/cssHelper';
   import * as d3 from 'd3';
   import d3tip from 'd3-tip';
@@ -159,8 +158,7 @@ export default {
     draw(value, oldValue) {
       // Avoid unnecessary repetitive rendering
       const diffNodes = _.difference(_.sortBy(value, 'id'), _.sortBy(oldValue, 'id'));
-      if(value && value.length > 0 && diffNodes && diffNodes.length <=0
-        && this.datas.type !== TOPOTYPE.INSTANCE_DEPENDENCY) {
+      if(value && value.length > 0 && diffNodes && diffNodes.length <=0) {
         return;
       }
       const codeId = this.datas.nodes.map(i => i.id);
@@ -188,12 +186,6 @@ export default {
       this.svg.on('click', (d, i) => {
         event.stopPropagation();
         event.preventDefault();
-        if (this.datas.type === TOPOTYPE.INSTANCE_DEPENDENCY) {
-          if (event.target.nodeName === 'svg') {
-            this.$store.dispatch('rocketTopo/CLEAR_INSTANCE_METRICS');
-          }
-          return;
-        }
         this.$store.commit('rocketTopo/SET_NODE', {});
         this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
         that.tip.hide({}, this);
@@ -233,10 +225,6 @@ export default {
         })
         .on('click', function(d, i) {
           event.stopPropagation();
-          if (that.datas.type === TOPOTYPE.INSTANCE_DEPENDENCY) {
-            that.$store.dispatch('rocketTopo/HANDLE_INSTANCE_DEPENDENCY', d);
-            return;
-          }
           // active selected nodes and disable another nodes of non-relations
           that.clickNodesToUpdate(d, this);
           if (d.isReal) {
@@ -301,14 +289,6 @@ export default {
         .attr('ry', 3)
         .attr('fill', d => d.cpm ? '#217EF299' : '#6a6d7799')
         .on('click', function(d, i) {
-          if (that.datas.type === TOPOTYPE.INSTANCE_DEPENDENCY) {
-            that.$store.dispatch('rocketTopo/GET_INSTANCE_DEPENDENCY_METRICS', {
-              ...d,
-              durationTime: that.$store.getters.durationTime,
-              mode: d.detectPoints[0],
-            });
-            return;
-          }
           that.clickLinkNodes(d, this);
         });
       d3.timeout(() => {

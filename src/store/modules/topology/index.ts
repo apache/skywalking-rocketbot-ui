@@ -19,7 +19,6 @@ import { Commit, ActionTree, Dispatch } from 'vuex';
 import graph from '@/graph';
 import * as types from '../../mutation-types';
 import { AxiosResponse } from 'axios';
-import deepClone from '@/utils/deepClone';
 
 interface Option {
   key: string;
@@ -72,11 +71,6 @@ export interface State {
   instanceDependency: {
     calls: Call[];
     nodes: Node[];
-    type: string;
-  };
-  instanceDependencySource: {
-    calls: Call[];
-    nodes: Node[];
   };
   selectedInstanceCall: Call | null;
   instanceDependencyMetrics: {[key: string]: any};
@@ -109,11 +103,6 @@ const initState: State = {
   showInstancesDialog: false,
   showEndpointDialog: false,
   instanceDependency: {
-    calls: [],
-    nodes: [],
-    type: 'instance_denpendency',
-  },
-  instanceDependencySource: {
     calls: [],
     nodes: [],
   },
@@ -177,13 +166,7 @@ const mutations = {
     state.p99 = data.p99 ? data.p99.values.map((i: any) => i.value) : [];
   },
   [types.SET_INSTANCE_DEPENDENCY](state: State, data: any) {
-    state.instanceDependency = {
-      ...data,
-      type: 'instance_dependency',
-    };
-  },
-  [types.SET_INSTANCE_DEPENDENCY_SOURCE](state: State, data: any) {
-    state.instanceDependencySource = deepClone(data);
+    state.instanceDependency = data;
   },
   [types.SET_SELECTED_INSTANCE_CALL](state: State, data: Call) {
     state.selectedInstanceCall = data;
@@ -214,26 +197,6 @@ const actions: ActionTree<State, any> = {
   CLEAR_TOPO_INFO(context: { commit: Commit; state: State; }) {
     context.commit(types.SET_TOPO_RELATION, {});
     context.commit(types.SET_SELECTED_CALL, null);
-  },
-  HANDLE_INSTANCE_DEPENDENCY(context: { commit: Commit; state: State }, params: any) {
-    const { instanceDependencySource } = context.state;
-    const calls = instanceDependencySource.calls.filter((call: any) =>
-      call.source === params.id || call.target === params.id,
-    );
-    const data = {
-      nodes: instanceDependencySource.nodes,
-      calls: deepClone(calls),
-    };
-    context.commit(types.SET_INSTANCE_DEPENDENCY, data);
-  },
-  CLEAR_INSTANCE_METRICS(context: { commit: Commit; state: State; }) {
-    const { instanceDependencySource } = context.state;
-    const data = {
-      nodes: instanceDependencySource.nodes,
-      calls: [],
-    };
-    context.commit(types.SET_SELECTED_INSTANCE_CALL, null);
-    context.commit(types.SET_INSTANCE_DEPENDENCY, data);
   },
   GET_INSTANCE_DEPENDENCY_METRICS(
     context: { commit: Commit; state: State, dispatch: Dispatch, getters: any}, params: any,
@@ -366,7 +329,6 @@ const actions: ActionTree<State, any> = {
             calls,
           };
           context.commit(types.SET_INSTANCE_DEPENDENCY, data);
-          context.commit(types.SET_INSTANCE_DEPENDENCY_SOURCE, res.data.data.topo);
         });
       });
   },
