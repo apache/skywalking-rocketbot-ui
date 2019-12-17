@@ -98,7 +98,7 @@
           </div>
         </div>
         <div class="show-dependency" v-if="stateTopo.selectedServiceCall">
-          <a class="rk-btn lg" @click="dialogTopoVisible=true">{{$t('ShowInstanceDependency')}}</a>
+          <a class="rk-btn lg" @click="openInstanceModal">{{$t('ShowInstanceDependency')}}</a>
           <el-dialog
             class="instance-dependency" 
             :width="'90%'"
@@ -107,7 +107,7 @@
             :modal-append-to-body="false"
             :close-on-click-modal="false"
             :destroy-on-close="true"
-            :close="clearInstance"
+            :before-close="clearInstance"
           >
             <TopoInstanceDependency />
           </el-dialog>
@@ -139,6 +139,8 @@
     @State('rocketDashboard') private rocketDashboard: any;
     @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL') private SET_SELECTED_INSTANCE_CALL: any;
     @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY') private SET_INSTANCE_DEPENDENCY: any;
+    @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
+    @Action('rocketTopo/GET_TOPO_INSTANCE_DEPENDENCY') private GET_INSTANCE_DEPENDENCY: any;
 
     private isMini: boolean = true;
     private showInfoCount: number = 0;
@@ -195,10 +197,23 @@
     }
 
     private clearInstance() {
+      this.dialogTopoVisible = false;
       this.SET_SELECTED_INSTANCE_CALL(null);
       this.SET_INSTANCE_DEPENDENCY({
         nodes: [],
         calls: [],
+      });
+    }
+
+    private openInstanceModal() {
+      this.dialogTopoVisible = true;
+      if (!(this.stateTopo.selectedServiceCall && this.stateTopo.selectedServiceCall.source)) {
+        return;
+      }
+      this.GET_INSTANCE_DEPENDENCY({
+        serverServiceId: this.stateTopo.selectedServiceCall.source.id,
+        clientServiceId: this.stateTopo.selectedServiceCall.target.id,
+        duration: this.durationTime,
       });
     }
   }

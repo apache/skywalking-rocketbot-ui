@@ -27,17 +27,11 @@ import echarts from 'echarts/lib/echarts';
 
 @Component
 export default class DependencySankey extends Vue {
-  @Prop() private data!: any;
+  @Prop() private data: any;
   @Getter('durationTime') private durationTime: any;
   @Action('rocketTopo/GET_INSTANCE_DEPENDENCY_METRICS') private GET_INSTANCE_DEPENDENCY_METRICS: any;
 
   get optionConfigs() {
-    const links = this.data.calls.map((call: any, index: number) => {
-      return {
-        ...call,
-      };
-    });
-
     return {
       series: {
         type: 'sankey',

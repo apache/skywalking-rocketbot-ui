@@ -67,7 +67,6 @@
         />
       </div>
     </div>
-    <!-- <Topo :datas="stateTopo.instanceDependency"/> -->
   </div>
 </template>
 <script lang="ts">
@@ -86,7 +85,6 @@ import DependencySankey from './dependency-sankey.vue';
   },
 })
 export default class TopoInstanceDependency extends Vue {
-  @Action('rocketTopo/GET_TOPO_INSTANCE_DEPENDENCY') private GET_INSTANCE_DEPENDENCY: any;
   @Getter('durationTime') private durationTime: any;
   @State('rocketTopo') private stateTopo!: topoState;
   @State('rocketDashboard') private rocketDashboard: any;
@@ -96,16 +94,6 @@ export default class TopoInstanceDependency extends Vue {
 
   private showInfo: boolean = true;
 
-  private created() {
-    if (!(this.stateTopo.selectedServiceCall && this.stateTopo.selectedServiceCall.source)) {
-      return;
-    }
-    this.GET_INSTANCE_DEPENDENCY({
-      serverServiceId: this.stateTopo.selectedServiceCall.source.id,
-      clientServiceId: this.stateTopo.selectedServiceCall.target.id,
-      duration: this.durationTime,
-    });
-  }
   private setMode(mode: string) {
     this.GET_INSTANCE_DEPENDENCY_METRICS({
       ...this.stateTopo.selectedInstanceCall,
