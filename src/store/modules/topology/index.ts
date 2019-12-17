@@ -321,7 +321,7 @@ const actions: ActionTree<State, any> = {
           const calls = res.data.data.topo.calls.map((call: Call, index: number) => {
             return {
               ...call,
-              value: json.data.data.cpmC.values[index] || 1,
+              ...json.data.data.cpmC.values[index],
             };
           });
           const data = {

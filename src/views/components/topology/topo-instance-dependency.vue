@@ -20,6 +20,7 @@
     <div class="rk-dependency-chart">
       <DependencySankey :data="stateTopo.instanceDependency" />
     </div>
+    <div v-if="!stateTopo.instanceDependency.nodes.length">No Instance Dependency</div>
     <div v-if="stateTopo.selectedInstanceCall" class="rk-instance-dependency-metrics">
       <div class="mb-5 clear">
         <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
@@ -109,6 +110,11 @@ export default class TopoInstanceDependency extends Vue {
     height: 100%;
     display: flex;
     flex-direction: row;
+    &>:first-child {
+      line-height: 400px;
+      text-align: center;
+      width: 100%;
+    }
     .rk-instance-dependency-metrics {
       width: 320px;
       height: 100%;

@@ -199,10 +199,6 @@
     private clearInstance() {
       this.dialogTopoVisible = false;
       this.SET_SELECTED_INSTANCE_CALL(null);
-      this.SET_INSTANCE_DEPENDENCY({
-        nodes: [],
-        calls: [],
-      });
     }
 
     private openInstanceModal() {
@@ -284,32 +280,4 @@
       margin-block-end: auto !important;
     }
   }
-
-  // .link-topo-aside-box-min {
-  //   width: 280px;
-  //   animation: 0.5s linkTopoAsideBoxMin 1 running;
-  // }
-
-  // .link-topo-aside-box-max {
-  //   width: 60%;
-  //   animation: 0.5s linkTopoAsideBoxMax 1 running;
-  // }
-
-  // @keyframes linkTopoAsideBoxMax {
-  //   from {
-  //     width: 280px;
-  //   }
-  //   to {
-  //     width: 60%;
-  //   }
-  // }
-
-  // @keyframes linkTopoAsideBoxMin {
-  //   from {
-  //     width: 60%;
-  //   }
-  //   to {
-  //     width: 280px;
-  //   }
-  // }
 </style>
