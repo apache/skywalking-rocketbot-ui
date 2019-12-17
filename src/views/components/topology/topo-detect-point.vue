@@ -107,6 +107,7 @@
             :modal-append-to-body="false"
             :close-on-click-modal="false"
             :destroy-on-close="true"
+            :close="clearInstance"
           >
             <TopoInstanceDependency />
           </el-dialog>
@@ -136,6 +137,8 @@
     @Action('GET_QUERY') private GET_QUERY: any;
     @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
     @State('rocketDashboard') private rocketDashboard: any;
+    @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL') private SET_SELECTED_INSTANCE_CALL: any;
+    @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY') private SET_INSTANCE_DEPENDENCY: any;
 
     private isMini: boolean = true;
     private showInfoCount: number = 0;
@@ -190,6 +193,14 @@
       this.SET_MODE_STATUS(mode);
       this.stateTopo.callback();
     }
+
+    private clearInstance() {
+      this.SET_SELECTED_INSTANCE_CALL(null);
+      this.SET_INSTANCE_DEPENDENCY({
+        nodes: [],
+        calls: [],
+      });
+    }
   }
 
 </script>
@@ -220,6 +231,7 @@
       background: #333;
       color: #efeff1;
       height: 650px;
+      padding: 10px 20px;
     }
   }
   .link-topo-aside-box {

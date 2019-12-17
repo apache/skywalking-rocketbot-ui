@@ -344,17 +344,34 @@ const actions: ActionTree<State, any> = {
 
     graph.query('queryTopoInstanceDependency').params(params)
       .then((res: AxiosResponse) => {
-        if (res.data && res.data.data) {
+        if (!(res.data && res.data.data)) {
+          return;
+        }
+        const idsC = res.data.data.topo.calls.map((node: Node) => node.id);
+        graph.query('queryDependencyInstanceClientMetric').params({
+          idsC,
+          duration: params.duration,
+        }).then((json: AxiosResponse) => {
+          if (!(json.data.data && json.data.data.cpmC.values)) {
+            return;
+          }
+          const calls = res.data.data.topo.calls.map((call: Call, index: number) => {
+            return {
+              ...call,
+              value: json.data.data.cpmC.values[index] || 1,
+            };
+          });
           const data = {
             nodes: res.data.data.topo.nodes,
-            calls: [],
+            calls,
           };
           context.commit(types.SET_INSTANCE_DEPENDENCY, data);
           context.commit(types.SET_INSTANCE_DEPENDENCY_SOURCE, res.data.data.topo);
-        }
+        });
       });
   },
-  INSTANCE_RELATION_INFO(context: { commit: Commit; state: State; }, params: any) {
+  INSTANCE_RELATION_INFO(context: { commit: Commit; state: State; }, params: Call &
+    {mode: string; queryType: string; durationTime: string}) {
     graph.query(params.queryType).params({
       id: params.id,
       duration: params.durationTime,

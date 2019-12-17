@@ -17,6 +17,9 @@
 
 <template>
   <div class="rk-topo-instance-dependency">
+    <div class="rk-dependency-chart">
+      <DependencySankey :data="stateTopo.instanceDependency" />
+    </div>
     <div v-if="stateTopo.selectedInstanceCall" class="rk-instance-dependency-metrics">
       <div class="mb-5 clear">
         <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
@@ -64,7 +67,7 @@
         />
       </div>
     </div>
-    <Topo :datas="stateTopo.instanceDependency"/>
+    <!-- <Topo :datas="stateTopo.instanceDependency"/> -->
   </div>
 </template>
 <script lang="ts">
@@ -75,10 +78,11 @@ import { State as topoState} from '@/store/modules/topology';
 import Topo from './topo.vue';
 import TopoChart from './topo-chart.vue';
 import ChartResponse from './topo-response.vue';
+import DependencySankey from './dependency-sankey.vue';
 
 @Component({
   components: {
-    Topo, ChartResponse, TopoChart,
+    Topo, ChartResponse, TopoChart, DependencySankey,
   },
 })
 export default class TopoInstanceDependency extends Vue {
@@ -88,7 +92,6 @@ export default class TopoInstanceDependency extends Vue {
   @State('rocketDashboard') private rocketDashboard: any;
   @Getter('intervalTime') private intervalTime: any;
   @Mutation('rocketTopo/SET_INSTANCE_DEPEDENCE_TYPE') private SET_MODE_STATUS: any;
-  @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL') private SET_SELECTED_INSTANCE_CALL: any;
   @Action('rocketTopo/GET_INSTANCE_DEPENDENCY_METRICS') private GET_INSTANCE_DEPENDENCY_METRICS: any;
 
   private showInfo: boolean = true;
@@ -108,10 +111,7 @@ export default class TopoInstanceDependency extends Vue {
       ...this.stateTopo.selectedInstanceCall,
       durationTime: this.durationTime,
       mode,
-    })
-  }
-  private beforeDestroy() {
-    this.SET_SELECTED_INSTANCE_CALL(null);
+    });
   }
 }
 
@@ -119,14 +119,17 @@ export default class TopoInstanceDependency extends Vue {
 <style lang="scss">
   .rk-topo-instance-dependency {
     height: 100%;
-    position: relative;
+    display: flex;
+    flex-direction: row;
     .rk-instance-dependency-metrics {
       width: 320px;
-      position: absolute;
-      left: 0;
-      top: -20px;
+      height: 100%;
       background: #111;
       padding: 10px 20px;
+    }
+    .rk-dependency-chart {
+      width: 850px;
+      height: 100%;
     }
   }
 </style>

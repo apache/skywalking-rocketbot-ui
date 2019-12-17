@@ -294,7 +294,8 @@ export const TopoInstanceServerInfo = {
 export const TopoInstanceDependency = {
   variable: '$clientServiceId: ID!, $serverServiceId: ID!, $duration: Duration!',
   query: `
-  topo: getServiceInstanceTopology(clientServiceId: $clientServiceId, serverServiceId: $serverServiceId, duration: $duration) {
+  topo: getServiceInstanceTopology(clientServiceId: $clientServiceId,
+    serverServiceId: $serverServiceId, duration: $duration) {
     nodes {
       id
       name
@@ -413,6 +414,31 @@ export const TopoClientMetric = {
   }
   latencyC: getValues(metric: {
     name: "service_relation_client_resp_time"
+    ids: $idsC
+  }, duration: $duration) {
+    values {
+      id
+      value
+    }
+  }`};
+
+export const DependencyInstanceServerMetric = {
+  variable: '$duration: Duration!, $idsC: [ID!]!',
+  query: `
+  cpmC: getValues(metric: {
+    name: "service_instance_relation_server_cpm"
+    ids: $idsC
+  }, duration: $duration) {
+    values {
+      id
+      value
+    }
+  }`};
+export const DependencyInstanceClientMetric = {
+  variable: '$duration: Duration!, $idsC: [ID!]!',
+  query: `
+  cpmC: getValues(metric: {
+    name: "service_instance_relation_client_cpm"
     ids: $idsC
   }, duration: $duration) {
     values {
