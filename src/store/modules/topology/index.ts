@@ -31,6 +31,7 @@ interface Call {
   source: string | any;
   target: string | any;
   id: string;
+  detectPoints: string[];
 }
 interface Node {
   apdex: number;
@@ -302,7 +303,7 @@ const actions: ActionTree<State, any> = {
         });
     });
   },
-  GET_TOPO_INSTANCE_DEPENDENCY(context: { commit: Commit; state: State; }, params: {
+  async GET_TOPO_INSTANCE_DEPENDENCY(context: { commit: Commit; state: State; }, params: {
     clientServiceId: string, serverServiceId: string, duration: string}) {
 
     graph.query('queryTopoInstanceDependency').params(params)
@@ -310,25 +311,52 @@ const actions: ActionTree<State, any> = {
         if (!(res.data && res.data.data)) {
           return;
         }
-        const idsC = res.data.data.topo.calls.map((node: Node) => node.id);
+        const serverIdsC = [] as string[];
+        const clientIdsC = [] as string[];
+        const topoCalls = res.data.data.topo.calls;
+        for (const call of topoCalls) {
+          if (call.detectPoints.includes('CLIENT')) {
+            clientIdsC.push(call.id);
+          } else {
+            serverIdsC.push(call.id);
+          }
+        }
         graph.query('queryDependencyInstanceClientMetric').params({
-          idsC,
+          idsC: clientIdsC,
           duration: params.duration,
         }).then((json: AxiosResponse) => {
-          if (!(json.data.data && json.data.data.cpmC.values)) {
-            return;
+          const clientCalls = [] as string[];
+          for (const call of topoCalls) {
+            for (const cpm of json.data.data.cpmC.values) {
+              if (cpm.id === call.id) {
+                clientCalls.push({
+                  ...call,
+                  ...cpm,
+                });
+              }
+            }
           }
-          const calls = res.data.data.topo.calls.map((call: Call, index: number) => {
-            return {
-              ...call,
-              ...json.data.data.cpmC.values[index],
+          graph.query('queryDependencyInstanceServerMetric').params({
+            idsC: serverIdsC,
+            duration: params.duration,
+          }).then((jsonResp: AxiosResponse) => {
+            const serverCalls = [] as string[];
+            for (const call of topoCalls) {
+              for (const cpm of jsonResp.data.data.cpmC.values) {
+                if (cpm.id === call.id) {
+                  serverCalls.push({
+                    ...call,
+                    ...cpm,
+                  });
+                }
+              }
+            }
+            const data = {
+              nodes: res.data.data.topo.nodes,
+              calls: [...serverCalls, ...clientCalls],
             };
+            context.commit(types.SET_INSTANCE_DEPENDENCY, data);
           });
-          const data = {
-            nodes: res.data.data.topo.nodes,
-            calls,
-          };
-          context.commit(types.SET_INSTANCE_DEPENDENCY, data);
         });
       });
   },
