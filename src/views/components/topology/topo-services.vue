@@ -16,7 +16,7 @@
 */
 
 <template>
-  <div class="link-topo-aside-box" style="padding:0;z-index:102;">
+  <div class="link-topo-aside-box" style="padding:0;">
     <TopoSelect :current="service" :data="services" @onChoose="handleChange"/>
   </div>
 </template>
