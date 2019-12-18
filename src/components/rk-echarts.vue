@@ -27,6 +27,7 @@ import { Action } from 'vuex-class';
 @Component
 export default class RkEcharts extends Vue {
   @Prop() private option: any;
+  @Prop() private clickEvent: any;
   @Prop({ default: false }) private uncombine!: boolean;
   @Prop({ default: '100%' }) private height!: string;
   @Prop({default: '100%' }) private width!: string;
@@ -59,6 +60,9 @@ export default class RkEcharts extends Vue {
     const el: any = this.$el;
     this.myChart = echarts.init(el, '');
     this.myChart.setOption(this.option);
+    this.myChart.on('click', (params: any) => {
+      this.clickEvent(params);
+    });
   }
 }
 </script>
