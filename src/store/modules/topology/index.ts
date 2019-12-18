@@ -19,6 +19,7 @@ import { Commit, ActionTree, Dispatch } from 'vuex';
 import graph from '@/graph';
 import * as types from '../../mutation-types';
 import { AxiosResponse } from 'axios';
+
 interface Option {
   key: string;
   label: string;
@@ -27,8 +28,10 @@ interface Call {
   avgResponseTime: number;
   cpm: number;
   isAlert: boolean;
-  source: string;
-  target: string;
+  source: string | any;
+  target: string | any;
+  id: string;
+  detectPoints: string[];
 }
 interface Node {
   apdex: number;
@@ -49,7 +52,7 @@ export interface State {
   calls: Call[];
   nodes: Node[];
   detectPoints: string[];
-  selectedCallId: string;
+  selectedServiceCall: Call | null;
   currentNode: any;
   current: Option;
   mode: boolean;
@@ -66,13 +69,20 @@ export interface State {
   showTraceDialog: boolean;
   showInstancesDialog: boolean;
   showEndpointDialog: boolean;
+  instanceDependency: {
+    calls: Call[];
+    nodes: Node[];
+  };
+  selectedInstanceCall: Call | null;
+  instanceDependencyMetrics: {[key: string]: any};
+  queryInstanceMetricsType: string;
 }
 
 const initState: State = {
   callback: '',
   mode: true,
   detectPoints: [],
-  selectedCallId: '',
+  selectedServiceCall: null,
   calls: [],
   nodes: [],
   currentNode: {},
@@ -93,6 +103,13 @@ const initState: State = {
   showTraceDialog: false,
   showInstancesDialog: false,
   showEndpointDialog: false,
+  instanceDependency: {
+    calls: [],
+    nodes: [],
+  },
+  selectedInstanceCall: null,
+  instanceDependencyMetrics: {},
+  queryInstanceMetricsType: '',
 };
 
 // getters
@@ -135,8 +152,10 @@ const mutations = {
     state.calls = data.calls;
     state.nodes = data.nodes;
   },
+  [types.SET_SELECTED_CALL](state: State, data: any) {
+    state.selectedServiceCall = data;
+  },
   [types.SET_TOPO_RELATION](state: State, data: any) {
-    state.selectedCallId = data.id;
     state.getResponseTimeTrend = data.getResponseTimeTrend ?
     data.getResponseTimeTrend.values.map((i: any) => i.value) : [];
     state.getSLATrend = data.getSLATrend ? data.getSLATrend.values.map((i: any) => i.value) : [];
@@ -147,6 +166,28 @@ const mutations = {
     state.p95 = data.p95 ? data.p95.values.map((i: any) => i.value) : [];
     state.p99 = data.p99 ? data.p99.values.map((i: any) => i.value) : [];
   },
+  [types.SET_INSTANCE_DEPENDENCY](state: State, data: any) {
+    state.instanceDependency = data;
+  },
+  [types.SET_SELECTED_INSTANCE_CALL](state: State, data: Call) {
+    state.selectedInstanceCall = data;
+  },
+  [types.SET_INSTANCE_DEPEDENCE_METRICS](state: State, data: any) {
+    state.instanceDependencyMetrics.getResponseTimeTrend = data.getResponseTimeTrend ?
+    data.getResponseTimeTrend.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.getSLATrend = data.getSLATrend ?
+    data.getSLATrend.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.getThroughputTrend = data.getThroughputTrend ?
+    data.getThroughputTrend.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.p50 = data.p50 ? data.p50.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.p75 = data.p75 ? data.p75.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.p90 = data.p90 ? data.p90.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.p95 = data.p95 ? data.p95.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.p99 = data.p99 ? data.p99.values.map((i: any) => i.value) : [];
+  },
+  [types.SET_INSTANCE_DEPEDENCE_TYPE](state: State, data: string) {
+    state.queryInstanceMetricsType = data;
+  },
 };
 
 // actions
@@ -156,13 +197,30 @@ const actions: ActionTree<State, any> = {
   },
   CLEAR_TOPO_INFO(context: { commit: Commit; state: State; }) {
     context.commit(types.SET_TOPO_RELATION, {});
+    context.commit(types.SET_SELECTED_CALL, null);
+  },
+  GET_INSTANCE_DEPENDENCY_METRICS(
+    context: { commit: Commit; state: State, dispatch: Dispatch, getters: any}, params: any,
+  ) {
+    if (params.mode === 'SERVER') {
+      params.queryType = 'queryTopoInstanceServerInfo';
+      context.dispatch('INSTANCE_RELATION_INFO', params);
+    }
+    if (params.mode === 'CLIENT') {
+      params.queryType = 'queryTopoInstanceClientInfo';
+      context.dispatch('INSTANCE_RELATION_INFO', params);
+    }
   },
   GET_TOPO_SERVICE_INFO(context: { commit: Commit; state: State; }, params: any) {
     return graph
     .query('queryTopoServiceInfo')
-    .params(params)
+    .params({
+      id: params.id,
+      duration: params.duration,
+    })
     .then((res: AxiosResponse) => {
-      context.commit('SET_TOPO_RELATION', Object.assign(res.data.data, { id: params.id }));
+      context.commit('SET_TOPO_RELATION', res.data.data);
+      context.commit(types.SET_SELECTED_CALL, params);
     });
   },
   GET_TOPO_CLIENT_INFO(context: { commit: Commit; state: State; }, params: any) {
@@ -170,7 +228,8 @@ const actions: ActionTree<State, any> = {
     .query('queryTopoClientInfo')
     .params(params)
     .then((res: AxiosResponse) => {
-      context.commit('SET_TOPO_RELATION', Object.assign(res.data.data, { id: params.id }));
+      context.commit('SET_TOPO_RELATION', res.data.data);
+      context.commit(types.SET_SELECTED_CALL, params);
     });
   },
   GET_TOPO(context: { commit: Commit; state: State; }, params: any) {
@@ -242,6 +301,77 @@ const actions: ActionTree<State, any> = {
           }
           context.commit(types.SET_TOPO, {calls, nodes});
         });
+    });
+  },
+  async GET_TOPO_INSTANCE_DEPENDENCY(context: { commit: Commit; state: State; }, params: {
+    clientServiceId: string, serverServiceId: string, duration: string}) {
+
+    graph.query('queryTopoInstanceDependency').params(params)
+      .then((res: AxiosResponse) => {
+        if (!(res.data && res.data.data)) {
+          return;
+        }
+        const serverIdsC = [] as string[];
+        const clientIdsC = [] as string[];
+        const topoCalls = res.data.data.topo.calls;
+        for (const call of topoCalls) {
+          if (call.detectPoints.includes('CLIENT')) {
+            clientIdsC.push(call.id);
+          } else {
+            serverIdsC.push(call.id);
+          }
+        }
+        graph.query('queryDependencyInstanceClientMetric').params({
+          idsC: clientIdsC,
+          duration: params.duration,
+        }).then((json: AxiosResponse) => {
+          const clientCalls = [] as string[];
+          for (const call of topoCalls) {
+            for (const cpm of json.data.data.cpmC.values) {
+              if (cpm.id === call.id) {
+                clientCalls.push({
+                  ...call,
+                  ...cpm,
+                });
+              }
+            }
+          }
+          graph.query('queryDependencyInstanceServerMetric').params({
+            idsC: serverIdsC,
+            duration: params.duration,
+          }).then((jsonResp: AxiosResponse) => {
+            const serverCalls = [] as string[];
+            for (const call of topoCalls) {
+              for (const cpm of jsonResp.data.data.cpmC.values) {
+                if (cpm.id === call.id) {
+                  serverCalls.push({
+                    ...call,
+                    ...cpm,
+                  });
+                }
+              }
+            }
+            const data = {
+              nodes: res.data.data.topo.nodes,
+              calls: [...serverCalls, ...clientCalls],
+            };
+            context.commit(types.SET_INSTANCE_DEPENDENCY, data);
+          });
+        });
+      });
+  },
+  INSTANCE_RELATION_INFO(context: { commit: Commit; state: State; }, params: Call &
+    {mode: string; queryType: string; durationTime: string}) {
+    graph.query(params.queryType).params({
+      id: params.id,
+      duration: params.durationTime,
+    }).then((res: AxiosResponse) => {
+      if (!(res.data && res.data.data)) {
+        return;
+      }
+      context.commit(types.SET_SELECTED_INSTANCE_CALL, params);
+      context.commit(types.SET_INSTANCE_DEPEDENCE_TYPE, params.mode);
+      context.commit(types.SET_INSTANCE_DEPEDENCE_METRICS, res.data.data);
     });
   },
 };

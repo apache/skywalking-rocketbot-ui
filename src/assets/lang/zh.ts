@@ -104,6 +104,8 @@ const m = {
   nextService: '下一个服务',
   object: '粒度',
   metrics: '指标',
+  ShowInstanceDependency: '展示实例依赖',
+  InstanceDependencyTitle: '实例依赖',
 };
 
 export default m;

@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-import { Topo, ServiceTopo, TopoMetric,
-  TopoServiceMetric, TopoClientMetric, TopoServiceInfo, TopoClientInfo } from '../fragments/topology';
+import { Topo, ServiceTopo, TopoMetric, TopoInstanceDependency, TopoInstanceClientInfo, TopoInstanceServerInfo,
+  TopoServiceMetric, TopoClientMetric, TopoServiceInfo, TopoClientInfo,
+  DependencyInstanceServerMetric, DependencyInstanceClientMetric } from '../fragments/topology';
 
 export const queryTopo =
   `query queryTopo(${Topo.variable}) {${Topo.query}}`;
@@ -41,3 +42,18 @@ export const queryTopoServiceInfo =
 
 export const queryTopoClientInfo =
   `query queryTopoClientInfo(${TopoClientInfo.variable}) {${TopoClientInfo.query}}`;
+
+export const queryTopoInstanceDependency =
+  `query queryTopoInstanceDependency(${TopoInstanceDependency.variable}) {${TopoInstanceDependency.query}}`;
+
+export const queryTopoInstanceServerInfo =
+  `query queryTopoInstanceServerInfo(${TopoInstanceServerInfo.variable}) {${TopoInstanceServerInfo.query}}`;
+
+export const queryTopoInstanceClientInfo =
+  `query queryTopoInstanceClientInfo(${TopoInstanceClientInfo.variable}) {${TopoInstanceClientInfo.query}}`;
+
+export const queryDependencyInstanceServerMetric =
+  `query queryDependencyInstanceServerMetric(${DependencyInstanceServerMetric.variable}) {${DependencyInstanceServerMetric.query}}`;
+
+export const queryDependencyInstanceClientMetric =
+  `query queryDependencyInstanceClientMetric(${DependencyInstanceClientMetric.variable}) {${DependencyInstanceClientMetric.query}}`;
