@@ -43,7 +43,6 @@ export default class DependencySankey extends Vue {
           formatter: ((param: any) => param.data.name),
         },
         color: [
-            '#bf99f8',
             '#3fe1da',
             '#6be6c1',
             '#3fcfdc',
@@ -52,6 +51,7 @@ export default class DependencySankey extends Vue {
             '#a0a7e6',
             '#3fa9e1',
             '#96dee8',
+            '#bf99f8',
           ],
         itemStyle: {
           normal: {
