@@ -35,6 +35,10 @@ export default class DependencySankey extends Vue {
     return {
       series: {
         type: 'sankey',
+        left: 40,
+        top: 20,
+        right: 300,
+        bottom: 40,
         focusNodeAdjacency: 'allEdges',
         data: this.data.nodes,
         links: this.data.calls,
