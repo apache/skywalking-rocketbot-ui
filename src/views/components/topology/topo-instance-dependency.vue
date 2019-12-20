@@ -20,52 +20,54 @@
     <div class="rk-dependency-chart">
       <DependencySankey :data="stateTopo.instanceDependency" />
     </div>
-    <div v-if="!stateTopo.instanceDependency.nodes.length">No Instance Dependency</div>
-    <div v-if="stateTopo.selectedInstanceCall" class="rk-instance-dependency-metrics">
-      <div class="mb-5 clear">
-        <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
-        <span
-            v-if="stateTopo.selectedInstanceCall.detectPoints.includes('CLIENT')"
-            class="link-topo-aside-box-btn tc r sm cp b"
-            :class="{'active':stateTopo.queryInstanceMetricsType==='CLIENT'}"
-            @click="setMode('CLIENT')"
-        >{{ this.$t('client') }}</span>
-        <span
-            v-if="stateTopo.selectedInstanceCall.detectPoints.includes('SERVER')"
-            class="link-topo-aside-box-btn tc r sm cp b"
-            :class="{'active':stateTopo.queryInstanceMetricsType==='SERVER' }"
-            @click="setMode('SERVER')"
-        >{{ this.$t('server') }}</span>
-      </div>
-      <div v-if="stateTopo.selectedInstanceCall">
-        <TopoChart
-            v-if="stateTopo.instanceDependencyMetrics.getResponseTimeTrend"
-            :data="stateTopo.instanceDependencyMetrics.getResponseTimeTrend"
-            :intervalTime="intervalTime"
-            :title="$t('avgResponseTime')"
-            unit="ms"
-        />
-        <TopoChart
-            v-if="stateTopo.instanceDependencyMetrics.getThroughputTrend"
-            :data="stateTopo.instanceDependencyMetrics.getThroughputTrend"
-            :intervalTime="intervalTime"
-            :title="$t('avgThroughput')"
-            unit="cpm"
-        />
-        <TopoChart
-            v-if="stateTopo.instanceDependencyMetrics.getSLATrend"
-            :data="stateTopo.instanceDependencyMetrics.getSLATrend"
-            :intervalTime="intervalTime"
-            :precent="true"
-            :title="$t('avgSLA')"
-            unit="%"
-        />
-        <ChartResponse
-            v-if="stateTopo.instanceDependencyMetrics.p50"
-            :data="stateTopo.instanceDependencyMetrics"
-            :intervalTime="intervalTime"
-            :title="$t('percentResponse')"
-        />
+    <div class="rk-instance-metric-box">
+      <div v-if="!stateTopo.instanceDependency.nodes.length">No Instance Dependency</div>
+      <div v-if="stateTopo.selectedInstanceCall" class="rk-instance-dependency-metrics">
+        <div class="mb-5 clear">
+          <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
+          <span
+              v-if="stateTopo.selectedInstanceCall.detectPoints.includes('CLIENT')"
+              class="link-topo-aside-box-btn tc r sm cp b"
+              :class="{'active':stateTopo.queryInstanceMetricsType==='CLIENT'}"
+              @click="setMode('CLIENT')"
+          >{{ this.$t('client') }}</span>
+          <span
+              v-if="stateTopo.selectedInstanceCall.detectPoints.includes('SERVER')"
+              class="link-topo-aside-box-btn tc r sm cp b"
+              :class="{'active':stateTopo.queryInstanceMetricsType==='SERVER' }"
+              @click="setMode('SERVER')"
+          >{{ this.$t('server') }}</span>
+        </div>
+        <div v-if="stateTopo.selectedInstanceCall">
+          <TopoChart
+              v-if="stateTopo.instanceDependencyMetrics.getResponseTimeTrend"
+              :data="stateTopo.instanceDependencyMetrics.getResponseTimeTrend"
+              :intervalTime="intervalTime"
+              :title="$t('avgResponseTime')"
+              unit="ms"
+          />
+          <TopoChart
+              v-if="stateTopo.instanceDependencyMetrics.getThroughputTrend"
+              :data="stateTopo.instanceDependencyMetrics.getThroughputTrend"
+              :intervalTime="intervalTime"
+              :title="$t('avgThroughput')"
+              unit="cpm"
+          />
+          <TopoChart
+              v-if="stateTopo.instanceDependencyMetrics.getSLATrend"
+              :data="stateTopo.instanceDependencyMetrics.getSLATrend"
+              :intervalTime="intervalTime"
+              :precent="true"
+              :title="$t('avgSLA')"
+              unit="%"
+          />
+          <ChartResponse
+              v-if="stateTopo.instanceDependencyMetrics.p50"
+              :data="stateTopo.instanceDependencyMetrics"
+              :intervalTime="intervalTime"
+              :title="$t('percentResponse')"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -115,11 +117,16 @@ export default class TopoInstanceDependency extends Vue {
       text-align: center;
       width: 100%;
     }
+    .rk-instance-metric-box {
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
     .rk-instance-dependency-metrics {
       width: 320px;
-      height: 100%;
+      height: 650px;
       background: #111;
-      padding: 10px 20px;
+      padding: 20px;
     }
     .rk-dependency-chart {
       width: 850px;

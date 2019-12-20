@@ -99,9 +99,9 @@
         </div>
         <div class="show-dependency" v-if="stateTopo.selectedServiceCall">
           <a class="rk-btn lg" @click="openInstanceModal">{{$t('ShowInstanceDependency')}}</a>
-          <el-dialog
-            class="instance-dependency" 
-            :width="'90%'"
+          <el-drawer
+            custom-class="instance-dependency" 
+            size="1200px"
             :title="`${stateTopo.selectedServiceCall.source.name} -> ${stateTopo.selectedServiceCall.target.name} Instance Dependency`"
             :visible.sync="dialogTopoVisible"
             :modal-append-to-body="false"
@@ -109,8 +109,9 @@
             :destroy-on-close="true"
             :before-close="clearInstance"
           >
+            <div class="title-name">{{stateTopo.selectedServiceCall.source.name}} -> {{stateTopo.selectedServiceCall.target.name}} Instance Dependency</div>
             <TopoInstanceDependency />
-          </el-dialog>
+          </el-drawer>
         </div>
       </div>
 </template>
@@ -232,17 +233,18 @@
       display: block;
       text-align: center;
     }
-    .el-dialog__header{
+    .instance-dependency{
       background: #333;
-      .el-dialog__title{
-        color: #efeff1;
+      outline: none;
+      .el-drawer__header{
+        color: #fff;
+        padding: 0;
       }
     }
-    .el-dialog__body{
-      background: #333;
-      color: #efeff1;
-      height: 650px;
-      padding: 10px 20px;
+    .title-name {
+      width: 100%;
+      padding-left: 40px;
+      font-size: 16px;
     }
   }
   .link-topo-aside-box {
