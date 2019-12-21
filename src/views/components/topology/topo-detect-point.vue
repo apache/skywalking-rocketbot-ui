@@ -130,8 +130,8 @@
 
   @Component({
     components: {
-      TopoInstanceDependency, ChartResponse, TopoChart
-    }
+      TopoInstanceDependency, ChartResponse, TopoChart,
+    },
   })
   export default class TopoDetectPoint extends Vue {
     @State('rocketTopo') private stateTopo!: topoState;
@@ -176,7 +176,7 @@
           .then(() => {
             this.GET_QUERY({
               serviceId: service.id || '',
-              duration: this.durationTime
+              duration: this.durationTime,
             });
           });
       }
@@ -216,7 +216,7 @@
       this.GET_INSTANCE_DEPENDENCY({
         serverServiceId: this.stateTopo.selectedServiceCall.source.id,
         clientServiceId: this.stateTopo.selectedServiceCall.target.id,
-        duration: this.durationTime
+        duration: this.durationTime,
       });
     }
   }
