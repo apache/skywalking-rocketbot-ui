@@ -162,6 +162,7 @@
         this.showInfo = true;
       } else {
         this.showInfo = false;
+        this.showInfoCount = 0;
         this.isMini = true;
       }
     }
@@ -183,6 +184,7 @@
         this.showInfo = true;
       } else {
         this.showInfo = false;
+        this.showInfoCount = 0;
         this.isMini = true;
       }
     }
