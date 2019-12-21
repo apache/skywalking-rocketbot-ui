@@ -17,117 +17,121 @@
 
 <template>
   <div v-if="stateTopo.selectedServiceCall || showServerInfo"
-           :class="`link-topo-aside-box link-topo-aside-box-${isMini?'min':'max'}`"
-           :style="`top:80px;position: fixed;right: 30px;${showInfoCount === 0 ? 'animation: unset;': ''}`">
-        <svg
-            :style="`position:absolute;left:-48px;top:0;transform: rotate(${isMini?0 : 180}deg);`"
-            class="link-topo-aside-btn icon cp lg"
-            @click="setShowInfo"
-        >
-          <use xlink:href="#chevron-left"/>
-        </svg>
-        <div class="mb-5 clear">
-          <span v-if="stateTopo.selectedServiceCall" class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
-          <span v-else-if="showServerInfo" class="b dib mr-20 vm">{{ $t('serviceDetail') }}</span>
-          <span
-              v-if="stateTopo.detectPoints.indexOf('CLIENT') !== -1"
-              :class="{'active':!stateTopo.mode}"
-              class="link-topo-aside-box-btn tc r sm cp b"
-              @click="setMode(false)"
-          >{{ this.$t('client') }}</span>
-          <span
-              v-if="stateTopo.detectPoints.indexOf('SERVER') !== -1"
-              :class="{'active':stateTopo.mode}"
-              class="link-topo-aside-box-btn tc r sm cp b"
-              @click="setMode(true)"
-          >{{ this.$t('server') }}</span>
-        </div>
-        <div v-if="showInfo">
-          <div v-if="stateTopo.selectedServiceCall">
-            <TopoChart
-                v-if="stateTopo.getResponseTimeTrend.length"
-                :data="stateTopo.getResponseTimeTrend"
-                :intervalTime="intervalTime"
-                :title="$t('avgResponseTime')"
-                unit="ms"
-            />
-            <TopoChart
-                v-if="stateTopo.getThroughputTrend.length"
-                :data="stateTopo.getThroughputTrend"
-                :intervalTime="intervalTime"
-                :title="$t('avgThroughput')"
-                unit="cpm"
-            />
-            <TopoChart
-                v-if="stateTopo.getSLATrend.length"
-                :data="stateTopo.getSLATrend"
-                :intervalTime="intervalTime"
-                :precent="true"
-                :title="$t('avgSLA')"
-                unit="%"
-            />
-            <ChartResponse
-                v-if="stateTopo.p50.length"
-                :data="stateTopo"
-                :intervalTime="intervalTime"
-                :title="$t('percentResponse')"
-            />
-          </div>
-          <div v-else-if="showServerInfo">
-            <TopoChart
-                v-if="rocketDashboard.serviceResponseTime.ResponseTime.length"
-                :data="rocketDashboard.serviceResponseTime.ResponseTime"
-                :intervalTime="intervalTime"
-                title="Service ResponseTime"
-                unit="ms"
-            />
-            <TopoChart
-                v-if="rocketDashboard.serviceThroughput.Throughput.length"
-                :data="rocketDashboard.serviceThroughput.Throughput"
-                :intervalTime="intervalTime"
-                title="Service Throughput"
-                unit="cpm"
-            />
-            <ChartResponse
-                v-if="rocketDashboard.servicePercent.p50.length"
-                :data="rocketDashboard.servicePercent"
-                :intervalTime="intervalTime"
-                title="Service Response Time Percentile"
-                unit="ms"
-            />
-          </div>
-        </div>
-        <div class="show-dependency" v-if="stateTopo.selectedServiceCall">
-          <a class="rk-btn lg" @click="openInstanceModal">{{$t('ShowInstanceDependency')}}</a>
-          <el-drawer
-            custom-class="instance-dependency" 
-            size="1200px"
-            :title="`${stateTopo.selectedServiceCall.source.name} -> ${stateTopo.selectedServiceCall.target.name} Instance Dependency`"
-            :visible.sync="dialogTopoVisible"
-            :modal-append-to-body="false"
-            :close-on-click-modal="false"
-            :destroy-on-close="true"
-            :before-close="clearInstance"
-          >
-            <div class="title-name">{{stateTopo.selectedServiceCall.source.name}} -> {{stateTopo.selectedServiceCall.target.name}} Instance Dependency</div>
-            <TopoInstanceDependency />
-          </el-drawer>
-        </div>
+       :class="`link-topo-aside-box link-topo-aside-box-${isMini?'min':'max'}`"
+       :style="`top:80px;position: fixed;right: 30px;${showInfoCount === 0 ? 'animation: unset;': ''}`">
+    <svg
+        :style="`position:absolute;left:-48px;top:0;transform: rotate(${isMini?0 : 180}deg);`"
+        class="link-topo-aside-btn icon cp lg"
+        @click="setShowInfo"
+    >
+      <use xlink:href="#chevron-left"/>
+    </svg>
+    <div class="mb-5 clear">
+      <div v-if="stateTopo.selectedServiceCall">
+        <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
+        <span
+            v-if="stateTopo.detectPoints.indexOf('CLIENT') !== -1"
+            :class="{'active':!stateTopo.mode}"
+            class="link-topo-aside-box-btn tc r sm cp b"
+            @click="setMode(false)"
+        >{{ this.$t('client') }}</span>
+        <span
+            v-if="stateTopo.detectPoints.indexOf('SERVER') !== -1"
+            :class="{'active':stateTopo.mode}"
+            class="link-topo-aside-box-btn tc r sm cp b"
+            @click="setMode(true)"
+        >{{ this.$t('server') }}</span>
       </div>
+      <span v-else-if="showServerInfo" class="b dib mr-20 vm">{{ $t('serviceDetail') }}</span>
+    </div>
+    <div v-if="showInfo">
+      <div v-if="stateTopo.selectedServiceCall">
+        <TopoChart
+            v-if="stateTopo.getResponseTimeTrend.length"
+            :data="stateTopo.getResponseTimeTrend"
+            :intervalTime="intervalTime"
+            :title="$t('avgResponseTime')"
+            unit="ms"
+        />
+        <TopoChart
+            v-if="stateTopo.getThroughputTrend.length"
+            :data="stateTopo.getThroughputTrend"
+            :intervalTime="intervalTime"
+            :title="$t('avgThroughput')"
+            unit="cpm"
+        />
+        <TopoChart
+            v-if="stateTopo.getSLATrend.length"
+            :data="stateTopo.getSLATrend"
+            :intervalTime="intervalTime"
+            :precent="true"
+            :title="$t('avgSLA')"
+            unit="%"
+        />
+        <ChartResponse
+            v-if="stateTopo.p50.length"
+            :data="stateTopo"
+            :intervalTime="intervalTime"
+            :title="$t('percentResponse')"
+        />
+      </div>
+      <div v-else-if="showServerInfo">
+        <TopoChart
+            v-if="rocketDashboard.serviceResponseTime.ResponseTime.length"
+            :data="rocketDashboard.serviceResponseTime.ResponseTime"
+            :intervalTime="intervalTime"
+            title="Service ResponseTime"
+            unit="ms"
+        />
+        <TopoChart
+            v-if="rocketDashboard.serviceThroughput.Throughput.length"
+            :data="rocketDashboard.serviceThroughput.Throughput"
+            :intervalTime="intervalTime"
+            title="Service Throughput"
+            unit="cpm"
+        />
+        <ChartResponse
+            v-if="rocketDashboard.servicePercent.p50.length"
+            :data="rocketDashboard.servicePercent"
+            :intervalTime="intervalTime"
+            title="Service Response Time Percentile"
+            unit="ms"
+        />
+      </div>
+    </div>
+    <div class="show-dependency" v-if="stateTopo.selectedServiceCall">
+      <a class="rk-btn lg" @click="openInstanceModal">{{$t('ShowInstanceDependency')}}</a>
+      <el-drawer
+          custom-class="instance-dependency"
+          size="1200px"
+          :title="`${stateTopo.selectedServiceCall.source.name} -> ${stateTopo.selectedServiceCall.target.name} Instance Dependency`"
+          :visible.sync="dialogTopoVisible"
+          :modal-append-to-body="false"
+          :close-on-click-modal="false"
+          :destroy-on-close="true"
+          :before-close="clearInstance"
+      >
+        <div class="title-name">{{stateTopo.selectedServiceCall.source.name}} ->
+          {{stateTopo.selectedServiceCall.target.name}} Instance Dependency
+        </div>
+        <TopoInstanceDependency/>
+      </el-drawer>
+    </div>
+  </div>
 </template>
 <script lang="ts">
 
-  import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
+  import { State as topoState } from '@/store/modules/topology';
+  import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
-  import topo, { State as topoState } from '@/store/modules/topology';
-  import TopoInstanceDependency from './topo-instance-dependency.vue';
   import TopoChart from './topo-chart.vue';
+  import TopoInstanceDependency from './topo-instance-dependency.vue';
   import ChartResponse from './topo-response.vue';
 
   @Component({
     components: {
-      TopoInstanceDependency, ChartResponse, TopoChart,
-    },
+      TopoInstanceDependency, ChartResponse, TopoChart
+    }
   })
   export default class TopoDetectPoint extends Vue {
     @State('rocketTopo') private stateTopo!: topoState;
@@ -171,7 +175,7 @@
           .then(() => {
             this.GET_QUERY({
               serviceId: service.id || '',
-              duration: this.durationTime,
+              duration: this.durationTime
             });
           });
       }
@@ -210,7 +214,7 @@
       this.GET_INSTANCE_DEPENDENCY({
         serverServiceId: this.stateTopo.selectedServiceCall.source.id,
         clientServiceId: this.stateTopo.selectedServiceCall.target.id,
-        duration: this.durationTime,
+        duration: this.durationTime
       });
     }
   }
@@ -223,30 +227,37 @@
     padding: 0px 3px;
     width: 45px;
     display: inline-block;
+
     &.active {
       color: #448dfe;
     }
   }
+
   .show-dependency {
     margin: 20px 0;
+
     .rk-btn {
       display: block;
       text-align: center;
     }
-    .instance-dependency{
+
+    .instance-dependency {
       background: #333;
       outline: none;
-      .el-drawer__header{
+
+      .el-drawer__header {
         color: #fff;
         padding: 0;
       }
     }
+
     .title-name {
       width: 100%;
       padding-left: 40px;
       font-size: 16px;
     }
   }
+
   .link-topo-aside-box {
     border-radius: 4px;
     position: absolute;
