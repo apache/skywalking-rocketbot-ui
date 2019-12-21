@@ -26,46 +26,46 @@
         <div class="mb-5 clear">
           <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
           <span
-              v-if="stateTopo.selectedInstanceCall.detectPoints.includes('CLIENT')"
-              class="link-topo-aside-box-btn tc r sm cp b"
-              :class="{'active':stateTopo.queryInstanceMetricsType==='CLIENT'}"
-              @click="setMode('CLIENT')"
+            v-if="stateTopo.selectedInstanceCall.detectPoints.includes('CLIENT')"
+            class="link-topo-aside-box-btn tc r sm cp b"
+            :class="{'active':stateTopo.queryInstanceMetricsType==='CLIENT'}"
+            @click="setMode('CLIENT')"
           >{{ this.$t('client') }}</span>
           <span
-              v-if="stateTopo.selectedInstanceCall.detectPoints.includes('SERVER')"
-              class="link-topo-aside-box-btn tc r sm cp b"
-              :class="{'active':stateTopo.queryInstanceMetricsType==='SERVER' }"
-              @click="setMode('SERVER')"
+            v-if="stateTopo.selectedInstanceCall.detectPoints.includes('SERVER')"
+            class="link-topo-aside-box-btn tc r sm cp b"
+            :class="{'active':stateTopo.queryInstanceMetricsType==='SERVER' }"
+            @click="setMode('SERVER')"
           >{{ this.$t('server') }}</span>
         </div>
         <div v-if="stateTopo.selectedInstanceCall">
           <TopoChart
-              v-if="stateTopo.instanceDependencyMetrics.getResponseTimeTrend"
-              :data="stateTopo.instanceDependencyMetrics.getResponseTimeTrend"
-              :intervalTime="intervalTime"
-              :title="$t('avgResponseTime')"
-              unit="ms"
+            v-if="stateTopo.instanceDependencyMetrics.getResponseTimeTrend"
+            :data="stateTopo.instanceDependencyMetrics.getResponseTimeTrend"
+            :intervalTime="intervalTime"
+            :title="$t('avgResponseTime')"
+            unit="ms"
           />
           <TopoChart
-              v-if="stateTopo.instanceDependencyMetrics.getThroughputTrend"
-              :data="stateTopo.instanceDependencyMetrics.getThroughputTrend"
-              :intervalTime="intervalTime"
-              :title="$t('avgThroughput')"
-              unit="cpm"
+            v-if="stateTopo.instanceDependencyMetrics.getThroughputTrend"
+            :data="stateTopo.instanceDependencyMetrics.getThroughputTrend"
+            :intervalTime="intervalTime"
+            :title="$t('avgThroughput')"
+            unit="cpm"
           />
           <TopoChart
-              v-if="stateTopo.instanceDependencyMetrics.getSLATrend"
-              :data="stateTopo.instanceDependencyMetrics.getSLATrend"
-              :intervalTime="intervalTime"
-              :precent="true"
-              :title="$t('avgSLA')"
-              unit="%"
+            v-if="stateTopo.instanceDependencyMetrics.getSLATrend"
+            :data="stateTopo.instanceDependencyMetrics.getSLATrend"
+            :intervalTime="intervalTime"
+            :precent="true"
+            :title="$t('avgSLA')"
+            unit="%"
           />
-          <ChartResponse
-              v-if="stateTopo.instanceDependencyMetrics.p50"
-              :data="stateTopo.instanceDependencyMetrics"
-              :intervalTime="intervalTime"
-              :title="$t('percentResponse')"
+          <ChartLine
+            v-if="stateTopo.instanceDependencyMetrics.percentResponse"
+            :data="stateTopo.instanceDependencyMetrics.percentResponse"
+            :intervalTime="intervalTime"
+            :title="$t('percentResponse')"
           />
         </div>
       </div>
@@ -79,12 +79,12 @@ import { State, Action, Getter, Mutation } from 'vuex-class';
 import { State as topoState} from '@/store/modules/topology';
 import Topo from './topo.vue';
 import TopoChart from './topo-chart.vue';
-import ChartResponse from './topo-response.vue';
 import DependencySankey from './dependency-sankey.vue';
+import ChartLine from './chart-line.vue';
 
 @Component({
   components: {
-    Topo, ChartResponse, TopoChart, DependencySankey,
+    Topo, ChartLine, TopoChart, DependencySankey,
   },
 })
 export default class TopoInstanceDependency extends Vue {

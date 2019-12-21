@@ -179,11 +179,12 @@ const mutations = {
     data.getSLATrend.values.map((i: any) => i.value) : [];
     state.instanceDependencyMetrics.getThroughputTrend = data.getThroughputTrend ?
     data.getThroughputTrend.values.map((i: any) => i.value) : [];
-    state.instanceDependencyMetrics.p50 = data.p50 ? data.p50.values.map((i: any) => i.value) : [];
-    state.instanceDependencyMetrics.p75 = data.p75 ? data.p75.values.map((i: any) => i.value) : [];
-    state.instanceDependencyMetrics.p90 = data.p90 ? data.p90.values.map((i: any) => i.value) : [];
-    state.instanceDependencyMetrics.p95 = data.p95 ? data.p95.values.map((i: any) => i.value) : [];
-    state.instanceDependencyMetrics.p99 = data.p99 ? data.p99.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.percentResponse = {};
+    state.instanceDependencyMetrics.percentResponse.p50 = data.p50 ? data.p50.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.percentResponse.p75 = data.p75 ? data.p75.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.percentResponse.p90 = data.p90 ? data.p90.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.percentResponse.p95 = data.p95 ? data.p95.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.percentResponse.p99 = data.p99 ? data.p99.values.map((i: any) => i.value) : [];
   },
   [types.SET_INSTANCE_DEPEDENCE_TYPE](state: State, data: string) {
     state.queryInstanceMetricsType = data;
