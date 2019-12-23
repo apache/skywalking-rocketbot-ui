@@ -59,11 +59,7 @@ export interface State {
   getResponseTimeTrend: number[];
   getSLATrend: number[];
   getThroughputTrend: number[];
-  p50: number[];
-  p75: number[];
-  p90: number[];
-  p95: number[];
-  p99: number[];
+  responsePercentile: {[key: string]: number[]};
   honeycombNode: any;
   showAlarmDialog: boolean;
   showTraceDialog: boolean;
@@ -93,11 +89,7 @@ const initState: State = {
   getResponseTimeTrend: [],
   getSLATrend: [],
   getThroughputTrend: [],
-  p50: [],
-  p75: [],
-  p90: [],
-  p95: [],
-  p99: [],
+  responsePercentile: {},
   honeycombNode: {},
   showAlarmDialog: false,
   showTraceDialog: false,
@@ -160,11 +152,11 @@ const mutations = {
     data.getResponseTimeTrend.values.map((i: any) => i.value) : [];
     state.getSLATrend = data.getSLATrend ? data.getSLATrend.values.map((i: any) => i.value) : [];
     state.getThroughputTrend = data.getThroughputTrend ? data.getThroughputTrend.values.map((i: any) => i.value) : [];
-    state.p50 = data.p50 ? data.p50.values.map((i: any) => i.value) : [];
-    state.p75 = data.p75 ? data.p75.values.map((i: any) => i.value) : [];
-    state.p90 = data.p90 ? data.p90.values.map((i: any) => i.value) : [];
-    state.p95 = data.p95 ? data.p95.values.map((i: any) => i.value) : [];
-    state.p99 = data.p99 ? data.p99.values.map((i: any) => i.value) : [];
+    state.responsePercentile.p50 = data.p50 ? data.p50.values.map((i: any) => i.value) : [];
+    state.responsePercentile.p75 = data.p75 ? data.p75.values.map((i: any) => i.value) : [];
+    state.responsePercentile.p90 = data.p90 ? data.p90.values.map((i: any) => i.value) : [];
+    state.responsePercentile.p95 = data.p95 ? data.p95.values.map((i: any) => i.value) : [];
+    state.responsePercentile.p99 = data.p99 ? data.p99.values.map((i: any) => i.value) : [];
   },
   [types.SET_INSTANCE_DEPENDENCY](state: State, data: any) {
     state.instanceDependency = data;

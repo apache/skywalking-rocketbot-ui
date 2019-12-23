@@ -68,12 +68,12 @@
             :title="$t('avgSLA')"
             unit="%"
         />
-        <ChartResponse
-            v-if="stateTopo.p50.length"
-            :data="stateTopo"
+        <ChartLine
+            v-if="stateTopo.responsePercentile"
+            :data="stateTopo.responsePercentile"
             :intervalTime="intervalTime"
             :title="$t('percentResponse')"
-        />
+          />
       </div>
       <div v-else-if="showServerInfo">
         <TopoChart
@@ -90,13 +90,12 @@
             title="Service Throughput"
             unit="cpm"
         />
-        <ChartResponse
+         <ChartLine
             v-if="rocketDashboard.servicePercent.p50.length"
             :data="rocketDashboard.servicePercent"
             :intervalTime="intervalTime"
-            title="Service Response Time Percentile"
-            unit="ms"
-        />
+            :title="$t('percentResponse')"
+          />
       </div>
     </div>
     <div class="show-dependency" v-if="stateTopo.selectedServiceCall">
@@ -126,11 +125,11 @@
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import TopoChart from './topo-chart.vue';
   import TopoInstanceDependency from './topo-instance-dependency.vue';
-  import ChartResponse from './topo-response.vue';
+  import ChartLine from './chart-line.vue';
 
   @Component({
     components: {
-      TopoInstanceDependency, ChartResponse, TopoChart,
+      TopoInstanceDependency, TopoChart, ChartLine,
     },
   })
   export default class TopoDetectPoint extends Vue {

@@ -110,14 +110,13 @@
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import Radial from './radial.vue';
   import TopoChart from './topo-chart.vue';
-  import ChartResponse from './topo-response.vue';
   import TopoService from './topo-services.vue';
   import TopoInstanceDependency from './topo-instance-dependency.vue';
   import TopoDetectPoint from './topo-detect-point.vue';
 
   @Component({
     components: {
-      TopoChart, TopoService, ChartResponse, Radial, AlarmContainers,
+      TopoChart, TopoService, Radial, AlarmContainers,
       TraceContainers, InstancesSurveyWindow, EndpointSurveyWindow,
       TopoInstanceDependency, TopoDetectPoint,
     },
