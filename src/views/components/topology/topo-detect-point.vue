@@ -73,7 +73,7 @@
             :data="stateTopo.responsePercentile"
             :intervalTime="intervalTime"
             :title="$t('percentResponse')"
-          />
+        />
       </div>
       <div v-else-if="showServerInfo">
         <TopoChart
@@ -90,12 +90,12 @@
             title="Service Throughput"
             unit="cpm"
         />
-         <ChartLine
+        <ChartLine
             v-if="rocketDashboard.servicePercent.p50.length"
             :data="rocketDashboard.servicePercent"
             :intervalTime="intervalTime"
             :title="$t('percentResponse')"
-          />
+        />
       </div>
     </div>
     <div class="show-dependency" v-if="stateTopo.selectedServiceCall">
