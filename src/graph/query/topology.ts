@@ -53,7 +53,9 @@ export const queryTopoInstanceClientInfo =
   `query queryTopoInstanceClientInfo(${TopoInstanceClientInfo.variable}) {${TopoInstanceClientInfo.query}}`;
 
 export const queryDependencyInstanceServerMetric =
-  `query queryDependencyInstanceServerMetric(${DependencyInstanceServerMetric.variable}) {${DependencyInstanceServerMetric.query}}`;
+  `query queryDependencyInstanceServerMetric(${DependencyInstanceServerMetric.variable}) \
+    {${DependencyInstanceServerMetric.query}}`;
 
 export const queryDependencyInstanceClientMetric =
-  `query queryDependencyInstanceClientMetric(${DependencyInstanceClientMetric.variable}) {${DependencyInstanceClientMetric.query}}`;
+  `query queryDependencyInstanceClientMetric(${DependencyInstanceClientMetric.variable}) \
+    {${DependencyInstanceClientMetric.query}}`;

@@ -35,6 +35,10 @@ export default class DependencySankey extends Vue {
     return {
       series: {
         type: 'sankey',
+        left: 40,
+        top: 20,
+        right: 300,
+        bottom: 40,
         focusNodeAdjacency: 'allEdges',
         data: this.data.nodes,
         links: this.data.calls,
@@ -43,7 +47,6 @@ export default class DependencySankey extends Vue {
           formatter: ((param: any) => param.data.name),
         },
         color: [
-            '#bf99f8',
             '#3fe1da',
             '#6be6c1',
             '#3fcfdc',
@@ -52,6 +55,7 @@ export default class DependencySankey extends Vue {
             '#a0a7e6',
             '#3fa9e1',
             '#96dee8',
+            '#bf99f8',
           ],
         itemStyle: {
           normal: {
