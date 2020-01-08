@@ -26,7 +26,7 @@
             {{data.endpointName}}
           </span>
         </div>
-        <div class="start-time" style="width: 200px;">
+        <div class="start-time" lang="scss" style="width: 200px;">
           {{data.startTime | dateformat}}
         </div>
         <div class="gap">

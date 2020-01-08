@@ -21,7 +21,7 @@
         <div class="method">
           Method
         </div>
-        <div class="start-time" style="width: 200px;">
+        <div class="start-time" lang="scss" style="width: 200px;">
           Start Time
         </div>
         <div class="gap">
