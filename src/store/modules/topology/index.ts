@@ -152,11 +152,11 @@ const mutations = {
     data.getResponseTimeTrend.values.map((i: any) => i.value) : [];
     state.getSLATrend = data.getSLATrend ? data.getSLATrend.values.map((i: any) => i.value) : [];
     state.getThroughputTrend = data.getThroughputTrend ? data.getThroughputTrend.values.map((i: any) => i.value) : [];
-    state.responsePercentile.p50 = data.p50 ? data.p50.values.map((i: any) => i.value) : [];
-    state.responsePercentile.p75 = data.p75 ? data.p75.values.map((i: any) => i.value) : [];
-    state.responsePercentile.p90 = data.p90 ? data.p90.values.map((i: any) => i.value) : [];
-    state.responsePercentile.p95 = data.p95 ? data.p95.values.map((i: any) => i.value) : [];
-    state.responsePercentile.p99 = data.p99 ? data.p99.values.map((i: any) => i.value) : [];
+    state.responsePercentile.p50 = data.getPercentile ? data.getPercentile[0].values.map((i: any) => i.value) : [];
+    state.responsePercentile.p75 = data.getPercentile ? data.getPercentile[1].values.map((i: any) => i.value) : [];
+    state.responsePercentile.p90 = data.getPercentile ? data.getPercentile[2].values.map((i: any) => i.value) : [];
+    state.responsePercentile.p95 = data.getPercentile ? data.getPercentile[3].values.map((i: any) => i.value) : [];
+    state.responsePercentile.p99 = data.getPercentile ? data.getPercentile[4].values.map((i: any) => i.value) : [];
   },
   [types.SET_INSTANCE_DEPENDENCY](state: State, data: any) {
     state.instanceDependency = data;
