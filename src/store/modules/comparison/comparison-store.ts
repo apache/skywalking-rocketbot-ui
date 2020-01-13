@@ -257,9 +257,8 @@ const mutations = {
     }
   },
   [types.SET_CHARTVAL](state: State, data: {value: any, type: string}) {
-    const { preObject, preService, preType, preMetrics } = state.currentOptions;
-    const { nextObject, nextService, nextType, nextMetrics } = state.currentOptions;
-    const metrics = data.type === ServiceType.PREVIOUS ? preMetrics : nextMetrics;
+    const { preObject, preService, preType } = state.currentOptions;
+    const { nextObject, nextService, nextType } = state.currentOptions;
     const obj = {} as any;
 
     for (const key of Object.keys(data.value)) {
