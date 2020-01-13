@@ -261,11 +261,6 @@ const actions: ActionTree<State, any> = {
                   sla: resInfo.sla.values[i].value ? resInfo.sla.values[i].value / 100 : -1,
                   cpm: resInfo.nodeCpm.values[i] ? resInfo.nodeCpm.values[i].value : -1,
                   latency: resInfo.nodeLatency.values[i] ? resInfo.nodeLatency.values[i].value : -1,
-                  p50: resInfo.p50 && resInfo.p50.values[i] ? resInfo.p50.values[i].value : 0,
-                  p75: resInfo.p75 && resInfo.p75.values[i] ? resInfo.p75.values[i].value : 0,
-                  p90: resInfo.p90 && resInfo.p90.values[i] ? resInfo.p90.values[i].value : 0,
-                  p95: resInfo.p95 && resInfo.p95.values[i] ? resInfo.p95.values[i].value : 0,
-                  p99: resInfo.p95 && resInfo.p95.values[i] ? resInfo.p95.values[i].value : 0,
                 };
               }
             }
