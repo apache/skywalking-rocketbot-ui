@@ -118,7 +118,7 @@ export default class TraceSearch extends Vue {
   @Mutation('rocketTrace/SET_TRACE_FORM_ITEM') private SET_TRACE_FORM_ITEM: any;
   @Prop({ default: false, type: Boolean })
   private inTopo!: boolean;
-  @Prop({ default: { label: 'All', key: '' } })
+  @Prop({ default: () => ({label: 'All', key: ''})})
   private propsService!: Option;
   private service: Option = {label: 'All', key: ''};
   private time!: Date[];

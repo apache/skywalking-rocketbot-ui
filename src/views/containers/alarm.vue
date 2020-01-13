@@ -39,7 +39,7 @@ import { State, Action, Getter } from 'vuex-class';
 export default class Alarm extends Vue {
   @State('rocketAlarm') private rocketAlarm!: any;
   @Getter('durationTime') private durationTime: any;
-  @Prop({default: {label: 'All', key: ''}})
+  @Prop({default: () => ({label: 'All', key: ''})})
   private alarmScope: any;
   @Prop({default: false, type: Boolean})
   private inTopo!: boolean;
