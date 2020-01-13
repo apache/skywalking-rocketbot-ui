@@ -52,10 +52,11 @@ export const endpointSLA =  {
   }`,
 };
 export const endpointPercent = {
-  variable: ['$duration: Duration!'],
+  variable: ['$endpointId: ID!', '$duration: Duration!'],
   fragment: `
   endpointPercentile: getMultipleLinearIntValues(metric: {
     name: "endpoint_percentile"
+    id: $endpointId
   }, numOfLinear: 5, duration: $duration) { values { value } }`,
 };
 

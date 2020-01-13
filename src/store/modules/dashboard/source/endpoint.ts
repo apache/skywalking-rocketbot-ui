@@ -52,26 +52,34 @@ export const initState: State = {
 
 
 export const SetEndpoint = (state: State, params: any) => {
-  if (params && params.endpointPercentile) {
-    state.endpointPercent.p50 = params.endpointPercentile[0].values.map((i: Value) => i.value);
-    state.endpointPercent.p75 = params.endpointPercentile[1].values.map((i: Value) => i.value);
-    state.endpointPercent.p90 = params.endpointPercentile[2].values.map((i: Value) => i.value);
-    state.endpointPercent.p95 = params.endpointPercentile[3].values.map((i: Value) => i.value);
-    state.endpointPercent.p99 = params.endpointPercentile[4].values.map((i: Value) => i.value);
+  if (!params) {
+    return;
   }
-  if (params && params.endpointResponseTime) {
+  if (params.endpointPercentile) {
+    const PercentileItem = ['p50', 'p75', 'p90', 'p95', 'p99'] as string[];
+    const endpointPercent = {} as any;
+
+    params.endpointPercentile.forEach((item: any, index: number) => {
+      if (item && item.values) {
+        const key = PercentileItem[index] as string;
+        endpointPercent[key] = item.values.map((i: any) => i.value);
+      }
+    });
+    state.endpointPercent = endpointPercent;
+  }
+  if (params.endpointResponseTime) {
     state.endpointResponseTime.ResponseTime = params.endpointResponseTime.values.map((i: Value) => i.value);
   }
-  if (params && params.endpointThroughput) {
+  if (params.endpointThroughput) {
     state.endpointThroughput.Throughput = params.endpointThroughput.values.map((i: Value) => i.value);
   }
-  if (params && params.endpointSLA) {
+  if (params.endpointSLA) {
     state.endpointSLA.SLA = params.endpointSLA.values.map((i: Value) => i.value / 100);
   }
-  if (params && params.endpointSlowEndpoint) {
+  if (params.endpointSlowEndpoint) {
     state.endpointSlowEndpoint = params.endpointSlowEndpoint;
   }
-  if (params && params.endpointTopology) {
+  if (params.endpointTopology) {
     const serviceIdxMap = params.endpointTopology.endpoints.map((e: any) => (e.serviceName)).filter(
       function onlyUnique(value: any, index: number, self: any) {
         return self.indexOf(value) === index;
@@ -102,7 +110,7 @@ export const SetEndpoint = (state: State, params: any) => {
       top: 'top',
     }];
   }
-  if (params && params.endpointTraces) {
+  if (params.endpointTraces) {
     state.endpointTraces = params.endpointTraces.traces.map((i: any) => ({
       key: i.key,
       label: i.endpointNames[0],

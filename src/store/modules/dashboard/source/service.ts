@@ -64,11 +64,16 @@ export const SetService = (state: State, params: any) => {
     state.serviceSLA.SLA = params.serviceSLA.values.map((i: Value) => i.value / 100);
   }
   if (params.servicePercentile) {
-    state.servicePercent.p50 = params.servicePercentile[0].values.map((i: Value) => i.value);
-    state.servicePercent.p75 = params.servicePercentile[1].values.map((i: Value) => i.value);
-    state.servicePercent.p90 = params.servicePercentile[2].values.map((i: Value) => i.value);
-    state.servicePercent.p95 = params.servicePercentile[3].values.map((i: Value) => i.value);
-    state.servicePercent.p99 = params.servicePercentile[4].values.map((i: Value) => i.value);
+    const PercentileItem = ['p50', 'p75', 'p90', 'p95', 'p99'];
+    const servicePercent = {} as any;
+
+    params.servicePercentile.forEach((item: any, index: number) => {
+      if (item && item.values) {
+        const key = PercentileItem[index] as string;
+        servicePercent[key] = item.values.map((i: any) => i.value);
+      }
+    });
+    state.servicePercent = servicePercent;
   }
   if (params.serviceSlowEndpoint) {
     state.serviceSlowEndpoint = params.serviceSlowEndpoint;

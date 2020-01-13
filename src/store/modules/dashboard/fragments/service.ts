@@ -53,10 +53,11 @@ export const serviceSLA =  {
 };
 
 export const servicePercent = {
-  variable: ['$duration: Duration!'],
+  variable: ['$serviceId: ID!', '$duration: Duration!'],
   fragment: `
   servicePercentile: getMultipleLinearIntValues(metric: {
     name: "service_percentile"
+    id: $serviceId
   }, numOfLinear: 5, duration: $duration) { values { value } }`,
 };
 

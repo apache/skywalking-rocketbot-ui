@@ -57,11 +57,16 @@ export const SetDatabase = (state: State, params: any) => {
     state.databaseSLA.SLA = params.databaseSLA.values.map((i: Value) => i.value / 100);
   }
   if (params.databasePercentile) {
-    state.databasePercent.p50 = params.databasePercentile[0].values.map((i: Value) => i.value);
-    state.databasePercent.p75 = params.databasePercentile[1].values.map((i: Value) => i.value);
-    state.databasePercent.p90 = params.databasePercentile[2].values.map((i: Value) => i.value);
-    state.databasePercent.p95 = params.databasePercentile[3].values.map((i: Value) => i.value);
-    state.databasePercent.p99 = params.databasePercentile[4].values.map((i: Value) => i.value);
+    const PercentileItem = ['p50', 'p75', 'p90', 'p95', 'p99'] as string[];
+    const databasePercent = {} as any;
+
+    params.databasePercentile.forEach((item: any, index: number) => {
+      if (item && item.values) {
+        const key = PercentileItem[index] as string;
+        databasePercent[key] = item.values.map((i: any) => i.value);
+      }
+    });
+    state.databasePercent = databasePercent;
   }
   if (params.databaseTopNRecords) {
     state.databaseTopNRecords = params.databaseTopNRecords.map((i: any) => ({

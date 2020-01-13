@@ -73,11 +73,16 @@ export const SetGlobal = (state: State, params: any) => {
 
   }
   if (params.globalPercentile) {
-    state.globalPercent.p50 = params.globalPercentile[0].values.map((i: Value) => i.value);
-    state.globalPercent.p75 = params.globalPercentile[1].values.map((i: Value) => i.value);
-    state.globalPercent.p90 = params.globalPercentile[2].values.map((i: Value) => i.value);
-    state.globalPercent.p95 = params.globalPercentile[3].values.map((i: Value) => i.value);
-    state.globalPercent.p99 = params.globalPercentile[4].values.map((i: Value) => i.value);
+    const PercentileItem = ['p50', 'p75', 'p90', 'p95', 'p99'];
+    const globalPercent = {} as any;
+
+    params.globalPercentile.forEach((item: any, index: number) => {
+      if (item && item.values) {
+        const key = PercentileItem[index] as string;
+        globalPercent[key] = item.values.map((i: any) => i.value);
+      }
+    });
+    state.globalPercent = globalPercent;
   }
   if (params.globalHeatmap) {
     state.globalHeatmap = params.globalHeatmap.nodes;

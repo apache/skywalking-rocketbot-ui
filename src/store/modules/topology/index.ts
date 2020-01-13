@@ -74,6 +74,8 @@ export interface State {
   queryInstanceMetricsType: string;
 }
 
+const PercentileItem: string[] = ['p50', 'p75', 'p90', 'p95', 'p99'];
+
 const initState: State = {
   callback: '',
   mode: true,
@@ -152,11 +154,14 @@ const mutations = {
     data.getResponseTimeTrend.values.map((i: any) => i.value) : [];
     state.getSLATrend = data.getSLATrend ? data.getSLATrend.values.map((i: any) => i.value) : [];
     state.getThroughputTrend = data.getThroughputTrend ? data.getThroughputTrend.values.map((i: any) => i.value) : [];
-    state.responsePercentile.p50 = data.getPercentile ? data.getPercentile[0].values.map((i: any) => i.value) : [];
-    state.responsePercentile.p75 = data.getPercentile ? data.getPercentile[1].values.map((i: any) => i.value) : [];
-    state.responsePercentile.p90 = data.getPercentile ? data.getPercentile[2].values.map((i: any) => i.value) : [];
-    state.responsePercentile.p95 = data.getPercentile ? data.getPercentile[3].values.map((i: any) => i.value) : [];
-    state.responsePercentile.p99 = data.getPercentile ? data.getPercentile[4].values.map((i: any) => i.value) : [];
+
+    if (!data.getPercentile) {
+      state.responsePercentile = {};
+      return;
+    }
+    data.getPercentile.forEach((item: any, index: number) => {
+      state.responsePercentile[PercentileItem[index]] = item.values.map((i: any) => i.value);
+    });
   },
   [types.SET_INSTANCE_DEPENDENCY](state: State, data: any) {
     state.instanceDependency = data;
@@ -172,11 +177,12 @@ const mutations = {
     state.instanceDependencyMetrics.getThroughputTrend = data.getThroughputTrend ?
     data.getThroughputTrend.values.map((i: any) => i.value) : [];
     state.instanceDependencyMetrics.percentResponse = {};
-    state.instanceDependencyMetrics.percentResponse.p50 = data.p50 ? data.p50.values.map((i: any) => i.value) : [];
-    state.instanceDependencyMetrics.percentResponse.p75 = data.p75 ? data.p75.values.map((i: any) => i.value) : [];
-    state.instanceDependencyMetrics.percentResponse.p90 = data.p90 ? data.p90.values.map((i: any) => i.value) : [];
-    state.instanceDependencyMetrics.percentResponse.p95 = data.p95 ? data.p95.values.map((i: any) => i.value) : [];
-    state.instanceDependencyMetrics.percentResponse.p99 = data.p99 ? data.p99.values.map((i: any) => i.value) : [];
+    if (!data.getPercentile) {
+      return;
+    }
+    data.getPercentile.forEach((item: any, index: number) => {
+      state.instanceDependencyMetrics.percentResponse[PercentileItem[index]] = item.values.map((i: any) => i.value);
+    });
   },
   [types.SET_INSTANCE_DEPEDENCE_TYPE](state: State, data: string) {
     state.queryInstanceMetricsType = data;
