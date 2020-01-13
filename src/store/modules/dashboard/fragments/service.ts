@@ -51,30 +51,6 @@ export const serviceSLA =  {
     }
   }`,
 };
-// export const servicePercent =  {
-//   variable: ['$serviceId: ID!', '$duration: Duration!'],
-//   fragment: `
-//   serviceP99: getLinearIntValues(metric: {
-//     name: "service_p99"
-//     id: $serviceId
-//   }, duration: $duration) { values { value } }
-//   serviceP95: getLinearIntValues(metric: {
-//     name: "service_p95"
-//     id: $serviceId
-//   }, duration: $duration) { values { value } }
-//   serviceP90: getLinearIntValues(metric: {
-//     name: "service_p90"
-//     id: $serviceId
-//   }, duration: $duration) { values { value } }
-//   serviceP75: getLinearIntValues(metric: {
-//     name: "service_p75"
-//     id: $serviceId
-//   }, duration: $duration) { values { value } }
-//   serviceP50: getLinearIntValues(metric: {
-//     name: "service_p50"
-//     id: $serviceId
-//   }, duration: $duration) { values { value } }`,
-// };
 
 export const servicePercent = {
   variable: ['$duration: Duration!'],

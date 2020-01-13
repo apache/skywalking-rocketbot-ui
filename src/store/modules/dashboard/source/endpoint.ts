@@ -52,13 +52,12 @@ export const initState: State = {
 
 
 export const SetEndpoint = (state: State, params: any) => {
-  if (params &&
-    params.endpointP50 && params.endpointP75 && params.endpointP90 && params.endpointP95 && params.endpointP99) {
-    state.endpointPercent.p50 = params.endpointP50.values.map((i: Value) => i.value);
-    state.endpointPercent.p75 = params.endpointP75.values.map((i: Value) => i.value);
-    state.endpointPercent.p90 = params.endpointP90.values.map((i: Value) => i.value);
-    state.endpointPercent.p95 = params.endpointP95.values.map((i: Value) => i.value);
-    state.endpointPercent.p99 = params.endpointP99.values.map((i: Value) => i.value);
+  if (params && params.endpointPercentile) {
+    state.endpointPercent.p50 = params.endpointPercentile[0].values.map((i: Value) => i.value);
+    state.endpointPercent.p75 = params.endpointPercentile[1].values.map((i: Value) => i.value);
+    state.endpointPercent.p90 = params.endpointPercentile[2].values.map((i: Value) => i.value);
+    state.endpointPercent.p95 = params.endpointPercentile[3].values.map((i: Value) => i.value);
+    state.endpointPercent.p99 = params.endpointPercentile[4].values.map((i: Value) => i.value);
   }
   if (params && params.endpointResponseTime) {
     state.endpointResponseTime.ResponseTime = params.endpointResponseTime.values.map((i: Value) => i.value);

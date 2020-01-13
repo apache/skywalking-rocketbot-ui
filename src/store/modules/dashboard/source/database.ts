@@ -47,28 +47,30 @@ export const initState: State = {
 };
 
 export const SetDatabase = (state: State, params: any) => {
-  if (params && params.databaseResponseTime) {
+  if (!params) {
+    return;
+  }
+  if (params.databaseResponseTime) {
     state.databaseResponseTime.ResponseTime = params.databaseResponseTime.values.map((i: Value) => i.value);
   }
-  if (params && params.databaseSLA) {
+  if (params.databaseSLA) {
     state.databaseSLA.SLA = params.databaseSLA.values.map((i: Value) => i.value / 100);
   }
-  if (params && params.databaseP50
-    && params.databaseP75 && params.databaseP90 && params.databaseP95 && params.databaseP99) {
-    state.databasePercent.p50 = params.databaseP50.values.map((i: Value) => i.value);
-    state.databasePercent.p75 = params.databaseP75.values.map((i: Value) => i.value);
-    state.databasePercent.p90 = params.databaseP90.values.map((i: Value) => i.value);
-    state.databasePercent.p95 = params.databaseP95.values.map((i: Value) => i.value);
-    state.databasePercent.p99 = params.databaseP99.values.map((i: Value) => i.value);
+  if (params.databasePercentile) {
+    state.databasePercent.p50 = params.databasePercentile[0].values.map((i: Value) => i.value);
+    state.databasePercent.p75 = params.databasePercentile[1].values.map((i: Value) => i.value);
+    state.databasePercent.p90 = params.databasePercentile[2].values.map((i: Value) => i.value);
+    state.databasePercent.p95 = params.databasePercentile[3].values.map((i: Value) => i.value);
+    state.databasePercent.p99 = params.databasePercentile[4].values.map((i: Value) => i.value);
   }
-  if (params && params.databaseTopNRecords) {
+  if (params.databaseTopNRecords) {
     state.databaseTopNRecords = params.databaseTopNRecords.map((i: any) => ({
       key: i.traceId,
       label: i.statement,
       value: i.latency,
     }));
   }
-  if (params && params.databaseThroughput) {
+  if (params.databaseThroughput) {
     state.databaseThroughput.Throughput = params.databaseThroughput.values.map((i: Value) => i.value);
   }
 };
