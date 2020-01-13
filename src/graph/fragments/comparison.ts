@@ -15,10 +15,11 @@
  * limitations under the License.
  */
 export const dependencyServerPercentile = {
-  variable: ['$duration: Duration!'],
+  variable: '$duration: Duration!, $id: ID!',
   fragment: `
   serverSidePercentile: getMultipleLinearIntValues(metric: {
     name: "service_relation_server_percentile"
+    id: $id
   }, numOfLinear: 5, duration: $duration) { values { value } }`,
 };
 
@@ -100,9 +101,10 @@ export const dependencyClientSLATrend = {
     }
 `};
 export const dependencyClientPercentile = {
-  variable: ['$duration: Duration!'],
+  variable: '$duration: Duration!, $id: ID!',
   fragment: `
   clientSidePercentile: getMultipleLinearIntValues(metric: {
     name: "service_relation_client_percentile"
+    id: $id
   }, numOfLinear: 5, duration: $duration) { values { value } }`,
 };
