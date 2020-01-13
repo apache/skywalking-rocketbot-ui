@@ -16,18 +16,23 @@
  */
 
 <template>
-  <div class="rk-trace flex-v">
-    <TraceSearch :propsService="service" :inTopo="inTopo"/>
-    <div class="rk-trace-inner">
-      <TraceTable/>
-      <TraceDetail :current="stateTrace.currentTrace" :spans="stateTrace.traceSpans"/>
+  <rk-sidebox
+      :show.sync="isShowSync"
+      :fixed="true"
+      width="80%">
+    <div class="rk-trace flex-v">
+      <TraceSearch :propsService="service" :inTopo="inTopo"/>
+      <div class="rk-trace-inner">
+        <TraceTable/>
+        <TraceDetail :current="stateTrace.currentTrace" :spans="stateTrace.traceSpans"/>
+      </div>
     </div>
-  </div>
+  </rk-sidebox>
 </template>
 
 <script lang="ts">
 import { Option } from '@/types/global';
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, PropSync } from 'vue-property-decorator';
 import { State, Action, Mutation } from 'vuex-class';
 import TraceSearch from '@/views/components/trace/trace-search.vue';
 import TraceTable from '@/views/components/trace/trace-table.vue';
@@ -38,12 +43,13 @@ import trace from '../../../store/modules/trace';
     TraceTable, TraceDetail, TraceSearch,
   },
 })
-export default class Trace extends Vue {
+export default class WindowTrace extends Vue {
   @State('rocketTrace') private stateTrace!: any;
   @Mutation('SET_EVENTS') private SET_EVENTS: any;
   @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
   @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
-
+  @PropSync('isShow', { default: false })
+    private isShowSync!: boolean;
   @Prop({default: {label: 'All', key: ''}})
   private service!: Option;
 

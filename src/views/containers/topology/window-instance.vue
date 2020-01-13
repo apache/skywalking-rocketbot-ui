@@ -16,31 +16,28 @@
 */
 
 <template>
-  <div class="performance-metrics-window">
-    <el-drawer
-      :destroy-on-close="true"
-      :visible.sync="isShowSync"
-      :modal-append-to-body="false"
-      direction="rtl"
-      size="80%">
-      <div class="rk-dashboard-bar flex-h">
-        <ToolBarSelect
-            :selectable="false"
-            :title="this.$t('currentService')"
-            :current="stateDashboardOption.currentService"
-            :data="stateDashboardOption.services"
-            icon="package"/>
-        <ToolBarEndpointSelect @onChoose="selectEndpoint" :title="$t('currentEndpoint')"
-                               :current="stateDashboardOption.currentEndpoint" :data="endpoints" icon="code">
-        </ToolBarEndpointSelect>
-      </div>
-      <endpoints-survey v-if="!rocketComps.loading" :style="`overflow: auto; height: ${endpointsSurveyHeight}`" />
-    </el-drawer>
-  </div>
+  <rk-sidebox
+    :show.sync="isShowSync"
+    :fixed="true"
+    width="80%">
+    <div class="rk-dashboard-bar flex-h">
+      <ToolBarSelect
+          :selectable="false"
+          :title="this.$t('currentService')"
+          :current="stateDashboardOption.currentService"
+          :data="stateDashboardOption.services" icon="package"/>
+      <ToolBarSelect
+          @onChoose="selectInstance"
+          :title="$t('currentInstance')"
+          :current="stateDashboardOption.currentInstance"
+          :data="instances" icon="disk"/>
+    </div>
+    <instances-survey v-if="isShowSync" :style="`overflow: auto; height: ${instancesSurveyHeight}`" />
+  </rk-sidebox>
 </template>
 
 <script lang="ts">
-  import EndpointsSurvey from '@/views/components/topology/endpoints-survey.vue';
+  import InstancesSurvey from '@/views/components/topology/instances-survey.vue';
   import ToolBarSelect from '@/views/components/dashboard/tool-bar-select.vue';
   import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar-endpoint-select.vue';
   import _ from 'lodash';
@@ -48,7 +45,7 @@
   import { Component, PropSync, Watch } from 'vue-property-decorator';
   import { Action, Getter, State } from 'vuex-class';
 
-  interface Endpoint {
+  interface Instance {
     label: string;
     key: string;
     name?: string;
@@ -56,27 +53,26 @@
 
   @Component({
     components: {
-      EndpointsSurvey,
+      InstancesSurvey,
       ToolBarSelect,
       ToolBarEndpointSelect,
     },
   })
-  export default class InstancesSurveyWindow extends Vue {
+  export default class WindowInstance extends Vue {
     @State('rocketOption') private stateDashboardOption!: any;
     @State('rocketData') private rocketComps!: any;
     @Getter('durationTime') private durationTime: any;
-    @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
+    @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @PropSync('isShow', { default: false })
     private isShowSync!: boolean;
-    private endpointsSurveyHeight = '100%';
+    private instancesSurveyHeight = '100%';
 
     private tabsLoading = true;
-    private endpointName: string = '0';
-    private endpointKey: string = '0';
-    private endpoints: any[] = [];
+    private instanceName: string = '0';
+    private instances: any[] = [];
 
     private dragIndex: number = NaN;
 
@@ -84,38 +80,35 @@
       this.dragIndex = index;
     }
 
-    private selectEndpoint(i: any) {
-      this.SELECT_ENDPOINT({endpoint: i, duration: this.durationTime});
+    private selectInstance(i: any) {
+      this.SELECT_INSTANCE({instance: i, duration: this.durationTime});
     }
 
     private handleRefresh() {
       this.GET_QUERY({
         serviceId: this.stateDashboardOption.currentService.key || '',
-        endpointId: this.endpointKey || '',
-        endpointName: this.endpointName || '',
         duration: this.durationTime,
       });
     }
 
     private handleOption() {
-      this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 2 });
+      this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 3 });
       return this.MIXHANDLE_GET_OPTION({ compType: 'service', duration: this.durationTime })
       .then(() => {
         this.handleRefresh();
       });
     }
 
-    @Watch('stateDashboardOption.endpoints')
-    private watchInstances(endpoints: Endpoint[]) {
-      _.forEach(endpoints, (endpoint) => {
-        endpoint.name = endpoint.label;
+    @Watch('stateDashboardOption.instances')
+    private watchInstances(instances: Instance[]) {
+      _.forEach(instances, (instance) => {
+        instance.name = instance.label.includes('@') ? instance.label.split('@')[1] : instance.label;
       });
-      this.endpoints = endpoints;
-      if (endpoints.length > 0 && (this.endpointName === '0')) {
-        this.SELECT_ENDPOINT({ endpoint: endpoints[0], duration: this.durationTime });
-        if (endpoints[0].name) {
-          this.endpointName = endpoints[0].name;
-          this.endpointKey = endpoints[0].key;
+      this.instances = instances;
+      if (instances.length > 0 && (this.instanceName === '0')) {
+        this.SELECT_INSTANCE({ instance: instances[0], duration: this.durationTime });
+        if (instances[0].name) {
+          this.instanceName = instances[0].name;
         }
       }
       this.tabsLoading = false;
@@ -131,7 +124,7 @@
     }
 
     private resize() {
-      this.endpointsSurveyHeight = `${document.body.clientHeight - 101}px`;
+      this.instancesSurveyHeight = `${document.body.clientHeight - 101}px`;
     }
 
     private beforeDestroy() {
@@ -140,10 +133,6 @@
   }
 </script>
 
-<style lang="scss">
-  .rk-dashboard-bar {
-    flex-shrink: 0;
-    color: #efefef;
-    background-color: #333840;
-  }
+<style lang="less" scoped>
+
 </style>

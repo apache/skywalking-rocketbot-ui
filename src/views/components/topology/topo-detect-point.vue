@@ -1,297 +1,316 @@
-/**
-* Licensed to the Apache Software Foundation (ASF) under one or more
-* contributor license agreements.  See the NOTICE file distributed with
-* this work for additional information regarding copyright ownership.
-* The ASF licenses this file to You under the Apache License, Version 2.0
-* (the "License"); you may not use this file except in compliance with
-* the License.  You may obtain a copy of the License at
-*
-*      http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+/** * Licensed to the Apache Software Foundation (ASF) under one or more *
+contributor license agreements. See the NOTICE file distributed with * this work
+for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you
+may not use this file except in compliance with * the License. You may obtain a
+copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under
+the License is distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. * See the License for the
+specific language governing permissions and * limitations under the License. */
 
 <template>
-  <div v-if="stateTopo.selectedServiceCall || showServerInfo"
-       :class="`link-topo-aside-box link-topo-aside-box-${isMini?'min':'max'}`"
-       :style="`top:80px;position: fixed;right: 30px;${showInfoCount === 0 ? 'animation: unset;': ''}`">
+  <div
+    v-if="stateTopo.selectedServiceCall || showServerInfo"
+    :class="`link-topo-aside-box link-topo-aside-box-${isMini ? 'min' : 'max'}`"
+    :style="
+      `top:55px;position: fixed;right: 30px;${
+        showInfoCount === 0 ? 'animation: unset;' : ''
+      }`
+    "
+  >
     <svg
-        :style="`position:absolute;left:-48px;top:0;transform: rotate(${isMini?0 : 180}deg);`"
-        class="link-topo-aside-btn icon cp lg"
-        @click="setShowInfo"
+      :style="
+        `position:absolute;left:-48px;top:0;transform: rotate(${
+          isMini ? 0 : 180
+        }deg);`
+      "
+      class="link-topo-aside-btn icon cp lg"
+      @click="setShowInfo"
     >
-      <use xlink:href="#chevron-left"/>
+      <use xlink:href="#chevron-left" />
     </svg>
     <div class="mb-5 clear">
       <div v-if="stateTopo.selectedServiceCall">
         <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
         <span
-            v-if="stateTopo.detectPoints.indexOf('CLIENT') !== -1"
-            :class="{'active':!stateTopo.mode}"
-            class="link-topo-aside-box-btn tc r sm cp b"
-            @click="setMode(false)"
-        >{{ this.$t('client') }}</span>
+          v-if="stateTopo.detectPoints.indexOf('CLIENT') !== -1"
+          :class="{ active: !stateTopo.mode }"
+          class="link-topo-aside-box-btn tc r sm cp b"
+          @click="setMode(false)"
+          >{{ this.$t('client') }}</span
+        >
         <span
-            v-if="stateTopo.detectPoints.indexOf('SERVER') !== -1"
-            :class="{'active':stateTopo.mode}"
-            class="link-topo-aside-box-btn tc r sm cp b"
-            @click="setMode(true)"
-        >{{ this.$t('server') }}</span>
+          v-if="stateTopo.detectPoints.indexOf('SERVER') !== -1"
+          :class="{ active: stateTopo.mode }"
+          class="link-topo-aside-box-btn tc r sm cp b"
+          @click="setMode(true)"
+          >{{ this.$t('server') }}</span
+        >
       </div>
-      <span v-else-if="showServerInfo" class="b dib mr-20 vm">{{ $t('serviceDetail') }}</span>
+      <span v-else-if="showServerInfo" class="b dib mr-20 vm">{{
+        $t('serviceDetail')
+      }}</span>
     </div>
     <div v-if="showInfo">
       <div v-if="stateTopo.selectedServiceCall">
         <TopoChart
-            v-if="stateTopo.getResponseTimeTrend.length"
-            :data="stateTopo.getResponseTimeTrend"
-            :intervalTime="intervalTime"
-            :title="$t('avgResponseTime')"
-            unit="ms"
+          v-if="stateTopo.getResponseTimeTrend.length"
+          :data="stateTopo.getResponseTimeTrend"
+          :intervalTime="intervalTime"
+          :title="$t('avgResponseTime')"
+          unit="ms"
         />
         <TopoChart
-            v-if="stateTopo.getThroughputTrend.length"
-            :data="stateTopo.getThroughputTrend"
-            :intervalTime="intervalTime"
-            :title="$t('avgThroughput')"
-            unit="cpm"
+          v-if="stateTopo.getThroughputTrend.length"
+          :data="stateTopo.getThroughputTrend"
+          :intervalTime="intervalTime"
+          :title="$t('avgThroughput')"
+          unit="cpm"
         />
         <TopoChart
-            v-if="stateTopo.getSLATrend.length"
-            :data="stateTopo.getSLATrend"
-            :intervalTime="intervalTime"
-            :precent="true"
-            :title="$t('avgSLA')"
-            unit="%"
+          v-if="stateTopo.getSLATrend.length"
+          :data="stateTopo.getSLATrend"
+          :intervalTime="intervalTime"
+          :precent="true"
+          :title="$t('avgSLA')"
+          unit="%"
         />
         <ChartLine
-            v-if="stateTopo.responsePercentile"
-            :data="stateTopo.responsePercentile"
-            :intervalTime="intervalTime"
-            :title="$t('percentResponse')"
+          v-if="stateTopo.responsePercentile"
+          :data="stateTopo.responsePercentile"
+          :intervalTime="intervalTime"
+          :title="$t('percentResponse')"
         />
       </div>
       <div v-else-if="showServerInfo">
         <TopoChart
-            v-if="rocketDashboard.serviceResponseTime.ResponseTime.length"
-            :data="rocketDashboard.serviceResponseTime.ResponseTime"
-            :intervalTime="intervalTime"
-            title="Service ResponseTime"
-            unit="ms"
+          v-if="rocketDashboard.serviceResponseTime.ResponseTime.length"
+          :data="rocketDashboard.serviceResponseTime.ResponseTime"
+          :intervalTime="intervalTime"
+          title="Service ResponseTime"
+          unit="ms"
         />
         <TopoChart
-            v-if="rocketDashboard.serviceThroughput.Throughput.length"
-            :data="rocketDashboard.serviceThroughput.Throughput"
-            :intervalTime="intervalTime"
-            title="Service Throughput"
-            unit="cpm"
+          v-if="rocketDashboard.serviceThroughput.Throughput.length"
+          :data="rocketDashboard.serviceThroughput.Throughput"
+          :intervalTime="intervalTime"
+          title="Service Throughput"
+          unit="cpm"
         />
         <ChartLine
-            v-if="rocketDashboard.servicePercent.p50.length"
-            :data="rocketDashboard.servicePercent"
-            :intervalTime="intervalTime"
-            :title="$t('percentResponse')"
+          v-if="rocketDashboard.servicePercent.p50.length"
+          :data="rocketDashboard.servicePercent"
+          :intervalTime="intervalTime"
+          :title="$t('percentResponse')"
         />
       </div>
     </div>
     <div class="show-dependency" v-if="stateTopo.selectedServiceCall">
-      <a class="rk-btn lg" @click="openInstanceModal">{{$t('ShowInstanceDependency')}}</a>
-      <el-drawer
-          custom-class="instance-dependency"
-          size="1200px"
-          :title="`${stateTopo.selectedServiceCall.source.name} -> ${stateTopo.selectedServiceCall.target.name} Instance Dependency`"
-          :visible.sync="dialogTopoVisible"
-          :modal-append-to-body="false"
-          :close-on-click-modal="false"
-          :destroy-on-close="true"
-          :before-close="clearInstance"
+      <a class="rk-btn lg" @click="openInstanceModal">{{
+        $t('ShowInstanceDependency')
+      }}</a>
+      <rk-sidebox
+        class="instance-dependency"
+        width="75%"
+        :title="
+          `${stateTopo.selectedServiceCall.source.name} -> ${stateTopo.selectedServiceCall.target.name} Instance Dependency`
+        "
+        :show.sync="dialogTopoVisible"
       >
-        <div class="title-name">{{stateTopo.selectedServiceCall.source.name}} ->
-          {{stateTopo.selectedServiceCall.target.name}} Instance Dependency
-        </div>
-        <TopoInstanceDependency/>
-      </el-drawer>
+        <TopoInstanceDependency />
+      </rk-sidebox>
     </div>
   </div>
 </template>
 <script lang="ts">
+import { State as topoState } from '@/store/modules/topology';
+import { Component, Vue, Watch } from 'vue-property-decorator';
+import { Action, Getter, Mutation, State } from 'vuex-class';
+import TopoChart from './topo-chart.vue';
+import TopoInstanceDependency from './topo-instance-dependency.vue';
+import ChartLine from './chart-line.vue';
 
-  import { State as topoState } from '@/store/modules/topology';
-  import { Component, Vue, Watch } from 'vue-property-decorator';
-  import { Action, Getter, Mutation, State } from 'vuex-class';
-  import TopoChart from './topo-chart.vue';
-  import TopoInstanceDependency from './topo-instance-dependency.vue';
-  import ChartLine from './chart-line.vue';
+@Component({
+  components: {
+    TopoInstanceDependency,
+    TopoChart,
+    ChartLine,
+  },
+})
+export default class TopoDetectPoint extends Vue {
+  @State('rocketTopo') private stateTopo!: topoState;
+  @Getter('intervalTime') private intervalTime: any;
+  @Getter('durationTime') private durationTime: any;
+  @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT')
+  private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
+  @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+  @Action('GET_QUERY') private GET_QUERY: any;
+  @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
+  @State('rocketDashboard') private rocketDashboard: any;
+  @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL')
+  private SET_SELECTED_INSTANCE_CALL: any;
+  @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY')
+  private SET_INSTANCE_DEPENDENCY: any;
+  @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
+  @Action('rocketTopo/GET_TOPO_INSTANCE_DEPENDENCY')
+  private GET_INSTANCE_DEPENDENCY: any;
 
-  @Component({
-    components: {
-      TopoInstanceDependency, TopoChart, ChartLine,
-    },
-  })
-  export default class TopoDetectPoint extends Vue {
-    @State('rocketTopo') private stateTopo!: topoState;
-    @Getter('intervalTime') private intervalTime: any;
-    @Getter('durationTime') private durationTime: any;
-    @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
-    @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
-    @Action('GET_QUERY') private GET_QUERY: any;
-    @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
-    @State('rocketDashboard') private rocketDashboard: any;
-    @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL') private SET_SELECTED_INSTANCE_CALL: any;
-    @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY') private SET_INSTANCE_DEPENDENCY: any;
-    @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
-    @Action('rocketTopo/GET_TOPO_INSTANCE_DEPENDENCY') private GET_INSTANCE_DEPENDENCY: any;
+  private isMini: boolean = true;
+  private showInfoCount: number = 0;
+  private showInfo: boolean = false;
+  private dialogTopoVisible = false;
 
-    private isMini: boolean = true;
-    private showInfoCount: number = 0;
-    private showInfo: boolean = false;
-    private dialogTopoVisible = false;
+  private get showServerInfo() {
+    return this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal;
+  }
 
-    private get showServerInfo() {
-      return this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal;
-    }
-
-    @Watch('stateTopo.selectedServiceCall')
-    private watchDetectPointNodeId(newValue: string) {
-      if (newValue || this.stateTopo.currentNode.isReal) {
-        this.showInfo = true;
-      } else {
-        this.showInfo = false;
-        this.showInfoCount = 0;
-        this.isMini = true;
-      }
-    }
-
-    @Watch('stateTopo.currentNode.name')
-    private watchCurrentNodeIsReal(newValue: boolean) {
-      const service = this.stateTopo.currentNode;
-      if (this.stateTopo.currentNode.isReal) {
-        this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({index: 0, current: 1});
-        this.MIXHANDLE_GET_OPTION({compType: 'service', duration: this.durationTime})
-          .then(() => {
-            this.GET_QUERY({
-              serviceId: service.id || '',
-              duration: this.durationTime,
-            });
-          });
-      }
-      if (newValue || this.stateTopo.selectedServiceCall) {
-        this.showInfo = true;
-      } else {
-        this.showInfo = false;
-        this.showInfoCount = 0;
-        this.isMini = true;
-      }
-    }
-
-    private setShowInfo() {
+  @Watch('stateTopo.selectedServiceCall')
+  private watchDetectPointNodeId(newValue: string) {
+    if (newValue || this.stateTopo.currentNode.isReal) {
+      this.showInfo = true;
+    } else {
       this.showInfo = false;
-      this.showInfoCount = 1;
-      this.isMini = !this.isMini;
-      setTimeout(() => {
-        this.showInfo = true;
-      }, 550);
+      this.showInfoCount = 0;
+      this.isMini = true;
     }
+  }
 
-    private setMode(mode: boolean) {
-      this.SET_MODE_STATUS(mode);
-      this.stateTopo.callback();
-    }
-
-    private clearInstance() {
-      this.dialogTopoVisible = false;
-      this.SET_SELECTED_INSTANCE_CALL(null);
-    }
-
-    private openInstanceModal() {
-      this.dialogTopoVisible = true;
-      if (!(this.stateTopo.selectedServiceCall && this.stateTopo.selectedServiceCall.source)) {
-        return;
-      }
-      this.GET_INSTANCE_DEPENDENCY({
-        serverServiceId: this.stateTopo.selectedServiceCall.source.id,
-        clientServiceId: this.stateTopo.selectedServiceCall.target.id,
+  @Watch('stateTopo.currentNode.name')
+  private watchCurrentNodeIsReal(newValue: boolean) {
+    const service = this.stateTopo.currentNode;
+    if (this.stateTopo.currentNode.isReal) {
+      this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 1 });
+      this.MIXHANDLE_GET_OPTION({
+        compType: 'service',
         duration: this.durationTime,
+      }).then(() => {
+        this.GET_QUERY({
+          serviceId: service.id || '',
+          duration: this.durationTime,
+        });
       });
     }
+    if (newValue || this.stateTopo.selectedServiceCall) {
+      this.showInfo = true;
+    } else {
+      this.showInfo = false;
+      this.showInfoCount = 0;
+      this.isMini = true;
+    }
   }
 
+  private setShowInfo() {
+    this.showInfo = false;
+    this.showInfoCount = 1;
+    this.isMini = !this.isMini;
+    setTimeout(() => {
+      this.showInfo = true;
+    }, 550);
+  }
+
+  private setMode(mode: boolean) {
+    this.SET_MODE_STATUS(mode);
+    this.stateTopo.callback();
+  }
+
+  private clearInstance() {
+    this.dialogTopoVisible = false;
+    this.SET_SELECTED_INSTANCE_CALL(null);
+  }
+
+  private openInstanceModal() {
+    this.dialogTopoVisible = true;
+    if (
+      !(
+        this.stateTopo.selectedServiceCall &&
+        this.stateTopo.selectedServiceCall.source
+      )
+    ) {
+      return;
+    }
+    this.GET_INSTANCE_DEPENDENCY({
+      serverServiceId: this.stateTopo.selectedServiceCall.source.id,
+      clientServiceId: this.stateTopo.selectedServiceCall.target.id,
+      duration: this.durationTime,
+    });
+  }
+}
 </script>
 <style lang="scss">
-  .link-topo-aside-box-btn {
-    color: #626977;
-    border: 1px solid;
-    padding: 0px 3px;
-    width: 45px;
+.link-topo-aside-box-btn {
+  color: #626977;
+  border: 1px solid;
+  padding: 0px 3px;
+  width: 45px;
+  display: inline-block;
+
+  &.active {
+    color: #448dfe;
+  }
+}
+
+.show-dependency {
+  margin: 20px 0;
+
+  .rk-btn {
+    display: block;
+    text-align: center;
+  }
+
+  .instance-dependency {
+    .rk-sidebox{
+    background: #2b3037;
+    outline: none;
+    }
+
+
+    .el-drawer__header {
+      color: #fff;
+      padding: 0;
+    }
+  }
+
+  .title-name {
+    width: 100%;
+    padding-left: 40px;
+    font-size: 16px;
+  }
+}
+
+.link-topo-aside-box {
+  border-radius: 4px;
+  position: absolute;
+  width: 280px;
+  z-index: 101;
+  color: #ddd;
+  background-color: #2b3037;
+  padding: 15px 20px 10px;
+
+  .label {
     display: inline-block;
-
-    &.active {
-      color: #448dfe;
-    }
+    width: 40%;
   }
 
-  .show-dependency {
-    margin: 20px 0;
-
-    .rk-btn {
-      display: block;
-      text-align: center;
-    }
-
-    .instance-dependency {
-      background: #333;
-      outline: none;
-
-      .el-drawer__header {
-        color: #fff;
-        padding: 0;
-      }
-    }
-
-    .title-name {
-      width: 100%;
-      padding-left: 40px;
-      font-size: 16px;
-    }
+  .content {
+    vertical-align: top;
+    display: inline-block;
+    width: 60%;
   }
 
-  .link-topo-aside-box {
+  .circle {
+    width: 8px;
+    height: 8px;
     border-radius: 4px;
-    position: absolute;
-    width: 280px;
-    z-index: 101;
-    color: #ddd;
-    background-color: #333;
-    padding: 15px 20px 10px;
-
-    .label {
-      display: inline-block;
-      width: 40%;
-    }
-
-    .content {
-      vertical-align: top;
-      display: inline-block;
-      width: 60%;
-    }
-
-    .circle {
-      width: 8px;
-      height: 8px;
-      border-radius: 4px;
-      background-color: #EE5B5B;
-      margin-top: 6px;
-    }
+    background-color: #ee5b5b;
+    margin-top: 6px;
   }
+}
 
-  .link-topo-aside-box {
-    p {
-      margin-block-start: auto !important;
-      margin-block-end: auto !important;
-    }
+.link-topo-aside-box {
+  p {
+    margin-block-start: auto !important;
+    margin-block-end: auto !important;
   }
+}
 </style>

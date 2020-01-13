@@ -36,15 +36,12 @@ import 'echarts/lib/chart/sankey';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/tooltip';
 import VModal from 'vue-js-modal';
-import './assets';
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
 import { queryOAPTimeInfo } from './utils/localtime';
+import './assets';
 
 Vue.use(eventBus);
 Vue.use(VueI18n);
 Vue.use(components);
-Vue.use(ElementUI);
 Vue.use(VModal, {dialog: true});
 Vue.directive('clickout', clickout);
 Vue.directive('tooltip', tooltip);
