@@ -61,7 +61,10 @@ export const initState: State = {
 
 
 export const SetGlobal = (state: State, params: any) => {
-  if (params && params.globalBrief) {
+  if (!params) {
+    return;
+  }
+  if (params.globalBrief) {
     state.globalBrief.numOfCache = params.globalBrief.numOfCache || 0;
     state.globalBrief.numOfDatabase = params.globalBrief.numOfDatabase || 0;
     state.globalBrief.numOfEndpoint = params.globalBrief.numOfEndpoint || 0;
@@ -69,20 +72,25 @@ export const SetGlobal = (state: State, params: any) => {
     state.globalBrief.numOfService = params.globalBrief.numOfService || 0;
 
   }
-  if (params && params.globalP50 && params.globalP75 && params.globalP90 && params.globalP95 && params.globalP99) {
-    state.globalPercent.p50 = params.globalP50.values.map((i: Value) => i.value);
-    state.globalPercent.p75 = params.globalP75.values.map((i: Value) => i.value);
-    state.globalPercent.p90 = params.globalP90.values.map((i: Value) => i.value);
-    state.globalPercent.p95 = params.globalP95.values.map((i: Value) => i.value);
-    state.globalPercent.p99 = params.globalP99.values.map((i: Value) => i.value);
+  if (params.globalPercentile) {
+    const PercentileItem = ['p50', 'p75', 'p90', 'p95', 'p99'];
+    const globalPercent = {} as any;
+
+    params.globalPercentile.forEach((item: any, index: number) => {
+      if (item && item.values) {
+        const key = PercentileItem[index] as string;
+        globalPercent[key] = item.values.map((i: any) => i.value);
+      }
+    });
+    state.globalPercent = globalPercent;
   }
-  if (params && params.globalHeatmap) {
+  if (params.globalHeatmap) {
     state.globalHeatmap = params.globalHeatmap.nodes;
   }
-  if (params && params.globalSlow) {
+  if (params.globalSlow) {
     state.globalSlow = params.globalSlow;
   }
-  if (params && params.globalThroughput) {
+  if (params.globalThroughput) {
     state.globalThroughput = params.globalThroughput;
   }
 };

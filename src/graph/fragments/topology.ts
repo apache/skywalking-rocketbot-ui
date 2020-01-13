@@ -42,46 +42,10 @@ export const TopoServiceInfo = {
         value
       }
     }
-    p50: getLinearIntValues(metric: {
-      name: "service_relation_server_p50"
+    getPercentile: getMultipleLinearIntValues(metric: {
+      name: "service_relation_server_percentile",
       id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p75: getLinearIntValues(metric: {
-      name: "service_relation_server_p75"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p90: getLinearIntValues(metric: {
-      name: "service_relation_server_p90"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p95: getLinearIntValues(metric: {
-      name: "service_relation_server_p95"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p99: getLinearIntValues(metric: {
-      name: "service_relation_server_p99"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
+    }, numOfLinear: 5, duration: $duration) { values { value } }
 `};
 
 export const TopoClientInfo = {
@@ -111,46 +75,10 @@ export const TopoClientInfo = {
         value
       }
     }
-    p50: getLinearIntValues(metric: {
-      name: "service_relation_client_p50"
+    getPercentile: getMultipleLinearIntValues(metric: {
+      name: "service_relation_client_percentile",
       id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p75: getLinearIntValues(metric: {
-      name: "service_relation_client_p75"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p90: getLinearIntValues(metric: {
-      name: "service_relation_client_p90"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p95: getLinearIntValues(metric: {
-      name: "service_relation_client_p95"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p99: getLinearIntValues(metric: {
-      name: "service_relation_client_p99"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
+    }, numOfLinear: 5, duration: $duration) { values { value } }
 `};
 
 export const TopoInstanceClientInfo = {
@@ -180,46 +108,10 @@ export const TopoInstanceClientInfo = {
         value
       }
     }
-    p50: getLinearIntValues(metric: {
-      name: "service_instance_relation_client_p50"
+    getPercentile: getMultipleLinearIntValues(metric: {
+      name: "service_instance_relation_client_percentile",
       id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p75: getLinearIntValues(metric: {
-      name: "service_instance_relation_client_p75"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p90: getLinearIntValues(metric: {
-      name: "service_instance_relation_client_p90"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p95: getLinearIntValues(metric: {
-      name: "service_instance_relation_client_p95"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p99: getLinearIntValues(metric: {
-      name: "service_instance_relation_client_p99"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
+    }, numOfLinear: 5, duration: $duration) { values { value } }
 `};
 
 export const TopoInstanceServerInfo = {
@@ -249,46 +141,10 @@ export const TopoInstanceServerInfo = {
         value
       }
     }
-    p50: getLinearIntValues(metric: {
-      name: "service_instance_relation_server_p50"
+    getPercentile: getMultipleLinearIntValues(metric: {
+      name: "service_instance_relation_client_percentile",
       id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p75: getLinearIntValues(metric: {
-      name: "service_instance_relation_server_p75"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p90: getLinearIntValues(metric: {
-      name: "service_instance_relation_server_p90"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p95: getLinearIntValues(metric: {
-      name: "service_instance_relation_server_p95"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    p99: getLinearIntValues(metric: {
-      name: "service_instance_relation_server_p99"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
+    }, numOfLinear: 5, duration: $duration) { values { value } }
 `};
 
 export const TopoInstanceDependency = {

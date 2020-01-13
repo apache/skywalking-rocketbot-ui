@@ -51,69 +51,13 @@ export const databaseSLA =  {
     }
   }`,
 };
-export const databaseP99 =  {
+export const databasePercent = {
   variable: ['$databaseId: ID!', '$duration: Duration!'],
   fragment: `
-  databaseP99: getLinearIntValues(metric: {
-    name: "database_access_p99"
+  databasePercentile: getMultipleLinearIntValues(metric: {
+    name: "database_access_percentile"
     id: $databaseId
-  }, duration: $duration) { values { value } }`,
-};
-export const databaseP95 =  {
-  variable: ['$databaseId: ID!', '$duration: Duration!'],
-  fragment: `
-  databaseP99: getLinearIntValues(metric: {
-    name: "database_access_p95"
-    id: $databaseId
-  }, duration: $duration) { values { value } }`,
-};
-export const databaseP90 =  {
-  variable: ['$databaseId: ID!', '$duration: Duration!'],
-  fragment: `
-  databaseP99: getLinearIntValues(metric: {
-    name: "database_access_p90"
-    id: $databaseId
-  }, duration: $duration) { values { value } }`,
-};
-export const databaseP75 =  {
-  variable: ['$databaseId: ID!', '$duration: Duration!'],
-  fragment: `
-  databaseP99: getLinearIntValues(metric: {
-    name: "database_access_p75"
-    id: $databaseId
-  }, duration: $duration) { values { value } }`,
-};
-export const databaseP50 =  {
-  variable: ['$databaseId: ID!', '$duration: Duration!'],
-  fragment: `
-  databaseP99: getLinearIntValues(metric: {
-    name: "database_access_p50"
-    id: $databaseId
-  }, duration: $duration) { values { value } }`,
-};
-export const databasePercent =  {
-  variable: ['$databaseId: ID!', '$duration: Duration!'],
-  fragment: `
-  databaseP99: getLinearIntValues(metric: {
-    name: "database_access_p99"
-    id: $databaseId
-  }, duration: $duration) { values { value } }
-  databaseP95: getLinearIntValues(metric: {
-    name: "database_access_p95"
-    id: $databaseId
-  }, duration: $duration) { values { value } }
-  databaseP90: getLinearIntValues(metric: {
-    name: "database_access_p90"
-    id: $databaseId
-  }, duration: $duration) { values { value } }
-  databaseP75: getLinearIntValues(metric: {
-    name: "database_access_p75"
-    id: $databaseId
-  }, duration: $duration) { values { value } }
-  databaseP50: getLinearIntValues(metric: {
-    name: "database_access_p50"
-    id: $databaseId
-  }, duration: $duration) { values { value } }`,
+  }, numOfLinear: 5, duration: $duration) { values { value } }`,
 };
 
 export const databaseTopNRecords =  {

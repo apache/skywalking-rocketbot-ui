@@ -84,3 +84,4 @@ export const PercentileType: any = {
   dependencyServerPercentile: ['serverSideP50', 'serverSideP75', 'serverSideP90', 'serverSideP95', 'serverSideP99'],
   dependencyClientPercentile: ['clientSideP50', 'clientSideP75', 'clientSideP90', 'clientSideP95', 'clientSideP99'],
 };
+export const PercentileItem: string[] = ['p50', 'p75', 'p90', 'p95', 'p99'];
