@@ -21,7 +21,7 @@ import Router from 'vue-router';
 import Index from './views/containers/index.vue';
 import Dashboard from './views/containers/dashboard.vue';
 import Trace from './views/containers/trace.vue';
-import Topology from './views/containers/topology.vue';
+import Topology from './views/containers/topology/topology.vue';
 import Alarm from './views/containers/alarm.vue';
 import Comparison from './views/containers/comparison.vue';
 
