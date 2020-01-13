@@ -103,9 +103,9 @@
   import { initState } from '@/store/modules/dashboard/modules/dashboard-data-layout';
   import topo, { State as topoState } from '@/store/modules/topology';
   import AlarmContainers from '@/views/containers/alarm.vue';
-  import EndpointSurveyWindow from '@/views/containers/endpoint-survey-window.vue';
-  import InstancesSurveyWindow from '@/views/containers/instances-survey-window.vue';
-  import TraceContainers from '@/views/containers/trace.vue';
+  import EndpointSurveyWindow from '@/views/containers/topology/endpoint-survey-window.vue';
+  import InstancesSurveyWindow from '@/views/containers/topology/instances-survey-window.vue';
+  import TraceContainers from '@/views/containers/topology/topology-trace.vue';
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import Radial from './radial.vue';
