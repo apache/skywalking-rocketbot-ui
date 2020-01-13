@@ -27,7 +27,7 @@ import fragmentAll from '@/graph/query/comparison';
 import { ICurrentOptions, DataSourceType, ISelectConfig, MetricsType } from '@/types/comparison';
 import {
   ComparisonOption, InitSource, LinearType, ComparisonType,
-  ObjectType, ServiceType, ChangeType, StatusType, PercentileType,
+  ObjectType, ServiceType, ChangeType, StatusType, PercentileItem,
 } from './comparison-const';
 
 type GenericIdentityFn<T> = (arg: T) => T;
@@ -261,21 +261,21 @@ const mutations = {
     const { nextObject, nextService, nextType, nextMetrics } = state.currentOptions;
     const metrics = data.type === ServiceType.PREVIOUS ? preMetrics : nextMetrics;
     const obj = {} as any;
+
     for (const key of Object.keys(data.value)) {
-      const value = data.value[key].values.map((d: {value: number}) => d.value);
+      let value = [] as any;
+
+      if (Array.isArray(data.value[key].values)) {
+        value = data.value[key].values.map((d: {value: number}) => d.value);
+      } else {
+        value = {};
+        PercentileItem.map((item, index) => {
+          value[item] = data.value[key][index].values.map((d: {value: number}) => d.value);
+        });
+      }
       obj[key] = value;
     }
-    for (const metric of metrics) {
-      const title = metric.key;
-      const percentile = PercentileType[title];
-      if (percentile) {
-        obj[metric.label] = {};
-        for (const item of percentile) {
-          obj[metric.label][item] = obj[item];
-          delete obj[item];
-        }
-      }
-    }
+
     for (const key of Object.keys(obj)) {
       if (data.type === ServiceType.PREVIOUS) {
         const str = `${preService.label}_`;
