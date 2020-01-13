@@ -118,7 +118,7 @@ export default class TraceSearch extends Vue {
   @Mutation('rocketTrace/SET_TRACE_FORM_ITEM') private SET_TRACE_FORM_ITEM: any;
   @Prop({ default: false, type: Boolean })
   private inTopo!: boolean;
-  @Prop({ default: { label: 'All', key: '' } })
+  @Prop({ default: () => ({label: 'All', key: ''})})
   private propsService!: Option;
   private service: Option = {label: 'All', key: ''};
   private time!: Date[];
@@ -132,53 +132,12 @@ export default class TraceSearch extends Vue {
   private traceId: string = localStorage.getItem('traceId') || '';
   private traceState: Option = { label: 'All', key: 'ALL' };
 
-    private time!: Date[];
-    private status: boolean = true;
-    private maxTraceDuration: string = localStorage.getItem('maxTraceDuration') || '';
-    private minTraceDuration: string = localStorage.getItem('minTraceDuration') || '';
-    @Prop({default: () => ({label: 'All', key: ''})})
-    private service!: Option;
-    private instance: Option = {label: 'All', key: ''};
-    private endpointName: string = localStorage.getItem('endpointName') || '';
-    private traceId: string = localStorage.getItem('traceId') || '';
-    private traceState: Option = {label: 'All', key: 'ALL'};
-    @Prop({default: false, type: Boolean})
-    private inTopo!: boolean;
-
-    private dateFormat = (date: Date, step: string) => {
-      const year = date.getFullYear();
-      const monthTemp = date.getMonth() + 1;
-      let month: string = `${monthTemp}`;
-      if (monthTemp < 10) {
-        month = `0${monthTemp}`;
-      }
-      if (step === 'MONTH') {
-        return `${year}-${month}`;
-      }
-      const dayTemp = date.getDate();
-      let day: string = `${dayTemp}`;
-      if (dayTemp < 10) {
-        day = `0${dayTemp}`;
-      }
-      if (step === 'DAY') {
-        return `${year}-${month}-${day}`;
-      }
-      const hourTemp = date.getHours();
-      let hour: string = `${hourTemp}`;
-      if (hourTemp < 10) {
-        hour = `0${hourTemp}`;
-      }
-      if (step === 'HOUR') {
-        return `${year}-${month}-${day} ${hour}`;
-      }
-      const minuteTemp = date.getMinutes();
-      let minute: string = `${minuteTemp}`;
-      if (minuteTemp < 10) {
-        minute = `0${minuteTemp}`;
-      }
-      if (step === 'MINUTE') {
-        return `${year}-${month}-${day} ${hour}${minute}`;
-      }
+  private dateFormat = (date: Date, step: string) => {
+    const year = date.getFullYear();
+    const monthTemp = date.getMonth() + 1;
+    let month: string = `${monthTemp}`;
+    if (monthTemp < 10) {
+      month = `0${monthTemp}`;
     }
     if (step === 'MONTH') {
       return `${year}-${month}`;
