@@ -112,7 +112,7 @@ specific language governing permissions and * limitations under the License. */
       }}</a>
       <rk-sidebox
         class="instance-dependency"
-        width="75%"
+        width="100%"
         :title="
           `${stateTopo.selectedServiceCall.source.name} -> ${stateTopo.selectedServiceCall.target.name} Instance Dependency`
         "
@@ -260,14 +260,11 @@ export default class TopoDetectPoint extends Vue {
 
   .instance-dependency {
     .rk-sidebox{
-    background: #2b3037;
-    outline: none;
+      background: #2b3037;
+      outline: none;
     }
-
-
-    .el-drawer__header {
-      color: #fff;
-      padding: 0;
+    .rk-sidebox-inner{
+      height: 100%;
     }
   }
 
