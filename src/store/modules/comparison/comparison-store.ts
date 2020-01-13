@@ -269,7 +269,7 @@ const mutations = {
         value = data.value[key].values.map((d: {value: number}) => d.value);
       } else {
         value = {};
-        PercentileItem.map((item, index) => {
+        PercentileItem.forEach((item, index) => {
           value[item] = data.value[key][index].values.map((d: {value: number}) => d.value);
         });
       }
