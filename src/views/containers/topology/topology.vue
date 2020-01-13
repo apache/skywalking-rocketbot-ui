@@ -26,11 +26,10 @@ import { Vue, Component } from 'vue-property-decorator';
 import { State, Action, Getter, Mutation } from 'vuex-class';
 import { AxiosResponse } from 'axios';
 import Topo from '../../components/topology/topo.vue';
-import TopoDate from '../../components/topology/topo-date.vue';
 import TopoAside from '../../components/topology/topo-aside.vue';
 import topo, { State as topoState} from '@/store/modules/topology';
 
-@Component({components: {Topo, TopoAside, TopoDate}})
+@Component({components: {Topo, TopoAside}})
 export default class Topology extends Vue {
   @State('rocketTopo') private stateTopo!: topoState;
   @Mutation('SET_EVENTS') private SET_EVENTS: any;

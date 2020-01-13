@@ -142,7 +142,7 @@
     }
     .reload {
       background: #fff;
-      color: #333;
+      color: #2b3037;
       position: absolute;
       top: 3px;
     }

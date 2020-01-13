@@ -26,7 +26,7 @@
           </svg>
         </div>
       </h3>
-      <div class="rk-sidebox-inner">
+      <div class="rk-sidebox-inner" :class="{'rk-sidebox-inner-fixed':fixed}">
         <slot/>
       </div>
     </aside>
@@ -41,6 +41,9 @@ export default {
       default: '',
     },
     right: {
+      default: false,
+    },
+    fixed: {
       default: false,
     },
     width: {
@@ -71,12 +74,17 @@ export default {
   position: fixed;
   right: 0;
   top: 50px;
-  bottom: 0;
+  bottom: 30px;
   z-index: 200;
   background-color: #fff;
 }
 .rk-sidebox-inner{
   padding: 35px 20px 20px;
+}
+.rk-sidebox-inner-fixed{
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
 }
 .rk-sidebox-title {
   font-size: 16px;

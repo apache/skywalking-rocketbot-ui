@@ -286,8 +286,8 @@ export default {
       this.lineNode = this.link.append('rect').attr('class', 'link-node cp')
         .attr('width', 10)
         .attr('height', 10)
-        .attr('rx', 3)
-        .attr('ry', 3)
+        .attr('rx', 5)
+        .attr('ry', 5)
         .attr('fill', d => d.cpm ? '#217EF299' : '#6a6d7799')
         .on('click', function(d, i) {
           that.clickLinkNodes(d, this);
