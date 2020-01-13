@@ -16,7 +16,7 @@
  */
 
 
-export const globalBrief =  {
+export const globalBrief = {
   variable: ['$duration: Duration!'],
   fragment: `
   globalBrief: getGlobalBrief(duration: $duration) {
@@ -24,7 +24,7 @@ export const globalBrief =  {
   }`,
 };
 
-export const globalHeatmap =  {
+export const globalHeatmap = {
   variable: ['$duration: Duration!'],
   fragment: `
   globalHeatmap: getThermodynamic(duration: $duration, metric: {
@@ -33,27 +33,14 @@ export const globalHeatmap =  {
     nodes responseTimeStep: axisYStep
   }`,
 };
-
-export const globalPercent =  {
+export const globalPercent = {
   variable: ['$duration: Duration!'],
   fragment: `
-  globalP99: getLinearIntValues(metric: {
-    name: "all_p99"
-  }, duration: $duration) { values { value } }
-  globalP95: getLinearIntValues(metric: {
-    name: "all_p95"
-  }, duration: $duration) { values { value } }
-  globalP90: getLinearIntValues(metric: {
-    name: "all_p90"
-  }, duration: $duration) { values { value } }
-  globalP75: getLinearIntValues(metric: {
-    name: "all_p75"
-  }, duration: $duration) { values { value } }
-  globalP50: getLinearIntValues(metric: {
-    name: "all_p50"
-  }, duration: $duration) { values { value } }`,
+  globalPercentile: getMultipleLinearIntValues(metric: {
+    name: "all_percentile"
+  }, numOfLinear: 5, duration: $duration) { values { value } }`,
 };
-export const globalSlow =  {
+export const globalSlow = {
   variable: ['$duration: Duration!'],
   fragment: `
   globalSlow: getAllEndpointTopN(
@@ -65,7 +52,7 @@ export const globalSlow =  {
     key: id label: name value
   }`,
 };
-export const globalThroughput =  {
+export const globalThroughput = {
   variable: ['$duration: Duration!'],
   fragment: `
   globalThroughput: getServiceTopN(
