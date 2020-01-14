@@ -124,14 +124,15 @@ export default class TopoInstanceDependency extends Vue {
     }
     .rk-instance-dependency-metrics {
       width: 320px;
-      height: 650px;
-      margin-top: 10px;
+      margin-top: 20px;
+      margin-right: 20px;
       background: #252a2f;
       padding: 20px;
     }
     .rk-dependency-chart {
       width: 850px;
       height: 100%;
+      flex-grow: 1;
     }
   }
 </style>

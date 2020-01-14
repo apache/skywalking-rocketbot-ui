@@ -18,7 +18,7 @@
 <template>
   <div>
     <div class="grey sm mb-5">{{title}}</div>
-    <RkEcharts height="120px" :option="option"/>
+    <RkEcharts height="90px" :option="option"/>
   </div>
 </template>
 <script lang="ts">
