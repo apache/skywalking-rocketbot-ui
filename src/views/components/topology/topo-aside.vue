@@ -72,30 +72,6 @@ specific language governing permissions and * limitations under the License. */
       </div>
       <TopoDetectPoint />
     </div>
-    <window-endpoint
-      v-if="stateTopo.showEndpointDialog"
-      :is-show.sync="stateTopo.showEndpointDialog"
-      :endpoints="stateDashboardOption.endpoints"
-    />
-    <window-instance
-      v-if="stateTopo.showInstancesDialog"
-      :is-show.sync="stateTopo.showInstancesDialog"
-      :instances="stateDashboardOption.instances"
-    />
-    <window-trace
-      v-if="stateTopo.showTraceDialog"
-      :is-show.sync="stateTopo.showTraceDialog"
-      :service="{
-        label: stateTopo.honeycombNode.name,
-        key: stateTopo.honeycombNode.id,
-      }"
-    />
-    <window-alarm
-      v-if="stateTopo.showAlarmDialog"
-      :is-show.sync="stateTopo.showAlarmDialog"
-      :alarmScope="{ label: 'Service', key: 'Service' }"
-      :keyword="stateTopo.honeycombNode.name"
-    />
   </aside>
 </template>
 <script lang="ts">
@@ -107,10 +83,6 @@ import Radial from './radial.vue';
 import TopoChart from './topo-chart.vue';
 import TopoService from './topo-services.vue';
 import TopoDetectPoint from './topo-detect-point.vue';
-import WindowEndpoint from '@/views/containers/topology/window-endpoint.vue';
-import WindowInstance from '@/views/containers/topology/window-instance.vue';
-import WindowTrace from '@/views/containers/topology/window-trace.vue';
-import WindowAlarm from '@/views/containers/topology/window-alarm.vue';
 
 @Component({
   components: {
@@ -118,15 +90,10 @@ import WindowAlarm from '@/views/containers/topology/window-alarm.vue';
     TopoService,
     Radial,
     TopoDetectPoint,
-    WindowEndpoint,
-    WindowInstance,
-    WindowTrace,
-    WindowAlarm,
   },
 })
 export default class TopoAside extends Vue {
   @State('rocketTopo') private stateTopo!: topoState;
-  @State('rocketOption') private stateDashboardOption!: any;
   @State('rocketDashboard') private rocketDashboard: any;
   @Getter('intervalTime') private intervalTime: any;
   @Getter('durationTime') private durationTime: any;
@@ -169,7 +136,6 @@ export default class TopoAside extends Vue {
     window.removeEventListener('resize', this.resize);
     this.CLEAR_TOPO_INFO();
     this.CLEAR_TOPO();
-    this.$store.unregisterModule('rocketTopo');
   }
 
   get types() {

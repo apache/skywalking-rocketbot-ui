@@ -357,22 +357,22 @@ export default {
 
     that.$store.commit('rocketTopo/SET_HONEYCOMB_NODE', d);
 
-    d3.selectAll('#honeycomb-selector_honeycomb-group-top-right').on('click', () => {
-      that.$store.commit('rocketTopo/SET_SHOW_ALARM_DIALOG', true);
-      that.removeHoneycomb(that);
-    });
-    d3.selectAll('#honeycomb-selector_honeycomb-group-below-right').on('click', () => {
-      this.$store.commit('rocketTopo/SET_SHOW_TRACE_DIALOG', true);
+    d3.selectAll('#honeycomb-selector_honeycomb-group-top-left').on('click', () => {
+      that.$store.commit('SET_CURRENT_SERVICE', { key: d.id, label: d.name });
+      that.$store.commit('rocketTopo/SET_SHOW_DIALOG', 'endpoint');
       that.removeHoneycomb(that);
     });
     d3.selectAll('#honeycomb-selector_honeycomb-group-below-left').on('click', () => {
       that.$store.commit('SET_CURRENT_SERVICE', { key: d.id, label: d.name });
-      that.$store.commit('rocketTopo/SET_SHOW_INSTANCES_DIALOG', true);
+      that.$store.commit('rocketTopo/SET_SHOW_DIALOG', 'instance');
       that.removeHoneycomb(that);
     });
-    d3.selectAll('#honeycomb-selector_honeycomb-group-top-left').on('click', () => {
-      that.$store.commit('SET_CURRENT_SERVICE', { key: d.id, label: d.name });
-      that.$store.commit('rocketTopo/SET_SHOW_ENDPOINT_DIALOG', true);
+    d3.selectAll('#honeycomb-selector_honeycomb-group-top-right').on('click', () => {
+      that.$store.commit('rocketTopo/SET_SHOW_DIALOG', 'alarm');
+      that.removeHoneycomb(that);
+    });
+    d3.selectAll('#honeycomb-selector_honeycomb-group-below-right').on('click', () => {
+      this.$store.commit('rocketTopo/SET_SHOW_DIALOG', 'trace');
       that.removeHoneycomb(that);
     });
   },

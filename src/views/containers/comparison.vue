@@ -25,8 +25,6 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
   import { State, Getter, Mutation } from 'vuex-class';
-
-  import { comparisonStore } from '@/store/modules/comparison';
   import { ConparisonConfig, ConparisonCharts } from '../components/comparison';
   import { DurationTime } from '@/types/global';
   import compareObj from '@/utils/comparison';
@@ -42,22 +40,12 @@
     @Getter('durationTime') private durationTime: any;
     @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Mutation('comparisonStore/SET_ISPREVIOUS') private SET_ISPREVIOUS: any;
-
-    private beforeCreate() {
-      this.$store.registerModule('comparisonStore', comparisonStore);
-    }
-
     private beforeMount() {
       this.$store.dispatch('comparisonStore/GET_SERVICES', {duration: this.durationTime});
       this.SET_EVENTS([this.reloadConfig]);
     }
-
     private reloadConfig() {
       this.$store.dispatch('comparisonStore/RENDER_CHART', this.durationTime);
-    }
-
-    private beforeDestroy() {
-      this.$store.unregisterModule('comparisonStore');
     }
   }
 </script>
