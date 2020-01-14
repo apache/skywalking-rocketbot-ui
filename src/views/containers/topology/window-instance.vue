@@ -16,10 +16,7 @@
 */
 
 <template>
-  <rk-sidebox
-    :show.sync="isShowSync"
-    :fixed="true"
-    width="80%">
+  <div>
     <div class="rk-dashboard-bar flex-h">
       <ToolBarSelect
           :selectable="false"
@@ -32,8 +29,8 @@
           :current="stateDashboardOption.currentInstance"
           :data="instances" icon="disk"/>
     </div>
-    <instances-survey v-if="isShowSync" :style="`overflow: auto; height: ${instancesSurveyHeight}`" />
-  </rk-sidebox>
+    <instances-survey :style="`overflow: auto; height: ${instancesSurveyHeight}`" />
+  </div>
 </template>
 
 <script lang="ts">

@@ -29,7 +29,7 @@ import { State, Action, Mutation } from 'vuex-class';
 import TraceSearch from '@/views/components/trace/trace-search.vue';
 import TraceTable from '@/views/components/trace/trace-table.vue';
 import TraceDetail from '@/views/components/trace/trace-detail.vue';
-import trace from '../../store/modules/trace';
+
 @Component({
   components: {
     TraceTable,
@@ -50,14 +50,8 @@ export default class Trace extends Vue {
   private inTopo!: boolean;
 
   private show: boolean = true;
-  private beforeCreate() {
-    this.$store.registerModule('rocketTrace', trace);
-  }
   private beforeMount() {
     this.SET_EVENTS([]);
-  }
-  private beforeDestroy() {
-    this.$store.unregisterModule('rocketTrace');
   }
 }
 </script>

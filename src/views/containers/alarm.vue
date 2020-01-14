@@ -27,7 +27,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import alarm from '@/store/modules/alarm';
 import { Prop } from 'vue-property-decorator';
 import AlarmTool from '../components/alarm/alarm-tool.vue';
 import AlarmTable from '../components/alarm/alarm-table.vue';
@@ -45,13 +44,6 @@ export default class Alarm extends Vue {
   private inTopo!: boolean;
   @Prop({default: ''})
   private keyword!: string;
-  private beforeCreate() {
-    this.$store.registerModule('rocketAlarm', alarm);
-  }
-  private beforeDestroy() {
-    this.$store.unregisterModule('rocketAlarm');
-
-  }
 }
 </script>
 

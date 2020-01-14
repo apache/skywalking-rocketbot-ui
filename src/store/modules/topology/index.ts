@@ -61,10 +61,8 @@ export interface State {
   getThroughputTrend: number[];
   responsePercentile: {[key: string]: number[]};
   honeycombNode: any;
-  showAlarmDialog: boolean;
-  showTraceDialog: boolean;
-  showInstancesDialog: boolean;
-  showEndpointDialog: boolean;
+  showDialog: boolean;
+  showDialogType: string;
   instanceDependency: {
     calls: Call[];
     nodes: Node[];
@@ -93,10 +91,8 @@ const initState: State = {
   getThroughputTrend: [],
   responsePercentile: {},
   honeycombNode: {},
-  showAlarmDialog: false,
-  showTraceDialog: false,
-  showInstancesDialog: false,
-  showEndpointDialog: false,
+  showDialog: false,
+  showDialogType: '',
   instanceDependency: {
     calls: [],
     nodes: [],
@@ -114,17 +110,9 @@ const mutations = {
   [types.SET_HONEYCOMB_NODE](state: State, data: any) {
     state.honeycombNode = data;
   },
-  [types.SET_SHOW_ALARM_DIALOG](state: State, isShow: boolean) {
-    state.showAlarmDialog = isShow;
-  },
-  [types.SET_SHOW_TRACE_DIALOG](state: State, isShow: boolean) {
-    state.showTraceDialog = isShow;
-  },
-  [types.SET_SHOW_INSTANCES_DIALOG](state: State, isShow: boolean) {
-    state.showInstancesDialog = isShow;
-  },
-  [types.SET_SHOW_ENDPOINT_DIALOG](state: State, isShow: boolean) {
-    state.showEndpointDialog = isShow;
+  [types.SET_SHOW_DIALOG](state: State, type: string) {
+    state.showDialog = !!type;
+    state.showDialogType = type;
   },
   [types.SET_CALLBACK](state: State, data: any) {
     state.callback = data;
