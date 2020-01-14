@@ -91,7 +91,7 @@ export default {
   position: absolute;
   width: 100%;
   padding: 0 20px;
-  line-height: 20px;
+  line-height: 17px;
 }
 .rk-sidebox-close{
   cursor: pointer;
