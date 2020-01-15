@@ -107,7 +107,7 @@ language governing permissions and * limitations under the License. */
     private traceId: string = localStorage.getItem('traceId') || '';
     private traceState: Option = { label: 'All', key: 'ALL' };
 
-    private dateFormat = (date: Date, step: string) => {
+    private dateFormat(date: Date, step: string) {
       const year = date.getFullYear();
       const monthTemp = date.getMonth() + 1;
       let month: string = `${monthTemp}`;
@@ -141,9 +141,9 @@ language governing permissions and * limitations under the License. */
       if (step === 'MINUTE') {
         return `${year}-${month}-${day} ${hour}${minute}`;
       }
-    };
+    }
 
-    private globalTimeFormat = (time: Date[]): any => {
+    private globalTimeFormat(time: Date[]) {
       let step = 'MINUTE';
       const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
       if (unix <= 60 * 60 * 1000) {
@@ -160,7 +160,7 @@ language governing permissions and * limitations under the License. */
         end: this.dateFormat(time[1], step),
         step,
       };
-    };
+    }
 
     private chooseService(i: any) {
       if (this.service.key === i.key) {
