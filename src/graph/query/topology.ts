@@ -45,18 +45,23 @@ export const queryTopoInfo = `query queryTrace(
         ${TopoClientMetric.query}
       }`;
 
-export const queryTopoServiceInfo = `query queryTopoServiceInfo(${TopoServiceInfo.variable}) {${TopoServiceInfo.query}}`;
+export const queryTopoServiceInfo = `query queryTopoServiceInfo(
+  ${TopoServiceInfo.variable}) {${TopoServiceInfo.query}}`;
 
-export const queryTopoClientInfo = `query queryTopoClientInfo(${TopoClientInfo.variable}) {${TopoClientInfo.query}}`;
+export const queryTopoClientInfo = `query queryTopoClientInfo(
+  ${TopoClientInfo.variable}) {${TopoClientInfo.query}}`;
 
-export const queryTopoInstanceDependency = `query queryTopoInstanceDependency(${TopoInstanceDependency.variable}) {${TopoInstanceDependency.query}}`;
+export const queryTopoInstanceDependency = `query queryTopoInstanceDependency(
+  ${TopoInstanceDependency.variable}) {${TopoInstanceDependency.query}}`;
 
-export const queryTopoInstanceServerInfo = `query queryTopoInstanceServerInfo(${TopoInstanceServerInfo.variable}) {${TopoInstanceServerInfo.query}}`;
+export const queryTopoInstanceServerInfo = `query queryTopoInstanceServerInfo(
+  ${TopoInstanceServerInfo.variable}) {${TopoInstanceServerInfo.query}}`;
 
-export const queryTopoInstanceClientInfo = `query queryTopoInstanceClientInfo(${TopoInstanceClientInfo.variable}) {${TopoInstanceClientInfo.query}}`;
+export const queryTopoInstanceClientInfo = `query queryTopoInstanceClientInfo(
+  ${TopoInstanceClientInfo.variable}) {${TopoInstanceClientInfo.query}}`;
 
-export const queryDependencyInstanceServerMetric = `query queryDependencyInstanceServerMetric(${DependencyInstanceServerMetric.variable}) \
-    {${DependencyInstanceServerMetric.query}}`;
+export const queryDependencyInstanceServerMetric = `query queryDependencyInstanceServerMetric(
+  ${DependencyInstanceServerMetric.variable}) {${DependencyInstanceServerMetric.query}}`;
 
-export const queryDependencyInstanceClientMetric = `query queryDependencyInstanceClientMetric(${DependencyInstanceClientMetric.variable}) \
-    {${DependencyInstanceClientMetric.query}}`;
+export const queryDependencyInstanceClientMetric = `query queryDependencyInstanceClientMetric(
+  ${DependencyInstanceClientMetric.variable}) {${DependencyInstanceClientMetric.query}}`;

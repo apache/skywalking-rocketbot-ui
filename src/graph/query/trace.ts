@@ -21,4 +21,5 @@ export const queryTraces = `query queryTraces(${Traces.variable}) {${Traces.quer
 
 export const queryTrace = `query queryTrace(${Trace.variable}) {${Trace.query}}`;
 
-export const queryServiceInstance = `query queryServiceInstance(${ServiceInstanceOption.variable}) {${ServiceInstanceOption.query}}`;
+export const queryServiceInstance = `query queryServiceInstance(${ServiceInstanceOption.variable})
+{${ServiceInstanceOption.query}}`;
