@@ -79,7 +79,7 @@ const m = {
   start: 'Start',
   spans: 'Spans',
   spanInfo: 'Span Info',
-  spanType:  'Span Type',
+  spanType: 'Span Type',
   time: 'Time',
   tags: 'Tags',
   logs: 'Logs',

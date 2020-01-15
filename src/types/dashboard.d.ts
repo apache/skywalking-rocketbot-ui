@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Option } from "./global";
+import { Option } from './global';
 export interface Value {
   value: number;
 }

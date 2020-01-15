@@ -70,7 +70,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   const token = window.localStorage.getItem('skywalking-authority');
   if (window.axiosCancel.length !== 0) {
-    for (const func of  window.axiosCancel) {
+    for (const func of window.axiosCancel) {
       setTimeout(func(), 0);
     }
     window.axiosCancel = [];

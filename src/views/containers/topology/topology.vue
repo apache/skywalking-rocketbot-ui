@@ -38,57 +38,57 @@ specific language governing permissions and * limitations under the License. */
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import { State, Action, Getter, Mutation } from 'vuex-class';
-import { AxiosResponse } from 'axios';
-import WindowEndpoint from '@/views/containers/topology/window-endpoint.vue';
-import WindowInstance from '@/views/containers/topology/window-instance.vue';
-import WindowTrace from '@/views/containers/topology/window-trace.vue';
-import WindowAlarm from '@/views/containers/topology/window-alarm.vue';
-import Topo from '../../components/topology/topo.vue';
-import TopoAside from '../../components/topology/topo-aside.vue';
-import { State as topoState } from '@/store/modules/topology';
+  import { Vue, Component } from 'vue-property-decorator';
+  import { State, Action, Getter, Mutation } from 'vuex-class';
+  import { AxiosResponse } from 'axios';
+  import WindowEndpoint from '@/views/containers/topology/window-endpoint.vue';
+  import WindowInstance from '@/views/containers/topology/window-instance.vue';
+  import WindowTrace from '@/views/containers/topology/window-trace.vue';
+  import WindowAlarm from '@/views/containers/topology/window-alarm.vue';
+  import Topo from '../../components/topology/topo.vue';
+  import TopoAside from '../../components/topology/topo-aside.vue';
+  import { State as topoState } from '@/store/modules/topology';
 
-@Component({
-  components: {
-    Topo,
-    TopoAside,
-    WindowEndpoint,
-    WindowInstance,
-    WindowTrace,
-    WindowAlarm,
-  },
-})
-export default class Topology extends Vue {
-  @State('rocketTopo') private stateTopo!: topoState;
-  @State('rocketOption') private stateDashboardOption!: any;
-  @Mutation('SET_EVENTS') private SET_EVENTS: any;
-  @Action('rocketTopo/GET_TOPO') private GET_TOPO: any;
-  @Action('rocketTopo/CLEAR_TOPO') private CLEAR_TOPO: any;
-  @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
-  @Getter('durationTime') private durationTime: any;
+  @Component({
+    components: {
+      Topo,
+      TopoAside,
+      WindowEndpoint,
+      WindowInstance,
+      WindowTrace,
+      WindowAlarm,
+    },
+  })
+  export default class Topology extends Vue {
+    @State('rocketTopo') private stateTopo!: topoState;
+    @State('rocketOption') private stateDashboardOption!: any;
+    @Mutation('SET_EVENTS') private SET_EVENTS: any;
+    @Action('rocketTopo/GET_TOPO') private GET_TOPO: any;
+    @Action('rocketTopo/CLEAR_TOPO') private CLEAR_TOPO: any;
+    @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
+    @Getter('durationTime') private durationTime: any;
 
-  private beforeMount(): void {
-    this.SET_EVENTS([this.getTopo]);
+    private beforeMount(): void {
+      this.SET_EVENTS([this.getTopo]);
+    }
+    private mounted() {
+      this.getTopo();
+    }
+    private getTopo() {
+      this.GET_TOPO({ duration: this.durationTime });
+    }
+    private beforeDestroy() {
+      this.CLEAR_TOPO_INFO();
+      this.CLEAR_TOPO();
+    }
   }
-  private mounted() {
-    this.getTopo();
-  }
-  private getTopo() {
-    this.GET_TOPO({ duration: this.durationTime });
-  }
-  private beforeDestroy() {
-    this.CLEAR_TOPO_INFO();
-    this.CLEAR_TOPO();
-  }
-}
 </script>
 <style lang="scss">
-.rk-topo {
-  position: relative;
-  height: 100%;
-  min-height: 0;
-  display: flex;
-  background: #333840;
-}
+  .rk-topo {
+    position: relative;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    background: #333840;
+  }
 </style>

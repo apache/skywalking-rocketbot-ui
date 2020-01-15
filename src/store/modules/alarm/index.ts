@@ -49,7 +49,10 @@ const mutations: MutationTree<State> = {
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_ALARM(context: { commit: Commit; state: State}, params: AlarmParams): Promise<void> {
+  GET_ALARM(
+    context: { commit: Commit; state: State },
+    params: AlarmParams,
+  ): Promise<void> {
     return graph
       .query('queryAlarms')
       .params(params)

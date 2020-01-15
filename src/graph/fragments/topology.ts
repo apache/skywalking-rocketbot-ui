@@ -46,7 +46,8 @@ export const TopoServiceInfo = {
       name: "service_relation_server_percentile",
       id: $id
     }, numOfLinear: 5, duration: $duration) { values { value } }
-`};
+`,
+};
 
 export const TopoClientInfo = {
   variable: '$duration: Duration!, $id: ID!',
@@ -79,7 +80,8 @@ export const TopoClientInfo = {
       name: "service_relation_client_percentile",
       id: $id
     }, numOfLinear: 5, duration: $duration) { values { value } }
-`};
+`,
+};
 
 export const TopoInstanceClientInfo = {
   variable: '$duration: Duration!, $id: ID!',
@@ -112,7 +114,8 @@ export const TopoInstanceClientInfo = {
       name: "service_instance_relation_client_percentile",
       id: $id
     }, numOfLinear: 5, duration: $duration) { values { value } }
-`};
+`,
+};
 
 export const TopoInstanceServerInfo = {
   variable: '$duration: Duration!, $id: ID!',
@@ -145,10 +148,12 @@ export const TopoInstanceServerInfo = {
       name: "service_instance_relation_client_percentile",
       id: $id
     }, numOfLinear: 5, duration: $duration) { values { value } }
-`};
+`,
+};
 
 export const TopoInstanceDependency = {
-  variable: '$clientServiceId: ID!, $serverServiceId: ID!, $duration: Duration!',
+  variable:
+    '$clientServiceId: ID!, $serverServiceId: ID!, $duration: Duration!',
   query: `
   topo: getServiceInstanceTopology(clientServiceId: $clientServiceId,
     serverServiceId: $serverServiceId, duration: $duration) {
@@ -167,7 +172,8 @@ export const TopoInstanceDependency = {
       target
     }
   }
-`};
+`,
+};
 
 export const Topo = {
   variable: '$duration: Duration!',
@@ -185,7 +191,8 @@ export const Topo = {
       detectPoints
       target
     }
-  }`};
+  }`,
+};
 export const ServiceTopo = {
   variable: '$duration: Duration!, $serviceId: ID!',
   query: `
@@ -202,7 +209,8 @@ export const ServiceTopo = {
       detectPoints
       target
     }
-  }`};
+  }`,
+};
 export const TopoMetric = {
   variable: '$ids: [ID!]!',
   query: `
@@ -232,7 +240,8 @@ export const TopoMetric = {
       id
       value
     }
-  }`};
+  }`,
+};
 
 export const TopoServiceMetric = {
   variable: '$idsS: [ID!]!',
@@ -254,7 +263,8 @@ export const TopoServiceMetric = {
       id
       value
     }
-  }`};
+  }`,
+};
 
 export const TopoClientMetric = {
   variable: '$idsC: [ID!]!',
@@ -276,7 +286,8 @@ export const TopoClientMetric = {
       id
       value
     }
-  }`};
+  }`,
+};
 
 export const DependencyInstanceServerMetric = {
   variable: '$duration: Duration!, $idsC: [ID!]!',
@@ -289,7 +300,8 @@ export const DependencyInstanceServerMetric = {
       id
       value
     }
-  }`};
+  }`,
+};
 export const DependencyInstanceClientMetric = {
   variable: '$duration: Duration!, $idsC: [ID!]!',
   query: `
@@ -301,4 +313,5 @@ export const DependencyInstanceClientMetric = {
       id
       value
     }
-  }`};
+  }`,
+};

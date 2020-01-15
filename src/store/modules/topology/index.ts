@@ -59,7 +59,7 @@ export interface State {
   getResponseTimeTrend: number[];
   getSLATrend: number[];
   getThroughputTrend: number[];
-  responsePercentile: {[key: string]: number[]};
+  responsePercentile: { [key: string]: number[] };
   honeycombNode: any;
   showDialog: boolean;
   showDialogType: string;
@@ -68,7 +68,7 @@ export interface State {
     nodes: Node[];
   };
   selectedInstanceCall: Call | null;
-  instanceDependencyMetrics: {[key: string]: any};
+  instanceDependencyMetrics: { [key: string]: any };
   queryInstanceMetricsType: string;
 }
 
@@ -138,17 +138,24 @@ const mutations = {
     state.selectedServiceCall = data;
   },
   [types.SET_TOPO_RELATION](state: State, data: any) {
-    state.getResponseTimeTrend = data.getResponseTimeTrend ?
-    data.getResponseTimeTrend.values.map((i: any) => i.value) : [];
-    state.getSLATrend = data.getSLATrend ? data.getSLATrend.values.map((i: any) => i.value) : [];
-    state.getThroughputTrend = data.getThroughputTrend ? data.getThroughputTrend.values.map((i: any) => i.value) : [];
+    state.getResponseTimeTrend = data.getResponseTimeTrend
+      ? data.getResponseTimeTrend.values.map((i: any) => i.value)
+      : [];
+    state.getSLATrend = data.getSLATrend
+      ? data.getSLATrend.values.map((i: any) => i.value)
+      : [];
+    state.getThroughputTrend = data.getThroughputTrend
+      ? data.getThroughputTrend.values.map((i: any) => i.value)
+      : [];
 
     if (!data.getPercentile) {
       state.responsePercentile = {};
       return;
     }
     data.getPercentile.forEach((item: any, index: number) => {
-      state.responsePercentile[PercentileItem[index]] = item.values.map((i: any) => i.value);
+      state.responsePercentile[PercentileItem[index]] = item.values.map(
+        (i: any) => i.value,
+      );
     });
   },
   [types.SET_INSTANCE_DEPENDENCY](state: State, data: any) {
@@ -158,18 +165,23 @@ const mutations = {
     state.selectedInstanceCall = data;
   },
   [types.SET_INSTANCE_DEPEDENCE_METRICS](state: State, data: any) {
-    state.instanceDependencyMetrics.getResponseTimeTrend = data.getResponseTimeTrend ?
-    data.getResponseTimeTrend.values.map((i: any) => i.value) : [];
-    state.instanceDependencyMetrics.getSLATrend = data.getSLATrend ?
-    data.getSLATrend.values.map((i: any) => i.value) : [];
-    state.instanceDependencyMetrics.getThroughputTrend = data.getThroughputTrend ?
-    data.getThroughputTrend.values.map((i: any) => i.value) : [];
+    state.instanceDependencyMetrics.getResponseTimeTrend = data.getResponseTimeTrend
+      ? data.getResponseTimeTrend.values.map((i: any) => i.value)
+      : [];
+    state.instanceDependencyMetrics.getSLATrend = data.getSLATrend
+      ? data.getSLATrend.values.map((i: any) => i.value)
+      : [];
+    state.instanceDependencyMetrics.getThroughputTrend = data.getThroughputTrend
+      ? data.getThroughputTrend.values.map((i: any) => i.value)
+      : [];
     state.instanceDependencyMetrics.percentResponse = {};
     if (!data.getPercentile) {
       return;
     }
     data.getPercentile.forEach((item: any, index: number) => {
-      state.instanceDependencyMetrics.percentResponse[PercentileItem[index]] = item.values.map((i: any) => i.value);
+      state.instanceDependencyMetrics.percentResponse[
+        PercentileItem[index]
+      ] = item.values.map((i: any) => i.value);
     });
   },
   [types.SET_INSTANCE_DEPEDENCE_TYPE](state: State, data: string) {
@@ -179,15 +191,16 @@ const mutations = {
 
 // actions
 const actions: ActionTree<State, any> = {
-  CLEAR_TOPO(context: { commit: Commit; state: State; }) {
-    context.commit(types.SET_TOPO, {calls: [], nodes: []});
+  CLEAR_TOPO(context: { commit: Commit; state: State }) {
+    context.commit(types.SET_TOPO, { calls: [], nodes: [] });
   },
-  CLEAR_TOPO_INFO(context: { commit: Commit; state: State; }) {
+  CLEAR_TOPO_INFO(context: { commit: Commit; state: State }) {
     context.commit(types.SET_TOPO_RELATION, {});
     context.commit(types.SET_SELECTED_CALL, null);
   },
   GET_INSTANCE_DEPENDENCY_METRICS(
-    context: { commit: Commit; state: State, dispatch: Dispatch, getters: any}, params: any,
+    context: { commit: Commit; state: State; dispatch: Dispatch; getters: any },
+    params: any,
   ) {
     if (params.mode === 'SERVER') {
       params.queryType = 'queryTopoInstanceServerInfo';
@@ -198,97 +211,125 @@ const actions: ActionTree<State, any> = {
       context.dispatch('INSTANCE_RELATION_INFO', params);
     }
   },
-  GET_TOPO_SERVICE_INFO(context: { commit: Commit; state: State; }, params: any) {
+  GET_TOPO_SERVICE_INFO(
+    context: { commit: Commit; state: State },
+    params: any,
+  ) {
     return graph
-    .query('queryTopoServiceInfo')
-    .params({
-      id: params.id,
-      duration: params.duration,
-    })
-    .then((res: AxiosResponse) => {
-      context.commit('SET_TOPO_RELATION', res.data.data);
-      context.commit(types.SET_SELECTED_CALL, params);
-    });
+      .query('queryTopoServiceInfo')
+      .params({
+        id: params.id,
+        duration: params.duration,
+      })
+      .then((res: AxiosResponse) => {
+        context.commit('SET_TOPO_RELATION', res.data.data);
+        context.commit(types.SET_SELECTED_CALL, params);
+      });
   },
-  GET_TOPO_CLIENT_INFO(context: { commit: Commit; state: State; }, params: any) {
+  GET_TOPO_CLIENT_INFO(context: { commit: Commit; state: State }, params: any) {
     return graph
-    .query('queryTopoClientInfo')
-    .params(params)
-    .then((res: AxiosResponse) => {
-      context.commit('SET_TOPO_RELATION', res.data.data);
-      context.commit(types.SET_SELECTED_CALL, params);
-    });
+      .query('queryTopoClientInfo')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        context.commit('SET_TOPO_RELATION', res.data.data);
+        context.commit(types.SET_SELECTED_CALL, params);
+      });
   },
-  GET_TOPO(context: { commit: Commit; state: State; }, params: any) {
+  GET_TOPO(context: { commit: Commit; state: State }, params: any) {
     let query = 'queryTopo';
     if (params.serviceId) {
       query = 'queryServiceTopo';
     }
     return graph
-    .query(query)
-    .params(params)
-    .then((res: AxiosResponse) => {
-      const calls = res.data.data.topo.calls;
-      const nodes = res.data.data.topo.nodes;
-      const ids = nodes.map((i: any) => i.id);
-      const idsS = calls.filter((i: any) => i.detectPoints.indexOf('CLIENT') === -1).map((b: any) => b.id);
-      const idsC = calls.filter((i: any) => i.detectPoints.indexOf('CLIENT') !== -1).map((b: any) => b.id);
-      return graph
-        .query('queryTopoInfo')
-        .params({...params, ids, idsC, idsS})
-        .then((info: AxiosResponse) => {
-          const resInfo = info.data.data;
-          if (!resInfo.sla) {
-            return context.commit(types.SET_TOPO, {calls, nodes});
-          }
-          for (let i = 0; i < resInfo.sla.values.length; i += 1) {
-            for (let j = 0; j < nodes.length; j += 1) {
-              if (nodes[j].id === resInfo.sla.values[i].id) {
-                nodes[j] = {
-                  ...nodes[j],
-                  sla: resInfo.sla.values[i].value ? resInfo.sla.values[i].value / 100 : -1,
-                  cpm: resInfo.nodeCpm.values[i] ? resInfo.nodeCpm.values[i].value : -1,
-                  latency: resInfo.nodeLatency.values[i] ? resInfo.nodeLatency.values[i].value : -1,
-                };
+      .query(query)
+      .params(params)
+      .then((res: AxiosResponse) => {
+        const calls = res.data.data.topo.calls;
+        const nodes = res.data.data.topo.nodes;
+        const ids = nodes.map((i: any) => i.id);
+        const idsS = calls
+          .filter((i: any) => i.detectPoints.indexOf('CLIENT') === -1)
+          .map((b: any) => b.id);
+        const idsC = calls
+          .filter((i: any) => i.detectPoints.indexOf('CLIENT') !== -1)
+          .map((b: any) => b.id);
+        return graph
+          .query('queryTopoInfo')
+          .params({ ...params, ids, idsC, idsS })
+          .then((info: AxiosResponse) => {
+            const resInfo = info.data.data;
+            if (!resInfo.sla) {
+              return context.commit(types.SET_TOPO, { calls, nodes });
+            }
+            for (let i = 0; i < resInfo.sla.values.length; i += 1) {
+              for (let j = 0; j < nodes.length; j += 1) {
+                if (nodes[j].id === resInfo.sla.values[i].id) {
+                  nodes[j] = {
+                    ...nodes[j],
+                    sla: resInfo.sla.values[i].value
+                      ? resInfo.sla.values[i].value / 100
+                      : -1,
+                    cpm: resInfo.nodeCpm.values[i]
+                      ? resInfo.nodeCpm.values[i].value
+                      : -1,
+                    latency: resInfo.nodeLatency.values[i]
+                      ? resInfo.nodeLatency.values[i].value
+                      : -1,
+                  };
+                }
               }
             }
-          }
-          if (!resInfo.cpmC) {
-            return context.commit(types.SET_TOPO, {calls, nodes});
-          }
-          for (let i = 0; i < resInfo.cpmC.values.length; i += 1) {
-            for (let j = 0; j < calls.length; j += 1) {
-              if (calls[j].id === resInfo.cpmC.values[i].id) {
-                calls[j] = {
-                  ...calls[j],
-                  cpm: resInfo.cpmC.values[i] ? resInfo.cpmC.values[i].value : '',
-                  latency: resInfo.latencyC.values[i] ? resInfo.latencyC.values[i].value : '',
-                };
+            if (!resInfo.cpmC) {
+              return context.commit(types.SET_TOPO, { calls, nodes });
+            }
+            for (let i = 0; i < resInfo.cpmC.values.length; i += 1) {
+              for (let j = 0; j < calls.length; j += 1) {
+                if (calls[j].id === resInfo.cpmC.values[i].id) {
+                  calls[j] = {
+                    ...calls[j],
+                    cpm: resInfo.cpmC.values[i]
+                      ? resInfo.cpmC.values[i].value
+                      : '',
+                    latency: resInfo.latencyC.values[i]
+                      ? resInfo.latencyC.values[i].value
+                      : '',
+                  };
+                }
               }
             }
-          }
-          if (!resInfo.cpmS) {
-            return context.commit(types.SET_TOPO, {calls, nodes});
-          }
-          for (let i = 0; i < resInfo.cpmS.values.length; i += 1) {
-            for (let j = 0; j < calls.length; j += 1) {
-              if (calls[j].id === resInfo.cpmS.values[i].id) {
-                calls[j] = {
-                  ...calls[j],
-                  cpm: resInfo.cpmS.values[i] ? resInfo.cpmS.values[i].value : '',
-                  latency: resInfo.latencyS.values[i] ? resInfo.latencyS.values[i].value : '',
-                };
+            if (!resInfo.cpmS) {
+              return context.commit(types.SET_TOPO, { calls, nodes });
+            }
+            for (let i = 0; i < resInfo.cpmS.values.length; i += 1) {
+              for (let j = 0; j < calls.length; j += 1) {
+                if (calls[j].id === resInfo.cpmS.values[i].id) {
+                  calls[j] = {
+                    ...calls[j],
+                    cpm: resInfo.cpmS.values[i]
+                      ? resInfo.cpmS.values[i].value
+                      : '',
+                    latency: resInfo.latencyS.values[i]
+                      ? resInfo.latencyS.values[i].value
+                      : '',
+                  };
+                }
               }
             }
-          }
-          context.commit(types.SET_TOPO, {calls, nodes});
-        });
-    });
+            context.commit(types.SET_TOPO, { calls, nodes });
+          });
+      });
   },
-  async GET_TOPO_INSTANCE_DEPENDENCY(context: { commit: Commit; state: State; }, params: {
-    clientServiceId: string, serverServiceId: string, duration: string}) {
-
-    graph.query('queryTopoInstanceDependency').params(params)
+  async GET_TOPO_INSTANCE_DEPENDENCY(
+    context: { commit: Commit; state: State },
+    params: {
+      clientServiceId: string;
+      serverServiceId: string;
+      duration: string;
+    },
+  ) {
+    graph
+      .query('queryTopoInstanceDependency')
+      .params(params)
       .then((res: AxiosResponse) => {
         if (!(res.data && res.data.data)) {
           return;
@@ -303,58 +344,69 @@ const actions: ActionTree<State, any> = {
             serverIdsC.push(call.id);
           }
         }
-        graph.query('queryDependencyInstanceClientMetric').params({
-          idsC: clientIdsC,
-          duration: params.duration,
-        }).then((json: AxiosResponse) => {
-          const clientCalls = [] as string[];
-          for (const call of topoCalls) {
-            for (const cpm of json.data.data.cpmC.values) {
-              if (cpm.id === call.id) {
-                clientCalls.push({
-                  ...call,
-                  ...cpm,
-                });
-              }
-            }
-          }
-          graph.query('queryDependencyInstanceServerMetric').params({
-            idsC: serverIdsC,
+        graph
+          .query('queryDependencyInstanceClientMetric')
+          .params({
+            idsC: clientIdsC,
             duration: params.duration,
-          }).then((jsonResp: AxiosResponse) => {
-            const serverCalls = [] as string[];
+          })
+          .then((json: AxiosResponse) => {
+            const clientCalls = [] as string[];
             for (const call of topoCalls) {
-              for (const cpm of jsonResp.data.data.cpmC.values) {
+              for (const cpm of json.data.data.cpmC.values) {
                 if (cpm.id === call.id) {
-                  serverCalls.push({
+                  clientCalls.push({
                     ...call,
                     ...cpm,
                   });
                 }
               }
             }
-            const data = {
-              nodes: res.data.data.topo.nodes,
-              calls: [...serverCalls, ...clientCalls],
-            };
-            context.commit(types.SET_INSTANCE_DEPENDENCY, data);
+            graph
+              .query('queryDependencyInstanceServerMetric')
+              .params({
+                idsC: serverIdsC,
+                duration: params.duration,
+              })
+              .then((jsonResp: AxiosResponse) => {
+                const serverCalls = [] as string[];
+                for (const call of topoCalls) {
+                  for (const cpm of jsonResp.data.data.cpmC.values) {
+                    if (cpm.id === call.id) {
+                      serverCalls.push({
+                        ...call,
+                        ...cpm,
+                      });
+                    }
+                  }
+                }
+                const data = {
+                  nodes: res.data.data.topo.nodes,
+                  calls: [...serverCalls, ...clientCalls],
+                };
+                context.commit(types.SET_INSTANCE_DEPENDENCY, data);
+              });
           });
-        });
       });
   },
-  INSTANCE_RELATION_INFO(context: { commit: Commit; state: State; }, params: Call &
-    {mode: string; queryType: string; durationTime: string}) {
-    graph.query(params.queryType).params({
-      id: params.id,
-      duration: params.durationTime,
-    }).then((res: AxiosResponse) => {
-      if (!(res.data && res.data.data)) {
-        return;
-      }
-      context.commit(types.SET_SELECTED_INSTANCE_CALL, params);
-      context.commit(types.SET_INSTANCE_DEPEDENCE_TYPE, params.mode);
-      context.commit(types.SET_INSTANCE_DEPEDENCE_METRICS, res.data.data);
-    });
+  INSTANCE_RELATION_INFO(
+    context: { commit: Commit; state: State },
+    params: Call & { mode: string; queryType: string; durationTime: string },
+  ) {
+    graph
+      .query(params.queryType)
+      .params({
+        id: params.id,
+        duration: params.durationTime,
+      })
+      .then((res: AxiosResponse) => {
+        if (!(res.data && res.data.data)) {
+          return;
+        }
+        context.commit(types.SET_SELECTED_INSTANCE_CALL, params);
+        context.commit(types.SET_INSTANCE_DEPEDENCE_TYPE, params.mode);
+        context.commit(types.SET_INSTANCE_DEPEDENCE_METRICS, res.data.data);
+      });
   },
 };
 

@@ -43,9 +43,13 @@ function setProperties(el: any, binding: any) {
 function setAttributes($inner: any, el: any) {
   const popper = el.popper;
   $inner.innerHTML = el.popper._content;
-  if (!popper.popper) { return; }
+  if (!popper.popper) {
+    return;
+  }
   const isShow =
-  !popper._disabled && (popper._visible || popper._always) && (!popper._ellipsis || isEllipsisTooltip(el));
+    !popper._disabled &&
+    (popper._visible || popper._always) &&
+    (!popper._ellipsis || isEllipsisTooltip(el));
 
   if (popper._appendToBody) {
     if (isShow && popper.popper.parentNode !== document.body) {
@@ -91,7 +95,7 @@ function removeEvent(el: any) {
 }
 
 function isEllipsisTooltip(el: any) {
-  return (el.offsetWidth < el.scrollWidth);
+  return el.offsetWidth < el.scrollWidth;
 }
 
 export default {
@@ -111,7 +115,6 @@ export default {
     const $inner = document.createElement('div');
     $inner.setAttribute('class', 'rk-tooltip-inner');
 
-
     $content.appendChild($inner);
     $popper.appendChild($content);
     if (binding.value) {
@@ -119,7 +122,9 @@ export default {
         $popper.style.display = 'none';
         el.appendChild($popper);
       } else {
-        $popper.className += ` append-to-body ${binding.value.popperCls ? binding.value.popperCls.join(' ') : ''}`;
+        $popper.className += ` append-to-body ${
+          binding.value.popperCls ? binding.value.popperCls.join(' ') : ''
+        }`;
       }
     }
 
@@ -137,8 +142,13 @@ export default {
     removeEvent(el);
     el.popper.destroy();
     if (binding.value.appendToBody === false) {
-      if (el.popper.popper) { el.removeChild(el.popper.popper); }
-    } else if (el.popper.popper && el.popper.popper.parentNode === document.body) {
+      if (el.popper.popper) {
+        el.removeChild(el.popper.popper);
+      }
+    } else if (
+      el.popper.popper &&
+      el.popper.popper.parentNode === document.body
+    ) {
       document.body.removeChild(el.popper.popper);
     }
   },

@@ -22,7 +22,8 @@ export const Services = {
       key: id
       label: name
     }
-  `};
+  `,
+};
 
 export const Database = {
   variable: '$duration: Duration!',
@@ -31,7 +32,8 @@ export const Database = {
       key: id
       label: name
     }
-  `};
+  `,
+};
 
 export const Endpoints = {
   variable: '$serviceId: ID!, $keyword: String!',
@@ -40,7 +42,8 @@ export const Endpoints = {
       key: id
       label: name
     }
-`};
+`,
+};
 
 export const Instances = {
   variable: '$serviceId: ID!, $duration: Duration!',
@@ -54,7 +57,8 @@ export const Instances = {
         value
       }
     }
-  `};
+  `,
+};
 
 export const OAPTimeInfo = {
   query: `
@@ -62,4 +66,5 @@ export const OAPTimeInfo = {
       timezone
       currentTimestamp
     }
-  `};
+  `,
+};

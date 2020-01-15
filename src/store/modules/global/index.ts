@@ -112,14 +112,19 @@ const initState: State = {
   chartStack: [],
   edit: false,
   lock: true,
-  utc: window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60),
+  utc:
+    window.localStorage.getItem('utc') ||
+    -(new Date().getTimezoneOffset() / 60),
 };
 
 // getters
 const getters = {
   duration(state: State): Duration {
     return {
-      start: getLocalTime(parseInt(state.utc + '', 10), state.durationRow.start),
+      start: getLocalTime(
+        parseInt(state.utc + '', 10),
+        state.durationRow.start,
+      ),
       end: getLocalTime(parseInt(state.utc + '', 10), state.durationRow.end),
       step: state.durationRow.step,
     };
@@ -137,17 +142,25 @@ const getters = {
         interval = 86400000;
         break;
       case 'MONTH':
-        interval = (getter.duration.end.getTime() - getter.duration.start.getTime())
-          / (getter.duration.end.getFullYear() * 12 + getter.duration.end.getMonth()
-            - getter.duration.start.getFullYear() * 12 - getter.duration.start.getMonth());
+        interval =
+          (getter.duration.end.getTime() - getter.duration.start.getTime()) /
+          (getter.duration.end.getFullYear() * 12 +
+            getter.duration.end.getMonth() -
+            getter.duration.start.getFullYear() * 12 -
+            getter.duration.start.getMonth());
         break;
     }
-    const utcSpace = (parseInt(state.utc + '', 10) + new Date().getTimezoneOffset() / 60) * 3600000;
+    const utcSpace =
+      (parseInt(state.utc + '', 10) + new Date().getTimezoneOffset() / 60) *
+      3600000;
     const startUnix: number = getter.duration.start.getTime();
     const endUnix: number = getter.duration.end.getTime();
     const timeIntervals: string[] = [];
     for (let i = 0; i <= endUnix - startUnix; i += interval) {
-      const temp: string = dateFormatTime(new Date(startUnix + i - utcSpace), getter.duration.step);
+      const temp: string = dateFormatTime(
+        new Date(startUnix + i - utcSpace),
+        getter.duration.step,
+      );
       timeIntervals.push(temp);
     }
     return timeIntervals;
@@ -182,9 +195,13 @@ const mutations: MutationTree<State> = {
   },
   [types.RUN_EVENTS](state: State): void {
     clearTimeout(timer);
-    timer = setTimeout(() => state.eventStack.forEach((event: any) => {
-      setTimeout(event(), 0);
-    }), 500);
+    timer = setTimeout(
+      () =>
+        state.eventStack.forEach((event: any) => {
+          setTimeout(event(), 0);
+        }),
+      500,
+    );
   },
   [types.SET_EDIT](state: State, status: boolean): void {
     state.edit = status;
