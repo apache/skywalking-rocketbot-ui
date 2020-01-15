@@ -6,5 +6,5 @@
   "singleQuote": true,
   "bracketSpacing": true,
   "vueIndentScriptAndStyle": true,
-  "arrowParens": always
+  "arrowParens": "always"
 }
