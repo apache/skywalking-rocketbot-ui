@@ -28,7 +28,8 @@ export const Traces = {
       traceIds
     }
     total
-  }`};
+  }`,
+};
 
 export const ServiceInstanceOption = {
   variable: '$duration: Duration!, $serviceId: ID!',
@@ -36,9 +37,8 @@ export const ServiceInstanceOption = {
     instanceId: getServiceInstances(duration: $duration, serviceId: $serviceId) {
       key: id
       label: name
-    }`};
-
-
+    }`,
+};
 
 /**
  * @param { traceId } { string }
@@ -80,4 +80,5 @@ export const Trace = {
       }
     }
   }
-  `};
+  `,
+};

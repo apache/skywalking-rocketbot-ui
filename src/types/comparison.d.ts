@@ -18,7 +18,7 @@ export type IOption = {
   key: number | string;
   label: string;
   sources?: any;
-}
+};
 export interface ICurrentOptions {
   preService: IOption;
   preType: IOption;
@@ -42,7 +42,7 @@ export interface DataSourceType {
 export interface ISelectConfig {
   option: IOption;
   type: string;
-  duration: string
+  duration: string;
 }
 
 export interface MetricsType {

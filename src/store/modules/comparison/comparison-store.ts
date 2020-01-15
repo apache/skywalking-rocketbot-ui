@@ -15,21 +15,21 @@
  * limitations under the License.
  */
 
-import { Commit, ActionTree, Dispatch } from "vuex";
-import axios, { AxiosResponse } from "axios";
+import { Commit, ActionTree, Dispatch } from 'vuex';
+import axios, { AxiosResponse } from 'axios';
 
-import graph from "@/graph";
-import { cancelToken } from "@/utils/cancelToken";
-import * as types from "../../mutation-types";
-import { DurationTime } from "@/types/global";
-import { queryChartData } from "@/utils/queryChartData";
-import fragmentAll from "@/graph/query/comparison";
+import graph from '@/graph';
+import { cancelToken } from '@/utils/cancelToken';
+import * as types from '../../mutation-types';
+import { DurationTime } from '@/types/global';
+import { queryChartData } from '@/utils/queryChartData';
+import fragmentAll from '@/graph/query/comparison';
 import {
   ICurrentOptions,
   DataSourceType,
   ISelectConfig,
-  MetricsType
-} from "@/types/comparison";
+  MetricsType,
+} from '@/types/comparison';
 import {
   ComparisonOption,
   InitSource,
@@ -39,8 +39,8 @@ import {
   ServiceType,
   ChangeType,
   StatusType,
-  PercentileItem
-} from "./comparison-const";
+  PercentileItem,
+} from './comparison-const';
 
 type GenericIdentityFn<T> = (arg: T) => T;
 
@@ -64,7 +64,7 @@ const initState: State = {
   dataSource: InitSource,
   chartSource: identity,
   isPrevious: StatusType.Init,
-  metricSource: {} as MetricsType
+  metricSource: {} as MetricsType,
 };
 
 // getters
@@ -82,7 +82,7 @@ const getters = {
         fragments.push(preParam.fragment);
       }
     }
-    return `query queryData(${variable}) {${fragments.join(",")}}`;
+    return `query queryData(${variable}) {${fragments.join(',')}}`;
   },
   queryNextValue(state: State) {
     const { nextMetrics } = state.currentOptions;
@@ -96,12 +96,12 @@ const getters = {
         fragments.push(nextParam.fragment);
       }
     }
-    return `query queryData(${variable}) {${fragments.join(",")}}`;
+    return `query queryData(${variable}) {${fragments.join(',')}}`;
   },
   preConfig(state: State) {
     const { currentOptions } = state;
     const variablesData = {
-      serviceId: currentOptions.preService.key
+      serviceId: currentOptions.preService.key,
     } as any;
     const { key } = currentOptions.preType;
 
@@ -129,12 +129,12 @@ const getters = {
       variablesData = {
         ...variablesData,
         endpointId: nextObject.key,
-        endpointName: nextObject.label
+        endpointName: nextObject.label,
       };
     } else if (nextType.key === ObjectType.ServiceInstance) {
       variablesData = {
         ...variablesData,
-        instanceId: nextObject.key
+        instanceId: nextObject.key,
       };
     } else if (nextType.key === ObjectType.Database) {
       delete variablesData.serviceId;
@@ -155,7 +155,7 @@ const getters = {
       NextService: ChangeType.NextService,
       NextType: ChangeType.NextType,
       NextObject: ChangeType.NextObject,
-      NextMetrics: ChangeType.NextMetrics
+      NextMetrics: ChangeType.NextMetrics,
     };
   },
   AllMetrics() {
@@ -165,7 +165,7 @@ const getters = {
       ServiceEndpoint: [],
       ServiceInstance: [],
       Database: [],
-      ServiceDependency: []
+      ServiceDependency: [],
     } as MetricsType;
 
     for (const item of service) {
@@ -175,22 +175,22 @@ const getters = {
       if (item.o === ObjectType.Service) {
         MetricsObj.Service.push({
           label: item.t,
-          key: item.d
+          key: item.d,
         });
       } else if (item.o === ObjectType.ServiceInstance) {
         MetricsObj.ServiceInstance.push({
           label: item.t,
-          key: item.d
+          key: item.d,
         });
       } else if (item.o === ObjectType.ServiceEndpoint) {
         MetricsObj.ServiceEndpoint.push({
           label: item.t,
-          key: item.d
+          key: item.d,
         });
       } else if (item.o === ObjectType.ServiceDependency) {
         MetricsObj.ServiceDependency.push({
           label: item.t,
-          key: item.d
+          key: item.d,
         });
       }
     }
@@ -201,13 +201,13 @@ const getters = {
       if (data.o === ObjectType.Database) {
         MetricsObj.Database.push({
           label: data.t,
-          key: data.d
+          key: data.d,
         });
       }
     }
 
     return MetricsObj;
-  }
+  },
 };
 
 // mutations
@@ -233,9 +233,9 @@ const mutations = {
     if (!data.length) {
       data = [
         {
-          key: "",
-          label: ""
-        }
+          key: '',
+          label: '',
+        },
       ];
     }
     const { isPrevious, currentOptions, metricSource } = state as any;
@@ -262,14 +262,14 @@ const mutations = {
         preMetrics: [metricSource[type][0]],
         nextMetrics: [metricSource[type][1]],
         preType: ComparisonType[2],
-        nextType: ComparisonType[2]
+        nextType: ComparisonType[2],
       };
       state.dataSource = {
         ...state.dataSource,
         nextObjectSource: data,
         preObjectSource: data,
         preMetricsSource: metricSource[type],
-        nextMetricsSource: metricSource[type]
+        nextMetricsSource: metricSource[type],
       };
     }
   },
@@ -287,7 +287,7 @@ const mutations = {
         value = {};
         PercentileItem.forEach((item, index) => {
           value[item] = data.value[key][index].values.map(
-            (d: { value: number }) => d.value
+            (d: { value: number }) => d.value,
           );
         });
       }
@@ -297,8 +297,8 @@ const mutations = {
     for (const key of Object.keys(obj)) {
       if (data.type === ServiceType.PREVIOUS) {
         const str = `${preService.label}_`;
-        const strKeyPre = `${preType.key === ObjectType.Database ? "" : str}${
-          preType.key === ObjectType.Service ? "" : preObject.label
+        const strKeyPre = `${preType.key === ObjectType.Database ? '' : str}${
+          preType.key === ObjectType.Service ? '' : preObject.label
         }_${key}`;
         obj[strKeyPre] = obj[key];
         delete obj[key];
@@ -306,15 +306,15 @@ const mutations = {
         const str = `${nextObject.label}`;
         const servicesLabel = `${nextService.label}_`;
         const strKeyNext = `${
-          nextType.key === ObjectType.Database ? "" : servicesLabel
-        }${nextType.key === ObjectType.Service ? "" : str}_${key}`;
+          nextType.key === ObjectType.Database ? '' : servicesLabel
+        }${nextType.key === ObjectType.Service ? '' : str}_${key}`;
         obj[strKeyNext] = obj[key];
         delete obj[key];
       }
     }
     state.chartSource = {
       ...obj,
-      ...state.chartSource
+      ...state.chartSource,
     };
   },
   [types.UPDATE_CONFIG](state: any, data: ISelectConfig) {
@@ -327,7 +327,7 @@ const mutations = {
 
       if (item > -1) {
         state.currentOptions[type] = metrics.filter(
-          (d: any) => d.key !== option.key
+          (d: any) => d.key !== option.key,
         );
       } else {
         state.currentOptions[type].push(option);
@@ -384,7 +384,7 @@ const mutations = {
     const objectSource = calls.map((call: any) => {
       return {
         key: call.id,
-        label: `${call.sourceLabel}-${call.targetLabel}`
+        label: `${call.sourceLabel}-${call.targetLabel}`,
       };
     });
     if (state.isPrevious === StatusType.Next) {
@@ -398,7 +398,7 @@ const mutations = {
       state.currentOptions.preObject = objectSource[0];
       state.dataSource.preObjectSource = objectSource;
     }
-  }
+  },
 };
 
 // actions
@@ -407,7 +407,7 @@ const actions: ActionTree<State, ActionsParamType> = {
     context: { commit: Commit; dispatch: Dispatch; getters: any; state: State },
     params: {
       duration: string;
-    }
+    },
   ) {
     if (context.state.isPrevious !== StatusType.Init) {
       return;
@@ -416,26 +416,26 @@ const actions: ActionTree<State, ActionsParamType> = {
     context.commit(types.SET_METRICSOURCE, context.getters.AllMetrics);
     context.commit(types.SET_ISPREVIOUS, StatusType.Init);
     return graph
-      .query("queryServices")
+      .query('queryServices')
       .params(params)
       .then((res: AxiosResponse) => {
         if (!res.data.data) {
           return;
         }
         context.commit(types.SET_SERVICES, {
-          services: res.data.data.services
+          services: res.data.data.services,
         });
       })
       .then(() => {
-        context.dispatch("GET_SERVICE_ENDPOINTS", params.duration);
+        context.dispatch('GET_SERVICE_ENDPOINTS', params.duration);
       });
   },
   GET_SERVICE_ENDPOINTS(
     context: { commit: Commit; state: State; dispatch: Dispatch },
-    date: string
+    date: string,
   ) {
     if (!context.state.currentOptions.preService) {
-      return new Promise(resolve => resolve());
+      return new Promise((resolve) => resolve());
     }
     const { isPrevious, currentOptions } = context.state;
     const servicesId =
@@ -443,8 +443,8 @@ const actions: ActionTree<State, ActionsParamType> = {
         ? currentOptions.preService.key
         : currentOptions.nextService.key;
     graph
-      .query("queryEndpoints")
-      .params({ serviceId: servicesId, keyword: "" })
+      .query('queryEndpoints')
+      .params({ serviceId: servicesId, keyword: '' })
       .then((res: AxiosResponse) => {
         if (!res.data.data) {
           return;
@@ -452,12 +452,12 @@ const actions: ActionTree<State, ActionsParamType> = {
         context.commit(types.SET_CONFIG, res.data.data.getEndpoints);
         return res.data.data;
       })
-      .then(data => {
+      .then((data) => {
         if (!data.getEndpoints) {
           return;
         }
         if (isPrevious === StatusType.Init) {
-          context.dispatch("RENDER_CHART", date);
+          context.dispatch('RENDER_CHART', date);
         }
       });
   },
@@ -468,7 +468,7 @@ const actions: ActionTree<State, ActionsParamType> = {
         ? currentOptions.preService.key
         : currentOptions.nextService.key;
     return graph
-      .query("queryInstances")
+      .query('queryInstances')
       .params(params)
       .then((res: AxiosResponse) => {
         if (!res.data) {
@@ -476,16 +476,16 @@ const actions: ActionTree<State, ActionsParamType> = {
         }
         context.commit(
           types.SELECT_INSTANCE_DATABASE,
-          res.data.data.getServiceInstances
+          res.data.data.getServiceInstances,
         );
       });
   },
   GET_DATABASES(
     context: { commit: Commit; state: State },
-    params: { duration: string }
+    params: { duration: string },
   ) {
     return graph
-      .query("queryDatabases")
+      .query('queryDatabases')
       .params(params)
       .then((res: AxiosResponse) => {
         if (!res.data) {
@@ -501,7 +501,7 @@ const actions: ActionTree<State, ActionsParamType> = {
         ? currentOptions.preService.key
         : currentOptions.nextService.key;
     return graph
-      .query("queryServiceTopo")
+      .query('queryServiceTopo')
       .params(params)
       .then((res: AxiosResponse) => {
         if (!res.data.data) {
@@ -512,18 +512,18 @@ const actions: ActionTree<State, ActionsParamType> = {
   },
   RENDER_CHART(context: { dispatch: Dispatch; commit: Commit }, date: string) {
     context.commit(types.CLEAR_CHART_VAL);
-    context.dispatch("GET_COMPARISON", {
+    context.dispatch('GET_COMPARISON', {
       duration: date,
-      type: ServiceType.PREVIOUS
+      type: ServiceType.PREVIOUS,
     });
-    context.dispatch("GET_COMPARISON", {
+    context.dispatch('GET_COMPARISON', {
       duration: date,
-      type: ServiceType.NEXT
+      type: ServiceType.NEXT,
     });
   },
   SELECT_CONFIG(
     context: { commit: Commit; state: State; dispatch: Dispatch },
-    params: any
+    params: any,
   ) {
     const isPrevious = params.type.includes(StatusType.Next)
       ? StatusType.Next
@@ -541,66 +541,66 @@ const actions: ActionTree<State, ActionsParamType> = {
       ChangeType.PreService,
       ChangeType.NextService,
       ChangeType.PreType,
-      ChangeType.NextType
+      ChangeType.NextType,
     ];
 
     if (typeList.includes(params.type)) {
       if (objType.key === ObjectType.Service) {
         context.commit(types.SELECT_TYPE_SERVICES);
       } else if (objType.key === ObjectType.ServiceInstance) {
-        context.dispatch("GET_SERVICE_INSTANCES", {
-          duration: params.duration
+        context.dispatch('GET_SERVICE_INSTANCES', {
+          duration: params.duration,
         });
       } else if (objType.key === ObjectType.ServiceEndpoint) {
-        context.dispatch("GET_SERVICE_ENDPOINTS", params.duration);
+        context.dispatch('GET_SERVICE_ENDPOINTS', params.duration);
       } else if (objType.key === ObjectType.Database) {
-        context.dispatch("GET_DATABASES", { duration: params.duration });
+        context.dispatch('GET_DATABASES', { duration: params.duration });
       } else if (objType.key === ObjectType.ServiceDependency) {
-        context.dispatch("GET_SERVICE_TOPOLOGY", { duration: params.duration });
+        context.dispatch('GET_SERVICE_TOPOLOGY', { duration: params.duration });
       }
     }
   },
   GET_COMPARISON(
     context: { commit: Commit; state: State; dispatch: Dispatch; getters: any },
-    param: { duration: string; type: string }
+    param: { duration: string; type: string },
   ) {
     let variablesData = {
-      duration: param.duration
+      duration: param.duration,
     } as any;
-    let queryVal = "";
+    let queryVal = '';
     if (param.type === ServiceType.PREVIOUS) {
       variablesData = {
         ...variablesData,
-        ...context.getters.preConfig
+        ...context.getters.preConfig,
       };
       queryVal = context.getters.queryPreValue;
     } else {
       variablesData = {
         ...variablesData,
-        ...context.getters.nextConfig
+        ...context.getters.nextConfig,
       };
       queryVal = context.getters.queryNextValue;
     }
     return axios
       .post(
-        "/graphql",
+        '/graphql',
         {
           query: queryVal,
-          variables: variablesData
+          variables: variablesData,
         },
-        { cancelToken: cancelToken() }
+        { cancelToken: cancelToken() },
       )
       .then((res: AxiosResponse<any>) => {
         const data = res.data.data;
         if (!data) {
           return;
         }
-        context.dispatch("FORMAT_VALUE", { value: data, type: param.type });
+        context.dispatch('FORMAT_VALUE', { value: data, type: param.type });
       });
   },
   FORMAT_VALUE(
     context: { commit: Commit; state: State; dispatch: Dispatch },
-    params: { value: any; type: string }
+    params: { value: any; type: string },
   ) {
     if (!(params && params.value)) {
       return;
@@ -609,35 +609,35 @@ const actions: ActionTree<State, ActionsParamType> = {
       params.value.endpointSLA.values = params.value.endpointSLA.values.map(
         (i: any) => {
           return { value: i.value / 100 };
-        }
+        },
       );
     }
     if (params.value.databaseSLA) {
       params.value.databaseSLA.values = params.value.databaseSLA.values.map(
         (i: any) => {
           return { value: i.value / 100 };
-        }
+        },
       );
     }
     if (params.value.serviceSLA) {
       params.value.serviceSLA.values = params.value.serviceSLA.values.map(
         (i: any) => {
           return { value: i.value / 100 };
-        }
+        },
       );
     }
     if (params.value.instanceSLA) {
       params.value.instanceSLA.values = params.value.instanceSLA.values.map(
         (i: any) => {
           return { value: i.value / 100 };
-        }
+        },
       );
     }
     if (params.value.serviceApdexScore) {
       params.value.serviceApdexScore.values = params.value.serviceApdexScore.values.map(
         (i: any) => {
           return { value: (i.value / 10000).toFixed(2) };
-        }
+        },
       );
     }
     if (params.value.heap && params.value.maxHeap) {
@@ -654,17 +654,17 @@ const actions: ActionTree<State, ActionsParamType> = {
                 ).toFixed(2)
               : 0;
           return { value: val };
-        }
+        },
       );
       if (Math.max.apply(Math, params.value.maxHeap.values) === -1) {
-        params.value.maxHeap.values = "Max Heap Unlimited";
+        params.value.maxHeap.values = 'Max Heap Unlimited';
       }
     }
     if (params.value.nonheap && params.value.maxNonHeap) {
       params.value.nonheap.values = params.value.nonheap.values.map(
         (i: any) => {
           return { value: (i.value / 1048576).toFixed(2) };
-        }
+        },
       );
       params.value.maxNonHeap.values = params.value.maxNonHeap.values.map(
         (i: any, index: number) => {
@@ -676,21 +676,21 @@ const actions: ActionTree<State, ActionsParamType> = {
                 ).toFixed(2)
               : 0;
           return { value: val };
-        }
+        },
       );
       if (Math.max.apply(Math, params.value.maxNonHeap.values) === -1) {
-        params.value.maxNonHeap.values = "Max NonHeap Unlimited";
+        params.value.maxNonHeap.values = 'Max NonHeap Unlimited';
       }
     }
     if (params.value.clrHeap) {
       params.value.clrHeap.values = params.value.clrHeap.values.map(
         (i: any) => {
           return { value: (i.value / 1048576).toFixed(2) };
-        }
+        },
       );
     }
     context.commit(types.SET_CHARTVAL, params);
-  }
+  },
 };
 
 export default {
@@ -698,5 +698,5 @@ export default {
   state: initState,
   getters,
   actions,
-  mutations
+  mutations,
 };

@@ -125,190 +125,192 @@ specific language governing permissions and * limitations under the License. */
   </div>
 </template>
 <script lang="ts">
-import { State as topoState } from '@/store/modules/topology';
-import { Component, Vue, Watch } from 'vue-property-decorator';
-import { Action, Getter, Mutation, State } from 'vuex-class';
-import TopoChart from './topo-chart.vue';
-import TopoInstanceDependency from './topo-instance-dependency.vue';
-import ChartLine from './chart-line.vue';
+  import { State as topoState } from '@/store/modules/topology';
+  import { Component, Vue, Watch } from 'vue-property-decorator';
+  import { Action, Getter, Mutation, State } from 'vuex-class';
+  import TopoChart from './topo-chart.vue';
+  import TopoInstanceDependency from './topo-instance-dependency.vue';
+  import ChartLine from './chart-line.vue';
 
-@Component({
-  components: {
-    TopoInstanceDependency,
-    TopoChart,
-    ChartLine,
-  },
-})
-export default class TopoDetectPoint extends Vue {
-  @State('rocketTopo') private stateTopo!: topoState;
-  @Getter('intervalTime') private intervalTime: any;
-  @Getter('durationTime') private durationTime: any;
-  @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT')
-  private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
-  @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
-  @Action('GET_QUERY') private GET_QUERY: any;
-  @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
-  @State('rocketDashboard') private rocketDashboard: any;
-  @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL')
-  private SET_SELECTED_INSTANCE_CALL: any;
-  @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY')
-  private SET_INSTANCE_DEPENDENCY: any;
-  @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
-  @Action('rocketTopo/GET_TOPO_INSTANCE_DEPENDENCY')
-  private GET_INSTANCE_DEPENDENCY: any;
+  @Component({
+    components: {
+      TopoInstanceDependency,
+      TopoChart,
+      ChartLine,
+    },
+  })
+  export default class TopoDetectPoint extends Vue {
+    @State('rocketTopo') private stateTopo!: topoState;
+    @Getter('intervalTime') private intervalTime: any;
+    @Getter('durationTime') private durationTime: any;
+    @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT')
+    private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
+    @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+    @Action('GET_QUERY') private GET_QUERY: any;
+    @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
+    @State('rocketDashboard') private rocketDashboard: any;
+    @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL')
+    private SET_SELECTED_INSTANCE_CALL: any;
+    @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY')
+    private SET_INSTANCE_DEPENDENCY: any;
+    @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
+    @Action('rocketTopo/GET_TOPO_INSTANCE_DEPENDENCY')
+    private GET_INSTANCE_DEPENDENCY: any;
 
-  private isMini: boolean = true;
-  private showInfoCount: number = 0;
-  private showInfo: boolean = false;
-  private dialogTopoVisible = false;
+    private isMini: boolean = true;
+    private showInfoCount: number = 0;
+    private showInfo: boolean = false;
+    private dialogTopoVisible = false;
 
-  private get showServerInfo() {
-    return this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal;
-  }
-
-  @Watch('stateTopo.selectedServiceCall')
-  private watchDetectPointNodeId(newValue: string) {
-    if (newValue || this.stateTopo.currentNode.isReal) {
-      this.showInfo = true;
-    } else {
-      this.showInfo = false;
-      this.showInfoCount = 0;
-      this.isMini = true;
+    private get showServerInfo() {
+      return (
+        this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal
+      );
     }
-  }
 
-  @Watch('stateTopo.currentNode.name')
-  private watchCurrentNodeIsReal(newValue: boolean) {
-    const service = this.stateTopo.currentNode;
-    if (this.stateTopo.currentNode.isReal) {
-      this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 1 });
-      this.MIXHANDLE_GET_OPTION({
-        compType: 'service',
-        duration: this.durationTime,
-      }).then(() => {
-        this.GET_QUERY({
-          serviceId: service.id || '',
+    @Watch('stateTopo.selectedServiceCall')
+    private watchDetectPointNodeId(newValue: string) {
+      if (newValue || this.stateTopo.currentNode.isReal) {
+        this.showInfo = true;
+      } else {
+        this.showInfo = false;
+        this.showInfoCount = 0;
+        this.isMini = true;
+      }
+    }
+
+    @Watch('stateTopo.currentNode.name')
+    private watchCurrentNodeIsReal(newValue: boolean) {
+      const service = this.stateTopo.currentNode;
+      if (this.stateTopo.currentNode.isReal) {
+        this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 1 });
+        this.MIXHANDLE_GET_OPTION({
+          compType: 'service',
           duration: this.durationTime,
+        }).then(() => {
+          this.GET_QUERY({
+            serviceId: service.id || '',
+            duration: this.durationTime,
+          });
         });
+      }
+      if (newValue || this.stateTopo.selectedServiceCall) {
+        this.showInfo = true;
+      } else {
+        this.showInfo = false;
+        this.showInfoCount = 0;
+        this.isMini = true;
+      }
+    }
+
+    private setShowInfo() {
+      this.showInfo = false;
+      this.showInfoCount = 1;
+      this.isMini = !this.isMini;
+      setTimeout(() => {
+        this.showInfo = true;
+      }, 550);
+    }
+
+    private setMode(mode: boolean) {
+      this.SET_MODE_STATUS(mode);
+      this.stateTopo.callback();
+    }
+
+    private clearInstance() {
+      this.dialogTopoVisible = false;
+      this.SET_SELECTED_INSTANCE_CALL(null);
+    }
+
+    private openInstanceModal() {
+      this.dialogTopoVisible = true;
+      if (
+        !(
+          this.stateTopo.selectedServiceCall &&
+          this.stateTopo.selectedServiceCall.source
+        )
+      ) {
+        return;
+      }
+      this.GET_INSTANCE_DEPENDENCY({
+        serverServiceId: this.stateTopo.selectedServiceCall.source.id,
+        clientServiceId: this.stateTopo.selectedServiceCall.target.id,
+        duration: this.durationTime,
       });
     }
-    if (newValue || this.stateTopo.selectedServiceCall) {
-      this.showInfo = true;
-    } else {
-      this.showInfo = false;
-      this.showInfoCount = 0;
-      this.isMini = true;
-    }
   }
-
-  private setShowInfo() {
-    this.showInfo = false;
-    this.showInfoCount = 1;
-    this.isMini = !this.isMini;
-    setTimeout(() => {
-      this.showInfo = true;
-    }, 550);
-  }
-
-  private setMode(mode: boolean) {
-    this.SET_MODE_STATUS(mode);
-    this.stateTopo.callback();
-  }
-
-  private clearInstance() {
-    this.dialogTopoVisible = false;
-    this.SET_SELECTED_INSTANCE_CALL(null);
-  }
-
-  private openInstanceModal() {
-    this.dialogTopoVisible = true;
-    if (
-      !(
-        this.stateTopo.selectedServiceCall &&
-        this.stateTopo.selectedServiceCall.source
-      )
-    ) {
-      return;
-    }
-    this.GET_INSTANCE_DEPENDENCY({
-      serverServiceId: this.stateTopo.selectedServiceCall.source.id,
-      clientServiceId: this.stateTopo.selectedServiceCall.target.id,
-      duration: this.durationTime,
-    });
-  }
-}
 </script>
 <style lang="scss">
-.link-topo-aside-box-btn {
-  color: #626977;
-  border: 1px solid;
-  padding: 0px 3px;
-  width: 45px;
-  display: inline-block;
+  .link-topo-aside-box-btn {
+    color: #626977;
+    border: 1px solid;
+    padding: 0px 3px;
+    width: 45px;
+    display: inline-block;
 
-  &.active {
-    color: #448dfe;
-  }
-}
-
-.show-dependency {
-  margin-top: 20px;
-
-  .rk-btn {
-    display: block;
-    text-align: center;
-  }
-
-  .instance-dependency {
-    .rk-sidebox{
-      background: #2b3037;
-      outline: none;
-    }
-    .rk-sidebox-inner{
-      height: 100%;
+    &.active {
+      color: #448dfe;
     }
   }
 
-  .title-name {
-    width: 100%;
-    padding-left: 40px;
-    font-size: 16px;
-  }
-}
+  .show-dependency {
+    margin-top: 20px;
 
-.link-topo-aside-box {
-  border-radius: 4px;
-  position: absolute;
-  width: 280px;
-  z-index: 101;
-  color: #ddd;
-  background-color: #2b3037;
-  padding: 15px 20px 10px;
+    .rk-btn {
+      display: block;
+      text-align: center;
+    }
 
-  .label {
-    display: inline-block;
-    width: 40%;
-  }
+    .instance-dependency {
+      .rk-sidebox {
+        background: #2b3037;
+        outline: none;
+      }
+      .rk-sidebox-inner {
+        height: 100%;
+      }
+    }
 
-  .content {
-    vertical-align: top;
-    display: inline-block;
-    width: 60%;
+    .title-name {
+      width: 100%;
+      padding-left: 40px;
+      font-size: 16px;
+    }
   }
 
-  .circle {
-    width: 8px;
-    height: 8px;
+  .link-topo-aside-box {
     border-radius: 4px;
-    background-color: #ee5b5b;
-    margin-top: 6px;
-  }
-}
+    position: absolute;
+    width: 280px;
+    z-index: 101;
+    color: #ddd;
+    background-color: #2b3037;
+    padding: 15px 20px 10px;
 
-.link-topo-aside-box {
-  p {
-    margin-block-start: auto !important;
-    margin-block-end: auto !important;
+    .label {
+      display: inline-block;
+      width: 40%;
+    }
+
+    .content {
+      vertical-align: top;
+      display: inline-block;
+      width: 60%;
+    }
+
+    .circle {
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      background-color: #ee5b5b;
+      margin-top: 6px;
+    }
   }
-}
+
+  .link-topo-aside-box {
+    p {
+      margin-block-start: auto !important;
+      margin-block-end: auto !important;
+    }
+  }
 </style>

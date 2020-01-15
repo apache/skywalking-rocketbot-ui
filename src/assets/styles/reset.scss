@@ -15,49 +15,87 @@
  * limitations under the License.
  */
 
-body{
+body {
   margin: 0;
   line-height: 1.5;
   font-size: 13px;
   color: #3d444f;
-  font-family: "Lato","Source Han Sans CN", "Microsoft YaHei", sans-serif;
+  font-family: 'Lato', 'Source Han Sans CN', 'Microsoft YaHei', sans-serif;
   text-rendering: optimizeLegibility;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
-html, body {
+html,
+body {
   height: 100%;
 }
-div,header,footer,nav,article,section,aside,label,input,textarea,select,button,ul,ol,li,h1,h2,h3,h4,h5,a,img{
+div,
+header,
+footer,
+nav,
+article,
+section,
+aside,
+label,
+input,
+textarea,
+select,
+button,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+a,
+img {
   box-sizing: border-box;
 }
-input,textarea,select,button {
+input,
+textarea,
+select,
+button {
   font-size: 100%;
   font-family: inherit;
 }
-h1{font-size: 26px;}
-h2{font-size: 24px;}
-h3{font-size: 21px;}
-h4{font-size: 18px;}
-h5{font-size: 14px;}
-h6{font-size:1em;}
-ul,ol{
-  margin:0;
-  padding-left:0;
-  list-style-type:none;
+h1 {
+  font-size: 26px;
 }
-a{
-  text-decoration:none;
+h2 {
+  font-size: 24px;
+}
+h3 {
+  font-size: 21px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 14px;
+}
+h6 {
+  font-size: 1em;
+}
+ul,
+ol {
+  margin: 0;
+  padding-left: 0;
+  list-style-type: none;
+}
+a {
+  text-decoration: none;
   cursor: pointer;
   color: inherit;
-  -webkit-tap-highlight-color: transparent; 
-  -webkit-appearance: none; 
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
 }
-hr{
+hr {
   border-width: 0;
   border-bottom: 1px solid #e0e0e0;
 }
-blockquote{
+blockquote {
   margin-left: 0;
   margin-right: 0;
   padding-left: 1.2em;
@@ -65,57 +103,57 @@ blockquote{
 }
 
 code,
-pre{
+pre {
   font-family: Consolas, Menlo, Courier, monospace;
 }
 /*webkit内核*/
 .scroll_hide::-webkit-scrollbar {
-  width:0px;
-  height:0px;
+  width: 0px;
+  height: 0px;
 }
-.scroll_hide::-webkit-scrollbar-button    {
-  background-color:rgba(0,0,0,0);
+.scroll_hide::-webkit-scrollbar-button {
+  background-color: rgba(0, 0, 0, 0);
 }
-.scroll_hide::-webkit-scrollbar-track     {
-  background-color:rgba(0,0,0,0);
+.scroll_hide::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
 }
 .scroll_hide::-webkit-scrollbar-track-piece {
-  background-color:rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
 }
-.scroll_hide::-webkit-scrollbar-thumb{
-  background-color:rgba(0,0,0,0);
+.scroll_hide::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0);
 }
 .scroll_hide::-webkit-scrollbar-corner {
-  background-color:rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
 }
-.scroll_hide::-webkit-scrollbar-resizer  {
-  background-color:rgba(0,0,0,0);
+.scroll_hide::-webkit-scrollbar-resizer {
+  background-color: rgba(0, 0, 0, 0);
 }
 /*o内核*/
-.scroll_hide .-o-scrollbar{
-  -moz-appearance: none !important;   
-  background: rgba(0,255,0,0) !important;  
+.scroll_hide .-o-scrollbar {
+  -moz-appearance: none !important;
+  background: rgba(0, 255, 0, 0) !important;
 }
-.scroll_hide::-o-scrollbar-button    {
-  background-color:rgba(0,0,0,0);
+.scroll_hide::-o-scrollbar-button {
+  background-color: rgba(0, 0, 0, 0);
 }
-.scroll_hide::-o-scrollbar-track     {
-  background-color:rgba(0,0,0,0);
+.scroll_hide::-o-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0);
 }
 .scroll_hide::-o-scrollbar-track-piece {
-  background-color:rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
 }
-.scroll_hide::-o-scrollbar-thumb{
-  background-color:rgba(0,0,0,0);
+.scroll_hide::-o-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0);
 }
 .scroll_hide::-o-scrollbar-corner {
-  background-color:rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
 }
-.scroll_hide::-o-scrollbar-resizer  {
-  background-color:rgba(0,0,0,0);
+.scroll_hide::-o-scrollbar-resizer {
+  background-color: rgba(0, 0, 0, 0);
 }
 /*IE10,IE11,IE12*/
-.scroll_hide{
+.scroll_hide {
   -ms-scroll-chaining: chained;
   -ms-overflow-style: none;
   -ms-content-zooming: zoom;

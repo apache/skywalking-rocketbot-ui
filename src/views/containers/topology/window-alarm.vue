@@ -25,32 +25,32 @@ specific language governing permissions and * limitations under the License. */
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
-import { Prop, PropSync } from 'vue-property-decorator';
-import AlarmTool from '../../components/alarm/alarm-tool.vue';
-import AlarmTable from '../../components/alarm/alarm-table.vue';
-import { State, Action, Getter } from 'vuex-class';
+  import Vue from 'vue';
+  import Component from 'vue-class-component';
+  import { Prop, PropSync } from 'vue-property-decorator';
+  import AlarmTool from '../../components/alarm/alarm-tool.vue';
+  import AlarmTable from '../../components/alarm/alarm-table.vue';
+  import { State, Action, Getter } from 'vuex-class';
 
-@Component({
-  components: { AlarmTool, AlarmTable },
-})
-export default class WindowAlarm extends Vue {
-  @State('rocketAlarm') private rocketAlarm!: any;
-  @Getter('durationTime') private durationTime: any;
-  @Prop({ default: () => ({ label: 'All', key: '' }) })
-  private alarmScope: any;
-  @Prop({ default: false, type: Boolean })
-  private inTopo!: boolean;
-  @Prop({ default: '' })
-  private keyword!: string;
-}
+  @Component({
+    components: { AlarmTool, AlarmTable },
+  })
+  export default class WindowAlarm extends Vue {
+    @State('rocketAlarm') private rocketAlarm!: any;
+    @Getter('durationTime') private durationTime: any;
+    @Prop({ default: () => ({ label: 'All', key: '' }) })
+    private alarmScope: any;
+    @Prop({ default: false, type: Boolean })
+    private inTopo!: boolean;
+    @Prop({ default: '' })
+    private keyword!: string;
+  }
 </script>
 
 <style lang="scss">
-.rk-alarm {
-  flex-grow: 1;
-  height: 100%;
-  min-height: 0;
-}
+  .rk-alarm {
+    flex-grow: 1;
+    height: 100%;
+    min-height: 0;
+  }
 </style>

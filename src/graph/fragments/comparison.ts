@@ -34,7 +34,8 @@ export const dependencyServerResponseTimeTrend = {
         value
       }
     }
-`};
+`,
+};
 
 export const dependencyServerThroughputTrend = {
   variable: '$duration: Duration!, $id: ID!',
@@ -47,7 +48,8 @@ export const dependencyServerThroughputTrend = {
         value
       }
     }
-`};
+`,
+};
 
 export const dependencyServerSLATrend = {
   variable: '$duration: Duration!, $id: ID!',
@@ -60,7 +62,8 @@ export const dependencyServerSLATrend = {
         value
       }
     }
-`};
+`,
+};
 
 export const dependencyClientResponseTimeTrend = {
   variable: '$duration: Duration!, $id: ID!',
@@ -73,7 +76,8 @@ export const dependencyClientResponseTimeTrend = {
         value
       }
     }
-`};
+`,
+};
 
 export const dependencyClientThroughputTrend = {
   variable: '$duration: Duration!, $id: ID!',
@@ -86,7 +90,8 @@ export const dependencyClientThroughputTrend = {
         value
       }
     }
-`};
+`,
+};
 
 export const dependencyClientSLATrend = {
   variable: '$duration: Duration!, $id: ID!',
@@ -99,7 +104,8 @@ export const dependencyClientSLATrend = {
         value
       }
     }
-`};
+`,
+};
 export const dependencyClientPercentile = {
   variable: '$duration: Duration!, $id: ID!',
   fragment: `

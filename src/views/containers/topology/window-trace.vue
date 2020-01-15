@@ -23,47 +23,47 @@ specific language governing permissions and * limitations under the License. */
 </template>
 
 <script lang="ts">
-import { Option } from '@/types/global';
-import { Component, Vue, Prop, PropSync } from 'vue-property-decorator';
-import { State, Action, Mutation } from 'vuex-class';
-import TraceSearch from '@/views/components/trace/trace-search.vue';
-import TraceTable from '@/views/components/trace/trace-table.vue';
-import TraceDetail from '@/views/components/trace/trace-detail.vue';
-@Component({
-  components: {
-    TraceTable,
-    TraceDetail,
-    TraceSearch,
-  },
-})
-export default class WindowTrace extends Vue {
-  @State('rocketTrace') private stateTrace!: any;
-  @Mutation('SET_EVENTS') private SET_EVENTS: any;
-  @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
-  @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
-  @PropSync('isShow', { default: false })
-  private isShowSync!: boolean;
-  @Prop({ default: { label: 'All', key: '' } })
-  private service!: Option;
+  import { Option } from '@/types/global';
+  import { Component, Vue, Prop, PropSync } from 'vue-property-decorator';
+  import { State, Action, Mutation } from 'vuex-class';
+  import TraceSearch from '@/views/components/trace/trace-search.vue';
+  import TraceTable from '@/views/components/trace/trace-table.vue';
+  import TraceDetail from '@/views/components/trace/trace-detail.vue';
+  @Component({
+    components: {
+      TraceTable,
+      TraceDetail,
+      TraceSearch,
+    },
+  })
+  export default class WindowTrace extends Vue {
+    @State('rocketTrace') private stateTrace!: any;
+    @Mutation('SET_EVENTS') private SET_EVENTS: any;
+    @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
+    @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
+    @PropSync('isShow', { default: false })
+    private isShowSync!: boolean;
+    @Prop({ default: { label: 'All', key: '' } })
+    private service!: Option;
 
-  @Prop({ default: false, type: Boolean })
-  private inTopo!: boolean;
+    @Prop({ default: false, type: Boolean })
+    private inTopo!: boolean;
 
-  private show: boolean = true;
-  private beforeMount() {
-    this.SET_EVENTS([]);
+    private show: boolean = true;
+    private beforeMount() {
+      this.SET_EVENTS([]);
+    }
   }
-}
 </script>
 <style lang="scss">
-.rk-trace {
-  flex-grow: 1;
-  height: 100%;
-  min-height: 0;
-}
-.rk-trace-inner {
-  height: 100%;
-  display: flex;
-  min-height: 0;
-}
+  .rk-trace {
+    flex-grow: 1;
+    height: 100%;
+    min-height: 0;
+  }
+  .rk-trace-inner {
+    height: 100%;
+    display: flex;
+    min-height: 0;
+  }
 </style>

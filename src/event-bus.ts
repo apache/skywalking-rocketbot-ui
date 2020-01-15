@@ -15,10 +15,9 @@
  * limitations under the License.
  */
 
-import Vue, { VueConstructor  } from 'vue';
+import Vue, { VueConstructor } from 'vue';
 
-type VueComponentVM = Vue & { _uid: string; };
-
+type VueComponentVM = Vue & { _uid: string };
 
 interface Handles {
   [key: string]: any[];
@@ -47,7 +46,11 @@ export class EventBus {
    * @param vm vue component object or undefined, if is undefined, event not auto destroy.
    * @param callback event callback
    */
-  public $on(eventName: string, vm: Vue | undefined, callback: (cb: any) => void) {
+  public $on(
+    eventName: string,
+    vm: Vue | undefined,
+    callback: (cb: any) => void,
+  ) {
     if (!this.handles[eventName]) {
       this.handles[eventName] = [];
     }
@@ -105,14 +108,17 @@ const $EventBus = {
     vue.prototype.$eventBus = new EventBus(vue);
     vue.mixin({
       deactivated() {
-        (this as VueComponentVM).$eventBus.$offVmEvent((this as VueComponentVM)._uid);
+        (this as VueComponentVM).$eventBus.$offVmEvent(
+          (this as VueComponentVM)._uid,
+        );
       },
       beforeDestroy() {
-        (this as VueComponentVM).$eventBus.$offVmEvent((this as VueComponentVM)._uid);
+        (this as VueComponentVM).$eventBus.$offVmEvent(
+          (this as VueComponentVM)._uid,
+        );
       },
     });
   },
 };
-
 
 export default $EventBus;

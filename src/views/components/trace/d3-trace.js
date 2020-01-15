@@ -44,11 +44,23 @@ export default class Trace {
     this.tip = d3tip()
       .attr('class', 'd3-tip')
       .offset([-8, 0])
-      .html(d => `
+      .html(
+        (d) => `
       <div class="mb-5">${d.data.label}</div>
-      ${d.data.dur?'<div class="sm">SelfDuration: ' + d.data.dur + 'ms</div>' : ''}
-      ${(d.data.endTime - d.data.startTime)?'<div class="sm">TotalDuration: ' + (d.data.endTime - d.data.startTime) + 'ms</div>' : ''}
-      `);
+      ${
+        d.data.dur
+          ? '<div class="sm">SelfDuration: ' + d.data.dur + 'ms</div>'
+          : ''
+      }
+      ${
+        d.data.endTime - d.data.startTime
+          ? '<div class="sm">TotalDuration: ' +
+            (d.data.endTime - d.data.startTime) +
+            'ms</div>'
+          : ''
+      }
+      `,
+      );
     this.svg.call(this.tip);
   }
   diagonal(d) {
@@ -61,30 +73,30 @@ export default class Trace {
     d3.select('.trace-xaxis').remove();
     this.row = row;
     this.data = data;
-    this.min = d3.min(this.row.map(i => i.startTime));
-    this.max = d3.max(this.row.map(i => i.endTime - this.min));
-    this.list = Array.from(new Set(this.row.map(i => i.serviceCode)));
+    this.min = d3.min(this.row.map((i) => i.startTime));
+    this.max = d3.max(this.row.map((i) => i.endTime - this.min));
+    this.list = Array.from(new Set(this.row.map((i) => i.serviceCode)));
     this.xScale = d3
       .scaleLinear()
       .range([0, this.width * 0.387])
       .domain([0, this.max]);
-    this.xAxis = d3.axisTop(this.xScale).tickFormat(d => {
-      if(d === 0) return 0;
-      if(d>=1000) return d/1000 + 's';
+    this.xAxis = d3.axisTop(this.xScale).tickFormat((d) => {
+      if (d === 0) return 0;
+      if (d >= 1000) return d / 1000 + 's';
       return d;
     });
-    this.svg.attr('height', (this.row.length+1) * this.barHeight);
+    this.svg.attr('height', (this.row.length + 1) * this.barHeight);
     this.svg
-    .append('g')
-    .attr('class','trace-xaxis')
-    
-    .attr('transform', `translate(${this.width * 0.618 -20 },${30})`)
-    .call(this.xAxis);
+      .append('g')
+      .attr('class', 'trace-xaxis')
+
+      .attr('transform', `translate(${this.width * 0.618 - 20},${30})`)
+      .call(this.xAxis);
     this.sequentialScale = d3
       .scaleSequential()
       .domain([0, this.list.length + 1])
       .interpolator(d3.interpolateCool);
-    this.root = d3.hierarchy(this.data, d => d.children);
+    this.root = d3.hierarchy(this.data, (d) => d.children);
     this.root.x0 = 0;
     this.root.y0 = 0;
   }
@@ -106,13 +118,13 @@ export default class Trace {
     const that = this;
     const nodes = this.root.descendants();
     let index = -1;
-    this.root.eachBefore(n => {
+    this.root.eachBefore((n) => {
       n.x = ++index * this.barHeight + 24;
       n.y = n.depth * 12;
     });
     const node = this.svg
       .selectAll('.trace-node')
-      .data(nodes, d => d.id || (d.id = ++this.i));
+      .data(nodes, (d) => d.id || (d.id = ++this.i));
     const nodeEnter = node
       .enter()
       .append('g')
@@ -131,8 +143,8 @@ export default class Trace {
     nodeEnter
       .append('rect')
       .attr('height', 42)
-      .attr('ry',2)
-      .attr('rx',2)
+      .attr('ry', 2)
+      .attr('rx', 2)
       .attr('y', -22)
       .attr('x', 20)
       .attr('width', '100%')
@@ -142,92 +154,90 @@ export default class Trace {
       .attr('x', 13)
       .attr('y', 5)
       .attr('fill', '#E54C17')
-      .html(d => d.data.isError?'◉': '')
-      nodeEnter
+      .html((d) => (d.data.isError ? '◉' : ''));
+    nodeEnter
       .append('text')
-      .attr('class','node-text')
+      .attr('class', 'node-text')
       .attr('x', 35)
       .attr('y', -6)
       .attr('fill', '#333')
-      .text( d =>
-        {
-          if(d.data.label === 'TRACE_ROOT') {
-            return '';
-          }
-          return   d.data.label.length > 40
-          ? `${d.data.label.slice(0, 40)}...`
-          : `${d.data.label}`
+      .text((d) => {
+        if (d.data.label === 'TRACE_ROOT') {
+          return '';
         }
-      );
+        return d.data.label.length > 40
+          ? `${d.data.label.slice(0, 40)}...`
+          : `${d.data.label}`;
+      });
     nodeEnter
       .append('text')
-      .attr('class','node-text')
+      .attr('class', 'node-text')
       .attr('x', 35)
       .attr('y', 12)
       .attr('fill', '#ccc')
       .style('font-size', '11px')
       .text(
-        d =>
+        (d) =>
           `${d.data.layer || ''} ${
             d.data.component ? '- ' + d.data.component : d.data.component || ''
-          }`
+          }`,
       );
     nodeEnter
       .append('rect')
       .attr('rx', 2)
       .attr('ry', 2)
       .attr('height', 4)
-      .attr('width', d => {
+      .attr('width', (d) => {
         if (!d.data.endTime || !d.data.startTime) return 0;
-        return this.xScale(d.data.endTime- d.data.startTime)+1 || 0;
+        return this.xScale(d.data.endTime - d.data.startTime) + 1 || 0;
       })
-      .attr('x', d =>
+      .attr('x', (d) =>
         !d.data.endTime || !d.data.startTime
           ? 0
-          : (this.width * 0.618 -
-            20 -
-            d.y +
-            this.xScale(d.data.startTime - this.min)) || 0
+          : this.width * 0.618 -
+              20 -
+              d.y +
+              this.xScale(d.data.startTime - this.min) || 0,
       )
       .attr('y', -2)
       .style(
         'fill',
-        d => `${this.sequentialScale(this.list.indexOf(d.data.serviceCode))}`
+        (d) => `${this.sequentialScale(this.list.indexOf(d.data.serviceCode))}`,
       );
     nodeEnter
       .transition()
       .duration(400)
-      .attr('transform', d => `translate(${d.y},${d.x})`)
+      .attr('transform', (d) => `translate(${d.y},${d.x})`)
       .style('opacity', 1);
     nodeEnter
       .append('circle')
       .attr('r', 3)
       .style('cursor', 'pointer')
       .attr('stroke-width', 2.5)
-      .attr('fill', d =>
+      .attr('fill', (d) =>
         d._children
           ? `${this.sequentialScale(this.list.indexOf(d.data.serviceCode))}`
-          : 'rbga(0,0,0,0)'
+          : 'rbga(0,0,0,0)',
       )
-      .style(
-        'stroke',
-        d => d.data.label === 'TRACE_ROOT'?'':`${this.sequentialScale(this.list.indexOf(d.data.serviceCode))}`
+      .style('stroke', (d) =>
+        d.data.label === 'TRACE_ROOT'
+          ? ''
+          : `${this.sequentialScale(this.list.indexOf(d.data.serviceCode))}`,
       )
-      .on('click', d => {
-        this.click(d, this)
+      .on('click', (d) => {
+        this.click(d, this);
         d3.event.stopPropagation();
-
       });
     node
       .transition()
       .duration(400)
-      .attr('transform', d => `translate(${d.y},${d.x})`)
+      .attr('transform', (d) => `translate(${d.y},${d.x})`)
       .style('opacity', 1)
       .select('circle')
-      .attr('fill', d =>
+      .attr('fill', (d) =>
         d._children
           ? `${this.sequentialScale(this.list.indexOf(d.data.serviceCode))}`
-          : ''
+          : '',
       );
 
     // Transition exiting nodes to the parent's new position.
@@ -251,7 +261,7 @@ export default class Trace {
       .attr('fill', 'rgba(0,0,0,0)')
       .attr('stroke', 'rgba(0, 0, 0, 0.1)')
       .attr('stroke-width', 2)
-      .attr('d', d => {
+      .attr('d', (d) => {
         const o = { x: source.x0 + 35, y: source.y0 };
         return this.diagonal({ source: o, target: o });
       })
@@ -268,7 +278,7 @@ export default class Trace {
       .exit()
       .transition()
       .duration(400)
-      .attr('d', d => {
+      .attr('d', (d) => {
         const o = { x: source.x + 35, y: source.y };
         return this.diagonal({ source: o, target: o });
       })
@@ -278,7 +288,7 @@ export default class Trace {
       d.y0 = d.y;
     });
     if (callback) {
-      callback()
+      callback();
     }
   }
 }

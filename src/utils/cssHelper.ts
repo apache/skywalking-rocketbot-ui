@@ -14,8 +14,10 @@ export interface CssTranslate {
 
 class CssHelper {
   public matrixSerialization(matrixString: string): CssMatrix {
-    const matrixArray = matrixString.replace('matrix(', '')
-      .replace(')', '').split(',');
+    const matrixArray = matrixString
+      .replace('matrix(', '')
+      .replace(')', '')
+      .split(',');
     // const matrixNumberArray = [];
     const matrixNumberArray = matrixArray.map((value) => {
       return parseFloat(value);
@@ -41,8 +43,10 @@ class CssHelper {
   }
 
   public translateSerialization(translateString: string): CssTranslate {
-    const translateArray = translateString.replace('translate(', '')
-      .replace(')', '').split(',');
+    const translateArray = translateString
+      .replace('translate(', '')
+      .replace(')', '')
+      .split(',');
     // const translateNumberArray = [];
     const translateNumberArray = translateArray.map((value) => {
       return parseFloat(value);

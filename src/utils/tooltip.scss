@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-$zindex-tooltip:           1070 !default;
-$tooltip-max-width:        200px !default;
-$tooltip-color:            #fff !default;
-$tooltip-bg:               #252a2f !default;
+$zindex-tooltip: 1070 !default;
+$tooltip-max-width: 200px !default;
+$tooltip-color: #fff !default;
+$tooltip-bg: #252a2f !default;
 // Base class
 .rk-tooltip {
   display: inline-block;
@@ -40,7 +40,7 @@ $tooltip-bg:               #252a2f !default;
     text-align: left;
     background-color: $tooltip-bg;
     border-radius: 5px;
-    word-break:break-all;
+    word-break: break-all;
   }
 
   // Arrows
@@ -53,13 +53,13 @@ $tooltip-bg:               #252a2f !default;
   }
 }
 
-.trace-detail-chart-table .rk-tooltip-popper .rk-tooltip-inner  {
+.trace-detail-chart-table .rk-tooltip-popper .rk-tooltip-inner {
   max-width: 500px;
-} 
+}
 
 // Note: Deprecated .top-left, .top-right, .bottom-left, and .bottom-right as of v3.3.1
 .rk-tooltip-popper {
-  &[x-placement^="top"] {
+  &[x-placement^='top'] {
     padding: 5px 0 15px;
     .rk-tooltip-arrow {
       bottom: 6px;
@@ -67,7 +67,7 @@ $tooltip-bg:               #252a2f !default;
       border-top-color: $tooltip-bg;
     }
   }
-  &[x-placement^="right"] {
+  &[x-placement^='right'] {
     padding: 0 5px 0 15px;
     .rk-tooltip-arrow {
       left: 6px;
@@ -75,7 +75,7 @@ $tooltip-bg:               #252a2f !default;
       border-right-color: $tooltip-bg;
     }
   }
-  &[x-placement^="bottom"] {
+  &[x-placement^='bottom'] {
     padding: 15px 0 5px;
     .rk-tooltip-arrow {
       top: 6px;
@@ -83,7 +83,7 @@ $tooltip-bg:               #252a2f !default;
       border-bottom-color: $tooltip-bg;
     }
   }
-  &[x-placement^="left"] {
+  &[x-placement^='left'] {
     padding: 0 15px 0 5px;
     .rk-tooltip-arrow {
       right: 6px;
@@ -93,46 +93,46 @@ $tooltip-bg:               #252a2f !default;
   }
 }
 
-.rk-tooltip-popper[x-placement="top"] .rk-tooltip-arrow {
+.rk-tooltip-popper[x-placement='top'] .rk-tooltip-arrow {
   left: 50%;
   margin-left: -13px;
 }
-.rk-tooltip-popper[x-placement="top-start"] .rk-tooltip-arrow {
+.rk-tooltip-popper[x-placement='top-start'] .rk-tooltip-arrow {
   left: 16px;
 }
-.rk-tooltip-popper[x-placement="top-end"] .rk-tooltip-arrow {
+.rk-tooltip-popper[x-placement='top-end'] .rk-tooltip-arrow {
   right: 16px;
 }
 
-.rk-tooltip-popper[x-placement="bottom"] .rk-tooltip-arrow {
+.rk-tooltip-popper[x-placement='bottom'] .rk-tooltip-arrow {
   left: 50%;
   margin-left: -13px;
 }
-.rk-tooltip-popper[x-placement="bottom-start"] .rk-tooltip-arrow {
+.rk-tooltip-popper[x-placement='bottom-start'] .rk-tooltip-arrow {
   left: 16px;
 }
-.rk-tooltip-popper[x-placement="bottom-end"] .rk-tooltip-arrow {
+.rk-tooltip-popper[x-placement='bottom-end'] .rk-tooltip-arrow {
   right: 16px;
 }
 
-.rk-tooltip-popper[x-placement="left"] .rk-tooltip-arrow {
+.rk-tooltip-popper[x-placement='left'] .rk-tooltip-arrow {
   top: 50%;
   margin-top: -13px;
 }
-.rk-tooltip-popper[x-placement="left-start"] .rk-tooltip-arrow {
+.rk-tooltip-popper[x-placement='left-start'] .rk-tooltip-arrow {
   top: 8px;
 }
-.rk-tooltip-popper[x-placement="left-end"] .rk-tooltip-arrow {
+.rk-tooltip-popper[x-placement='left-end'] .rk-tooltip-arrow {
   bottom: 8px;
 }
 
-.rk-tooltip-popper[x-placement="right"] .rk-tooltip-arrow {
+.rk-tooltip-popper[x-placement='right'] .rk-tooltip-arrow {
   top: 50%;
   margin-top: -13px;
 }
-.rk-tooltip-popper[x-placement="right-start"] .rk-tooltip-arrow {
+.rk-tooltip-popper[x-placement='right-start'] .rk-tooltip-arrow {
   top: 8px;
 }
-.rk-tooltip-popper[x-placement="right-end"] .rk-tooltip-arrow {
+.rk-tooltip-popper[x-placement='right-end'] .rk-tooltip-arrow {
   bottom: 8px;
 }
