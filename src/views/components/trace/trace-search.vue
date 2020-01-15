@@ -1,23 +1,17 @@
-/** * Licensed to the Apache Software Foundation (ASF) under one or more *
-contributor license agreements. See the NOTICE file distributed with * this work
-for additional information regarding copyright ownership. * The ASF licenses
-this file to You under the Apache License, Version 2.0 * (the "License"); you
-may not use this file except in compliance with * the License. You may obtain a
-copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
-required by applicable law or agreed to in writing, software * distributed under
-the License is distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. * See the License for the
-specific language governing permissions and * limitations under the License. */
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 
 <template>
   <div class="rk-trace-search">
     <div>
       <a class="rk-trace-clear-btn r" @click="status = !status">
         <span class="mr-5 vm">{{ this.$t('more') }}</span>
-        <svg
-          class="icon trans vm"
-          :style="`transform: rotate(${status ? 180 : 0}deg);`"
-        >
+        <svg class="icon trans vm" :style="`transform: rotate(${status ? 180 : 0}deg);`">
           <use xlink:href="#arrow-down"></use>
         </svg>
       </a>
@@ -42,12 +36,7 @@ specific language governing permissions and * limitations under the License. */
           :data="rocketTrace.services"
           :readonly="inTopo"
         />
-        <TraceSelect
-          :hasSearch="true"
-          :title="this.$t('instance')"
-          v-model="instance"
-          :data="rocketTrace.instances"
-        />
+        <TraceSelect :hasSearch="true" :title="this.$t('instance')" v-model="instance" :data="rocketTrace.instances" />
         <TraceSelect
           :title="this.$t('status')"
           :value="traceState"
@@ -60,22 +49,14 @@ specific language governing permissions and * limitations under the License. */
         />
         <div class="mr-10" style="padding: 3px 15px 0">
           <div class="sm grey">{{ this.$t('endpointName') }}</div>
-          <input
-            type="text"
-            v-model="endpointName"
-            class="rk-trace-search-input"
-          />
+          <input type="text" v-model="endpointName" class="rk-trace-search-input" />
         </div>
       </div>
     </div>
     <div class="rk-trace-search-more flex-h" v-show="status">
       <div class="mr-15">
         <span class="sm b grey mr-10">{{ this.$t('traceID') }}:</span>
-        <input
-          type="text"
-          v-model="traceId"
-          class="rk-trace-search-input dib"
-        />
+        <input type="text" v-model="traceId" class="rk-trace-search-input dib" />
       </div>
       <div class="mr-15">
         <span class="sm b grey mr-10">{{ this.$t('duration') }}:</span>
@@ -87,12 +68,7 @@ specific language governing permissions and * limitations under the License. */
       </div>
       <div>
         <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
-        <RkDate
-          class="sm"
-          v-model="time"
-          position="bottom"
-          format="YYYY-MM-DD HH:mm:ss"
-        />
+        <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
       </div>
     </div>
   </div>
@@ -124,10 +100,8 @@ specific language governing permissions and * limitations under the License. */
     private service: Option = { label: 'All', key: '' };
     private time!: Date[];
     private status: boolean = true;
-    private maxTraceDuration: string =
-      localStorage.getItem('maxTraceDuration') || '';
-    private minTraceDuration: string =
-      localStorage.getItem('minTraceDuration') || '';
+    private maxTraceDuration: string = localStorage.getItem('maxTraceDuration') || '';
+    private minTraceDuration: string = localStorage.getItem('minTraceDuration') || '';
     private instance: Option = { label: 'All', key: '' };
     private endpointName: string = localStorage.getItem('endpointName') || '';
     private traceId: string = localStorage.getItem('traceId') || '';
@@ -171,8 +145,7 @@ specific language governing permissions and * limitations under the License. */
 
     private globalTimeFormat = (time: Date[]): any => {
       let step = 'MINUTE';
-      const unix =
-        Math.round(time[1].getTime()) - Math.round(time[0].getTime());
+      const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
       if (unix <= 60 * 60 * 1000) {
         step = 'MINUTE';
       } else if (unix <= 24 * 60 * 60 * 1000) {
@@ -211,15 +184,11 @@ specific language governing permissions and * limitations under the License. */
         queryDuration: this.globalTimeFormat([
           new Date(
             this.time[0].getTime() +
-              (parseInt(this.rocketbotGlobal.utc, 10) +
-                new Date().getTimezoneOffset() / 60) *
-                3600000,
+              (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000,
           ),
           new Date(
             this.time[1].getTime() +
-              (parseInt(this.rocketbotGlobal.utc, 10) +
-                new Date().getTimezoneOffset() / 60) *
-                3600000,
+              (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000,
           ),
         ]),
         traceState: this.traceState.key,
@@ -285,13 +254,8 @@ specific language governing permissions and * limitations under the License. */
       this.endpointName = this.$route.query.endpointname
         ? this.$route.query.endpointname.toString()
         : this.endpointName;
-      this.traceId = this.$route.query.traceid
-        ? this.$route.query.traceid.toString()
-        : this.traceId;
-      this.time = [
-        this.rocketbotGlobal.durationRow.start,
-        this.rocketbotGlobal.durationRow.end,
-      ];
+      this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
+      this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     }
 
     private mounted() {
