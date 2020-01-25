@@ -91,6 +91,7 @@ specific language governing permissions and * limitations under the License. */
         SERVICECOMBMESHER: require('./assets/SERVICECOMBMESHER.png'),
         SERVICECOMBSERVICECENTER: require('./assets/SERVICECOMBSERVICECENTER.png'),
         PLAY: require('./assets/PLAY.png'),
+        AVRO: require('./assets/AVRO.png'),
         width: 600,
         height: 600,
         force: '',
