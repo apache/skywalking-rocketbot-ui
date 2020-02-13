@@ -106,6 +106,7 @@ const m = {
   metrics: '指标',
   ShowInstanceDependency: '展示实例依赖',
   InstanceDependencyTitle: '实例依赖',
+  profile: '收益',
 };
 
 export default m;

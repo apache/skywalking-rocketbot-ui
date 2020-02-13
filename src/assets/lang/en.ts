@@ -106,6 +106,7 @@ const m = {
   metrics: 'Metrics',
   ShowInstanceDependency: 'Show Instance Dependency',
   InstanceDependencyTitle: 'Service Instance Dependency',
+  profile: 'Profile',
 };
 
 export default m;

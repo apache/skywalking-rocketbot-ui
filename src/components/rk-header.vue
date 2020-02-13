@@ -1,13 +1,10 @@
-/** * Licensed to the Apache Software Foundation (ASF) under one or more *
-contributor license agreements. See the NOTICE file distributed with * this work
-for additional information regarding copyright ownership. * The ASF licenses
-this file to You under the Apache License, Version 2.0 * (the "License"); you
-may not use this file except in compliance with * the License. You may obtain a
-copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
-required by applicable law or agreed to in writing, software * distributed under
-the License is distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. * See the License for the
-specific language governing permissions and * limitations under the License. */
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 
 <template>
   <header class="rk-header flex-h">
@@ -34,6 +31,12 @@ specific language governing permissions and * limitations under the License. */
         </svg>
         <span class="vm hide-xs ml-5">{{ this.$t('trace') }}</span>
       </router-link>
+      <router-link class="nav-link mr-20" to="/profile">
+        <svg class="icon sm vm">
+          <use xlink:href="#merge"></use>
+        </svg>
+        <span class="vm hide-xs ml-5">{{ this.$t('profile') }}</span>
+      </router-link>
       <router-link class="nav-link mr-20" to="/alarm">
         <svg class="icon sm vm">
           <use xlink:href="#spam"></use>
@@ -48,21 +51,12 @@ specific language governing permissions and * limitations under the License. */
       </router-link>
     </div>
     <div class="flex-h">
-      <a
-        class="rk-btn mr-5 sm"
-        :class="auto ? 'blue' : 'ghost'"
-        @click="handleAuto"
-      >
+      <a class="rk-btn mr-5 sm" :class="auto ? 'blue' : 'ghost'" @click="handleAuto">
         <span class="vm">{{ this.$t('auto') }}</span>
       </a>
       <div class="auto-time">
         <span class="rk-auto-select">
-          <input
-            v-model="autoTime"
-            type="number"
-            @change="changeAutoTime"
-            min="1"
-          />
+          <input v-model="autoTime" type="number" @change="changeAutoTime" min="1" />
         </span>
         {{ this.$t('second') }}
       </div>

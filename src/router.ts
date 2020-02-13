@@ -24,6 +24,7 @@ import Trace from './views/containers/trace.vue';
 import Topology from './views/containers/topology/topology.vue';
 import Alarm from './views/containers/alarm.vue';
 import Comparison from './views/containers/comparison.vue';
+import Profile from './views/containers/profile.vue';
 
 Vue.use(Router);
 window.axiosCancel = [];
@@ -61,6 +62,10 @@ const router = new Router({
         {
           path: 'comparison',
           component: Comparison,
+        },
+        {
+          path: 'profile',
+          component: Profile,
         },
       ],
     },
