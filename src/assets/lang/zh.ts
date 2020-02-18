@@ -107,6 +107,8 @@ const m = {
   ShowInstanceDependency: '展示实例依赖',
   InstanceDependencyTitle: '实例依赖',
   profile: '收益',
+  newTask: '新建任务',
+  monitorTime: '监控时间',
 };
 
 export default m;

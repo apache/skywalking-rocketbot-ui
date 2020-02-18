@@ -7,8 +7,15 @@ IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or imp
 language governing permissions and * limitations under the License. */
 
 <template>
-  <div class="rk-profile flex-h">
-    Performace profile
+  <div class="rk-profile flex-v">
+    <ProfileHeader
+      :headerSource="profile.headerSource"
+      :newTaskFields="profile.newTaskFields"
+      :taskFieldSource="profile.taskFieldSource"
+    />
+    <div>
+      Profile
+    </div>
   </div>
 </template>
 
@@ -16,11 +23,21 @@ language governing permissions and * limitations under the License. */
   import { Component, Vue } from 'vue-property-decorator';
   import { State, Getter, Mutation } from 'vuex-class';
   import { DurationTime } from '@/types/global';
+  import ProfileHeader from '@/views/components/profile/profile-header.vue';
 
   @Component({
-    components: {},
+    components: { ProfileHeader },
   })
-  export default class Comparison extends Vue {}
+  export default class Profile extends Vue {
+    @State('profileStore') private profile: any;
+    @Getter('durationTime') private durationTime: any;
+
+    private beforeMount() {
+      this.$store.dispatch('profileStore/GET_SERVICES', {
+        duration: this.durationTime,
+      });
+    }
+  }
 </script>
 
 <style lang="scss">
