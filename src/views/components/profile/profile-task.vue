@@ -13,24 +13,43 @@ language governing permissions and * limitations under the License. */
       class="mb-5"
       :current="newTaskFields.service"
       :data="taskFieldSource.serviceSource"
-      @onChoose="(item) => changOption(item)"
+      @onChoose="(item) => changeOption(item, updateTaskOpt.Service)"
     />
     <label>{{ this.$t('endpoint') }}</label>
-    <input type="text" v-model="endpointName" class="rk-profile-input" />
+    <input type="text" class="rk-profile-input" @change="changeOption($event, updateTaskOpt.EndpointName)" />
     <label>{{ this.$t('monitorTime') }}</label>
     <RkRadio
       class="mb-5"
       :current="newTaskFields.monitorTime"
       :data="taskFieldSource.monitorTime"
-      @onChoose="(item) => changOption(item)"
+      @onChoose="(item) => changeOption(item, updateTaskOpt.MonitorTime)"
     />
     <label>{{ this.$t('monitorDuration') }}</label>
     <RkCheckbox
       class="mb-5"
       :current="newTaskFields.monitorDuration"
       :data="taskFieldSource.monitorDuration"
-      @onChoose="(item) => changOption(item)"
+      @onChoose="(item) => changeOption(item, updateTaskOpt.MonitorDuration)"
     />
+    <label>{{ this.$t('minThreshold') }} (ms)</label>
+    <input
+      type="text"
+      class="rk-profile-input"
+      :value="newTaskFields.minThreshold"
+      @change="changeOption($event, updateTaskOpt.MinThreshold)"
+    />
+    <label>{{ this.$t('dumpPeriod') }}</label>
+    <RkCheckbox
+      class="mb-5"
+      :current="newTaskFields.dumpPeriod"
+      :data="taskFieldSource.dumpPeriod"
+      @onChoose="(item) => changeOption(item, updateTaskOpt.DumpPeriod)"
+    />
+    <div @click="createTask">
+      <a class="rk-create-task-btn bg-blue r">
+        <span class="mr-5 vm">{{ this.$t('createTask') }}</span>
+      </a>
+    </div>
   </div>
 </template>
 
@@ -43,12 +62,22 @@ language governing permissions and * limitations under the License. */
   export default class ProfileTask extends Vue {
     private endpointName: string = localStorage.getItem('endpointName') || '';
     private serviceOpt: any;
+    private minThreshold: any = '';
     @Prop() private newTaskFields: any;
     @Prop() private taskFieldSource: any;
+    @Getter('profileStore/updateTaskOpt') private updateTaskOpt: any;
 
-    private changOption(item: any) {
-      this.serviceOpt = item;
+    private changeOption(item: any, type: string) {
+      if ([this.updateTaskOpt.MinThreshold, this.updateTaskOpt.EndpointName].includes(type)) {
+        item = {
+          label: type,
+          key: item.target.value,
+        };
+      }
+      this.$store.commit('profileStore/SET_TASK_OPTIONS', { item, type });
     }
+
+    private createTask() {}
   }
 </script>
 
@@ -72,5 +101,13 @@ language governing permissions and * limitations under the License. */
     line-height: 40px;
     display: block;
     width: 100%;
+  }
+  .rk-create-task-btn {
+    color: #fff;
+    padding: 10px 9px;
+    border-radius: 4px;
+    margin-top: 40px;
+    width: 100%;
+    text-align: center;
   }
 </style>

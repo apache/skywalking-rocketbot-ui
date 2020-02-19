@@ -110,6 +110,9 @@ const m = {
   newTask: '新建任务',
   monitorTime: '监控时间',
   monitorDuration: '监控时间',
+  minThreshold: '时间区间内最小值',
+  dumpPeriod: '倾倒期',
+  createTask: '新建任务',
 };
 
 export default m;

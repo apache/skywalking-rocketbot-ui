@@ -25,7 +25,7 @@ import { DurationTime } from '@/types/global';
 import { queryChartData } from '@/utils/queryChartData';
 import fragmentAll from '@/graph/query/comparison';
 import { IOption, ITaskOptions, TaskSourceType } from '@/types/profile';
-import { InitTaskField, InitTaskFieldSource } from './profile-constant';
+import { InitTaskField, InitTaskFieldSource, ChangeTaskOpt } from './profile-constant';
 
 export interface State {
   headerSource: {
@@ -44,7 +44,11 @@ const initState: State = {
   taskFieldSource: InitTaskFieldSource,
 };
 // getters
-const getters = {};
+const getters = {
+  updateTaskOpt() {
+    return ChangeTaskOpt;
+  },
+};
 
 // mutations
 const mutations = {
@@ -53,6 +57,12 @@ const mutations = {
     state.headerSource.currentService = data[0];
     state.taskFieldSource.serviceSource = data;
     state.newTaskFields.service = data[0];
+  },
+  [types.SET_TASK_OPTIONS](state: State, data: any) {
+    state.newTaskFields = {
+      ...state.newTaskFields,
+      [data.type]: data.item,
+    };
   },
 };
 

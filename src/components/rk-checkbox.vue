@@ -9,7 +9,8 @@ language governing permissions and * limitations under the License. */
 <template>
   <div>
     <span v-for="(item, index) in data" :key="index">
-      <input type="checkbox" :value="item.key" @click="changeOpt(item)" />{{ item.label }}
+      <input type="checkbox" :value="item.key" @click="changeOpt(item)" :checked="checkItem(item)" />
+      {{ item.label }}
     </span>
   </div>
 </template>
@@ -19,7 +20,16 @@ language governing permissions and * limitations under the License. */
   @Component
   export default class RkCheckbox extends Vue {
     @Prop() public data!: any;
-    @Prop() public current: any = [];
+    @Prop() public current: any;
+
+    private checkItem(item: any) {
+      if (!this.current) {
+        return;
+      }
+      const data = this.current.filter((d: any) => d.key === item.key);
+
+      return !!data.length;
+    }
 
     private changeOpt(item: any) {
       const index = this.current.findIndex((d: any) => item.key === d.key);

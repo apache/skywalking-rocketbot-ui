@@ -110,6 +110,9 @@ const m = {
   newTask: 'New Task',
   monitorTime: 'Monitor Time',
   monitorDuration: 'Monitor Duration',
+  minThreshold: 'Min Duration Threshold',
+  dumpPeriod: 'Dump Period',
+  createTask: 'Create Task',
 };
 
 export default m;

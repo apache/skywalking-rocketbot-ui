@@ -19,7 +19,7 @@ export const InitTaskField = {
   service: { key: '', label: 'None' },
   endpoint: '',
   monitorTime: { key: '1', label: 'monitor now' },
-  monitorDuration: [{ key: '5min', label: '5min' }],
+  monitorDuration: [{ key: '5min', label: '5 min' }],
   minThreshold: 0,
   dumpPeriod: [{ key: '10ms', label: '10ms' }],
 };
@@ -28,7 +28,7 @@ export const InitTaskFieldSource = {
   serviceSource: [{ key: '', label: 'None' }],
   monitorTime: [
     { key: '0', label: 'monitor now' },
-    { key: '1', label: 'fix start time' },
+    { key: '1', label: 'set start time' },
   ],
   monitorDuration: [
     { key: '5min', label: '5 min' },
@@ -42,3 +42,12 @@ export const InitTaskFieldSource = {
     { key: '100ms', label: '100 ms' },
   ],
 };
+
+export enum ChangeTaskOpt {
+  Service = 'service',
+  EndpointName = 'endpointName',
+  MonitorTime = 'monitorTime',
+  MonitorDuration = 'monitorDuration',
+  MinThreshold = 'minThreshold',
+  DumpPeriod = 'dumpPeriod',
+}
