@@ -109,6 +109,7 @@ const m = {
   profile: '收益',
   newTask: '新建任务',
   monitorTime: '监控时间',
+  monitorDuration: '监控时间',
 };
 
 export default m;

@@ -107,8 +107,9 @@ const m = {
   ShowInstanceDependency: 'Show Instance Dependency',
   InstanceDependencyTitle: 'Service Instance Dependency',
   profile: 'Profile',
-  newTask: 'new task',
+  newTask: 'New Task',
   monitorTime: 'Monitor Time',
+  monitorDuration: 'Monitor Duration',
 };
 
 export default m;

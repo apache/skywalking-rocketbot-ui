@@ -18,6 +18,19 @@ language governing permissions and * limitations under the License. */
     <label>{{ this.$t('endpoint') }}</label>
     <input type="text" v-model="endpointName" class="rk-profile-input" />
     <label>{{ this.$t('monitorTime') }}</label>
+    <RkRadio
+      class="mb-5"
+      :current="newTaskFields.monitorTime"
+      :data="taskFieldSource.monitorTime"
+      @onChoose="(item) => changOption(item)"
+    />
+    <label>{{ this.$t('monitorDuration') }}</label>
+    <RkCheckbox
+      class="mb-5"
+      :current="newTaskFields.monitorDuration"
+      :data="taskFieldSource.monitorDuration"
+      @onChoose="(item) => changOption(item)"
+    />
   </div>
 </template>
 
