@@ -33,6 +33,7 @@ import RkButton from './rk-button.vue';
 import RkIcon from './rk-icon.vue';
 import RkRadio from './rk-radio.vue';
 import RkCheckbox from './rk-checkbox.vue';
+import RkCalendar from './rk-date-calendar.vue';
 
 const components: any = {
   RkHeader,
@@ -52,6 +53,7 @@ const components: any = {
   RkIcon,
   RkRadio,
   RkCheckbox,
+  RkCalendar,
 };
 
 const componentsName: string[] = Object.keys(components);

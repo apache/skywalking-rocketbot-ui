@@ -24,7 +24,7 @@ import * as types from '../../mutation-types';
 import { DurationTime } from '@/types/global';
 import { queryChartData } from '@/utils/queryChartData';
 import fragmentAll from '@/graph/query/comparison';
-import { IOption, ITaskOptions, TaskSourceType } from '@/types/profile';
+import { IOption, ITaskOptions, TaskSourceType, TaskListSourceType, TracesSourceType } from '@/types/profile';
 import { InitTaskField, InitTaskFieldSource, ChangeTaskOpt } from './profile-constant';
 
 export interface State {
@@ -34,6 +34,8 @@ export interface State {
   };
   newTaskFields: ITaskOptions;
   taskFieldSource: TaskSourceType;
+  taskListSource: TaskListSourceType[];
+  traceListSource: TracesSourceType[];
 }
 const initState: State = {
   headerSource: {
@@ -42,6 +44,8 @@ const initState: State = {
   },
   newTaskFields: InitTaskField,
   taskFieldSource: InitTaskFieldSource,
+  taskListSource: [],
+  traceListSource: [],
 };
 // getters
 const getters = {
@@ -64,12 +68,18 @@ const mutations = {
       [data.type]: data.item,
     };
   },
+  [types.SET_TASK_LIST](state: State, data: any) {
+    state.taskListSource = data;
+  },
+  [types.SET_TRACE_LIST](state: State, data: any) {
+    state.traceListSource = data;
+  },
 };
 
 // actions
 const actions = {
   GET_SERVICES(
-    context: { commit: Commit },
+    context: { commit: Commit; dispatch: Dispatch },
     params: {
       duration: string;
     },
@@ -82,7 +92,17 @@ const actions = {
           return;
         }
         context.commit(types.SET_SERVICES, res.data.data.services);
+        context.dispatch('GET_TASK_LIST', params);
       });
+  },
+  GET_TASK_LIST(context: { state: State; dispatch: Dispatch; commit: Commit }, params: { duration: string }) {
+    // const { headerSource } = context.state;
+    // context.commit(types.SET_TRACE_LIST, res.data.data.services);
+    // context.dispatch('GET_TRACE_LIST');
+  },
+  GET_TRACE_LIST(context: { state: State; commit: Commit }) {
+    // tasklist[0]
+    // context.commit(types.SET_TRACE_LIST, res.data.data.services);
   },
 };
 

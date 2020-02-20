@@ -13,8 +13,9 @@ language governing permissions and * limitations under the License. */
       :newTaskFields="profile.newTaskFields"
       :taskFieldSource="profile.taskFieldSource"
     />
-    <div>
-      Profile
+    <div class="rk-profile-context">
+      <ProfileTaskList :taskListSource="profile.taskListSource" :traceListSource="profile.traceListSource" />
+      <ProfileTraceDetail />
     </div>
   </div>
 </template>
@@ -24,9 +25,11 @@ language governing permissions and * limitations under the License. */
   import { State, Getter, Mutation } from 'vuex-class';
   import { DurationTime } from '@/types/global';
   import ProfileHeader from '@/views/components/profile/profile-header.vue';
+  import ProfileTaskList from '@/views/components/profile/task-list.vue';
+  import ProfileTraceDetail from '@/views/components/profile/profile-trace-detail.vue';
 
   @Component({
-    components: { ProfileHeader },
+    components: { ProfileHeader, ProfileTaskList, ProfileTraceDetail },
   })
   export default class Profile extends Vue {
     @State('profileStore') private profile: any;
@@ -44,5 +47,10 @@ language governing permissions and * limitations under the License. */
   .rk-profile {
     height: 100%;
     overflow: auto;
+  }
+  .rk-profile-context {
+    height: 100%;
+    display: flex;
+    min-height: 0;
   }
 </style>

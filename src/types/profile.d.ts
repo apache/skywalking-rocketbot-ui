@@ -33,3 +33,16 @@ export interface TaskSourceType {
   monitorDuration: IOption[];
   dumpPeriod: IOption[];
 }
+
+export interface TaskListSourceType {
+  endpointName: string;
+  startTime: string;
+  duration: string;
+  notified: any;
+}
+
+export interface TracesSourceType {
+  endpointName: string;
+  startTime: string;
+  duration: string;
+}

@@ -102,3 +102,5 @@ export const SET_SELECTED_CALL = 'SET_SELECTED_CALL';
 
 // profile
 export const SET_TASK_OPTIONS = 'SET_TASK_OPTIONS';
+export const SET_TASK_LIST = 'SET_TASK_LIST';
+export const SET_TRACE_LIST = 'SET_TRACE_LIST';

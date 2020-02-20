@@ -24,6 +24,9 @@ language governing permissions and * limitations under the License. */
       :data="taskFieldSource.monitorTime"
       @onChoose="(item) => changeOption(item, updateTaskOpt.MonitorTime)"
     />
+    <div v-if="setMonitorTime">
+      <!-- <RkCalendar /> -->
+    </div>
     <label>{{ this.$t('monitorDuration') }}</label>
     <RkCheckbox
       class="mb-5"
@@ -60,14 +63,16 @@ language governing permissions and * limitations under the License. */
 
   @Component
   export default class ProfileTask extends Vue {
-    private endpointName: string = localStorage.getItem('endpointName') || '';
-    private serviceOpt: any;
-    private minThreshold: any = '';
+    private setMonitorTime: boolean = false;
+    private time!: Date[];
     @Prop() private newTaskFields: any;
     @Prop() private taskFieldSource: any;
     @Getter('profileStore/updateTaskOpt') private updateTaskOpt: any;
 
     private changeOption(item: any, type: string) {
+      if (type === this.updateTaskOpt.MonitorTime && item.key === '1') {
+        this.setMonitorTime = true;
+      }
       if ([this.updateTaskOpt.MinThreshold, this.updateTaskOpt.EndpointName].includes(type)) {
         item = {
           label: type,
@@ -77,7 +82,9 @@ language governing permissions and * limitations under the License. */
       this.$store.commit('profileStore/SET_TASK_OPTIONS', { item, type });
     }
 
-    private createTask() {}
+    private createTask() {
+      // this.$store.dispatch('profileStore/SAVETASK');
+    }
   }
 </script>
 
