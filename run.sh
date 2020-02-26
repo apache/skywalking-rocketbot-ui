@@ -31,9 +31,9 @@ pool_name="skywalkingLB"
 
 skywalking_collector=${SKYWALKING_URL}
 
-#skywalking_collector=localhost:1234,127.0.0.1:1235
+# skywalking_collector=localhost:1234,127.0.0.1:1235
 
- #pool对应ip地址列表,多个ip以逗号改开
+# pool_ip is a comma-separated list of IP
 pool_ip=`awk 'BEGIN{list="'${skywalking_collector}'";split(list,ip_list,",");for(ip in ip_list){print ip_list[ip];}}'`
 for ip in ${pool_ip[*]};do
     echo "add ${pool_name} ${ip} in ${ngx_upstream_file}"
