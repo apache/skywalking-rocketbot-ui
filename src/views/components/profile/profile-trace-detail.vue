@@ -8,7 +8,17 @@ language governing permissions and * limitations under the License. */
 
 <template>
   <div class="profile-trace-dashboard flex-v">
-    trace detail
+    <!-- <div class="profile-trace-detail-wrapper">
+      <div class="mb-5 blue sm">
+        <select
+          class="profile-trace-detail-ids"
+          @change="GET_TRACE_SPANS({ traceId: i })"
+        >
+          <option v-for="i in current.traceIds" :value="i" :key="i">{{i}}</option>
+        </select>
+      </div>
+    </div> -->
+    <TraceDetailChartTable :data="detail" :traceId="current.traceIds[0]" />
   </div>
 </template>
 
@@ -16,9 +26,15 @@ language governing permissions and * limitations under the License. */
   import { Duration, Option } from '@/types/global';
   import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
+  import { TraceDetailChartTable } from '../common';
 
-  @Component
-  export default class ProfileTraceDetail extends Vue {}
+  @Component({
+    components: { TraceDetailChartTable },
+  })
+  export default class ProfileTraceDetail extends Vue {
+    @Prop() private detail: any;
+    @Prop() private current: any;
+  }
 </script>
 
 <style lang="scss">
@@ -30,5 +46,17 @@ language governing permissions and * limitations under the License. */
     flex-shrink: 0;
     height: 100%;
     overflow: auto;
+  }
+  .profile-trace-detail-wrapper {
+    padding: 8px 30px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  .profile-trace-detail-ids {
+    background-color: rgba(0, 0, 0, 0);
+    outline: 0;
+    border-style: unset;
+    color: inherit;
+    border: 1px solid;
+    border-radius: 4px;
   }
 </style>

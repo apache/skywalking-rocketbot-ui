@@ -36,6 +36,8 @@ export interface State {
   taskFieldSource: TaskSourceType;
   taskListSource: TaskListSourceType[];
   traceListSource: TracesSourceType[];
+  currentTrace: any;
+  traceSpans: any;
 }
 const initState: State = {
   headerSource: {
@@ -46,6 +48,15 @@ const initState: State = {
   taskFieldSource: InitTaskFieldSource,
   taskListSource: [],
   traceListSource: [],
+  currentTrace: {
+    operationNames: [],
+    duration: 0,
+    isError: false,
+    key: '',
+    start: '',
+    traceIds: [],
+  },
+  traceSpans: [],
 };
 // getters
 const getters = {
@@ -74,6 +85,12 @@ const mutations = {
   [types.SET_TRACE_LIST](state: State, data: any) {
     state.traceListSource = data;
   },
+  [types.SET_TRACE_SPANS](state: State, data: any[]): void {
+    state.traceSpans = data;
+  },
+  [types.SET_CURRENT_TRACE](state: State, data: any): void {
+    state.currentTrace = data;
+  },
 };
 
 // actions
@@ -99,10 +116,36 @@ const actions = {
     // const { headerSource } = context.state;
     // context.commit(types.SET_TRACE_LIST, res.data.data.services);
     // context.dispatch('GET_TRACE_LIST');
+    const traceForm = {
+      paging: { pageNum: 1, pageSize: 5, needTotal: true },
+      traceState: 'ALL',
+      queryOrder: localStorage.getItem('traceQueryOrder') || 'BY_DURATION',
+      queryDuration: params.duration,
+    };
+    graph
+      .query('queryTraces')
+      .params({ condition: traceForm })
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_TASK_LIST, res.data.data.traces.data);
+        context.commit(types.SET_TRACE_LIST, res.data.data.traces.data);
+        return res;
+      })
+      .then((json: AxiosResponse) => {
+        context.dispatch('GET_TRACE_SPANS', { traceId: json.data.data.traces.data[0].traceIds[0] });
+        context.commit(types.SET_CURRENT_TRACE, json.data.data.traces.data[0]);
+      });
   },
   GET_TRACE_LIST(context: { state: State; commit: Commit }) {
     // tasklist[0]
     // context.commit(types.SET_TRACE_LIST, res.data.data.services);
+  },
+  GET_TRACE_SPANS(context: { commit: Commit }, params: any) {
+    graph
+      .query('queryTrace')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_TRACE_SPANS, res.data.data.trace.spans);
+      });
   },
 };
 

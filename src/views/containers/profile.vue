@@ -15,7 +15,7 @@ language governing permissions and * limitations under the License. */
     />
     <div class="rk-profile-context">
       <ProfileTaskList :taskListSource="profile.taskListSource" :traceListSource="profile.traceListSource" />
-      <ProfileTraceDetail />
+      <ProfileTraceDetail :current="profile.currentTrace" :detail="profile.traceSpans" />
     </div>
   </div>
 </template>

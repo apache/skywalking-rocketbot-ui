@@ -8,8 +8,89 @@ language governing permissions and * limitations under the License. */
 
 <template>
   <div class="profile-task-list flex-v">
-    <div class="profile-task-wrapper"></div>
-    <div class="profile-trace-wrapper"></div>
+    <div class="profile-task-wrapper flex-v">
+      <div class="rk-trace-t-tool flex-h">
+        <!-- <RkPage
+          :currentSize="8"
+          :currentPage="rocketTrace.traceForm.paging.pageNum"
+          @changePage="page"
+          :total="rocketTrace.traceTotal"
+        /> -->
+      </div>
+      <div class="rk-trace-t-loading" v-show="loading">
+        <svg class="icon loading">
+          <use xlink:href="#spinner"></use>
+        </svg>
+      </div>
+      <div class="rk-trace-t-wrapper scroll_hide">
+        <table class="rk-trace-t">
+          <tr class="rk-trace-tr cp" v-for="(i, index) in taskListSource" @click="selectTask(i)" :key="index">
+            <td
+              class="rk-trace-td"
+              :class="{
+                'rk-trace-success': !i.isError,
+                'rk-trace-error': i.isError,
+              }"
+            >
+              <div
+                class="ell mb-5"
+                :class="{
+                  blue: !i.isError,
+                  red: i.isError,
+                }"
+              >
+                <span class="b">{{ i.endpointNames[0] }}</span>
+              </div>
+              <div class="grey ell sm">
+                <span class="rk-tag mr-10 sm">{{ i.duration }} ms</span>{{ parseInt(i.start) | dateformat }}
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="profile-trace-wrapper flex-v">
+      <div class="rk-trace-t-tool flex-h">
+        <!-- <RkPage
+          :currentSize="8"
+          :currentPage="rocketTrace.traceForm.paging.pageNum"
+          @changePage="page"
+          :total="rocketTrace.traceTotal"
+        /> -->
+      </div>
+      <div class="rk-trace-t-loading" v-show="loading">
+        <svg class="icon loading">
+          <use xlink:href="#spinner"></use>
+        </svg>
+      </div>
+      <div class="rk-trace-t-wrapper scroll_hide">
+        <table class="rk-trace-t">
+          <tr class="rk-trace-tr cp" v-for="(i, index) in traceListSource" @click="selectTrace(i)" :key="index">
+            <td
+              class="rk-trace-td"
+              :class="{
+                'rk-trace-success': !i.isError,
+                'rk-trace-error': i.isError,
+                selected: selectedKey == i.key,
+              }"
+            >
+              <div
+                class="ell mb-5"
+                :class="{
+                  blue: !i.isError,
+                  red: i.isError,
+                }"
+              >
+                <span class="b">{{ i.endpointNames[0] }}</span>
+              </div>
+              <div class="grey ell sm">
+                <span class="rk-tag mr-10 sm">{{ i.duration }} ms</span>{{ parseInt(i.start) | dateformat }}
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -22,18 +103,41 @@ language governing permissions and * limitations under the License. */
   export default class ProfileTaskList extends Vue {
     @Prop() private taskListSource: any;
     @Prop() private traceListSource: any;
+    @Mutation('profileStore/SET_CURRENT_TRACE') private SET_CURRENT_TRACE: any;
+    @Action('profileStore/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
+    private loading: any;
+    private selectedKey: string = '';
+
+    private created() {
+      this.loading = false;
+    }
+
+    private selectTask() {}
+
+    private selectTrace(i: any) {
+      this.SET_CURRENT_TRACE(i);
+      this.selectedKey = i.key;
+      if (i.traceIds.length) {
+        this.GET_TRACE_SPANS({ traceId: i.traceIds[0] });
+      }
+    }
   }
 </script>
 
 <style lang="scss">
   .profile-task-list {
-    padding: 20px;
     width: 30%;
-    border-right: 1px solid #ccc;
     min-height: 150px;
     min-width: 350px;
-    flex-grow: 1;
     height: 100%;
     overflow: auto;
+    .profile-task-wrapper {
+      height: 100%;
+      width: 100%;
+    }
+    .profile-trace-wrapper {
+      height: 100%;
+      width: 100%;
+    }
   }
 </style>
