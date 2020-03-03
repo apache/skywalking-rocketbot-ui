@@ -21,7 +21,7 @@
   opacity: 0;
 }
 
-.d3-tip,.d3-tip-grey {
+.d3-tip {
   line-height: 1;
   padding: 8px;
   color: #eee;
@@ -31,27 +31,21 @@
 .d3-tip{
   background: #252a2f;
 }
-.d3-tip-grey{
-  background: #252a2fcc;
-}
 
-.d3-tip-grey:after,.d3-tip:after {
+.d3-tip:after {
   box-sizing: border-box;
   display: block;
   font-size: 10px;
   width: 100%;
-  line-height: 0.8;
+  line-height: 0.7;
   color: #252a2f;
   content: "\25BC";
   position: absolute;
   text-align: center;
 }
 
-.d3-tip-grey:after {
-  color: #252a2fcc;
-}
 
-.d3-tip-grey.n:after,.d3-tip.n:after {
+.d3-tip.n:after {
   margin: -2px 0 0 0;
   top: 100%;
   left: 0;

@@ -18,14 +18,14 @@
 <template>
   <div class="rk-topo">
     <TopoAside/>
-    <Topo :datas="{nodes:stateTopo.nodes,calls:stateTopo.calls}"/>
+    <Topo :nodes="stateTopo.nodes" :links="stateTopo.calls"/>
   </div>
 </template>
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { State, Action, Getter, Mutation } from 'vuex-class';
 import { AxiosResponse } from 'axios';
-import Topo from '../../components/topology/topo.vue';
+import Topo from '../../components/topology/chart/topo.vue';
 import TopoAside from '../../components/topology/topo-aside.vue';
 import topo, { State as topoState} from '@/store/modules/topology';
 
