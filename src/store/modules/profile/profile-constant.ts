@@ -17,11 +17,12 @@
 
 export const InitTaskField = {
   service: { key: '', label: 'None' },
-  endpoint: '',
-  monitorTime: { key: '1', label: 'monitor now' },
-  monitorDuration: [{ key: '5min', label: '5 min' }],
+  monitorTime: { key: '0', label: 'monitor now' },
+  monitorDuration: { key: 5, label: '5 min' },
   minThreshold: 0,
-  dumpPeriod: [{ key: '10ms', label: '10ms' }],
+  dumpPeriod: { key: 10, label: '10ms' },
+  endpointName: '',
+  maxSamplingCount: { key: 5, label: '5' },
 };
 
 export const InitTaskFieldSource = {
@@ -31,15 +32,26 @@ export const InitTaskFieldSource = {
     { key: '1', label: 'set start time' },
   ],
   monitorDuration: [
-    { key: '5min', label: '5 min' },
-    { key: '10min', label: '10 min' },
-    { key: '15min', label: '15 min' },
+    { key: 5, label: '5 min' },
+    { key: 10, label: '10 min' },
+    { key: 15, label: '15 min' },
   ],
   dumpPeriod: [
-    { key: '10ms', label: '10 ms' },
-    { key: '20ms', label: '20 ms' },
-    { key: '50ms', label: '50 ms' },
-    { key: '100ms', label: '100 ms' },
+    { key: 10, label: '10 ms' },
+    { key: 20, label: '20 ms' },
+    { key: 50, label: '50 ms' },
+    { key: 100, label: '100 ms' },
+  ],
+  maxSamplingCount: [
+    { key: 1, label: '1' },
+    { key: 2, label: '2' },
+    { key: 3, label: '3' },
+    { key: 4, label: '4' },
+    { key: 5, label: '5' },
+    { key: 6, label: '6' },
+    { key: 7, label: '7' },
+    { key: 8, label: '8' },
+    { key: 9, label: '9' },
   ],
 };
 
@@ -50,4 +62,5 @@ export enum ChangeTaskOpt {
   MonitorDuration = 'monitorDuration',
   MinThreshold = 'minThreshold',
   DumpPeriod = 'dumpPeriod',
+  MaxSamplingCount = 'maxSamplingCount',
 }

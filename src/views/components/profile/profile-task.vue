@@ -15,7 +15,7 @@ language governing permissions and * limitations under the License. */
       :data="taskFieldSource.serviceSource"
       @onChoose="(item) => changeOption(item, updateTaskOpt.Service)"
     />
-    <label>{{ this.$t('endpoint') }}</label>
+    <label>{{ this.$t('endpointName') }}</label>
     <input type="text" class="rk-profile-input" @change="changeOption($event, updateTaskOpt.EndpointName)" />
     <label>{{ this.$t('monitorTime') }}</label>
     <RkRadio
@@ -28,7 +28,7 @@ language governing permissions and * limitations under the License. */
       <!-- <RkCalendar /> -->
     </div>
     <label>{{ this.$t('monitorDuration') }}</label>
-    <RkCheckbox
+    <RkRadio
       class="mb-5"
       :current="newTaskFields.monitorDuration"
       :data="taskFieldSource.monitorDuration"
@@ -42,11 +42,18 @@ language governing permissions and * limitations under the License. */
       @change="changeOption($event, updateTaskOpt.MinThreshold)"
     />
     <label>{{ this.$t('dumpPeriod') }}</label>
-    <RkCheckbox
+    <RkRadio
       class="mb-5"
       :current="newTaskFields.dumpPeriod"
       :data="taskFieldSource.dumpPeriod"
       @onChoose="(item) => changeOption(item, updateTaskOpt.DumpPeriod)"
+    />
+    <label>{{ this.$t('maxSamplingCount') }}</label>
+    <RkSelect
+      class="mb-5"
+      :current="newTaskFields.maxSamplingCount"
+      :data="taskFieldSource.maxSamplingCount"
+      @onChoose="(item) => changeOption(item, updateTaskOpt.MaxSamplingCount)"
     />
     <div @click="createTask">
       <a class="rk-create-task-btn bg-blue r">
@@ -83,7 +90,7 @@ language governing permissions and * limitations under the License. */
     }
 
     private createTask() {
-      // this.$store.dispatch('profileStore/SAVETASK');
+      this.$store.dispatch('profileStore/CREATE_PROFILE_TASK');
     }
   }
 </script>

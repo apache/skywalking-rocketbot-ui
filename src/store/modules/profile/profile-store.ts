@@ -74,9 +74,10 @@ const mutations = {
     state.newTaskFields.service = data[0];
   },
   [types.SET_TASK_OPTIONS](state: State, data: any) {
+    const param = ['minThreshold', 'endpointName'];
     state.newTaskFields = {
       ...state.newTaskFields,
-      [data.type]: data.item,
+      [data.type]: param.includes(data.type) ? data.item.key : data.item,
     };
   },
   [types.SET_TASK_LIST](state: State, data: any) {
@@ -131,7 +132,7 @@ const actions = {
         return res;
       })
       .then((json: AxiosResponse) => {
-        context.dispatch('GET_TRACE_SPANS', { traceId: json.data.data.traces.data[0].traceIds[0] });
+        context.dispatch('GET_TRACE_SPANS', { segmentId: json.data.data.traces.data[0].traceIds[0] });
         context.commit(types.SET_CURRENT_TRACE, json.data.data.traces.data[0]);
       });
   },
@@ -139,12 +140,38 @@ const actions = {
     // tasklist[0]
     // context.commit(types.SET_TRACE_LIST, res.data.data.services);
   },
-  GET_TRACE_SPANS(context: { commit: Commit }, params: any) {
+  GET_TRACE_SPANS(context: { commit: Commit }, params: { segmentId: string }) {
     graph
-      .query('queryTrace')
+      .query('queryProfileSegment')
       .params(params)
       .then((res: AxiosResponse) => {
         context.commit(types.SET_TRACE_SPANS, res.data.data.trace.spans);
+      });
+  },
+  CREATE_PROFILE_TASK(context: { commit: Commit; state: State }) {
+    const {
+      service,
+      endpointName,
+      minThreshold,
+      monitorDuration,
+      dumpPeriod,
+      maxSamplingCount,
+    } = context.state.newTaskFields;
+    const creationRequest = {
+      serviceId: service.key,
+      endpointName,
+      startTime: new Date().getTime(),
+      duration: monitorDuration.key,
+      minDurationThreshold: Number(minThreshold),
+      dumpPeriod: dumpPeriod.key,
+      maxSamplingCount: maxSamplingCount.key,
+    };
+
+    graph
+      .query('saveProfileTask')
+      .params({ creationRequest })
+      .then((res: AxiosResponse) => {
+        // context.commit(types.SET_TRACE_SPANS, res.data.data.trace.spans);
       });
   },
 };

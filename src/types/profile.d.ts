@@ -15,23 +15,25 @@
  * limitations under the License.
  */
 export type IOption = {
-  key: string;
+  key: string | number;
   label: string;
   time?: string;
 };
 export interface ITaskOptions {
   service: IOption;
-  endpoint: string;
-  monitorDuration: IOption[];
+  endpointName: string;
+  monitorDuration: IOption;
   monitorTime: IOption;
   minThreshold: number;
-  dumpPeriod: IOption[];
+  dumpPeriod: IOption;
+  maxSamplingCount: IOption;
 }
 export interface TaskSourceType {
   serviceSource: IOption[];
   monitorTime: IOption[];
   monitorDuration: IOption[];
   dumpPeriod: IOption[];
+  maxSamplingCount: IOption[];
 }
 
 export interface TaskListSourceType {

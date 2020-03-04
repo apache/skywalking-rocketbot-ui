@@ -15,38 +15,13 @@
  * limitations under the License.
  */
 
-import axios, { AxiosPromise } from 'axios';
-import { cancelToken } from '@/utils/cancelToken';
-import * as option from './query/option';
-import * as trace from './query/trace';
-import * as topology from './query/topology';
-import * as alarm from './query/alarm';
-import * as profile from './query/profile';
+import { Traces, ProfileSegment, ServiceInstanceOption, CreateProfileTask } from '../fragments/profile';
 
-const query: any = {
-  ...option,
-  ...trace,
-  ...topology,
-  ...alarm,
-  ...profile,
-};
+export const queryTraces = `query queryTraces(${Traces.variable}) {${Traces.query}}`;
 
-class Graph {
-  private queryData: string = '';
-  public query(queryData: string) {
-    this.queryData = queryData;
-    return this;
-  }
-  public params(variablesData: any): AxiosPromise<void> {
-    return axios.post(
-      '/graphql',
-      {
-        query: query[this.queryData],
-        variables: variablesData,
-      },
-      { cancelToken: cancelToken() },
-    );
-  }
-}
+export const queryProfileSegment = `query queryProfileSegment(${ProfileSegment.variable}) {${ProfileSegment.query}}`;
 
-export default new Graph();
+export const queryServiceInstance = `query queryServiceInstance(${ServiceInstanceOption.variable})
+{${ServiceInstanceOption.query}}`;
+
+export const saveProfileTask = `mutation createProfileTask(${CreateProfileTask.variable}) {${CreateProfileTask.query}}`;

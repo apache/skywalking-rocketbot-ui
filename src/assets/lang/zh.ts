@@ -113,6 +113,7 @@ const m = {
   minThreshold: '时间区间内最小值',
   dumpPeriod: '倾倒期',
   createTask: '新建任务',
+  maxSamplingCount: '最大采样数',
 };
 
 export default m;

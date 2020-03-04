@@ -113,6 +113,7 @@ const m = {
   minThreshold: 'Min Duration Threshold',
   dumpPeriod: 'Dump Period',
   createTask: 'Create Task',
+  maxSamplingCount: 'Max Sampling Count',
 };
 
 export default m;

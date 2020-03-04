@@ -8,16 +8,18 @@ language governing permissions and * limitations under the License. */
 
 <template>
   <div class="profile-trace-dashboard flex-v">
-    <!-- <div class="profile-trace-detail-wrapper">
+    <div class="profile-trace-detail-wrapper">
       <div class="mb-5 blue sm">
-        <select
-          class="profile-trace-detail-ids"
-          @change="GET_TRACE_SPANS({ traceId: i })"
-        >
-          <option v-for="i in current.traceIds" :value="i" :key="i">{{i}}</option>
+        <select class="profile-trace-detail-ids" @change="GET_TRACE_SPANS({ traceId: i })">
+          <option v-for="i in current.traceIds" :value="i" :key="i">{{ i }}</option>
+        </select>
+        <select class="profile-trace-detail-ids" @change="analyzeProfile()">
+          <option value="include" key="include">include children</option>
+          <option value="exclude" key="exclude">exclude children</option>
         </select>
       </div>
-    </div> -->
+    </div>
+    <TraceDetailChartTable :data="detail" :traceId="current.traceIds[0]" />
     <TraceDetailChartTable :data="detail" :traceId="current.traceIds[0]" />
   </div>
 </template>
@@ -34,6 +36,8 @@ language governing permissions and * limitations under the License. */
   export default class ProfileTraceDetail extends Vue {
     @Prop() private detail: any;
     @Prop() private current: any;
+
+    private analyzeProfile() {}
   }
 </script>
 
@@ -48,7 +52,7 @@ language governing permissions and * limitations under the License. */
     overflow: auto;
   }
   .profile-trace-detail-wrapper {
-    padding: 8px 30px;
+    padding: 8px 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
   .profile-trace-detail-ids {
@@ -58,5 +62,8 @@ language governing permissions and * limitations under the License. */
     color: inherit;
     border: 1px solid;
     border-radius: 4px;
+  }
+  select {
+    margin: 0 10px;
   }
 </style>
