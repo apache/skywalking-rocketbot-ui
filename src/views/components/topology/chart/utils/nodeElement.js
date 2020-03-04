@@ -1,14 +1,22 @@
 import icons from './icons';
 
 icons['KAFKA-CONSUMER'] = icons.KAFKA;
-export default (d3, graph, tool, drag) => {
+export default (d3, graph, tool, funcs, tip) => {
   const nodeEnter = graph
   .append('g').call(d3.drag()
-  .on('start', drag.dragstart)
-  .on('drag', drag.dragged)
-  .on('end', drag.dragended))
+  .on('start', funcs.dragstart)
+  .on('drag', funcs.dragged)
+  .on('end', funcs.dragended))
+  .on('mouseover', function(d) { tip.html((data) => `<div>${data.name}</div>`).show(d, this)})
+  .on('mouseout', function() { tip.hide(this)})
   .on('click', (d) => {
-    tool.attr('transform', `translate(${d.x},${d.y - 20})`);
+    event.stopPropagation();
+    event.preventDefault();
+    tool.attr('style', 'display: none');
+    funcs.handleNodeClick(d);
+    if(d.isReal){
+      tool.attr('transform', `translate(${d.x},${d.y - 20})`).attr('style', 'display: block');
+    }
   });
   nodeEnter
     .append('image')

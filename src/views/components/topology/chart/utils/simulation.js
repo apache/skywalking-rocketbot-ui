@@ -6,7 +6,7 @@ export const simulationInit = (d3, data_nodes, data_links, ticked) => {
   .force('xPos', d3.forceX().strength(1))
   .force('charge', d3.forceManyBody().strength(-520))
   .force( 'link', d3.forceLink(data_links).id((d) => d.id))
-  // .force('center', d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2 - 20))
+  .force('center', d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2 - 20))
   .on('tick', ticked)
   .stop();
   simulationSkip(d3, simulation, ticked)

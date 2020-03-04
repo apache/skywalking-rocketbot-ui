@@ -14,6 +14,7 @@ specific language governing permissions and * limitations under the License. */
 </template>
 <script lang="js">
 import * as d3 from 'd3';
+import d3tip from 'd3-tip';
 import zoom from './utils/zoom';
 import { simulationInit, simulationSkip } from './utils/simulation';
 import nodeElement from './utils/nodeElement';
@@ -47,20 +48,31 @@ export default {
       .append('svg')
       .attr('class', 'topo-svg')
       .attr('height', this.$el.clientHeight);
+    this.tip = d3tip()
+      .attr('class', 'd3-tip')
+      .offset([-8, 0]);
     this.graph = this.svg.append('g').attr('class', 'topo-svg_graph');
+    this.graph.call(this.tip);
     this.simulation = simulationInit(d3, this.nodes, this.links, this.ticked);
     this.svg.call(zoom(d3, this.graph));
     this.node = this.graph.append('g').selectAll('.topo-node');
     this.link = this.graph.append('g').selectAll('.topo-line');
     this.anchor = this.graph.append('g').selectAll('.topo-line-anchor');
     this.tool = tool(this.graph, [
-      {icon: 'API', click: this.handleGoAlarm},
-      {icon: 'INSTANCE', click: this.handleGoAlarm},
+      {icon: 'API', click: this.handleGoEndpoint},
+      {icon: 'INSTANCE', click: this.handleGoInstance},
       {icon: 'TRACE', click: this.handleGoTrace},
       {icon: 'ALARM', click: this.handleGoAlarm},
       {icon: ''},
       {icon: ''},
     ]);
+    this.svg.on('click', (d, i) => {
+      event.stopPropagation();
+      event.preventDefault();
+      this.$store.commit('rocketTopo/SET_NODE', {});
+      this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
+      this.tool.attr('style', 'display: none');
+    });
   },
   watch: {
     nodes: 'update',
@@ -73,16 +85,41 @@ export default {
     handleGoTrace() {
       this.$store.commit('rocketTopo/SET_SHOW_TRACE_DIALOG', true);
     },
+    handleGoInstance() {
+      this.$store.commit('rocketTopo/SET_SHOW_INSTANCES_DIALOG', true);
+    },
+    handleGoEndpoint() {
+      this.$store.commit('rocketTopo/SET_SHOW_ENDPOINT_DIALOG', true);
+    },
+    handleNodeClick(d) {
+      const {x, y, vx, vy, fx, fy, index, ...rest} = d;
+      this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
+      this.$store.commit('rocketTopo/SET_NODE', rest);
+    },
+    handleLinkClick(d) {
+      event.stopPropagation();
+      this.$store.commit('rocketTopo/SET_NODE', {});
+      this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
+      this.$store.commit('rocketTopo/SET_MODE', d.detectPoints);
+      this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
+      this.$store.commit('rocketTopo/SET_CALLBACK', () => {
+        this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
+      });
+    },
     resize() {
       this.svg.attr('height', this.$el.clientHeight);
     },
     update() {
       // node element
+      const that = this;
       this.node = this.node.data(this.nodes);
       this.node.exit().remove();
       this.node = nodeElement(d3, this.node.enter(), this.tool, {
-        dragstart: this.dragstart, dragged: this.dragged, dragended: this.dragended,
-      }).merge(this.node);
+        dragstart: this.dragstart,
+        dragged: this.dragged,
+        dragended: this.dragended,
+        handleNodeClick: this.handleNodeClick,
+      }, this.tip).merge(this.node);
       // line element
       this.link = this.link.data(this.links, (d) => d.id);
       this.link.exit().remove();
@@ -90,11 +127,18 @@ export default {
       // anchorElement
       this.anchor = this.anchor.data(this.links, (d) => d.id);
       this.anchor.exit().remove();
-      this.anchor = anchorElement(this.anchor.enter()).merge(this.anchor);
+      this.anchor = anchorElement(this.anchor.enter(), {
+        handleLinkClick: this.handleLinkClick,
+        $tip: (data) =>
+        `
+          <div class="mb-5"><span class="grey">${this.$t('cpm')}: </span>${data.cpm}</div>
+          <div class="mb-5"><span class="grey">${this.$t('latency')}: </span>${data.latency}</div>
+          <div><span class="grey">${this.$t('detectPoint')}:</span>${data.detectPoints.join(' | ')}</div>
+        `
+      }, this.tip).merge(this.anchor);
       // force element
       this.simulation.nodes(this.nodes);
       this.simulation.force('link').links(this.links).id((d) => d.id);
-      // this.simulation.alpha(1).restart();
       simulationSkip(d3, this.simulation, this.ticked);
     },
     ticked() {
@@ -122,8 +166,6 @@ export default {
       if (!d3.event.active) {
         this.simulation.alphaTarget(0);
       }
-      // d.fx = null;
-      // d.fy = null;
     },
   },
 };
@@ -152,6 +194,9 @@ export default {
     font-size: 11px;
     opacity: 0.8;
   }
+  .topo-tool {
+    display: none;
+  }
   .topo-tool-i {
     cursor: pointer;
     .tool-hexagon {
@@ -166,13 +211,13 @@ export default {
       }
     }
   }
-  @keyframes topo-dash {
-    from {
-      stroke-dashoffset: 20;
-    }
-    to {
-      stroke-dashoffset: 0;
-    }
+}
+@keyframes topo-dash {
+  from {
+    stroke-dashoffset: 20;
+  }
+  to {
+    stroke-dashoffset: 0;
   }
 }
 </style>
