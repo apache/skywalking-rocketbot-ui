@@ -43,7 +43,7 @@ export default (d3, graph, tool, funcs, tip) => {
     .attr('xlink:href', (d) => (!d.type || d.type === 'N/A') ? icons.UNDEFINED : icons[d.type.toUpperCase()]);
   nodeEnter
     .append('text')
-    .attr('class', 'node-text')
+    .attr('class', 'topo-text')
     .attr('text-anchor', 'middle')
     .attr('x', 22)
     .attr('y', 70)

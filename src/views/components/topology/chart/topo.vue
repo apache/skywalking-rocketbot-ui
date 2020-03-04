@@ -36,6 +36,7 @@ export default {
       height: 600,
       simulation: '',
       zoom: '',
+      current: {},
     };
   },
   beforeDestroy() {
@@ -86,12 +87,15 @@ export default {
       this.$store.commit('rocketTopo/SET_SHOW_TRACE_DIALOG', true);
     },
     handleGoInstance() {
+      this.$store.commit('SET_CURRENT_SERVICE', { key: this.current.id, label: this.current.name });
       this.$store.commit('rocketTopo/SET_SHOW_INSTANCES_DIALOG', true);
     },
     handleGoEndpoint() {
+      this.$store.commit('SET_CURRENT_SERVICE', { key: this.current.id, label: this.current.name });
       this.$store.commit('rocketTopo/SET_SHOW_ENDPOINT_DIALOG', true);
     },
     handleNodeClick(d) {
+      this.current = d;
       const {x, y, vx, vy, fx, fy, index, ...rest} = d;
       this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
       this.$store.commit('rocketTopo/SET_NODE', rest);
@@ -134,7 +138,7 @@ export default {
           <div class="mb-5"><span class="grey">${this.$t('cpm')}: </span>${data.cpm}</div>
           <div class="mb-5"><span class="grey">${this.$t('latency')}: </span>${data.latency}</div>
           <div><span class="grey">${this.$t('detectPoint')}:</span>${data.detectPoints.join(' | ')}</div>
-        `
+        `,
       }, this.tip).merge(this.anchor);
       // force element
       this.simulation.nodes(this.nodes);

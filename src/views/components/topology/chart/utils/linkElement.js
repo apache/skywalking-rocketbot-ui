@@ -5,7 +5,6 @@ export const linkElement = (graph) => {
   return linkEnter;
 }
 export const anchorElement = (graph, funcs, tip) => {
-  console.log(funcs.$tip);
   const linkEnter = graph
     .append('circle').attr('class', 'topo-line-anchor')
     .attr('r', 5)
