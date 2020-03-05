@@ -15,7 +15,14 @@
  * limitations under the License.
  */
 
-import { Traces, ProfileSegment, ServiceInstanceOption, CreateProfileTask } from '../fragments/profile';
+import {
+  Traces,
+  ProfileSegment,
+  ServiceInstanceOption,
+  CreateProfileTask,
+  GetProfileTaskList,
+  GetProfileTaskSegmentList,
+} from '../fragments/profile';
 
 export const queryTraces = `query queryTraces(${Traces.variable}) {${Traces.query}}`;
 
@@ -25,3 +32,7 @@ export const queryServiceInstance = `query queryServiceInstance(${ServiceInstanc
 {${ServiceInstanceOption.query}}`;
 
 export const saveProfileTask = `mutation createProfileTask(${CreateProfileTask.variable}) {${CreateProfileTask.query}}`;
+
+export const getProfileTaskList = `query getProfileTaskList(${GetProfileTaskList.variable}) {${GetProfileTaskList.query}}`;
+
+export const getProfileTaskSegmentList = `query getProfileTaskSegmentList(${GetProfileTaskSegmentList.variable}) {${GetProfileTaskSegmentList.query}}`;

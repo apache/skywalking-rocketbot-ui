@@ -91,6 +91,7 @@ language governing permissions and * limitations under the License. */
 
     private createTask() {
       this.$store.dispatch('profileStore/CREATE_PROFILE_TASK');
+      this.$emit('closeSidebox');
     }
   }
 </script>

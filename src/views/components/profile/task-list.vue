@@ -9,14 +9,6 @@ language governing permissions and * limitations under the License. */
 <template>
   <div class="profile-task-list flex-v">
     <div class="profile-task-wrapper flex-v">
-      <div class="rk-trace-t-tool flex-h">
-        <!-- <RkPage
-          :currentSize="8"
-          :currentPage="rocketTrace.traceForm.paging.pageNum"
-          @changePage="page"
-          :total="rocketTrace.traceTotal"
-        /> -->
-      </div>
       <div class="rk-trace-t-loading" v-show="loading">
         <svg class="icon loading">
           <use xlink:href="#spinner"></use>
@@ -25,24 +17,13 @@ language governing permissions and * limitations under the License. */
       <div class="rk-trace-t-wrapper scroll_hide">
         <table class="rk-trace-t">
           <tr class="rk-trace-tr cp" v-for="(i, index) in taskListSource" @click="selectTask(i)" :key="index">
-            <td
-              class="rk-trace-td"
-              :class="{
-                'rk-trace-success': !i.isError,
-                'rk-trace-error': i.isError,
-              }"
-            >
-              <div
-                class="ell mb-5"
-                :class="{
-                  blue: !i.isError,
-                  red: i.isError,
-                }"
-              >
-                <span class="b">{{ i.endpointNames[0] }}</span>
+            <td class="rk-trace-td rk-trace-success">
+              <div class="ell mb-5">
+                <span class="b">{{ i.endpointName }}</span>
               </div>
               <div class="grey ell sm">
-                <span class="rk-tag mr-10 sm">{{ i.duration }} ms</span>{{ parseInt(i.start) | dateformat }}
+                <span class="rk-tag mr-10 sm">{{ i.duration }} ms</span>{{ i.startTime | dateformat }}
+                <span class="rk-tag mr-10 sm">{{ i.maxSamplingCount }}</span>
               </div>
             </td>
           </tr>
@@ -65,7 +46,7 @@ language governing permissions and * limitations under the License. */
       </div>
       <div class="rk-trace-t-wrapper scroll_hide">
         <table class="rk-trace-t">
-          <tr class="rk-trace-tr cp" v-for="(i, index) in traceListSource" @click="selectTrace(i)" :key="index">
+          <tr class="rk-trace-tr cp" v-for="(i, index) in segmentList" @click="selectTrace(i)" :key="index">
             <td
               class="rk-trace-td"
               :class="{
@@ -102,7 +83,7 @@ language governing permissions and * limitations under the License. */
   @Component
   export default class ProfileTaskList extends Vue {
     @Prop() private taskListSource: any;
-    @Prop() private traceListSource: any;
+    @Prop() private segmentList: any;
     @Mutation('profileStore/SET_CURRENT_TRACE') private SET_CURRENT_TRACE: any;
     @Action('profileStore/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
     private loading: any;

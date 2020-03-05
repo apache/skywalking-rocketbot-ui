@@ -36,7 +36,7 @@ language governing permissions and * limitations under the License. */
         </div>
       </div>
       <rk-sidebox class="profile-task-box" width="600px" :title="this.$t('newTask')" :show.sync="dialogVisible">
-        <ProfileTask :taskFieldSource="taskFieldSource" :newTaskFields="newTaskFields" />
+        <ProfileTask :taskFieldSource="taskFieldSource" :newTaskFields="newTaskFields" @closeSidebox="closeSidebox" />
       </rk-sidebox>
     </div>
   </div>
@@ -46,7 +46,7 @@ language governing permissions and * limitations under the License. */
   import { Duration, Option } from '@/types/global';
   import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
-  import TraceSelect from '../trace/trace-select.vue';
+  import TraceSelect from '../common/trace-select.vue';
   import ProfileTask from './profile-task.vue';
 
   @Component({ components: { TraceSelect, ProfileTask } })
@@ -57,6 +57,7 @@ language governing permissions and * limitations under the License. */
     @State('rocketbot') private rocketbotGlobal: any;
     @Getter('durationTime') private durationTime: any;
     @Getter('duration') private duration: any;
+    @Mutation('profileStore/SET_HEADER_SOURCE') private SET_HEADER_SOURCE: any;
 
     private time!: Date[];
     private endpointName: string = localStorage.getItem('endpointName') || '';
@@ -118,8 +119,8 @@ language governing permissions and * limitations under the License. */
       };
     }
 
-    private chooseService(item: any) {
-      this.serviceOpt = item;
+    private chooseService(item: any, type: string) {
+      this.$store.commit('profileStore/SET_HEADER_SOURCE', { item, type });
     }
 
     @Watch('rocketbotGlobal.durationRow')
@@ -133,6 +134,10 @@ language governing permissions and * limitations under the License. */
 
     private showDialogTask() {
       this.dialogVisible = true;
+    }
+
+    private closeSidebox() {
+      this.dialogVisible = false;
     }
   }
 </script>

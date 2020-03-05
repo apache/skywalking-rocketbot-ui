@@ -55,6 +55,10 @@ export const ProfileSegment = {
       endTime
       endpointName
       type
+      peer
+      component
+      isError
+      layer
     }
   }
   `,
@@ -65,6 +69,36 @@ export const CreateProfileTask = {
   query: `
   createTask: createProfileTask(creationRequest: $creationRequest) {
     id
+    errorReason
+  }
+  `,
+};
+
+export const GetProfileTaskList = {
+  variable: '$endpointName: String, $serviceId: ID',
+  query: `
+  getProfileTaskList: getProfileTaskList(endpointName: $endpointName, serviceId: $serviceId) {
+    serviceId
+    endpointName
+    startTime
+    duration
+    minDurationThreshold
+    dumpPeriod
+    maxSamplingCount
+    id
+  }
+  `,
+};
+export const GetProfileTaskSegmentList = {
+  variable: '$taskID: String',
+  query: `
+  getProfileTaskSegmentList: getProfileTaskSegmentList(taskID: $taskID) {
+    segmentId
+    endpointNames
+    start
+    duration
+    traceIds
+    isError
   }
   `,
 };

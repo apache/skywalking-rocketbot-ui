@@ -11,7 +11,7 @@ language governing permissions and * limitations under the License. */
     <div class="profile-trace-detail-wrapper">
       <div class="mb-5 blue sm">
         <select class="profile-trace-detail-ids" @change="GET_TRACE_SPANS({ traceId: i })">
-          <option v-for="i in current.traceIds" :value="i" :key="i">{{ i }}</option>
+          <option v-for="i in currentSegment.traceIds" :value="i" :key="i">{{ i }}</option>
         </select>
         <select class="profile-trace-detail-ids" @change="analyzeProfile()">
           <option value="include" key="include">include children</option>
@@ -19,8 +19,8 @@ language governing permissions and * limitations under the License. */
         </select>
       </div>
     </div>
-    <TraceDetailChartTable :data="detail" :traceId="current.traceIds[0]" />
-    <TraceDetailChartTable :data="detail" :traceId="current.traceIds[0]" />
+    <TraceDetailChartTable :data="segmentSpans" :traceId="currentSegment.traceIds[0]" />
+    <TraceDetailChartTable :data="segmentSpans" :traceId="currentSegment.traceIds[0]" />
   </div>
 </template>
 
@@ -34,8 +34,8 @@ language governing permissions and * limitations under the License. */
     components: { TraceDetailChartTable },
   })
   export default class ProfileTraceDetail extends Vue {
-    @Prop() private detail: any;
-    @Prop() private current: any;
+    @Prop() private segmentSpans: any;
+    @Prop() private currentSegment: any;
 
     private analyzeProfile() {}
   }

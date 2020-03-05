@@ -29,5 +29,3 @@ language governing permissions and * limitations under the License. */
     }
   }
 </script>
-
-<style lang="scss" scoped></style>

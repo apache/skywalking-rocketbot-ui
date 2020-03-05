@@ -15,15 +15,13 @@
  * limitations under the License.
  */
 
-import { Commit, ActionTree, Dispatch } from 'vuex';
+import { Commit, Dispatch } from 'vuex';
 import axios, { AxiosResponse } from 'axios';
 
 import graph from '@/graph';
 import { cancelToken } from '@/utils/cancelToken';
 import * as types from '../../mutation-types';
 import { DurationTime } from '@/types/global';
-import { queryChartData } from '@/utils/queryChartData';
-import fragmentAll from '@/graph/query/comparison';
 import { IOption, ITaskOptions, TaskSourceType, TaskListSourceType, TracesSourceType } from '@/types/profile';
 import { InitTaskField, InitTaskFieldSource, ChangeTaskOpt } from './profile-constant';
 
@@ -35,9 +33,9 @@ export interface State {
   newTaskFields: ITaskOptions;
   taskFieldSource: TaskSourceType;
   taskListSource: TaskListSourceType[];
-  traceListSource: TracesSourceType[];
-  currentTrace: any;
-  traceSpans: any;
+  segmentSpans: any[];
+  currentSegment: any;
+  segmentList: TracesSourceType[];
 }
 const initState: State = {
   headerSource: {
@@ -47,8 +45,8 @@ const initState: State = {
   newTaskFields: InitTaskField,
   taskFieldSource: InitTaskFieldSource,
   taskListSource: [],
-  traceListSource: [],
-  currentTrace: {
+  segmentSpans: [],
+  currentSegment: {
     operationNames: [],
     duration: 0,
     isError: false,
@@ -56,7 +54,7 @@ const initState: State = {
     start: '',
     traceIds: [],
   },
-  traceSpans: [],
+  segmentList: [],
 };
 // getters
 const getters = {
@@ -68,8 +66,8 @@ const getters = {
 // mutations
 const mutations = {
   [types.SET_SERVICES](state: State, data: any[]) {
-    state.headerSource.serviceSource = data;
-    state.headerSource.currentService = data[0];
+    state.headerSource.serviceSource = [{ key: 'all', label: 'All' }, ...data];
+    state.headerSource.currentService = state.headerSource.serviceSource[0];
     state.taskFieldSource.serviceSource = data;
     state.newTaskFields.service = data[0];
   },
@@ -83,14 +81,20 @@ const mutations = {
   [types.SET_TASK_LIST](state: State, data: any) {
     state.taskListSource = data;
   },
-  [types.SET_TRACE_LIST](state: State, data: any) {
-    state.traceListSource = data;
+  [types.SET_SEGMENT_SPANS](state: State, data: any[]): void {
+    state.segmentSpans = data;
   },
-  [types.SET_TRACE_SPANS](state: State, data: any[]): void {
-    state.traceSpans = data;
+  [types.SET_SEGMENT_LIST](state: State, data: any[]) {
+    state.segmentList = data;
   },
-  [types.SET_CURRENT_TRACE](state: State, data: any): void {
-    state.currentTrace = data;
+  [types.SET_CURRENT_SEGMENT](state: State, data: any) {
+    state.currentSegment = data;
+  },
+  [types.SET_HEADER_SOURCE](state: State, data: any) {
+    // state.headerSource = {
+    //   ...state.headerSource,
+    //   [data.label]
+    // };
   },
 };
 
@@ -113,42 +117,51 @@ const actions = {
         context.dispatch('GET_TASK_LIST', params);
       });
   },
-  GET_TASK_LIST(context: { state: State; dispatch: Dispatch; commit: Commit }, params: { duration: string }) {
-    // const { headerSource } = context.state;
-    // context.commit(types.SET_TRACE_LIST, res.data.data.services);
-    // context.dispatch('GET_TRACE_LIST');
-    const traceForm = {
-      paging: { pageNum: 1, pageSize: 5, needTotal: true },
-      traceState: 'ALL',
-      queryOrder: localStorage.getItem('traceQueryOrder') || 'BY_DURATION',
-      queryDuration: params.duration,
-    };
+  GET_TASK_LIST(context: { state: State; dispatch: Dispatch; commit: Commit }) {
     graph
-      .query('queryTraces')
-      .params({ condition: traceForm })
+      .query('getProfileTaskList')
+      .params({})
       .then((res: AxiosResponse) => {
-        context.commit(types.SET_TASK_LIST, res.data.data.traces.data);
-        context.commit(types.SET_TRACE_LIST, res.data.data.traces.data);
-        return res;
+        if (!res.data.data) {
+          return;
+        }
+        context.commit(types.SET_TASK_LIST, res.data.data.getProfileTaskList);
+        return res.data.data.getProfileTaskList;
       })
-      .then((json: AxiosResponse) => {
-        context.dispatch('GET_TRACE_SPANS', { segmentId: json.data.data.traces.data[0].traceIds[0] });
-        context.commit(types.SET_CURRENT_TRACE, json.data.data.traces.data[0]);
+      .then((data: any) => {
+        if (!data) {
+          return;
+        }
+        context.dispatch('GET_SEGMENT_LIST', { taskID: data[0].id });
       });
   },
-  GET_TRACE_LIST(context: { state: State; commit: Commit }) {
-    // tasklist[0]
-    // context.commit(types.SET_TRACE_LIST, res.data.data.services);
-  },
-  GET_TRACE_SPANS(context: { commit: Commit }, params: { segmentId: string }) {
+  GET_SEGMENT_SPANS(context: { state: State; commit: Commit }, params: { segmentId: string }) {
     graph
       .query('queryProfileSegment')
       .params(params)
       .then((res: AxiosResponse) => {
-        context.commit(types.SET_TRACE_SPANS, res.data.data.trace.spans);
+        if (!res.data.data.getProfiledSegment) {
+          return;
+        }
+        context.commit(types.SET_SEGMENT_SPANS, res.data.data.getProfiledSegment.spans);
       });
   },
-  CREATE_PROFILE_TASK(context: { commit: Commit; state: State }) {
+  GET_SEGMENT_LIST(context: { commit: Commit; dispatch: Dispatch }, params: { taskID: string }) {
+    graph
+      .query('getProfileTaskSegmentList')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        if (!res.data.data.getProfileTaskSegmentList) {
+          return;
+        }
+        const { getProfileTaskSegmentList } = res.data.data;
+
+        context.commit(types.SET_SEGMENT_LIST, getProfileTaskSegmentList);
+        context.commit(types.SET_CURRENT_SEGMENT, getProfileTaskSegmentList[0]);
+        context.dispatch('GET_SEGMENT_SPANS', { segmentId: getProfileTaskSegmentList[0].segmentId });
+      });
+  },
+  CREATE_PROFILE_TASK(context: { commit: Commit; state: State; dispatch: Dispatch }) {
     const {
       service,
       endpointName,
@@ -171,7 +184,10 @@ const actions = {
       .query('saveProfileTask')
       .params({ creationRequest })
       .then((res: AxiosResponse) => {
-        // context.commit(types.SET_TRACE_SPANS, res.data.data.trace.spans);
+        if (!res.data.data) {
+          return;
+        }
+        context.dispatch('GET_TASK_LIST', {});
       });
   },
 };

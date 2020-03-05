@@ -1,13 +1,10 @@
-/** * Licensed to the Apache Software Foundation (ASF) under one or more *
-contributor license agreements. See the NOTICE file distributed with * this work
-for additional information regarding copyright ownership. * The ASF licenses
-this file to You under the Apache License, Version 2.0 * (the "License"); you
-may not use this file except in compliance with * the License. You may obtain a
-copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
-required by applicable law or agreed to in writing, software * distributed under
-the License is distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. * See the License for the
-specific language governing permissions and * limitations under the License. */
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 
 <template>
   <div class="rk-trace-t flex-v">
@@ -18,11 +15,7 @@ specific language governing permissions and * limitations under the License. */
         @changePage="page"
         :total="rocketTrace.traceTotal"
       />
-      <select
-        class="grey"
-        @change="changeSort"
-        :value="rocketTrace.traceForm.queryOrder"
-      >
+      <select class="grey" @change="changeSort" :value="rocketTrace.traceForm.queryOrder">
         <option value="BY_START_TIME">{{ this.$t('startTime') }}</option>
         <option value="BY_DURATION">{{ this.$t('duration') }}</option>
       </select>
@@ -34,12 +27,7 @@ specific language governing permissions and * limitations under the License. */
     </div>
     <div class="rk-trace-t-wrapper scroll_hide">
       <table class="rk-trace-t">
-        <tr
-          class="rk-trace-tr cp"
-          v-for="(i, index) in rocketTrace.traceList"
-          @click="selectTrace(i)"
-          :key="index"
-        >
+        <tr class="rk-trace-tr cp" v-for="(i, index) in rocketTrace.traceList" @click="selectTrace(i)" :key="index">
           <td
             class="rk-trace-td"
             :class="{
@@ -58,8 +46,7 @@ specific language governing permissions and * limitations under the License. */
               <span class="b">{{ i.endpointNames[0] }}</span>
             </div>
             <div class="grey ell sm">
-              <span class="rk-tag mr-10 sm">{{ i.duration }} ms</span
-              >{{ parseInt(i.start) | dateformat }}
+              <span class="rk-tag mr-10 sm">{{ i.duration }} ms</span>{{ parseInt(i.start) | dateformat }}
             </div>
           </td>
         </tr>
@@ -89,10 +76,7 @@ specific language governing permissions and * limitations under the License. */
       if (this.rocketTrace.traceList && this.rocketTrace.traceList.length > 0) {
         this.selectTrace(this.rocketTrace.traceList[0]);
       }
-      if (
-        this.rocketTrace.traceList &&
-        this.rocketTrace.traceList.length === 0
-      ) {
+      if (this.rocketTrace.traceList && this.rocketTrace.traceList.length === 0) {
         this.SET_DEFAULT_EMPTY_TRACE();
       }
     }
@@ -142,7 +126,6 @@ specific language governing permissions and * limitations under the License. */
 <style lang="scss">
   .rk-trace-t {
     flex-grow: 1;
-    height: 100%;
     position: relative;
   }
   .rk-trace-t-tool {
