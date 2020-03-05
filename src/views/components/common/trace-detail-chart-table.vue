@@ -175,7 +175,7 @@ language governing permissions and * limitations under the License. */
             }
           });
           segmentHeaders.forEach((span) => {
-            if (span.refs.length) {
+            if (span.refs && span.refs.length) {
               span.refs.forEach((ref) => {
                 const index = this.data.findIndex(i => (ref.parentSegmentId === i.segmentId && ref.parentSpanId === i.spanId));
                 if (index === -1) {
@@ -252,7 +252,7 @@ language governing permissions and * limitations under the License. */
             segmentGroup[id] = currentSegment[currentSegment.length-1]
           })
           segmentIdGroup.forEach(id => {
-            segmentGroup[id].refs.forEach(ref => {
+            segmentGroup[id].refs && segmentGroup[id].refs.forEach(ref => {
               if(ref.traceId === this.traceId) {
                 this.traverseTree(segmentGroup[ref.parentSegmentId],ref.parentSpanId,ref.parentSegmentId,segmentGroup[id])
               };
@@ -260,7 +260,7 @@ language governing permissions and * limitations under the License. */
             // if(segmentGroup[id].refs.length !==0 ) delete segmentGroup[id];
           })
         for (const i in segmentGroup) {
-          if (segmentGroup[i].refs.length === 0) {
+          if (segmentGroup[i].refs && segmentGroup[i].refs.length === 0 || !segmentGroup[i].refs) {
             this.segmentId.push(segmentGroup[i]);
           }
         }

@@ -15,34 +15,6 @@
  * limitations under the License.
  */
 
-export const Traces = {
-  variable: '$condition: TraceQueryCondition',
-  query: `
-  traces: queryBasicTraces(condition: $condition) {
-    data: traces {
-      key: segmentId
-      endpointNames
-      duration
-      start
-      isError
-      traceIds
-    }
-    total
-  }`,
-};
-
-export const ServiceInstanceOption = {
-  variable: '$duration: Duration!, $serviceId: ID!',
-  query: `
-    instanceId: getServiceInstances(duration: $duration, serviceId: $serviceId) {
-      key: id
-      label: name
-    }`,
-};
-
-/**
- * @param { segmentId } { string }
- */
 export const ProfileSegment = {
   variable: '$segmentId: String',
   query: `
@@ -59,6 +31,14 @@ export const ProfileSegment = {
       component
       isError
       layer
+      tags {
+        key value
+      }
+      logs {
+        time data {
+            key value
+        }
+      }
     }
   }
   `,
@@ -99,6 +79,25 @@ export const GetProfileTaskSegmentList = {
     duration
     traceIds
     isError
+  }
+  `,
+};
+
+export const GetProfileAnalyze = {
+  variable: '$segmentId: String!, $timeRanges: [ProfileAnalyzeTimeRange!]!',
+  query: `
+  getProfileAnalyze: getProfileAnalyze(segmentId: $segmentId, timeRanges: $timeRanges) {
+    tip
+    trees {
+      elements {
+        id
+        parentId
+        codeSignature
+        duration
+        durationChildExcluded
+        count
+      }
+    }
   }
   `,
 };

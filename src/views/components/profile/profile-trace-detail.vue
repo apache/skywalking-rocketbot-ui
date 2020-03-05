@@ -8,16 +8,17 @@ language governing permissions and * limitations under the License. */
 
 <template>
   <div class="profile-trace-dashboard flex-v">
-    <div class="profile-trace-detail-wrapper">
-      <div class="mb-5 blue sm">
-        <select class="profile-trace-detail-ids" @change="GET_TRACE_SPANS({ traceId: i })">
-          <option v-for="i in currentSegment.traceIds" :value="i" :key="i">{{ i }}</option>
-        </select>
-        <select class="profile-trace-detail-ids" @change="analyzeProfile()">
-          <option value="include" key="include">include children</option>
-          <option value="exclude" key="exclude">exclude children</option>
-        </select>
-      </div>
+    <div class="profile-trace-detail-wrapper mb-5 blue sm">
+      <select class="profile-trace-detail-ids" @change="GET_TRACE_SPANS({ traceId: i })">
+        <option v-for="i in currentSegment.traceIds" :value="i" :key="i">{{ i }}</option>
+      </select>
+      <select class="profile-trace-detail-ids" @change="analyzeProfile()">
+        <option value="include" key="include">include children</option>
+        <option value="exclude" key="exclude">exclude children</option>
+      </select>
+      <a class="profile-analyze-btn bg-blue profile-trace-detail-ids">
+        <span class="vm">{{ this.$t('analyze') }}</span>
+      </a>
     </div>
     <TraceDetailChartTable :data="segmentSpans" :traceId="currentSegment.traceIds[0]" />
     <TraceDetailChartTable :data="segmentSpans" :traceId="currentSegment.traceIds[0]" />
@@ -65,5 +66,13 @@ language governing permissions and * limitations under the License. */
   }
   select {
     margin: 0 10px;
+  }
+  .profile-analyze-btn {
+    color: #fff;
+    padding: 3px 9px;
+    background-color: #484b55;
+    &.bg-blue {
+      background-color: #448dfe;
+    }
   }
 </style>

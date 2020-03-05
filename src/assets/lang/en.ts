@@ -114,6 +114,7 @@ const m = {
   dumpPeriod: 'Dump Period',
   createTask: 'Create Task',
   maxSamplingCount: 'Max Sampling Count',
+  analyze: 'Analyze',
 };
 
 export default m;

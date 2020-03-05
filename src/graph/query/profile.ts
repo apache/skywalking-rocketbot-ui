@@ -16,23 +16,19 @@
  */
 
 import {
-  Traces,
   ProfileSegment,
-  ServiceInstanceOption,
   CreateProfileTask,
   GetProfileTaskList,
   GetProfileTaskSegmentList,
+  GetProfileAnalyze,
 } from '../fragments/profile';
 
-export const queryTraces = `query queryTraces(${Traces.variable}) {${Traces.query}}`;
-
 export const queryProfileSegment = `query queryProfileSegment(${ProfileSegment.variable}) {${ProfileSegment.query}}`;
-
-export const queryServiceInstance = `query queryServiceInstance(${ServiceInstanceOption.variable})
-{${ServiceInstanceOption.query}}`;
 
 export const saveProfileTask = `mutation createProfileTask(${CreateProfileTask.variable}) {${CreateProfileTask.query}}`;
 
 export const getProfileTaskList = `query getProfileTaskList(${GetProfileTaskList.variable}) {${GetProfileTaskList.query}}`;
 
 export const getProfileTaskSegmentList = `query getProfileTaskSegmentList(${GetProfileTaskSegmentList.variable}) {${GetProfileTaskSegmentList.query}}`;
+
+export const getProfileAnalyze = `query getProfileAnalyze(${GetProfileAnalyze.variable}) {${GetProfileAnalyze.query}}`;

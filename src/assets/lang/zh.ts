@@ -114,6 +114,7 @@ const m = {
   dumpPeriod: '倾倒期',
   createTask: '新建任务',
   maxSamplingCount: '最大采样数',
+  analyze: '分析',
 };
 
 export default m;
