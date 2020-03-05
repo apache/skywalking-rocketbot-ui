@@ -60,7 +60,6 @@ export const SET_SEARCH_ENDPOINTS = 'SET_SEARCH_ENDPOINTS';
 
 // alarm
 export const SET_ALARM = 'SET_ALARM';
-export const SET_ALARM_TOTAL = 'SET_ALARM_TOTAL';
 export const CLEAR_ALARM = 'CLEAR_ALARM';
 
 // trace

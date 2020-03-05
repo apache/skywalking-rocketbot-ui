@@ -80,9 +80,8 @@ specific language governing permissions and * limitations under the License. */
 <script lang="ts">
   import { Vue, Component, Prop } from 'vue-property-decorator';
   import { State, Action, Getter, Mutation } from 'vuex-class';
-
   import { State as topoState } from '@/store/modules/topology';
-  import Topo from './topo.vue';
+  import Topo from './chart/topo.vue';
   import TopoChart from './topo-chart.vue';
   import DependencySankey from './dependency-sankey.vue';
   import ChartLine from './chart-line.vue';
@@ -133,15 +132,14 @@ specific language governing permissions and * limitations under the License. */
     }
     .rk-instance-dependency-metrics {
       width: 320px;
-      margin-top: 20px;
-      margin-right: 20px;
+      height: 650px;
+      margin-top: 10px;
       background: #252a2f;
       padding: 20px;
     }
     .rk-dependency-chart {
       width: 850px;
       height: 100%;
-      flex-grow: 1;
     }
   }
 </style>

@@ -36,8 +36,9 @@ const getters = {};
 
 // mutations
 const mutations: MutationTree<State> = {
-  [types.SET_ALARM](state: State, data: Alarm[]): void {
-    state.alarmService = data;
+  [types.SET_ALARM](state: State, data: {items: Alarm[], total: number}): void {
+    state.alarmService = data.items;
+    state.total = data.total;
   },
   [types.SET_ALARM_TOTAL](state: State, total: number): void {
     state.total = total;
@@ -58,8 +59,7 @@ const actions: ActionTree<State, any> = {
       .params(params)
       .then((res: AxiosResponse<any>) => {
         if (res.data.data.getAlarm.items) {
-          context.commit(types.SET_ALARM, res.data.data.getAlarm.items);
-          context.commit(types.SET_ALARM_TOTAL, res.data.data.getAlarm.total);
+          context.commit(types.SET_ALARM, res.data.data.getAlarm);
         }
       });
   },

@@ -12,16 +12,14 @@ specific language governing permissions and * limitations under the License. */
 <template>
   <nav class="rk-alarm-tool flex-h">
     <AlarmSelect
-      v-show="!inTopo"
       :title="$t('filterScope')"
-      :value="alarmScope"
+      :value="alarmOption"
       @input="handleFilter"
       :data="alarmOptions"
     />
     <div class="mr-10" style="padding: 3px 15px 0">
       <div class="sm grey">{{ $t('searchKeyword') }}</div>
       <input
-        :disabled="inTopo"
         type="text"
         v-model="keyword"
         class="rk-alarm-tool-input"
@@ -41,21 +39,23 @@ specific language governing permissions and * limitations under the License. */
 <script lang="ts">
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
-  import { Action, Mutation } from 'vuex-class';
+  import { Action, Mutation, Getter } from 'vuex-class';
   import AlarmSelect from './alarm-select.vue';
+
+  interface Option{
+    key: string | number,
+    label: string | number,
+  }
 
   @Component({ components: { AlarmSelect } })
   export default class AlarmTool extends Vue {
+    @Getter('durationTime') private durationTime: any;
     @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Action('rocketAlarm/GET_ALARM') private GET_ALARM: any;
-    @Prop() private durationTime: any;
     @Prop() private total!: number;
     private pageNum: number = 1;
-    @Prop({ type: Object, default: () => ({ label: 'All', key: '' }) })
-    private alarmScope: any;
-    @Prop({ default: false, type: Boolean })
-    private inTopo!: boolean;
-    private alarmOptions: any = [
+    private alarmOption: Option = { label: 'All', key: '' };
+    private alarmOptions: Option[] = [
       { label: 'All', key: '' },
       { label: 'Service', key: 'Service' },
       { label: 'ServiceInstance', key: 'ServiceInstance' },
@@ -67,18 +67,12 @@ specific language governing permissions and * limitations under the License. */
     @Prop()
     private propKeyword!: string;
 
-    private created() {
-      if (this.propKeyword) {
-        this.keyword = this.propKeyword;
-      }
-    }
-
     private handlePage(pageNum: number) {
       this.handleRefresh(pageNum);
     }
 
-    private handleFilter(i: any) {
-      this.alarmScope = i;
+    private handleFilter(option: Option) {
+      this.alarmOption = option;
       this.handleRefresh(1);
     }
 
@@ -92,8 +86,8 @@ specific language governing permissions and * limitations under the License. */
           needTotal: true,
         },
       };
-      if (this.alarmScope.key) {
-        params.scope = this.alarmScope.key;
+      if (this.alarmOption.key) {
+        params.scope = this.alarmOption.key;
       }
       if (this.keyword) {
         params.keyword = this.keyword;
@@ -102,14 +96,9 @@ specific language governing permissions and * limitations under the License. */
     }
 
     private beforeMount() {
-      this.SET_EVENTS([
-        () => {
-          this.handleRefresh(1);
-        },
-      ]);
+      this.SET_EVENTS([() => { this.handleRefresh(1); }]);
       this.handleRefresh(1);
     }
-
     private beforeDestroy() {
       this.SET_EVENTS([]);
     }

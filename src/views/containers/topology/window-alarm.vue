@@ -15,7 +15,7 @@ specific language governing permissions and * limitations under the License. */
       :durationTime="durationTime"
       :total="rocketAlarm.total"
       :alarmScope="alarmScope"
-      :inTopo="inTopo"
+      :inTopo="true"
       :prop-keyword="keyword"
     />
     <div style="flex-grow: 1;overflow: auto;height: 100%;">
@@ -40,8 +40,6 @@ specific language governing permissions and * limitations under the License. */
     @Getter('durationTime') private durationTime: any;
     @Prop({ default: () => ({ label: 'All', key: '' }) })
     private alarmScope: any;
-    @Prop({ default: false, type: Boolean })
-    private inTopo!: boolean;
     @Prop({ default: '' })
     private keyword!: string;
   }

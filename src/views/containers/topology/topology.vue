@@ -12,7 +12,7 @@ specific language governing permissions and * limitations under the License. */
 <template>
   <div class="rk-topo">
     <TopoAside />
-    <Topo :datas="{ nodes: stateTopo.nodes, calls: stateTopo.calls }" />
+    <Topo :current="current" @setCurrent="setCurrent" :nodes="stateTopo.nodes" :links="stateTopo.calls"/>
     <rk-sidebox :show.sync="stateTopo.showDialog" :fixed="true" width="80%">
       <window-endpoint
         v-if="stateTopo.showDialogType === 'endpoint'"
@@ -24,15 +24,12 @@ specific language governing permissions and * limitations under the License. */
       />
       <window-trace
         v-else-if="stateTopo.showDialogType === 'trace'"
-        :service="{
-          label: stateTopo.honeycombNode.name,
-          key: stateTopo.honeycombNode.id,
-        }"
+        :service="this.current"
       />
       <window-alarm
         v-else-if="stateTopo.showDialogType === 'alarm'"
         :alarmScope="{ label: 'Service', key: 'Service' }"
-        :keyword="stateTopo.honeycombNode.name"
+        :keyword="this.current.label"
       />
     </rk-sidebox>
   </div>
@@ -45,7 +42,7 @@ specific language governing permissions and * limitations under the License. */
   import WindowInstance from '@/views/containers/topology/window-instance.vue';
   import WindowTrace from '@/views/containers/topology/window-trace.vue';
   import WindowAlarm from '@/views/containers/topology/window-alarm.vue';
-  import Topo from '../../components/topology/topo.vue';
+  import Topo from '../../components/topology/chart/topo.vue';
   import TopoAside from '../../components/topology/topo-aside.vue';
   import { State as topoState } from '@/store/modules/topology';
 
@@ -68,6 +65,10 @@ specific language governing permissions and * limitations under the License. */
     @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
     @Getter('durationTime') private durationTime: any;
 
+    private current: any = {};
+    private setCurrent(d: any): void {
+      this.current = d;
+    }
     private beforeMount(): void {
       this.SET_EVENTS([this.getTopo]);
     }
