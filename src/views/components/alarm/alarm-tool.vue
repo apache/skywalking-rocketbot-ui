@@ -14,7 +14,10 @@ specific language governing permissions and * limitations under the License. */
     <AlarmSelect
       :title="$t('filterScope')"
       :value="alarmOption"
-      @input="handleFilter"
+      @input="(option) => {
+        alarmOption = option;
+        handleRefresh(1);
+      }"
       :data="alarmOptions"
     />
     <div class="mr-10" style="padding: 3px 15px 0">
@@ -30,7 +33,7 @@ specific language governing permissions and * limitations under the License. */
       class="mt-15"
       :currentSize="20"
       :currentPage="pageNum"
-      @changePage="handlePage"
+      @changePage="(pageNum) => handleRefresh(pageNum)"
       :total="total"
     />
   </nav>
@@ -42,9 +45,9 @@ specific language governing permissions and * limitations under the License. */
   import { Action, Mutation, Getter } from 'vuex-class';
   import AlarmSelect from './alarm-select.vue';
 
-  interface Option{
-    key: string | number,
-    label: string | number,
+  interface Option {
+    key: string | number;
+    label: string | number;
   }
 
   @Component({ components: { AlarmSelect } })
@@ -61,20 +64,7 @@ specific language governing permissions and * limitations under the License. */
       { label: 'ServiceInstance', key: 'ServiceInstance' },
       { label: 'Endpoint', key: 'Endpoint' },
     ];
-
     private keyword: string = '';
-
-    @Prop()
-    private propKeyword!: string;
-
-    private handlePage(pageNum: number) {
-      this.handleRefresh(pageNum);
-    }
-
-    private handleFilter(option: Option) {
-      this.alarmOption = option;
-      this.handleRefresh(1);
-    }
 
     private handleRefresh(pageNum: number) {
       this.pageNum = pageNum;

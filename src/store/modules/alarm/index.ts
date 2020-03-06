@@ -40,11 +40,9 @@ const mutations: MutationTree<State> = {
     state.alarmService = data.items;
     state.total = data.total;
   },
-  [types.SET_ALARM_TOTAL](state: State, total: number): void {
-    state.total = total;
-  },
   [types.CLEAR_ALARM](state: State): void {
     state.alarmService = [];
+    state.total = 0;
   },
 };
 
