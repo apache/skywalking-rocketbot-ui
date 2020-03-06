@@ -23,8 +23,7 @@
   opacity: 0;
 }
 
-.d3-tip,
-.d3-tip-grey {
+.d3-tip {
   line-height: 1;
   padding: 8px;
   color: #eee;
@@ -34,11 +33,7 @@
 .d3-tip {
   background: #252a2f;
 }
-.d3-tip-grey {
-  background: #252a2fcc;
-}
 
-.d3-tip-grey:after,
 .d3-tip:after {
   box-sizing: border-box;
   display: block;
@@ -51,11 +46,6 @@
   text-align: center;
 }
 
-.d3-tip-grey:after {
-  color: #252a2fcc;
-}
-
-.d3-tip-grey.n:after,
 .d3-tip.n:after {
   margin: -2px 0 0 0;
   top: 100%;

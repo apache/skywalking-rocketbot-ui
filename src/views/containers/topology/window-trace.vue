@@ -11,7 +11,7 @@ specific language governing permissions and * limitations under the License. */
 
 <template>
   <div class="rk-trace flex-v">
-    <TraceSearch :propsService="service" :inTopo="inTopo" />
+    <TraceSearch ref="search" :propsService="service" :inTopo="true" />
     <div class="rk-trace-inner">
       <TraceTable />
       <TraceDetail
@@ -24,7 +24,7 @@ specific language governing permissions and * limitations under the License. */
 
 <script lang="ts">
   import { Option } from '@/types/global';
-  import { Component, Vue, Prop, PropSync } from 'vue-property-decorator';
+  import { Component, Vue, Prop, PropSync, Watch } from 'vue-property-decorator';
   import { State, Action, Mutation } from 'vuex-class';
   import TraceSearch from '@/views/components/trace/trace-search.vue';
   import TraceTable from '@/views/components/trace/trace-table.vue';
@@ -45,10 +45,6 @@ specific language governing permissions and * limitations under the License. */
     private isShowSync!: boolean;
     @Prop({ default: { label: 'All', key: '' } })
     private service!: Option;
-
-    @Prop({ default: false, type: Boolean })
-    private inTopo!: boolean;
-
     private show: boolean = true;
     private beforeMount() {
       this.SET_EVENTS([]);

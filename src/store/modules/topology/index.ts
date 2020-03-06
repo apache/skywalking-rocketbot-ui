@@ -60,7 +60,6 @@ export interface State {
   getSLATrend: number[];
   getThroughputTrend: number[];
   responsePercentile: { [key: string]: number[] };
-  honeycombNode: any;
   showDialog: boolean;
   showDialogType: string;
   instanceDependency: {
@@ -90,7 +89,6 @@ const initState: State = {
   getSLATrend: [],
   getThroughputTrend: [],
   responsePercentile: {},
-  honeycombNode: {},
   showDialog: false,
   showDialogType: '',
   instanceDependency: {
@@ -107,9 +105,6 @@ const getters = {};
 
 // mutations
 const mutations = {
-  [types.SET_HONEYCOMB_NODE](state: State, data: any) {
-    state.honeycombNode = data;
-  },
   [types.SET_SHOW_DIALOG](state: State, type: string) {
     state.showDialog = !!type;
     state.showDialogType = type;

@@ -51,6 +51,9 @@ specific language governing permissions and * limitations under the License. */
 <style lang="scss" scoped>
   .rk-alarm-table {
     padding: 30px 20px 20px 40px;
+    flex-grow: 1;
+    overflow: auto;
+    height: 100%;
   }
   .rk-alarm-time-line {
     padding: 14px 30px;

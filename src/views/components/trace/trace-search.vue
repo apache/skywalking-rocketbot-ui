@@ -257,11 +257,7 @@ language governing permissions and * limitations under the License. */
       this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     }
-
     private mounted() {
-      if (this.inTopo) {
-        this.service = this.propsService;
-      }
       this.getTraceList();
       if (this.service && this.service.key) {
         this.GET_INSTANCES({
