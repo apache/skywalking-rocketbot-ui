@@ -92,10 +92,6 @@ export default {
     },
     // instace hexagon
     handleGoInstance() {
-      this.$store.dispatch('SELECT_SERVICE', {
-        service: { key: this.current.id, label: this.current.name },
-        duration: this.$store.getters.durationTime,
-      });
       this.$emit('setDialog','instance')
     },
     // endpoint hexagon
