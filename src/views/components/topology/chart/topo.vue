@@ -82,25 +82,29 @@ export default {
     links: 'update',
   },
   methods: {
+    // alarm hexagon
     handleGoAlarm() {
-      this.$store.commit('rocketTopo/SET_SHOW_DIALOG', 'alarm');
+      this.$emit('setDialog','alarm')
     },
+    // trace hexagon
     handleGoTrace() {
-      this.$store.commit('rocketTopo/SET_SHOW_DIALOG', 'trace');
+      this.$emit('setDialog','trace')
     },
+    // instace hexagon
     handleGoInstance() {
       this.$store.dispatch('SELECT_SERVICE', {
         service: { key: this.current.id, label: this.current.name },
         duration: this.$store.getters.durationTime,
       });
-      this.$store.commit('rocketTopo/SET_SHOW_DIALOG', 'instance');
+      this.$emit('setDialog','instance')
     },
+    // endpoint hexagon
     handleGoEndpoint() {
       this.$store.dispatch('SELECT_SERVICE', {
         service: { key: this.current.id, label: this.current.name },
         duration: this.$store.getters.durationTime,
       });
-      this.$store.commit('rocketTopo/SET_SHOW_DIALOG', 'endpoint');
+      this.$emit('setDialog','endpoint');
     },
     handleNodeClick(d) {
       this.$emit('setCurrent', { key: d.id, label: d.name });

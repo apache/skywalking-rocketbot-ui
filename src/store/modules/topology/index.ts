@@ -60,8 +60,6 @@ export interface State {
   getSLATrend: number[];
   getThroughputTrend: number[];
   responsePercentile: { [key: string]: number[] };
-  showDialog: boolean;
-  showDialogType: string;
   instanceDependency: {
     calls: Call[];
     nodes: Node[];
@@ -89,8 +87,6 @@ const initState: State = {
   getSLATrend: [],
   getThroughputTrend: [],
   responsePercentile: {},
-  showDialog: false,
-  showDialogType: '',
   instanceDependency: {
     calls: [],
     nodes: [],
@@ -105,10 +101,6 @@ const getters = {};
 
 // mutations
 const mutations = {
-  [types.SET_SHOW_DIALOG](state: State, type: string) {
-    state.showDialog = !!type;
-    state.showDialogType = type;
-  },
   [types.SET_CALLBACK](state: State, data: any) {
     state.callback = data;
   },

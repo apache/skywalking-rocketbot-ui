@@ -12,24 +12,23 @@ specific language governing permissions and * limitations under the License. */
 <template>
   <div class="rk-topo">
     <TopoAside />
-    <Topo :current="current" @setCurrent="setCurrent" :nodes="stateTopo.nodes" :links="stateTopo.calls"/>
-    <rk-sidebox :show.sync="stateTopo.showDialog" :fixed="true" width="80%">
+    <Topo :current="current" @setDialog="(type) => dialog = type" @setCurrent="setCurrent" :nodes="stateTopo.nodes" :links="stateTopo.calls"/>
+    <rk-sidebox :show="dialog.length" @update:show="dialog = ''" :fixed="true" width="80%">
       <window-endpoint
-        v-if="stateTopo.showDialogType === 'endpoint'"
+        v-if="dialog === 'endpoint'"
         :endpoints="stateDashboardOption.endpoints"
       />
       <window-instance
-        v-else-if="stateTopo.showDialogType === 'instance'"
+        v-else-if="dialog === 'instance'"
         :instances="stateDashboardOption.instances"
       />
       <window-trace
-        v-else-if="stateTopo.showDialogType === 'trace'"
+        v-else-if="dialog === 'trace'"
         :service="this.current"
       />
       <window-alarm
-        v-else-if="stateTopo.showDialogType === 'alarm'"
-        :alarmScope="{ label: 'Service', key: 'Service' }"
-        :keyword="this.current.label"
+        v-if="dialog === 'alarm'"
+        :current="this.current"
       />
     </rk-sidebox>
   </div>
@@ -41,7 +40,7 @@ specific language governing permissions and * limitations under the License. */
   import WindowEndpoint from '@/views/containers/topology/window-endpoint.vue';
   import WindowInstance from '@/views/containers/topology/window-instance.vue';
   import WindowTrace from '@/views/containers/topology/window-trace.vue';
-  import WindowAlarm from '@/views/containers/topology/window-alarm.vue';
+  import WindowAlarm from '@/views/containers/topology/alarm/index.vue';
   import Topo from '../../components/topology/chart/topo.vue';
   import TopoAside from '../../components/topology/topo-aside.vue';
   import { State as topoState } from '@/store/modules/topology';
@@ -66,6 +65,7 @@ specific language governing permissions and * limitations under the License. */
     @Getter('durationTime') private durationTime: any;
 
     private current: any = {};
+    private dialog: string = '';
     private setCurrent(d: any): void {
       this.current = d;
     }
