@@ -84,15 +84,15 @@ export default {
   methods: {
     // alarm hexagon
     handleGoAlarm() {
-      this.$emit('setDialog','alarm')
+      this.$emit('setDialog', 'alarm');
     },
     // trace hexagon
     handleGoTrace() {
-      this.$emit('setDialog','trace')
+      this.$emit('setDialog', 'trace');
     },
     // instace hexagon
     handleGoInstance() {
-      this.$emit('setDialog','instance')
+      this.$emit('setDialog', 'instance');
     },
     // endpoint hexagon
     handleGoEndpoint() {
@@ -100,7 +100,7 @@ export default {
         service: { key: this.current.id, label: this.current.name },
         duration: this.$store.getters.durationTime,
       });
-      this.$emit('setDialog','endpoint');
+      this.$emit('setDialog', 'endpoint');
     },
     handleNodeClick(d) {
       this.$emit('setCurrent', { key: d.id, label: d.name });
@@ -116,7 +116,7 @@ export default {
       this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' :
           'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
       this.$store.commit('rocketTopo/SET_CALLBACK', () => {
-        this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 
+        this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' :
           'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
       });
     },
