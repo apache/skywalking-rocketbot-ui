@@ -92,10 +92,6 @@ export default {
     },
     // instace hexagon
     handleGoInstance() {
-      this.$store.dispatch('SELECT_SERVICE', {
-        service: { key: this.current.id, label: this.current.name },
-        duration: this.$store.getters.durationTime,
-      });
       this.$emit('setDialog','instance')
     },
     // endpoint hexagon
@@ -117,9 +113,11 @@ export default {
       this.$store.commit('rocketTopo/SET_NODE', {});
       this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
       this.$store.commit('rocketTopo/SET_MODE', d.detectPoints);
-      this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
+      this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' :
+          'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
       this.$store.commit('rocketTopo/SET_CALLBACK', () => {
-        this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
+        this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 
+          'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
       });
     },
     resize() {
