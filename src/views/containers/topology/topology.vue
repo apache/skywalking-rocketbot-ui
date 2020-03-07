@@ -23,8 +23,8 @@ specific language governing permissions and * limitations under the License. */
         :instances="stateDashboardOption.instances"
       />
       <window-trace
-        v-else-if="dialog === 'trace'"
-        :service="this.current"
+        v-if="dialog === 'trace'"
+        :current="this.current"
       />
       <window-alarm
         v-if="dialog === 'alarm'"
@@ -39,7 +39,7 @@ specific language governing permissions and * limitations under the License. */
   import { AxiosResponse } from 'axios';
   import WindowEndpoint from '@/views/containers/topology/endpoint/index.vue';
   import WindowInstance from '@/views/containers/topology/window-instance.vue';
-  import WindowTrace from '@/views/containers/topology/window-trace.vue';
+  import WindowTrace from '@/views/containers/topology/trace/index.vue';
   import WindowAlarm from '@/views/containers/topology/alarm/index.vue';
   import Topo from '../../components/topology/chart/topo.vue';
   import TopoAside from '../../components/topology/topo-aside.vue';

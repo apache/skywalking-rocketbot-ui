@@ -28,13 +28,6 @@ language governing permissions and * limitations under the License. */
         <span class="vm">{{ this.$t('clear') }}</span>
       </a>
       <div class="flex-h">
-        <TraceSelect
-          :hasSearch="true"
-          :title="this.$t('service')"
-          :value="service"
-          @input="chooseService"
-          :data="rocketTrace.services"
-        />
         <TraceSelect :hasSearch="true" :title="this.$t('instance')" v-model="instance" :data="rocketTrace.instances" />
         <TraceSelect
           :title="this.$t('status')"
@@ -75,7 +68,7 @@ language governing permissions and * limitations under the License. */
 
 <script lang="ts">
   import { Duration, Option } from '@/types/global';
-  import { Component, Vue, Watch } from 'vue-property-decorator';
+  import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import TraceSelect from './trace-select.vue';
 
@@ -90,9 +83,8 @@ language governing permissions and * limitations under the License. */
     @Action('rocketTrace/GET_INSTANCES') private GET_INSTANCES: any;
     @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
     @Action('rocketTrace/SET_TRACE_FORM') private SET_TRACE_FORM: any;
-    @Mutation('rocketTrace/SET_TRACE_FORM_ITEM')
-    private SET_TRACE_FORM_ITEM: any;
-    private service: Option = { label: 'All', key: '' };
+    @Mutation('rocketTrace/SET_TRACE_FORM_ITEM') private SET_TRACE_FORM_ITEM: any;
+    @Prop() private service!: Option;
     private time!: Date[];
     private status: boolean = true;
     private maxTraceDuration: string = localStorage.getItem('maxTraceDuration') || '';
@@ -174,7 +166,6 @@ language governing permissions and * limitations under the License. */
     }
 
     private getTraceList() {
-      this.GET_SERVICES({ duration: this.durationTime });
       const temp: any = {
         queryDuration: this.globalTimeFormat([
           new Date(
@@ -190,10 +181,7 @@ language governing permissions and * limitations under the License. */
         paging: { pageNum: 1, pageSize: 15, needTotal: true },
         queryOrder: this.rocketTrace.traceForm.queryOrder,
       };
-
-      if (this.service.key) {
-        temp.serviceId = this.service.key;
-      }
+      temp.serviceId = this.service.key;
       if (this.instance.key) {
         temp.serviceInstanceId = this.instance.key;
       }
@@ -229,7 +217,6 @@ language governing permissions and * limitations under the License. */
       localStorage.removeItem('maxTraceDuration');
       this.minTraceDuration = '';
       localStorage.removeItem('minTraceDuration');
-      this.service = { label: 'All', key: '' };
       this.instance = { label: 'All', key: '' };
       this.endpointName = '';
       localStorage.removeItem('endpointName');
@@ -254,12 +241,10 @@ language governing permissions and * limitations under the License. */
     }
     private mounted() {
       this.getTraceList();
-      if (this.service && this.service.key) {
-        this.GET_INSTANCES({
-          duration: this.durationTime,
-          serviceId: this.service.key,
-        });
-      }
+      this.GET_INSTANCES({
+        duration: this.durationTime,
+        serviceId: this.service.key,
+      });
     }
   }
 </script>
