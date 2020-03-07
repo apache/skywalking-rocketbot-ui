@@ -20,14 +20,14 @@ specific language governing permissions and * limitations under the License. */
           : `width:${width};${right ? 'right' : 'left'}:-${width}`
       "
     >
-      <h3 class="rk-sidebox-title">
-        {{ this.title }}
+      <div class="rk-sidebox-title">
+        <span class="title">{{ this.title }}</span>
         <div class="r rk-sidebox-close" @click="handleHide">
           <svg class="icon">
             <use xlink:href="#close"></use>
           </svg>
         </div>
-      </h3>
+      </div>
       <div
         class="rk-sidebox-inner"
         :class="{ 'rk-sidebox-inner-fixed': fixed }"
@@ -96,10 +96,13 @@ specific language governing permissions and * limitations under the License. */
     font-size: 16px;
     position: absolute;
     width: 100%;
-    padding: 0 20px;
-    line-height: 17px;
+    padding-left: 20px;
+    line-height: 35px;
   }
   .rk-sidebox-close {
+    position: absolute;
+    right: 10px;
+    top:0;
     cursor: pointer;
     color: #d8d8d8;
     transition: color 0.3s;
