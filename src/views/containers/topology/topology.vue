@@ -19,8 +19,8 @@ specific language governing permissions and * limitations under the License. */
         :endpoints="stateDashboardOption.endpoints"
       />
       <window-instance
-        v-else-if="dialog === 'instance'"
-        :instances="stateDashboardOption.instances"
+        v-if="dialog === 'instance'"
+        :current="this.current"
       />
       <window-trace
         v-if="dialog === 'trace'"
@@ -38,7 +38,7 @@ specific language governing permissions and * limitations under the License. */
   import { State, Action, Getter, Mutation } from 'vuex-class';
   import { AxiosResponse } from 'axios';
   import WindowEndpoint from '@/views/containers/topology/window-endpoint.vue';
-  import WindowInstance from '@/views/containers/topology/window-instance.vue';
+  import WindowInstance from '@/views/containers/topology/instance/index.vue';
   import WindowTrace from '@/views/containers/topology/trace/index.vue';
   import WindowAlarm from '@/views/containers/topology/alarm/index.vue';
   import Topo from '../../components/topology/chart/topo.vue';
