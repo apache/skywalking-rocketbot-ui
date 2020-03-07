@@ -11,7 +11,7 @@ specific language governing permissions and * limitations under the License. */
 
 <template>
   <div class="rk-trace flex-v">
-    <TraceSearch ref="search" :propsService="service" :inTopo="true" />
+    <TraceSearch :service="current"/>
     <div class="rk-trace-inner">
       <TraceTable />
       <TraceDetail
@@ -26,7 +26,7 @@ specific language governing permissions and * limitations under the License. */
   import { Option } from '@/types/global';
   import { Component, Vue, Prop, PropSync, Watch } from 'vue-property-decorator';
   import { State, Action, Mutation } from 'vuex-class';
-  import TraceSearch from '@/views/components/trace/trace-search.vue';
+  import TraceSearch from './trace-search.vue';
   import TraceTable from '@/views/components/trace/trace-table.vue';
   import TraceDetail from '@/views/components/trace/trace-detail.vue';
   @Component({
@@ -38,17 +38,9 @@ specific language governing permissions and * limitations under the License. */
   })
   export default class WindowTrace extends Vue {
     @State('rocketTrace') private stateTrace!: any;
-    @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
     @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
-    @PropSync('isShow', { default: false })
-    private isShowSync!: boolean;
-    @Prop({ default: { label: 'All', key: '' } })
-    private service!: Option;
-    private show: boolean = true;
-    private beforeMount() {
-      this.SET_EVENTS([]);
-    }
+    @Prop() private current!: Option;
   }
 </script>
 <style lang="scss">
