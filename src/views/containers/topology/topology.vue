@@ -16,7 +16,7 @@ specific language governing permissions and * limitations under the License. */
     <rk-sidebox :show="dialog.length" @update:show="dialog = ''" :fixed="true" width="80%">
       <window-endpoint
         v-if="dialog === 'endpoint'"
-        :endpoints="stateDashboardOption.endpoints"
+        :current="this.current"
       />
       <window-instance
         v-if="dialog === 'instance'"
@@ -37,7 +37,7 @@ specific language governing permissions and * limitations under the License. */
   import { Vue, Component } from 'vue-property-decorator';
   import { State, Action, Getter, Mutation } from 'vuex-class';
   import { AxiosResponse } from 'axios';
-  import WindowEndpoint from '@/views/containers/topology/window-endpoint.vue';
+  import WindowEndpoint from '@/views/containers/topology/endpoint/index.vue';
   import WindowInstance from '@/views/containers/topology/instance/index.vue';
   import WindowTrace from '@/views/containers/topology/trace/index.vue';
   import WindowAlarm from '@/views/containers/topology/alarm/index.vue';

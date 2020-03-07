@@ -14,20 +14,17 @@ specific language governing permissions and * limitations under the License. */
     <DashboardItem
       v-for="(i, index) in rocketComps.tree[0].children[2].children"
       :key="index + i.t + i.w + i.d"
-      :index="index"
-      :rocketGlobal="rocketGlobal"
+      :rocketGlobal="{edit: false}"
       :i="i"
-      :dragIndex="dragIndex"
-      @dragStart="dragStart"
     />
   </div>
 </template>
 
 <script lang="ts">
-  import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
   import Vue from 'vue';
   import { Component } from 'vue-property-decorator';
   import { State } from 'vuex-class';
+  import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
 
   @Component({
     components: {
@@ -35,15 +32,7 @@ specific language governing permissions and * limitations under the License. */
     },
   })
   export default class InstancesSurvey extends Vue {
-    @State('rocketbot') private rocketGlobal: any;
-    @State('rocketOption') private stateDashboardOption!: any;
     @State('rocketData') private rocketComps!: any;
-
-    private dragIndex: number = NaN;
-
-    public dragStart(index: number) {
-      this.dragIndex = index;
-    }
   }
 </script>
 

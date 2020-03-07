@@ -113,9 +113,11 @@ export default {
       this.$store.commit('rocketTopo/SET_NODE', {});
       this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
       this.$store.commit('rocketTopo/SET_MODE', d.detectPoints);
-      this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
+      this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' :
+          'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
       this.$store.commit('rocketTopo/SET_CALLBACK', () => {
-        this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
+        this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 
+          'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
       });
     },
     resize() {
