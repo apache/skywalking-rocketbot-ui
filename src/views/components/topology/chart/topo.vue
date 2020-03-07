@@ -1,14 +1,19 @@
-/** * Licensed to the Apache Software Foundation (ASF) under one or more *
-contributor license agreements. See the NOTICE file distributed with * this work
-for additional information regarding copyright ownership. * The ASF licenses
-this file to You under the Apache License, Version 2.0 * (the "License"); you
-may not use this file except in compliance with * the License. You may obtain a
-copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
-required by applicable law or agreed to in writing, software * distributed under
-the License is distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. * See the License for the
-specific language governing permissions and * limitations under the License. */
-
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 <template>
   <div class="micro-topo-chart"></div>
 </template>
@@ -84,15 +89,15 @@ export default {
   methods: {
     // alarm hexagon
     handleGoAlarm() {
-      this.$emit('setDialog','alarm')
+      this.$emit('setDialog', 'alarm');
     },
     // trace hexagon
     handleGoTrace() {
-      this.$emit('setDialog','trace')
+      this.$emit('setDialog', 'trace');
     },
     // instace hexagon
     handleGoInstance() {
-      this.$emit('setDialog','instance')
+      this.$emit('setDialog', 'instance');
     },
     // endpoint hexagon
     handleGoEndpoint() {
@@ -100,7 +105,7 @@ export default {
         service: { key: this.current.id, label: this.current.name },
         duration: this.$store.getters.durationTime,
       });
-      this.$emit('setDialog','endpoint');
+      this.$emit('setDialog', 'endpoint');
     },
     handleNodeClick(d) {
       this.$emit('setCurrent', { key: d.id, label: d.name });
@@ -116,7 +121,7 @@ export default {
       this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' :
           'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
       this.$store.commit('rocketTopo/SET_CALLBACK', () => {
-        this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 
+        this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' :
           'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
       });
     },
