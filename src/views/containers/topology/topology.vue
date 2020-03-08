@@ -16,8 +16,9 @@
  */
 <template>
   <div class="rk-topo">
-    <TopoAside />
     <Topo :current="current" @setDialog="(type) => dialog = type" @setCurrent="setCurrent" :nodes="stateTopo.nodes" :links="stateTopo.calls"/>
+    <TopoAside />
+    <TopoGroup />
     <rk-sidebox :show="dialog.length" @update:show="dialog = ''" :fixed="true" width="80%">
       <window-endpoint
         v-if="dialog === 'endpoint'"
@@ -48,12 +49,14 @@
   import WindowAlarm from '@/views/containers/topology/alarm/index.vue';
   import Topo from '../../components/topology/chart/topo.vue';
   import TopoAside from '../../components/topology/topo-aside.vue';
+  import TopoGroup from '../../components/topology/topo-group/index.vue';
   import { State as topoState } from '@/store/modules/topology';
 
   @Component({
     components: {
       Topo,
       TopoAside,
+      TopoGroup,
       WindowEndpoint,
       WindowInstance,
       WindowTrace,
