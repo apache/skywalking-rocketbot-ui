@@ -14,24 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-module.exports = {
-  devServer: {
-    proxy: {
-      '/graphql': {
-        target: `${process.env.SW_PROXY_TARGET || "http://127.0.0.1:8080"}`,
-        changeOrigin: true,
-      },
-    },
-  },
-  chainWebpack: config => {
-    const svgRule = config.module.rule('svg');
-    svgRule.uses.clear();
-    svgRule
-      .use('svg-sprite-loader')
-      .loader('svg-sprite-loader')
-      .options({
-        symbolId: '[name]',
-      });
-  },
+export const genID = (length: number) => {
+  return Number(
+    Math.random()
+      .toString()
+      .substr(3, length) + Date.now(),
+  ).toString(36);
 };

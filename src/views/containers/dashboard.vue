@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 <template>
-  <div class="flex-v wrapper" style="flex-grow:1;height: 100%;">
+  <div class="flex-v wrapper" style="flex-grow:1;height: 100%;overflow:hidden">
     <ToolGroup :rocketGlobal="rocketGlobal" :rocketComps="rocketComps" />
     <ToolBar
       :rocketGlobal="rocketGlobal"
