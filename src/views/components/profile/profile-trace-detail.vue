@@ -37,6 +37,7 @@ language governing permissions and * limitations under the License. */
   export default class ProfileTraceDetail extends Vue {
     @Prop() private segmentSpans: any;
     @Prop() private currentSegment: any;
+    @Prop() private profileAnalyzation: any;
 
     private analyzeProfile() {}
   }

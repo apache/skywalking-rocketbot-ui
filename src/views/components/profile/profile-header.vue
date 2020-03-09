@@ -101,21 +101,9 @@ language governing permissions and * limitations under the License. */
     }
 
     private globalTimeFormat(time: Date[]) {
-      let step = 'MINUTE';
-      const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
-      if (unix <= 60 * 60 * 1000) {
-        step = 'MINUTE';
-      } else if (unix <= 24 * 60 * 60 * 1000) {
-        step = 'HOUR';
-      } else if (unix <= 30 * 24 * 60 * 60 * 1000) {
-        step = 'DAY';
-      } else {
-        step = 'MONTH';
-      }
       return {
-        start: this.dateFormat(time[0], step),
-        end: this.dateFormat(time[1], step),
-        step,
+        start: time[0].getTime(),
+        end: time[1].getTime(),
       };
     }
 
@@ -130,6 +118,7 @@ language governing permissions and * limitations under the License. */
 
     private created() {
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
+      this.$store.commit('profileStore/SET_HEADER_SOURCE', { timeRanges: [this.globalTimeFormat(this.time)] });
     }
 
     private showDialogTask() {

@@ -19,7 +19,6 @@ import { Commit, Dispatch } from 'vuex';
 import axios, { AxiosResponse } from 'axios';
 
 import graph from '@/graph';
-import { cancelToken } from '@/utils/cancelToken';
 import * as types from '../../mutation-types';
 import { DurationTime } from '@/types/global';
 import { IOption, ITaskOptions, TaskSourceType, TaskListSourceType, TracesSourceType } from '@/types/profile';
@@ -29,6 +28,7 @@ export interface State {
   headerSource: {
     serviceSource: IOption[];
     currentService: IOption;
+    timeRanges: any[];
   };
   newTaskFields: ITaskOptions;
   taskFieldSource: TaskSourceType;
@@ -36,11 +36,13 @@ export interface State {
   segmentSpans: any[];
   currentSegment: any;
   segmentList: TracesSourceType[];
+  profileAnalyzation: any;
 }
 const initState: State = {
   headerSource: {
     serviceSource: [{ key: '', label: 'None' }],
     currentService: { key: '', label: 'None' },
+    timeRanges: [],
   },
   newTaskFields: InitTaskField,
   taskFieldSource: InitTaskFieldSource,
@@ -55,6 +57,7 @@ const initState: State = {
     traceIds: [],
   },
   segmentList: [],
+  profileAnalyzation: {},
 };
 // getters
 const getters = {
@@ -90,11 +93,14 @@ const mutations = {
   [types.SET_CURRENT_SEGMENT](state: State, data: any) {
     state.currentSegment = data;
   },
+  [types.SET_PROFILE_ANALYZATION](state: State, data: any) {
+    state.profileAnalyzation = data;
+  },
   [types.SET_HEADER_SOURCE](state: State, data: any) {
-    // state.headerSource = {
-    //   ...state.headerSource,
-    //   [data.label]
-    // };
+    state.headerSource = {
+      ...state.headerSource,
+      ...data,
+    };
   },
 };
 
@@ -135,17 +141,6 @@ const actions = {
         context.dispatch('GET_SEGMENT_LIST', { taskID: data[0].id });
       });
   },
-  GET_SEGMENT_SPANS(context: { state: State; commit: Commit }, params: { segmentId: string }) {
-    graph
-      .query('queryProfileSegment')
-      .params(params)
-      .then((res: AxiosResponse) => {
-        if (!res.data.data.getProfiledSegment) {
-          return;
-        }
-        context.commit(types.SET_SEGMENT_SPANS, res.data.data.getProfiledSegment.spans);
-      });
-  },
   GET_SEGMENT_LIST(context: { commit: Commit; dispatch: Dispatch }, params: { taskID: string }) {
     graph
       .query('getProfileTaskSegmentList')
@@ -159,6 +154,33 @@ const actions = {
         context.commit(types.SET_SEGMENT_LIST, getProfileTaskSegmentList);
         context.commit(types.SET_CURRENT_SEGMENT, getProfileTaskSegmentList[0]);
         context.dispatch('GET_SEGMENT_SPANS', { segmentId: getProfileTaskSegmentList[0].segmentId });
+      });
+  },
+  GET_SEGMENT_SPANS(context: { state: State; commit: Commit; dispatch: Dispatch }, params: { segmentId: string }) {
+    graph
+      .query('queryProfileSegment')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        if (!res.data.data.getProfiledSegment) {
+          return;
+        }
+        context.commit(types.SET_SEGMENT_SPANS, res.data.data.getProfiledSegment.spans);
+        context.dispatch('GET_PROFILE_ANALYZE', { segmentId: params.segmentId });
+      });
+  },
+  GET_PROFILE_ANALYZE(
+    context: { commit: Commit; state: State; dispatch: Dispatch },
+    params: { segmentId: string; timeRanges?: DurationTime[] },
+  ) {
+    params = { ...params, timeRanges: context.state.headerSource.timeRanges };
+    graph
+      .query('getProfileAnalyze')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        if (!res.data.data.getProfileAnalyze) {
+          return;
+        }
+        context.commit(types.SET_PROFILE_ANALYZATION, res.data.data.getProfileAnalyze.trees);
       });
   },
   CREATE_PROFILE_TASK(context: { commit: Commit; state: State; dispatch: Dispatch }) {
