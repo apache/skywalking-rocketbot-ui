@@ -29,6 +29,7 @@ export interface State {
     serviceSource: IOption[];
     currentService: IOption;
     timeRanges: any[];
+    endpointName: string;
   };
   newTaskFields: ITaskOptions;
   taskFieldSource: TaskSourceType;
@@ -43,6 +44,7 @@ const initState: State = {
     serviceSource: [{ key: '', label: 'None' }],
     currentService: { key: '', label: 'None' },
     timeRanges: [],
+    endpointName: '',
   },
   newTaskFields: InitTaskField,
   taskFieldSource: InitTaskFieldSource,
@@ -120,13 +122,19 @@ const actions = {
           return;
         }
         context.commit(types.SET_SERVICES, res.data.data.services);
-        context.dispatch('GET_TASK_LIST', params);
+        context.dispatch('GET_TASK_LIST');
       });
   },
   GET_TASK_LIST(context: { state: State; dispatch: Dispatch; commit: Commit }) {
+    const { headerSource } = context.state;
+    const param = {
+      serviceId: headerSource.currentService.key === 'all' ? '' : headerSource.currentService.key,
+      endpointName: headerSource.endpointName,
+    };
+
     graph
       .query('getProfileTaskList')
-      .params({})
+      .params(param)
       .then((res: AxiosResponse) => {
         if (!res.data.data) {
           return;

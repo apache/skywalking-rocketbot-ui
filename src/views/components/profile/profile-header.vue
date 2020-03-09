@@ -12,7 +12,7 @@ language governing permissions and * limitations under the License. */
       <a class="rk-new-task-btn r" @click="showDialogTask">
         <span class="mr-5 vm">{{ this.$t('newTask') }}</span>
       </a>
-      <a class="rk-profile-header-btn bg-blue r mr-10">
+      <a class="rk-profile-header-btn bg-blue r mr-10" @click="searchTask">
         <svg class="icon mr-5 vm">
           <use xlink:href="#search"></use>
         </svg>
@@ -107,8 +107,13 @@ language governing permissions and * limitations under the License. */
       };
     }
 
-    private chooseService(item: any, type: string) {
-      this.$store.commit('profileStore/SET_HEADER_SOURCE', { item, type });
+    private chooseService(item: { key: string; label: string }) {
+      this.SET_HEADER_SOURCE({ currentService: item });
+    }
+
+    private searchTask() {
+      this.SET_HEADER_SOURCE({ endpointName: this.endpointName, timeRanges: [this.globalTimeFormat(this.time)] });
+      this.$store.dispatch('profileStore/GET_TASK_LIST');
     }
 
     @Watch('rocketbotGlobal.durationRow')
@@ -118,7 +123,7 @@ language governing permissions and * limitations under the License. */
 
     private created() {
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
-      this.$store.commit('profileStore/SET_HEADER_SOURCE', { timeRanges: [this.globalTimeFormat(this.time)] });
+      this.SET_HEADER_SOURCE({ endpointName: this.endpointName, timeRanges: [this.globalTimeFormat(this.time)] });
     }
 
     private showDialogTask() {

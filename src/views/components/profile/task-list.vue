@@ -84,8 +84,9 @@ language governing permissions and * limitations under the License. */
   export default class ProfileTaskList extends Vue {
     @Prop() private taskListSource: any;
     @Prop() private segmentList: any;
+    @Action('profileStore/GET_SEGMENT_LIST') private GET_SEGMENT_LIST: any;
     @Mutation('profileStore/SET_CURRENT_TRACE') private SET_CURRENT_TRACE: any;
-    @Action('profileStore/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
+    @Action('profileStore/GET_SEGMENT_SPANS') private GET_SEGMENT_SPANS: any;
     private loading: any;
     private selectedKey: string = '';
 
@@ -93,14 +94,14 @@ language governing permissions and * limitations under the License. */
       this.loading = false;
     }
 
-    private selectTask() {}
+    private selectTask(item: { id: string }) {
+      this.GET_SEGMENT_LIST({ taskID: item.id });
+    }
 
-    private selectTrace(i: any) {
-      this.SET_CURRENT_TRACE(i);
-      this.selectedKey = i.key;
-      if (i.traceIds.length) {
-        this.GET_TRACE_SPANS({ traceId: i.traceIds[0] });
-      }
+    private selectTrace(item: { key: string; segmentId: string }) {
+      this.SET_CURRENT_TRACE(item);
+      this.selectedKey = item.key;
+      this.GET_SEGMENT_SPANS({ segmentId: item.segmentId });
     }
   }
 </script>
