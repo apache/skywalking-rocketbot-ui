@@ -17,15 +17,18 @@
 <template>
   <div class="topo-group">
     <div v-for="i in rocketTopoGroup.groups">
-      <div class="group-item" :class="{'active': rocketTopoGroup.groupId === i.id}" :key="i.id" @click="handleSelectGroup(i.id)">
-        <span class="mr-5">{{i.name}}</span>
-        <RkButton icon="close" size="sm" :ghost="true" @click="handleDeleteGroup(i.id)"/>
-      </div>
+      <GroupItem
+      :active="rocketTopoGroup.groupId === i.id"
+      :key="i.id"
+      @delete="handleSelectGroup(i.id)"
+      @select="handleSelectGroup(i.id)"
+      :data="i"/>
     </div>
     <div>
-      <div class="group-item default" @click="SELECT_GROUP('all')" :class="{'active': rocketTopoGroup.groupId === 'all'}"><span>Default</span></div>
+      <div class="group-item default" @click="handleSelectGroup('all')" :class="{'active': rocketTopoGroup.groupId === 'all'}"><span>Default</span></div>
     </div>
     <CreateGroup/>
+    <GroupServices/>
   </div>
 </template>
 <script lang="ts">
@@ -34,20 +37,24 @@
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import { State as TopoGroupState } from '@/store/modules/topology/group';
   import CreateGroup from './create-group.vue';
-
+  import GroupItem from './group-item.vue';
+  import GroupServices from './group-services.vue';
   @Component({
     components: {
       CreateGroup,
+      GroupItem,
+      GroupServices,
     },
   })
   export default class TopoGroup extends Vue {
     @State('rocketTopo') private stateTopo!: topoState;
     @State('rocketTopoGroup') private rocketTopoGroup!: TopoGroupState;
     @Getter('durationTime') private durationTime: any;
+    @Getter('rocketTopoGroup/services') private services: any;
     @Mutation('rocketTopoGroup/INIT_GROUPS') private INIT_GROUPS: any;
     @Mutation('rocketTopoGroup/DELETE_GROUP') private DELETE_GROUP: any;
     @Mutation('rocketTopoGroup/SELECT_GROUP') private SELECT_GROUP: any;
-    @Mutation('rocketTopo/SET_TOPO') private SET_TOPO: any;
+    @Action('rocketTopo/FILTER_TOPO') private FILTER_TOPO: any;
 
     private handleDeleteGroup(id: string) {
       const r = confirm('Do you want to delete this group!');
@@ -57,7 +64,7 @@
     }
     private handleSelectGroup(id: string) {
       this.SELECT_GROUP(id);
-      this.SET_TOPO({ calls: [], nodes: [] });
+      this.FILTER_TOPO({ services: this.services, group: id });
     }
     private created() {
       this.INIT_GROUPS();
@@ -69,25 +76,5 @@
     position: absolute;
     bottom: 10px;
     left: 10px;
-    .group-item{
-      display: inline-block;
-      user-select: none;
-      cursor: pointer;
-      background: #252a2f66;
-      color: #ddd;
-      height: 26px;
-      line-height: 26px;
-      padding-left: 10px;
-      border-radius: 4px;
-      margin-bottom: 5px;
-      text-align: center;
-      &:hover,&.active{
-        color: #fff;
-        background-color: #252a2f;
-      }
-      &.default{
-        padding-right: 10px;
-      }
-    }
   }
 </style>

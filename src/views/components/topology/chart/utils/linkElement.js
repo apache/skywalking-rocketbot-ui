@@ -17,7 +17,7 @@
 export const linkElement = (graph) => {
   const linkEnter = graph
     .append('path').attr('class', 'topo-line')
-    .attr('stroke', d => d.cpm ? '#217EF25f' : '#6a6d7777');;
+    .attr('stroke', d => d.cpm ? '#217EF25f' : '#6a6d7777');
   return linkEnter;
 }
 export const anchorElement = (graph, funcs, tip) => {

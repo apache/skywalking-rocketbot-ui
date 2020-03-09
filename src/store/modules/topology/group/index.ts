@@ -22,7 +22,7 @@ import * as types from './mutation-types';
 export interface Group {
     id: string;
     name: string;
-    services: number[];
+    services: string[];
 }
 export interface State {
   groupId: string;
@@ -73,7 +73,7 @@ const mutations: MutationTree<State> = {
   [types.SELECT_GROUP](state: State, id: string): void {
     state.groupId = id;
   },
-  [types.ADD_GROUP_SERVICE](state: State, data: {id: string, serviceId: number}): void {
+  [types.ADD_GROUP_SERVICE](state: State, data: {id: string, serviceId: string}): void {
     const groupIndex = state.groups.findIndex((i: Group) => i.id === data.id);
     if (groupIndex === -1) { return; }
     const services =  state.groups[groupIndex].services;
@@ -83,7 +83,7 @@ const mutations: MutationTree<State> = {
     }
     localStorage.setItem('topology-groups', JSON.stringify(state.groups));
   },
-  [types.DELETE_GROUP_SERVICE](state: State, data: {id: string, serviceId: number}): void {
+  [types.DELETE_GROUP_SERVICE](state: State, data: {id: string, serviceId: string}): void {
     const groupIndex = state.groups.findIndex((i: Group) => i.id === data.id);
     if (groupIndex === -1) { return; }
     const services =  state.groups[groupIndex].services;
