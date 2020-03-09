@@ -15,37 +15,67 @@
  * limitations under the License.
  */
 <template>
-  <div class="group-item ell" :class="{'active': active}" @click="$emit('select')">
-    <RkButton icon="settings" size="sm" class="mr-5" :ghost="true" @click="open = !open"/>
-    <span class="mr-5">{{data.name}}</span>
+  <div class="group-wrapper">
+    <div class="group-item ell" :class="{'active': active}" @click="$emit('select', data.id)">
+      <RkButton icon="close" size="sm" class="mr-5" :ghost="true" @click="$emit('delete')"/>
+      <span class="mr-5">{{data.name}}</span>
+    </div>
+    <div class="group-services">
+      <div class="ell" v-for="i in servicesMap" :key="i.key">
+        <input type="checkbox" @click="(e) => {
+          !e.target.checked ? DELETE_GROUP_SERVICE({id: data.id, serviceId:i.key}) : ADD_GROUP_SERVICE({id: data.id, serviceId:i.key})
+          $emit('select', data.id)
+        }" :checked="data.services.some(service => service === i.key)">
+        <span>{{i.label}}</span>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">
   import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import { State as TopoGroupState } from '@/store/modules/topology/group';
-  import GroupServices from './group-services.vue';
-  @Component({ components: { GroupServices } })
+  @Component
   export default class TopoGroupItem extends Vue {
     @Prop() private active!: boolean;
     @Prop() private data!: any;
+    @Prop() private servicesMap!: any;
+    @Mutation('rocketTopoGroup/ADD_GROUP_SERVICE') private ADD_GROUP_SERVICE: any;
+    @Mutation('rocketTopoGroup/DELETE_GROUP_SERVICE') private DELETE_GROUP_SERVICE: any;
   }
 </script>
 <style lang="scss">
   .topo-group{
+    .group-wrapper{
+      position: relative;
+      margin-bottom: 5px;
+      &:hover{
+        .group-services{
+          display: block;
+        }
+      }
+    }
+    .group-services{
+      display: none;
+      position: absolute;
+      background-color: #252a2f;
+      padding: 10px;
+      left: 110px;
+      bottom: 0;
+      color: #ccc;
+      border-radius: 4px;
+    }
     .group-item{
-      display: inline-block;
       position: relative;
       user-select: none;
       cursor: pointer;
       background: #252a2f66;
       color: #ccc;
       height: 26px;
-      width: 100px;
+      width: 110px;
       line-height: 26px;
       padding-right: 10px;
       border-radius: 4px;
-      margin-bottom: 5px;
       &:hover,&.active{
         color: #fff;
         background-color: #252a2f;
