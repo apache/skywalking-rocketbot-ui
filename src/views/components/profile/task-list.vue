@@ -17,7 +17,12 @@ language governing permissions and * limitations under the License. */
       <div class="rk-trace-t-wrapper scroll_hide">
         <table class="rk-trace-t">
           <tr class="rk-trace-tr cp" v-for="(i, index) in taskListSource" @click="selectTask(i)" :key="index">
-            <td class="rk-trace-td rk-trace-success">
+            <td
+              class="rk-trace-td"
+              :class="{
+                selected: selectedTask == i.segmentId,
+              }"
+            >
               <div class="ell mb-5">
                 <span class="b">{{ i.endpointName }}</span>
               </div>
@@ -85,21 +90,23 @@ language governing permissions and * limitations under the License. */
     @Prop() private taskListSource: any;
     @Prop() private segmentList: any;
     @Action('profileStore/GET_SEGMENT_LIST') private GET_SEGMENT_LIST: any;
-    @Mutation('profileStore/SET_CURRENT_TRACE') private SET_CURRENT_TRACE: any;
+    @Mutation('profileStore/SET_CURRENT_SEGMENT') private SET_CURRENT_SEGMENT: any;
     @Action('profileStore/GET_SEGMENT_SPANS') private GET_SEGMENT_SPANS: any;
     private loading: any;
     private selectedKey: string = '';
+    private selectedTask: string = '';
 
     private created() {
       this.loading = false;
     }
 
-    private selectTask(item: { id: string }) {
+    private selectTask(item: { id: string; segmentId: string }) {
+      this.selectedTask = item.segmentId;
       this.GET_SEGMENT_LIST({ taskID: item.id });
     }
 
     private selectTrace(item: { key: string; segmentId: string }) {
-      this.SET_CURRENT_TRACE(item);
+      this.SET_CURRENT_SEGMENT(item);
       this.selectedKey = item.key;
       this.GET_SEGMENT_SPANS({ segmentId: item.segmentId });
     }

@@ -9,19 +9,19 @@ language governing permissions and * limitations under the License. */
 <template>
   <div class="profile-trace-dashboard flex-v">
     <div class="profile-trace-detail-wrapper mb-5 blue sm">
-      <select class="profile-trace-detail-ids" @change="GET_TRACE_SPANS({ traceId: i })">
+      <select class="profile-trace-detail-ids">
         <option v-for="i in currentSegment.traceIds" :value="i" :key="i">{{ i }}</option>
       </select>
-      <select class="profile-trace-detail-ids" @change="analyzeProfile()">
+      <select class="profile-trace-detail-ids" @change="spanModeChange($event)">
         <option value="include" key="include">include children</option>
         <option value="exclude" key="exclude">exclude children</option>
       </select>
-      <a class="profile-analyze-btn bg-blue profile-trace-detail-ids">
+      <a class="profile-analyze-btn bg-blue profile-trace-detail-ids" @click="analyzeProfile()">
         <span class="vm">{{ this.$t('analyze') }}</span>
       </a>
     </div>
-    <TraceDetailChartTable :data="segmentSpans" :traceId="currentSegment.traceIds[0]" />
-    <TraceDetailChartTable :data="segmentSpans" :traceId="currentSegment.traceIds[0]" />
+    <TraceDetailChartTable :data="segmentSpans" :traceId="currentSegment.traceIds[0]" :showSpanDetail="false" />
+    <TraceDetailChartTable :data="segmentSpans" :traceId="currentSegment.traceIds[0]" :showSpanDetail="false" />
   </div>
 </template>
 
@@ -39,7 +39,47 @@ language governing permissions and * limitations under the License. */
     @Prop() private currentSegment: any;
     @Prop() private profileAnalyzation: any;
 
-    private analyzeProfile() {}
+    private currentSpan: any;
+    private timeRange: any;
+    private mode: string = 'include';
+
+    private created() {
+      this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
+    }
+    private handleSelectSpan(data: any) {
+      this.currentSpan = data;
+    }
+    private spanModeChange(item: any) {
+      this.mode = item.target.value;
+      this.updateTimeRange();
+    }
+    private updateTimeRange() {
+      if (!this.currentSpan) {
+        this.currentSpan = this.segmentSpans[0];
+      }
+      if (this.mode === 'include') {
+        this.timeRange = [
+          {
+            start: this.currentSpan.startTime,
+            end: this.currentSpan.endTime,
+          },
+        ];
+      } else {
+        this.timeRange = [
+          {
+            start: this.currentSpan.startTime,
+            end: this.currentSpan.endTime,
+          },
+        ];
+      }
+    }
+    private analyzeProfile() {
+      this.updateTimeRange();
+      this.$store.dispatch('profileStore/GET_PROFILE_ANALYZE', {
+        segmentId: this.currentSegment.segmentId,
+        timeRanges: this.timeRange,
+      });
+    }
   }
 </script>
 

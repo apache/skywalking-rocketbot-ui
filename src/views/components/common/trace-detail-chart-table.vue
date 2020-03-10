@@ -95,7 +95,7 @@ language governing permissions and * limitations under the License. */
       Item,
       TraceContainer,
     },
-    props: ['data', 'traceId'],
+    props: ['data', 'traceId', 'showSpanDetail'],
     watch: {
       data(val, oldVal) {
         if (!this.data.length) {
@@ -281,7 +281,9 @@ language governing permissions and * limitations under the License. */
       },
       handleSelectSpan(data) {
         this.currentSpan = data;
-        this.showDetail = true;
+        if (this.showSpanDetail) {
+          this.showDetail = true;
+        }
       },
       showCurrentSpanDetail(title, text) {
         const textLineNumber = text.split('\n').length;

@@ -30,10 +30,6 @@ language governing permissions and * limitations under the License. */
           <div class="sm grey">{{ this.$t('endpointName') }}</div>
           <input type="text" v-model="endpointName" class="rk-profile-header-input" />
         </div>
-        <div>
-          <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
-          <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
-        </div>
       </div>
       <rk-sidebox class="profile-task-box" width="600px" :title="this.$t('newTask')" :show.sync="dialogVisible">
         <ProfileTask :taskFieldSource="taskFieldSource" :newTaskFields="newTaskFields" @closeSidebox="closeSidebox" />
@@ -54,12 +50,8 @@ language governing permissions and * limitations under the License. */
     @Prop() private headerSource: any;
     @Prop() private newTaskFields: any;
     @Prop() private taskFieldSource: any;
-    @State('rocketbot') private rocketbotGlobal: any;
-    @Getter('durationTime') private durationTime: any;
-    @Getter('duration') private duration: any;
     @Mutation('profileStore/SET_HEADER_SOURCE') private SET_HEADER_SOURCE: any;
 
-    private time!: Date[];
     private endpointName: string = localStorage.getItem('endpointName') || '';
     private dialogVisible = false;
     private serviceOpt: any;
@@ -112,18 +104,12 @@ language governing permissions and * limitations under the License. */
     }
 
     private searchTask() {
-      this.SET_HEADER_SOURCE({ endpointName: this.endpointName, timeRanges: [this.globalTimeFormat(this.time)] });
+      this.SET_HEADER_SOURCE({ endpointName: this.endpointName });
       this.$store.dispatch('profileStore/GET_TASK_LIST');
     }
 
-    @Watch('rocketbotGlobal.durationRow')
-    private durationRowWatch(value: Duration) {
-      this.time = [value.start, value.end];
-    }
-
     private created() {
-      this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
-      this.SET_HEADER_SOURCE({ endpointName: this.endpointName, timeRanges: [this.globalTimeFormat(this.time)] });
+      this.SET_HEADER_SOURCE({ endpointName: this.endpointName });
     }
 
     private showDialogTask() {

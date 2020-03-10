@@ -64,6 +64,7 @@ language governing permissions and * limitations under the License. */
       v-if="displayMode == 'table' && current.endpointNames"
       :data="spans"
       :traceId="current.traceIds[0]"
+      :showSpanDetail="true"
     />
 
     <div v-if="!current.endpointNames" class="flex-h container">

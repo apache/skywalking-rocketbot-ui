@@ -20,7 +20,6 @@ import axios, { AxiosResponse } from 'axios';
 
 import graph from '@/graph';
 import * as types from '../../mutation-types';
-import { DurationTime } from '@/types/global';
 import { IOption, ITaskOptions, TaskSourceType, TaskListSourceType, TracesSourceType } from '@/types/profile';
 import { InitTaskField, InitTaskFieldSource, ChangeTaskOpt } from './profile-constant';
 
@@ -28,7 +27,6 @@ export interface State {
   headerSource: {
     serviceSource: IOption[];
     currentService: IOption;
-    timeRanges: any[];
     endpointName: string;
   };
   newTaskFields: ITaskOptions;
@@ -43,7 +41,6 @@ const initState: State = {
   headerSource: {
     serviceSource: [{ key: '', label: 'None' }],
     currentService: { key: '', label: 'None' },
-    timeRanges: [],
     endpointName: '',
   },
   newTaskFields: InitTaskField,
@@ -169,23 +166,33 @@ const actions = {
       .query('queryProfileSegment')
       .params(params)
       .then((res: AxiosResponse) => {
-        if (!res.data.data.getProfiledSegment) {
+        const { getProfiledSegment } = res.data.data;
+        if (!getProfiledSegment) {
           return;
         }
-        context.commit(types.SET_SEGMENT_SPANS, res.data.data.getProfiledSegment.spans);
-        context.dispatch('GET_PROFILE_ANALYZE', { segmentId: params.segmentId });
+        context.commit(types.SET_SEGMENT_SPANS, getProfiledSegment.spans);
+        if (!(getProfiledSegment.spans && getProfiledSegment.spans.length)) {
+          return;
+        }
+        const currentSpan = getProfiledSegment.spans[4];
+        const timeRanges = [
+          {
+            start: currentSpan.startTime,
+            end: currentSpan.endTime,
+          },
+        ];
+        context.dispatch('GET_PROFILE_ANALYZE', { segmentId: params.segmentId, timeRanges });
       });
   },
   GET_PROFILE_ANALYZE(
     context: { commit: Commit; state: State; dispatch: Dispatch },
-    params: { segmentId: string; timeRanges?: DurationTime[] },
+    params: { segmentId: string; timeRanges: any[] },
   ) {
-    params = { ...params, timeRanges: context.state.headerSource.timeRanges };
     graph
       .query('getProfileAnalyze')
       .params(params)
       .then((res: AxiosResponse) => {
-        if (!res.data.data.getProfileAnalyze) {
+        if (!(res.data.data && res.data.data.getProfileAnalyze)) {
           return;
         }
         context.commit(types.SET_PROFILE_ANALYZATION, res.data.data.getProfileAnalyze.trees);
