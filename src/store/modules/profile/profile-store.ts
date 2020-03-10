@@ -157,8 +157,16 @@ const actions = {
         const { getProfileTaskSegmentList } = res.data.data;
 
         context.commit(types.SET_SEGMENT_LIST, getProfileTaskSegmentList);
-        context.commit(types.SET_CURRENT_SEGMENT, getProfileTaskSegmentList[0]);
-        context.dispatch('GET_SEGMENT_SPANS', { segmentId: getProfileTaskSegmentList[0].segmentId });
+        if (getProfileTaskSegmentList[0]) {
+          context.commit(types.SET_CURRENT_SEGMENT, getProfileTaskSegmentList[0]);
+          context.dispatch('GET_SEGMENT_SPANS', { segmentId: getProfileTaskSegmentList[0].segmentId });
+        } else {
+          context.commit(types.SET_CURRENT_SEGMENT, {
+            traceIds: [],
+          });
+          context.commit(types.SET_SEGMENT_SPANS, []);
+          context.commit(types.SET_PROFILE_ANALYZATION, []);
+        }
       });
   },
   GET_SEGMENT_SPANS(context: { state: State; commit: Commit; dispatch: Dispatch }, params: { segmentId: string }) {
@@ -217,14 +225,15 @@ const actions = {
       maxSamplingCount: maxSamplingCount.key,
     };
 
-    graph
+    return graph
       .query('saveProfileTask')
       .params({ creationRequest })
       .then((res: AxiosResponse) => {
-        if (!res.data.data) {
-          return;
+        if (res.data.data && res.data.data.createTask && res.data.data.createTask.errorReason) {
+          return res.data.data.createTask;
         }
-        context.dispatch('GET_TASK_LIST', {});
+        context.dispatch('GET_TASK_LIST');
+        return res.data.data.createTask;
       });
   },
 };

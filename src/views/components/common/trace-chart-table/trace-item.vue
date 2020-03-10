@@ -8,13 +8,16 @@ language governing permissions and * limitations under the License. */
 
 <template>
   <div>
-    <div @click="showSelectSpan" :class="['trace-item', 'level' + (data.level - 1)]">
+    <div
+      @click="showSelectSpan"
+      :class="['trace-item', 'level' + (data.level - 1), { selected: data.spanId === selectedSpan }]"
+    >
       <div :class="['method', 'level' + (data.level - 1)]" :style="{ 'text-indent': (data.level - 1) * 10 + 'px' }">
         <svg
           class="icon vm cp trans"
           :style="!displayChildren ? 'transform: rotate(-90deg);' : ''"
           @click.stop="toggle"
-          v-if="data.children && data.children.length > 0"
+          v-if="data.children && data.children.length"
         >
           <use xlink:href="#arrow-down"></use>
         </svg>
@@ -124,6 +127,7 @@ language governing permissions and * limitations under the License. */
     data() {
       return {
         displayChildren: true,
+        selectedSpan: 0,
       };
     },
     computed: {
@@ -154,9 +158,10 @@ language governing permissions and * limitations under the License. */
     },
     methods: {
       toggle() {
-        this.displayChildren = ! this.displayChildren;
+        this.displayChildren = !this.displayChildren;
       },
       showSelectSpan() {
+        // this.selectedSpan = this.data.spanId;
         this.$eventBus.$emit('HANDLE-SELECT-SPAN', this.data);
       },
     },

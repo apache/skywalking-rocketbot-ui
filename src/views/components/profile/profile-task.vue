@@ -55,6 +55,7 @@ language governing permissions and * limitations under the License. */
       :data="taskFieldSource.maxSamplingCount"
       @onChoose="(item) => changeOption(item, updateTaskOpt.MaxSamplingCount)"
     />
+    <div v-if="this.message" class="message-tip">{{ this.message }}</div>
     <div @click="createTask">
       <a class="rk-create-task-btn bg-blue r">
         <span class="mr-5 vm">{{ this.$t('createTask') }}</span>
@@ -72,9 +73,11 @@ language governing permissions and * limitations under the License. */
   export default class ProfileTask extends Vue {
     private setMonitorTime: boolean = false;
     private time!: Date[];
+    private message: string = '';
     @Prop() private newTaskFields: any;
     @Prop() private taskFieldSource: any;
     @Getter('profileStore/updateTaskOpt') private updateTaskOpt: any;
+    @Action('profileStore/CREATE_PROFILE_TASK') private CREATE_PROFILE_TASK: any;
 
     private changeOption(item: any, type: string) {
       if (type === this.updateTaskOpt.MonitorTime && item.key === '1') {
@@ -90,8 +93,14 @@ language governing permissions and * limitations under the License. */
     }
 
     private createTask() {
-      this.$store.dispatch('profileStore/CREATE_PROFILE_TASK');
-      this.$emit('closeSidebox');
+      this.CREATE_PROFILE_TASK().then((res: any) => {
+        if (res.errorReason) {
+          this.message = res.errorReason;
+          return;
+        } else {
+          this.$emit('closeSidebox');
+        }
+      });
     }
   }
 </script>
@@ -124,5 +133,10 @@ language governing permissions and * limitations under the License. */
     margin-top: 40px;
     width: 100%;
     text-align: center;
+  }
+  .message-tip {
+    font-size: 14px;
+    color: red;
+    margin-top: 10px;
   }
 </style>

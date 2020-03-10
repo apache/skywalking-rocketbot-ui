@@ -20,7 +20,7 @@ language governing permissions and * limitations under the License. */
             <td
               class="rk-trace-td"
               :class="{
-                selected: selectedTask == i.segmentId,
+                selected: selectedTask === i.id,
               }"
             >
               <div class="ell mb-5">
@@ -101,7 +101,7 @@ language governing permissions and * limitations under the License. */
     }
 
     private selectTask(item: { id: string; segmentId: string }) {
-      this.selectedTask = item.segmentId;
+      this.selectedTask = item.id;
       this.GET_SEGMENT_LIST({ taskID: item.id });
     }
 
@@ -127,6 +127,13 @@ language governing permissions and * limitations under the License. */
     .profile-trace-wrapper {
       height: 100%;
       width: 100%;
+    }
+    .rk-trace-td {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+      &.selected {
+        background-color: #ededed;
+      }
     }
   }
 </style>

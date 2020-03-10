@@ -55,7 +55,7 @@ language governing permissions and * limitations under the License. */
     }
     private updateTimeRange() {
       if (!this.currentSpan) {
-        this.currentSpan = this.segmentSpans[0];
+        this.currentSpan = this.segmentSpans[4];
       }
       if (this.mode === 'include') {
         this.timeRange = [
