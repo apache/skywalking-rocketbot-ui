@@ -276,6 +276,8 @@ const actions: ActionTree<State, any> = {
         const idsC = calls
           .filter((i: any) => i.detectPoints.indexOf('CLIENT') !== -1)
           .map((b: any) => b.id);
+        context.commit(types.SET_TOPO_COPY, { calls: [], nodes: [] });
+        context.commit(types.SET_TOPO, { calls: [], nodes: [] });
         return graph
           .query('queryTopoInfo')
           .params({ ...params, ids, idsC, idsS })
