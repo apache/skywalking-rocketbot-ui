@@ -15,23 +15,11 @@
  * limitations under the License.
  */
 
-module.exports = {
-  devServer: {
-    proxy: {
-      '/graphql': {
-        target: `${process.env.SW_PROXY_TARGET || "http://127.0.0.1:8080"}`,
-        changeOrigin: true,
-      },
-    },
-  },
-  chainWebpack: config => {
-    const svgRule = config.module.rule('svg');
-    svgRule.uses.clear();
-    svgRule
-      .use('svg-sprite-loader')
-      .loader('svg-sprite-loader')
-      .options({
-        symbolId: '[name]',
-      });
-  },
-};
+export const INIT_GROUPS = 'INIT_GROUPS';
+export const SAVE_GROUPS = 'SAVE_GROUPS';
+export const CREATE_GROUP = 'CREATE_GROUP';
+export const DELETE_GROUP = 'DELETE_GROUP';
+export const SELECT_GROUP = 'SELECT_GROUP';
+export const ADD_GROUP_SERVICE = 'ADD_GROUP_SERVICE';
+export const DELETE_GROUP_SERVICE = 'DELETE_GROUP_SERVICE';
+export const GET_GROUPS = 'GET_GROUPS';
