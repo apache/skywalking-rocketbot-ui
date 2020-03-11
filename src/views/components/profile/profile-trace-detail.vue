@@ -29,7 +29,8 @@ language governing permissions and * limitations under the License. */
   import { Duration, Option } from '@/types/global';
   import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
-  import { TraceDetailChartTable, ProfileDetailChartTable } from '../common';
+  import { TraceDetailChartTable } from '../common';
+  import ProfileDetailChartTable from './profile-detail-chart-table.vue';
 
   @Component({
     components: { TraceDetailChartTable, ProfileDetailChartTable },

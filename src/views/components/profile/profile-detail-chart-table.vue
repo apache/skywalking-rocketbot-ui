@@ -13,9 +13,9 @@ language governing permissions and * limitations under the License. */
         <use xlink:href="#spinner"></use>
       </svg>
     </div>
-    <TraceContainer>
+    <ProfileContainer>
       <Item v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
-    </TraceContainer>
+    </ProfileContainer>
   </div>
 </template>
 <style lang="scss">
@@ -31,15 +31,15 @@ language governing permissions and * limitations under the License. */
 
 <script lang="js">
   import copy from '@/utils/copy';
-  import Item from './trace-chart-table/trace-item';
-  import TraceContainer from './trace-chart-table/trace-container';
+  import Item from './profile-item';
+  import ProfileContainer from './profile-container';
   import _ from 'lodash';
   /* eslint-disable */
   /* tslint:disable */
   export default {
     components: {
       Item,
-      TraceContainer,
+      ProfileContainer,
     },
     props: ['data'],
     watch: {
@@ -120,27 +120,6 @@ language governing permissions and * limitations under the License. */
       },
       handleSelectSpan(data) {
         this.currentSpan = data;
-      },
-      showCurrentSpanDetail(title, text) {
-        const textLineNumber = text.split('\n').length;
-        let textHeight = textLineNumber * 20.2 + 10;
-        const tmpHeight = window.innerHeight * 0.9
-        textHeight = textHeight >= tmpHeight ? tmpHeight : textHeight;
-        this.$modal.show('dialog', {
-          title,
-          text: `<div style="height:${textHeight}px">${text}</div>`,
-          buttons: [
-            {
-              title: 'Copy',
-              handler: () => {
-                this.copy(text);
-              },
-            },
-            {
-              title: 'Close',
-            },
-          ],
-        })
       },
     },
     created() {
