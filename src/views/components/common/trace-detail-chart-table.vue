@@ -79,7 +79,8 @@ language governing permissions and * limitations under the License. */
   }
   .trace-detail-chart-table {
     position: relative;
-    min-height: 150px;
+    min-height: 200px;
+    border-bottom: 1px solid #ccc;
   }
 </style>
 
@@ -154,26 +155,26 @@ language governing permissions and * limitations under the License. */
         const segmentIdGroup = [];
         const fixSpans = [];
         const segmentHeaders = [];
-          this.data.forEach((span) => {
-            if (span.parentSpanId === -1) {
-              segmentHeaders.push(span);
-            } else {
-              const index = this.data.findIndex(i => (i.segmentId === span.segmentId && i.spanId === (span.spanId - 1)));
-              const fixSpanKeyContent = {
-                traceId: span.traceId,
-                segmentId: span.segmentId,
-                spanId: span.spanId - 1,
-                parentSpanId: span.spanId - 2,
-              };
-              if (index === -1 && !_.find(fixSpans, fixSpanKeyContent)) {
-                fixSpans.push(
-                  {
-                    ...fixSpanKeyContent, refs: [], endpointName: `VNode: ${span.segmentId}`, serviceCode: 'VirtualNode', type: `[Broken] ${span.type}`, peer: '', component: `VirtualNode: #${span.spanId - 1}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
-                  },
-                );
-              }
+        this.data.forEach((span) => {
+          if (span.parentSpanId === -1) {
+            segmentHeaders.push(span);
+          } else {
+            const index = this.data.findIndex(i => (i.segmentId === span.segmentId && i.spanId === (span.spanId - 1)));
+            const fixSpanKeyContent = {
+              traceId: span.traceId,
+              segmentId: span.segmentId,
+              spanId: span.spanId - 1,
+              parentSpanId: span.spanId - 2,
+            };
+            if (index === -1 && !_.find(fixSpans, fixSpanKeyContent)) {
+              fixSpans.push(
+                {
+                  ...fixSpanKeyContent, refs: [], endpointName: `VNode: ${span.segmentId}`, serviceCode: 'VirtualNode', type: `[Broken] ${span.type}`, peer: '', component: `VirtualNode: #${span.spanId - 1}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
+                },
+              );
             }
-          });
+          }
+        });
           segmentHeaders.forEach((span) => {
             if (span.refs && span.refs.length) {
               span.refs.forEach((ref) => {

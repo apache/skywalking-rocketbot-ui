@@ -196,7 +196,7 @@ const actions = {
     context: { commit: Commit; state: State; dispatch: Dispatch },
     params: { segmentId: string; timeRanges: any[] },
   ) {
-    graph
+    return graph
       .query('getProfileAnalyze')
       .params(params)
       .then((res: AxiosResponse) => {

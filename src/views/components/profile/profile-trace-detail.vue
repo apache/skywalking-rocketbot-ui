@@ -21,7 +21,7 @@ language governing permissions and * limitations under the License. */
       </a>
     </div>
     <TraceDetailChartTable :data="segmentSpans" :traceId="currentSegment.traceIds[0]" :showSpanDetail="false" />
-    <TraceDetailChartTable :data="segmentSpans" :traceId="currentSegment.traceIds[0]" :showSpanDetail="false" />
+    <ProfileDetailChartTable :data="profileAnalyzation" />
   </div>
 </template>
 
@@ -29,15 +29,16 @@ language governing permissions and * limitations under the License. */
   import { Duration, Option } from '@/types/global';
   import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
-  import { TraceDetailChartTable } from '../common';
+  import { TraceDetailChartTable, ProfileDetailChartTable } from '../common';
 
   @Component({
-    components: { TraceDetailChartTable },
+    components: { TraceDetailChartTable, ProfileDetailChartTable },
   })
   export default class ProfileTraceDetail extends Vue {
     @Prop() private segmentSpans: any;
     @Prop() private currentSegment: any;
     @Prop() private profileAnalyzation: any;
+    @Action('profileStore/GET_PROFILE_ANALYZE') private GET_PROFILE_ANALYZE: any;
 
     private currentSpan: any;
     private timeRange: any;
@@ -75,7 +76,7 @@ language governing permissions and * limitations under the License. */
     }
     private analyzeProfile() {
       this.updateTimeRange();
-      this.$store.dispatch('profileStore/GET_PROFILE_ANALYZE', {
+      this.GET_PROFILE_ANALYZE({
         segmentId: this.currentSegment.segmentId,
         timeRanges: this.timeRange,
       });

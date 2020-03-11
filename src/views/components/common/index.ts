@@ -16,5 +16,6 @@
  */
 
 import TraceDetailChartTable from './trace-detail-chart-table.vue';
+import ProfileDetailChartTable from './profile-detail-chart-table.vue';
 
-export { TraceDetailChartTable };
+export { TraceDetailChartTable, ProfileDetailChartTable };
