@@ -131,7 +131,7 @@ export default {
     update() {
       // node element
       const that = this;
-      this.node = this.node.data(this.nodes);
+      this.node = this.node.data(this.nodes, (d) => d.id);
       this.node.exit().remove();
       this.node = nodeElement(d3, this.node.enter(), this.tool, {
         dragstart: this.dragstart,
