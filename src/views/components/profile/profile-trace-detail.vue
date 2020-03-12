@@ -43,7 +43,7 @@ language governing permissions and * limitations under the License. */
     @Action('profileStore/GET_PROFILE_ANALYZE') private GET_PROFILE_ANALYZE: any;
 
     private currentSpan: any;
-    private timeRange: any;
+    private timeRange: Array<{ start: number; end: number }> = [];
     private mode: string = 'include';
     private message: string = '';
 
@@ -69,12 +69,44 @@ language governing permissions and * limitations under the License. */
           },
         ];
       } else {
-        this.timeRange = [
-          {
-            start: this.currentSpan.startTime,
-            end: this.currentSpan.endTime,
-          },
-        ];
+        const { children, startTime, endTime } = this.currentSpan;
+        const timeRange = [];
+
+        if (!children || !children.length) {
+          this.timeRange = [
+            {
+              start: this.currentSpan.startTime,
+              end: this.currentSpan.endTime,
+            },
+          ];
+          return;
+        }
+        for (const item of children) {
+          timeRange.push(
+            {
+              start: startTime,
+              end: item.startTime - 1,
+            },
+            {
+              start: item.endTime + 1,
+              end: endTime,
+            },
+          );
+        }
+        this.timeRange = timeRange.reduce((prev: any[], cur) => {
+          let isUpdate = false;
+          for (const item of prev) {
+            if (cur.start <= item.end && item.start <= cur.start) {
+              isUpdate = true;
+              item.start = item.start < cur.start ? cur.start : item.start;
+              item.end = item.end < cur.end ? item.end : cur.end;
+            }
+          }
+          if (!isUpdate) {
+            prev.push(cur);
+          }
+          return prev;
+        }, []);
       }
     }
     private analyzeProfile() {
@@ -83,7 +115,7 @@ language governing permissions and * limitations under the License. */
         segmentId: this.currentSegment.segmentId,
         timeRanges: this.timeRange,
       })
-        .then((result: any) => {
+        .then((result: string) => {
           this.message = result;
         })
         .catch((err: any) => {

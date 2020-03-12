@@ -73,6 +73,7 @@ language governing permissions and * limitations under the License. */
   .trace-item {
     display: flex;
     position: relative;
+    cursor: pointer;
   }
   .trace-item.selected {
     background: rgba(0, 0, 0, 0.04);

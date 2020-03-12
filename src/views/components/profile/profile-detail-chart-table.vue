@@ -34,8 +34,7 @@ language governing permissions and * limitations under the License. */
   import Item from './profile-item';
   import ProfileContainer from './profile-container';
   import _ from 'lodash';
-  /* eslint-disable */
-  /* tslint:disable */
+
   export default {
     components: {
       Item,
@@ -106,7 +105,7 @@ language governing permissions and * limitations under the License. */
       this.tableData = this.processTree();
       this.loading = false;
       this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
-      this.$eventBus.$on('TRACE-TABLE-LOADING', this, () => { this.loading = true });
+      this.$eventBus.$on('TRACE-TABLE-LOADING', this, () => { this.loading = true; });
     },
   };
 </script>
