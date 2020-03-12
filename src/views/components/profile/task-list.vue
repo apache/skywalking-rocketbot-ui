@@ -35,15 +35,7 @@ language governing permissions and * limitations under the License. */
         </table>
       </div>
     </div>
-    <div class="profile-trace-wrapper flex-v">
-      <div class="rk-trace-t-tool flex-h">
-        <!-- <RkPage
-          :currentSize="8"
-          :currentPage="rocketTrace.traceForm.paging.pageNum"
-          @changePage="page"
-          :total="rocketTrace.traceTotal"
-        /> -->
-      </div>
+    <div class="profile-trace-wrapper profile-segment flex-v">
       <div class="rk-trace-t-loading" v-show="loading">
         <svg class="icon loading">
           <use xlink:href="#spinner"></use>
@@ -135,5 +127,9 @@ language governing permissions and * limitations under the License. */
         background-color: #ededed;
       }
     }
+  }
+  .profile-segment {
+    margin-top: 10px;
+    border-top: 1px solid #ccc;
   }
 </style>

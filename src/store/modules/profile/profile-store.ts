@@ -190,6 +190,9 @@ const actions = {
           },
         ];
         context.dispatch('GET_PROFILE_ANALYZE', { segmentId: params.segmentId, timeRanges });
+      })
+      .catch((error: any) => {
+        throw error;
       });
   },
   GET_PROFILE_ANALYZE(
@@ -230,8 +233,6 @@ const actions = {
       dumpPeriod: dumpPeriod.key,
       maxSamplingCount: maxSamplingCount.key,
     };
-
-    console.log(creationRequest);
 
     return graph
       .query('saveProfileTask')

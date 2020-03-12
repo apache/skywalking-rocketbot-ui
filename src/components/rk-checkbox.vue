@@ -20,7 +20,7 @@ language governing permissions and * limitations under the License. */
   @Component
   export default class RkCheckbox extends Vue {
     @Prop() public data!: any;
-    @Prop() public current: any;
+    @Prop() public current!: any[];
 
     private checkItem(item: any) {
       if (!this.current) {

@@ -24,7 +24,6 @@ language governing permissions and * limitations under the License. */
     @Prop() public current!: any;
 
     private changeOpt(item: any) {
-      this.current = item;
       this.$emit('onChoose', item);
     }
   }
