@@ -47,7 +47,7 @@ language governing permissions and * limitations under the License. */
         if (!this.data.length) {
           return;
         }
-        this.tableData = this.formatData(this.processTree());
+        this.tableData = this.processTree();
         this.loading = false;
       },
     },
@@ -60,18 +60,6 @@ language governing permissions and * limitations under the License. */
     },
     methods: {
       copy,
-      // 给增加层级关系
-      formatData(arr, level = 1, totalExec = null) {
-        for (const item of arr) {
-          item.level = level;
-          totalExec = totalExec || (item.endTime - item.startTime);
-          item.totalExec = totalExec;
-          if (item.children && item.children.length) {
-            this.formatData(item.children, level + 1, totalExec);
-          }
-        }
-        return arr;
-      },
       processTree() {
         if (!this.data.length) {
           return [];
@@ -96,7 +84,6 @@ language governing permissions and * limitations under the License. */
           }
           for (const key in obj) {
             if (item.id === obj[key].parentId) {
-              item.endpointName = item.codeSignature || 'no operation name';
               if (item.children) {
                 item.children.push(obj[key]);
               } else {
@@ -108,16 +95,6 @@ language governing permissions and * limitations under the License. */
 
         return res;
       },
-      collapse(d) {
-        if (d.children) {
-          let dur = d.endTime - d.startTime;
-          d.children.forEach((i) => {
-            dur -= (i.endTime - i.startTime);
-          });
-          d.dur = dur < 0 ? 0 : dur;
-          d.children.forEach((i) => this.collapse(i));
-        }
-      },
       handleSelectSpan(data) {
         this.currentSpan = data;
       },
@@ -126,11 +103,10 @@ language governing permissions and * limitations under the License. */
       this.loading = true;
     },
     mounted() {
-      this.tableData = this.formatData(this.processTree());
+      this.tableData = this.processTree();
       this.loading = false;
       this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
-      this.$eventBus.$on('TRACE-TABLE-LOADING', this, ()=>{ this.loading = true });
-
+      this.$eventBus.$on('TRACE-TABLE-LOADING', this, () => { this.loading = true });
     },
   };
 </script>

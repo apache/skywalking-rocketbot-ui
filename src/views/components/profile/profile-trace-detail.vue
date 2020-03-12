@@ -22,6 +22,7 @@ language governing permissions and * limitations under the License. */
     </div>
     <TraceDetailChartTable :data="segmentSpans" :traceId="currentSegment.traceIds[0]" :showSpanDetail="false" />
     <ProfileDetailChartTable :data="profileAnalyzation" />
+    <div v-if="message">{{ message }}</div>
   </div>
 </template>
 
@@ -44,6 +45,7 @@ language governing permissions and * limitations under the License. */
     private currentSpan: any;
     private timeRange: any;
     private mode: string = 'include';
+    private message: string = '';
 
     private created() {
       this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
@@ -80,7 +82,13 @@ language governing permissions and * limitations under the License. */
       this.GET_PROFILE_ANALYZE({
         segmentId: this.currentSegment.segmentId,
         timeRanges: this.timeRange,
-      });
+      })
+        .then((result: any) => {
+          this.message = result;
+        })
+        .catch((err: any) => {
+          throw err;
+        });
     }
   }
 </script>

@@ -17,15 +17,19 @@ language governing permissions and * limitations under the License. */
     />
     <label>{{ this.$t('endpointName') }}</label>
     <input type="text" class="rk-profile-input" @change="changeOption($event, updateTaskOpt.EndpointName)" />
-    <label>{{ this.$t('monitorTime') }}</label>
-    <RkRadio
-      class="mb-5"
-      :current="newTaskFields.monitorTime"
-      :data="taskFieldSource.monitorTime"
-      @onChoose="(item) => changeOption(item, updateTaskOpt.MonitorTime)"
-    />
-    <div v-if="setMonitorTime">
-      <!-- <RkCalendar /> -->
+    <div>
+      <label>{{ this.$t('monitorTime') }}</label>
+      <div>
+        <RkRadio
+          class="mb-5 monitor-time-radio"
+          :current="newTaskFields.monitorTime"
+          :data="taskFieldSource.monitorTime"
+          @onChoose="(item) => changeOption(item, updateTaskOpt.MonitorTime)"
+        />
+        <span>
+          <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
+        </span>
+      </div>
     </div>
     <label>{{ this.$t('monitorDuration') }}</label>
     <RkRadio
@@ -71,25 +75,28 @@ language governing permissions and * limitations under the License. */
 
   @Component
   export default class ProfileTask extends Vue {
-    private setMonitorTime: boolean = false;
-    private time!: Date[];
+    private time!: Date;
     private message: string = '';
     @Prop() private newTaskFields: any;
     @Prop() private taskFieldSource: any;
     @Getter('profileStore/updateTaskOpt') private updateTaskOpt: any;
     @Action('profileStore/CREATE_PROFILE_TASK') private CREATE_PROFILE_TASK: any;
+    @Mutation('profileStore/SET_TASK_OPTIONS') private SET_TASK_OPTIONS: any;
+    @State('rocketbot') private rocketbotGlobal: any;
 
     private changeOption(item: any, type: string) {
-      if (type === this.updateTaskOpt.MonitorTime && item.key === '1') {
-        this.setMonitorTime = true;
-      }
-      if ([this.updateTaskOpt.MinThreshold, this.updateTaskOpt.EndpointName].includes(type)) {
+      if (type === this.updateTaskOpt.MonitorTime) {
+        item = {
+          ...item,
+          param: item.key === '1' ? this.time.getTime() : new Date().getTime(),
+        };
+      } else if ([this.updateTaskOpt.MinThreshold, this.updateTaskOpt.EndpointName].includes(type)) {
         item = {
           label: type,
           key: item.target.value,
         };
       }
-      this.$store.commit('profileStore/SET_TASK_OPTIONS', { item, type });
+      this.SET_TASK_OPTIONS({ item, type });
     }
 
     private createTask() {
@@ -101,6 +108,15 @@ language governing permissions and * limitations under the License. */
           this.$emit('closeSidebox');
         }
       });
+    }
+
+    @Watch('rocketbotGlobal.durationRow')
+    private durationRowWatch(value: Duration) {
+      this.time = value.start;
+    }
+
+    private created() {
+      this.time = this.rocketbotGlobal.durationRow.start;
     }
   }
 </script>
@@ -138,5 +154,8 @@ language governing permissions and * limitations under the License. */
     font-size: 14px;
     color: red;
     margin-top: 10px;
+  }
+  .monitor-time-radio {
+    display: inline;
   }
 </style>

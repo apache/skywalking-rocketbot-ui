@@ -17,7 +17,7 @@
 export type IOption = {
   key: string | number;
   label: string;
-  time?: string;
+  param?: string;
 };
 export interface ITaskOptions {
   service: IOption;

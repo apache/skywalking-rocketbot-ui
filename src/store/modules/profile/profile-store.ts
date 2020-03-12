@@ -16,7 +16,7 @@
  */
 
 import { Commit, Dispatch } from 'vuex';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 
 import graph from '@/graph';
 import * as types from '../../mutation-types';
@@ -200,10 +200,15 @@ const actions = {
       .query('getProfileAnalyze')
       .params(params)
       .then((res: AxiosResponse) => {
-        if (!(res.data.data && res.data.data.getProfileAnalyze)) {
+        const { getProfileAnalyze, tip } = res.data.data;
+        if (tip) {
+          return tip;
+        }
+        if (!getProfileAnalyze) {
+          context.commit(types.SET_PROFILE_ANALYZATION, []);
           return;
         }
-        context.commit(types.SET_PROFILE_ANALYZATION, res.data.data.getProfileAnalyze.trees);
+        context.commit(types.SET_PROFILE_ANALYZATION, getProfileAnalyze.trees);
       });
   },
   CREATE_PROFILE_TASK(context: { commit: Commit; state: State; dispatch: Dispatch }) {
@@ -214,16 +219,19 @@ const actions = {
       monitorDuration,
       dumpPeriod,
       maxSamplingCount,
+      monitorTime,
     } = context.state.newTaskFields;
     const creationRequest = {
       serviceId: service.key,
       endpointName,
-      startTime: new Date().getTime(),
+      startTime: monitorTime.param,
       duration: monitorDuration.key,
       minDurationThreshold: Number(minThreshold),
       dumpPeriod: dumpPeriod.key,
       maxSamplingCount: maxSamplingCount.key,
     };
+
+    console.log(creationRequest);
 
     return graph
       .query('saveProfileTask')

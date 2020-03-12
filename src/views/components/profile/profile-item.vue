@@ -10,9 +10,9 @@ language governing permissions and * limitations under the License. */
   <div>
     <div
       @click="showSelectSpan"
-      :class="['trace-item', 'level' + (data.level - 1), { selected: data.spanId === selectedSpan }]"
+      :class="['trace-item', 'level' + data.parentId, { selected: data.spanId === selectedSpan }]"
     >
-      <div :class="['thread', 'level' + (data.level - 1)]" :style="{ 'text-indent': (data.level - 1) * 10 + 'px' }">
+      <div :class="['thread', 'level' + data.parentId]" :style="{ 'text-indent': data.parentId * 4 + 'px' }">
         <svg
           class="icon vm cp trans"
           :style="!displayChildren ? 'transform: rotate(-90deg);' : ''"
@@ -25,12 +25,8 @@ language governing permissions and * limitations under the License. */
           {{ data.codeSignature }}
         </span>
       </div>
-      <div class="exec-ms">
-        {{ data.durationChildExcluded }}
-      </div>
-      <div class="self">
-        {{ data.dur ? data.dur + '' : '0' }}
-      </div>
+      <div class="self">{{ data.duration }}</div>
+      <div class="exec-ms">{{ data.durationChildExcluded }}</div>
       <div class="dump-count">
         <span v-tooltip:bottom="data.count || '-'">{{ data.count }}</span>
       </div>
@@ -50,12 +46,6 @@ language governing permissions and * limitations under the License. */
         displayChildren: true,
         selectedSpan: 0,
       };
-    },
-    computed: {
-      selfTime() {
-        const {data} = this;
-        return  data.dur ? data.dur : 0;
-      },
     },
     methods: {
       toggle() {
