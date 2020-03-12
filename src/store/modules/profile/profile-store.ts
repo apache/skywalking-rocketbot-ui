@@ -20,15 +20,18 @@ import { AxiosResponse } from 'axios';
 
 import graph from '@/graph';
 import * as types from '../../mutation-types';
-import { IOption, ITaskOptions, TaskSourceType, TaskListSourceType, TracesSourceType } from '@/types/profile';
+import {
+  IOption,
+  ITaskOptions,
+  TaskSourceType,
+  TaskListSourceType,
+  TracesSourceType,
+  IHeaderSource,
+} from '@/types/profile';
 import { InitTaskField, InitTaskFieldSource, ChangeTaskOpt } from './profile-constant';
 
 export interface State {
-  headerSource: {
-    serviceSource: IOption[];
-    currentService: IOption;
-    endpointName: string;
-  };
+  headerSource: IHeaderSource;
   newTaskFields: ITaskOptions;
   taskFieldSource: TaskSourceType;
   taskListSource: TaskListSourceType[];
@@ -56,7 +59,7 @@ const initState: State = {
     traceIds: [],
   },
   segmentList: [],
-  profileAnalyzation: {},
+  profileAnalyzation: [],
 };
 // getters
 const getters = {
@@ -73,29 +76,29 @@ const mutations = {
     state.taskFieldSource.serviceSource = data;
     state.newTaskFields.service = data[0];
   },
-  [types.SET_TASK_OPTIONS](state: State, data: any) {
+  [types.SET_TASK_OPTIONS](state: State, data: { type: string; item: IOption }) {
     const param = ['minThreshold', 'endpointName'];
     state.newTaskFields = {
       ...state.newTaskFields,
       [data.type]: param.includes(data.type) ? data.item.key : data.item,
     };
   },
-  [types.SET_TASK_LIST](state: State, data: any) {
+  [types.SET_TASK_LIST](state: State, data: TaskListSourceType[]) {
     state.taskListSource = data;
   },
-  [types.SET_SEGMENT_SPANS](state: State, data: any[]): void {
+  [types.SET_SEGMENT_SPANS](state: State, data: any[]) {
     state.segmentSpans = data;
   },
-  [types.SET_SEGMENT_LIST](state: State, data: any[]) {
+  [types.SET_SEGMENT_LIST](state: State, data: TracesSourceType[]) {
     state.segmentList = data;
   },
   [types.SET_CURRENT_SEGMENT](state: State, data: any) {
     state.currentSegment = data;
   },
-  [types.SET_PROFILE_ANALYZATION](state: State, data: any) {
+  [types.SET_PROFILE_ANALYZATION](state: State, data: any[]) {
     state.profileAnalyzation = data;
   },
-  [types.SET_HEADER_SOURCE](state: State, data: any) {
+  [types.SET_HEADER_SOURCE](state: State, data: IHeaderSource) {
     state.headerSource = {
       ...state.headerSource,
       ...data,
@@ -182,7 +185,7 @@ const actions = {
         if (!(getProfiledSegment.spans && getProfiledSegment.spans.length)) {
           return;
         }
-        const currentSpan = getProfiledSegment.spans[4];
+        const currentSpan = getProfiledSegment.spans[0];
         const timeRanges = [
           {
             start: currentSpan.startTime,

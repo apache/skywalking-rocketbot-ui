@@ -8,10 +8,7 @@ language governing permissions and * limitations under the License. */
 
 <template>
   <div>
-    <div
-      @click="showSelectSpan"
-      :class="['trace-item', 'level' + data.parentId, { selected: data.spanId === selectedSpan }]"
-    >
+    <div @click="showSelectSpan" :class="['profile-item', 'level' + data.parentId]">
       <div :class="['thread', 'level' + data.parentId]" :style="{ 'text-indent': data.parentId * 4 + 'px' }">
         <svg
           class="icon vm cp trans"
@@ -52,7 +49,6 @@ language governing permissions and * limitations under the License. */
         this.displayChildren = !this.displayChildren;
       },
       showSelectSpan() {
-        // this.selectedSpan = this.data.spanId;
         this.$eventBus.$emit('HANDLE-SELECT-SPAN', this.data);
       },
     },
@@ -60,7 +56,7 @@ language governing permissions and * limitations under the License. */
 </script>
 <style lang="scss" scoped>
   @import './profile.scss';
-  .trace-item.level0 {
+  .profile-item.level0 {
     background: rgba(0, 0, 0, 0.04);
     color: #448dfe;
     &:hover {
@@ -77,19 +73,19 @@ language governing permissions and * limitations under the License. */
     }
   }
 
-  .trace-item {
+  .profile-item {
     display: flex;
     position: relative;
   }
-  .trace-item.selected {
+  .profile-item.selected {
     background: rgba(0, 0, 0, 0.04);
   }
 
-  .trace-item:not(.level0):hover {
+  .profile-item:not(.level0):hover {
     background: rgba(0, 0, 0, 0.04);
   }
 
-  .trace-item > div {
+  .profile-item > div {
     padding: 0 5px;
     border: 1px solid transparent;
     border-right: 1px dotted silver;
@@ -99,10 +95,10 @@ language governing permissions and * limitations under the License. */
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .trace-item > div.method {
+  .profile-item > div.method {
     padding-left: 10px;
   }
-  .trace-item div.exec-percent {
+  .profile-item div.exec-percent {
     width: 10%;
     padding-left: 8px;
     padding-right: 8px;

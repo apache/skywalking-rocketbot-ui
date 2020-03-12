@@ -15,6 +15,7 @@ language governing permissions and * limitations under the License. */
     </div>
     <ProfileContainer>
       <Item v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+      <div class="profile-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
     </ProfileContainer>
   </div>
 </template>
@@ -42,7 +43,7 @@ language governing permissions and * limitations under the License. */
     },
     props: ['data'],
     watch: {
-      data(val, oldVal) {
+      data() {
         if (!this.data.length) {
           return;
         }
@@ -114,5 +115,10 @@ language governing permissions and * limitations under the License. */
     white-space: pre;
     overflow: auto;
     font-family: monospace;
+  }
+  .profile-tips {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
   }
 </style>

@@ -8,10 +8,7 @@ language governing permissions and * limitations under the License. */
 
 <template>
   <div>
-    <div
-      @click="showSelectSpan"
-      :class="['trace-item', 'level' + (data.level - 1), { selected: data.spanId === selectedSpan }]"
-    >
+    <div @click="showSelectSpan" :class="['trace-item', 'level' + (data.level - 1)]" ref="traceItem">
       <div :class="['method', 'level' + (data.level - 1)]" :style="{ 'text-indent': (data.level - 1) * 10 + 'px' }">
         <svg
           class="icon vm cp trans"
@@ -51,6 +48,58 @@ language governing permissions and * limitations under the License. */
     </div>
   </div>
 </template>
+<script lang="js">
+  import moment from 'dayjs';
+  export default {
+    name: 'item',
+    props: ['data'],
+    data() {
+      return {
+        displayChildren: true,
+        selectedSpan: 0,
+      };
+    },
+    computed: {
+      selfTime() {
+        const {data} = this;
+        return  data.dur ? data.dur : 0;
+      },
+      execTime() {
+        const {data} = this;
+        return  (data.endTime - data.startTime) ? (data.endTime - data.startTime) : 0;
+      },
+      outterPercent() {
+        if (this.data.level === 1) {
+          return '100%';
+        } else {
+          const data = this.data;
+          const exec = (data.endTime - data.startTime) ? (data.endTime - data.startTime) : 0;
+          let result = (exec / data.totalExec * 100);
+          result = result > 100 ? 100 : result;
+          result = result.toFixed(4) + '%';
+          return result === '0.0000%' ? '0.9%' : result;
+        }
+      },
+      innerPercent() {
+        const result = (this.selfTime / this.execTime) * 100 .toFixed(4) + '%';
+        return result === '0.0000%' ? '0.9%' : result;
+      },
+    },
+    methods: {
+      toggle() {
+        this.displayChildren = !this.displayChildren;
+      },
+      showSelectSpan() {
+        const items = document.querySelectorAll('.trace-item');
+        for (const item of items) {
+          item.style.background = '#fff';
+        }
+        this.$refs.traceItem.style.background = 'rgba(0, 0, 0, 0.04)';
+        this.$eventBus.$emit('HANDLE-SELECT-SPAN', this.data);
+      },
+    },
+  };
+</script>
 <style lang="scss" scoped>
   @import './trace.scss';
   .trace-item.level0 {
@@ -120,51 +169,3 @@ language governing permissions and * limitations under the License. */
     }
   }
 </style>
-<script lang="js">
-  import moment from 'dayjs';
-  export default {
-    name: 'item',
-    props: ['data'],
-    data() {
-      return {
-        displayChildren: true,
-        selectedSpan: 0,
-      };
-    },
-    computed: {
-      selfTime() {
-        const {data} = this;
-        return  data.dur ? data.dur : 0;
-      },
-      execTime() {
-        const {data} = this;
-        return  (data.endTime - data.startTime) ? (data.endTime - data.startTime) : 0;
-      },
-      outterPercent() {
-        if (this.data.level === 1) {
-          return '100%';
-        } else {
-          const data = this.data;
-          const exec = (data.endTime - data.startTime) ? (data.endTime - data.startTime) : 0;
-          let result = (exec / data.totalExec * 100);
-          result = result > 100 ? 100 : result;
-          result = result.toFixed(4) + '%';
-          return result === '0.0000%' ? '0.9%' : result;
-        }
-      },
-      innerPercent() {
-        const result = (this.selfTime / this.execTime) * 100 .toFixed(4) + '%';
-        return result === '0.0000%' ? '0.9%' : result;
-      },
-    },
-    methods: {
-      toggle() {
-        this.displayChildren = !this.displayChildren;
-      },
-      showSelectSpan() {
-        // this.selectedSpan = this.data.spanId;
-        this.$eventBus.$emit('HANDLE-SELECT-SPAN', this.data);
-      },
-    },
-  };
-</script>

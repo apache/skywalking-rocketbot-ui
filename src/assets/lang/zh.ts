@@ -115,6 +115,7 @@ const m = {
   createTask: '新建任务',
   maxSamplingCount: '最大采样数',
   analyze: '分析',
+  noData: '数据为空',
 };
 
 export default m;

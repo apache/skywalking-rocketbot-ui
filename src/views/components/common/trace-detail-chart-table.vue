@@ -15,6 +15,7 @@ language governing permissions and * limitations under the License. */
     </div>
     <TraceContainer>
       <Item v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+      <div class="trace-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
     </TraceContainer>
     <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('spanInfo')">
       <div class="rk-trace-detail">
@@ -79,7 +80,7 @@ language governing permissions and * limitations under the License. */
   }
   .trace-detail-chart-table {
     position: relative;
-    min-height: 200px;
+    min-height: 300px;
     border-bottom: 1px solid #ccc;
   }
 </style>
@@ -325,5 +326,10 @@ language governing permissions and * limitations under the License. */
     white-space: pre;
     overflow: auto;
     font-family: monospace;
+  }
+  .trace-tips {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
   }
 </style>

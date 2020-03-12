@@ -48,3 +48,9 @@ export interface TracesSourceType {
   startTime: string;
   duration: string;
 }
+
+export interface IHeaderSource {
+  serviceSource: IOption[];
+  currentService: IOption;
+  endpointName: string;
+}

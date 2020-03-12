@@ -115,6 +115,7 @@ const m = {
   createTask: 'Create Task',
   maxSamplingCount: 'Max Sampling Count',
   analyze: 'Analyze',
+  noData: 'No Data',
 };
 
 export default m;
