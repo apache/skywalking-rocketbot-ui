@@ -1,14 +1,10 @@
-/** * Licensed to the Apache Software Foundation (ASF) under one or more *
-contributor license agreements. See the NOTICE file distributed with * this work
-for additional information regarding copyright ownership. * The ASF licenses
-this file to You under the Apache License, Version 2.0 * (the "License"); you
-may not use this file except in compliance with * the License. You may obtain a
-copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
-required by applicable law or agreed to in writing, software * distributed under
-the License is distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. * See the License for the
-specific language governing permissions and * limitations under the License. */
-
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 <template>
   <div
     class="rk-bar-select cp flex-h"
@@ -25,22 +21,14 @@ specific language governing permissions and * limitations under the License. */
         <div v-if="Array.isArray(current)">
           <span class="selected" v-for="item in current" :key="item.key">
             <span>{{ item.label }}</span>
-            <span
-              class="remove-icon"
-              v-if="current.length !== 1"
-              @click="removeSelected(item)"
-              >×</span
-            >
+            <span class="remove-icon" v-if="current.length !== 1" @click="removeSelected(item)">×</span>
           </span>
         </div>
         <div class="ell" v-else v-tooltip:right.ellipsis="current.label || ''">
           {{ current.label }}
         </div>
       </div>
-      <svg
-        class="icon lg trans"
-        :style="`transform: rotate(${visible ? 180 : 0}deg)`"
-      >
+      <svg class="icon lg trans" :style="`transform: rotate(${visible ? 180 : 0}deg)`">
         <use xlink:href="#arrow-down"></use>
       </svg>
     </div>
@@ -78,16 +66,11 @@ specific language governing permissions and * limitations under the License. */
     public visible: boolean = false;
 
     get filterData() {
-      return this.data.filter(
-        (i: any) =>
-          i.label.toUpperCase().indexOf(this.search.toUpperCase()) !== -1,
-      );
+      return this.data.filter((i: any) => i.label.toUpperCase().indexOf(this.search.toUpperCase()) !== -1);
     }
 
     get selectedOpt() {
-      return this.mode === Multiple
-        ? this.current.map((item: any) => item.key)
-        : [this.current.key];
+      return this.mode === Multiple ? this.current.map((item: any) => item.key) : [this.current.key];
     }
 
     public handleOpen() {
@@ -95,10 +78,7 @@ specific language governing permissions and * limitations under the License. */
     }
 
     public handleSelect(i: any) {
-      const selected =
-        this.mode === Multiple
-          ? this.current.map((item: any) => item.key)
-          : [this.current.key];
+      const selected = this.mode === Multiple ? this.current.map((item: any) => item.key) : [this.current.key];
       if (selected.includes(i.key)) {
         return;
       }

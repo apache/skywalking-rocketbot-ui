@@ -36,30 +36,25 @@ const getters = {};
 
 // mutations
 const mutations: MutationTree<State> = {
-  [types.SET_ALARM](state: State, data: Alarm[]): void {
-    state.alarmService = data;
-  },
-  [types.SET_ALARM_TOTAL](state: State, total: number): void {
-    state.total = total;
+  [types.SET_ALARM](state: State, data: { items: Alarm[]; total: number }): void {
+    state.alarmService = data.items;
+    state.total = data.total;
   },
   [types.CLEAR_ALARM](state: State): void {
     state.alarmService = [];
+    state.total = 0;
   },
 };
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_ALARM(
-    context: { commit: Commit; state: State },
-    params: AlarmParams,
-  ): Promise<void> {
+  GET_ALARM(context: { commit: Commit; state: State }, params: AlarmParams): Promise<void> {
     return graph
       .query('queryAlarms')
       .params(params)
       .then((res: AxiosResponse<any>) => {
         if (res.data.data.getAlarm.items) {
-          context.commit(types.SET_ALARM, res.data.data.getAlarm.items);
-          context.commit(types.SET_ALARM_TOTAL, res.data.data.getAlarm.total);
+          context.commit(types.SET_ALARM, res.data.data.getAlarm);
         }
       });
   },

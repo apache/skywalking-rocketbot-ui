@@ -34,7 +34,6 @@ language governing permissions and * limitations under the License. */
           :value="service"
           @input="chooseService"
           :data="rocketTrace.services"
-          :readonly="inTopo"
         />
         <TraceSelect :hasSearch="true" :title="this.$t('instance')" v-model="instance" :data="rocketTrace.instances" />
         <TraceSelect
@@ -76,7 +75,7 @@ language governing permissions and * limitations under the License. */
 
 <script lang="ts">
   import { Duration, Option } from '@/types/global';
-  import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+  import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import TraceSelect from '../common/trace-select.vue';
 
@@ -93,10 +92,6 @@ language governing permissions and * limitations under the License. */
     @Action('rocketTrace/SET_TRACE_FORM') private SET_TRACE_FORM: any;
     @Mutation('rocketTrace/SET_TRACE_FORM_ITEM')
     private SET_TRACE_FORM_ITEM: any;
-    @Prop({ default: false, type: Boolean })
-    private inTopo!: boolean;
-    @Prop({ default: () => ({ label: 'All', key: '' }) })
-    private propsService!: Option;
     private service: Option = { label: 'All', key: '' };
     private time!: Date[];
     private status: boolean = true;
@@ -257,11 +252,7 @@ language governing permissions and * limitations under the License. */
       this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     }
-
     private mounted() {
-      if (this.inTopo) {
-        this.service = this.propsService;
-      }
       this.getTraceList();
       if (this.service && this.service.key) {
         this.GET_INSTANCES({

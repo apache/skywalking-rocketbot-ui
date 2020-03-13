@@ -1,14 +1,10 @@
-/** * Licensed to the Apache Software Foundation (ASF) under one or more *
-contributor license agreements. See the NOTICE file distributed with * this work
-for additional information regarding copyright ownership. * The ASF licenses
-this file to You under the Apache License, Version 2.0 * (the "License"); you
-may not use this file except in compliance with * the License. You may obtain a
-copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
-required by applicable law or agreed to in writing, software * distributed under
-the License is distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. * See the License for the
-specific language governing permissions and * limitations under the License. */
-
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 <template>
   <div
     class="rk-dashboard-bar-select cp flex-h"
@@ -36,27 +32,14 @@ specific language governing permissions and * limitations under the License. */
           {{ current.label }}
         </div>
       </div>
-      <svg
-        class="icon lg trans"
-        :style="`transform: rotate(${visible ? 180 : 0}deg)`"
-      >
+      <svg class="icon lg trans" :style="`transform: rotate(${visible ? 180 : 0}deg)`">
         <use xlink:href="#arrow-down"></use>
       </svg>
     </div>
     <div class="rk-dashboard-sel" v-if="visible">
       <div>
-        <input
-          type="text"
-          class="rk-dashboard-sel-search"
-          v-model="search"
-          @input="handleSearch"
-        />
-        <svg
-          class="icon sm close"
-          style="margin-top: 3px;"
-          @click="search = ''"
-          v-if="search"
-        >
+        <input type="text" class="rk-dashboard-sel-search" v-model="search" @input="handleSearch" />
+        <svg class="icon sm close" style="margin-top: 3px;" @click="search = ''" v-if="search">
           <use xlink:href="#clear"></use>
         </svg>
       </div>

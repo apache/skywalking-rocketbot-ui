@@ -1,14 +1,10 @@
-/** * Licensed to the Apache Software Foundation (ASF) under one or more *
-contributor license agreements. See the NOTICE file distributed with * this work
-for additional information regarding copyright ownership. * The ASF licenses
-this file to You under the Apache License, Version 2.0 * (the "License"); you
-may not use this file except in compliance with * the License. You may obtain a
-copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
-required by applicable law or agreed to in writing, software * distributed under
-the License is distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. * See the License for the
-specific language governing permissions and * limitations under the License. */
-
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 <template>
   <div
     class="rk-alarm-select cp flex-h"
@@ -23,28 +19,17 @@ specific language governing permissions and * limitations under the License. */
     <div class="rk-alarm-bar-i flex-h" @click="visible = !visible">
       <div class="mr-15 rk-alarm-bar-i-text">
         <div class="sm grey">{{ title }}</div>
-        <div
-          class="ell"
-          v-tooltip:right.ellipsis="$t(value.label.toLowerCase()) || ''"
-        >
+        <div class="ell" v-tooltip:right.ellipsis="$t(value.label.toLowerCase()) || ''">
           {{ $t(value.label.toLowerCase()) || '' }}
         </div>
       </div>
-      <svg
-        class="icon lg trans"
-        :style="`transform: rotate(${visible ? 180 : 0}deg)`"
-      >
+      <svg class="icon lg trans" :style="`transform: rotate(${visible ? 180 : 0}deg)`">
         <use xlink:href="#arrow-down"></use>
       </svg>
     </div>
     <div class="rk-alarm-sel" v-if="visible">
       <div v-if="hasSearch">
-        <input
-          type="text"
-          class="rk-alarm-sel-search"
-          v-model="search"
-          placeholder="Search..."
-        />
+        <input type="text" class="rk-alarm-sel-search" v-model="search" placeholder="Search..." />
         <svg class="icon sm close" @click="search = ''" v-if="search">
           <use xlink:href="#clear"></use>
         </svg>
@@ -75,10 +60,7 @@ specific language governing permissions and * limitations under the License. */
     public search: string = '';
     public visible: boolean = false;
     get filterData() {
-      return this.data.filter(
-        (i: any) =>
-          i.label.toUpperCase().indexOf(this.search.toUpperCase()) !== -1,
-      );
+      return this.data.filter((i: any) => i.label.toUpperCase().indexOf(this.search.toUpperCase()) !== -1);
     }
     public handleOpen() {
       this.visible = true;

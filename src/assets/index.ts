@@ -32,7 +32,6 @@ import './svg/file-addition.svg';
 import './svg/file-deletion.svg';
 import './svg/file-modified.svg';
 import './svg/file-tree.svg';
-import './svg/honeycomb-selector.svg';
 import './svg/issue-child.svg';
 import './svg/issue-close.svg';
 import './svg/issue-open-m.svg';

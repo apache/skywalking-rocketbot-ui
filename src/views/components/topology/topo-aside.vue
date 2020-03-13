@@ -1,46 +1,27 @@
-/** * Licensed to the Apache Software Foundation (ASF) under one or more *
-contributor license agreements. See the NOTICE file distributed with * this work
-for additional information regarding copyright ownership. * The ASF licenses
-this file to You under the Apache License, Version 2.0 * (the "License"); you
-may not use this file except in compliance with * the License. You may obtain a
-copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
-required by applicable law or agreed to in writing, software * distributed under
-the License is distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. * See the License for the
-specific language governing permissions and * limitations under the License. */
-
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 <template>
   <aside class="link-topo-aside">
-    <Radial
-      v-if="radioStatus"
-      :datas="{ nodes: stateTopo.nodes, calls: stateTopo.calls }"
-    />
-    <svg
-      class="link-topo-aside-btn icon cp lg"
-      @click="showRadial()"
-      :style="`position:absolute;left:290px;`"
-    >
+    <Radial v-if="radioStatus" :datas="{ nodes: stateTopo.nodes, calls: stateTopo.calls }" />
+    <svg class="link-topo-aside-btn icon cp lg" @click="showRadial()" :style="`position:absolute;left:290px;`">
       <use xlink:href="#issues" />
     </svg>
     <svg
       v-if="showServerInfo"
       class="link-topo-aside-btn icon cp lg"
       @click="show = !show"
-      :style="
-        `position:absolute;left:290px;transform: rotate(${
-          show ? 0 : 180
-        }deg);top:45px;`
-      "
+      :style="`position:absolute;left:290px;transform: rotate(${show ? 0 : 180}deg);top:45px;`"
     >
       <use xlink:href="#chevron-left" />
     </svg>
     <TopoService />
     <div v-if="show">
-      <div
-        class="link-topo-aside-box"
-        style="top:45px"
-        v-if="!stateTopo.selectedServiceCall && showServerInfo"
-      >
+      <div class="link-topo-aside-box" style="top:45px" v-if="!stateTopo.selectedServiceCall && showServerInfo">
         <div class="mb-20">
           <span class="b dib mr-20">{{ $t('serviceDetail') }}</span>
         </div>
@@ -111,9 +92,7 @@ specific language governing permissions and * limitations under the License. */
     private show: boolean = true;
 
     private get showServerInfo() {
-      return (
-        this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal
-      );
+      return this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal;
     }
 
     private resize() {

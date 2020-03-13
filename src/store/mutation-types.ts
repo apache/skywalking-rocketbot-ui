@@ -60,7 +60,6 @@ export const SET_SEARCH_ENDPOINTS = 'SET_SEARCH_ENDPOINTS';
 
 // alarm
 export const SET_ALARM = 'SET_ALARM';
-export const SET_ALARM_TOTAL = 'SET_ALARM_TOTAL';
 export const CLEAR_ALARM = 'CLEAR_ALARM';
 
 // trace
@@ -82,6 +81,7 @@ export const SET_MODE_STATUS = 'SET_MODE_STATUS';
 export const SET_HONEYCOMB_NODE = 'SET_HONEYCOMB_NODE';
 export const SET_SHOW_DIALOG = 'SET_SHOW_DIALOG';
 export const SET_INSTANCE_DEPENDENCY = 'SET_INSTANCE_DEPENDENCY';
+export const SET_TOPO_COPY = 'SET_TOPO_COPY';
 
 // comparison
 export const SET_CHARTVAL = 'SET_CHARTVAL';

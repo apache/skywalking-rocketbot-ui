@@ -1,30 +1,18 @@
-/** * Licensed to the Apache Software Foundation (ASF) under one or more *
-contributor license agreements. See the NOTICE file distributed with * this work
-for additional information regarding copyright ownership. * The ASF licenses
-this file to You under the Apache License, Version 2.0 * (the "License"); you
-may not use this file except in compliance with * the License. You may obtain a
-copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
-required by applicable law or agreed to in writing, software * distributed under
-the License is distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. * See the License for the
-specific language governing permissions and * limitations under the License. */
-
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 <template>
   <div
     v-if="stateTopo.selectedServiceCall || showServerInfo"
     :class="`link-topo-aside-box link-topo-aside-box-${isMini ? 'min' : 'max'}`"
-    :style="
-      `top:55px;position: fixed;right: 30px;${
-        showInfoCount === 0 ? 'animation: unset;' : ''
-      }`
-    "
+    :style="`top:55px;position: fixed;right: 30px;${showInfoCount === 0 ? 'animation: unset;' : ''}`"
   >
     <svg
-      :style="
-        `position:absolute;left:-48px;top:0;transform: rotate(${
-          isMini ? 0 : 180
-        }deg);`
-      "
+      :style="`position:absolute;left:-48px;top:0;transform: rotate(${isMini ? 0 : 180}deg);`"
       class="link-topo-aside-btn icon cp lg"
       @click="setShowInfo"
     >
@@ -48,9 +36,7 @@ specific language governing permissions and * limitations under the License. */
           >{{ this.$t('server') }}</span
         >
       </div>
-      <span v-else-if="showServerInfo" class="b dib mr-20 vm">{{
-        $t('serviceDetail')
-      }}</span>
+      <span v-else-if="showServerInfo" class="b dib mr-20 vm">{{ $t('serviceDetail') }}</span>
     </div>
     <div v-if="showInfo">
       <div v-if="stateTopo.selectedServiceCall">
@@ -107,9 +93,7 @@ specific language governing permissions and * limitations under the License. */
       </div>
     </div>
     <div class="show-dependency" v-if="stateTopo.selectedServiceCall">
-      <a class="rk-btn lg" @click="openInstanceModal">{{
-        $t('ShowInstanceDependency')
-      }}</a>
+      <a class="rk-btn lg" @click="openInstanceModal">{{ $t('ShowInstanceDependency') }}</a>
       <rk-sidebox
         class="instance-dependency"
         width="80%"
@@ -163,9 +147,7 @@ specific language governing permissions and * limitations under the License. */
     private dialogTopoVisible = false;
 
     private get showServerInfo() {
-      return (
-        this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal
-      );
+      return this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal;
     }
 
     @Watch('stateTopo.selectedServiceCall')
@@ -224,12 +206,7 @@ specific language governing permissions and * limitations under the License. */
 
     private openInstanceModal() {
       this.dialogTopoVisible = true;
-      if (
-        !(
-          this.stateTopo.selectedServiceCall &&
-          this.stateTopo.selectedServiceCall.source
-        )
-      ) {
+      if (!(this.stateTopo.selectedServiceCall && this.stateTopo.selectedServiceCall.source)) {
         return;
       }
       this.GET_INSTANCE_DEPENDENCY({

@@ -1,21 +1,14 @@
-/** * Licensed to the Apache Software Foundation (ASF) under one or more *
-contributor license agreements. See the NOTICE file distributed with * this work
-for additional information regarding copyright ownership. * The ASF licenses
-this file to You under the Apache License, Version 2.0 * (the "License"); you
-may not use this file except in compliance with * the License. You may obtain a
-copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
-required by applicable law or agreed to in writing, software * distributed under
-the License is distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. * See the License for the
-specific language governing permissions and * limitations under the License. */
-
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 <template>
   <div :class="`${pre}`">
     <div :class="`${pre}-head`">
-      <a
-        :class="`${pre}-prev-decade-btn`"
-        v-show="showYears"
-        @click="year -= 10"
+      <a :class="`${pre}-prev-decade-btn`" v-show="showYears" @click="year -= 10"
         ><svg class="icon sm cp">
           <use xlink:href="#angle-double-left"></use></svg
       ></a>
@@ -23,50 +16,26 @@ specific language governing permissions and * limitations under the License. */
         ><svg class="icon sm cp">
           <use xlink:href="#angle-double-left"></use></svg
       ></a>
-      <a
-        :class="`${pre}-prev-month-btn`"
-        v-show="!showYears && !showMonths"
-        @click="pm"
-      >
+      <a :class="`${pre}-prev-month-btn`" v-show="!showYears && !showMonths" @click="pm">
         <svg class="icon lg cp">
           <use xlink:href="#chevron-left"></use></svg
       ></a>
-      <a :class="`${pre}-year-select`" v-show="showYears">{{
-        ys + '-' + ye
-      }}</a>
+      <a :class="`${pre}-year-select`" v-show="showYears">{{ ys + '-' + ye }}</a>
       <template v-if="local.yearSuffix">
-        <a
-          :class="`${pre}-year-select`"
-          @click="showYears = !showYears"
-          v-show="!showYears"
+        <a :class="`${pre}-year-select`" @click="showYears = !showYears" v-show="!showYears"
           >{{ year }}{{ local.yearSuffix }}</a
         >
-        <a
-          :class="`${pre}-month-select`"
-          @click="showMonths = !showMonths"
-          v-show="!showYears && !showMonths"
-          >{{ local.monthsHead[month] }}</a
-        >
+        <a :class="`${pre}-month-select`" @click="showMonths = !showMonths" v-show="!showYears && !showMonths">{{
+          local.monthsHead[month]
+        }}</a>
       </template>
       <template v-else>
-        <a
-          :class="`${pre}-month-select`"
-          @click="showMonths = !showMonths"
-          v-show="!showYears && !showMonths"
-          >{{ local.monthsHead[month] }}</a
-        >
-        <a
-          :class="`${pre}-year-select`"
-          @click="showYears = !showYears"
-          v-show="!showYears"
-          >{{ year }}</a
-        >
+        <a :class="`${pre}-month-select`" @click="showMonths = !showMonths" v-show="!showYears && !showMonths">{{
+          local.monthsHead[month]
+        }}</a>
+        <a :class="`${pre}-year-select`" @click="showYears = !showYears" v-show="!showYears">{{ year }}</a>
       </template>
-      <a
-        :class="`${pre}-next-month-btn`"
-        v-show="!showYears && !showMonths"
-        @click="nm"
-      >
+      <a :class="`${pre}-next-month-btn`" v-show="!showYears && !showMonths" @click="nm">
         <svg class="icon lg cp">
           <use xlink:href="#chevron-right"></use></svg
       ></a>
@@ -74,10 +43,7 @@ specific language governing permissions and * limitations under the License. */
         ><svg class="icon sm cp">
           <use xlink:href="#angle-double-right"></use></svg
       ></a>
-      <a
-        :class="`${pre}-next-decade-btn`"
-        v-show="showYears"
-        @click="year += 10"
+      <a :class="`${pre}-next-decade-btn`" v-show="showYears" @click="year += 10"
         ><svg class="icon sm cp">
           <use xlink:href="#angle-double-right"></use></svg
       ></a>
@@ -88,10 +54,7 @@ specific language governing permissions and * limitations under the License. */
         <a
           v-for="(j, i) in days"
           @click="is($event) && ((day = j.i), ok(j))"
-          :class="[
-            j.p || j.n ? `${pre}-date-out` : '',
-            status(j.y, j.m, j.i, hour, minute, second, 'YYYYMMDD'),
-          ]"
+          :class="[j.p || j.n ? `${pre}-date-out` : '', status(j.y, j.m, j.i, hour, minute, second, 'YYYYMMDD')]"
           :key="i"
           >{{ j.i }}</a
         >
@@ -99,10 +62,7 @@ specific language governing permissions and * limitations under the License. */
       <div :class="`${pre}-months`" v-show="showMonths">
         <a
           v-for="(i, j) in local.months"
-          @click="
-            is($event) &&
-              ((showMonths = m === 'M'), (month = j), m === 'M' && ok('m'))
-          "
+          @click="is($event) && ((showMonths = m === 'M'), (month = j), m === 'M' && ok('m'))"
           :class="[status(year, j, day, hour, minute, second, 'YYYYMM')]"
           :key="j"
           >{{ i }}</a
@@ -111,14 +71,8 @@ specific language governing permissions and * limitations under the License. */
       <div :class="`${pre}-years`" v-show="showYears">
         <a
           v-for="(i, j) in years"
-          @click="
-            is($event) &&
-              ((showYears = m === 'Y'), (year = i), m === 'Y' && ok('y'))
-          "
-          :class="[
-            j === 0 || j === 11 ? `${pre}-date-out` : '',
-            status(i, month, day, hour, minute, second, 'YYYY'),
-          ]"
+          @click="is($event) && ((showYears = m === 'Y'), (year = i), m === 'Y' && ok('y'))"
+          :class="[j === 0 || j === 11 ? `${pre}-date-out` : '', status(i, month, day, hour, minute, second, 'YYYY')]"
           :key="j"
           >{{ i }}</a
         >
@@ -140,9 +94,7 @@ specific language governing permissions and * limitations under the License. */
         <div class="scroll_hide calendar-overflow">
           <a
             v-for="(j, i) in 60"
-            @click="
-              is($event) && ((showMinutes = false), (minute = i), ok('h'))
-            "
+            @click="is($event) && ((showMinutes = false), (minute = i), ok('h'))"
             :class="[status(year, month, day, hour, i, second, 'YYYYMMDDHHmm')]"
             :key="i"
             >{{ i }}</a
@@ -154,12 +106,8 @@ specific language governing permissions and * limitations under the License. */
         <div class="scroll_hide calendar-overflow">
           <a
             v-for="(j, i) in 60"
-            @click="
-              is($event) && ((showSeconds = false), (second = i), ok('h'))
-            "
-            :class="[
-              status(year, month, day, hour, minute, i, 'YYYYMMDDHHmmss'),
-            ]"
+            @click="is($event) && ((showSeconds = false), (second = i), ok('h'))"
+            :class="[status(year, month, day, hour, minute, i, 'YYYYMMDDHHmmss')]"
             :key="i"
             >{{ i }}</a
           >
@@ -177,18 +125,14 @@ specific language governing permissions and * limitations under the License. */
         <span>:</span>
         <a
           :title="local.minuteTip"
-          @click="
-            (showMinutes = !showMinutes), (showHours = showSeconds = false)
-          "
+          @click="(showMinutes = !showMinutes), (showHours = showSeconds = false)"
           :class="{ on: showMinutes }"
           >{{ minute | dd }}</a
         >
         <span>:</span>
         <a
           :title="local.secondTip"
-          @click="
-            (showSeconds = !showSeconds), (showHours = showMinutes = false)
-          "
+          @click="(showSeconds = !showSeconds), (showHours = showMinutes = false)"
           :class="{ on: showSeconds }"
           >{{ second | dd }}</a
         >
