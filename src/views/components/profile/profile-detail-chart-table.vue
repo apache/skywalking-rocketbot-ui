@@ -13,10 +13,12 @@ language governing permissions and * limitations under the License. */
         <use xlink:href="#spinner"></use>
       </svg>
     </div>
-    <ProfileContainer>
-      <Item v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
-      <div class="profile-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
-    </ProfileContainer>
+    <div class="profile-table">
+      <ProfileContainer>
+        <Item v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+        <div class="profile-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
+      </ProfileContainer>
+    </div>
   </div>
 </template>
 <style lang="scss">
@@ -120,5 +122,8 @@ language governing permissions and * limitations under the License. */
     width: 100%;
     text-align: center;
     margin-top: 10px;
+  }
+  .profile-table {
+    overflow-x: scroll;
   }
 </style>

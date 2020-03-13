@@ -9,6 +9,9 @@ language governing permissions and * limitations under the License. */
 <template>
   <div class="profile-task-list flex-v">
     <div class="profile-task-wrapper flex-v">
+      <div class="rk-profile-t-tool flex-h">
+        Task List
+      </div>
       <div class="rk-trace-t-loading" v-show="loading">
         <svg class="icon loading">
           <use xlink:href="#spinner"></use>
@@ -27,7 +30,8 @@ language governing permissions and * limitations under the License. */
                 <span class="b">{{ i.endpointName }}</span>
               </div>
               <div class="grey ell sm">
-                <span class="rk-tag mr-10 sm">{{ i.duration }} ms</span>{{ i.startTime | dateformat }}
+                <span class="mr-10 sm">{{ i.startTime | dateformat }}</span>
+                <span class="mr-10 sm">{{ (i.startTime + i.duration * 60 * 1000) | dateformat }}</span>
                 <span class="rk-tag mr-10 sm">{{ i.maxSamplingCount }}</span>
               </div>
             </td>
@@ -36,6 +40,9 @@ language governing permissions and * limitations under the License. */
       </div>
     </div>
     <div class="profile-trace-wrapper profile-segment flex-v">
+      <div class="rk-profile-t-tool flex-h">
+        Sampled Traces
+      </div>
       <div class="rk-trace-t-loading" v-show="loading">
         <svg class="icon loading">
           <use xlink:href="#spinner"></use>
@@ -127,9 +134,14 @@ language governing permissions and * limitations under the License. */
         background-color: #ededed;
       }
     }
+    .rk-profile-t-tool {
+      padding: 10px 10px;
+      font-weight: bold;
+      border-right: 1px solid rgba(0, 0, 0, 0.07);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    }
   }
   .profile-segment {
-    margin-top: 10px;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
   }
 </style>

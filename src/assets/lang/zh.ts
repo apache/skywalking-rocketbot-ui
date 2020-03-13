@@ -106,7 +106,7 @@ const m = {
   metrics: '指标',
   ShowInstanceDependency: '展示实例依赖',
   InstanceDependencyTitle: '实例依赖',
-  profile: '收益',
+  profile: '性能剖析',
   newTask: '新建任务',
   monitorTime: '监控时间',
   monitorDuration: '监控时间',

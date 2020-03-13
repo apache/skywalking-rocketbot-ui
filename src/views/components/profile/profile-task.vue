@@ -85,12 +85,7 @@ language governing permissions and * limitations under the License. */
     @State('rocketbot') private rocketbotGlobal: any;
 
     private changeOption(item: any, type: string) {
-      if (type === this.updateTaskOpt.MonitorTime) {
-        item = {
-          ...item,
-          param: item.key === '1' ? this.time.getTime() : new Date().getTime(),
-        };
-      } else if ([this.updateTaskOpt.MinThreshold, this.updateTaskOpt.EndpointName].includes(type)) {
+      if ([this.updateTaskOpt.MinThreshold, this.updateTaskOpt.EndpointName].includes(type)) {
         item = {
           label: type,
           key: item.target.value,
@@ -100,7 +95,7 @@ language governing permissions and * limitations under the License. */
     }
 
     private createTask() {
-      this.CREATE_PROFILE_TASK().then((res: any) => {
+      this.CREATE_PROFILE_TASK({ startTime: this.time.getTime() }).then((res: any) => {
         if (res.errorReason) {
           this.message = res.errorReason;
           return;

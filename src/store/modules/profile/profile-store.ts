@@ -200,7 +200,7 @@ const actions = {
   },
   GET_PROFILE_ANALYZE(
     context: { commit: Commit; state: State; dispatch: Dispatch },
-    params: { segmentId: string; timeRanges: any[] },
+    params: { segmentId: string; timeRanges: Array<{ start: number; end: number }> },
   ) {
     return graph
       .query('getProfileAnalyze')
@@ -217,7 +217,7 @@ const actions = {
         context.commit(types.SET_PROFILE_ANALYZATION, getProfileAnalyze.trees);
       });
   },
-  CREATE_PROFILE_TASK(context: { commit: Commit; state: State; dispatch: Dispatch }) {
+  CREATE_PROFILE_TASK(context: { commit: Commit; state: State; dispatch: Dispatch }, param: { startTime: number }) {
     const {
       service,
       endpointName,
@@ -230,7 +230,7 @@ const actions = {
     const creationRequest = {
       serviceId: service.key,
       endpointName,
-      startTime: monitorTime.param,
+      startTime: monitorTime.key === '1' ? param.startTime : new Date().getTime(),
       duration: monitorDuration.key,
       minDurationThreshold: Number(minThreshold),
       dumpPeriod: dumpPeriod.key,

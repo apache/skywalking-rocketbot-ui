@@ -32,7 +32,7 @@ language governing permissions and * limitations under the License. */
   .profile {
     font-size: 12px;
     height: 100%;
-    overflow: auto;
+    min-width: 1200px;
   }
   .profile-header {
     display: flex;
