@@ -116,6 +116,10 @@ const m = {
   maxSamplingCount: 'Max Sampling Count',
   analyze: 'Analyze',
   noData: 'No Data',
+  taskInfo: 'Task Information',
+  task: 'Task',
+  operationType: 'Operation Type',
+  operationTime: 'Operation Time',
 };
 
 export default m;

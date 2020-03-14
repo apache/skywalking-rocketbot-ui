@@ -66,6 +66,13 @@ export const GetProfileTaskList = {
     dumpPeriod
     maxSamplingCount
     id
+    logs {
+      id
+      instanceId
+      instanceName
+      operationType
+      operationTime
+    }
   }
   `,
 };

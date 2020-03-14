@@ -116,6 +116,10 @@ const m = {
   maxSamplingCount: '最大采样数',
   analyze: '分析',
   noData: '数据为空',
+  taskInfo: '任务详情',
+  task: '任务',
+  operationType: '操作类型',
+  operationTime: '操作时间',
 };
 
 export default m;

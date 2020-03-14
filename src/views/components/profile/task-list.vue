@@ -23,7 +23,7 @@ language governing permissions and * limitations under the License. */
             <td
               class="rk-trace-td"
               :class="{
-                selected: selectedTask === i.id,
+                selected: selectedTask.id === i.id,
               }"
             >
               <div class="ell mb-5">
@@ -32,12 +32,55 @@ language governing permissions and * limitations under the License. */
               <div class="grey ell sm">
                 <span class="mr-10 sm">{{ i.startTime | dateformat }}</span>
                 <span class="mr-10 sm">{{ (i.startTime + i.duration * 60 * 1000) | dateformat }}</span>
-                <span class="rk-tag mr-10 sm">{{ i.maxSamplingCount }}</span>
               </div>
             </td>
           </tr>
         </table>
       </div>
+      <rk-sidebox :width="'50%'" :show.sync="viewDetail" :title="$t('taskInfo')">
+        <div class="rk-trace-detail">
+          <h5 class="mb-10">{{ $t('task') }}.</h5>
+          <div class="mb-10 clear">
+            <span class="g-sm-4 grey">{{ $t('endpoint') }}:</span
+            ><span class="g-sm-8 wba">{{ this.selectedTask.endpointName }}</span>
+          </div>
+          <div class="mb-10 clear">
+            <span class="g-sm-4 grey">{{ this.$t('monitorTime') }}:</span
+            ><span class="g-sm-8 wba">{{ this.selectedTask.startTime | dateformat }}</span>
+          </div>
+          <div class="mb-10 clear">
+            <span class="g-sm-4 grey">{{ this.$t('monitorDuration') }}:</span
+            ><span class="g-sm-8 wba">{{ this.selectedTask.duration }} min</span>
+          </div>
+          <div class="mb-10 clear">
+            <span class="g-sm-4 grey">{{ this.$t('minThreshold') }}:</span>
+            <span class="g-sm-8 wba">{{ this.selectedTask.minDurationThreshold }} ms</span>
+          </div>
+          <div class="mb-10 clear">
+            <span class="g-sm-4 grey">{{ this.$t('dumpPeriod') }}:</span>
+            <span class="g-sm-8 wba">{{ this.selectedTask.dumpPeriod }}</span>
+          </div>
+          <div class="mb-10 clear">
+            <span class="g-sm-4 grey">{{ this.$t('maxSamplingCount') }}:</span>
+            <span class="g-sm-8 wba">{{ this.selectedTask.maxSamplingCount }}</span>
+          </div>
+          <h5 class="mb-10" v-if="this.selectedTask.logs" v-show="this.selectedTask.logs.length">{{ $t('logs') }}.</h5>
+          <div class="log-item" v-for="(i, index) in this.selectedTask.logs" :key="index">
+            <div class="mb-10 sm">
+              <span class="mr-10 grey">{{ $t('instance') }}:</span>
+              <span>{{ i.instanceName }}</span>
+            </div>
+            <div class="mb-10 sm">
+              <span class="mr-10 grey">{{ $t('operationType') }}:</span>
+              <span>{{ i.operationType }}</span>
+            </div>
+            <div class="mb-10 sm">
+              <span class="mr-10 grey">{{ $t('operationTime') }}:</span>
+              <span>{{ i.operationTime | dateformat }}</span>
+            </div>
+          </div>
+        </div>
+      </rk-sidebox>
     </div>
     <div class="profile-trace-wrapper profile-segment flex-v">
       <div class="rk-profile-t-tool flex-h">
@@ -93,14 +136,16 @@ language governing permissions and * limitations under the License. */
     @Action('profileStore/GET_SEGMENT_SPANS') private GET_SEGMENT_SPANS: any;
     private loading: any;
     private selectedKey: string = '';
-    private selectedTask: string = '';
+    private selectedTask: any = {};
+    private viewDetail: boolean = false;
 
     private created() {
       this.loading = false;
     }
 
     private selectTask(item: { id: string; segmentId: string }) {
-      this.selectedTask = item.id;
+      this.viewDetail = true;
+      this.selectedTask = item;
       this.GET_SEGMENT_LIST({ taskID: item.id });
     }
 
@@ -139,6 +184,9 @@ language governing permissions and * limitations under the License. */
       font-weight: bold;
       border-right: 1px solid rgba(0, 0, 0, 0.07);
       border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    }
+    .log-item {
+      margin-top: 20px;
     }
   }
   .profile-segment {
