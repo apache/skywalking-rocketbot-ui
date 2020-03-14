@@ -27,9 +27,13 @@ export const InitTaskField = {
 
 export const InitTaskFieldSource = {
   serviceSource: [{ key: '', label: 'None' }],
-  monitorTime: [
+  monitorTimeEn: [
     { key: '0', label: 'monitor now' },
     { key: '1', label: 'set start time' },
+  ],
+  monitorTimeCn: [
+    { key: '0', label: '此刻' },
+    { key: '1', label: '设置时间' },
   ],
   monitorDuration: [
     { key: 5, label: '5 min' },

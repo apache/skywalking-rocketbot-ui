@@ -20,7 +20,12 @@ language governing permissions and * limitations under the License. */
         <span class="vm">{{ this.$t('analyze') }}</span>
       </a>
     </div>
-    <TraceDetailChartTable :data="segmentSpans" :traceId="currentSegment.traceIds[0]" :showSpanDetail="false" />
+    <TraceDetailChartTable
+      :data="segmentSpans"
+      :traceId="currentSegment.traceIds[0]"
+      :showSpanDetail="false"
+      :HeaderType="'profile'"
+    />
     <ProfileDetailChartTable :data="profileAnalyzation" />
     <div v-if="message">{{ message }}</div>
   </div>

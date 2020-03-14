@@ -30,7 +30,8 @@ export interface ITaskOptions {
 }
 export interface TaskSourceType {
   serviceSource: IOption[];
-  monitorTime: IOption[];
+  monitorTimeCn: IOption[];
+  monitorTimeEn: IOption[];
   monitorDuration: IOption[];
   dumpPeriod: IOption[];
   maxSamplingCount: IOption[];

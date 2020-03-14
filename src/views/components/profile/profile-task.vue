@@ -23,7 +23,7 @@ language governing permissions and * limitations under the License. */
         <RkRadio
           class="mb-5 monitor-time-radio"
           :current="newTaskFields.monitorTime"
-          :data="taskFieldSource.monitorTime"
+          :data="locale === 'en' ? taskFieldSource.monitorTimeEn : taskFieldSource.monitorTimeCn"
           @onChoose="(item) => changeOption(item, updateTaskOpt.MonitorTime)"
         />
         <span>
@@ -77,6 +77,7 @@ language governing permissions and * limitations under the License. */
   export default class ProfileTask extends Vue {
     private time!: Date;
     private message: string = '';
+    private locale: string = 'en';
     @Prop() private newTaskFields: any;
     @Prop() private taskFieldSource: any;
     @Getter('profileStore/updateTaskOpt') private updateTaskOpt: any;
@@ -111,6 +112,7 @@ language governing permissions and * limitations under the License. */
     }
 
     private created() {
+      this.locale = this.$i18n.locale;
       this.time = this.rocketbotGlobal.durationRow.start;
     }
   }

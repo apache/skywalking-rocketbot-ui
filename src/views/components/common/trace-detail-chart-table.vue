@@ -12,7 +12,7 @@ language governing permissions and * limitations under the License. */
         <use xlink:href="#spinner"></use>
       </svg>
     </div>
-    <TraceContainer>
+    <TraceContainer :type="HeaderType">
       <Item v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
       <div class="trace-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
     </TraceContainer>
@@ -96,7 +96,7 @@ language governing permissions and * limitations under the License. */
       Item,
       TraceContainer,
     },
-    props: ['data', 'traceId', 'showSpanDetail'],
+    props: ['data', 'traceId', 'showSpanDetail', 'HeaderType'],
     watch: {
       data(val, oldVal) {
         if (!this.data.length) {

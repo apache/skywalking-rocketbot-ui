@@ -9,33 +9,24 @@ language governing permissions and * limitations under the License. */
 <template>
   <div class="trace">
     <div class="trace-header">
-      <div class="method">
-        Method
-      </div>
-      <div class="start-time">
-        Start Time
-      </div>
-      <div class="exec-ms">
-        Exec(ms)
-      </div>
-      <div class="exec-percent">
-        Exec(%)
-      </div>
-      <div class="self">
-        Self(ms)
-      </div>
-      <div class="api">
-        API
-      </div>
-      <div class="application">
-        Service
+      <div :class="item.label" v-for="(item, index) in data" :key="index">
+        {{ item.value }}
       </div>
     </div>
-
     <slot> </slot>
   </div>
 </template>
-<script lang="js"></script>
+<script lang="js">
+  import { ProfileConstant, TraceConstant } from './trace-constant';
+
+  export default {
+    name: 'TraceContainer',
+    props: ['type'],
+    created() {
+      this.data = this.type === 'profile' ? ProfileConstant : TraceConstant;
+    },
+  };
+</script>
 <style lang="scss" scoped>
   @import './trace.scss';
   .trace {

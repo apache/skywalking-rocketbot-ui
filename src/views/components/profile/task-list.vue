@@ -41,8 +41,12 @@ language governing permissions and * limitations under the License. */
         <div class="rk-trace-detail">
           <h5 class="mb-10">{{ $t('task') }}.</h5>
           <div class="mb-10 clear">
-            <span class="g-sm-4 grey">{{ $t('endpoint') }}:</span
-            ><span class="g-sm-8 wba">{{ this.selectedTask.endpointName }}</span>
+            <span class="g-sm-4 grey">{{ $t('service') }}:</span>
+            <span class="g-sm-8 wba">{{ this.selectedTaskService.label }}</span>
+          </div>
+          <div class="mb-10 clear">
+            <span class="g-sm-4 grey">{{ $t('endpoint') }}:</span>
+            <span class="g-sm-8 wba">{{ this.selectedTask.endpointName }}</span>
           </div>
           <div class="mb-10 clear">
             <span class="g-sm-4 grey">{{ this.$t('monitorTime') }}:</span
@@ -99,7 +103,7 @@ language governing permissions and * limitations under the License. */
               :class="{
                 'rk-trace-success': !i.isError,
                 'rk-trace-error': i.isError,
-                selected: selectedKey == i.key,
+                selected: selectedKey == i.segmentId,
               }"
             >
               <div
@@ -131,6 +135,7 @@ language governing permissions and * limitations under the License. */
   export default class ProfileTaskList extends Vue {
     @Prop() private taskListSource: any;
     @Prop() private segmentList: any;
+    @Prop() private headerSource: any;
     @Action('profileStore/GET_SEGMENT_LIST') private GET_SEGMENT_LIST: any;
     @Mutation('profileStore/SET_CURRENT_SEGMENT') private SET_CURRENT_SEGMENT: any;
     @Action('profileStore/GET_SEGMENT_SPANS') private GET_SEGMENT_SPANS: any;
@@ -138,20 +143,23 @@ language governing permissions and * limitations under the License. */
     private selectedKey: string = '';
     private selectedTask: any = {};
     private viewDetail: boolean = false;
+    private selectedTaskService: any = {};
 
     private created() {
       this.loading = false;
     }
 
-    private selectTask(item: { id: string; segmentId: string }) {
+    private selectTask(item: { id: string; serviceId: string }) {
       this.viewDetail = true;
       this.selectedTask = item;
+      this.selectedTaskService =
+        this.headerSource.serviceSource.filter((service: any) => service.key === item.serviceId)[0] || {};
       this.GET_SEGMENT_LIST({ taskID: item.id });
     }
 
-    private selectTrace(item: { key: string; segmentId: string }) {
+    private selectTrace(item: { segmentId: string }) {
       this.SET_CURRENT_SEGMENT(item);
-      this.selectedKey = item.key;
+      this.selectedKey = item.segmentId;
       this.GET_SEGMENT_SPANS({ segmentId: item.segmentId });
     }
   }

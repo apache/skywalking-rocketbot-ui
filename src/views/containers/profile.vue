@@ -14,7 +14,11 @@ language governing permissions and * limitations under the License. */
       :taskFieldSource="profile.taskFieldSource"
     />
     <div class="rk-profile-context">
-      <ProfileTaskList :taskListSource="profile.taskListSource" :segmentList="profile.segmentList" />
+      <ProfileTaskList
+        :headerSource="profile.headerSource"
+        :taskListSource="profile.taskListSource"
+        :segmentList="profile.segmentList"
+      />
       <ProfileTraceDetail
         :currentSegment="profile.currentSegment"
         :segmentSpans="profile.segmentSpans"
