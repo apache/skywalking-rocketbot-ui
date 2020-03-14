@@ -120,6 +120,9 @@ const m = {
   task: '任务',
   operationType: '操作类型',
   operationTime: '操作时间',
+  taskView: '查看任务详情',
+  includeChildren: '包含子部分',
+  excludeChildren: '不包含子部分',
 };
 
 export default m;

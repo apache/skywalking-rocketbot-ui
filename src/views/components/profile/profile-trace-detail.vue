@@ -13,8 +13,8 @@ language governing permissions and * limitations under the License. */
         <option v-for="i in currentSegment.traceIds" :value="i" :key="i">{{ i }}</option>
       </select>
       <select class="profile-trace-detail-ids" @change="spanModeChange($event)">
-        <option value="include" key="include">include children</option>
-        <option value="exclude" key="exclude">exclude children</option>
+        <option value="include" key="include">{{ this.$t('includeChildren') }}</option>
+        <option value="exclude" key="exclude">{{ this.$t('excludeChildren') }}</option>
       </select>
       <a class="profile-analyze-btn bg-blue profile-trace-detail-ids" @click="analyzeProfile()">
         <span class="vm">{{ this.$t('analyze') }}</span>

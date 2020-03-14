@@ -12,11 +12,6 @@ language governing permissions and * limitations under the License. */
       <div class="rk-profile-t-tool flex-h">
         Task List
       </div>
-      <div class="rk-trace-t-loading" v-show="loading">
-        <svg class="icon loading">
-          <use xlink:href="#spinner"></use>
-        </svg>
-      </div>
       <div class="rk-trace-t-wrapper scroll_hide">
         <table class="rk-trace-t">
           <tr class="rk-trace-tr cp" v-for="(i, index) in taskListSource" @click="selectTask(i)" :key="index">
@@ -28,6 +23,9 @@ language governing permissions and * limitations under the License. */
             >
               <div class="ell mb-5">
                 <span class="b">{{ i.endpointName }}</span>
+                <a class="profile-btn bg-blue r" @click="viewTask(i)">
+                  <span class="vm">{{ $t('taskView') }}</span>
+                </a>
               </div>
               <div class="grey ell sm">
                 <span class="mr-10 sm">{{ i.startTime | dateformat }}</span>
@@ -90,11 +88,6 @@ language governing permissions and * limitations under the License. */
       <div class="rk-profile-t-tool flex-h">
         Sampled Traces
       </div>
-      <div class="rk-trace-t-loading" v-show="loading">
-        <svg class="icon loading">
-          <use xlink:href="#spinner"></use>
-        </svg>
-      </div>
       <div class="rk-trace-t-wrapper scroll_hide">
         <table class="rk-trace-t">
           <tr class="rk-trace-tr cp" v-for="(i, index) in segmentList" @click="selectTrace(i)" :key="index">
@@ -139,22 +132,21 @@ language governing permissions and * limitations under the License. */
     @Action('profileStore/GET_SEGMENT_LIST') private GET_SEGMENT_LIST: any;
     @Mutation('profileStore/SET_CURRENT_SEGMENT') private SET_CURRENT_SEGMENT: any;
     @Action('profileStore/GET_SEGMENT_SPANS') private GET_SEGMENT_SPANS: any;
-    private loading: any;
     private selectedKey: string = '';
     private selectedTask: any = {};
     private viewDetail: boolean = false;
     private selectedTaskService: any = {};
 
-    private created() {
-      this.loading = false;
-    }
-
     private selectTask(item: { id: string; serviceId: string }) {
-      this.viewDetail = true;
       this.selectedTask = item;
       this.selectedTaskService =
         this.headerSource.serviceSource.filter((service: any) => service.key === item.serviceId)[0] || {};
       this.GET_SEGMENT_LIST({ taskID: item.id });
+    }
+
+    private viewTask(item: any) {
+      this.viewDetail = true;
+      this.selectedTask = item;
     }
 
     private selectTrace(item: { segmentId: string }) {
@@ -195,6 +187,12 @@ language governing permissions and * limitations under the License. */
     }
     .log-item {
       margin-top: 20px;
+    }
+    .profile-btn {
+      color: #fff;
+      padding: 1px 3px;
+      border-radius: 2px;
+      font-size: 12px;
     }
   }
   .profile-segment {

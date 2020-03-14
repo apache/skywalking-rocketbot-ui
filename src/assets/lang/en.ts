@@ -120,6 +120,9 @@ const m = {
   task: 'Task',
   operationType: 'Operation Type',
   operationTime: 'Operation Time',
+  taskView: 'View Task',
+  includeChildren: 'Include Children',
+  excludeChildren: 'Exclude Children',
 };
 
 export default m;
