@@ -79,7 +79,6 @@ language governing permissions and * limitations under the License. */
     @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
-    @Action('rocketTopo/GET_TOPO') private GET_TOPO: any;
     @Action('rocketTopo/CLEAR_TOPO') private CLEAR_TOPO: any;
     @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
@@ -109,10 +108,6 @@ language governing permissions and * limitations under the License. */
       window.addEventListener('resize', this.resize);
     }
 
-    private getTopo() {
-      this.GET_TOPO({ duration: this.durationTime });
-    }
-
     private beforeDestroy() {
       window.removeEventListener('resize', this.resize);
       this.CLEAR_TOPO_INFO();
@@ -129,11 +124,6 @@ language governing permissions and * limitations under the License. */
         }
       });
       return result;
-    }
-
-    @Watch('durationTime')
-    private watchDurationTime() {
-      this.getTopo();
     }
 
     private showRadial() {

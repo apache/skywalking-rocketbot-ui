@@ -253,17 +253,22 @@ const actions: ActionTree<State, any> = {
     if (params.serviceId) {
       query = 'queryServiceTopo';
     }
+    if (params.serviceIds) {
+      query = 'queryServicesTopo';
+    }
     return graph
       .query(query)
       .params(params)
       .then((res: AxiosResponse) => {
+        if (res.data.errors) {
+          context.commit(types.SET_TOPO, { calls: [], nodes: [] });
+          return;
+        }
         const calls = res.data.data.topo.calls;
         const nodes = res.data.data.topo.nodes;
         const ids = nodes.map((i: any) => i.id);
-        const idsS = calls.filter((i: any) => i.detectPoints.indexOf('CLIENT') === -1).map((b: any) => b.id);
         const idsC = calls.filter((i: any) => i.detectPoints.indexOf('CLIENT') !== -1).map((b: any) => b.id);
-        context.commit(types.SET_TOPO_COPY, { calls: [], nodes: [] });
-        context.commit(types.SET_TOPO, { calls: [], nodes: [] });
+        const idsS = calls.filter((i: any) => i.detectPoints.indexOf('CLIENT') === -1).map((b: any) => b.id);
         return graph
           .query('queryTopoInfo')
           .params({ ...params, ids, idsC, idsS })

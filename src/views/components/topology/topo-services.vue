@@ -15,13 +15,14 @@ language governing permissions and * limitations under the License. */
   import compareObj from '@/utils/comparison';
   import Axios, { AxiosResponse } from 'axios';
   import { Component, Vue, Watch } from 'vue-property-decorator';
-  import { Action, Getter } from 'vuex-class';
+  import { Action, Getter, Mutation } from 'vuex-class';
   import TopoSelect from './topo-select.vue';
 
   @Component({ components: { TopoSelect } })
   export default class TopoServices extends Vue {
     @Getter('durationTime') public durationTime: any;
     @Action('rocketTopo/GET_TOPO') public GET_TOPO: any;
+    @Mutation('rocketTopoGroup/UNSELECT_GROUP') private UNSELECT_GROUP: any;
     private services = [{ key: 0, label: 'All services' }];
     private service = { key: 0, label: 'All services' };
 
@@ -54,6 +55,7 @@ language governing permissions and * limitations under the License. */
 
     private handleChange(i: any) {
       this.service = i;
+      this.UNSELECT_GROUP();
       this.GET_TOPO({
         serviceId: this.service.key,
         duration: this.durationTime,

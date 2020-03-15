@@ -17,15 +17,6 @@ language governing permissions and * limitations under the License. */
         :data="i"
       />
     </div>
-    <div>
-      <div
-        class="group-item default mb-10"
-        @click="handleSelectGroup('all')"
-        :class="{ active: rocketTopoGroup.groupId === 'all' }"
-      >
-        <span>Default</span>
-      </div>
-    </div>
     <CreateGroup />
   </div>
 </template>
@@ -52,8 +43,9 @@ language governing permissions and * limitations under the License. */
     @Mutation('rocketTopoGroup/INIT_GROUPS') private INIT_GROUPS: any;
     @Mutation('rocketTopoGroup/DELETE_GROUP') private DELETE_GROUP: any;
     @Mutation('rocketTopoGroup/SELECT_GROUP') private SELECT_GROUP: any;
+    @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Action('rocketTopo/FILTER_TOPO') private FILTER_TOPO: any;
-
+    @Action('rocketTopo/GET_TOPO') private GET_TOPO: any;
     private servicesMap = [];
     private handleDeleteGroup(id: string) {
       const r = confirm('Do you want to delete this group!');
@@ -63,10 +55,10 @@ language governing permissions and * limitations under the License. */
     }
     private handleSelectGroup(id: string) {
       this.SELECT_GROUP(id);
-      this.FILTER_TOPO({ services: this.services, group: id });
+      this.GET_TOPO({ duration: this.durationTime, serviceIds: this.services });
     }
     private fetchData() {
-      Axios.post('/graphql', {
+      return Axios.post('/graphql', {
         query: `
       query queryServices($duration: Duration!) {
         services: getAllServices(duration: $duration) {
@@ -81,9 +73,26 @@ language governing permissions and * limitations under the License. */
         this.servicesMap = res.data.data.services ? res.data.data.services : [];
       });
     }
+    private initGroupTopo() {
+      let serviceOld = localStorage.getItem('topology-group-history') || '';
+      if (!this.rocketTopoGroup.groups.length) {
+        return;
+      }
+      if (
+        !this.rocketTopoGroup.groups.some((i: { id: string; name: string; services: string[] }) => i.id === serviceOld)
+      ) {
+        serviceOld = this.rocketTopoGroup.groups[0].id;
+        this.handleSelectGroup(serviceOld);
+      } else {
+        this.handleSelectGroup(serviceOld);
+      }
+    }
     private created() {
       this.INIT_GROUPS();
-      this.fetchData();
+      this.fetchData().then(() => {
+        this.initGroupTopo();
+        this.SET_EVENTS([this.initGroupTopo]);
+      });
     }
   }
 </script>

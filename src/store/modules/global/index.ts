@@ -112,19 +112,14 @@ const initState: State = {
   chartStack: [],
   edit: false,
   lock: true,
-  utc:
-    window.localStorage.getItem('utc') ||
-    -(new Date().getTimezoneOffset() / 60),
+  utc: window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60),
 };
 
 // getters
 const getters = {
   duration(state: State): Duration {
     return {
-      start: getLocalTime(
-        parseInt(state.utc + '', 10),
-        state.durationRow.start,
-      ),
+      start: getLocalTime(parseInt(state.utc + '', 10), state.durationRow.start),
       end: getLocalTime(parseInt(state.utc + '', 10), state.durationRow.end),
       step: state.durationRow.step,
     };
@@ -150,17 +145,12 @@ const getters = {
             getter.duration.start.getMonth());
         break;
     }
-    const utcSpace =
-      (parseInt(state.utc + '', 10) + new Date().getTimezoneOffset() / 60) *
-      3600000;
+    const utcSpace = (parseInt(state.utc + '', 10) + new Date().getTimezoneOffset() / 60) * 3600000;
     const startUnix: number = getter.duration.start.getTime();
     const endUnix: number = getter.duration.end.getTime();
     const timeIntervals: string[] = [];
     for (let i = 0; i <= endUnix - startUnix; i += interval) {
-      const temp: string = dateFormatTime(
-        new Date(startUnix + i - utcSpace),
-        getter.duration.step,
-      );
+      const temp: string = dateFormatTime(new Date(startUnix + i - utcSpace), getter.duration.step);
       timeIntervals.push(temp);
     }
     return timeIntervals;
@@ -216,6 +206,12 @@ const actions: ActionTree<State, any> = {
   },
   SET_DURATION(context: { commit: Commit }, data: Duration): void {
     context.commit(types.SET_DURATION, data);
+    if (window.axiosCancel.length !== 0) {
+      for (const event of window.axiosCancel) {
+        setTimeout(event(), 0);
+      }
+      window.axiosCancel = [];
+    }
     context.commit(types.RUN_EVENTS);
   },
   RESET_DURATION(context: { commit: Commit }): void {
