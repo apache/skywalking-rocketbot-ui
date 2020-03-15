@@ -21,13 +21,13 @@
       <span class="mr-5">{{data.name}}</span>
     </div>
     <div class="group-services">
-      <div class="ell" v-for="i in servicesMap" :key="i.key">
+      <div class="ell mb-10" v-for="i in servicesMap" :key="i.key">
         <input type="checkbox" @click="(e) => {
-          !e.target.checked ? DELETE_GROUP_SERVICE({id: data.id, serviceId:i.key}) : ADD_GROUP_SERVICE({id: data.id, serviceId:i.key})
-          $emit('select', data.id)
+          !e.target.checked ? DELETE_GROUP_SERVICE({id: data.id, serviceId:i.key}) : ADD_GROUP_SERVICE({id: data.id, serviceId:i.key});
         }" :checked="data.services.some(service => service === i.key)">
         <span>{{i.label}}</span>
       </div>
+       <RkButton size="sm" class="mr-5"  @click="$emit('select', data.id)">Render</RkButton>
     </div>
   </div>
 </template>

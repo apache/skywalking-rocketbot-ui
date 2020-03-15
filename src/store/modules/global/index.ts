@@ -216,6 +216,12 @@ const actions: ActionTree<State, any> = {
   },
   SET_DURATION(context: { commit: Commit }, data: Duration): void {
     context.commit(types.SET_DURATION, data);
+    if (window.axiosCancel.length !== 0) {
+      for (const event of window.axiosCancel) {
+        setTimeout(event(), 0);
+      }
+      window.axiosCancel = [];
+    }
     context.commit(types.RUN_EVENTS);
   },
   RESET_DURATION(context: { commit: Commit }): void {

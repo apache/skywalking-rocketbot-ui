@@ -18,6 +18,7 @@
 import {
   Topo,
   ServiceTopo,
+  ServicesTopo,
   TopoMetric,
   TopoInstanceDependency,
   TopoInstanceClientInfo,
@@ -34,7 +35,9 @@ export const queryTopo = `query queryTopo(${Topo.variable}) {${Topo.query}}`;
 
 export const queryServiceTopo = `query queryServiceTopo(${ServiceTopo.variable}) {${ServiceTopo.query}}`;
 
-export const queryTopoInfo = `query queryTrace(
+export const queryServicesTopo = `query queryServiceTopo(${ServicesTopo.variable}) {${ServicesTopo.query}}`;
+
+export const queryTopoInfo = `query queryTopoInfo(
     ${Topo.variable},
     ${TopoMetric.variable},
     ${TopoServiceMetric.variable},

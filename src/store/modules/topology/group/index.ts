@@ -72,6 +72,11 @@ const mutations: MutationTree<State> = {
   },
   [types.SELECT_GROUP](state: State, id: string): void {
     state.groupId = id;
+    localStorage.setItem('topology-group-history', id);
+  },
+  [types.UNSELECT_GROUP](state: State): void {
+    state.groupId = 'all';
+    localStorage.removeItem('topology-group-history');
   },
   [types.ADD_GROUP_SERVICE](state: State, data: {id: string, serviceId: string}): void {
     const groupIndex = state.groups.findIndex((i: Group) => i.id === data.id);

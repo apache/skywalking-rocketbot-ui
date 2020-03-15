@@ -211,6 +211,24 @@ export const ServiceTopo = {
     }
   }`,
 };
+export const ServicesTopo = {
+  variable: '$duration: Duration!, $serviceIds: [ID!]!',
+  query: `
+  topo: getServicesTopology(duration: $duration, serviceIds: $serviceIds) {
+    nodes {
+      id
+      name
+      type
+      isReal
+    }
+    calls {
+      id
+      source
+      detectPoints
+      target
+    }
+  }`,
+};
 export const TopoMetric = {
   variable: '$ids: [ID!]!',
   query: `
