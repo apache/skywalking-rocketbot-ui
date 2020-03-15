@@ -67,7 +67,6 @@
     @State('rocketTopo') private stateTopo!: topoState;
     @State('rocketOption') private stateDashboardOption!: any;
     @Mutation('SET_EVENTS') private SET_EVENTS: any;
-    @Action('rocketTopo/GET_TOPO') private GET_TOPO: any;
     @Action('rocketTopo/CLEAR_TOPO') private CLEAR_TOPO: any;
     @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
     @Getter('durationTime') private durationTime: any;
@@ -76,15 +75,6 @@
     private dialog: string = '';
     private setCurrent(d: any): void {
       this.current = d;
-    }
-    private beforeMount(): void {
-      this.SET_EVENTS([this.getTopo]);
-    }
-    private mounted() {
-      this.getTopo();
-    }
-    private getTopo() {
-      this.GET_TOPO({ duration: this.durationTime });
     }
     private beforeDestroy() {
       this.CLEAR_TOPO_INFO();
