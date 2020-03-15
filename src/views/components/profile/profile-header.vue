@@ -40,8 +40,8 @@ language governing permissions and * limitations under the License. */
 
 <script lang="ts">
   import { Duration, Option } from '@/types/global';
-  import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-  import { Action, Getter, Mutation, State } from 'vuex-class';
+  import { Component, Prop, Vue } from 'vue-property-decorator';
+  import { Mutation } from 'vuex-class';
   import TraceSelect from '../common/trace-select.vue';
   import ProfileTask from './profile-task.vue';
 

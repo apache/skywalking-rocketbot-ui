@@ -121,8 +121,8 @@ language governing permissions and * limitations under the License. */
 
 <script lang="ts">
   import { Duration, Option } from '@/types/global';
-  import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-  import { Action, Getter, Mutation, State } from 'vuex-class';
+  import { Component, Prop, Vue } from 'vue-property-decorator';
+  import { Action, Mutation } from 'vuex-class';
 
   @Component
   export default class ProfileTaskList extends Vue {

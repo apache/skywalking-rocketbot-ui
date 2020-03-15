@@ -34,8 +34,8 @@ language governing permissions and * limitations under the License. */
   </div>
 </template>
 <script lang="ts">
-  import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-  import { Action, Getter, Mutation, State } from 'vuex-class';
+  import { Component, Prop, Vue } from 'vue-property-decorator';
+  import { Mutation } from 'vuex-class';
 
   @Component
   export default class ProfileContainer extends Vue {

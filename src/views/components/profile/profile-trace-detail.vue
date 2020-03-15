@@ -34,7 +34,7 @@ language governing permissions and * limitations under the License. */
 <script lang="ts">
   import { Duration, Option } from '@/types/global';
   import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-  import { Action, Getter, Mutation, State } from 'vuex-class';
+  import { Action } from 'vuex-class';
   import { TraceDetailChartTable } from '../common';
   import ProfileDetailChartTable from './profile-detail-chart-table.vue';
 
