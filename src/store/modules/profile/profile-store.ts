@@ -39,6 +39,7 @@ export interface State {
   currentSegment: any;
   segmentList: TracesSourceType[];
   profileAnalyzation: any;
+  highlightTop: boolean;
 }
 const initState: State = {
   headerSource: {
@@ -60,6 +61,7 @@ const initState: State = {
   },
   segmentList: [],
   profileAnalyzation: [],
+  highlightTop: true,
 };
 // getters
 const getters = {
@@ -103,6 +105,9 @@ const mutations = {
       ...state.headerSource,
       ...data,
     };
+  },
+  [types.SET_HIGHLIGHT_TOP](state: State) {
+    state.highlightTop = !state.highlightTop;
   },
 };
 

@@ -23,10 +23,10 @@ language governing permissions and * limitations under the License. */
     <TraceDetailChartTable
       :data="segmentSpans"
       :traceId="currentSegment.traceIds[0]"
-      :showSpanDetail="false"
+      :showBtnDetail="true"
       :HeaderType="'profile'"
     />
-    <ProfileDetailChartTable :data="profileAnalyzation" />
+    <ProfileDetailChartTable :data="profileAnalyzation" :highlightTop="highlightTop" />
     <div v-if="message">{{ message }}</div>
   </div>
 </template>
@@ -45,6 +45,7 @@ language governing permissions and * limitations under the License. */
     @Prop() private segmentSpans: any;
     @Prop() private currentSegment: any;
     @Prop() private profileAnalyzation: any;
+    @Prop() private highlightTop!: boolean;
     @Action('profileStore/GET_PROFILE_ANALYZE') private GET_PROFILE_ANALYZE: any;
 
     private currentSpan: any;

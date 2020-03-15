@@ -23,6 +23,7 @@ language governing permissions and * limitations under the License. */
         :currentSegment="profile.currentSegment"
         :segmentSpans="profile.segmentSpans"
         :profileAnalyzation="profile.profileAnalyzation"
+        :highlightTop="profile.highlightTop"
       />
     </div>
   </div>

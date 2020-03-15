@@ -96,7 +96,7 @@ language governing permissions and * limitations under the License. */
       Item,
       TraceContainer,
     },
-    props: ['data', 'traceId', 'showSpanDetail', 'HeaderType'],
+    props: ['data', 'traceId', 'showBtnDetail', 'HeaderType'],
     watch: {
       data(val, oldVal) {
         if (!this.data.length) {
@@ -282,7 +282,7 @@ language governing permissions and * limitations under the License. */
       },
       handleSelectSpan(data) {
         this.currentSpan = data;
-        if (this.showSpanDetail) {
+        if (!this.showBtnDetail) {
           this.showDetail = true;
         }
       },

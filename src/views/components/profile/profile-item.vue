@@ -8,7 +8,11 @@ language governing permissions and * limitations under the License. */
 
 <template>
   <div>
-    <div @click="showSelectSpan" :class="['profile-item', 'level' + data.parentId]">
+    <div
+      @click="showSelectSpan"
+      :class="['profile-item', 'level' + data.parentId]"
+      :style="{ color: data.topDur ? '#448dfe' : '#3d444f' }"
+    >
       <div :class="['thread', 'level' + data.parentId]" :style="{ 'text-indent': data.parentId * 4 + 'px' }">
         <svg
           class="icon vm cp trans"
@@ -24,20 +28,17 @@ language governing permissions and * limitations under the License. */
       </div>
       <div class="self">{{ data.duration }}</div>
       <div class="exec-ms">{{ data.durationChildExcluded }}</div>
-      <div class="dump-count">
-        <span v-tooltip:bottom="data.count || '-'">{{ data.count }}</span>
-      </div>
+      <div class="dump-count">{{ data.count }}</div>
     </div>
     <div v-show="data.children && data.children.length && displayChildren" class="children-trace">
-      <item v-for="(item, index) in data.children" :key="index" :data="item"> </item>
+      <item v-for="(item, index) in data.children" :key="index" :data="item" />
     </div>
   </div>
 </template>
 <script lang="js">
-  import moment from 'dayjs';
   export default {
     name: 'item',
-    props: ['data'],
+    props: ['data', 'highlightTop'],
     data() {
       return {
         displayChildren: true,

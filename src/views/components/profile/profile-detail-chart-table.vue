@@ -14,8 +14,8 @@ language governing permissions and * limitations under the License. */
       </svg>
     </div>
     <div class="profile-table">
-      <ProfileContainer>
-        <Item v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+      <ProfileContainer :highlightTop="highlightTop">
+        <Item :highlightTop="highlightTop" v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
         <div class="profile-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
       </ProfileContainer>
     </div>
@@ -43,7 +43,7 @@ language governing permissions and * limitations under the License. */
       Item,
       ProfileContainer,
     },
-    props: ['data'],
+    props: ['data', 'highlightTop'],
     watch: {
       data() {
         if (!this.data.length) {
@@ -51,6 +51,12 @@ language governing permissions and * limitations under the License. */
         }
         this.tableData = this.processTree();
         this.loading = false;
+      },
+      highlightTop() {
+        if (!this.data.length) {
+          return;
+        }
+        this.tableData = this.processTree();
       },
     },
     data() {
@@ -66,14 +72,24 @@ language governing permissions and * limitations under the License. */
         if (!this.data.length) {
           return [];
         }
+
+        const duration = this.data.map((d) => {
+          return d.elements.map((item) => item.duration);
+        }).flat(1);
+        function compare(val, val1) {
+          return val1 - val;
+        }
+        const topDur = duration.sort(compare).filter((item, index) => index < 10 && item !== 0);
         const trees = [];
+
         for (const item of this.data) {
-          const newArr = this.sortArr(item.elements);
+          const newArr = this.sortArr(item.elements, topDur);
           trees.push(...newArr);
         }
+
         return trees;
       },
-      sortArr(arr) {
+      sortArr(arr, topDur) {
         const copyArr = JSON.parse(JSON.stringify(arr));
         const obj = {};
         const res = [];
@@ -86,6 +102,7 @@ language governing permissions and * limitations under the License. */
           }
           for (const key in obj) {
             if (item.id === obj[key].parentId) {
+              item.topDur = topDur.includes(item.duration) && this.highlightTop;
               if (item.children) {
                 item.children.push(obj[key]);
               } else {

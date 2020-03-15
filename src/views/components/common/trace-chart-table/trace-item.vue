@@ -49,7 +49,6 @@ language governing permissions and * limitations under the License. */
   </div>
 </template>
 <script lang="js">
-  import moment from 'dayjs';
   export default {
     name: 'item',
     props: ['data'],

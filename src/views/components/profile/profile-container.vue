@@ -13,26 +13,61 @@ language governing permissions and * limitations under the License. */
         Thread Stack
       </div>
       <div class="self">
-        Self Duration(ms)
+        Self Duration (ms)
+        <a
+          class="profile-set-btn"
+          @click="updateHighlightTop()"
+          v-tooltip:bottom="{ content: 'Highlight top 10 slow methods', popperCls: ['trace-table-tooltip'] }"
+          :style="{ color: highlightTop ? '#448dfe' : '#484b55' }"
+        >
+          Highlight top 10 slow methods
+        </a>
       </div>
       <div class="exec-ms">
-        Exclude Child Duration(ms)
+        Exclude Child Duration (ms)
       </div>
       <div class="dump-count">
         Dump Count
       </div>
     </div>
-
     <slot> </slot>
   </div>
 </template>
-<script lang="js"></script>
+<script lang="ts">
+  import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+  import { Action, Getter, Mutation, State } from 'vuex-class';
+
+  @Component
+  export default class ProfileContainer extends Vue {
+    @Mutation('profileStore/SET_HIGHLIGHT_TOP') private SET_HIGHLIGHT_TOP: any;
+    @Prop() private highlightTop!: boolean;
+
+    private updateHighlightTop() {
+      this.SET_HIGHLIGHT_TOP();
+    }
+  }
+</script>
 <style lang="scss" scoped>
   @import './profile.scss';
   .profile {
     font-size: 12px;
     height: 100%;
     min-width: 1200px;
+    .profile-set-btn {
+      font-size: 12px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      text-align: center;
+      width: 57px;
+      overflow: hidden;
+      display: inline-block;
+      height: 20px;
+      line-height: 20px;
+      position: absolute;
+      top: 4px;
+      right: 3px;
+      padding: 0 3px;
+    }
   }
   .profile-header {
     display: flex;
