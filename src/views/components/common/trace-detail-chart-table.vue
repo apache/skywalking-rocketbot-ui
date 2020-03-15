@@ -307,6 +307,9 @@ language governing permissions and * limitations under the License. */
           ],
         })
       },
+      handleViewSpan(data) {
+        this.showDetail = true;
+      }
     },
     created() {
       this.loading = true;
@@ -315,8 +318,8 @@ language governing permissions and * limitations under the License. */
       this.tableData = this.formatData(this.changeTree());
       this.loading = false;
       this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
+      this.$eventBus.$on('HANDLE-VIEW-SPAN', this, this.handleViewSpan);
       this.$eventBus.$on('TRACE-TABLE-LOADING', this, ()=>{ this.loading = true });
-
     },
   };
 </script>

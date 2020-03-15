@@ -44,6 +44,10 @@ export const ProfileConstant = [
     label: 'application',
     value: 'Service',
   },
+  {
+    label: 'application',
+    value: 'Operation',
+  },
 ];
 
 export const TraceConstant = [

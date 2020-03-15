@@ -123,6 +123,7 @@ const m = {
   taskView: 'View Task',
   includeChildren: 'Include Children',
   excludeChildren: 'Exclude Children',
+  view: 'View',
 };
 
 export default m;

@@ -123,6 +123,7 @@ const m = {
   taskView: '查看任务详情',
   includeChildren: '包含子部分',
   excludeChildren: '不包含子部分',
+  view: '查看',
 };
 
 export default m;

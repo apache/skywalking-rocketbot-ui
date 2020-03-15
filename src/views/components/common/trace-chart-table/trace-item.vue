@@ -42,6 +42,9 @@ language governing permissions and * limitations under the License. */
       <div class="application">
         <span v-tooltip:bottom="data.serviceCode || '-'">{{ data.serviceCode }}</span>
       </div>
+      <div class="application">
+        <span @click="viewSpanDetail">{{ this.$t('view') }}</span>
+      </div>
     </div>
     <div v-show="data.children && data.children.length > 0 && displayChildren" class="children-trace">
       <item v-for="(item, index) in data.children" :key="index" :data="item"> </item>
@@ -95,6 +98,10 @@ language governing permissions and * limitations under the License. */
         }
         this.$refs.traceItem.style.background = 'rgba(0, 0, 0, 0.04)';
         this.$eventBus.$emit('HANDLE-SELECT-SPAN', this.data);
+      },
+      viewSpanDetail(data) {
+        this.showSelectSpan();
+        this.$eventBus.$emit('HANDLE-VIEW-SPAN', this.data);
       },
     },
   };
