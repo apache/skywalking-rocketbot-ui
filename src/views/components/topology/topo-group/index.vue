@@ -1,31 +1,23 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 <template>
   <div class="topo-group">
     <div v-for="i in rocketTopoGroup.groups">
       <GroupItem
-      :servicesMap="servicesMap"
-      :active="rocketTopoGroup.groupId === i.id"
-      :key="i.id"
-      @delete="handleDeleteGroup(i.id)"
-      @select="handleSelectGroup"
-      :data="i"/>
+        :servicesMap="servicesMap"
+        :active="rocketTopoGroup.groupId === i.id"
+        :key="i.id"
+        @delete="handleDeleteGroup(i.id)"
+        @select="handleSelectGroup"
+        :data="i"
+      />
     </div>
-    <CreateGroup/>
+    <CreateGroup />
   </div>
 </template>
 <script lang="ts">
@@ -36,7 +28,7 @@
   import CreateGroup from './create-group.vue';
   import GroupItem from './group-item.vue';
   import Axios, { AxiosResponse } from 'axios';
-  
+
   @Component({
     components: {
       CreateGroup,
@@ -58,12 +50,12 @@
     private handleDeleteGroup(id: string) {
       const r = confirm('Do you want to delete this group!');
       if (r === true) {
-         this.DELETE_GROUP(id);
+        this.DELETE_GROUP(id);
       }
     }
     private handleSelectGroup(id: string) {
       this.SELECT_GROUP(id);
-      this.GET_TOPO({ duration: this.durationTime , serviceIds: this.services});
+      this.GET_TOPO({ duration: this.durationTime, serviceIds: this.services });
     }
     private fetchData() {
       return Axios.post('/graphql', {
@@ -78,9 +70,7 @@
           duration: this.durationTime,
         },
       }).then((res: AxiosResponse) => {
-        this.servicesMap = res.data.data.services
-          ? res.data.data.services
-          : [];
+        this.servicesMap = res.data.data.services ? res.data.data.services : [];
       });
     }
     private initGroupTopo() {
@@ -88,7 +78,9 @@
       if (!this.rocketTopoGroup.groups.length) {
         return;
       }
-      if (!this.rocketTopoGroup.groups.some((i: {id: string, name: string, services: string[]}) => i.id === serviceOld)) {
+      if (
+        !this.rocketTopoGroup.groups.some((i: { id: string; name: string; services: string[] }) => i.id === serviceOld)
+      ) {
         serviceOld = this.rocketTopoGroup.groups[0].id;
         this.handleSelectGroup(serviceOld);
       } else {
@@ -105,7 +97,7 @@
   }
 </script>
 <style lang="scss">
-  .topo-group{
+  .topo-group {
     position: absolute;
     bottom: 10px;
     left: 10px;

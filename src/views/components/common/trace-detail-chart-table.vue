@@ -1,19 +1,10 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 <template>
   <div class="trace-detail-chart-table">
     <div class="rk-trace-t-loading" v-show="loading">
@@ -21,12 +12,9 @@
         <use xlink:href="#spinner"></use>
       </svg>
     </div>
-    <TraceContainer>
-      <Item
-        v-for="(item, index) in tableData"
-        :data="item"
-        :key="'key' + index"
-      />
+    <TraceContainer :type="HeaderType">
+      <Item v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+      <div class="trace-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
     </TraceContainer>
     <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('spanInfo')">
       <div class="rk-trace-detail">
@@ -44,39 +32,22 @@
           ><span class="g-sm-8 wba">{{ this.currentSpan.component }}</span>
         </div>
         <div class="mb-10 clear">
-          <span class="g-sm-4 grey">Peer:</span
-          ><span class="g-sm-8 wba">{{
-            this.currentSpan.peer || 'No Peer'
-          }}</span>
+          <span class="g-sm-4 grey">Peer:</span><span class="g-sm-8 wba">{{ this.currentSpan.peer || 'No Peer' }}</span>
         </div>
         <div class="mb-10 clear">
           <span class="g-sm-4 grey">{{ $t('error') }}:</span
           ><span class="g-sm-8 wba">{{ this.currentSpan.isError }}</span>
         </div>
-        <div
-          class="mb-10 clear"
-          v-for="i in this.currentSpan.tags"
-          :key="i.key"
-        >
+        <div class="mb-10 clear" v-for="i in this.currentSpan.tags" :key="i.key">
           <span class="g-sm-4 grey">{{ i.key }}:</span>
           <span class="g-sm-8 wba">
             {{ i.value }}
-            <svg
-              v-if="i.key === 'db.statement'"
-              class="icon vm grey link-hover cp ml-5"
-              @click="copy(i.value)"
-            >
+            <svg v-if="i.key === 'db.statement'" class="icon vm grey link-hover cp ml-5" @click="copy(i.value)">
               <use xlink:href="#review-list"></use>
             </svg>
           </span>
         </div>
-        <h5
-          class="mb-10"
-          v-if="this.currentSpan.logs"
-          v-show="this.currentSpan.logs.length"
-        >
-          {{ $t('logs') }}.
-        </h5>
+        <h5 class="mb-10" v-if="this.currentSpan.logs" v-show="this.currentSpan.logs.length">{{ $t('logs') }}.</h5>
         <div v-for="(i, index) in this.currentSpan.logs" :key="index">
           <div class="mb-10 sm">
             <span class="mr-10">{{ $t('time') }}:</span>
@@ -108,7 +79,8 @@
   }
   .trace-detail-chart-table {
     position: relative;
-    min-height: 150px;
+    min-height: 300px;
+    border-bottom: 1px solid #ccc;
   }
 </style>
 
@@ -124,7 +96,7 @@
       Item,
       TraceContainer,
     },
-    props: ['data', 'traceId'],
+    props: ['data', 'traceId', 'showBtnDetail', 'HeaderType'],
     watch: {
       data(val, oldVal) {
         if (!this.data.length) {
@@ -183,28 +155,28 @@
         const segmentIdGroup = [];
         const fixSpans = [];
         const segmentHeaders = [];
-          this.data.forEach((span) => {
-            if (span.parentSpanId === -1) {
-              segmentHeaders.push(span);
-            } else {
-              const index = this.data.findIndex(i => (i.segmentId === span.segmentId && i.spanId === (span.spanId - 1)));
-              const fixSpanKeyContent = {
-                traceId: span.traceId,
-                segmentId: span.segmentId,
-                spanId: span.spanId - 1,
-                parentSpanId: span.spanId - 2,
-              };
-              if (index === -1 && !_.find(fixSpans, fixSpanKeyContent)) {
-                fixSpans.push(
-                  {
-                    ...fixSpanKeyContent, refs: [], endpointName: `VNode: ${span.segmentId}`, serviceCode: 'VirtualNode', type: `[Broken] ${span.type}`, peer: '', component: `VirtualNode: #${span.spanId - 1}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
-                  },
-                );
-              }
+        this.data.forEach((span) => {
+          if (span.parentSpanId === -1) {
+            segmentHeaders.push(span);
+          } else {
+            const index = this.data.findIndex(i => (i.segmentId === span.segmentId && i.spanId === (span.spanId - 1)));
+            const fixSpanKeyContent = {
+              traceId: span.traceId,
+              segmentId: span.segmentId,
+              spanId: span.spanId - 1,
+              parentSpanId: span.spanId - 2,
+            };
+            if (index === -1 && !_.find(fixSpans, fixSpanKeyContent)) {
+              fixSpans.push(
+                {
+                  ...fixSpanKeyContent, refs: [], endpointName: `VNode: ${span.segmentId}`, serviceCode: 'VirtualNode', type: `[Broken] ${span.type}`, peer: '', component: `VirtualNode: #${span.spanId - 1}`, isError: true, isBroken: true, layer: 'Broken', tags: [], logs: [],
+                },
+              );
             }
-          });
+          }
+        });
           segmentHeaders.forEach((span) => {
-            if (span.refs.length) {
+            if (span.refs && span.refs.length) {
               span.refs.forEach((ref) => {
                 const index = this.data.findIndex(i => (ref.parentSegmentId === i.segmentId && ref.parentSpanId === i.spanId));
                 if (index === -1) {
@@ -281,7 +253,7 @@
             segmentGroup[id] = currentSegment[currentSegment.length-1]
           })
           segmentIdGroup.forEach(id => {
-            segmentGroup[id].refs.forEach(ref => {
+            segmentGroup[id].refs && segmentGroup[id].refs.forEach(ref => {
               if(ref.traceId === this.traceId) {
                 this.traverseTree(segmentGroup[ref.parentSegmentId],ref.parentSpanId,ref.parentSegmentId,segmentGroup[id])
               };
@@ -289,7 +261,7 @@
             // if(segmentGroup[id].refs.length !==0 ) delete segmentGroup[id];
           })
         for (const i in segmentGroup) {
-          if (segmentGroup[i].refs.length === 0) {
+          if (segmentGroup[i].refs && segmentGroup[i].refs.length === 0 || !segmentGroup[i].refs) {
             this.segmentId.push(segmentGroup[i]);
           }
         }
@@ -310,7 +282,9 @@
       },
       handleSelectSpan(data) {
         this.currentSpan = data;
-        this.showDetail = true;
+        if (!this.showBtnDetail) {
+          this.showDetail = true;
+        }
       },
       showCurrentSpanDetail(title, text) {
         const textLineNumber = text.split('\n').length;
@@ -333,6 +307,9 @@
           ],
         })
       },
+      handleViewSpan(data) {
+        this.showDetail = true;
+      }
     },
     created() {
       this.loading = true;
@@ -341,8 +318,8 @@
       this.tableData = this.formatData(this.changeTree());
       this.loading = false;
       this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
+      this.$eventBus.$on('HANDLE-VIEW-SPAN', this, this.handleViewSpan);
       this.$eventBus.$on('TRACE-TABLE-LOADING', this, ()=>{ this.loading = true });
-
     },
   };
 </script>
@@ -351,5 +328,10 @@
     white-space: pre;
     overflow: auto;
     font-family: monospace;
+  }
+  .trace-tips {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
   }
 </style>

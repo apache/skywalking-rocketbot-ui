@@ -1,33 +1,32 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 <template>
   <div class="group-wrapper">
-    <div class="group-item ell" :class="{'active': active}" @click="$emit('select', data.id)">
-      <RkButton icon="close" size="sm" class="mr-5" :ghost="true" @click="$emit('delete')"/>
-      <span class="mr-5">{{data.name}}</span>
+    <div class="group-item ell" :class="{ active: active }" @click="$emit('select', data.id)">
+      <RkButton icon="close" size="sm" class="mr-5" :ghost="true" @click="$emit('delete')" />
+      <span class="mr-5">{{ data.name }}</span>
     </div>
     <div class="group-services">
       <div class="ell mb-10" v-for="i in servicesMap" :key="i.key">
-        <input type="checkbox" @click="(e) => {
-          !e.target.checked ? DELETE_GROUP_SERVICE({id: data.id, serviceId:i.key}) : ADD_GROUP_SERVICE({id: data.id, serviceId:i.key});
-        }" :checked="data.services.some(service => service === i.key)">
-        <span>{{i.label}}</span>
+        <input
+          type="checkbox"
+          @click="
+            (e) => {
+              !e.target.checked
+                ? DELETE_GROUP_SERVICE({ id: data.id, serviceId: i.key })
+                : ADD_GROUP_SERVICE({ id: data.id, serviceId: i.key });
+            }
+          "
+          :checked="data.services.some((service) => service === i.key)"
+        />
+        <span>{{ i.label }}</span>
       </div>
-       <RkButton size="sm" class="mr-5"  @click="$emit('select', data.id)">Render</RkButton>
+      <RkButton size="sm" class="mr-5" @click="$emit('select', data.id)">Render</RkButton>
     </div>
   </div>
 </template>
@@ -45,17 +44,17 @@
   }
 </script>
 <style lang="scss">
-  .topo-group{
-    .group-wrapper{
+  .topo-group {
+    .group-wrapper {
       position: relative;
       margin-bottom: 5px;
-      &:hover{
-        .group-services{
+      &:hover {
+        .group-services {
           display: block;
         }
       }
     }
-    .group-services{
+    .group-services {
       display: none;
       position: absolute;
       background-color: #252a2f;
@@ -65,7 +64,7 @@
       color: #ccc;
       border-radius: 4px;
     }
-    .group-item{
+    .group-item {
       position: relative;
       user-select: none;
       cursor: pointer;
@@ -76,11 +75,12 @@
       line-height: 26px;
       padding-right: 10px;
       border-radius: 4px;
-      &:hover,&.active{
+      &:hover,
+      &.active {
         color: #fff;
         background-color: #252a2f;
       }
-      &.default{
+      &.default {
         padding-left: 10px;
       }
     }

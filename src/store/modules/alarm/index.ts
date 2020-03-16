@@ -36,7 +36,7 @@ const getters = {};
 
 // mutations
 const mutations: MutationTree<State> = {
-  [types.SET_ALARM](state: State, data: {items: Alarm[], total: number}): void {
+  [types.SET_ALARM](state: State, data: { items: Alarm[]; total: number }): void {
     state.alarmService = data.items;
     state.total = data.total;
   },
@@ -48,10 +48,7 @@ const mutations: MutationTree<State> = {
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_ALARM(
-    context: { commit: Commit; state: State },
-    params: AlarmParams,
-  ): Promise<void> {
+  GET_ALARM(context: { commit: Commit; state: State }, params: AlarmParams): Promise<void> {
     return graph
       .query('queryAlarms')
       .params(params)

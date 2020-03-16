@@ -1,0 +1,146 @@
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
+
+<template>
+  <div class="profile-detail-chart-table">
+    <div class="rk-trace-t-loading" v-show="loading">
+      <svg class="icon loading">
+        <use xlink:href="#spinner"></use>
+      </svg>
+    </div>
+    <div class="profile-table">
+      <ProfileContainer :highlightTop="highlightTop">
+        <Item :highlightTop="highlightTop" v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+        <div class="profile-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
+      </ProfileContainer>
+    </div>
+  </div>
+</template>
+<style lang="scss">
+  .rk-tooltip-popper.trace-table-tooltip .rk-tooltip-inner {
+    max-width: 600px;
+  }
+  .profile-detail-chart-table {
+    position: relative;
+    min-height: 150px;
+    margin-top: 20px;
+  }
+</style>
+
+<script lang="js">
+  import copy from '@/utils/copy';
+  import Item from './profile-item';
+  import ProfileContainer from './profile-container';
+  import _ from 'lodash';
+
+  export default {
+    components: {
+      Item,
+      ProfileContainer,
+    },
+    props: ['data', 'highlightTop'],
+    watch: {
+      data() {
+        if (!this.data.length) {
+          return;
+        }
+        this.tableData = this.processTree();
+        this.loading = false;
+      },
+      highlightTop() {
+        if (!this.data.length) {
+          return;
+        }
+        this.tableData = this.processTree();
+      },
+    },
+    data() {
+      return {
+        tableData: [],
+        currentSpan: [],
+        loading: true,
+      };
+    },
+    methods: {
+      copy,
+      processTree() {
+        if (!this.data.length) {
+          return [];
+        }
+
+        const durationChildExcluded = this.data.map((d) => {
+          return d.elements.map((item) => item.durationChildExcluded);
+        }).flat(1);
+        function compare(val, val1) {
+          return val1 - val;
+        }
+        const topDur = durationChildExcluded.sort(compare).filter((item, index) => index < 10 && item !== 0);
+        const trees = [];
+
+        for (const item of this.data) {
+          const newArr = this.sortArr(item.elements, topDur);
+          trees.push(...newArr);
+        }
+
+        return trees;
+      },
+      sortArr(arr, topDur) {
+        const copyArr = JSON.parse(JSON.stringify(arr));
+        const obj = {};
+        const res = [];
+        for (const item of copyArr) {
+          obj[item.id] = item;
+        }
+        for (const item of copyArr) {
+          item.topDur = topDur.includes(item.durationChildExcluded) && this.highlightTop;
+          if (item.parentId === '0') {
+            res.push(item);
+          }
+          for (const key in obj) {
+            if (item.id === obj[key].parentId) {
+              if (item.children) {
+                item.children.push(obj[key]);
+              } else {
+                item.children = [obj[key]];
+              }
+            }
+          }
+        }
+
+        return res;
+      },
+      handleSelectSpan(data) {
+        this.currentSpan = data;
+      },
+    },
+    created() {
+      this.loading = true;
+    },
+    mounted() {
+      this.tableData = this.processTree();
+      this.loading = false;
+      this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
+      this.$eventBus.$on('TRACE-TABLE-LOADING', this, () => { this.loading = true; });
+    },
+  };
+</script>
+<style>
+  .dialog-c-text {
+    white-space: pre;
+    overflow: auto;
+    font-family: monospace;
+  }
+  .profile-tips {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+  }
+  .profile-table {
+    overflow-x: scroll;
+  }
+</style>

@@ -1,28 +1,14 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 <template>
   <div class="trace-tree-charts scroll_hide flex-v">
     <transition-group name="fade" tag="div" style="padding: 10px 30px;">
-      <span
-        class="time-charts-item mr-10"
-        v-for="(i, index) in list"
-        :key="i"
-        :style="`color:${computedScale(index)}`"
-      >
+      <span class="time-charts-item mr-10" v-for="(i, index) in list" :key="i" :style="`color:${computedScale(index)}`">
         <svg class="icon vm mr-5 sm">
           <use xlink:href="#issue-open-m"></use>
         </svg>
@@ -31,12 +17,8 @@
     </transition-group>
     <div style="padding: 0 30px;">
       <a class="trace-tree-btn mr-10" @click="tree.setDefault()">Default</a>
-      <a class="trace-tree-btn mr-10" @click="tree.getTopSlow()"
-        >Top 5 of slow</a
-      >
-      <a class="trace-tree-btn mr-10" @click="tree.getTopChild()"
-        >Top 5 of children</a
-      >
+      <a class="trace-tree-btn mr-10" @click="tree.getTopSlow()">Top 5 of slow</a>
+      <a class="trace-tree-btn mr-10" @click="tree.getTopChild()">Top 5 of children</a>
     </div>
     <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('spanInfo')">
       <div class="rk-trace-detail">
@@ -54,43 +36,25 @@
           ><span class="g-sm-8 wba">{{ this.currentSpan.component }}</span>
         </div>
         <div class="mb-10 clear">
-          <span class="g-sm-4 grey">Peer:</span
-          ><span class="g-sm-8 wba">{{
-            this.currentSpan.peer || 'No Peer'
-          }}</span>
+          <span class="g-sm-4 grey">Peer:</span><span class="g-sm-8 wba">{{ this.currentSpan.peer || 'No Peer' }}</span>
         </div>
         <div class="mb-10 clear">
           <span class="g-sm-4 grey">{{ $t('error') }}:</span
           ><span class="g-sm-8 wba">{{ this.currentSpan.isError }}</span>
         </div>
-        <div
-          class="mb-10 clear"
-          v-for="i in this.currentSpan.tags"
-          :key="i.key"
-        >
+        <div class="mb-10 clear" v-for="i in this.currentSpan.tags" :key="i.key">
           <span class="g-sm-4 grey">{{ i.key }}:</span>
           <span class="g-sm-8 wba">
             {{ i.value }}
-            <svg
-              v-if="i.key === 'db.statement'"
-              class="icon vm grey link-hover cp ml-5"
-              @click="copy(i.value)"
-            >
+            <svg v-if="i.key === 'db.statement'" class="icon vm grey link-hover cp ml-5" @click="copy(i.value)">
               <use xlink:href="#review-list"></use>
             </svg>
           </span>
         </div>
-        <h5
-          class="mb-10"
-          v-if="this.currentSpan.logs"
-          v-show="this.currentSpan.logs.length"
-        >
-          {{ $t('logs') }}.
-        </h5>
+        <h5 class="mb-10" v-if="this.currentSpan.logs" v-show="this.currentSpan.logs.length">{{ $t('logs') }}.</h5>
         <div v-for="(i, index) in this.currentSpan.logs" :key="index">
           <div class="mb-10 sm">
-            <span class="mr-10">{{ $t('time') }}:</span
-            ><span class="grey">{{ i.time | dateformat }}</span>
+            <span class="mr-10">{{ $t('time') }}:</span><span class="grey">{{ i.time | dateformat }}</span>
           </div>
           <div class="mb-15 clear" v-for="(_i, _index) in i.data" :key="_index">
             <div class="mb-10">

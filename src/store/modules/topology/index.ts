@@ -136,21 +136,15 @@ const mutations = {
     state.getResponseTimeTrend = data.getResponseTimeTrend
       ? data.getResponseTimeTrend.values.map((i: any) => i.value)
       : [];
-    state.getSLATrend = data.getSLATrend
-      ? data.getSLATrend.values.map((i: any) => i.value)
-      : [];
-    state.getThroughputTrend = data.getThroughputTrend
-      ? data.getThroughputTrend.values.map((i: any) => i.value)
-      : [];
+    state.getSLATrend = data.getSLATrend ? data.getSLATrend.values.map((i: any) => i.value) : [];
+    state.getThroughputTrend = data.getThroughputTrend ? data.getThroughputTrend.values.map((i: any) => i.value) : [];
 
     if (!data.getPercentile) {
       state.responsePercentile = {};
       return;
     }
     data.getPercentile.forEach((item: any, index: number) => {
-      state.responsePercentile[PercentileItem[index]] = item.values.map(
-        (i: any) => i.value,
-      );
+      state.responsePercentile[PercentileItem[index]] = item.values.map((i: any) => i.value);
     });
   },
   [types.SET_INSTANCE_DEPENDENCY](state: State, data: any) {
@@ -174,9 +168,7 @@ const mutations = {
       return;
     }
     data.getPercentile.forEach((item: any, index: number) => {
-      state.instanceDependencyMetrics.percentResponse[
-        PercentileItem[index]
-      ] = item.values.map((i: any) => i.value);
+      state.instanceDependencyMetrics.percentResponse[PercentileItem[index]] = item.values.map((i: any) => i.value);
     });
   },
   [types.SET_INSTANCE_DEPEDENCE_TYPE](state: State, data: string) {
@@ -186,7 +178,7 @@ const mutations = {
 
 // actions
 const actions: ActionTree<State, any> = {
-  FILTER_TOPO(context: { commit: Commit; state: State }, params: {services: string[], group: string}) {
+  FILTER_TOPO(context: { commit: Commit; state: State }, params: { services: string[]; group: string }) {
     const tempCalls = [...context.state._calls];
     const tempNodes = [...context.state._nodes];
     if (params.group === 'all') {
@@ -199,15 +191,16 @@ const actions: ActionTree<State, any> = {
     tempCalls.forEach((call: any) => {
       if (
         params.services.some((i: string) => call.source.id === i) ||
-        params.services.some((i: string) => call.target.id === i)) {
-          nodeInCalls.push(call.source.id);
-          nodeInCalls.push(call.target.id);
-          resultCalls.push(call);
+        params.services.some((i: string) => call.target.id === i)
+      ) {
+        nodeInCalls.push(call.source.id);
+        nodeInCalls.push(call.target.id);
+        resultCalls.push(call);
       }
     });
     const setNodes: string[] = Array.from(new Set(nodeInCalls));
     tempNodes.forEach((node: any) => {
-      if (setNodes.some((i: string) => node.id === i )) {
+      if (setNodes.some((i: string) => node.id === i)) {
         resultNodes.push(node);
       }
     });
@@ -234,10 +227,7 @@ const actions: ActionTree<State, any> = {
       context.dispatch('INSTANCE_RELATION_INFO', params);
     }
   },
-  GET_TOPO_SERVICE_INFO(
-    context: { commit: Commit; state: State },
-    params: any,
-  ) {
+  GET_TOPO_SERVICE_INFO(context: { commit: Commit; state: State }, params: any) {
     return graph
       .query('queryTopoServiceInfo')
       .params({
@@ -277,12 +267,8 @@ const actions: ActionTree<State, any> = {
         const calls = res.data.data.topo.calls;
         const nodes = res.data.data.topo.nodes;
         const ids = nodes.map((i: any) => i.id);
-        const idsC = calls
-          .filter((i: any) => i.detectPoints.indexOf('CLIENT') !== -1)
-          .map((b: any) => b.id);
-        const idsS = calls
-          .filter((i: any) => i.detectPoints.indexOf('CLIENT') === -1)
-          .map((b: any) => b.id);
+        const idsC = calls.filter((i: any) => i.detectPoints.indexOf('CLIENT') !== -1).map((b: any) => b.id);
+        const idsS = calls.filter((i: any) => i.detectPoints.indexOf('CLIENT') === -1).map((b: any) => b.id);
         return graph
           .query('queryTopoInfo')
           .params({ ...params, ids, idsC, idsS })
@@ -298,15 +284,9 @@ const actions: ActionTree<State, any> = {
                   nodes[j] = {
                     ...nodes[j],
                     isGroupActive: true,
-                    sla: resInfo.sla.values[i].value
-                      ? resInfo.sla.values[i].value / 100
-                      : -1,
-                    cpm: resInfo.nodeCpm.values[i]
-                      ? resInfo.nodeCpm.values[i].value
-                      : -1,
-                    latency: resInfo.nodeLatency.values[i]
-                      ? resInfo.nodeLatency.values[i].value
-                      : -1,
+                    sla: resInfo.sla.values[i].value ? resInfo.sla.values[i].value / 100 : -1,
+                    cpm: resInfo.nodeCpm.values[i] ? resInfo.nodeCpm.values[i].value : -1,
+                    latency: resInfo.nodeLatency.values[i] ? resInfo.nodeLatency.values[i].value : -1,
                   };
                 }
               }
@@ -321,12 +301,8 @@ const actions: ActionTree<State, any> = {
                   calls[j] = {
                     ...calls[j],
                     isGroupActive: true,
-                    cpm: resInfo.cpmC.values[i]
-                      ? resInfo.cpmC.values[i].value
-                      : '',
-                    latency: resInfo.latencyC.values[i]
-                      ? resInfo.latencyC.values[i].value
-                      : '',
+                    cpm: resInfo.cpmC.values[i] ? resInfo.cpmC.values[i].value : '',
+                    latency: resInfo.latencyC.values[i] ? resInfo.latencyC.values[i].value : '',
                   };
                 }
               }
@@ -340,12 +316,8 @@ const actions: ActionTree<State, any> = {
                 if (calls[j].id === resInfo.cpmS.values[i].id) {
                   calls[j] = {
                     ...calls[j],
-                    cpm: resInfo.cpmS.values[i]
-                      ? resInfo.cpmS.values[i].value
-                      : '',
-                    latency: resInfo.latencyS.values[i]
-                      ? resInfo.latencyS.values[i].value
-                      : '',
+                    cpm: resInfo.cpmS.values[i] ? resInfo.cpmS.values[i].value : '',
+                    latency: resInfo.latencyS.values[i] ? resInfo.latencyS.values[i].value : '',
                   };
                 }
               }

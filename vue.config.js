@@ -19,12 +19,12 @@ module.exports = {
   devServer: {
     proxy: {
       '/graphql': {
-        target: `${process.env.SW_PROXY_TARGET || "http://127.0.0.1:8080"}`,
+        target: `${process.env.SW_PROXY_TARGET || 'http://127.0.0.1:12800'}`,
         changeOrigin: true,
       },
     },
   },
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     const svgRule = config.module.rule('svg');
     svgRule.uses.clear();
     svgRule

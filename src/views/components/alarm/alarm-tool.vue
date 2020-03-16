@@ -1,38 +1,26 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 <template>
   <nav class="rk-alarm-tool flex-h">
     <AlarmSelect
       :title="$t('filterScope')"
       :value="alarmOption"
-      @input="(option) => {
-        alarmOption = option;
-        handleRefresh(1);
-      }"
+      @input="
+        (option) => {
+          alarmOption = option;
+          handleRefresh(1);
+        }
+      "
       :data="alarmOptions"
     />
     <div class="mr-10" style="padding: 3px 15px 0">
       <div class="sm grey">{{ $t('searchKeyword') }}</div>
-      <input
-        type="text"
-        v-model="keyword"
-        class="rk-alarm-tool-input"
-        @input="handleRefresh(1)"
-      />
+      <input type="text" v-model="keyword" class="rk-alarm-tool-input" @input="handleRefresh(1)" />
     </div>
     <RkPage
       class="mt-15"
@@ -91,7 +79,11 @@
     }
 
     private beforeMount() {
-      this.SET_EVENTS([() => { this.handleRefresh(1); }]);
+      this.SET_EVENTS([
+        () => {
+          this.handleRefresh(1);
+        },
+      ]);
       this.handleRefresh(1);
     }
     private beforeDestroy() {

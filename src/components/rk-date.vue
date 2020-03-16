@@ -1,19 +1,10 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 <template>
   <div
     class="datepicker"
@@ -39,56 +30,28 @@
     <transition name="datepicker-anim">
       <div
         class="datepicker-popup"
-        :class="[
-          popupClass,
-          { 'datepicker-inline': type === 'inline' },
-          position === 'top' ? 'top' : 'bottom',
-        ]"
+        :class="[popupClass, { 'datepicker-inline': type === 'inline' }, position === 'top' ? 'top' : 'bottom']"
         tabindex="-1"
         v-if="show || type === 'inline'"
       >
         <template v-if="range">
           <div class="datepicker-popup__sidebar">
-            <button
-              type="button"
-              class="datepicker-popup__shortcut"
-              @click="quickPick('quarter')"
-            >
+            <button type="button" class="datepicker-popup__shortcut" @click="quickPick('quarter')">
               {{ this.local.quarterHourCutTip }}
             </button>
-            <button
-              type="button"
-              class="datepicker-popup__shortcut"
-              @click="quickPick('half')"
-            >
+            <button type="button" class="datepicker-popup__shortcut" @click="quickPick('half')">
               {{ this.local.halfHourCutTip }}
             </button>
-            <button
-              type="button"
-              class="datepicker-popup__shortcut"
-              @click="quickPick('hour')"
-            >
+            <button type="button" class="datepicker-popup__shortcut" @click="quickPick('hour')">
               {{ this.local.hourCutTip }}
             </button>
-            <button
-              type="button"
-              class="datepicker-popup__shortcut"
-              @click="quickPick('day')"
-            >
+            <button type="button" class="datepicker-popup__shortcut" @click="quickPick('day')">
               {{ this.local.dayCutTip }}
             </button>
-            <button
-              type="button"
-              class="datepicker-popup__shortcut"
-              @click="quickPick('week')"
-            >
+            <button type="button" class="datepicker-popup__shortcut" @click="quickPick('week')">
               {{ this.local.weekCutTip }}
             </button>
-            <button
-              type="button"
-              class="datepicker-popup__shortcut"
-              @click="quickPick('month')"
-            >
+            <button type="button" class="datepicker-popup__shortcut" @click="quickPick('month')">
               {{ this.local.monthCutTip }}
             </button>
           </div>
@@ -101,16 +64,10 @@
           <rk-calendar v-model="dates[0]"></rk-calendar>
         </template>
         <div v-if="showButtons" class="datepicker__buttons">
-          <button
-            @click.prevent.stop="cancel"
-            class="datepicker__button-cancel"
-          >
+          <button @click.prevent.stop="cancel" class="datepicker__button-cancel">
             {{ this.local.cancelTip }}
           </button>
-          <button
-            @click.prevent.stop="submit"
-            class="datepicker__button-select"
-          >
+          <button @click.prevent.stop="submit" class="datepicker__button-select">
             {{ this.local.submitTip }}
           </button>
         </div>

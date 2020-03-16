@@ -77,7 +77,7 @@ language governing permissions and * limitations under the License. */
   import { Duration, Option } from '@/types/global';
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
-  import TraceSelect from './trace-select.vue';
+  import TraceSelect from '../common/trace-select.vue';
 
   @Component({ components: { TraceSelect } })
   export default class TraceSearch extends Vue {

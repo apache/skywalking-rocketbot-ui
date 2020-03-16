@@ -152,8 +152,7 @@ export const TopoInstanceServerInfo = {
 };
 
 export const TopoInstanceDependency = {
-  variable:
-    '$clientServiceId: ID!, $serverServiceId: ID!, $duration: Duration!',
+  variable: '$clientServiceId: ID!, $serverServiceId: ID!, $duration: Duration!',
   query: `
   topo: getServiceInstanceTopology(clientServiceId: $clientServiceId,
     serverServiceId: $serverServiceId, duration: $duration) {

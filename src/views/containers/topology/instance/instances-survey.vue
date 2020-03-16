@@ -11,7 +11,7 @@ language governing permissions and * limitations under the License. */
     <DashboardItem
       v-for="(i, index) in rocketComps.tree[0].children[3].children"
       :key="index + i.t + i.w + i.d"
-      :rocketGlobal="{edit: false}"
+      :rocketGlobal="{ edit: false }"
       :i="i"
     />
   </div>

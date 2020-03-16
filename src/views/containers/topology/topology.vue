@@ -1,41 +1,26 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 <template>
   <div class="rk-topo">
-    <Topo :current="current" @setDialog="(type) => dialog = type" @setCurrent="setCurrent" :nodes="stateTopo.nodes" :links="stateTopo.calls"/>
+    <Topo
+      :current="current"
+      @setDialog="(type) => (dialog = type)"
+      @setCurrent="setCurrent"
+      :nodes="stateTopo.nodes"
+      :links="stateTopo.calls"
+    />
     <TopoAside />
     <TopoGroup />
     <rk-sidebox :show="dialog.length" @update:show="dialog = ''" :fixed="true" width="80%">
-      <window-endpoint
-        v-if="dialog === 'endpoint'"
-        :current="this.current"
-      />
-      <window-instance
-        v-if="dialog === 'instance'"
-        :current="this.current"
-      />
-      <window-trace
-        v-if="dialog === 'trace'"
-        :current="this.current"
-      />
-      <window-alarm
-        v-if="dialog === 'alarm'"
-        :current="this.current"
-      />
+      <window-endpoint v-if="dialog === 'endpoint'" :current="this.current" />
+      <window-instance v-if="dialog === 'instance'" :current="this.current" />
+      <window-trace v-if="dialog === 'trace'" :current="this.current" />
+      <window-alarm v-if="dialog === 'alarm'" :current="this.current" />
     </rk-sidebox>
   </div>
 </template>

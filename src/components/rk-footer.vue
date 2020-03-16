@@ -1,39 +1,19 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 <template>
-  <footer
-    class="rk-footer trans"
-    :class="{ 'rk-footer-dark': $route.path === '/topology' }"
-  >
+  <footer class="rk-footer trans" :class="{ 'rk-footer-dark': $route.path === '/topology' }">
     <div class="rk-footer-inner">
       <div class="flex-h"></div>
       <div class="sm flex-h">
         <RkFooterTime />
-        <span class="mr-15 cp" @click="setLang">{{
-          lang === 'zh' ? '中' : 'En'
-        }}</span>
+        <span class="mr-15 cp" @click="setLang">{{ lang === 'zh' ? '中' : 'En' }}</span>
         <span>{{ $t('serverZone') }} UTC {{ utc >= 0 ? '+' : '' }}</span
-        ><input
-          v-model="utc"
-          min="-12"
-          max="14"
-          class="rk-footer-utc"
-          type="number"
-        />
+        ><input v-model="utc" min="-12" max="14" class="rk-footer-utc" type="number" />
       </div>
     </div>
   </footer>
@@ -51,9 +31,7 @@
     @Action('SET_DURATION') private SET_DURATION: any;
     @Action('SET_UTC') private SET_UTC: any;
     private lang: any = '';
-    private utc: any =
-      window.localStorage.getItem('utc') ||
-      -(new Date().getTimezoneOffset() / 60);
+    private utc: any = window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60);
     @Watch('utc')
     private onUtcUpdate() {
       if (this.utc < -12) {
