@@ -18,11 +18,11 @@ language governing permissions and * limitations under the License. */
           @click="
             (e) => {
               !e.target.checked
-                ? DELETE_GROUP_SERVICE({ id: data.id, serviceId: i.key })
-                : ADD_GROUP_SERVICE({ id: data.id, serviceId: i.key });
+                ? DELETE_GROUP_SERVICE({ id: data.id, service: i })
+                : ADD_GROUP_SERVICE({ id: data.id, service: i });
             }
           "
-          :checked="data.services.some((service) => service === i.key)"
+          :checked="data.services.some((service) => service.label === i.label)"
         />
         <span>{{ i.label }}</span>
       </div>

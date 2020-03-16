@@ -22,7 +22,7 @@ import * as types from './mutation-types';
 export interface Group {
   id: string;
   name: string;
-  services: string[];
+  services: Array<{key: string, label: string}>;
 }
 export interface State {
   groupId: string;
@@ -83,25 +83,25 @@ const mutations: MutationTree<State> = {
     state.groupId = 'all';
     localStorage.removeItem('topology-group-history');
   },
-  [types.ADD_GROUP_SERVICE](state: State, data: { id: string; serviceId: string }): void {
+  [types.ADD_GROUP_SERVICE](state: State, data: { id: string; service: {label: string, key: string} }): void {
     const groupIndex = state.groups.findIndex((i: Group) => i.id === data.id);
     if (groupIndex === -1) {
       return;
     }
     const services = state.groups[groupIndex].services;
-    const index = services.findIndex((i) => i === data.serviceId);
+    const index = services.findIndex((i) => i.label === data.service.label);
     if (index === -1) {
-      services.push(data.serviceId);
+      services.push(data.service);
     }
     localStorage.setItem('topology-groups', JSON.stringify(state.groups));
   },
-  [types.DELETE_GROUP_SERVICE](state: State, data: { id: string; serviceId: string }): void {
+  [types.DELETE_GROUP_SERVICE](state: State, data: { id: string; service: {label: string, key: string} }): void {
     const groupIndex = state.groups.findIndex((i: Group) => i.id === data.id);
     if (groupIndex === -1) {
       return;
     }
     const services = state.groups[groupIndex].services;
-    const index = services.findIndex((i) => i === data.serviceId);
+    const index = services.findIndex((i) => i.label === data.service.label);
     if (index !== -1) {
       services.splice(index, 1);
     }
