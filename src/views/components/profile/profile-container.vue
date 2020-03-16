@@ -23,7 +23,7 @@ language governing permissions and * limitations under the License. */
           v-tooltip:bottom="{ content: 'Highlight top 10 slow methods', popperCls: ['trace-table-tooltip'] }"
           :style="{ color: highlightTop ? '#448dfe' : '#484b55' }"
         >
-          Highlight top 10 slow methods
+          top slow
         </a>
       </div>
       <div class="dump-count">
