@@ -39,7 +39,7 @@ language governing permissions and * limitations under the License. */
     @State('rocketTopo') private stateTopo!: topoState;
     @State('rocketTopoGroup') private rocketTopoGroup!: TopoGroupState;
     @Getter('durationTime') private durationTime: any;
-    @Getter('rocketTopoGroup/services') private services: any;
+    @Getter('rocketTopoGroup/services') private services!: Array<{label: string, key: string}>;
     @Mutation('rocketTopoGroup/INIT_GROUPS') private INIT_GROUPS: any;
     @Mutation('rocketTopoGroup/DELETE_GROUP') private DELETE_GROUP: any;
     @Mutation('rocketTopoGroup/SELECT_GROUP') private SELECT_GROUP: any;
@@ -55,7 +55,7 @@ language governing permissions and * limitations under the License. */
     }
     private handleSelectGroup(id: string) {
       this.SELECT_GROUP(id);
-      this.GET_TOPO({ duration: this.durationTime, serviceIds: this.services });
+      this.GET_TOPO({ duration: this.durationTime, serviceIds: this.services.map((i) => i.key) });
     }
     private fetchData() {
       return Axios.post('/graphql', {
@@ -79,7 +79,8 @@ language governing permissions and * limitations under the License. */
         return;
       }
       if (
-        !this.rocketTopoGroup.groups.some((i: { id: string; name: string; services: string[] }) => i.id === serviceOld)
+        !this.rocketTopoGroup.groups
+        .some((i: { id: string; name: string; services: Array<{label: string, key: string}> }) => i.id === serviceOld)
       ) {
         serviceOld = this.rocketTopoGroup.groups[0].id;
         this.handleSelectGroup(serviceOld);
