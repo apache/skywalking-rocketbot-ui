@@ -13,6 +13,9 @@ language governing permissions and * limitations under the License. */
         Thread Stack
       </div>
       <div class="self">
+        Duration (ms)
+      </div>
+      <div class="exec-ms">
         Self Duration (ms)
         <a
           class="profile-set-btn"
@@ -22,9 +25,6 @@ language governing permissions and * limitations under the License. */
         >
           Highlight top 10 slow methods
         </a>
-      </div>
-      <div class="exec-ms">
-        Exclude Child Duration (ms)
       </div>
       <div class="dump-count">
         Dump Count

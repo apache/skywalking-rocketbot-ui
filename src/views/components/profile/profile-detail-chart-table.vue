@@ -73,13 +73,13 @@ language governing permissions and * limitations under the License. */
           return [];
         }
 
-        const duration = this.data.map((d) => {
-          return d.elements.map((item) => item.duration);
+        const durationChildExcluded = this.data.map((d) => {
+          return d.elements.map((item) => item.durationChildExcluded);
         }).flat(1);
         function compare(val, val1) {
           return val1 - val;
         }
-        const topDur = duration.sort(compare).filter((item, index) => index < 10 && item !== 0);
+        const topDur = durationChildExcluded.sort(compare).filter((item, index) => index < 10 && item !== 0);
         const trees = [];
 
         for (const item of this.data) {
@@ -97,12 +97,12 @@ language governing permissions and * limitations under the License. */
           obj[item.id] = item;
         }
         for (const item of copyArr) {
+          item.topDur = topDur.includes(item.durationChildExcluded) && this.highlightTop;
           if (item.parentId === '0') {
             res.push(item);
           }
           for (const key in obj) {
             if (item.id === obj[key].parentId) {
-              item.topDur = topDur.includes(item.duration) && this.highlightTop;
               if (item.children) {
                 item.children.push(obj[key]);
               } else {

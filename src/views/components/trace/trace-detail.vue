@@ -115,6 +115,9 @@ language governing permissions and * limitations under the License. */
     height: 100%;
     width: 75%;
     overflow-y: auto;
+    .rk-btn.ghost {
+      background: rgba(0, 0, 0, 0.5);
+    }
   }
   .rk-trace-detail-wrapper {
     padding: 8px 30px;
