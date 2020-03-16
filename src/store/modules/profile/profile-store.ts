@@ -190,7 +190,8 @@ const actions = {
         if (!(getProfiledSegment.spans && getProfiledSegment.spans.length)) {
           return;
         }
-        const currentSpan = getProfiledSegment.spans[0];
+        const index = getProfiledSegment.spans.length - 1 || 0;
+        const currentSpan = getProfiledSegment.spans[index];
         const timeRanges = [
           {
             start: currentSpan.startTime,
