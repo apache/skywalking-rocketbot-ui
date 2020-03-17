@@ -25,16 +25,24 @@ language governing permissions and * limitations under the License. */
       :traceId="currentSegment.traceIds[0]"
       :showBtnDetail="true"
       :HeaderType="'profile'"
+      @selectSpan="selectSpan"
     />
-    <ProfileDetailChartTable :data="profileAnalyzation" :highlightTop="highlightTop" />
-    <div v-if="message">{{ message }}</div>
+    <div>
+      <ProfileDetailChartTable :data="profileAnalyzation" :highlightTop="highlightTop" v-if="!loading" />
+      <div class="rk-trace-t-loading" v-show="loading">
+        <svg class="icon loading">
+          <use xlink:href="#spinner"></use>
+        </svg>
+      </div>
+      <div v-if="message">{{ message }}</div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
   import { Duration, Option } from '@/types/global';
   import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-  import { Action } from 'vuex-class';
+  import { Action, State, Mutation } from 'vuex-class';
   import { TraceDetailChartTable } from '../common';
   import ProfileDetailChartTable from './profile-detail-chart-table.vue';
 
@@ -46,27 +54,23 @@ language governing permissions and * limitations under the License. */
     @Prop() private currentSegment: any;
     @Prop() private profileAnalyzation: any;
     @Prop() private highlightTop!: boolean;
+    @Prop() private currentSpan!: any;
     @Action('profileStore/GET_PROFILE_ANALYZE') private GET_PROFILE_ANALYZE: any;
+    @Mutation('profileStore/SET_CURRENT_SPAN') private SET_CURRENT_SPAN: any;
 
-    private currentSpan: any;
     private timeRange: Array<{ start: number; end: number }> = [];
     private mode: string = 'include';
     private message: string = '';
+    private loading: boolean = false;
 
-    private created() {
-      this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
-    }
-    private handleSelectSpan(data: any) {
-      this.currentSpan = data;
+    private selectSpan(data: any) {
+      this.SET_CURRENT_SPAN(data);
     }
     private spanModeChange(item: any) {
       this.mode = item.target.value;
       this.updateTimeRange();
     }
     private updateTimeRange() {
-      if (!this.currentSpan) {
-        this.currentSpan = this.segmentSpans[0];
-      }
       if (this.mode === 'include') {
         this.timeRange = [
           {
@@ -76,7 +80,7 @@ language governing permissions and * limitations under the License. */
         ];
       } else {
         const { children, startTime, endTime } = this.currentSpan;
-        const timeRange = [];
+        let timeRange = [];
 
         if (!children || !children.length) {
           this.timeRange = [
@@ -91,15 +95,15 @@ language governing permissions and * limitations under the License. */
           timeRange.push(
             {
               start: startTime,
-              end: item.startTime - 1,
+              end: item.startTime,
             },
             {
-              start: item.endTime + 1,
+              start: item.endTime,
               end: endTime,
             },
           );
         }
-        this.timeRange = timeRange.reduce((prev: any[], cur) => {
+        timeRange = timeRange.reduce((prev: any[], cur) => {
           let isUpdate = false;
           for (const item of prev) {
             if (cur.start <= item.end && item.start <= cur.start) {
@@ -113,9 +117,11 @@ language governing permissions and * limitations under the License. */
           }
           return prev;
         }, []);
+        this.timeRange = timeRange.filter((item: any) => item.start !== item.end);
       }
     }
     private analyzeProfile() {
+      this.loading = true;
       this.updateTimeRange();
       this.GET_PROFILE_ANALYZE({
         segmentId: this.currentSegment.segmentId,
@@ -126,6 +132,9 @@ language governing permissions and * limitations under the License. */
         })
         .catch((err: any) => {
           throw err;
+        })
+        .finally(() => {
+          this.loading = false;
         });
     }
   }

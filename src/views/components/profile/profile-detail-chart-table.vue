@@ -8,30 +8,12 @@ language governing permissions and * limitations under the License. */
 
 <template>
   <div class="profile-detail-chart-table">
-    <div class="rk-trace-t-loading" v-show="loading">
-      <svg class="icon loading">
-        <use xlink:href="#spinner"></use>
-      </svg>
-    </div>
-    <div class="profile-table">
-      <ProfileContainer :highlightTop="highlightTop">
-        <Item :highlightTop="highlightTop" v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
-        <div class="profile-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
-      </ProfileContainer>
-    </div>
+    <ProfileContainer :highlightTop="highlightTop">
+      <Item :highlightTop="highlightTop" v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+      <div class="profile-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
+    </ProfileContainer>
   </div>
 </template>
-<style lang="scss">
-  .rk-tooltip-popper.trace-table-tooltip .rk-tooltip-inner {
-    max-width: 600px;
-  }
-  .profile-detail-chart-table {
-    position: relative;
-    min-height: 150px;
-    margin-top: 20px;
-  }
-</style>
-
 <script lang="js">
   import copy from '@/utils/copy';
   import Item from './profile-item';
@@ -47,13 +29,14 @@ language governing permissions and * limitations under the License. */
     watch: {
       data() {
         if (!this.data.length) {
+          this.tableData = [];
           return;
         }
         this.tableData = this.processTree();
-        this.loading = false;
       },
       highlightTop() {
         if (!this.data.length) {
+          this.tableData = [];
           return;
         }
         this.tableData = this.processTree();
@@ -62,8 +45,6 @@ language governing permissions and * limitations under the License. */
     data() {
       return {
         tableData: [],
-        currentSpan: [],
-        loading: true,
       };
     },
     methods: {
@@ -114,18 +95,9 @@ language governing permissions and * limitations under the License. */
 
         return res;
       },
-      handleSelectSpan(data) {
-        this.currentSpan = data;
-      },
-    },
-    created() {
-      this.loading = true;
     },
     mounted() {
       this.tableData = this.processTree();
-      this.loading = false;
-      this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
-      this.$eventBus.$on('TRACE-TABLE-LOADING', this, () => { this.loading = true; });
     },
   };
 </script>
@@ -140,7 +112,13 @@ language governing permissions and * limitations under the License. */
     text-align: center;
     margin-top: 10px;
   }
-  .profile-table {
+  .rk-tooltip-popper.trace-table-tooltip .rk-tooltip-inner {
+    max-width: 600px;
+  }
+  .profile-detail-chart-table {
+    position: relative;
+    min-height: 150px;
+    margin-top: 20px;
     overflow-x: scroll;
   }
 </style>

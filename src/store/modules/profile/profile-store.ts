@@ -40,6 +40,7 @@ export interface State {
   segmentList: TracesSourceType[];
   profileAnalyzation: any;
   highlightTop: boolean;
+  currentSpan: any;
 }
 const initState: State = {
   headerSource: {
@@ -62,6 +63,7 @@ const initState: State = {
   segmentList: [],
   profileAnalyzation: [],
   highlightTop: true,
+  currentSpan: {},
 };
 // getters
 const getters = {
@@ -76,7 +78,7 @@ const mutations = {
     state.headerSource.serviceSource = [{ key: 'all', label: 'All' }, ...data];
     state.headerSource.currentService = state.headerSource.serviceSource[0];
     state.taskFieldSource.serviceSource = data;
-    state.newTaskFields.service = data[0];
+    state.newTaskFields.service = data[0] || {};
   },
   [types.SET_TASK_OPTIONS](state: State, data: { type: string; item: IOption }) {
     const param = ['minThreshold', 'endpointName'];
@@ -90,6 +92,9 @@ const mutations = {
   },
   [types.SET_SEGMENT_SPANS](state: State, data: any[]) {
     state.segmentSpans = data;
+  },
+  [types.SET_CURRENT_SPAN](state: State, data: any) {
+    state.currentSpan = data;
   },
   [types.SET_SEGMENT_LIST](state: State, data: TracesSourceType[]) {
     state.segmentList = data;
@@ -191,14 +196,7 @@ const actions = {
           return;
         }
         const index = getProfiledSegment.spans.length - 1 || 0;
-        const currentSpan = getProfiledSegment.spans[index];
-        const timeRanges = [
-          {
-            start: currentSpan.startTime,
-            end: currentSpan.endTime,
-          },
-        ];
-        context.dispatch('GET_PROFILE_ANALYZE', { segmentId: params.segmentId, timeRanges });
+        context.commit(types.SET_CURRENT_SPAN, getProfiledSegment.spans[index]);
       })
       .catch((error: any) => {
         throw error;

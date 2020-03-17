@@ -100,6 +100,7 @@ language governing permissions and * limitations under the License. */
     watch: {
       data(val, oldVal) {
         if (!this.data.length) {
+          this.tableData = [];
           return;
         }
         this.tableData = this.formatData(this.changeTree());
@@ -285,6 +286,7 @@ language governing permissions and * limitations under the License. */
         if (!this.showBtnDetail) {
           this.showDetail = true;
         }
+        this.$emit('selectSpan', data);
       },
       showCurrentSpanDetail(title, text) {
         const textLineNumber = text.split('\n').length;

@@ -8,11 +8,7 @@ language governing permissions and * limitations under the License. */
 
 <template>
   <div>
-    <div
-      @click="showSelectSpan"
-      :class="['profile-item', 'level' + data.parentId]"
-      :style="{ color: data.topDur ? '#448dfe' : '#3d444f' }"
-    >
+    <div :class="['profile-item', 'level' + data.parentId]" :style="{ color: data.topDur ? '#448dfe' : '#3d444f' }">
       <div :class="['thread', 'level' + data.parentId]" :style="{ 'text-indent': data.parentId * 4 + 'px' }">
         <svg
           class="icon vm cp trans"
@@ -48,9 +44,6 @@ language governing permissions and * limitations under the License. */
     methods: {
       toggle() {
         this.displayChildren = !this.displayChildren;
-      },
-      showSelectSpan() {
-        this.$eventBus.$emit('HANDLE-SELECT-SPAN', this.data);
       },
     },
   };
