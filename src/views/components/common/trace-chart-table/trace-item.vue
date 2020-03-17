@@ -55,6 +55,14 @@ language governing permissions and * limitations under the License. */
   export default {
     name: 'item',
     props: ['data'],
+    watch: {
+      data() {
+        const items = document.querySelectorAll('.trace-item');
+        for (const item of items) {
+          item.style.background = '#fff';
+        }
+      },
+    },
     data() {
       return {
         displayChildren: true,
@@ -99,7 +107,7 @@ language governing permissions and * limitations under the License. */
         this.$refs.traceItem.style.background = 'rgba(0, 0, 0, 0.1)';
         this.$eventBus.$emit('HANDLE-SELECT-SPAN', this.data);
       },
-      viewSpanDetail(data) {
+      viewSpanDetail() {
         this.showSelectSpan();
         this.$eventBus.$emit('HANDLE-VIEW-SPAN', this.data);
       },
@@ -109,7 +117,6 @@ language governing permissions and * limitations under the License. */
 <style lang="scss" scoped>
   @import './trace.scss';
   .trace-item.level0 {
-    background: rgba(0, 0, 0, 0.04);
     color: #448dfe;
     &:hover {
       background: rgba(0, 0, 0, 0.04);

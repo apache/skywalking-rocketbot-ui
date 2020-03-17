@@ -8,25 +8,12 @@ language governing permissions and * limitations under the License. */
 
 <template>
   <div class="profile-detail-chart-table">
-    <div class="profile-table">
-      <ProfileContainer :highlightTop="highlightTop">
-        <Item :highlightTop="highlightTop" v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
-        <div class="profile-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
-      </ProfileContainer>
-    </div>
+    <ProfileContainer :highlightTop="highlightTop">
+      <Item :highlightTop="highlightTop" v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+      <div class="profile-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
+    </ProfileContainer>
   </div>
 </template>
-<style lang="scss">
-  .rk-tooltip-popper.trace-table-tooltip .rk-tooltip-inner {
-    max-width: 600px;
-  }
-  .profile-detail-chart-table {
-    position: relative;
-    min-height: 150px;
-    margin-top: 20px;
-  }
-</style>
-
 <script lang="js">
   import copy from '@/utils/copy';
   import Item from './profile-item';
@@ -58,7 +45,6 @@ language governing permissions and * limitations under the License. */
     data() {
       return {
         tableData: [],
-        currentSpan: [],
       };
     },
     methods: {
@@ -109,13 +95,9 @@ language governing permissions and * limitations under the License. */
 
         return res;
       },
-      handleSelectSpan(data) {
-        this.currentSpan = data;
-      },
     },
     mounted() {
       this.tableData = this.processTree();
-      this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
     },
   };
 </script>
@@ -130,7 +112,13 @@ language governing permissions and * limitations under the License. */
     text-align: center;
     margin-top: 10px;
   }
-  .profile-table {
+  .rk-tooltip-popper.trace-table-tooltip .rk-tooltip-inner {
+    max-width: 600px;
+  }
+  .profile-detail-chart-table {
+    position: relative;
+    min-height: 150px;
+    margin-top: 20px;
     overflow-x: scroll;
   }
 </style>

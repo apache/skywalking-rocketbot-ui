@@ -25,6 +25,7 @@ language governing permissions and * limitations under the License. */
       :traceId="currentSegment.traceIds[0]"
       :showBtnDetail="true"
       :HeaderType="'profile'"
+      @selectSpan="selectSpan"
     />
     <div>
       <ProfileDetailChartTable :data="profileAnalyzation" :highlightTop="highlightTop" v-if="!loading" />
@@ -62,10 +63,7 @@ language governing permissions and * limitations under the License. */
     private message: string = '';
     private loading: boolean = false;
 
-    private created() {
-      this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
-    }
-    private handleSelectSpan(data: any) {
+    private selectSpan(data: any) {
       this.SET_CURRENT_SPAN(data);
     }
     private spanModeChange(item: any) {
