@@ -40,6 +40,7 @@ export interface State {
   segmentList: TracesSourceType[];
   profileAnalyzation: any;
   highlightTop: boolean;
+  currentSpan: any;
 }
 const initState: State = {
   headerSource: {
@@ -62,6 +63,7 @@ const initState: State = {
   segmentList: [],
   profileAnalyzation: [],
   highlightTop: true,
+  currentSpan: {},
 };
 // getters
 const getters = {
@@ -90,6 +92,9 @@ const mutations = {
   },
   [types.SET_SEGMENT_SPANS](state: State, data: any[]) {
     state.segmentSpans = data;
+  },
+  [types.SET_CURRENT_SPAN](state: State, data: any) {
+    state.currentSpan = data;
   },
   [types.SET_SEGMENT_LIST](state: State, data: TracesSourceType[]) {
     state.segmentList = data;
@@ -187,6 +192,8 @@ const actions = {
           return;
         }
         context.commit(types.SET_SEGMENT_SPANS, getProfiledSegment.spans);
+        const index = getProfiledSegment.spans.length - 1 || 0;
+        context.commit(types.SET_CURRENT_SPAN, getProfiledSegment.spans[index]);
       })
       .catch((error: any) => {
         throw error;

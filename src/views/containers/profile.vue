@@ -24,6 +24,7 @@ language governing permissions and * limitations under the License. */
         :segmentSpans="profile.segmentSpans"
         :profileAnalyzation="profile.profileAnalyzation"
         :highlightTop="profile.highlightTop"
+        :currentSpan="profile.currentSpan"
       />
     </div>
   </div>
