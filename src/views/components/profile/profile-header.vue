@@ -52,7 +52,7 @@ language governing permissions and * limitations under the License. */
     @Prop() private taskFieldSource: any;
     @Mutation('profileStore/SET_HEADER_SOURCE') private SET_HEADER_SOURCE: any;
 
-    private endpointName: string = localStorage.getItem('endpointName') || '';
+    private endpointName: string = '';
     private dialogVisible = false;
     private serviceOpt: any;
 
