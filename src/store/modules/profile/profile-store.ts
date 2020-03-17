@@ -192,6 +192,9 @@ const actions = {
           return;
         }
         context.commit(types.SET_SEGMENT_SPANS, getProfiledSegment.spans);
+        if (!(getProfiledSegment.spans && getProfiledSegment.spans.length)) {
+          return;
+        }
         const index = getProfiledSegment.spans.length - 1 || 0;
         context.commit(types.SET_CURRENT_SPAN, getProfiledSegment.spans[index]);
       })

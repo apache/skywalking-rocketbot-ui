@@ -282,7 +282,6 @@ language governing permissions and * limitations under the License. */
         }
       },
       handleSelectSpan(data) {
-        console.log(data);
         this.currentSpan = data;
         if (!this.showBtnDetail) {
           this.showDetail = true;
