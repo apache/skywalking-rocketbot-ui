@@ -26,8 +26,15 @@ language governing permissions and * limitations under the License. */
       :showBtnDetail="true"
       :HeaderType="'profile'"
     />
-    <ProfileDetailChartTable :data="profileAnalyzation" :highlightTop="highlightTop" />
-    <div v-if="message">{{ message }}</div>
+    <div>
+      <ProfileDetailChartTable :data="profileAnalyzation" :highlightTop="highlightTop" v-if="!loading" />
+      <div class="rk-trace-t-loading" v-show="loading">
+        <svg class="icon loading">
+          <use xlink:href="#spinner"></use>
+        </svg>
+      </div>
+      <div v-if="message">{{ message }}</div>
+    </div>
   </div>
 </template>
 
@@ -52,6 +59,7 @@ language governing permissions and * limitations under the License. */
     private timeRange: Array<{ start: number; end: number }> = [];
     private mode: string = 'include';
     private message: string = '';
+    private loading: boolean = false;
 
     private created() {
       this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
@@ -116,6 +124,7 @@ language governing permissions and * limitations under the License. */
       }
     }
     private analyzeProfile() {
+      this.loading = true;
       this.updateTimeRange();
       this.GET_PROFILE_ANALYZE({
         segmentId: this.currentSegment.segmentId,
@@ -126,6 +135,9 @@ language governing permissions and * limitations under the License. */
         })
         .catch((err: any) => {
           throw err;
+        })
+        .finally(() => {
+          this.loading = false;
         });
     }
   }

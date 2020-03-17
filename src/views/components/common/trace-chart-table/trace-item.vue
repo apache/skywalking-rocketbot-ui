@@ -96,7 +96,7 @@ language governing permissions and * limitations under the License. */
         for (const item of items) {
           item.style.background = '#fff';
         }
-        this.$refs.traceItem.style.background = 'rgba(0, 0, 0, 0.04)';
+        this.$refs.traceItem.style.background = 'rgba(0, 0, 0, 0.1)';
         this.$eventBus.$emit('HANDLE-SELECT-SPAN', this.data);
       },
       viewSpanDetail(data) {

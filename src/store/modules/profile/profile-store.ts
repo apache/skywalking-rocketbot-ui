@@ -76,7 +76,7 @@ const mutations = {
     state.headerSource.serviceSource = [{ key: 'all', label: 'All' }, ...data];
     state.headerSource.currentService = state.headerSource.serviceSource[0];
     state.taskFieldSource.serviceSource = data;
-    state.newTaskFields.service = data[0];
+    state.newTaskFields.service = data[0] || {};
   },
   [types.SET_TASK_OPTIONS](state: State, data: { type: string; item: IOption }) {
     const param = ['minThreshold', 'endpointName'];
@@ -187,18 +187,6 @@ const actions = {
           return;
         }
         context.commit(types.SET_SEGMENT_SPANS, getProfiledSegment.spans);
-        if (!(getProfiledSegment.spans && getProfiledSegment.spans.length)) {
-          return;
-        }
-        const index = getProfiledSegment.spans.length - 1 || 0;
-        const currentSpan = getProfiledSegment.spans[index];
-        const timeRanges = [
-          {
-            start: currentSpan.startTime,
-            end: currentSpan.endTime,
-          },
-        ];
-        context.dispatch('GET_PROFILE_ANALYZE', { segmentId: params.segmentId, timeRanges });
       })
       .catch((error: any) => {
         throw error;
