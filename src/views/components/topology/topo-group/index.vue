@@ -60,12 +60,12 @@ language governing permissions and * limitations under the License. */
     private fetchData() {
       return Axios.post('/graphql', {
         query: `
-      query queryServices($duration: Duration!) {
-        services: getAllServices(duration: $duration) {
-          key: id
-          label: name
-        }
-      }`,
+          query queryServices($duration: Duration!) {
+            services: getAllServices(duration: $duration) {
+              key: id
+              label: name
+            }
+          }`,
         variables: {
           duration: this.durationTime,
         },
@@ -75,12 +75,12 @@ language governing permissions and * limitations under the License. */
     }
     private initGroupTopo() {
       let serviceOld = localStorage.getItem('topology-group-history') || '';
-      if (!this.rocketTopoGroup.groups.length) {
-        return;
-      }
+      if (!this.rocketTopoGroup.groups.length) { return; }
       if (
         !this.rocketTopoGroup.groups
-        .some((i: { id: string; name: string; services: Array<{label: string, key: string}> }) => i.id === serviceOld)
+        .some((i: {
+          id: string; name: string; services: Array<{label: string, key: string}>
+        }) => i.id === serviceOld)
       ) {
         serviceOld = this.rocketTopoGroup.groups[0].id;
         this.handleSelectGroup(serviceOld);
@@ -90,10 +90,10 @@ language governing permissions and * limitations under the License. */
     }
     private created() {
       this.INIT_GROUPS();
-      this.fetchData().then(() => {
-        this.initGroupTopo();
-        this.SET_EVENTS([this.initGroupTopo]);
-      });
+      this.fetchData()
+        .then(() => {
+          this.initGroupTopo();
+        });
     }
   }
 </script>
