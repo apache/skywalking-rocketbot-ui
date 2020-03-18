@@ -37,6 +37,9 @@ const initState: State = {
 // getters
 const getters = {
   services(state: State) {
+    if (!state.groups.length) {
+      return [];
+    }
     if (state.groupId === 'all') {
       return [];
     }

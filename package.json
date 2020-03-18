@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "serve:proxy": "vue-cli-service serve --mode dev",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "docker:run": "docker build -t rocketbot . && docker run --name rocketbot -p 8888:80 -d -e SKYWALKING_URL=localhost:1234,127.0.0.1:1235 rocketbot",
