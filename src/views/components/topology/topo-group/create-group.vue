@@ -29,8 +29,8 @@ language governing permissions and * limitations under the License. */
 
     private handleCreateGroup() {
       this.CREATE_GROUP(this.name);
-      this.name = '';
       this.create = false;
+      this.name = '';
     }
   }
 </script>
