@@ -75,7 +75,13 @@ language governing permissions and * limitations under the License. */
     }
     private initGroupTopo() {
       let serviceOld = localStorage.getItem('topology-group-history') || '';
-      if (!this.rocketTopoGroup.groups.length) { return; }
+      if (!this.rocketTopoGroup.groups.length) {
+        this.handleSelectGroup(serviceOld);
+        this.GET_TOPO({
+          duration: this.durationTime,
+        });
+        return;
+      }
       if (
         !this.rocketTopoGroup.groups
         .some((i: {
