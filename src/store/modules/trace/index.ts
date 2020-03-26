@@ -36,7 +36,7 @@ const initState: State = {
   services: [],
   instances: [],
   traceForm: {
-    paging: {pageNum: 1, pageSize: 15, needTotal: true},
+    paging: { pageNum: 1, pageSize: 15, needTotal: true },
     queryOrder: localStorage.getItem('traceQueryOrder') || 'BY_DURATION',
   },
   traceList: [],
@@ -58,10 +58,10 @@ const getters = {};
 // mutations
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: Option[]): void {
-    state.services = [{label: 'All', key: ''}].concat(data);
+    state.services = [{ label: 'All', key: '' }].concat(data);
   },
   [types.SET_INSTANCES](state: State, data: Option[]): void {
-    state.instances = [{label: 'All', key: ''}].concat(data);
+    state.instances = [{ label: 'All', key: '' }].concat(data);
   },
   [types.SET_TRACE_FORM](state: State, data: any): void {
     if (data.queryOrder) {
@@ -127,14 +127,17 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_INSTANCES, res.data.data.instanceId);
       });
   },
-  SET_TRACE_FORM(context: { commit: Commit, dispatch: Dispatch }, params: any): void {
+  SET_TRACE_FORM(
+    context: { commit: Commit; dispatch: Dispatch },
+    params: any,
+  ): void {
     context.commit(types.SET_TRACE_FORM, params);
   },
-  GET_TRACELIST(context: { state: State, commit: Commit }): Promise<void> {
+  GET_TRACELIST(context: { state: State; commit: Commit }): Promise<void> {
     context.commit(types.SET_TRACELIST, []);
     return graph
       .query('queryTraces')
-      .params({condition: context.state.traceForm})
+      .params({ condition: context.state.traceForm })
       .then((res: AxiosResponse) => {
         context.commit(types.SET_TRACELIST, res.data.data.traces.data);
         context.commit(types.SET_TRACELIST_TOTAL, res.data.data.traces.total);

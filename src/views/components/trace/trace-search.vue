@@ -1,26 +1,17 @@
-/**
-* Licensed to the Apache Software Foundation (ASF) under one or more
-* contributor license agreements.  See the NOTICE file distributed with
-* this work for additional information regarding copyright ownership.
-* The ASF licenses this file to You under the Apache License, Version 2.0
-* (the "License"); you may not use this file except in compliance with
-* the License.  You may obtain a copy of the License at
-*
-*      http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+/** * Licensed to the Apache Software Foundation (ASF) under one or more * contributor license agreements. See the
+NOTICE file distributed with * this work for additional information regarding copyright ownership. * The ASF licenses
+this file to You under the Apache License, Version 2.0 * (the "License"); you may not use this file except in compliance
+with * the License. You may obtain a copy of the License at * * http://www.apache.org/licenses/LICENSE-2.0 * * Unless
+required by applicable law or agreed to in writing, software * distributed under the License is distributed on an "AS
+IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. * See the License for the specific
+language governing permissions and * limitations under the License. */
 
 <template>
   <div class="rk-trace-search">
     <div>
       <a class="rk-trace-clear-btn r" @click="status = !status">
-        <span class="mr-5 vm">{{this.$t('more')}}</span>
-        <svg class="icon trans vm" :style="`transform: rotate(${status?180:0}deg);`">
+        <span class="mr-5 vm">{{ this.$t('more') }}</span>
+        <svg class="icon trans vm" :style="`transform: rotate(${status ? 180 : 0}deg);`">
           <use xlink:href="#arrow-down"></use>
         </svg>
       </a>
@@ -28,42 +19,55 @@
         <svg class="icon mr-5 vm">
           <use xlink:href="#search"></use>
         </svg>
-        <span class="vm">{{this.$t('search')}}</span>
+        <span class="vm">{{ this.$t('search') }}</span>
       </a>
       <a class="rk-trace-clear-btn r mr-10" @click="clearSearch">
         <svg class="icon mr-5 vm">
           <use xlink:href="#clear"></use>
         </svg>
-        <span class="vm">{{this.$t('clear')}}</span>
+        <span class="vm">{{ this.$t('clear') }}</span>
       </a>
       <div class="flex-h">
-        <TraceSelect :hasSearch="true" :title="this.$t('service')" :value="service" @input="chooseService"
-                     :data="rocketTrace.services" :readonly="inTopo"/>
-        <TraceSelect :hasSearch="true" :title="this.$t('instance')" v-model="instance" :data="rocketTrace.instances"/>
-        <TraceSelect :title="this.$t('status')" :value="traceState" @input="chooseStatus"
-                     :data="[{label:'All', key: 'ALL'}, {label:'Success', key: 'SUCCESS'}, {label:'Error', key: 'ERROR'}]"/>
+        <TraceSelect
+          :hasSearch="true"
+          :title="this.$t('service')"
+          :value="service"
+          @input="chooseService"
+          :data="rocketTrace.services"
+        />
+        <TraceSelect :hasSearch="true" :title="this.$t('instance')" v-model="instance" :data="rocketTrace.instances" />
+        <TraceSelect
+          :title="this.$t('status')"
+          :value="traceState"
+          @input="chooseStatus"
+          :data="[
+            { label: 'All', key: 'ALL' },
+            { label: 'Success', key: 'SUCCESS' },
+            { label: 'Error', key: 'ERROR' },
+          ]"
+        />
         <div class="mr-10" style="padding: 3px 15px 0">
-          <div class="sm grey">{{this.$t('endpointName')}}</div>
-          <input type="text" v-model="endpointName" class="rk-trace-search-input">
+          <div class="sm grey">{{ this.$t('endpointName') }}</div>
+          <input type="text" v-model="endpointName" class="rk-trace-search-input" />
         </div>
       </div>
     </div>
     <div class="rk-trace-search-more flex-h" v-show="status">
       <div class="mr-15">
-        <span class="sm b grey mr-10">{{this.$t('traceID')}}:</span>
-        <input type="text" v-model="traceId" class="rk-trace-search-input dib">
+        <span class="sm b grey mr-10">{{ this.$t('traceID') }}:</span>
+        <input type="text" v-model="traceId" class="rk-trace-search-input dib" />
       </div>
       <div class="mr-15">
-        <span class="sm b grey mr-10">{{this.$t('duration')}}:</span>
+        <span class="sm b grey mr-10">{{ this.$t('duration') }}:</span>
         <div class="rk-trace-search-range dib">
-          <input class="vm tc" v-model="minTraceDuration">
+          <input class="vm tc" v-model="minTraceDuration" />
           <span class="grey vm">-</span>
-          <input class="vm tc" v-model="maxTraceDuration">
+          <input class="vm tc" v-model="maxTraceDuration" />
         </div>
       </div>
       <div>
-        <span class="sm b grey mr-5">{{this.$t('timeRange')}}:</span>
-        <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss"/>
+        <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
+        <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
       </div>
     </div>
   </div>
@@ -71,11 +75,11 @@
 
 <script lang="ts">
   import { Duration, Option } from '@/types/global';
-  import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+  import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
-  import TraceSelect from './trace-select.vue';
+  import TraceSelect from '../common/trace-select.vue';
 
-  @Component({components: {TraceSelect}})
+  @Component({ components: { TraceSelect } })
   export default class TraceSearch extends Vue {
     @State('rocketbot') private rocketbotGlobal: any;
     @State('rocketTrace') private rocketTrace: any;
@@ -86,22 +90,19 @@
     @Action('rocketTrace/GET_INSTANCES') private GET_INSTANCES: any;
     @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
     @Action('rocketTrace/SET_TRACE_FORM') private SET_TRACE_FORM: any;
-    @Mutation('rocketTrace/SET_TRACE_FORM_ITEM') private SET_TRACE_FORM_ITEM: any;
-
+    @Mutation('rocketTrace/SET_TRACE_FORM_ITEM')
+    private SET_TRACE_FORM_ITEM: any;
+    private service: Option = { label: 'All', key: '' };
     private time!: Date[];
     private status: boolean = true;
     private maxTraceDuration: string = localStorage.getItem('maxTraceDuration') || '';
     private minTraceDuration: string = localStorage.getItem('minTraceDuration') || '';
-    @Prop({default: {label: 'All', key: ''}})
-    private service!: Option;
-    private instance: Option = {label: 'All', key: ''};
+    private instance: Option = { label: 'All', key: '' };
     private endpointName: string = localStorage.getItem('endpointName') || '';
     private traceId: string = localStorage.getItem('traceId') || '';
-    private traceState: Option = {label: 'All', key: 'ALL'};
-    @Prop({default: false, type: Boolean})
-    private inTopo!: boolean;
+    private traceState: Option = { label: 'All', key: 'ALL' };
 
-    private dateFormat = (date: Date, step: string) => {
+    private dateFormat(date: Date, step: string) {
       const year = date.getFullYear();
       const monthTemp = date.getMonth() + 1;
       let month: string = `${monthTemp}`;
@@ -137,7 +138,7 @@
       }
     }
 
-    private globalTimeFormat = (time: Date[]): any => {
+    private globalTimeFormat(time: Date[]) {
       let step = 'MINUTE';
       const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
       if (unix <= 60 * 60 * 1000) {
@@ -149,19 +150,23 @@
       } else {
         step = 'MONTH';
       }
-      return {start: this.dateFormat(time[0], step), end: this.dateFormat(time[1], step), step};
+      return {
+        start: this.dateFormat(time[0], step),
+        end: this.dateFormat(time[1], step),
+        step,
+      };
     }
 
     private chooseService(i: any) {
       if (this.service.key === i.key) {
         return;
       }
-      this.instance = {label: 'All', key: ''};
+      this.instance = { label: 'All', key: '' };
       this.service = i;
       if (i.key === '') {
         return;
       }
-      this.GET_INSTANCES({duration: this.durationTime, serviceId: i.key});
+      this.GET_INSTANCES({ duration: this.durationTime, serviceId: i.key });
     }
 
     private chooseStatus(i: any) {
@@ -169,16 +174,20 @@
     }
 
     private getTraceList() {
-      this.GET_SERVICES({duration: this.durationTime});
+      this.GET_SERVICES({ duration: this.durationTime });
       const temp: any = {
         queryDuration: this.globalTimeFormat([
-          new Date(this.time[0].getTime() +
-            (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000),
-          new Date(this.time[1].getTime() +
-            (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000),
+          new Date(
+            this.time[0].getTime() +
+              (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000,
+          ),
+          new Date(
+            this.time[1].getTime() +
+              (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000,
+          ),
         ]),
         traceState: this.traceState.key,
-        paging: {pageNum: 1, pageSize: 15, needTotal: true},
+        paging: { pageNum: 1, pageSize: 15, needTotal: true },
         queryOrder: this.rocketTrace.traceForm.queryOrder,
       };
 
@@ -205,6 +214,7 @@
         localStorage.setItem('traceId', this.traceId);
       }
       this.SET_TRACE_FORM(temp);
+
       this.$eventBus.$emit('SET_LOADING_TRUE', () => {
         this.GET_TRACELIST().then(() => {
           this.$eventBus.$emit('SET_LOADING_FALSE');
@@ -219,14 +229,14 @@
       localStorage.removeItem('maxTraceDuration');
       this.minTraceDuration = '';
       localStorage.removeItem('minTraceDuration');
-      this.service = {label: 'All', key: ''};
-      this.instance = {label: 'All', key: ''};
+      this.service = { label: 'All', key: '' };
+      this.instance = { label: 'All', key: '' };
       this.endpointName = '';
       localStorage.removeItem('endpointName');
       this.traceId = '';
       localStorage.removeItem('traceId');
-      this.traceState = {label: 'All', key: 'ALL'};
-      this.SET_TRACE_FORM_ITEM({type: 'queryOrder', data: ''});
+      this.traceState = { label: 'All', key: 'ALL' };
+      this.SET_TRACE_FORM_ITEM({ type: 'queryOrder', data: '' });
       this.getTraceList();
     }
 
@@ -236,13 +246,19 @@
     }
 
     private created() {
+      this.endpointName = this.$route.query.endpointname
+        ? this.$route.query.endpointname.toString()
+        : this.endpointName;
+      this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     }
-
     private mounted() {
       this.getTraceList();
       if (this.service && this.service.key) {
-        this.GET_INSTANCES({duration: this.durationTime, serviceId: this.service.key});
+        this.GET_INSTANCES({
+          duration: this.durationTime,
+          serviceId: this.service.key,
+        });
       }
     }
   }
@@ -264,7 +280,8 @@
     border-radius: 3px;
   }
 
-  .rk-trace-search-range, .rk-auto-select {
+  .rk-trace-search-range,
+  .rk-auto-select {
     border-radius: 3px;
     background-color: #fff;
     padding: 1px;
@@ -295,7 +312,7 @@
     margin-top: 12px;
 
     &.bg-warning {
-      background-color: #FBB03B;
+      background-color: #fbb03b;
     }
   }
 
@@ -305,13 +322,13 @@
     border-radius: 3px;
     margin-top: 8px;
     position: relative;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .1);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
 
     &:after {
       bottom: 100%;
       right: 30px;
       border: solid transparent;
-      content: " ";
+      content: ' ';
       height: 0;
       width: 0;
       position: absolute;

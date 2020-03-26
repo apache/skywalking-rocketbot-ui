@@ -24,10 +24,22 @@ import * as types from '../../mutation-types';
 import { DurationTime } from '@/types/global';
 import { queryChartData } from '@/utils/queryChartData';
 import fragmentAll from '@/graph/query/comparison';
-import { ICurrentOptions, DataSourceType, ISelectConfig, MetricsType } from '@/types/comparison';
 import {
-  ComparisonOption, InitSource, LinearType, ComparisonType,
-  ObjectType, ServiceType, ChangeType, StatusType, PercentileType,
+  ICurrentOptions,
+  DataSourceType,
+  ISelectConfig,
+  MetricsType,
+} from '@/types/comparison';
+import {
+  ComparisonOption,
+  InitSource,
+  LinearType,
+  ComparisonType,
+  ObjectType,
+  ServiceType,
+  ChangeType,
+  StatusType,
+  PercentileItem,
 } from './comparison-const';
 
 type GenericIdentityFn<T> = (arg: T) => T;
@@ -94,8 +106,8 @@ const getters = {
     const { key } = currentOptions.preType;
 
     if (key === ObjectType.ServiceEndpoint) {
-        variablesData.endpointId = currentOptions.preObject.key;
-        variablesData.endpointName = currentOptions.preObject.label;
+      variablesData.endpointId = currentOptions.preObject.key;
+      variablesData.endpointName = currentOptions.preObject.label;
     } else if (key === ObjectType.ServiceInstance) {
       variablesData.instanceId = currentOptions.preObject.key;
     } else if (key === ObjectType.Database) {
@@ -111,7 +123,7 @@ const getters = {
   nextConfig(state: State) {
     const { currentOptions } = state;
     const { nextType, nextService, nextObject } = currentOptions;
-    let variablesData = {serviceId: nextService.key} as any;
+    let variablesData = { serviceId: nextService.key } as any;
 
     if (nextType.key === ObjectType.ServiceEndpoint) {
       variablesData = {
@@ -206,7 +218,7 @@ const mutations = {
   [types.SET_METRICSOURCE](state: State, source: MetricsType) {
     state.metricSource = source;
   },
-  [types.SET_SERVICES](state: State, data: {services: any[]}) {
+  [types.SET_SERVICES](state: State, data: { services: any[] }) {
     const { services } = data;
 
     if (!services.length) {
@@ -219,13 +231,18 @@ const mutations = {
   },
   [types.SET_CONFIG](state: State, data: any[]) {
     if (!data.length) {
-      data = [{
-        key: '',
-        label: '',
-      }];
+      data = [
+        {
+          key: '',
+          label: '',
+        },
+      ];
     }
     const { isPrevious, currentOptions, metricSource } = state as any;
-    const type = isPrevious === StatusType.Pre ? currentOptions.preType.key : currentOptions.nextType.key;
+    const type =
+      isPrevious === StatusType.Pre
+        ? currentOptions.preType.key
+        : currentOptions.nextType.key;
 
     if (isPrevious === StatusType.Pre) {
       state.dataSource.preObjectSource = data;
@@ -256,38 +273,41 @@ const mutations = {
       };
     }
   },
-  [types.SET_CHARTVAL](state: State, data: {value: any, type: string}) {
-    const { preObject, preService, preType, preMetrics } = state.currentOptions;
-    const { nextObject, nextService, nextType, nextMetrics } = state.currentOptions;
-    const metrics = data.type === ServiceType.PREVIOUS ? preMetrics : nextMetrics;
+  [types.SET_CHARTVAL](state: State, data: { value: any; type: string }) {
+    const { preObject, preService, preType } = state.currentOptions;
+    const { nextObject, nextService, nextType } = state.currentOptions;
     const obj = {} as any;
+
     for (const key of Object.keys(data.value)) {
-      const value = data.value[key].values.map((d: {value: number}) => d.value);
+      let value = [] as any;
+
+      if (Array.isArray(data.value[key].values)) {
+        value = data.value[key].values.map((d: { value: number }) => d.value);
+      } else {
+        value = {};
+        PercentileItem.forEach((item, index) => {
+          value[item] = data.value[key][index].values.map(
+            (d: { value: number }) => d.value,
+          );
+        });
+      }
       obj[key] = value;
     }
-    for (const metric of metrics) {
-      const title = metric.key;
-      const percentile = PercentileType[title];
-      if (percentile) {
-        obj[metric.label] = {};
-        for (const item of percentile) {
-          obj[metric.label][item] = obj[item];
-          delete obj[item];
-        }
-      }
-    }
+
     for (const key of Object.keys(obj)) {
       if (data.type === ServiceType.PREVIOUS) {
         const str = `${preService.label}_`;
-        const strKeyPre = `${preType.key === ObjectType.Database ?
-          '' : str}${preType.key === ObjectType.Service ? '' : preObject.label}_${key}`;
+        const strKeyPre = `${preType.key === ObjectType.Database ? '' : str}${
+          preType.key === ObjectType.Service ? '' : preObject.label
+        }_${key}`;
         obj[strKeyPre] = obj[key];
         delete obj[key];
       } else {
         const str = `${nextObject.label}`;
-        const servicesLabel =  `${nextService.label}_`;
-        const strKeyNext = `${nextType.key === ObjectType.Database ?
-          '' : servicesLabel}${nextType.key === ObjectType.Service ? '' : str}_${key}`;
+        const servicesLabel = `${nextService.label}_`;
+        const strKeyNext = `${
+          nextType.key === ObjectType.Database ? '' : servicesLabel
+        }${nextType.key === ObjectType.Service ? '' : str}_${key}`;
         obj[strKeyNext] = obj[key];
         delete obj[key];
       }
@@ -298,16 +318,17 @@ const mutations = {
     };
   },
   [types.UPDATE_CONFIG](state: any, data: ISelectConfig) {
-    const {type, option} = data;
-    const { currentOptions, isPrevious } = state;
-    const { nextType, preType } = currentOptions;
+    const { type, option } = data;
+    const { currentOptions } = state;
 
     if (type === ChangeType.NextMetrics || type === ChangeType.PreMetrics) {
       const metrics = currentOptions[type];
       const item = metrics.findIndex((d: any) => d.key === option.key);
 
       if (item > -1) {
-        state.currentOptions[type] = metrics.filter((d: any) => d.key !== option.key);
+        state.currentOptions[type] = metrics.filter(
+          (d: any) => d.key !== option.key,
+        );
       } else {
         state.currentOptions[type].push(option);
       }
@@ -382,41 +403,56 @@ const mutations = {
 
 // actions
 const actions: ActionTree<State, ActionsParamType> = {
-  GET_SERVICES(context: {commit: Commit, dispatch: Dispatch, getters: any, state: State}, params: {
-    duration: string;
-  }) {
+  GET_SERVICES(
+    context: { commit: Commit; dispatch: Dispatch; getters: any; state: State },
+    params: {
+      duration: string;
+    },
+  ) {
     if (context.state.isPrevious !== StatusType.Init) {
       return;
     }
 
     context.commit(types.SET_METRICSOURCE, context.getters.AllMetrics);
     context.commit(types.SET_ISPREVIOUS, StatusType.Init);
-    return graph.query('queryServices').params(params)
+    return graph
+      .query('queryServices')
+      .params(params)
       .then((res: AxiosResponse) => {
         if (!res.data.data) {
           return;
         }
-        context.commit(types.SET_SERVICES, {services: res.data.data.services});
-      }).then(() => {
+        context.commit(types.SET_SERVICES, {
+          services: res.data.data.services,
+        });
+      })
+      .then(() => {
         context.dispatch('GET_SERVICE_ENDPOINTS', params.duration);
       });
   },
-  GET_SERVICE_ENDPOINTS(context: { commit: Commit, state: State, dispatch: Dispatch }, date: string) {
+  GET_SERVICE_ENDPOINTS(
+    context: { commit: Commit; state: State; dispatch: Dispatch },
+    date: string,
+  ) {
     if (!context.state.currentOptions.preService) {
       return new Promise((resolve) => resolve());
     }
     const { isPrevious, currentOptions } = context.state;
-    const servicesId = isPrevious === StatusType.Pre ? currentOptions.preService.key : currentOptions.nextService.key;
+    const servicesId =
+      isPrevious === StatusType.Pre
+        ? currentOptions.preService.key
+        : currentOptions.nextService.key;
     graph
       .query('queryEndpoints')
-      .params({serviceId: servicesId, keyword: ''})
+      .params({ serviceId: servicesId, keyword: '' })
       .then((res: AxiosResponse) => {
         if (!res.data.data) {
           return;
         }
         context.commit(types.SET_CONFIG, res.data.data.getEndpoints);
         return res.data.data;
-      }).then((data) => {
+      })
+      .then((data) => {
         if (!data.getEndpoints) {
           return;
         }
@@ -425,9 +461,12 @@ const actions: ActionTree<State, ActionsParamType> = {
         }
       });
   },
-  GET_SERVICE_INSTANCES(context: { commit: Commit, state: State }, params) {
+  GET_SERVICE_INSTANCES(context: { commit: Commit; state: State }, params) {
     const { isPrevious, currentOptions } = context.state;
-    params.serviceId = isPrevious === StatusType.Pre ? currentOptions.preService.key : currentOptions.nextService.key;
+    params.serviceId =
+      isPrevious === StatusType.Pre
+        ? currentOptions.preService.key
+        : currentOptions.nextService.key;
     return graph
       .query('queryInstances')
       .params(params)
@@ -435,10 +474,16 @@ const actions: ActionTree<State, ActionsParamType> = {
         if (!res.data) {
           return;
         }
-        context.commit(types.SELECT_INSTANCE_DATABASE, res.data.data.getServiceInstances);
+        context.commit(
+          types.SELECT_INSTANCE_DATABASE,
+          res.data.data.getServiceInstances,
+        );
       });
   },
-  GET_DATABASES(context: { commit: Commit, state: State  }, params: {duration: string}) {
+  GET_DATABASES(
+    context: { commit: Commit; state: State },
+    params: { duration: string },
+  ) {
     return graph
       .query('queryDatabases')
       .params(params)
@@ -449,9 +494,12 @@ const actions: ActionTree<State, ActionsParamType> = {
         context.commit(types.SELECT_INSTANCE_DATABASE, res.data.data.services);
       });
   },
-  GET_SERVICE_TOPOLOGY(context: { commit: Commit, state: State  }, params) {
+  GET_SERVICE_TOPOLOGY(context: { commit: Commit; state: State }, params) {
     const { isPrevious, currentOptions } = context.state;
-    params.serviceId = isPrevious === StatusType.Pre ? currentOptions.preService.key : currentOptions.nextService.key;
+    params.serviceId =
+      isPrevious === StatusType.Pre
+        ? currentOptions.preService.key
+        : currentOptions.nextService.key;
     return graph
       .query('queryServiceTopo')
       .params(params)
@@ -462,20 +510,39 @@ const actions: ActionTree<State, ActionsParamType> = {
         context.commit(types.SET_SERVICE_TOPOLOGY, res.data.data.topo);
       });
   },
-  RENDER_CHART(context: {dispatch: Dispatch, commit: Commit}, date: string) {
+  RENDER_CHART(context: { dispatch: Dispatch; commit: Commit }, date: string) {
     context.commit(types.CLEAR_CHART_VAL);
-    context.dispatch('GET_COMPARISON', {duration: date, type: ServiceType.PREVIOUS});
-    context.dispatch('GET_COMPARISON', {duration: date, type: ServiceType.NEXT});
+    context.dispatch('GET_COMPARISON', {
+      duration: date,
+      type: ServiceType.PREVIOUS,
+    });
+    context.dispatch('GET_COMPARISON', {
+      duration: date,
+      type: ServiceType.NEXT,
+    });
   },
-  SELECT_CONFIG(context: {commit: Commit, state: State, dispatch: Dispatch}, params: any) {
-    const isPrevious = params.type.includes(StatusType.Next) ? StatusType.Next : StatusType.Pre;
+  SELECT_CONFIG(
+    context: { commit: Commit; state: State; dispatch: Dispatch },
+    params: any,
+  ) {
+    const isPrevious = params.type.includes(StatusType.Next)
+      ? StatusType.Next
+      : StatusType.Pre;
 
     context.commit(types.SET_ISPREVIOUS, isPrevious);
     context.commit(types.UPDATE_CONFIG, params);
 
     const { currentOptions } = context.state;
-    const objType = isPrevious === StatusType.Next ? currentOptions.nextType : currentOptions.preType;
-    const typeList = [ChangeType.PreService, ChangeType.NextService, ChangeType.PreType, ChangeType.NextType];
+    const objType =
+      isPrevious === StatusType.Next
+        ? currentOptions.nextType
+        : currentOptions.preType;
+    const typeList = [
+      ChangeType.PreService,
+      ChangeType.NextService,
+      ChangeType.PreType,
+      ChangeType.NextType,
+    ];
 
     if (typeList.includes(params.type)) {
       if (objType.key === ObjectType.Service) {
@@ -487,14 +554,15 @@ const actions: ActionTree<State, ActionsParamType> = {
       } else if (objType.key === ObjectType.ServiceEndpoint) {
         context.dispatch('GET_SERVICE_ENDPOINTS', params.duration);
       } else if (objType.key === ObjectType.Database) {
-        context.dispatch('GET_DATABASES', {duration: params.duration});
+        context.dispatch('GET_DATABASES', { duration: params.duration });
       } else if (objType.key === ObjectType.ServiceDependency) {
-        context.dispatch('GET_SERVICE_TOPOLOGY', {duration: params.duration});
+        context.dispatch('GET_SERVICE_TOPOLOGY', { duration: params.duration });
       }
     }
   },
   GET_COMPARISON(
-    context: {commit: Commit, state: State, dispatch: Dispatch, getters: any}, param: {duration: string, type: string},
+    context: { commit: Commit; state: State; dispatch: Dispatch; getters: any },
+    param: { duration: string; type: string },
   ) {
     let variablesData = {
       duration: param.duration,
@@ -513,76 +581,113 @@ const actions: ActionTree<State, ActionsParamType> = {
       };
       queryVal = context.getters.queryNextValue;
     }
-    return axios.post('/graphql', {
-      query: queryVal,
-      variables: variablesData,
-    }, {cancelToken: cancelToken()}).then((res: AxiosResponse<any>) => {
+    return axios
+      .post(
+        '/graphql',
+        {
+          query: queryVal,
+          variables: variablesData,
+        },
+        { cancelToken: cancelToken() },
+      )
+      .then((res: AxiosResponse<any>) => {
         const data = res.data.data;
         if (!data) {
           return;
         }
-        context.dispatch('FORMAT_VALUE', {value: data, type: param.type});
-    });
+        context.dispatch('FORMAT_VALUE', { value: data, type: param.type });
+      });
   },
-  FORMAT_VALUE(context: {commit: Commit, state: State, dispatch: Dispatch}, params: {value: any, type: string}) {
+  FORMAT_VALUE(
+    context: { commit: Commit; state: State; dispatch: Dispatch },
+    params: { value: any; type: string },
+  ) {
     if (!(params && params.value)) {
       return;
     }
     if (params.value.endpointSLA) {
-      params.value.endpointSLA.values = params.value.endpointSLA.values.map((i: any) => {
-        return {value: i.value / 100};
-      });
+      params.value.endpointSLA.values = params.value.endpointSLA.values.map(
+        (i: any) => {
+          return { value: i.value / 100 };
+        },
+      );
     }
     if (params.value.databaseSLA) {
-      params.value.databaseSLA.values = params.value.databaseSLA.values.map((i: any) => {
-        return {value: i.value / 100};
-    });
+      params.value.databaseSLA.values = params.value.databaseSLA.values.map(
+        (i: any) => {
+          return { value: i.value / 100 };
+        },
+      );
     }
     if (params.value.serviceSLA) {
-      params.value.serviceSLA.values = params.value.serviceSLA.values.map((i: any) => {
-        return {value: i.value / 100};
-      });
+      params.value.serviceSLA.values = params.value.serviceSLA.values.map(
+        (i: any) => {
+          return { value: i.value / 100 };
+        },
+      );
     }
     if (params.value.instanceSLA) {
-      params.value.instanceSLA.values = params.value.instanceSLA.values.map((i: any) => {
-        return {value: i.value / 100};
-      });
+      params.value.instanceSLA.values = params.value.instanceSLA.values.map(
+        (i: any) => {
+          return { value: i.value / 100 };
+        },
+      );
     }
     if (params.value.serviceApdexScore) {
-      params.value.serviceApdexScore.values = params.value.serviceApdexScore.values.map((i: any) => {
-        return {value: (i.value / 10000).toFixed(2)};
-      });
+      params.value.serviceApdexScore.values = params.value.serviceApdexScore.values.map(
+        (i: any) => {
+          return { value: (i.value / 10000).toFixed(2) };
+        },
+      );
     }
     if (params.value.heap && params.value.maxHeap) {
       params.value.heap.values = params.value.heap.values.map((i: any) => {
-        return {value: (i.value / 1048576).toFixed(2)};
+        return { value: (i.value / 1048576).toFixed(2) };
       });
-      params.value.maxHeap.values = params.value.maxHeap.values.map((i: any, index: number) => {
-        const val = i.value > -1 ? ((i.value / 1048576) - params.value.heap.values[index].value).toFixed(2) : 0;
-        return {value: val};
-      });
+      params.value.maxHeap.values = params.value.maxHeap.values.map(
+        (i: any, index: number) => {
+          const val =
+            i.value > -1
+              ? (
+                  i.value / 1048576 -
+                  params.value.heap.values[index].value
+                ).toFixed(2)
+              : 0;
+          return { value: val };
+        },
+      );
       if (Math.max.apply(Math, params.value.maxHeap.values) === -1) {
         params.value.maxHeap.values = 'Max Heap Unlimited';
       }
     }
     if (params.value.nonheap && params.value.maxNonHeap) {
-      params.value.nonheap.values = params.value.nonheap.values.map((i: any) => {
-        return {value : (i.value / 1048576).toFixed(2)};
-      });
-      params.value.maxNonHeap.values = params.value.maxNonHeap.values
-        .map((i: any, index: number) => {
-          const val = i.value > -1 ? ((i.value / 1048576) - params.value.nonheap.values[index].value).toFixed(2) : 0;
-          return {value: val};
-        });
+      params.value.nonheap.values = params.value.nonheap.values.map(
+        (i: any) => {
+          return { value: (i.value / 1048576).toFixed(2) };
+        },
+      );
+      params.value.maxNonHeap.values = params.value.maxNonHeap.values.map(
+        (i: any, index: number) => {
+          const val =
+            i.value > -1
+              ? (
+                  i.value / 1048576 -
+                  params.value.nonheap.values[index].value
+                ).toFixed(2)
+              : 0;
+          return { value: val };
+        },
+      );
       if (Math.max.apply(Math, params.value.maxNonHeap.values) === -1) {
         params.value.maxNonHeap.values = 'Max NonHeap Unlimited';
       }
     }
     if (params.value.clrHeap) {
-      params.value.clrHeap.values =
-      params.value.clrHeap.values.map((i: any) => {
-        return { value: (i.value / 1048576 ).toFixed(2)};
-      });
+      params.value.clrHeap.values = params.value.clrHeap.values.map(
+        (i: any) => {
+          return { value: (i.value / 1048576).toFixed(2) };
+        },
+      );
     }
     context.commit(types.SET_CHARTVAL, params);
   },

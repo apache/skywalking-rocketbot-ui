@@ -21,12 +21,14 @@ import * as option from './query/option';
 import * as trace from './query/trace';
 import * as topology from './query/topology';
 import * as alarm from './query/alarm';
+import * as profile from './query/profile';
 
 const query: any = {
   ...option,
   ...trace,
   ...topology,
   ...alarm,
+  ...profile,
 };
 
 class Graph {
@@ -36,10 +38,14 @@ class Graph {
     return this;
   }
   public params(variablesData: any): AxiosPromise<void> {
-    return axios.post('/graphql', {
-      query: query[this.queryData],
-      variables: variablesData,
-    }, { cancelToken: cancelToken() });
+    return axios.post(
+      '/graphql',
+      {
+        query: query[this.queryData],
+        variables: variablesData,
+      },
+      { cancelToken: cancelToken() },
+    );
   }
 }
 

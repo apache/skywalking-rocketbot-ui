@@ -137,9 +137,12 @@ const getters = {
         interval = 86400000;
         break;
       case 'MONTH':
-        interval = (getter.duration.end.getTime() - getter.duration.start.getTime())
-          / (getter.duration.end.getFullYear() * 12 + getter.duration.end.getMonth()
-            - getter.duration.start.getFullYear() * 12 - getter.duration.start.getMonth());
+        interval =
+          (getter.duration.end.getTime() - getter.duration.start.getTime()) /
+          (getter.duration.end.getFullYear() * 12 +
+            getter.duration.end.getMonth() -
+            getter.duration.start.getFullYear() * 12 -
+            getter.duration.start.getMonth());
         break;
     }
     const utcSpace = (parseInt(state.utc + '', 10) + new Date().getTimezoneOffset() / 60) * 3600000;
@@ -182,9 +185,13 @@ const mutations: MutationTree<State> = {
   },
   [types.RUN_EVENTS](state: State): void {
     clearTimeout(timer);
-    timer = setTimeout(() => state.eventStack.forEach((event: any) => {
-      setTimeout(event(), 0);
-    }), 500);
+    timer = setTimeout(
+      () =>
+        state.eventStack.forEach((event: any) => {
+          setTimeout(event(), 0);
+        }),
+      500,
+    );
   },
   [types.SET_EDIT](state: State, status: boolean): void {
     state.edit = status;
@@ -199,6 +206,12 @@ const actions: ActionTree<State, any> = {
   },
   SET_DURATION(context: { commit: Commit }, data: Duration): void {
     context.commit(types.SET_DURATION, data);
+    if (window.axiosCancel.length !== 0) {
+      for (const event of window.axiosCancel) {
+        setTimeout(event(), 0);
+      }
+      window.axiosCancel = [];
+    }
     context.commit(types.RUN_EVENTS);
   },
   RESET_DURATION(context: { commit: Commit }): void {

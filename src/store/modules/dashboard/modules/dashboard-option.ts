@@ -20,7 +20,6 @@ import * as types from '../mutation-types';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
 
-
 export interface State {
   services: any;
   currentService: any;
@@ -44,13 +43,14 @@ const initState: State = {
 };
 
 // getters
-const getters = {
-};
+const getters = {};
 
 // mutations
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: any) {
-    if (!data.length) { return; }
+    if (!data.length) {
+      return;
+    }
     state.services = data;
     if (!state.currentService.key && data.length) {
       state.currentService = data[0];
@@ -60,9 +60,11 @@ const mutations: MutationTree<State> = {
     state.currentService = service;
   },
   [types.SET_SEARCH_ENDPOINTS](state: State, data: any) {
-    if (!data.length) { return; }
+    if (!data.length) {
+      return;
+    }
     state.endpoints = data;
-    if ((!state.currentEndpoint.key && data.length) || state.endpoints.indexOf(state.currentEndpoint) === -1 ) {
+    if ((!state.currentEndpoint.key && data.length) || state.endpoints.indexOf(state.currentEndpoint) === -1) {
       state.currentEndpoint = data[0];
     }
   },
@@ -72,14 +74,14 @@ const mutations: MutationTree<State> = {
       state.currentEndpoint = {};
       return;
     }
-    if ((!state.currentEndpoint.key && data.length) || state.endpoints.indexOf(state.currentEndpoint) === -1 ) {
+    if ((!state.currentEndpoint.key && data.length) || state.endpoints.indexOf(state.currentEndpoint) === -1) {
       state.currentEndpoint = data[0];
     }
   },
   [types.SET_SEARCH_ENDPOINTS](state: State, data: any) {
     state.endpoints = data;
     if (!data.length) {
-      return ;
+      return;
     }
     if (!state.currentEndpoint.key && data.length) {
       state.currentEndpoint = data[0];
@@ -103,7 +105,9 @@ const mutations: MutationTree<State> = {
   },
   [types.SET_DATABASES](state: State, data: any) {
     state.databases = data;
-    if (!data.length) { return; }
+    if (!data.length) {
+      return;
+    }
     if (!state.currentDatabase.key && data.length) {
       state.currentDatabase = data[0];
     }
@@ -115,57 +119,61 @@ const mutations: MutationTree<State> = {
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_SERVICES(context: { commit: Commit, rootState: any  }, params: any) {
-    return graph.query('queryServices').params(params)
+  GET_SERVICES(context: { commit: Commit; rootState: any }, params: any) {
+    return graph
+      .query('queryServices')
+      .params(params)
       .then((res: AxiosResponse) => {
         context.commit(types.SET_SERVICES, res.data.data.services);
       });
   },
-  GET_SERVICE_ENDPOINTS(context: { commit: Commit, state: any }) {
+  GET_SERVICE_ENDPOINTS(context: { commit: Commit; state: any }, params: any) {
     if (!context.state.currentService.key) {
       return new Promise((resolve) => resolve());
     }
     return graph
       .query('queryEndpoints')
-      .params({serviceId: context.state.currentService.key, keyword: ''})
+      .params({ serviceId: context.state.currentService.key, keyword: '', ...params })
       .then((res: AxiosResponse) => {
         context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
       });
   },
   GET_ENDPOINTS(context: { commit: Commit }, params: any) {
-    return graph.query('queryEndpoints').params(params)
-    .then((res: AxiosResponse) => {
-      context.commit(types.SET_ENDPOINTS, res.data.data.endpoints);
-    });
-  },
-  SEARCH_ENDPOINTS(context: { commit: Commit, state: any }, params: any) {
     return graph
       .query('queryEndpoints')
-      .params({serviceId: context.state.currentService.key, keyword: params})
+      .params(params)
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_ENDPOINTS, res.data.data.endpoints);
+      });
+  },
+  SEARCH_ENDPOINTS(context: { commit: Commit; state: any }, params: any) {
+    return graph
+      .query('queryEndpoints')
+      .params({ serviceId: context.state.currentService.key, keyword: params })
       .then((res: AxiosResponse) => {
         context.commit(types.SET_SEARCH_ENDPOINTS, res.data.data.getEndpoints);
       });
   },
-  GET_SERVICE_INSTANCES(context: { commit: Commit, state: any }, params: any) {
+  GET_SERVICE_INSTANCES(context: { commit: Commit; state: any }, params: any) {
     if (!context.state.currentService.key) {
       return new Promise((resolve) => resolve());
     }
     return graph
       .query('queryInstances')
-      .params({serviceId: context.state.currentService.key, ...params})
+      .params({ serviceId: context.state.currentService.key, ...params })
       .then((res: AxiosResponse) => {
         context.commit(types.SET_INSTANCES, res.data.data.getServiceInstances);
       });
   },
   GET_INSTANCES(context: { commit: Commit }, params: any) {
     return graph
-    .query('queryInstances')
-    .params(params)
-    .then((res: AxiosResponse) => {
-      context.commit(types.SET_INSTANCES, res.data.data);
-    });
+      .query('queryInstances')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_INSTANCES, res.data.data);
+      });
   },
-  GET_DATABASES(context: { commit: Commit, rootState: any  }, params: any) {
+  GET_DATABASES(context: { commit: Commit; rootState: any }, params: any) {
     return graph
       .query('queryDatabases')
       .params(params)
@@ -173,14 +181,13 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_DATABASES, res.data.data.services);
       });
   },
-  SELECT_SERVICE(context: { commit: Commit, dispatch: Dispatch }, params: any) {
+  SELECT_SERVICE(context: { commit: Commit; dispatch: Dispatch }, params: any) {
     context.commit('SET_CURRENT_SERVICE', params.service);
-    context.dispatch('MIXHANDLE_GET_OPTION', {...params, compType: 'service'})
-    .then(() => {
-      context.dispatch('RUN_EVENTS', {}, {root: true});
+    context.dispatch('MIXHANDLE_GET_OPTION', { ...params, compType: 'service' }).then(() => {
+      context.dispatch('RUN_EVENTS', {}, { root: true });
     });
   },
-  SELECT_ENDPOINT(context: { commit: Commit, dispatch: Dispatch, state: any }, params: any) {
+  SELECT_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: any }, params: any) {
     context.commit('SET_CURRENT_ENDPOINT', params.endpoint);
     context.dispatch('GET_QUERY', {
       serviceId: context.state.currentService.key || '',
@@ -191,7 +198,7 @@ const actions: ActionTree<State, any> = {
       duration: params.duration,
     });
   },
-  SELECT_INSTANCE(context: { commit: Commit, dispatch: Dispatch, state: any }, params: any) {
+  SELECT_INSTANCE(context: { commit: Commit; dispatch: Dispatch; state: any }, params: any) {
     context.commit('SET_CURRENT_INSTANCE', params.instance);
     context.dispatch('GET_QUERY', {
       serviceId: context.state.currentService.key || '',
@@ -202,9 +209,9 @@ const actions: ActionTree<State, any> = {
       duration: params.duration,
     });
   },
-  SELECT_DATABASE(context: { commit: Commit, dispatch: Dispatch }, params: any) {
+  SELECT_DATABASE(context: { commit: Commit; dispatch: Dispatch }, params: any) {
     context.commit('SET_CURRENT_DATABASE', params);
-    context.dispatch('RUN_EVENTS', {}, {root: true});
+    context.dispatch('RUN_EVENTS', {}, { root: true });
   },
   SET_CURRENT_STATE(context: { commit: Commit }, params: any) {
     context.commit(types.SET_CURRENT_SERVICE, params.service ? params.service : {});
@@ -212,14 +219,15 @@ const actions: ActionTree<State, any> = {
     context.commit(types.SET_CURRENT_ENDPOINT, params.endpoint ? params.endpoint : {});
     context.commit(types.SET_CURRENT_INSTANCE, params.instance ? params.instance : {});
   },
-  MIXHANDLE_GET_OPTION(context: { commit: Commit, dispatch: Dispatch, state: State, getters: any }, params: any) {
+  MIXHANDLE_GET_OPTION(context: { commit: Commit; dispatch: Dispatch; state: State; getters: any }, params: any) {
     switch (params.compType) {
       case 'service':
-        return context.dispatch('GET_SERVICES', {duration: params.duration})
+        return context
+          .dispatch('GET_SERVICES', { duration: params.duration })
           .then(() => context.dispatch('GET_SERVICE_ENDPOINTS'))
-          .then(() => context.dispatch('GET_SERVICE_INSTANCES', {duration: params.duration}));
+          .then(() => context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration }));
       case 'database':
-        return context.dispatch('GET_DATABASES', {duration: params.duration});
+        return context.dispatch('GET_DATABASES', { duration: params.duration });
       default:
         break;
     }

@@ -51,29 +51,13 @@ export const endpointSLA =  {
     }
   }`,
 };
-export const endpointPercent =  {
+export const endpointPercent = {
   variable: ['$endpointId: ID!', '$duration: Duration!'],
   fragment: `
-  endpointP99: getLinearIntValues(metric: {
-    name: "endpoint_p99"
+  endpointPercentile: getMultipleLinearIntValues(metric: {
+    name: "endpoint_percentile"
     id: $endpointId
-  }, duration: $duration) { values { value } }
-  endpointP95: getLinearIntValues(metric: {
-    name: "endpoint_p95"
-    id: $endpointId
-  }, duration: $duration) { values { value } }
-  endpointP90: getLinearIntValues(metric: {
-    name: "endpoint_p90"
-    id: $endpointId
-  }, duration: $duration) { values { value } }
-  endpointP75: getLinearIntValues(metric: {
-    name: "endpoint_p75"
-    id: $endpointId
-  }, duration: $duration) { values { value } }
-  endpointP50: getLinearIntValues(metric: {
-    name: "endpoint_p50"
-    id: $endpointId
-  }, duration: $duration) { values { value } }`,
+  }, numOfLinear: 5, duration: $duration) { values { value } }`,
 };
 
 export const endpointTopology =  {

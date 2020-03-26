@@ -14,51 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 export const dependencyServerPercentile = {
   variable: '$duration: Duration!, $id: ID!',
   fragment: `
-  serverSideP50: getLinearIntValues(metric: {
-      name: "service_relation_server_p50"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    serverSideP75: getLinearIntValues(metric: {
-      name: "service_relation_server_p75"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    serverSideP90: getLinearIntValues(metric: {
-      name: "service_relation_server_p90"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    serverSideP95: getLinearIntValues(metric: {
-      name: "service_relation_server_p95"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    serverSideP99: getLinearIntValues(metric: {
-      name: "service_relation_server_p99"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-`};
+  serverSidePercentile: getMultipleLinearIntValues(metric: {
+    name: "service_relation_server_percentile"
+    id: $id
+  }, numOfLinear: 5, duration: $duration) { values { value } }`,
+};
 
 export const dependencyServerResponseTimeTrend = {
   variable: '$duration: Duration!, $id: ID!',
@@ -71,7 +34,8 @@ export const dependencyServerResponseTimeTrend = {
         value
       }
     }
-`};
+`,
+};
 
 export const dependencyServerThroughputTrend = {
   variable: '$duration: Duration!, $id: ID!',
@@ -84,7 +48,8 @@ export const dependencyServerThroughputTrend = {
         value
       }
     }
-`};
+`,
+};
 
 export const dependencyServerSLATrend = {
   variable: '$duration: Duration!, $id: ID!',
@@ -97,7 +62,8 @@ export const dependencyServerSLATrend = {
         value
       }
     }
-`};
+`,
+};
 
 export const dependencyClientResponseTimeTrend = {
   variable: '$duration: Duration!, $id: ID!',
@@ -110,7 +76,8 @@ export const dependencyClientResponseTimeTrend = {
         value
       }
     }
-`};
+`,
+};
 
 export const dependencyClientThroughputTrend = {
   variable: '$duration: Duration!, $id: ID!',
@@ -123,7 +90,8 @@ export const dependencyClientThroughputTrend = {
         value
       }
     }
-`};
+`,
+};
 
 export const dependencyClientSLATrend = {
   variable: '$duration: Duration!, $id: ID!',
@@ -136,49 +104,13 @@ export const dependencyClientSLATrend = {
         value
       }
     }
-`};
-
+`,
+};
 export const dependencyClientPercentile = {
   variable: '$duration: Duration!, $id: ID!',
   fragment: `
-  clientSideP50: getLinearIntValues(metric: {
-      name: "service_relation_client_p50"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    clientSideP75: getLinearIntValues(metric: {
-      name: "service_relation_client_p75"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    clientSideP90: getLinearIntValues(metric: {
-      name: "service_relation_client_p90"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    clientSideP95: getLinearIntValues(metric: {
-      name: "service_relation_client_p95"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-    clientSideP99: getLinearIntValues(metric: {
-      name: "service_relation_client_p99"
-      id: $id
-    }, duration: $duration) {
-      values {
-        value
-      }
-    }
-`};
+  clientSidePercentile: getMultipleLinearIntValues(metric: {
+    name: "service_relation_client_percentile"
+    id: $id
+  }, numOfLinear: 5, duration: $duration) { values { value } }`,
+};

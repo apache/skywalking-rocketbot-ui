@@ -31,16 +31,33 @@ import RkDropdown from './rk-dropdown.vue';
 import RkBack from './rk-back.vue';
 import RkButton from './rk-button.vue';
 import RkIcon from './rk-icon.vue';
+import RkRadio from './rk-radio.vue';
 
 const components: any = {
-  RkHeader, RkFooter, RkProgress, RkDate, RkPanel, RkEcharts, RkPage, RkSidebox, RkFooterTime, RkSelect,
-  RkPopper, RkDropdown, RkBack, RkButton, RkIcon,
+  RkHeader,
+  RkFooter,
+  RkProgress,
+  RkDate,
+  RkPanel,
+  RkEcharts,
+  RkPage,
+  RkSidebox,
+  RkFooterTime,
+  RkSelect,
+  RkPopper,
+  RkDropdown,
+  RkBack,
+  RkButton,
+  RkIcon,
+  RkRadio,
 };
 
 const componentsName: string[] = Object.keys(components);
-export default {install: (vue: any) => {
-  componentsName.forEach((i) => {
-    vue.component(i, components[i]);
-  });
-  vue.use(noty);
-}};
+export default {
+  install: (vue: any) => {
+    componentsName.forEach((i) => {
+      vue.component(i, components[i]);
+    });
+    vue.use(noty);
+  },
+};

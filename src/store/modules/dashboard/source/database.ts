@@ -47,28 +47,35 @@ export const initState: State = {
 };
 
 export const SetDatabase = (state: State, params: any) => {
-  if (params && params.databaseResponseTime) {
+  if (!params) {
+    return;
+  }
+  if (params.databaseResponseTime) {
     state.databaseResponseTime.ResponseTime = params.databaseResponseTime.values.map((i: Value) => i.value);
   }
-  if (params && params.databaseSLA) {
+  if (params.databaseSLA) {
     state.databaseSLA.SLA = params.databaseSLA.values.map((i: Value) => i.value / 100);
   }
-  if (params && params.databaseP50
-    && params.databaseP75 && params.databaseP90 && params.databaseP95 && params.databaseP99) {
-    state.databasePercent.p50 = params.databaseP50.values.map((i: Value) => i.value);
-    state.databasePercent.p75 = params.databaseP75.values.map((i: Value) => i.value);
-    state.databasePercent.p90 = params.databaseP90.values.map((i: Value) => i.value);
-    state.databasePercent.p95 = params.databaseP95.values.map((i: Value) => i.value);
-    state.databasePercent.p99 = params.databaseP99.values.map((i: Value) => i.value);
+  if (params.databasePercentile) {
+    const PercentileItem = ['p50', 'p75', 'p90', 'p95', 'p99'] as string[];
+    const databasePercent = {} as any;
+
+    params.databasePercentile.forEach((item: any, index: number) => {
+      if (item && item.values) {
+        const key = PercentileItem[index] as string;
+        databasePercent[key] = item.values.map((i: any) => i.value);
+      }
+    });
+    state.databasePercent = databasePercent;
   }
-  if (params && params.databaseTopNRecords) {
+  if (params.databaseTopNRecords) {
     state.databaseTopNRecords = params.databaseTopNRecords.map((i: any) => ({
       key: i.traceId,
       label: i.statement,
       value: i.latency,
     }));
   }
-  if (params && params.databaseThroughput) {
+  if (params.databaseThroughput) {
     state.databaseThroughput.Throughput = params.databaseThroughput.values.map((i: Value) => i.value);
   }
 };
