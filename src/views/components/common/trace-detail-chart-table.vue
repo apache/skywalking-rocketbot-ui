@@ -262,6 +262,7 @@ language governing permissions and * limitations under the License. */
             // if(segmentGroup[id].refs.length !==0 ) delete segmentGroup[id];
           })
         for (const i in segmentGroup) {
+          segmentGroup[i].children.sort((a, b) => a.startTime - b.startTime);
           if (segmentGroup[i].refs && segmentGroup[i].refs.length === 0 || !segmentGroup[i].refs) {
             this.segmentId.push(segmentGroup[i]);
           }

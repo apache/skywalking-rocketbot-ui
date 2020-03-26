@@ -293,6 +293,7 @@ language governing permissions and * limitations under the License. */
           });
         });
         for (const i in segmentGroup) {
+          segmentGroup[i].children.sort((a, b) => a.startTime - b.startTime);
           if (segmentGroup[i].refs.length === 0 ) {
             this.segmentId.push(segmentGroup[i]);
           }
