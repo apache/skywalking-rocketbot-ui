@@ -13,8 +13,7 @@ language governing permissions and * limitations under the License. */
       </div>
       <div class="rk-alarm-table-i g-sm-9">
         <div class="message mb-5 b">
-          <span class="mr-10 sm">#{{ i.key }}</span
-          >{{ i.message }}
+          {{ i.message }}
         </div>
         <div
           class="rk-alarm-table-i-scope mr-10 l sm"
