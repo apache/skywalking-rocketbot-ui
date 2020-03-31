@@ -50,6 +50,9 @@ language governing permissions and * limitations under the License. */
       this.myChart = echarts.init(el, '');
       this.myChart.setOption(this.option);
       this.myChart.on('click', (params: any) => {
+        if (!this.clickEvent) {
+          return;
+        }
         this.clickEvent(params);
       });
     }
