@@ -116,15 +116,13 @@ limitations under the License. -->
       if (monthTemp < 10) {
         month = `0${monthTemp}`;
       }
-      if (step === 'MONTH') {
-        return `${year}-${month}`;
-      }
+
       const dayTemp = date.getDate();
       let day: string = `${dayTemp}`;
       if (dayTemp < 10) {
         day = `0${dayTemp}`;
       }
-      if (step === 'DAY') {
+      if (step === 'DAY' || step === 'MONTH') {
         return `${year}-${month}-${day}`;
       }
       const hourTemp = date.getHours();
@@ -146,7 +144,7 @@ limitations under the License. -->
     }
 
     private globalTimeFormat(time: Date[]) {
-      let step = 'MINUTE';
+      let step = 'DAY';
       const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
       if (unix <= 60 * 60 * 1000) {
         step = 'MINUTE';
@@ -154,8 +152,6 @@ limitations under the License. -->
         step = 'HOUR';
       } else if (unix <= 30 * 24 * 60 * 60 * 1000) {
         step = 'DAY';
-      } else {
-        step = 'MONTH';
       }
       return {
         start: this.dateFormat(time[0], step),
