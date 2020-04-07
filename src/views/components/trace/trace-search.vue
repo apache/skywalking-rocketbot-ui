@@ -144,13 +144,13 @@ limitations under the License. -->
     }
 
     private globalTimeFormat(time: Date[]) {
-      let step = 'DAY';
+      let step = 'MINUTE';
       const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
       if (unix <= 60 * 60 * 1000) {
         step = 'MINUTE';
       } else if (unix <= 24 * 60 * 60 * 1000) {
         step = 'HOUR';
-      } else if (unix <= 30 * 24 * 60 * 60 * 1000) {
+      } else {
         step = 'DAY';
       }
       return {

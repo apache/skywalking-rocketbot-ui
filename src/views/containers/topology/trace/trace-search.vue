@@ -108,15 +108,12 @@ limitations under the License. -->
       if (monthTemp < 10) {
         month = `0${monthTemp}`;
       }
-      if (step === 'MONTH') {
-        return `${year}-${month}`;
-      }
       const dayTemp = date.getDate();
       let day: string = `${dayTemp}`;
       if (dayTemp < 10) {
         day = `0${dayTemp}`;
       }
-      if (step === 'DAY') {
+      if (step === 'DAY' || step === 'MONTH') {
         return `${year}-${month}-${day}`;
       }
       const hourTemp = date.getHours();
@@ -144,10 +141,8 @@ limitations under the License. -->
         step = 'MINUTE';
       } else if (unix <= 24 * 60 * 60 * 1000) {
         step = 'HOUR';
-      } else if (unix <= 30 * 24 * 60 * 60 * 1000) {
-        step = 'DAY';
       } else {
-        step = 'MONTH';
+        step = 'DAY';
       }
       return {
         start: this.dateFormat(time[0], step),
