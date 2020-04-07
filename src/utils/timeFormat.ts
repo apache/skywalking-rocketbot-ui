@@ -24,10 +24,8 @@ const timeFormat = (time: Date[]): Duration => {
     step = 'MINUTE';
   } else if (unix <= 24 * 60 * 60 * 1000) {
     step = 'HOUR';
-  } else if (unix <= 30 * 24 * 60 * 60 * 1000) {
-    step = 'DAY';
   } else {
-    step = 'MONTH';
+    step = 'DAY';
   }
   return { start: time[0], end: time[1], step };
 };

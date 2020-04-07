@@ -30,7 +30,6 @@ limitations under the License. -->
   import { Duration } from '@/types/global';
   import { Vue, Component, Watch } from 'vue-property-decorator';
   import { State, Action, Mutation } from 'vuex-class';
-  import timeFormat from '@/utils/timeFormat';
 
   @Component
   export default class Footerssd extends Vue {

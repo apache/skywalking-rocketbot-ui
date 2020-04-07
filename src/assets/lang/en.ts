@@ -124,6 +124,7 @@ const m = {
   includeChildren: 'Include Children',
   excludeChildren: 'Exclude Children',
   view: 'View',
+  timeTips: 'Time interval cannot exceed 60 days',
 };
 
 export default m;
