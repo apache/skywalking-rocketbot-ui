@@ -31,14 +31,17 @@ limitations under the License. -->
     computed: {
       time: {
         get() {
-          return [this.$store.state.rocketbot.durationRow.start, this.$store.state.rocketbot.durationRow.end];
+          return [
+            (this as any).$store.state.rocketbot.durationRow.start,
+            (this as any).$store.state.rocketbot.durationRow.end,
+          ];
         },
         set(val: Date[]) {
-          this.timeRange = val[1].getTime() - val[0].getTime() > 60 * 24 * 60 * 60 * 1000 ? 1 : 0;
-          if (this.timeRange) {
+          (this as any).timeRange = val[1].getTime() - val[0].getTime() > 60 * 24 * 60 * 60 * 1000 ? 1 : 0;
+          if ((this as any).timeRange) {
             return;
           }
-          this.$store.dispatch('SET_DURATION', timeFormat(val));
+          (this as any).$store.dispatch('SET_DURATION', timeFormat(val));
         },
       },
     },
