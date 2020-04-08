@@ -49,7 +49,7 @@ limitations under the License. -->
       <div class="application">
         <span v-tooltip:bottom="data.serviceCode || '-'">{{ data.serviceCode }}</span>
       </div>
-      <div class="application" v-show="type">
+      <div class="application" v-show="type === 'profile'">
         <span @click="viewSpanDetail">{{ this.$t('view') }}</span>
       </div>
     </div>
