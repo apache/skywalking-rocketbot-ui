@@ -49,7 +49,7 @@ limitations under the License. -->
       <div class="application">
         <span v-tooltip:bottom="data.serviceCode || '-'">{{ data.serviceCode }}</span>
       </div>
-      <div class="application">
+      <div class="application" v-show="type === 'profile'">
         <span @click="viewSpanDetail">{{ this.$t('view') }}</span>
       </div>
     </div>
@@ -61,7 +61,7 @@ limitations under the License. -->
 <script lang="js">
   export default {
     name: 'item',
-    props: ['data'],
+    props: ['data', 'type'],
     watch: {
       data() {
         const items = document.querySelectorAll('.trace-item');

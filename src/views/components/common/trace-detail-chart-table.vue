@@ -20,7 +20,7 @@ limitations under the License. -->
       </svg>
     </div>
     <TraceContainer :type="HeaderType">
-      <Item v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+      <Item v-for="(item, index) in tableData" :data="item" :key="'key' + index" :type="HeaderType" />
       <div class="trace-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
     </TraceContainer>
     <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('spanInfo')">
