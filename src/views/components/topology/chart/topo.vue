@@ -76,6 +76,7 @@ limitations under the License. -->
         event.stopPropagation();
         event.preventDefault();
         this.$store.commit('rocketTopo/SET_NODE', {});
+        this.$store.commit('rocketTopo/SET_LINK', {});
         this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
         this.tool.attr('style', 'display: none');
       });
@@ -110,10 +111,12 @@ limitations under the License. -->
         const {x, y, vx, vy, fx, fy, index, ...rest} = d;
         this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
         this.$store.commit('rocketTopo/SET_NODE', rest);
+        this.$store.commit('rocketTopo/SET_LINK', {});
       },
       handleLinkClick(d) {
         event.stopPropagation();
         this.$store.commit('rocketTopo/SET_NODE', {});
+        this.$store.commit('rocketTopo/SET_LINK', d);
         this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
         this.$store.commit('rocketTopo/SET_MODE', d.detectPoints);
         this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' :

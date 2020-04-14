@@ -82,6 +82,7 @@ export const SET_HONEYCOMB_NODE = 'SET_HONEYCOMB_NODE';
 export const SET_SHOW_DIALOG = 'SET_SHOW_DIALOG';
 export const SET_INSTANCE_DEPENDENCY = 'SET_INSTANCE_DEPENDENCY';
 export const SET_TOPO_COPY = 'SET_TOPO_COPY';
+export const SET_LINK = 'SET_LINK';
 
 // comparison
 export const SET_CHARTVAL = 'SET_CHARTVAL';

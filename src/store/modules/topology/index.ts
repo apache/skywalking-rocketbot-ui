@@ -56,6 +56,7 @@ export interface State {
   detectPoints: string[];
   selectedServiceCall: Call | null;
   currentNode: any;
+  currentLink: any;
   current: Option;
   mode: boolean;
   getResponseTimeTrend: number[];
@@ -83,6 +84,7 @@ const initState: State = {
   _calls: [],
   _nodes: [],
   currentNode: {},
+  currentLink: {},
   current: {
     key: 'default',
     label: 'default',
@@ -120,6 +122,9 @@ const mutations = {
   },
   [types.SET_NODE](state: State, data: any) {
     state.currentNode = data;
+  },
+  [types.SET_LINK](state: State, data: any) {
+    state.currentLink = data;
   },
   [types.SET_TOPO](state: State, data: any) {
     state.calls = data.calls;

@@ -105,9 +105,19 @@ limitations under the License. -->
       this.drawerMainBodyHeight = `${document.body.clientHeight - 50}px`;
     }
 
+    private beforeMount() {
+      this.SET_EVENTS([this.handleRefresh]);
+    }
+
     private created() {
-      this.SET_EVENTS([]);
       this.SET_COMPS_TREE(this.initState.tree);
+    }
+
+    private handleRefresh() {
+      this.$store.dispatch(
+        this.stateTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO',
+        { ...this.stateTopo.currentLink, duration: this.durationTime },
+      );
     }
 
     private mounted() {
@@ -119,6 +129,7 @@ limitations under the License. -->
       window.removeEventListener('resize', this.resize);
       this.CLEAR_TOPO_INFO();
       this.CLEAR_TOPO();
+      this.SET_EVENTS([]);
     }
 
     get types() {
