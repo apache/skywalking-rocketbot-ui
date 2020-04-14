@@ -20,6 +20,7 @@ limitations under the License. -->
       <span class="mr-5">{{ data.name }}</span>
     </div>
     <div class="group-services">
+      <div class="group-services-wrapper">
       <div class="ell mb-10" v-for="i in servicesMap" :key="i.key">
         <input
           type="checkbox"
@@ -34,6 +35,8 @@ limitations under the License. -->
         />
         <span>{{ i.label }}</span>
       </div>
+      </div>
+
       <RkButton size="sm" class="mr-5" @click="$emit('select', data.id)">Render</RkButton>
     </div>
   </div>
@@ -61,6 +64,11 @@ limitations under the License. -->
           display: block;
         }
       }
+    }
+    .group-services-wrapper{
+      max-height: 250px;
+      overflow: auto;
+      padding-right: 15px;
     }
     .group-services {
       display: none;
