@@ -91,7 +91,7 @@ limitations under the License. -->
     },
   };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
   .rk-page {
     display: inline-flex;
     .icon {
