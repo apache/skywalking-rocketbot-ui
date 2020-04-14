@@ -240,6 +240,9 @@ const actions: ActionTree<State, any> = {
         duration: params.duration,
       })
       .then((res: AxiosResponse) => {
+        if (!res.data.data) {
+          return;
+        }
         context.commit('SET_TOPO_RELATION', res.data.data);
         context.commit(types.SET_SELECTED_CALL, params);
       });
@@ -249,6 +252,9 @@ const actions: ActionTree<State, any> = {
       .query('queryTopoClientInfo')
       .params(params)
       .then((res: AxiosResponse) => {
+        if (!res.data.data) {
+          return;
+        }
         context.commit('SET_TOPO_RELATION', res.data.data);
         context.commit(types.SET_SELECTED_CALL, params);
       });
