@@ -56,6 +56,7 @@ export interface State {
   detectPoints: string[];
   selectedServiceCall: Call | null;
   currentNode: any;
+  currentLink: any;
   current: Option;
   mode: boolean;
   getResponseTimeTrend: number[];
@@ -83,6 +84,7 @@ const initState: State = {
   _calls: [],
   _nodes: [],
   currentNode: {},
+  currentLink: {},
   current: {
     key: 'default',
     label: 'default',
@@ -120,6 +122,9 @@ const mutations = {
   },
   [types.SET_NODE](state: State, data: any) {
     state.currentNode = data;
+  },
+  [types.SET_LINK](state: State, data: any) {
+    state.currentLink = data;
   },
   [types.SET_TOPO](state: State, data: any) {
     state.calls = data.calls;
@@ -235,6 +240,9 @@ const actions: ActionTree<State, any> = {
         duration: params.duration,
       })
       .then((res: AxiosResponse) => {
+        if (!res.data.data) {
+          return;
+        }
         context.commit('SET_TOPO_RELATION', res.data.data);
         context.commit(types.SET_SELECTED_CALL, params);
       });
@@ -244,6 +252,9 @@ const actions: ActionTree<State, any> = {
       .query('queryTopoClientInfo')
       .params(params)
       .then((res: AxiosResponse) => {
+        if (!res.data.data) {
+          return;
+        }
         context.commit('SET_TOPO_RELATION', res.data.data);
         context.commit(types.SET_SELECTED_CALL, params);
       });
