@@ -54,7 +54,7 @@ limitations under the License. -->
       </div>
     </div>
     <div v-show="data.children && data.children.length > 0 && displayChildren" class="children-trace">
-      <item v-for="(item, index) in data.children" :key="index" :data="item"> </item>
+      <item v-for="(item, index) in data.children" :key="index" :data="item" :type="type"> </item>
     </div>
   </div>
 </template>
