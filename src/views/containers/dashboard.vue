@@ -33,8 +33,8 @@ limitations under the License. -->
         @dragStart="dragStart"
       >
       </DashboardItem>
+      <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item" @click="ADD_COMP()">+ Add An Item</div>
     </div>
-    <!-- <DashboardComp v-if="rocketGlobal.edit" :compType="compType" :rocketComps="rocketComps" /> -->
   </div>
 </template>
 
@@ -45,7 +45,6 @@ limitations under the License. -->
   import ToolGroup from '@/views/components/dashboard/tool-group.vue';
   import ToolNav from '@/views/components/dashboard/tool-nav.vue';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
-  import DashboardComp from '@/views/components/dashboard/dashboard-comp.vue';
 
   @Component({
     components: {
@@ -53,7 +52,6 @@ limitations under the License. -->
       ToolGroup,
       ToolNav,
       DashboardItem,
-      DashboardComp,
     },
   })
   export default class Dashboard extends Vue {
@@ -66,6 +64,7 @@ limitations under the License. -->
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('durationTime') private durationTime: any;
+    @Mutation('ADD_COMP') private ADD_COMP: any;
     private isRouterAlive: boolean = true;
     private dragIndex: number = NaN;
     public dragStart(index: number) {
@@ -114,5 +113,17 @@ limitations under the License. -->
     padding: 20px 15px;
     height: 100%;
     flex-grow: 1;
+  }
+  .rk-add-dashboard-item {
+    width: 290px;
+    height: 250px;
+    text-align: center;
+    line-height: 250px;
+    border: 1px dashed rgba(196, 200, 225, 0.5);
+    clear: both;
+    margin: 0 5px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
   }
 </style>
