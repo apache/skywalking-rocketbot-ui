@@ -34,7 +34,7 @@ limitations under the License. -->
       >
       </DashboardItem>
     </div>
-    <DashboardComp v-if="rocketGlobal.edit" :compType="compType" :rocketComps="rocketComps" />
+    <!-- <DashboardComp v-if="rocketGlobal.edit" :compType="compType" :rocketComps="rocketComps" /> -->
   </div>
 </template>
 

@@ -39,15 +39,17 @@ limitations under the License. -->
       <div class="rk-dashboard-group-add-box" v-if="show">
         <div class="mb-10 vm">{{ $t('createGroup') }}</div>
         <div class="sm grey mb-5 mr-10">{{ $t('groupType') }}</div>
-        <select v-model="type" class="rk-dashboard-group-sel mb-5 long">
-          <option value="service">{{ $t('service') }}</option>
-          <!-- <option value="proxy">Proxy</option> -->
+        <select v-model="type" class="rk-dashboard-group-sel">
+          <option value="service"> Standard APM </option>
+          <option value="metric">Metrics</option>
           <option value="database">{{ $t('database') }}</option>
         </select>
         <div class="sm grey  mb-5 mr-10">{{ $t('groupName') }}</div>
         <input class="mb-5 rk-dashboard-group-input" type="text" v-model="name" />
-        <label class="mb-10 dib"><input type="checkbox" v-model="template" />{{ $t('template') }}</label>
-        <a class="rk-btn r vm long tc" @click="handleCreate">{{ $t('confirm') }}</a>
+        <div v-show="type === 'database'">
+          <label class="mb-10 dib"><input type="checkbox" v-model="template" />{{ $t('template') }}</label>
+        </div>
+        <a class="rk-btn r vm long tc confirm" @click="handleCreate">{{ $t('confirm') }}</a>
       </div>
     </a>
   </nav>
@@ -91,11 +93,14 @@ limitations under the License. -->
       if (this.type === 'service') {
         template = 'groupService';
       }
+      if (this.type === 'metric') {
+        template = 'nouse';
+      }
       if (this.type === 'database') {
         template = 'groupDatabase';
-      }
-      if (!this.template) {
-        template = 'nouse';
+        if (!this.template) {
+          template = 'nouse';
+        }
       }
       this.ADD_COMPS_GROUP({ name: this.name, type: this.type, template });
       this.handleHide();
@@ -114,6 +119,8 @@ limitations under the License. -->
   .rk-dashboard-group-sel {
     outline: none;
     border: 0;
+    margin: 0 0 5px 0;
+    width: 160px;
   }
   .rk-dashboard-group-add {
     position: relative;
@@ -128,6 +135,9 @@ limitations under the License. -->
     color: #eee;
     background-color: #252a2f;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+    .confirm {
+      margin: 10px 0;
+    }
   }
   .rk-dashboard-group-add-box:after {
     bottom: 100%;
