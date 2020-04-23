@@ -31,13 +31,6 @@ export default [
     h: 250,
   },
   {
-    d: 'globalBrief',
-    c: 'ChartBrief',
-    t: 'Global Brief',
-    w: 3,
-    h: 250,
-  },
-  {
     d: 'globalThroughput',
     c: 'ChartTrace',
     t: 'Global Top Throughput',

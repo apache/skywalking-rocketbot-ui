@@ -16,15 +16,17 @@ limitations under the License. -->
   <div>
     <div class="rk-dashboard-bar flex-h" v-if="compType === 'service'">
       <div class="rk-dashboard-bar-reload">
-        <svg
-          class="icon lg vm cp rk-btn ghost"
-          :style="`color:${!rocketGlobal.edit ? '' : '#ffc107'}`"
-          @click="handleSetEdit"
-        >
-          <use :xlink:href="!rocketGlobal.edit ? '#lock' : '#lock-open'"></use>
-        </svg>
+        <span v-tooltip:bottom="{ content: rocketGlobal.edit ? 'view' : 'edit' }">
+          <svg
+            class="icon lg vm cp rk-btn ghost"
+            :style="`color:${!rocketGlobal.edit ? '' : '#ffc107'}`"
+            @click="handleSetEdit"
+          >
+            <use :xlink:href="!rocketGlobal.edit ? '#lock' : '#lock-open'"></use>
+          </svg>
+        </span>
       </div>
-      <div class="rk-dashboard-bar-reload">
+      <div class="rk-dashboard-bar-reload" v-if="compType === dashboardType.SERVICE">
         <svg class="icon lg vm cp rk-btn ghost" @click="handleOption">
           <use xlink:href="#retry"></use>
         </svg>
@@ -51,7 +53,7 @@ limitations under the License. -->
         icon="disk"
       />
     </div>
-    <div class="rk-dashboard-bar flex-h" v-if="compType === 'proxy'">
+    <!-- <div class="rk-dashboard-bar flex-h" v-if="compType === dashboardType.METRIC">
       <div class="rk-dashboard-bar-reload">
         <svg class="icon vm cp rk-btn ghost" @click="handleOption">
           <use xlink:href="#retry"></use>
@@ -78,8 +80,8 @@ limitations under the License. -->
         :data="stateDashboard.instances"
         icon="disk"
       />
-    </div>
-    <div class="rk-dashboard-bar flex-h" v-else-if="compType === 'database'">
+    </div> -->
+    <div class="rk-dashboard-bar flex-h" v-else-if="compType === dashboardType.DATABASE">
       <div class="rk-dashboard-bar-reload">
         <svg
           class="icon lg vm cp rk-btn ghost"
@@ -110,6 +112,8 @@ limitations under the License. -->
   import ToolBarSelect from './tool-bar-select.vue';
   import ToolBarEndpointSelect from './tool-bar-endpoint-select.vue';
   import { State, Action, Mutation } from 'vuex-class';
+  import { DASHBOARDTYPE } from './constant';
+
   @Component({ components: { ToolBarSelect, ToolBarEndpointSelect } })
   export default class ToolBar extends Vue {
     @Prop() private compType!: any;
@@ -124,6 +128,7 @@ limitations under the License. -->
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+    private dashboardType = DASHBOARDTYPE;
     get lastKey() {
       const current = this.rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children;
       if (!current.length) {

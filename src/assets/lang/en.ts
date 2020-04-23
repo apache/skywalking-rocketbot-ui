@@ -125,6 +125,7 @@ const m = {
   excludeChildren: 'Exclude Children',
   view: 'View',
   timeTips: 'Time interval cannot exceed 60 days',
+  standardAPM: 'Standard APM',
 };
 
 export default m;

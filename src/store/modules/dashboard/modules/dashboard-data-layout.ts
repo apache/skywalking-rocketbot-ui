@@ -117,30 +117,11 @@ const mutations: MutationTree<State> = {
     }
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
-  [types.ADD_COMPS_TREE](state: State, params: any) {
+  [types.ADD_COMPS_TREE](state: State, params: { name: string }) {
     if (!params.name) {
       return;
     }
-    switch (params.template) {
-      case 'nouse':
-        state.tree[state.group].children.push({ name: params.name, children: [] });
-        break;
-      case 'global':
-        state.tree[state.group].children.push({ name: params.name, children: globalTemp });
-        break;
-      case 'service':
-        state.tree[state.group].children.push({ name: params.name, children: serviceTemp });
-        break;
-      case 'endpoint':
-        state.tree[state.group].children.push({ name: params.name, children: endpointTemp });
-        break;
-      case 'instance':
-        state.tree[state.group].children.push({ name: params.name, children: instanceTemp });
-        break;
-      case 'database':
-        state.tree[state.group].children.push({ name: params.name, children: databaseTemp });
-        break;
-    }
+    state.tree[state.group].children.push({ name: params.name, children: [] });
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
   [types.DELETE_COMPS_GROUP](state: State, index: number) {
@@ -151,14 +132,23 @@ const mutations: MutationTree<State> = {
     state.tree[state.group].children.splice(index, 1);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
-  [types.ADD_COMP](state: State) {
-    const comp = {
-      c: 'ChartTrace',
-      w: 3,
-      d: 'globalThroughput',
-      t: 'Global Top Throughput',
-      h: 250,
-    };
+  [types.ADD_COMP](state: State, param: { type: string } = { type: 'service' }) {
+    const comp =
+      param.type === 'database'
+        ? {
+            c: 'ChartLine',
+            w: 3,
+            d: 'databaseThroughput',
+            t: 'Database Throughput',
+            h: 250,
+          }
+        : {
+            c: 'ChartTrace',
+            w: 3,
+            d: 'globalThroughput',
+            t: 'Global Top Throughput',
+            h: 250,
+          };
     state.tree[state.group].children[state.current].children.push(comp);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },

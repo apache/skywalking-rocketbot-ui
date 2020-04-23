@@ -17,14 +17,6 @@
 
 export default [
   {
-    o: 'Global',
-    d: 'globalBrief',
-    c: 'ChartBrief',
-    t: 'Global Brief',
-    w: 3,
-    h: 250,
-  },
-  {
     o: 'ServiceEndpoint',
     d: 'endpointResponseTime',
     c: 'ChartNum',

@@ -33,7 +33,9 @@ limitations under the License. -->
         @dragStart="dragStart"
       >
       </DashboardItem>
-      <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item" @click="ADD_COMP()">+ Add An Item</div>
+      <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item" @click="ADD_COMP({ type: compType })">
+        + Add An Item
+      </div>
     </div>
   </div>
 </template>
@@ -77,7 +79,10 @@ limitations under the License. -->
       });
     }
     private get compType() {
-      return this.rocketComps.tree[this.rocketComps.group].type;
+      return (
+        (this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].type) ||
+        'service'
+      );
     }
     private handleRefresh() {
       this.GET_QUERY({
@@ -120,7 +125,6 @@ limitations under the License. -->
     text-align: center;
     line-height: 250px;
     border: 1px dashed rgba(196, 200, 225, 0.5);
-    clear: both;
     margin: 0 5px;
     cursor: pointer;
     display: inline-block;

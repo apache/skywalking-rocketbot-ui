@@ -40,9 +40,9 @@ limitations under the License. -->
         <div class="mb-10 vm">{{ $t('createGroup') }}</div>
         <div class="sm grey mb-5 mr-10">{{ $t('groupType') }}</div>
         <select v-model="type" class="rk-dashboard-group-sel">
-          <option value="service"> Standard APM </option>
-          <option value="metric">Metrics</option>
-          <option value="database">{{ $t('database') }}</option>
+          <option :value="DASHBOARDTYPE.SERVICE">{{ $t('standardAPM') }}</option>
+          <option :value="DASHBOARDTYPE.METRIC">{{ $t('metrics') }}</option>
+          <option :value="DASHBOARDTYPE.DATABASE">{{ $t('database') }}</option>
         </select>
         <div class="sm grey  mb-5 mr-10">{{ $t('groupName') }}</div>
         <input class="mb-5 rk-dashboard-group-input" type="text" v-model="name" />
@@ -59,6 +59,7 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import { Mutation, Action, Getter } from 'vuex-class';
+  import { DASHBOARDTYPE } from './constant';
 
   @Component({})
   export default class ToolGroup extends Vue {
@@ -70,9 +71,10 @@ limitations under the License. -->
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Getter('durationTime') private durationTime: any;
     private name: string = '';
-    private type: string = 'service';
+    private type: string = DASHBOARDTYPE.SERVICE;
     private show: boolean = false;
     private template: boolean = false;
+    private DASHBOARDTYPE = DASHBOARDTYPE;
     private get compType() {
       return this.rocketComps.tree[this.rocketComps.group].type;
     }
@@ -85,18 +87,18 @@ limitations under the License. -->
     }
     private handleHide() {
       this.name = '';
-      this.type = 'service';
+      this.type = DASHBOARDTYPE.SERVICE;
       this.show = false;
     }
     private handleCreate() {
       let template = 'nouse';
-      if (this.type === 'service') {
+      if (this.type === DASHBOARDTYPE.SERVICE) {
         template = 'groupService';
       }
-      if (this.type === 'metric') {
+      if (this.type === DASHBOARDTYPE.METRIC) {
         template = 'nouse';
       }
-      if (this.type === 'database') {
+      if (this.type === DASHBOARDTYPE.DATABASE) {
         template = 'groupDatabase';
         if (!this.template) {
           template = 'nouse';

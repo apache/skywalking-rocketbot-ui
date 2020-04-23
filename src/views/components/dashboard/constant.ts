@@ -14,11 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Vue from 'vue';
-import { EventBus } from '@/event-bus';
 
-declare module 'vue/types/vue' {
-  interface Vue {
-    $eventBus: EventBus;
-  }
+export enum DASHBOARDTYPE {
+  SERVICE = 'service',
+  METRIC = 'metric',
+  DATABASE = 'database',
 }
