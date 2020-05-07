@@ -49,7 +49,7 @@ export default (d3, graph, tool, funcs, tip) => {
     .attr('x', 2)
     .attr('y', 10)
     .attr('style', 'cursor: move;')
-    .attr('xlink:href', (d) => (d.sla < 98 ? icons.CUBEERROR : icons.CUBE));
+    .attr('xlink:href', (d) => ((d.sla < 98 && d.isReal) ? icons.CUBEERROR : icons.CUBE));
   nodeEnter
     .append('image')
     .attr('width', 32)
