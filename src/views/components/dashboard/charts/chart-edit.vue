@@ -108,6 +108,13 @@ limitations under the License. -->
     margin: 0 -10px;
     height: 100%;
     overflow: auto;
+    select {
+      margin: 0;
+      height: 30px;
+      border: 1px solid #ddd;
+      background-color: #fff;
+      outline: none;
+    }
   }
 
   .rk-chart-edit-container {
@@ -127,12 +134,5 @@ limitations under the License. -->
     border-radius: 3px;
     border: 1px solid #ddd;
     // background-color: rgba(196, 200, 225, 0.2);
-  }
-  select {
-    margin: 0;
-    height: 30px;
-    border: 1px solid #ddd;
-    background-color: #fff;
-    outline: none;
   }
 </style>
