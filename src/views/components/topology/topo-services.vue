@@ -71,6 +71,16 @@ limitations under the License. -->
 
     private created() {
       this.fetchData();
+      const groups = localStorage.getItem('topology-groups');
+      if (groups) {
+        const jsonGroup = JSON.parse(groups);
+        if (!jsonGroup.length) {
+          this.GET_TOPO({
+            serviceId: 0,
+            duration: this.durationTime,
+          });
+        }
+      }
     }
   }
 </script>
