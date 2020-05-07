@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div>
-    <div class="rk-dashboard-bar flex-h" v-if="compType === 'service'">
+    <div class="rk-dashboard-bar flex-h" v-if="compType !== dashboardType.DATABASE">
       <div class="rk-dashboard-bar-reload">
         <span v-tooltip:bottom="{ content: rocketGlobal.edit ? 'view' : 'edit' }">
           <svg
@@ -26,12 +26,13 @@ limitations under the License. -->
           </svg>
         </span>
       </div>
-      <div class="rk-dashboard-bar-reload" v-if="compType === dashboardType.SERVICE">
+      <div class="rk-dashboard-bar-reload">
         <svg class="icon lg vm cp rk-btn ghost" @click="handleOption">
           <use xlink:href="#retry"></use>
         </svg>
       </div>
       <ToolBarSelect
+        v-if="compType === dashboardType.SERVICE"
         @onChoose="selectService"
         :title="this.$t('currentService')"
         :current="stateDashboard.currentService"
@@ -39,6 +40,7 @@ limitations under the License. -->
         icon="package"
       />
       <ToolBarEndpointSelect
+        v-if="compType === dashboardType.SERVICE"
         @onChoose="selectEndpoint"
         :title="this.$t('currentEndpoint')"
         :current="stateDashboard.currentEndpoint"
@@ -46,6 +48,7 @@ limitations under the License. -->
         icon="code"
       />
       <ToolBarSelect
+        v-if="compType === dashboardType.SERVICE"
         @onChoose="selectInstance"
         :title="this.$t('currentInstance')"
         :current="stateDashboard.currentInstance"
@@ -81,7 +84,7 @@ limitations under the License. -->
         icon="disk"
       />
     </div> -->
-    <div class="rk-dashboard-bar flex-h" v-else-if="compType === dashboardType.DATABASE">
+    <div class="rk-dashboard-bar flex-h" v-else>
       <div class="rk-dashboard-bar-reload">
         <svg
           class="icon lg vm cp rk-btn ghost"
@@ -164,7 +167,7 @@ limitations under the License. -->
     background-color: #333840;
   }
   .rk-dashboard-bar-reload {
-    padding: 0 5px;
+    padding: 15px 5px;
     border-right: 2px solid #252a2f;
   }
 </style>

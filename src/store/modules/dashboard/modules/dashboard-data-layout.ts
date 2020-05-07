@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-import { ActionTree, MutationTree } from 'vuex';
-import { CompsItem, CompsTree } from '@/types/dashboard';
-import globalTemp from '../template/global-template';
-import serviceTemp from '../template/service-template';
-import endpointTemp from '../template/endpoint-template';
-import instanceTemp from '../template/instance-template';
-import databaseTemp from '../template/database-template';
+import { MutationTree } from 'vuex';
+import { CompsTree } from '@/types/dashboard';
+// import globalTemp from '../template/global-template';
+// import serviceTemp from '../template/service-template';
+// import endpointTemp from '../template/endpoint-template';
+// import instanceTemp from '../template/instance-template';
+// import databaseTemp from '../template/database-template';
 import groupServiceTemp from '../template/group-service-template';
 import groupDatabaseTemp from '../template/group-database-template';
 import * as types from '../mutation-types';
@@ -137,17 +137,17 @@ const mutations: MutationTree<State> = {
       param.type === 'database'
         ? {
             c: 'ChartLine',
-            w: 3,
+            w: 6,
             d: 'databaseThroughput',
             t: 'Database Throughput',
-            h: 250,
+            h: 350,
           }
         : {
             c: 'ChartTrace',
-            w: 3,
+            w: 6,
             d: 'globalThroughput',
             t: 'Global Top Throughput',
-            h: 250,
+            h: 350,
           };
     state.tree[state.group].children[state.current].children.push(comp);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
@@ -156,8 +156,9 @@ const mutations: MutationTree<State> = {
     state.tree[state.group].children[state.current].children.splice(index, 1);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
-  [types.EDIT_COMP](state: State, params: any) {
+  [types.EDIT_COMP_CONFIG](state: State, params: any) {
     const temp: any = state.tree[state.group].children[state.current].children[params.index];
+
     temp[params.type] = params.value;
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },

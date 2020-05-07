@@ -19,7 +19,7 @@ limitations under the License. -->
       v-for="(i, index) in rocketComps.tree[0].children[3].children"
       :key="index + i.t + i.w + i.d"
       :rocketGlobal="{ edit: false }"
-      :i="i"
+      :item="i"
     />
   </div>
 </template>

@@ -126,6 +126,7 @@ const m = {
   view: 'View',
   timeTips: 'Time interval cannot exceed 60 days',
   standardAPM: 'Standard APM',
+  entityType: 'Entity type',
 };
 
 export default m;

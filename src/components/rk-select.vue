@@ -39,7 +39,7 @@ limitations under the License. -->
         <use xlink:href="#arrow-down"></use>
       </svg>
     </div>
-    <div class="rk-sel" v-if="visible">
+    <div class="rk-sel" v-show="visible">
       <div>
         <input type="text" class="rk-sel-search" v-model="search" />
         <svg class="icon sm close" @click="search = ''" v-if="search">
@@ -66,11 +66,11 @@ limitations under the License. -->
   const Multiple = 'multiple';
   @Component
   export default class RkSelect extends Vue {
-    @Prop() public mode: any;
-    @Prop() public data!: any;
-    @Prop() public current!: any;
-    public search: string = '';
-    public visible: boolean = false;
+    @Prop() private mode: any;
+    @Prop() private data!: any;
+    @Prop() private current!: any;
+    private search: string = '';
+    private visible: boolean = false;
 
     get filterData() {
       return this.data.filter((i: any) => i.label.toUpperCase().indexOf(this.search.toUpperCase()) !== -1);
@@ -104,11 +104,12 @@ limitations under the License. -->
 <style lang="scss" scoped>
   .rk-bar-select {
     position: relative;
-    min-height: 40px;
+    height: 30px;
     justify-content: space-between;
     border: 1px solid #ddd;
     background: #fff;
     border-radius: 3px;
+    color: #000;
     .sm {
       line-height: 12px;
     }
@@ -137,12 +138,13 @@ limitations under the License. -->
   .rk-bar-i {
     height: 100%;
     width: 100%;
-    padding: 5px 15px;
+    padding: 5px 10px;
     overflow: auto;
   }
   .rk-sel {
     position: absolute;
     top: 100%;
+    left: 0;
     background: #fff;
     box-shadow: 0 1px 6px rgba(99, 99, 99, 0.2);
     border: 1px solid #ddd;

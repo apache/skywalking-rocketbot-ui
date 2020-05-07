@@ -28,7 +28,7 @@ limitations under the License. -->
         :key="index + i.t + i.w + i.d"
         :index="index"
         :rocketGlobal="rocketGlobal"
-        :i="i"
+        :item="i"
         :dragIndex="dragIndex"
         @dragStart="dragStart"
       >
@@ -41,7 +41,7 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator';
+  import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, State, Mutation } from 'vuex-class';
   import ToolBar from '@/views/components/dashboard/tool-bar.vue';
   import ToolGroup from '@/views/components/dashboard/tool-group.vue';
@@ -121,7 +121,7 @@ limitations under the License. -->
   }
   .rk-add-dashboard-item {
     width: 290px;
-    height: 250px;
+    height: 342px;
     text-align: center;
     line-height: 250px;
     border: 1px dashed rgba(196, 200, 225, 0.5);

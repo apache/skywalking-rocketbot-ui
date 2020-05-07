@@ -14,39 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Option } from './global';
-export interface Value {
-  value: number;
-}
 
-export interface CompsContainer {
-  service: CompsItem[];
-  database: CompsItem[];
-  proxy: CompsItem[];
-}
-export interface CompsItem {
-  o: string;
-  comp: string;
-  n: string;
-  t: string;
-  type?: string;
-  width: number;
-  entityType: string;
-  height: number;
-}
-export interface CompsGroup {
-  name: string;
-  children: CompsItem[];
-}
+export const EntityType = [
+  { key: 'Service', label: 'Service' },
+  { key: 'ServiceEndpoint', label: 'Service Endpoint' },
+  { key: 'ServiceInstance', label: 'Service Instance' },
+];
 
-export interface CompsTree {
-  name?: string;
-  type: string;
-  query: any;
-  children: any;
-}
-
-interface Fragment {
-  fragment: string;
-  variable: string;
-}
+export const DefaultType = { key: 'ServiceEndpoint', label: 'Service Endpoint' };

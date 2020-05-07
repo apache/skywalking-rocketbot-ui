@@ -15,8 +15,8 @@ limitations under the License. -->
 <template>
   <div
     class="rk-dashboard-item"
-    :class="`g-sm-${i.w}`"
-    :style="`height:${i.h}px;`"
+    :class="`g-sm-${item.w}`"
+    :style="`height:${item.h}px;`"
     draggable="true"
     @dragstart="$emit('dragStart', index)"
     @dragover="$event.preventDefault()"
@@ -26,18 +26,18 @@ limitations under the License. -->
       <svg class="icon cp red r" v-if="rocketGlobal.edit" @click="DELETE_COMP(index)">
         <use xlink:href="#file-deletion"></use>
       </svg>
-      <span>{{ i.t }}</span>
-      <span class="hint" v-if="rocketDashboard[i.d].Hint">({{ rocketDashboard[i.d].Hint }})</span>
+      <span>{{ item.t }}</span>
+      <span class="hint" v-if="rocketDashboard[item.d].Hint">({{ rocketDashboard[item.d].Hint }})</span>
     </div>
     <div class="rk-dashboard-item-body">
       <div style="height:100%;">
         <component
-          :is="rocketGlobal.edit ? 'ChartEdit' : i.c"
+          :is="rocketGlobal.edit ? 'ChartEdit' : item.c"
           ref="chart"
-          :i="i"
+          :item="item"
           :index="index"
           :intervalTime="intervalTime"
-          :data="rocketDashboard[i.d]"
+          :data="rocketDashboard[item.d]"
         ></component>
       </div>
     </div>
@@ -58,9 +58,10 @@ limitations under the License. -->
     @State('rocketDashboard') private rocketDashboard: any;
     @Getter('intervalTime') private intervalTime: any;
     @Prop() private rocketGlobal!: any;
-    @Prop() private i!: any;
+    @Prop() private item!: any;
     @Prop() private index!: number;
     @Prop() private dragIndex!: number;
+
     private drop() {
       this.SWICH_COMP({ start: this.dragIndex, end: this.index });
     }

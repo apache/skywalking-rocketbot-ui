@@ -48,5 +48,5 @@ export const DELETE_COMP = 'DELETE_COMP';
 export const SWICH_COMP = 'SWICH_COMP';
 export const SET_COMPS_TREE = 'SET_COMPS_TREE';
 export const SWICH_CURRENTCOMP = 'SWICH_CURRENTCOMP';
-export const EDIT_COMP = 'EDIT_COMP';
 export const SET_GROUP_QUERY = 'SET_GROUP_QUERY';
+export const EDIT_COMP_CONFIG = 'EDIT_COMP_CONFIG';

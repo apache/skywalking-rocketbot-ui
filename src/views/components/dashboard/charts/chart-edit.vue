@@ -21,9 +21,39 @@ limitations under the License. -->
         <input
           type="text"
           class="rk-chart-edit-input long"
-          :value="i.t"
-          @change="EDIT_COMP({ index, type: 't', value: $event.target.value })"
+          :value="item.t"
+          @change="EDIT_COMP_CONFIG({ index, type: 't', value: $event.target.value })"
         />
+      </div>
+      <div class="flex-h mb-5">
+        <div class="title grey sm">{{ $t('entityType') }}:</div>
+        <select class="long" @change="EDIT_COMP_CONFIG({ index, type: 'entityType', value: $event.target.value })">
+          <option v-for="type in EntityType" :value="type.key" :key="type.key">{{ type.label }}</option>
+        </select>
+      </div>
+      <div class="flex-h mb-5">
+        <div class="title grey sm">{{ $t('currentService') }}:</div>
+        <select class="long" @change="EDIT_COMP_CONFIG({ index, type: 'currentService', value: $event.target.value })">
+          <option v-for="service in stateDashboardOption.services" :value="service.key" :key="service.key">{{
+            service.label
+          }}</option>
+        </select>
+      </div>
+      <div class="flex-h mb-5" v-show="itemEntityType.key !== EntityType[0].key">
+        <div class="title grey sm">{{ $t('currentEndpoint') }}:</div>
+        <select class="long" @change="EDIT_COMP_CONFIG({ index, type: 'currentEndpoint', value: $event.target.value })">
+          <option v-for="endpoint in stateDashboardOption.endpoints" :value="endpoint.key" :key="endpoint.key">{{
+            endpoint.label
+          }}</option>
+        </select>
+      </div>
+      <div class="flex-h mb-5" v-show="itemEntityType.key === EntityType[2].key">
+        <div class="title grey sm">{{ $t('currentInstance') }}:</div>
+        <select class="long" @change="EDIT_COMP_CONFIG({ index, type: 'currentInstance', value: $event.target.value })">
+          <option v-for="instance in stateDashboardOption.instances" :value="instance.key" :key="instance.key">{{
+            instance.label
+          }}</option>
+        </select>
       </div>
       <div class="flex-h mb-5">
         <div class="title grey sm">{{ $t('width') }}:</div>
@@ -32,8 +62,8 @@ limitations under the License. -->
           min="1"
           max="12"
           class="rk-chart-edit-input long"
-          :value="i.w"
-          @change="EDIT_COMP({ index, type: 'w', value: $event.target.value })"
+          :value="item.w"
+          @change="EDIT_COMP_CONFIG({ index, type: 'w', value: $event.target.value })"
         />
       </div>
       <div class="flex-h">
@@ -42,8 +72,8 @@ limitations under the License. -->
           type="number"
           min="1"
           class="rk-chart-edit-input long"
-          :value="i.h"
-          @change="EDIT_COMP({ index, type: 'h', value: $event.target.value })"
+          :value="item.h"
+          @change="EDIT_COMP_CONFIG({ index, type: 'h', value: $event.target.value })"
         />
       </div>
     </div>
@@ -55,12 +85,22 @@ limitations under the License. -->
   import { State, Getter, Mutation } from 'vuex-class';
   import { Component, Prop } from 'vue-property-decorator';
 
+  import { EntityType, DefaultType } from './constant';
+
   @Component
   export default class ChartEdit extends Vue {
+    @State('rocketOption') private stateDashboardOption: any;
     @Mutation('EDIT_COMP') private EDIT_COMP: any;
-    @Prop() private i!: any;
+    @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
+    @Prop() private item!: any;
     @Prop() private index!: number;
     @Prop() private intervalTime!: any;
+    private EntityType = EntityType;
+    private DefaultType = DefaultType;
+
+    get itemEntityType() {
+      return this.item.entityType || DefaultType;
+    }
   }
 </script>
 <style lang="scss">
@@ -76,7 +116,7 @@ limitations under the License. -->
     border-radius: 4px;
     height: 100%;
     .title {
-      width: 45px;
+      width: 120px;
       flex-shrink: 0;
     }
   }
@@ -85,7 +125,14 @@ limitations under the License. -->
     outline: 0;
     padding: 4px 10px;
     border-radius: 3px;
-    // border: 1px solid #c1c5ca41;
-    background-color: rgba(196, 200, 225, 0.2);
+    border: 1px solid #ddd;
+    // background-color: rgba(196, 200, 225, 0.2);
+  }
+  select {
+    margin: 0;
+    height: 30px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    outline: none;
   }
 </style>

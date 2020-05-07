@@ -125,6 +125,8 @@ const m = {
   excludeChildren: '不包含子部分',
   view: '查看',
   timeTips: '时间区间不能超过60天',
+  standardAPM: '标准APM',
+  entityType: '实体类型',
 };
 
 export default m;
