@@ -146,6 +146,9 @@ const mutations: MutationTree<State> = {
             h: 350,
             version: '1.0',
             currentService: param.currentService,
+            entityType: 'Service',
+            independentSelector: true,
+            currentMetric: '',
           }
         : {
             c: 'ChartTrace',
@@ -155,6 +158,9 @@ const mutations: MutationTree<State> = {
             h: 350,
             version: '1.0',
             currentService: param.currentService,
+            entityType: 'Service',
+            independentSelector: true,
+            currentMetric: '',
           };
     state.tree[state.group].children[state.current].children.push(comp);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));

@@ -21,4 +21,7 @@ export const EntityType = [
   { key: 'ServiceInstance', label: 'Service Instance' },
 ];
 
-export const DefaultType = { key: 'Service', label: 'Service' };
+export const IndependentType = [
+  { key: 'true', label: 'Self selectors' },
+  { key: 'false', label: 'Common selectors' },
+];

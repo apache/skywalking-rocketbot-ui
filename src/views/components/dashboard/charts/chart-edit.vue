@@ -17,6 +17,18 @@ limitations under the License. -->
   <div class="rk-chart-edit">
     <div class="rk-chart-edit-container">
       <div class="flex-h mb-5">
+        <div class="title grey sm">{{ $t('metrics') }}:</div>
+        <select
+          class="long"
+          v-model="currentMetric"
+          @change="setItemConfig({ index, type: 'currentMetric', value: $event.target.value })"
+        >
+          <option v-for="service in stateDashboardOption.services" :value="service.key" :key="service.key">{{
+            service.label
+          }}</option>
+        </select>
+      </div>
+      <div class="flex-h mb-5">
         <div class="title grey sm">{{ $t('title') }}:</div>
         <input
           type="text"
@@ -37,7 +49,11 @@ limitations under the License. -->
       </div>
       <div class="flex-h mb-5">
         <div class="title grey sm">{{ $t('currentService') }}:</div>
-        <select class="long" @change="setItemConfig({ index, type: 'currentService', value: $event.target.value })">
+        <select
+          class="long"
+          v-model="currentService"
+          @change="setItemConfig({ index, type: 'currentService', value: $event.target.value })"
+        >
           <option v-for="service in stateDashboardOption.services" :value="service.key" :key="service.key">{{
             service.label
           }}</option>
@@ -45,14 +61,32 @@ limitations under the License. -->
       </div>
       <div class="flex-h mb-5" v-show="itemType === EntityType[1].key">
         <div class="title grey sm">{{ $t('currentEndpoint') }}:</div>
-        <select class="long" @change="setItemConfig({ index, type: 'currentEndpoint', value: $event.target.value })">
+        <select
+          class="long"
+          v-model="currentEndpoint"
+          @change="setItemConfig({ index, type: 'currentEndpoint', value: $event.target.value })"
+        >
           <option v-for="endpoint in endpoints" :value="endpoint.key" :key="endpoint.key">{{ endpoint.label }}</option>
         </select>
       </div>
       <div class="flex-h mb-5" v-show="itemType === EntityType[2].key">
         <div class="title grey sm">{{ $t('currentInstance') }}:</div>
-        <select class="long" @change="setItemConfig({ index, type: 'currentInstance', value: $event.target.value })">
+        <select
+          class="long"
+          v-model="currentInstance"
+          @change="setItemConfig({ index, type: 'currentInstance', value: $event.target.value })"
+        >
           <option v-for="instance in instances" :value="instance.key" :key="instance.key">{{ instance.label }}</option>
+        </select>
+      </div>
+      <div class="flex-h mb-5">
+        <div class="title grey sm">{{ $t('independentSelector') }}:</div>
+        <select
+          class="long"
+          v-model="independentSelector"
+          @change="EDIT_COMP_CONFIG({ index, type: 'independentSelector', value: $event.target.value })"
+        >
+          <option v-for="type in IndependentType" :value="type.key" :key="type.key">{{ type.label }}</option>
         </select>
       </div>
       <div class="flex-h mb-5">
@@ -76,16 +110,6 @@ limitations under the License. -->
           @change="EDIT_COMP_CONFIG({ index, type: 'h', value: $event.target.value })"
         />
       </div>
-      <div class="flex-h">
-        <div class="title grey sm">{{ $t('independentSelector') }}:</div>
-        <input
-          type="number"
-          min="1"
-          class="rk-chart-edit-input long"
-          :value="item.h"
-          @change="EDIT_COMP_CONFIG({ index, type: 'independentSelector', value: $event.target.value })"
-        />
-      </div>
     </div>
   </div>
 </template>
@@ -95,7 +119,7 @@ limitations under the License. -->
   import { State, Getter, Mutation, Action } from 'vuex-class';
   import { Component, Prop } from 'vue-property-decorator';
 
-  import { EntityType, DefaultType } from './constant';
+  import { EntityType, IndependentType } from './constant';
 
   @Component
   export default class ChartEdit extends Vue {
@@ -108,19 +132,25 @@ limitations under the License. -->
     @Prop() private index!: number;
     @Prop() private intervalTime!: any;
     private EntityType = EntityType;
-    private DefaultType = DefaultType;
+    private IndependentType = IndependentType;
     private itemType = '';
     private endpoints: any = [];
     private instances: any = [];
-
-    get itemEntityType() {
-      return this.item.entityType || DefaultType;
-    }
+    private currentService = '';
+    private currentEndpoint = '';
+    private currentInstance = '';
+    private independentSelector = true;
+    private currentMetric = '';
 
     private created() {
-      this.itemType = this.itemEntityType.key;
+      this.itemType = this.item.entityType;
       this.endpoints = this.stateDashboardOption.endpoints;
       this.instances = this.stateDashboardOption.instances;
+      this.currentService = this.item.currentService || this.stateDashboardOption.currentService;
+      this.currentEndpoint = this.item.currentEndpoint || this.stateDashboardOption.currentEndpoint;
+      this.currentInstance = this.item.currentInstance || this.stateDashboardOption.currentInstance;
+      this.currentMetric = this.item.currentMetric;
+      this.independentSelector = this.item.independentSelector;
     }
 
     private setItemConfig(params: { index: number; type: string; value: string }) {
@@ -129,16 +159,25 @@ limitations under the License. -->
       if (!this.item.version) {
         serviceId = this.stateDashboardOption.currentService.key;
       }
+      if (params.type === 'currentService') {
+        serviceId = params.value;
+      }
       if (this.itemType === EntityType[1].key) {
         this.GET_ITEM_ENDPOINTS({ serviceId, keyword: '', duration: this.durationTime }).then(
           (data: Array<{ key: string; label: string }>) => {
             this.endpoints = data;
+            if (data.length) {
+              this.currentEndpoint = data[0].key;
+            }
           },
         );
       } else if (this.itemType === EntityType[2].key) {
         this.GET_ITEM_INSTANCES({ serviceId, keyword: '', duration: this.durationTime }).then(
           (data: Array<{ key: string; label: string }>) => {
             this.instances = data;
+            if (data.length) {
+              this.currentInstance = data[0].key;
+            }
           },
         );
       }
