@@ -33,7 +33,11 @@ limitations under the License. -->
         @dragStart="dragStart"
       >
       </DashboardItem>
-      <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item" @click="ADD_COMP({ type: compType })">
+      <div
+        v-show="rocketGlobal.edit"
+        class="rk-add-dashboard-item"
+        @click="ADD_COMP({ type: compType, currentService: stateDashboardOption.services[0].key })"
+      >
         + Add An Item
       </div>
     </div>

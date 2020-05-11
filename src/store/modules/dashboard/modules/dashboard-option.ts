@@ -232,6 +232,22 @@ const actions: ActionTree<State, any> = {
         break;
     }
   },
+  GET_ITEM_ENDPOINTS(context, params) {
+    return graph
+      .query('queryEndpoints')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        return res.data.data.getEndpoints;
+      });
+  },
+  GET_ITEM_INSTANCES(context, params) {
+    return graph
+      .query('queryInstances')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        return res.data.data.getServiceInstances;
+      });
+  },
 };
 
 export default {

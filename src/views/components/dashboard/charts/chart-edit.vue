@@ -27,32 +27,32 @@ limitations under the License. -->
       </div>
       <div class="flex-h mb-5">
         <div class="title grey sm">{{ $t('entityType') }}:</div>
-        <select class="long" @change="EDIT_COMP_CONFIG({ index, type: 'entityType', value: $event.target.value })">
+        <select
+          class="long"
+          v-model="itemType"
+          @change="setItemConfig({ index, type: 'entityType', value: $event.target.value })"
+        >
           <option v-for="type in EntityType" :value="type.key" :key="type.key">{{ type.label }}</option>
         </select>
       </div>
       <div class="flex-h mb-5">
         <div class="title grey sm">{{ $t('currentService') }}:</div>
-        <select class="long" @change="EDIT_COMP_CONFIG({ index, type: 'currentService', value: $event.target.value })">
+        <select class="long" @change="setItemConfig({ index, type: 'currentService', value: $event.target.value })">
           <option v-for="service in stateDashboardOption.services" :value="service.key" :key="service.key">{{
             service.label
           }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="itemEntityType.key !== EntityType[0].key">
+      <div class="flex-h mb-5" v-show="itemType === EntityType[1].key">
         <div class="title grey sm">{{ $t('currentEndpoint') }}:</div>
-        <select class="long" @change="EDIT_COMP_CONFIG({ index, type: 'currentEndpoint', value: $event.target.value })">
-          <option v-for="endpoint in stateDashboardOption.endpoints" :value="endpoint.key" :key="endpoint.key">{{
-            endpoint.label
-          }}</option>
+        <select class="long" @change="setItemConfig({ index, type: 'currentEndpoint', value: $event.target.value })">
+          <option v-for="endpoint in endpoints" :value="endpoint.key" :key="endpoint.key">{{ endpoint.label }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="itemEntityType.key === EntityType[2].key">
+      <div class="flex-h mb-5" v-show="itemType === EntityType[2].key">
         <div class="title grey sm">{{ $t('currentInstance') }}:</div>
-        <select class="long" @change="EDIT_COMP_CONFIG({ index, type: 'currentInstance', value: $event.target.value })">
-          <option v-for="instance in stateDashboardOption.instances" :value="instance.key" :key="instance.key">{{
-            instance.label
-          }}</option>
+        <select class="long" @change="setItemConfig({ index, type: 'currentInstance', value: $event.target.value })">
+          <option v-for="instance in instances" :value="instance.key" :key="instance.key">{{ instance.label }}</option>
         </select>
       </div>
       <div class="flex-h mb-5">
@@ -76,13 +76,23 @@ limitations under the License. -->
           @change="EDIT_COMP_CONFIG({ index, type: 'h', value: $event.target.value })"
         />
       </div>
+      <div class="flex-h">
+        <div class="title grey sm">{{ $t('independentSelector') }}:</div>
+        <input
+          type="number"
+          min="1"
+          class="rk-chart-edit-input long"
+          :value="item.h"
+          @change="EDIT_COMP_CONFIG({ index, type: 'independentSelector', value: $event.target.value })"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
-  import { State, Getter, Mutation } from 'vuex-class';
+  import { State, Getter, Mutation, Action } from 'vuex-class';
   import { Component, Prop } from 'vue-property-decorator';
 
   import { EntityType, DefaultType } from './constant';
@@ -90,16 +100,49 @@ limitations under the License. -->
   @Component
   export default class ChartEdit extends Vue {
     @State('rocketOption') private stateDashboardOption: any;
-    @Mutation('EDIT_COMP') private EDIT_COMP: any;
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
+    @Action('GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
+    @Action('GET_ITEM_INSTANCES') private GET_ITEM_INSTANCES: any;
+    @Getter('durationTime') private durationTime: any;
     @Prop() private item!: any;
     @Prop() private index!: number;
     @Prop() private intervalTime!: any;
     private EntityType = EntityType;
     private DefaultType = DefaultType;
+    private itemType = '';
+    private endpoints: any = [];
+    private instances: any = [];
 
     get itemEntityType() {
       return this.item.entityType || DefaultType;
+    }
+
+    private created() {
+      this.itemType = this.itemEntityType.key;
+      this.endpoints = this.stateDashboardOption.endpoints;
+      this.instances = this.stateDashboardOption.instances;
+    }
+
+    private setItemConfig(params: { index: number; type: string; value: string }) {
+      let serviceId = this.item.currentService;
+
+      if (!this.item.version) {
+        serviceId = this.stateDashboardOption.currentService.key;
+      }
+      if (this.itemType === EntityType[1].key) {
+        this.GET_ITEM_ENDPOINTS({ serviceId, keyword: '', duration: this.durationTime }).then(
+          (data: Array<{ key: string; label: string }>) => {
+            this.endpoints = data;
+          },
+        );
+      } else if (this.itemType === EntityType[2].key) {
+        this.GET_ITEM_INSTANCES({ serviceId, keyword: '', duration: this.durationTime }).then(
+          (data: Array<{ key: string; label: string }>) => {
+            this.instances = data;
+          },
+        );
+      }
+      this.EDIT_COMP_CONFIG(params);
     }
   }
 </script>

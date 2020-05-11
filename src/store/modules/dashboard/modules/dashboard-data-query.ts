@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-import {Commit, ActionTree, MutationTree, Dispatch} from 'vuex';
-import axios, {AxiosPromise, AxiosResponse} from 'axios';
-import {cancelToken} from '@/utils/cancelToken';
-import {State} from './dashboard-data';
+import { Commit, ActionTree, Dispatch } from 'vuex';
+import axios, { AxiosPromise, AxiosResponse } from 'axios';
+import { cancelToken } from '@/utils/cancelToken';
+import { State } from './dashboard-data';
 import fragmentAll from '@/store/modules/dashboard/fragments';
 // getters
 const getters = {
@@ -49,36 +49,44 @@ query getEndpointInfo($endpointId: ID!) {
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_QUERY(context: { commit: Commit, dispatch: Dispatch, getters: any }, variablesData: any): AxiosPromise<void> {
-    return axios.post('/graphql', {
-      query: context.getters.Graphql,
-      variables: variablesData,
-    }, {cancelToken: cancelToken()}).then((res: AxiosResponse<any>) => {
-      const resData = res.data;
-      if (resData.data && resData.data.endpointTopology) {
-        const endpointIds = resData.data.endpointTopology.nodes.map((n: any) => n.name).filter(
-          function onlyUnique(value: any, index: number, self: any) {
-            return self.indexOf(value) === index;
-          },
-        );
-        Promise.all(
-          endpointIds.map((id: any) => {
-            return axios.post('/graphql', {
-              query: EndPointInfoGraphql,
-              variables: {endpointId: `${id}`},
-            }).then((endpointRes: AxiosResponse<any>) => {
-              return endpointRes.data.data.endpointInfo;
+  GET_QUERY(context: { commit: Commit; dispatch: Dispatch; getters: any }, variablesData: any): AxiosPromise<void> {
+    return axios
+      .post(
+        '/graphql',
+        {
+          query: context.getters.Graphql,
+          variables: variablesData,
+        },
+        { cancelToken: cancelToken() },
+      )
+      .then((res: AxiosResponse<any>) => {
+        const resData = res.data;
+        if (resData.data && resData.data.endpointTopology) {
+          const endpointIds = resData.data.endpointTopology.nodes
+            .map((n: any) => n.name)
+            .filter(function onlyUnique(value: any, index: number, self: any) {
+              return self.indexOf(value) === index;
             });
-          }),
-        ).then((endpointInfos) => {
-          resData.data.endpointTopology.endpoints = endpointInfos;
+          Promise.all(
+            endpointIds.map((id: any) => {
+              return axios
+                .post('/graphql', {
+                  query: EndPointInfoGraphql,
+                  variables: { endpointId: `${id}` },
+                })
+                .then((endpointRes: AxiosResponse<any>) => {
+                  return endpointRes.data.data.endpointInfo;
+                });
+            }),
+          ).then((endpointInfos) => {
+            resData.data.endpointTopology.endpoints = endpointInfos;
+            context.dispatch('COOK_SOURCE', resData);
+          });
+        } else {
           context.dispatch('COOK_SOURCE', resData);
-        });
-      } else {
-        context.dispatch('COOK_SOURCE', resData);
-      }
-      return res;
-    });
+        }
+        return res;
+      });
   },
 };
 

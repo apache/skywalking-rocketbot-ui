@@ -127,6 +127,7 @@ const m = {
   timeTips: 'Time interval cannot exceed 60 days',
   standardAPM: 'Standard APM',
   entityType: 'Entity type',
+  independentSelector: 'independentSelector',
 };
 
 export default m;

@@ -21,4 +21,4 @@ export const EntityType = [
   { key: 'ServiceInstance', label: 'Service Instance' },
 ];
 
-export const DefaultType = { key: 'ServiceEndpoint', label: 'Service Endpoint' };
+export const DefaultType = { key: 'Service', label: 'Service' };

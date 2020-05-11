@@ -132,7 +132,10 @@ const mutations: MutationTree<State> = {
     state.tree[state.group].children.splice(index, 1);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
-  [types.ADD_COMP](state: State, param: { type: string } = { type: 'service' }) {
+  [types.ADD_COMP](
+    state: State,
+    param: { type: string; currentService: string } = { type: 'service', currentService: '' },
+  ) {
     const comp =
       param.type === 'database'
         ? {
@@ -141,6 +144,8 @@ const mutations: MutationTree<State> = {
             d: 'databaseThroughput',
             t: 'Database Throughput',
             h: 350,
+            version: '1.0',
+            currentService: param.currentService,
           }
         : {
             c: 'ChartTrace',
@@ -148,6 +153,8 @@ const mutations: MutationTree<State> = {
             d: 'globalThroughput',
             t: 'Global Top Throughput',
             h: 350,
+            version: '1.0',
+            currentService: param.currentService,
           };
     state.tree[state.group].children[state.current].children.push(comp);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
