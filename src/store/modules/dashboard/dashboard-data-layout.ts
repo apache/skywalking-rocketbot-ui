@@ -120,12 +120,26 @@ const mutations: MutationTree<State> = {
     state.tree[state.group].children.push({ name: params.name, children: [] });
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
+  [types.IMPORT_COMPS_GROUP](state: State, params: any) {
+    state.tree.push(params);
+    window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
+  },
+  [types.IMPORT_COMPS_TREE](state: State, params: any) {
+    state.tree[state.group].children.push(params);
+    window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
+  },
   [types.DELETE_COMPS_GROUP](state: State, index: number) {
     state.tree.splice(index, 1);
+    if (!state.tree[state.group]) {
+      state.group--;
+    }
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
   [types.DELETE_COMPS_TREE](state: State, index: number) {
     state.tree[state.group].children.splice(index, 1);
+    if (!state.tree[state.group].children[state.current]) {
+      state.current--;
+    }
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
   [types.ADD_COMP](state: State) {

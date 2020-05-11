@@ -62,6 +62,21 @@ limitations under the License. -->
         <a class="rk-btn r vm long tc confirm" @click="handleCreate">{{ $t('confirm') }}</a>
       </div>
     </a>
+    <template v-if="rocketGlobal.edit">
+      <a class="rk-dashboard-import ml-10">
+        <input id="tool-nav-file" class="ipt" type="file" name="file" title="" accept=".json" @change="importData" />
+        <label for="tool-nav-file" class="input-label">
+          <svg class="icon open vm">
+            <use xlink:href="#folder_open"></use>
+          </svg>
+        </label>
+      </a>
+      <a class="ml-10">
+        <svg class="icon vm" @click="exportData">
+          <use xlink:href="#save_alt"></use>
+        </svg>
+      </a>
+    </template>
   </nav>
 </template>
 
@@ -69,11 +84,14 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop, Model } from 'vue-property-decorator';
   import { State, Mutation, Action } from 'vuex-class';
+  import { readFile } from '@/utils/readFile';
+  import { saveFile } from '@/utils/saveFile';
 
   @Component
   export default class ToolNav extends Vue {
     @Prop() private rocketGlobal: any;
     @Prop() private rocketComps: any;
+    @Mutation('IMPORT_COMPS_TREE') private IMPORT_COMPS_TREE: any;
     @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
     @Mutation('DELETE_COMPS_TREE') private DELETE_COMPS_TREE: any;
     @Mutation('ADD_COMPS_TREE') private ADD_COMPS_TREE: any;
@@ -95,6 +113,27 @@ limitations under the License. -->
       this.ADD_COMPS_TREE({ name: this.name });
       this.handleHide();
       // this.template = 'nouse';
+    }
+    private async importData(event: any) {
+      try {
+        const data: any = await readFile(event);
+        const { children, name, query, type } = data;
+        if (children && name && type && !query ) {
+          this.IMPORT_COMPS_TREE(data);
+        } else {
+          throw new Error();
+        }
+        const el: any = document.getElementById('tool-nav-file');
+        el!.value = '';
+      } catch (e) {
+        this.$modal.show('dialog', { text: 'ERROR' });
+      }
+    }
+    private exportData() {
+      const { tree, group, current } = this.rocketComps;
+      const currentData = tree[group].children[current];
+      const name = `${currentData.name}.comps.json`;
+      saveFile(currentData, name);
     }
   }
 </script>
@@ -163,5 +202,18 @@ limitations under the License. -->
   }
   .confirm {
     margin: 10px 0;
+  }
+  .rk-dashboard-import {
+    .icon.open {
+      margin-top: 2px;
+    }
+    .ipt {
+      display: none;
+    }
+    .input-label {
+      display: inline;
+      line-height: inherit;
+      cursor: pointer;
+    }
   }
 </style>
