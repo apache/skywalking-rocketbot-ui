@@ -17,6 +17,7 @@ limitations under the License. -->
     <ToolGroup :rocketGlobal="rocketGlobal" :rocketComps="rocketComps" />
     <ToolBar
       :rocketGlobal="rocketGlobal"
+      :rocketComps="rocketComps"
       :compType="compType"
       :durationTime="durationTime"
       :stateDashboard="stateDashboardOption"
@@ -35,6 +36,7 @@ limitations under the License. -->
       </DashboardItem>
     </div>
     <DashboardComp v-if="rocketGlobal.edit" :compType="compType" :rocketComps="rocketComps" />
+    <v-dialog width="300px" />
   </div>
 </template>
 

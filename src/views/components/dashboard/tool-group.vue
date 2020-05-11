@@ -32,24 +32,39 @@ limitations under the License. -->
         <use xlink:href="#file-deletion"></use>
       </svg>
     </span>
-    <a class="rk-dashboard-group-add" v-clickout="handleHide" v-if="rocketGlobal.edit">
-      <svg class="icon vm" @click="show = !show">
-        <use xlink:href="#todo-add"></use>
-      </svg>
-      <div class="rk-dashboard-group-add-box" v-if="show">
-        <div class="mb-10 vm">{{ $t('createGroup') }}</div>
-        <div class="sm grey mb-5 mr-10">{{ $t('groupType') }}</div>
-        <select v-model="type" class="rk-dashboard-group-sel mb-5 long">
-          <option value="service">{{ $t('service') }}</option>
-          <!-- <option value="proxy">Proxy</option> -->
-          <option value="database">{{ $t('database') }}</option>
-        </select>
-        <div class="sm grey  mb-5 mr-10">{{ $t('groupName') }}</div>
-        <input class="mb-5 rk-dashboard-group-input" type="text" v-model="name" />
-        <label class="mb-10 dib"><input type="checkbox" v-model="template" />{{ $t('template') }}</label>
-        <a class="rk-btn r vm long tc" @click="handleCreate">{{ $t('confirm') }}</a>
-      </div>
-    </a>
+    <span v-if="rocketGlobal.edit">
+      <a class="rk-dashboard-group-add" v-clickout="handleHide">
+        <svg class="icon vm" @click="show = !show">
+          <use xlink:href="#todo-add"></use>
+        </svg>
+        <div class="rk-dashboard-group-add-box" v-if="show">
+          <div class="mb-10 vm">{{ $t('createGroup') }}</div>
+          <div class="sm grey mb-5 mr-10">{{ $t('groupType') }}</div>
+          <select v-model="type" class="rk-dashboard-group-sel mb-5 long">
+            <option value="service">{{ $t('service') }}</option>
+            <!-- <option value="proxy">Proxy</option> -->
+            <option value="database">{{ $t('database') }}</option>
+          </select>
+          <div class="sm grey  mb-5 mr-10">{{ $t('groupName') }}</div>
+          <input class="mb-5 rk-dashboard-group-input" type="text" v-model="name" />
+          <label class="mb-10 dib"><input type="checkbox" v-model="template" />{{ $t('template') }}</label>
+          <a class="rk-btn r vm long tc" @click="handleCreate">{{ $t('confirm') }}</a>
+        </div>
+      </a>
+      <a class="rk-dashboard-import ml-10">
+        <input id="tool-group-file" class="ipt" type="file" name="file" title="" accept=".json" @change="importData" />
+        <label for="tool-group-file" class="input-label">
+          <svg class="icon open vm">
+            <use xlink:href="#folder_open"></use>
+          </svg>
+        </label>
+      </a>
+      <a class="ml-10">
+        <svg class="icon vm" @click="exportData">
+          <use xlink:href="#save_alt"></use>
+        </svg>
+      </a>
+    </span>
   </nav>
 </template>
 
@@ -57,11 +72,15 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import { Mutation, Action, Getter } from 'vuex-class';
+  import { readFile } from '@/utils/readFile';
+  import { saveFile } from '@/utils/saveFile';
 
   @Component({})
   export default class ToolGroup extends Vue {
     @Prop() private rocketGlobal: any;
     @Prop() private rocketComps: any;
+    @Mutation('IMPORT_COMPS_GROUP') private IMPORT_COMPS_GROUP: any;
+    @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('DELETE_COMPS_GROUP') private DELETE_COMPS_GROUP: any;
     @Mutation('ADD_COMPS_GROUP') private ADD_COMPS_GROUP: any;
     @Action('MIXHANDLE_CHANGE_GROUP') private MIXHANDLE_CHANGE_GROUP: any;
@@ -100,6 +119,26 @@ limitations under the License. -->
       this.ADD_COMPS_GROUP({ name: this.name, type: this.type, template });
       this.handleHide();
       this.template = false;
+    }
+    private async importData(event: any) {
+      try {
+        const data: any = await readFile(event);
+        const { children, name, query, type } = data;
+        if (children && name && query && type) {
+          this.IMPORT_COMPS_GROUP(data);
+        } else {
+          throw new Error();
+        }
+        const el: any = document.getElementById('tool-group-file');
+        el!.value = '';
+      } catch (e) {
+        this.$modal.show('dialog', { text: 'ERROR' });
+      }
+    }
+    private exportData() {
+      const group = this.rocketComps.tree[this.rocketComps.group];
+      const name = `${group.name}.group.json`;
+      saveFile(group, name);
     }
   }
 </script>
@@ -168,6 +207,19 @@ limitations under the License. -->
       background-color: #448dfe;
       top: 9px;
       left: 4px;
+    }
+  }
+  .rk-dashboard-import {
+    .icon.open {
+      margin-top: 2px;
+    }
+    .ipt {
+      display: none;
+    }
+    .input-label {
+      display: inline;
+      line-height: inherit;
+      cursor: pointer;
     }
   }
 </style>

@@ -13,22 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div>
-    <div class="rk-dashboard-bar flex-h" v-if="compType === 'service'">
-      <div class="rk-dashboard-bar-reload">
-        <svg
-          class="icon lg vm cp rk-btn ghost"
-          :style="`color:${!rocketGlobal.edit ? '' : '#ffc107'}`"
-          @click="handleSetEdit"
-        >
-          <use :xlink:href="!rocketGlobal.edit ? '#lock' : '#lock-open'"></use>
-        </svg>
-      </div>
-      <div class="rk-dashboard-bar-reload">
-        <svg class="icon lg vm cp rk-btn ghost" @click="handleOption">
-          <use xlink:href="#retry"></use>
-        </svg>
-      </div>
+  <div class="rk-dashboard-bar flex-h">
+    <ToolBarBtns :rocketGlobal="rocketGlobal" :rocketComps="rocketComps" :compType="compType" />
+    <div class="rk-dashboard-bar1 flex-h" v-if="compType === 'service'">
       <ToolBarSelect
         @onChoose="selectService"
         :title="this.$t('currentService')"
@@ -52,11 +39,6 @@ limitations under the License. -->
       />
     </div>
     <div class="rk-dashboard-bar flex-h" v-if="compType === 'proxy'">
-      <div class="rk-dashboard-bar-reload">
-        <svg class="icon vm cp rk-btn ghost" @click="handleOption">
-          <use xlink:href="#retry"></use>
-        </svg>
-      </div>
       <ToolBarSelect
         @onChoose="selectService"
         title="Current Proxy"
@@ -80,20 +62,6 @@ limitations under the License. -->
       />
     </div>
     <div class="rk-dashboard-bar flex-h" v-else-if="compType === 'database'">
-      <div class="rk-dashboard-bar-reload">
-        <svg
-          class="icon lg vm cp rk-btn ghost"
-          :style="`color:${!rocketGlobal.edit ? '' : '#ffc107'}`"
-          @click="handleSetEdit"
-        >
-          <use :xlink:href="!rocketGlobal.edit ? '#lock' : '#lock-open'"></use>
-        </svg>
-      </div>
-      <div class="rk-dashboard-bar-reload">
-        <svg class="icon lg vm cp rk-btn ghost" @click="handleOption">
-          <use xlink:href="#retry"></use>
-        </svg>
-      </div>
       <ToolBarSelect
         @onChoose="SELECT_DATABASE"
         :title="this.$t('currentDatabase')"
@@ -109,21 +77,19 @@ limitations under the License. -->
   import { Vue, Component, Prop } from 'vue-property-decorator';
   import ToolBarSelect from './tool-bar-select.vue';
   import ToolBarEndpointSelect from './tool-bar-endpoint-select.vue';
+  import ToolBarBtns from './tool-bar-btns.vue';
   import { State, Action, Mutation } from 'vuex-class';
-  @Component({ components: { ToolBarSelect, ToolBarEndpointSelect } })
+  @Component({ components: { ToolBarSelect, ToolBarEndpointSelect, ToolBarBtns } })
   export default class ToolBar extends Vue {
     @Prop() private compType!: any;
     @Prop() private stateDashboard!: any;
     @Prop() private rocketGlobal!: any;
     @Prop() private rocketComps!: any;
     @Prop() private durationTime!: any;
-    @Mutation('ADD_COMP') private ADD_COMP: any;
-    @Action('SET_EDIT') private SET_EDIT: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Action('SELECT_DATABASE') private SELECT_DATABASE: any;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
-    @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     get lastKey() {
       const current = this.rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children;
       if (!current.length) {
@@ -131,15 +97,7 @@ limitations under the License. -->
       }
       return current[current.length - 1].k;
     }
-    private handleOption() {
-      return this.MIXHANDLE_GET_OPTION({
-        compType: this.compType,
-        duration: this.durationTime,
-      });
-    }
-    private handleSetEdit() {
-      this.SET_EDIT(this.rocketGlobal.edit ? false : true);
-    }
+
     private selectService(i: any) {
       this.SELECT_SERVICE({ service: i, duration: this.durationTime });
     }
@@ -157,9 +115,5 @@ limitations under the License. -->
     flex-shrink: 0;
     color: #efefef;
     background-color: #333840;
-  }
-  .rk-dashboard-bar-reload {
-    padding: 0 5px;
-    border-right: 2px solid #252a2f;
   }
 </style>
