@@ -128,6 +128,7 @@ const m = {
   standardAPM: 'Standard APM',
   entityType: 'Entity type',
   independentSelector: 'Selectors',
+  unknownMetrics: 'Unknown Metrics',
 };
 
 export default m;

@@ -29,8 +29,6 @@ limitations under the License. -->
         :index="index"
         :rocketGlobal="rocketGlobal"
         :item="i"
-        :dragIndex="dragIndex"
-        @dragStart="dragStart"
       >
       </DashboardItem>
       <div
@@ -72,10 +70,6 @@ limitations under the License. -->
     @Getter('durationTime') private durationTime: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
     private isRouterAlive: boolean = true;
-    private dragIndex: number = NaN;
-    public dragStart(index: number) {
-      this.dragIndex = index;
-    }
     public reload(): void {
       this.isRouterAlive = false;
       this.$nextTick(() => {

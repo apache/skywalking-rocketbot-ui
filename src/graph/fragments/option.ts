@@ -68,3 +68,8 @@ export const OAPTimeInfo = {
     }
   `,
 };
+
+export const TypeOfMetrics = {
+  variable: '$name: String!',
+  query: `typeOfMetrics(name: $name)`,
+};

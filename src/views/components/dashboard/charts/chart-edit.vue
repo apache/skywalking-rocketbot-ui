@@ -17,24 +17,21 @@ limitations under the License. -->
   <div class="rk-chart-edit">
     <div class="rk-chart-edit-container">
       <div class="flex-h mb-5">
-        <div class="title grey sm">{{ $t('metrics') }}:</div>
-        <select
-          class="long"
-          v-model="currentMetric"
-          @change="setItemConfig({ index, type: 'currentMetric', value: $event.target.value })"
-        >
-          <option v-for="service in stateDashboardOption.services" :value="service.key" :key="service.key">{{
-            service.label
-          }}</option>
-        </select>
-      </div>
-      <div class="flex-h mb-5">
         <div class="title grey sm">{{ $t('title') }}:</div>
         <input
           type="text"
           class="rk-chart-edit-input long"
           :value="item.t"
           @change="EDIT_COMP_CONFIG({ index, type: 't', value: $event.target.value })"
+        />
+      </div>
+      <div class="flex-h mb-5">
+        <div class="title grey sm">{{ $t('metrics') }}:</div>
+        <input
+          type="text"
+          class="rk-chart-edit-input long"
+          :value="item.currentMetric"
+          @change="setItemConfig({ index, type: 'currentMetric', value: $event.target.value })"
         />
       </div>
       <div class="flex-h mb-5">
@@ -119,7 +116,7 @@ limitations under the License. -->
   import { State, Getter, Mutation, Action } from 'vuex-class';
   import { Component, Prop } from 'vue-property-decorator';
 
-  import { EntityType, IndependentType } from './constant';
+  import { EntityType, IndependentType, MetricsType } from './constant';
 
   @Component
   export default class ChartEdit extends Vue {
@@ -127,6 +124,7 @@ limitations under the License. -->
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
     @Action('GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
     @Action('GET_ITEM_INSTANCES') private GET_ITEM_INSTANCES: any;
+    @Action('TYPE_METRICS') private TYPE_METRICS: any;
     @Getter('durationTime') private durationTime: any;
     @Prop() private item!: any;
     @Prop() private index!: number;
@@ -151,23 +149,36 @@ limitations under the License. -->
       this.currentInstance = this.item.currentInstance || this.stateDashboardOption.currentInstance;
       this.currentMetric = this.item.currentMetric;
       this.independentSelector = this.item.independentSelector;
+      this.getServiceObject(this.currentService, this.index, false);
     }
 
     private setItemConfig(params: { index: number; type: string; value: string }) {
-      let serviceId = this.item.currentService;
-
-      if (!this.item.version) {
-        serviceId = this.stateDashboardOption.currentService.key;
-      }
       if (params.type === 'currentService') {
+        let serviceId = this.item.currentService;
+
+        if (!this.item.version) {
+          serviceId = this.stateDashboardOption.currentService.key;
+        }
         serviceId = params.value;
+        this.getServiceObject(serviceId, params.index);
       }
+      if (params.type === 'currentMetric') {
+        this.TYPE_METRICS({ name: params.value }).then((data: any) => {
+          this.$emit('updateStatus', data.typeOfMetrics);
+          this.EDIT_COMP_CONFIG({ index: params.index, type: 'metricsType', value: data.typeOfMetrics });
+        });
+      }
+      this.EDIT_COMP_CONFIG(params);
+    }
+
+    private getServiceObject(serviceId: string, index: number, update: boolean = true) {
       if (this.itemType === EntityType[1].key) {
         this.GET_ITEM_ENDPOINTS({ serviceId, keyword: '', duration: this.durationTime }).then(
           (data: Array<{ key: string; label: string }>) => {
             this.endpoints = data;
-            if (data.length) {
+            if (data.length && update) {
               this.currentEndpoint = data[0].key;
+              this.EDIT_COMP_CONFIG({ index, type: 'currentEndpoint', value: this.currentEndpoint });
             }
           },
         );
@@ -175,13 +186,13 @@ limitations under the License. -->
         this.GET_ITEM_INSTANCES({ serviceId, keyword: '', duration: this.durationTime }).then(
           (data: Array<{ key: string; label: string }>) => {
             this.instances = data;
-            if (data.length) {
+            if (data.length && update) {
               this.currentInstance = data[0].key;
+              this.EDIT_COMP_CONFIG({ index, type: 'currentInstance', value: this.currentInstance });
             }
           },
         );
       }
-      this.EDIT_COMP_CONFIG(params);
     }
   }
 </script>
@@ -215,6 +226,5 @@ limitations under the License. -->
     padding: 4px 10px;
     border-radius: 3px;
     border: 1px solid #ddd;
-    // background-color: rgba(196, 200, 225, 0.2);
   }
 </style>

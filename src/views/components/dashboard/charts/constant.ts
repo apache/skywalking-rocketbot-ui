@@ -25,3 +25,11 @@ export const IndependentType = [
   { key: 'true', label: 'Self selectors' },
   { key: 'false', label: 'Common selectors' },
 ];
+
+export enum MetricsType {
+  UNKNOWN = 'UNKNOWN',
+  REGULAR_VALUE = 'REGULAR_VALUE',
+  LABELED_VALUE = 'LABELED_VALUE',
+  HEATMAP = 'HEATMAP',
+  SAMPLED_RECORD = 'SAMPLED_RECORD',
+}

@@ -128,6 +128,7 @@ const m = {
   standardAPM: '标准APM',
   entityType: '实体类型',
   independentSelector: '独立选择器',
+  unknownMetrics: '未知指标',
 };
 
 export default m;

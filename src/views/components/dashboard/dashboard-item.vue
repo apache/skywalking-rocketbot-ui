@@ -13,21 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div
-    class="rk-dashboard-item"
-    :class="`g-sm-${item.w}`"
-    :style="`height:${item.h}px;`"
-    draggable="true"
-    @dragstart="$emit('dragStart', index)"
-    @dragover="$event.preventDefault()"
-    @drop="drop"
-  >
+  <div class="rk-dashboard-item" :class="`g-sm-${item.w}`" :style="`height:${item.h}px;`">
     <div class="rk-dashboard-item-title ell">
       <svg class="icon cp red r" v-if="rocketGlobal.edit" @click="DELETE_COMP(index)">
         <use xlink:href="#file-deletion"></use>
       </svg>
       <span>{{ item.t }}</span>
       <span class="hint" v-if="rocketDashboard[item.d].Hint">({{ rocketDashboard[item.d].Hint }})</span>
+      <span v-if="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
     </div>
     <div class="rk-dashboard-item-body">
       <div style="height:100%;">
@@ -38,6 +31,7 @@ limitations under the License. -->
           :index="index"
           :intervalTime="intervalTime"
           :data="rocketDashboard[item.d]"
+          @updateStatus="(type) => setStatus(type)"
         ></component>
       </div>
     </div>
@@ -47,7 +41,7 @@ limitations under the License. -->
   import { Vue, Component, Prop } from 'vue-property-decorator';
   import charts from './charts';
 
-  import { Mutation, Action, State, Getter } from 'vuex-class';
+  import { Mutation, State, Getter } from 'vuex-class';
 
   @Component({
     components: { ...charts },
@@ -60,10 +54,14 @@ limitations under the License. -->
     @Prop() private rocketGlobal!: any;
     @Prop() private item!: any;
     @Prop() private index!: number;
-    @Prop() private dragIndex!: number;
+    private status = '';
 
-    private drop() {
-      this.SWICH_COMP({ start: this.dragIndex, end: this.index });
+    private created() {
+      this.status = this.item.metricsType;
+    }
+
+    private setStatus(data: string) {
+      this.status = data;
     }
   }
 </script>
@@ -119,5 +117,10 @@ limitations under the License. -->
     flex-grow: 1;
     // height:100%;
     height: calc(100% - 28px);
+  }
+  .item-status {
+    color: red;
+    display: inline-block;
+    margin-left: 10px;
   }
 </style>

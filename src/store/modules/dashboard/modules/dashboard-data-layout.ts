@@ -17,11 +17,6 @@
 
 import { MutationTree } from 'vuex';
 import { CompsTree } from '@/types/dashboard';
-// import globalTemp from '../template/global-template';
-// import serviceTemp from '../template/service-template';
-// import endpointTemp from '../template/endpoint-template';
-// import instanceTemp from '../template/instance-template';
-// import databaseTemp from '../template/database-template';
 import groupServiceTemp from '../template/group-service-template';
 import groupDatabaseTemp from '../template/group-database-template';
 import * as types from '../mutation-types';
@@ -149,6 +144,7 @@ const mutations: MutationTree<State> = {
             entityType: 'Service',
             independentSelector: true,
             currentMetric: '',
+            metricsType: 'UNKNOWN',
           }
         : {
             c: 'ChartTrace',
@@ -161,6 +157,7 @@ const mutations: MutationTree<State> = {
             entityType: 'Service',
             independentSelector: true,
             currentMetric: '',
+            metricsType: 'UNKNOWN',
           };
     state.tree[state.group].children[state.current].children.push(comp);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
