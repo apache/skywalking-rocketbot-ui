@@ -63,7 +63,6 @@ limitations under the License. -->
       { label: 'Service', key: 'Service' },
       { label: 'ServiceInstance', key: 'ServiceInstance' },
       { label: 'Endpoint', key: 'Endpoint' },
-      { label: 'DatabaseAccess', key: 'DatabaseAccess' },
       { label: 'ServiceRelation', key: 'ServiceRelation' },
       { label: 'ServiceInstanceRelation', key: 'ServiceInstanceRelation' },
       { label: 'EndpointRelation', key: 'EndpointRelation' },
