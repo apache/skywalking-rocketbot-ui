@@ -23,17 +23,16 @@ import fragmentAll from '@/store/modules/dashboard/fragments';
 // getters
 const getters = {
   Graphql(state: State): string {
+    const treeItems = state.tree[state.group].children[state.current].children;
     let fragmentsArr: any = [];
     let variablesArr: any = [];
-    state.tree[state.group].children[state.current].children.forEach((i: any) => {
+    for (const item of treeItems) {
       const globalArr: any = fragmentAll;
-      if (globalArr[i.d]) {
-        fragmentsArr = [...fragmentsArr, globalArr[i.d].fragment];
+      if (globalArr[item.queryMetricType]) {
+        fragmentsArr = [...fragmentsArr, globalArr[item.queryMetricType].fragment];
+        variablesArr = [...variablesArr, ...globalArr[item.queryMetricType].variable];
       }
-      if (globalArr[i.d]) {
-        variablesArr = [...variablesArr, ...globalArr[i.d].variable];
-      }
-    });
+    }
     const fragments = Array.from(new Set(fragmentsArr)).join('');
     const variables = Array.from(new Set(variablesArr)).join(',');
     return `query queryData(${variables}) {${fragments}}`;
@@ -49,13 +48,29 @@ query getEndpointInfo($endpointId: ID!) {
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_QUERY(context: { commit: Commit; dispatch: Dispatch; getters: any }, variablesData: any): AxiosPromise<void> {
+  GET_QUERY(context: { commit: Commit; dispatch: Dispatch; getters: any; state: State }, params): AxiosPromise<void> {
+    const treeItems = context.state.tree[context.state.group].children[context.state.current].children;
+    const globalArr: any = fragmentAll;
+    const config = treeItems.filter((item: any) => globalArr[item.queryMetricType])[0] || {};
+    const variables = {
+      duration: params.duration,
+      name: config.metricName,
+      entity: {
+        scope: config.entityType,
+        serviceName: config.currentService,
+        normal: true,
+        serviceInstanceName: config.entityType === 'ServiceInstance' ? config.currentInstance : null,
+        endpointName: config.entityType === 'ServiceEndpoint' ? config.currentEndpoint : null,
+        destNormal: true,
+      },
+    };
+
     return axios
       .post(
         '/graphql',
         {
           query: context.getters.Graphql,
-          variables: variablesData,
+          variables,
         },
         { cancelToken: cancelToken() },
       )

@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 
-import { MutationTree } from 'vuex';
-import { Value } from '@/types/dashboard';
 import { SlowItem } from '@/types/global';
 
 export interface State {
@@ -28,11 +26,11 @@ export interface State {
     numOfService: number;
   };
   globalPercent: {
-    p50: number[],
-    p75: number[],
-    p90: number[],
-    p95: number[],
-    p99: number[],
+    p50: number[];
+    p75: number[];
+    p90: number[];
+    p95: number[];
+    p99: number[];
   };
   globalHeatmap: number[][];
   globalSlow: SlowItem[];
@@ -59,7 +57,6 @@ export const initState: State = {
   globalThroughput: [],
 };
 
-
 export const SetGlobal = (state: State, params: any) => {
   if (!params) {
     return;
@@ -70,7 +67,6 @@ export const SetGlobal = (state: State, params: any) => {
     state.globalBrief.numOfEndpoint = params.globalBrief.numOfEndpoint || 0;
     state.globalBrief.numOfMQ = params.globalBrief.numOfMQ || 0;
     state.globalBrief.numOfService = params.globalBrief.numOfService || 0;
-
   }
   if (params.globalPercentile) {
     const PercentileItem = ['p50', 'p75', 'p90', 'p95', 'p99'];

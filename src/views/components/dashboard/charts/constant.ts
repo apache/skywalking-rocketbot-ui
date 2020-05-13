@@ -33,3 +33,23 @@ export enum MetricsType {
   HEATMAP = 'HEATMAP',
   SAMPLED_RECORD = 'SAMPLED_RECORD',
 }
+
+export const QueryMetricTypes: { [key: string]: Array<{ label: string; value: string }> } = {
+  REGULAR_VALUE: [
+    { label: 'read avg value in the duration', value: 'readMetricsValue' },
+    { label: 'read all values in the duration', value: 'readMetricsValues' },
+    { label: 'get sorted top N values', value: 'sortMetrics' },
+  ],
+  LABELED_VALUE: [{ label: 'readLabeledMetricsValues', value: 'readLabeledMetricsValues' }],
+  HEATMAP: [{ label: 'readHeatMap', value: 'readHeatMap' }],
+  SAMPLED_RECORD: [{ label: 'readSampledRecords', value: 'readSampledRecords' }],
+};
+
+export const MetricChartType: { [key: string]: string } = {
+  readMetricsValue: 'ChartNum',
+  readMetricsValues: 'ChartLine',
+  sortMetrics: 'ChartSlow',
+  readLabeledMetricsValues: 'ChartLine',
+  HEATMAP: 'ChartHeatmap',
+  readSampledRecords: 'ChartSlow',
+};

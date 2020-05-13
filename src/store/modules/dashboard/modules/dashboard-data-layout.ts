@@ -134,29 +134,25 @@ const mutations: MutationTree<State> = {
     const comp =
       param.type === 'database'
         ? {
-            c: 'ChartLine',
             w: 6,
             d: 'databaseThroughput',
             t: 'Database Throughput',
-            h: 350,
+            h: 250,
             version: '1.0',
             currentService: param.currentService,
             entityType: 'Service',
             independentSelector: true,
-            currentMetric: '',
             metricsType: 'UNKNOWN',
           }
         : {
-            c: 'ChartTrace',
             w: 6,
             d: 'globalThroughput',
             t: 'Global Top Throughput',
-            h: 350,
+            h: 250,
             version: '1.0',
             currentService: param.currentService,
             entityType: 'Service',
             independentSelector: true,
-            currentMetric: '',
             metricsType: 'UNKNOWN',
           };
     state.tree[state.group].children[state.current].children.push(comp);

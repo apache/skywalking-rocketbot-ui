@@ -30,9 +30,18 @@ limitations under the License. -->
         <input
           type="text"
           class="rk-chart-edit-input long"
-          :value="item.currentMetric"
-          @change="setItemConfig({ index, type: 'currentMetric', value: $event.target.value })"
+          :value="item.metricName"
+          @change="setItemConfig({ index, type: 'metricName', value: $event.target.value })"
         />
+        <select
+          class="long"
+          v-model="queryMetricType"
+          @change="setItemConfig({ index, type: 'queryMetricType', value: $event.target.value })"
+        >
+          <option v-for="query in queryMetricTypesList" :value="query.value" :key="query.value">{{
+            query.label
+          }}</option>
+        </select>
       </div>
       <div class="flex-h mb-5">
         <div class="title grey sm">{{ $t('entityType') }}:</div>
@@ -116,7 +125,7 @@ limitations under the License. -->
   import { State, Getter, Mutation, Action } from 'vuex-class';
   import { Component, Prop } from 'vue-property-decorator';
 
-  import { EntityType, IndependentType, MetricsType } from './constant';
+  import { EntityType, IndependentType, MetricsType, QueryMetricTypes, MetricChartType } from './constant';
 
   @Component
   export default class ChartEdit extends Vue {
@@ -138,7 +147,10 @@ limitations under the License. -->
     private currentEndpoint = '';
     private currentInstance = '';
     private independentSelector = true;
-    private currentMetric = '';
+    private metricType = '';
+    private metricName = '';
+    private queryMetricTypesList: any = [];
+    private queryMetricType = '';
 
     private created() {
       this.itemType = this.item.entityType;
@@ -147,8 +159,11 @@ limitations under the License. -->
       this.currentService = this.item.currentService || this.stateDashboardOption.currentService;
       this.currentEndpoint = this.item.currentEndpoint || this.stateDashboardOption.currentEndpoint;
       this.currentInstance = this.item.currentInstance || this.stateDashboardOption.currentInstance;
-      this.currentMetric = this.item.currentMetric;
+      this.metricType = this.item.metricType;
+      this.metricName = this.item.metricName;
       this.independentSelector = this.item.independentSelector;
+      this.queryMetricType = this.item.queryMetricType;
+      this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
       this.getServiceObject(this.currentService, this.index, false);
     }
 
@@ -162,11 +177,18 @@ limitations under the License. -->
         serviceId = params.value;
         this.getServiceObject(serviceId, params.index);
       }
-      if (params.type === 'currentMetric') {
+      if (params.type === 'metricName') {
         this.TYPE_METRICS({ name: params.value }).then((data: any) => {
-          this.$emit('updateStatus', data.typeOfMetrics);
-          this.EDIT_COMP_CONFIG({ index: params.index, type: 'metricsType', value: data.typeOfMetrics });
+          const { typeOfMetrics } = data;
+          this.$emit('updateStatus', typeOfMetrics);
+          this.queryMetricTypesList = QueryMetricTypes[typeOfMetrics] || [];
+          this.queryMetricType = this.queryMetricTypesList[0] && this.queryMetricTypesList[0].value;
+          this.EDIT_COMP_CONFIG({ index: params.index, type: 'metricType', value: typeOfMetrics });
+          this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
         });
+      }
+      if (params.type === 'queryMetricType') {
+        this.EDIT_COMP_CONFIG({ index: params.index, type: 'c', value: MetricChartType[params.value] });
       }
       this.EDIT_COMP_CONFIG(params);
     }

@@ -13,7 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div class="rk-dashboard-item" :class="`g-sm-${item.w}`" :style="`height:${item.h}px;`">
+  <div
+    class="rk-dashboard-item"
+    :class="`g-sm-${item.w}`"
+    :style="rocketGlobal.edit ? 'height:350px' : `height:${item.h}px;`"
+  >
     <div class="rk-dashboard-item-title ell">
       <svg class="icon cp red r" v-if="rocketGlobal.edit" @click="DELETE_COMP(index)">
         <use xlink:href="#file-deletion"></use>
@@ -54,10 +58,10 @@ limitations under the License. -->
     @Prop() private rocketGlobal!: any;
     @Prop() private item!: any;
     @Prop() private index!: number;
-    private status = '';
+    private status = 'UNKNOWN';
 
     private created() {
-      this.status = this.item.metricsType;
+      this.status = this.item.metricType;
     }
 
     private setStatus(data: string) {

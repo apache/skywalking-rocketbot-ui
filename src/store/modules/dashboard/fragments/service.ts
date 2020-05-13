@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 
-
-export const serviceResponseTime =  {
+export const serviceResponseTime = {
   variable: ['$serviceId: ID!', '$duration: Duration!'],
   fragment: `
   serviceResponseTime: getLinearIntValues(metric: {
@@ -27,7 +26,7 @@ export const serviceResponseTime =  {
   }`,
 };
 
-export const serviceThroughput =  {
+export const serviceThroughput = {
   variable: ['$serviceId: ID!', '$duration: Duration!'],
   fragment: `
   serviceThroughput: getLinearIntValues(metric: {
@@ -39,7 +38,7 @@ export const serviceThroughput =  {
     }
   }`,
 };
-export const serviceSLA =  {
+export const serviceSLA = {
   variable: ['$serviceId: ID!', '$duration: Duration!'],
   fragment: `
   serviceSLA: getLinearIntValues(metric: {
@@ -61,7 +60,7 @@ export const servicePercent = {
   }, numOfLinear: 5, duration: $duration) { values { value } }`,
 };
 
-export const serviceSlowEndpoint =  {
+export const serviceSlowEndpoint = {
   variable: ['$serviceId: ID!', '$duration: Duration!'],
   fragment: `
   serviceSlowEndpoint: getEndpointTopN(
@@ -77,7 +76,7 @@ export const serviceSlowEndpoint =  {
   }`,
 };
 
-export const serviceInstanceThroughput =  {
+export const serviceInstanceThroughput = {
   variable: ['$serviceId: ID!', '$duration: Duration!'],
   fragment: `
   serviceInstanceThroughput: getServiceInstanceTopN(
@@ -93,7 +92,7 @@ export const serviceInstanceThroughput =  {
   }`,
 };
 
-export const serviceApdexScore =  {
+export const serviceApdexScore = {
   variable: ['$serviceId: ID!', '$duration: Duration!'],
   fragment: `
   serviceApdexScore: getLinearIntValues(metric: {
@@ -101,5 +100,34 @@ export const serviceApdexScore =  {
     id: $serviceId
   }, duration: $duration) {
     values {value}
+  }`,
+};
+
+export function readMetricsValue(params: any) {
+  const { name, entity } = params;
+
+  return {
+    variable: ['$name: String!', '$entity: Entity', '$duration: Duration!'],
+    fragment: `
+    readMetricsValue: readMetricsValue(condition: {
+      name: $name
+      entity: $entity
+    }, duration: $duration)`,
+  };
+}
+
+export const readMetricsValues = {
+  variable: ['$name: String!', '$entity: Entity', '$duration: Duration!'],
+  fragment: `
+  readMetricsValues: readMetricsValues(condition: {
+    name: $name
+    entity: $entity
+  }, duration: $duration) {
+    {
+      label
+      values {
+        value
+      }
+    }
   }`,
 };
