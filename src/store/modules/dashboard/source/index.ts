@@ -16,11 +16,11 @@
  */
 
 import { Commit, ActionTree, MutationTree } from 'vuex';
-import {initState as global, SetGlobal} from './global';
-import {initState as service, SetService} from './service';
-import {initState as endpoint, SetEndpoint} from './endpoint';
-import {initState as instance, SetInstance} from './instance';
-import {initState as database, SetDatabase} from './database';
+import { initState as global, SetGlobal } from './global';
+import { initState as service, SetService } from './service';
+import { initState as endpoint, SetEndpoint } from './endpoint';
+import { initState as instance, SetInstance } from './instance';
+import { initState as database, SetDatabase } from './database';
 import { SlowItem } from '@/types/global';
 export interface State {
   globalBrief: {
@@ -31,67 +31,69 @@ export interface State {
     numOfService: number;
   };
   globalPercent: {
-    p50: number[],
-    p75: number[],
-    p90: number[],
-    p95: number[],
-    p99: number[],
+    p50: number[];
+    p75: number[];
+    p90: number[];
+    p95: number[];
+    p99: number[];
   };
   globalHeatmap: number[][];
   globalSlow: SlowItem[];
   globalThroughput: SlowItem[];
-  serviceApdexScore: { ApdexScore: number[]; };
-  serviceResponseTime: { ResponseTime: number[]; };
+  serviceApdexScore: { ApdexScore: number[] };
+  serviceResponseTime: { ResponseTime: number[] };
   serviceInstanceThroughput: SlowItem[];
-  serviceSLA: { SLA: number[]; };
+  serviceSLA: { SLA: number[] };
   servicePercent: {
-    p50: number[],
-    p75: number[],
-    p90: number[],
-    p95: number[],
-    p99: number[],
+    p50: number[];
+    p75: number[];
+    p90: number[];
+    p95: number[];
+    p99: number[];
   };
   serviceSlowEndpoint: SlowItem[];
-  serviceThroughput: { Throughput: number[]; };
+  serviceThroughput: { Throughput: number[] };
 
   endpointPercent: {
-    p50: number[],
-    p75: number[],
-    p90: number[],
-    p95: number[],
-    p99: number[],
+    p50: number[];
+    p75: number[];
+    p90: number[];
+    p95: number[];
+    p99: number[];
   };
-  endpointResponseTime: { ResponseTime: number[]; };
-  endpointThroughput: { Throughput: number[]; };
-  endpointSLA: { SLA: number[]; };
+  endpointResponseTime: { ResponseTime: number[] };
+  endpointThroughput: { Throughput: number[] };
+  endpointSLA: { SLA: number[] };
   endpointSlowEndpoint: SlowItem[];
   endpointTraces: SlowItem[];
-  instanceResponseTime: { ResponseTime: number[]; };
-  instanceSLA: { SLA: number[]; };
-  instanceThroughput: { Throughput: number[]; };
-  instanceCPU: { cpu: number[]; };
-  instanceGC: { oldGC: number[], youngGC: number[] };
-  instanceGCCount: { oldGC: number[], youngGC: number[] };
-  instanceHeap: { Value: number[], Free: number[], Hint: string };
-  instanceNonheap: { Value: number[], Free: number[], Hint: string };
+  instanceResponseTime: { ResponseTime: number[] };
+  instanceSLA: { SLA: number[] };
+  instanceThroughput: { Throughput: number[] };
+  instanceCPU: { cpu: number[] };
+  instanceGC: { oldGC: number[]; youngGC: number[] };
+  instanceGCCount: { oldGC: number[]; youngGC: number[] };
+  instanceHeap: { Value: number[]; Free: number[]; Hint: string };
+  instanceNonheap: { Value: number[]; Free: number[]; Hint: string };
   instanceClrHeap: { Value: number[] };
-  instanceClrCPU: { cpu: number[]; };
-  instanceClrGC: { clrGCGen0: number[], clrGCGen1: number[], clrGCGen2: number[]};
+  instanceClrCPU: { cpu: number[] };
+  instanceClrGC: { clrGCGen0: number[]; clrGCGen1: number[]; clrGCGen2: number[] };
   endpointTopology: { calls: any; nodes: any; visualMap: any };
-  databaseResponseTime: { ResponseTime: number[]; };
-  databaseSLA: { SLA: number[]; };
+  databaseResponseTime: { ResponseTime: number[] };
+  databaseSLA: { SLA: number[] };
   databasePercent: {
-    p50: number[],
-    p75: number[],
-    p90: number[],
-    p95: number[],
-    p99: number[],
+    p50: number[];
+    p75: number[];
+    p90: number[];
+    p95: number[];
+    p99: number[];
   };
   databaseTopNRecords: SlowItem[];
-  databaseThroughput: { Throughput: number[]; };
+  databaseThroughput: { Throughput: number[] };
+  chartMetricsSource: { [key: string]: any };
 }
 
 const initState: State = {
+  chartMetricsSource: {},
   ...global,
   ...service,
   ...endpoint,
@@ -100,8 +102,7 @@ const initState: State = {
 };
 
 // getters
-const getters = {
-};
+const getters = {};
 
 // mutations
 const mutations: MutationTree<State> = {
@@ -112,12 +113,20 @@ const mutations: MutationTree<State> = {
     SetInstance(state, params);
     SetDatabase(state, params);
   },
+  CHART_SOURCE(state: State, params: { id: string; values: any }) {
+    if (!params) {
+      return;
+    }
+
+    state.chartMetricsSource[params.id] = params.values.values;
+  },
 };
 
 // actions
 const actions: ActionTree<State, any> = {
-  COOK_SOURCE(context: { commit: Commit }, params: any) {
-    context.commit('COOK_SOURCE', params.data);
+  COOK_SOURCE(context: { commit: Commit }, params: { id: string; values: any }) {
+    // context.commit('COOK_SOURCE', params.data);
+    context.commit('CHART_SOURCE', params);
   },
 };
 

@@ -1,3 +1,5 @@
+import dashboardData from '../modules/dashboard-data';
+
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -103,31 +105,30 @@ export const serviceApdexScore = {
   }`,
 };
 
-export function readMetricsValue(params: any) {
-  const { name, entity } = params;
-
-  return {
-    variable: ['$name: String!', '$entity: Entity', '$duration: Duration!'],
-    fragment: `
-    readMetricsValue: readMetricsValue(condition: {
-      name: $name
-      entity: $entity
-    }, duration: $duration)`,
-  };
-}
-
 export const readMetricsValues = {
-  variable: ['$name: String!', '$entity: Entity', '$duration: Duration!'],
+  variable: ['$condition: MetricsCondition!, $duration: Duration!'],
   fragment: `
-  readMetricsValues: readMetricsValues(condition: {
-    name: $name
-    entity: $entity
-  }, duration: $duration) {
-    {
-      label
-      values {
-        value
-      }
+  readMetricsValues: readMetricsValues(condition: $condition, duration: $duration) {
+    label
+    values {
+      values {value}
     }
+  }`,
+};
+
+export const readMetricsValue = {
+  variable: ['$condition: MetricsCondition!, $duration: Duration!'],
+  fragment: `
+  readMetricsValue: readMetricsValue(condition: $condition, duration: $duration)`,
+};
+
+export const sortMetrics = {
+  variable: ['$condition: TopNCondition!, $duration: Duration!'],
+  fragment: `
+  sortMetrics: sortMetrics(condition: $condition, duration: $duration) {
+    name
+    id
+    value
+    refId
   }`,
 };

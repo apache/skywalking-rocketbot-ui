@@ -38,32 +38,51 @@ const getters = {
     return `query queryData(${variables}) {${fragments}}`;
   },
 };
-const EndPointInfoGraphql = `
-query getEndpointInfo($endpointId: ID!) {
-        endpointInfo: getEndpointInfo(endpointId: $endpointId) {
-            serviceName
-            id
-    }}
-`;
+// const EndPointInfoGraphql = `
+// query getEndpointInfo($endpointId: ID!) {
+//         endpointInfo: getEndpointInfo(endpointId: $endpointId) {
+//             serviceName
+//             id
+//     }}
+// `;
 
 // actions
 const actions: ActionTree<State, any> = {
   GET_QUERY(context: { commit: Commit; dispatch: Dispatch; getters: any; state: State }, params): AxiosPromise<void> {
+    const normal = context.state.tree[context.state.group].type === 'database' ? false : true;
     const treeItems = context.state.tree[context.state.group].children[context.state.current].children;
     const globalArr: any = fragmentAll;
     const config = treeItems.filter((item: any) => globalArr[item.queryMetricType])[0] || {};
-    const variables = {
-      duration: params.duration,
-      name: config.metricName,
-      entity: {
-        scope: config.entityType,
-        serviceName: config.currentService,
-        normal: true,
-        serviceInstanceName: config.entityType === 'ServiceInstance' ? config.currentInstance : null,
-        endpointName: config.entityType === 'ServiceEndpoint' ? config.currentEndpoint : null,
-        destNormal: true,
-      },
-    };
+    const variables =
+      config.queryMetricType === 'sortMetrics'
+        ? {
+            duration: params.duration,
+            condition: {
+              name: config.metricName,
+              parentService: config.currentService,
+              normal,
+              scope: config.entityType,
+              topN: 10,
+              order: 'DES',
+            },
+          }
+        : {
+            duration: params.duration,
+            condition: {
+              name: config.metricName,
+              entity: {
+                scope: config.entityType,
+                serviceName: config.entityType !== 'All' ? config.currentService : undefined,
+                serviceInstanceName: config.entityType === 'ServiceInstance' ? config.currentInstance : undefined,
+                endpointName: config.entityType === 'ServiceEndpoint' ? config.currentEndpoint : undefined,
+                normal,
+                // destNormal: normal,
+                // destServiceName: '',
+                // destServiceInstanceName: '',
+                // destEndpointName: '',
+              },
+            },
+          };
 
     return axios
       .post(
@@ -75,31 +94,35 @@ const actions: ActionTree<State, any> = {
         { cancelToken: cancelToken() },
       )
       .then((res: AxiosResponse<any>) => {
-        const resData = res.data;
-        if (resData.data && resData.data.endpointTopology) {
-          const endpointIds = resData.data.endpointTopology.nodes
-            .map((n: any) => n.name)
-            .filter(function onlyUnique(value: any, index: number, self: any) {
-              return self.indexOf(value) === index;
-            });
-          Promise.all(
-            endpointIds.map((id: any) => {
-              return axios
-                .post('/graphql', {
-                  query: EndPointInfoGraphql,
-                  variables: { endpointId: `${id}` },
-                })
-                .then((endpointRes: AxiosResponse<any>) => {
-                  return endpointRes.data.data.endpointInfo;
-                });
-            }),
-          ).then((endpointInfos) => {
-            resData.data.endpointTopology.endpoints = endpointInfos;
-            context.dispatch('COOK_SOURCE', resData);
-          });
-        } else {
-          context.dispatch('COOK_SOURCE', resData);
-        }
+        const resData = res.data.data;
+        // if (resData.data && resData.data.endpointTopology) {
+        //   const endpointIds = resData.data.endpointTopology.nodes
+        //     .map((n: any) => n.name)
+        //     .filter(function onlyUnique(value: any, index: number, self: any) {
+        //       return self.indexOf(value) === index;
+        //     });
+        //   Promise.all(
+        //     endpointIds.map((id: any) => {
+        //       return axios
+        //         .post('/graphql', {
+        //           query: EndPointInfoGraphql,
+        //           variables: { endpointId: `${id}` },
+        //         })
+        //         .then((endpointRes: AxiosResponse<any>) => {
+        //           return endpointRes.data.data.endpointInfo;
+        //         });
+        //     }),
+        //   ).then((endpointInfos) => {
+        //     resData.data.endpointTopology.endpoints = endpointInfos;
+        //     context.dispatch('COOK_SOURCE', resData);
+        //   });
+        // } else {
+        //   context.dispatch('COOK_SOURCE', resData);
+        // }
+        const data = Object.values(resData)[0] || ({} as any);
+
+        context.dispatch('COOK_SOURCE', { ...data, id: config.id });
+
         return res;
       });
   },

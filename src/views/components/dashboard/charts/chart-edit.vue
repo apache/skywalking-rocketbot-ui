@@ -53,7 +53,7 @@ limitations under the License. -->
           <option v-for="type in EntityType" :value="type.key" :key="type.key">{{ type.label }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5">
+      <div class="flex-h mb-5" v-show="itemType !== EntityType[1].key">
         <div class="title grey sm">{{ $t('currentService') }}:</div>
         <select
           class="long"
@@ -65,7 +65,7 @@ limitations under the License. -->
           }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="itemType === EntityType[1].key">
+      <div class="flex-h mb-5" v-show="itemType === EntityType[2].key">
         <div class="title grey sm">{{ $t('currentEndpoint') }}:</div>
         <select
           class="long"
@@ -75,7 +75,7 @@ limitations under the License. -->
           <option v-for="endpoint in endpoints" :value="endpoint.key" :key="endpoint.key">{{ endpoint.label }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="itemType === EntityType[2].key">
+      <div class="flex-h mb-5" v-show="itemType === EntityType[3].key">
         <div class="title grey sm">{{ $t('currentInstance') }}:</div>
         <select
           class="long"

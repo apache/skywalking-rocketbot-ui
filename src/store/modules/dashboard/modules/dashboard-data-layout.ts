@@ -19,6 +19,7 @@ import { MutationTree } from 'vuex';
 import { CompsTree } from '@/types/dashboard';
 import groupServiceTemp from '../template/group-service-template';
 import groupDatabaseTemp from '../template/group-database-template';
+import { uuid } from '@/utils/uuid.ts';
 import * as types from '../mutation-types';
 
 export interface State {
@@ -134,6 +135,7 @@ const mutations: MutationTree<State> = {
     const comp =
       param.type === 'database'
         ? {
+            id: uuid(),
             w: 6,
             d: 'databaseThroughput',
             t: 'Database Throughput',
@@ -145,6 +147,7 @@ const mutations: MutationTree<State> = {
             metricsType: 'UNKNOWN',
           }
         : {
+            id: uuid(),
             w: 6,
             d: 'globalThroughput',
             t: 'Global Top Throughput',

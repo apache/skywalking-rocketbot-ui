@@ -15,16 +15,13 @@
  * limitations under the License.
  */
 
-// import * as global from '@/store/modules/dashboard/fragments/global';
-import * as service from '@/store/modules/dashboard/fragments/service';
-// import * as endpoint from '@/store/modules/dashboard/fragments/endpoint';
-// import * as instance from '@/store/modules/dashboard/fragments/instance';
-// import * as database from '@/store/modules/dashboard/fragments/database';
+export function uuid() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    /* tslint:disable */
+    const r = (Math.random() * 16) | 0;
+    /* tslint:disable */
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
 
-export default {
-  // ...global,
-  ...service,
-  // ...endpoint,
-  // ...instance,
-  // ...database,
-};
+    return v.toString(16);
+  });
+}

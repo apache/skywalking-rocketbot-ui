@@ -34,7 +34,7 @@ limitations under the License. -->
           :item="item"
           :index="index"
           :intervalTime="intervalTime"
-          :data="rocketDashboard[item.d]"
+          :data="rocketDashboard.chartMetricsSource[item.id]"
           @updateStatus="(type) => setStatus(type)"
         ></component>
       </div>
