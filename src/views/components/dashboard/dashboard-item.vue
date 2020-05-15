@@ -34,7 +34,7 @@ limitations under the License. -->
           :item="item"
           :index="index"
           :intervalTime="intervalTime"
-          :data="rocketDashboard.chartMetricsSource[item.id]"
+          :data="chartSource"
           @updateStatus="(type) => setStatus(type)"
         ></component>
       </div>
@@ -45,7 +45,7 @@ limitations under the License. -->
   import { Vue, Component, Prop } from 'vue-property-decorator';
   import charts from './charts';
 
-  import { Mutation, State, Getter } from 'vuex-class';
+  import { Mutation, State, Getter, Action } from 'vuex-class';
 
   @Component({
     components: { ...charts },
@@ -53,15 +53,34 @@ limitations under the License. -->
   export default class DashboardItem extends Vue {
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('SWICH_COMP') private SWICH_COMP: any;
-    @State('rocketDashboard') private rocketDashboard: any;
+    // @State('rocketDashboard') private rocketDashboard: any;
     @Getter('intervalTime') private intervalTime: any;
+    @Action('GET_QUERY') private GET_QUERY: any;
+    @Getter('durationTime') private durationTime: any;
     @Prop() private rocketGlobal!: any;
     @Prop() private item!: any;
     @Prop() private index!: number;
     private status = 'UNKNOWN';
+    private chartSource = {};
 
-    private created() {
+    private beforeMount() {
       this.status = this.item.metricType;
+      this.chartRender();
+    }
+
+    private chartRender() {
+      this.GET_QUERY({
+        duration: this.durationTime,
+      }).then((params: any) => {
+        if (!params) {
+          return;
+        }
+
+        const { values } = params.values;
+        const data = values.map((item: { value: number }) => item.value);
+
+        this.chartSource = { [params.metricName]: data };
+      });
     }
 
     private setStatus(data: string) {

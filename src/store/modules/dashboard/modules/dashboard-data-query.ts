@@ -53,36 +53,36 @@ const actions: ActionTree<State, any> = {
     const treeItems = context.state.tree[context.state.group].children[context.state.current].children;
     const globalArr: any = fragmentAll;
     const config = treeItems.filter((item: any) => globalArr[item.queryMetricType])[0] || {};
-    const variables =
-      config.queryMetricType === 'sortMetrics'
-        ? {
-            duration: params.duration,
-            condition: {
-              name: config.metricName,
-              parentService: config.currentService,
-              normal,
+    const types = ['readSampledRecords', 'sortMetrics'];
+    const variables = types.includes(config.queryMetricType)
+      ? {
+          duration: params.duration,
+          condition: {
+            name: config.metricName,
+            parentService: config.currentService,
+            normal,
+            scope: config.entityType,
+            topN: 10,
+            order: 'DES',
+          },
+        }
+      : {
+          duration: params.duration,
+          condition: {
+            name: config.metricName,
+            entity: {
               scope: config.entityType,
-              topN: 10,
-              order: 'DES',
+              serviceName: config.entityType !== 'All' ? config.currentService : undefined,
+              serviceInstanceName: config.entityType === 'ServiceInstance' ? config.currentInstance : undefined,
+              endpointName: config.entityType === 'ServiceEndpoint' ? config.currentEndpoint : undefined,
+              normal,
+              // destNormal: normal,
+              // destServiceName: '',
+              // destServiceInstanceName: '',
+              // destEndpointName: '',
             },
-          }
-        : {
-            duration: params.duration,
-            condition: {
-              name: config.metricName,
-              entity: {
-                scope: config.entityType,
-                serviceName: config.entityType !== 'All' ? config.currentService : undefined,
-                serviceInstanceName: config.entityType === 'ServiceInstance' ? config.currentInstance : undefined,
-                endpointName: config.entityType === 'ServiceEndpoint' ? config.currentEndpoint : undefined,
-                normal,
-                // destNormal: normal,
-                // destServiceName: '',
-                // destServiceInstanceName: '',
-                // destEndpointName: '',
-              },
-            },
-          };
+          },
+        };
 
     return axios
       .post(
@@ -121,9 +121,9 @@ const actions: ActionTree<State, any> = {
         // }
         const data = Object.values(resData)[0] || ({} as any);
 
-        context.dispatch('COOK_SOURCE', { ...data, id: config.id });
+        // context.dispatch('COOK_SOURCE', { ...data, id: config.id, metricName: config.metricName });
 
-        return res;
+        return { ...data, id: config.id, metricName: config.metricName };
       });
   },
 };

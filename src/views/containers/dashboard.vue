@@ -83,21 +83,21 @@ limitations under the License. -->
       );
     }
     private handleRefresh() {
-      this.GET_QUERY({
-        serviceId: this.stateDashboardOption.currentService.key || '',
-        endpointId: this.stateDashboardOption.currentEndpoint.key || '',
-        endpointName: this.stateDashboardOption.currentEndpoint.label || '',
-        instanceId: this.stateDashboardOption.currentInstance.key || '',
-        databaseId: this.stateDashboardOption.currentDatabase.key || '',
-        duration: this.durationTime,
-      });
+      // this.GET_QUERY({
+      //   serviceId: this.stateDashboardOption.currentService.key || '',
+      //   endpointId: this.stateDashboardOption.currentEndpoint.key || '',
+      //   endpointName: this.stateDashboardOption.currentEndpoint.label || '',
+      //   instanceId: this.stateDashboardOption.currentInstance.key || '',
+      //   databaseId: this.stateDashboardOption.currentDatabase.key || '',
+      //   duration: this.durationTime,
+      // });
     }
     private handleOption() {
       return this.MIXHANDLE_GET_OPTION({
         compType: this.compType,
         duration: this.durationTime,
       }).then(() => {
-        this.handleRefresh();
+        // this.handleRefresh();
       });
     }
     private beforeMount() {

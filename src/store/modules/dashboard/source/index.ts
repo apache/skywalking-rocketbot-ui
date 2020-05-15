@@ -89,11 +89,11 @@ export interface State {
   };
   databaseTopNRecords: SlowItem[];
   databaseThroughput: { Throughput: number[] };
-  chartMetricsSource: { [key: string]: any };
+  // chartMetricsSource: { [key: string]: {[key: string]: number[]} };
 }
 
 const initState: State = {
-  chartMetricsSource: {},
+  // chartMetricsSource: {},
   ...global,
   ...service,
   ...endpoint,
@@ -113,18 +113,21 @@ const mutations: MutationTree<State> = {
     SetInstance(state, params);
     SetDatabase(state, params);
   },
-  CHART_SOURCE(state: State, params: { id: string; values: any }) {
+  CHART_SOURCE(state: State, params: { id: string; metricName: string; values: any }) {
     if (!params) {
       return;
     }
 
-    state.chartMetricsSource[params.id] = params.values.values;
+    const { values } = params.values;
+    const data = values.map((item: { value: number }) => item.value);
+
+    // state.chartMetricsSource[params.id] = {[params.metricName]: data};
   },
 };
 
 // actions
 const actions: ActionTree<State, any> = {
-  COOK_SOURCE(context: { commit: Commit }, params: { id: string; values: any }) {
+  COOK_SOURCE(context: { commit: Commit }, params: { id: string; metricName: string; values: any }) {
     // context.commit('COOK_SOURCE', params.data);
     context.commit('CHART_SOURCE', params);
   },

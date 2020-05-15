@@ -132,3 +132,34 @@ export const sortMetrics = {
     refId
   }`,
 };
+
+export const readLabeledMetricsValues = {
+  variable: ['$condition: MetricsCondition!, labels: [String!]!, duration: Duration!'],
+  fragment: `
+  readLabeledMetricsValues: readLabeledMetricsValues(condition: $condition, duration: $duration) {
+    label
+    values {
+      values {value}
+    }
+  }`,
+};
+
+export const readHeatMap = {
+  variable: ['$condition: MetricsCondition!, $duration: Duration!'],
+  fragment: `
+  readHeatMap: readHeatMap(condition: $condition, duration: $duration) {
+    id
+    values
+  }`,
+};
+
+export const readSampledRecords = {
+  variable: ['$condition: TopNCondition!, $duration: Duration!'],
+  fragment: `
+  readSampledRecords: readSampledRecords(condition: $condition, duration: $duration) {
+    name
+    id
+    value
+    refId
+  }`,
+};
