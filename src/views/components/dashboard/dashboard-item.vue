@@ -23,7 +23,6 @@ limitations under the License. -->
         <use xlink:href="#file-deletion"></use>
       </svg>
       <span>{{ item.t }}</span>
-      <span class="hint" v-if="rocketDashboard[item.d].Hint">({{ rocketDashboard[item.d].Hint }})</span>
       <span v-if="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
     </div>
     <div class="rk-dashboard-item-body">
@@ -53,7 +52,6 @@ limitations under the License. -->
   export default class DashboardItem extends Vue {
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('SWICH_COMP') private SWICH_COMP: any;
-    // @State('rocketDashboard') private rocketDashboard: any;
     @Getter('intervalTime') private intervalTime: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('durationTime') private durationTime: any;
