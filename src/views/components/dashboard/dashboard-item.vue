@@ -78,7 +78,6 @@ limitations under the License. -->
         }
         this.EDIT_COMP_CONFIG({ index: this.index, values: { ...configs[type], d: type, version: '1.0' } });
       }
-
       this.chartRender();
       this.SET_EVENTS([this.chartRender]);
     }
@@ -103,9 +102,7 @@ limitations under the License. -->
 
           this.chartSource = { [params.metricName]: data };
         } else if (queryMetricType === QueryTypes.SortMetrics) {
-          const data = resVal.map((item: { value: number }) => item.value);
-
-          this.chartSource = { [params.metricName]: data };
+          this.chartSource = resVal;
         } else if (queryMetricType === QueryTypes.HEATMAP) {
           const data = resVal.map((item: { value: number }) => item.value);
 

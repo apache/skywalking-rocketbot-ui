@@ -39,7 +39,7 @@ const actions: ActionTree<State, any> = {
           duration: params.duration,
           condition: {
             name: config.metricName,
-            parentService: config.currentService,
+            parentService: config.entityType !== 'All' ? currentServiceId : null,
             normal,
             scope: config.entityType,
             topN: 10,
@@ -54,7 +54,7 @@ const actions: ActionTree<State, any> = {
               scope: config.entityType,
               serviceName: config.entityType !== 'All' ? currentServiceId : undefined,
               serviceInstanceName: config.entityType === 'ServiceInstance' ? currentInstanceId : undefined,
-              endpointName: config.entityType === 'ServiceEndpoint' ? currentEndpointId : undefined,
+              endpointName: config.entityType === 'Endpoint' ? currentEndpointId : undefined,
               normal,
               // destNormal: normal,
               // destServiceName: '',
