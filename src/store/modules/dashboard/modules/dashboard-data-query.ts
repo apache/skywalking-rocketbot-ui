@@ -15,46 +15,26 @@
  * limitations under the License.
  */
 
-import { Commit, ActionTree, Dispatch } from 'vuex';
+import { Commit, ActionTree, Dispatch, MutationTree } from 'vuex';
 import axios, { AxiosPromise, AxiosResponse } from 'axios';
 import { cancelToken } from '@/utils/cancelToken';
 import { State } from './dashboard-data';
 import fragmentAll from '@/store/modules/dashboard/fragments';
-// getters
-const getters = {
-  Graphql(state: State): string {
-    const treeItems = state.tree[state.group].children[state.current].children;
-    let fragmentsArr: any = [];
-    let variablesArr: any = [];
-    for (const item of treeItems) {
-      const globalArr: any = fragmentAll;
-      if (globalArr[item.queryMetricType]) {
-        fragmentsArr = [...fragmentsArr, globalArr[item.queryMetricType].fragment];
-        variablesArr = [...variablesArr, ...globalArr[item.queryMetricType].variable];
-      }
-    }
-    const fragments = Array.from(new Set(fragmentsArr)).join('');
-    const variables = Array.from(new Set(variablesArr)).join(',');
-    return `query queryData(${variables}) {${fragments}}`;
-  },
-};
-// const EndPointInfoGraphql = `
-// query getEndpointInfo($endpointId: ID!) {
-//         endpointInfo: getEndpointInfo(endpointId: $endpointId) {
-//             serviceName
-//             id
-//     }}
-// `;
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_QUERY(context: { commit: Commit; dispatch: Dispatch; getters: any; state: State }, params): AxiosPromise<void> {
+  GET_QUERY(
+    context: { commit: Commit; dispatch: Dispatch; getters: any; state: State; rootState: any },
+    params,
+  ): AxiosPromise<void> {
+    const { currentDatabase, currentEndpoint, currentInstance, currentService } = context.rootState.rocketOption;
     const normal = context.state.tree[context.state.group].type === 'database' ? false : true;
-    const treeItems = context.state.tree[context.state.group].children[context.state.current].children;
-    const globalArr: any = fragmentAll;
-    const config = treeItems.filter((item: any) => globalArr[item.queryMetricType])[0] || {};
-    const types = ['readSampledRecords', 'sortMetrics'];
-    const variables = types.includes(config.queryMetricType)
+    const config = context.state.tree[context.state.group].children[context.state.current].children[params.index];
+    const names = ['readSampledRecords', 'sortMetrics'];
+    const currentServiceId = config.independentSelector ? config.currentService : currentService.key;
+    const currentInstanceId = config.independentSelector ? config.currentInstance : currentInstance.key;
+    const currentEndpointId = config.independentSelector ? config.currentEndpoint : currentEndpoint.key;
+    const variables = names.includes(config.queryMetricType)
       ? {
           duration: params.duration,
           condition: {
@@ -72,9 +52,9 @@ const actions: ActionTree<State, any> = {
             name: config.metricName,
             entity: {
               scope: config.entityType,
-              serviceName: config.entityType !== 'All' ? config.currentService : undefined,
-              serviceInstanceName: config.entityType === 'ServiceInstance' ? config.currentInstance : undefined,
-              endpointName: config.entityType === 'ServiceEndpoint' ? config.currentEndpoint : undefined,
+              serviceName: config.entityType !== 'All' ? currentServiceId : undefined,
+              serviceInstanceName: config.entityType === 'ServiceInstance' ? currentInstanceId : undefined,
+              endpointName: config.entityType === 'ServiceEndpoint' ? currentEndpointId : undefined,
               normal,
               // destNormal: normal,
               // destServiceName: '',
@@ -83,12 +63,16 @@ const actions: ActionTree<State, any> = {
             },
           },
         };
+    const globalArr: any = fragmentAll;
+    const fragments = globalArr[config.queryMetricType].fragment;
+    const queryVariables = globalArr[config.queryMetricType].variable;
+    const query = `query queryData(${queryVariables}) {${fragments}}`;
 
     return axios
       .post(
         '/graphql',
         {
-          query: context.getters.Graphql,
+          query,
           variables,
         },
         { cancelToken: cancelToken() },
@@ -119,16 +103,16 @@ const actions: ActionTree<State, any> = {
         // } else {
         //   context.dispatch('COOK_SOURCE', resData);
         // }
-        const data = Object.values(resData)[0] || ({} as any);
-
+        // const data = Object.values(resData)[0] || ({} as any);
         // context.dispatch('COOK_SOURCE', { ...data, id: config.id, metricName: config.metricName });
-
-        return { ...data, id: config.id, metricName: config.metricName };
+        // if (Number(data)) {
+        //   return { ...resData, id: config.id, metricName: config.metricName };
+        // }
+        return { ...resData, id: config.id, metricName: config.metricName };
       });
   },
 };
 
 export default {
-  getters,
   actions,
 };

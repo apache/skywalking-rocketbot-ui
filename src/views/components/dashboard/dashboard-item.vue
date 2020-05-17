@@ -43,6 +43,8 @@ limitations under the License. -->
 <script lang="ts">
   import { Vue, Component, Prop } from 'vue-property-decorator';
   import charts from './charts';
+  import metricsConfig, { QueryTypes } from './constant';
+  import { uuid } from '@/utils/uuid.ts';
 
   import { Mutation, State, Getter, Action } from 'vuex-class';
 
@@ -50,10 +52,12 @@ limitations under the License. -->
     components: { ...charts },
   })
   export default class DashboardItem extends Vue {
+    @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('SWICH_COMP') private SWICH_COMP: any;
-    @Getter('intervalTime') private intervalTime: any;
+    @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Action('GET_QUERY') private GET_QUERY: any;
+    @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
     @Prop() private rocketGlobal!: any;
     @Prop() private item!: any;
@@ -62,22 +66,56 @@ limitations under the License. -->
     private chartSource = {};
 
     private beforeMount() {
+      const configs = metricsConfig as any;
       this.status = this.item.metricType;
+      if (this.item.id === '') {
+        this.EDIT_COMP_CONFIG({ index: this.index, values: { id: uuid() } });
+      }
+      if (!this.item.version) {
+        let type = this.item.d;
+        if (this.item.c === 'ChartNum' && !type.includes('Avg')) {
+          type = type + 'Avg';
+        }
+        this.EDIT_COMP_CONFIG({ index: this.index, values: { ...configs[type], d: type, version: '1.0' } });
+      }
+
       this.chartRender();
+      this.SET_EVENTS([this.chartRender]);
     }
 
     private chartRender() {
       this.GET_QUERY({
         duration: this.durationTime,
-      }).then((params: any) => {
+        index: this.index,
+      }).then((params: { metricName: string; [key: string]: any; id: string }) => {
         if (!params) {
           return;
         }
 
-        const { values } = params.values;
-        const data = values.map((item: { value: number }) => item.value);
+        const { queryMetricType } = this.item;
+        const resVal = params[queryMetricType];
 
-        this.chartSource = { [params.metricName]: data };
+        if (queryMetricType === QueryTypes.ReadMetricsValue) {
+          this.chartSource = { [params.metricName]: resVal };
+        } else if (queryMetricType === QueryTypes.ReadMetricsValues) {
+          const { values } = resVal.values;
+          const data = values.map((item: { value: number }) => item.value);
+
+          this.chartSource = { [params.metricName]: data };
+        } else if (queryMetricType === QueryTypes.SortMetrics) {
+          const data = resVal.map((item: { value: number }) => item.value);
+
+          this.chartSource = { [params.metricName]: data };
+        } else if (queryMetricType === QueryTypes.HEATMAP) {
+          const data = resVal.map((item: { value: number }) => item.value);
+
+          this.chartSource = { [params.metricName]: data };
+        } else {
+          const { values } = resVal.values;
+          const data = values.map((item: { value: number }) => item.value);
+
+          this.chartSource = { [params.metricName]: data };
+        }
       });
     }
 

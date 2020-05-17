@@ -22,7 +22,7 @@ limitations under the License. -->
           type="text"
           class="rk-chart-edit-input long"
           :value="item.t"
-          @change="EDIT_COMP_CONFIG({ index, type: 't', value: $event.target.value })"
+          @change="EDIT_COMP_CONFIG({ index, values: { t: $event.target.value } })"
         />
       </div>
       <div class="flex-h mb-5">
@@ -30,7 +30,7 @@ limitations under the License. -->
         <input
           type="text"
           class="rk-chart-edit-input long"
-          :value="item.metricName"
+          :value="metricName"
           @change="setItemConfig({ index, type: 'metricName', value: $event.target.value })"
         />
         <select
@@ -90,7 +90,7 @@ limitations under the License. -->
         <select
           class="long"
           v-model="independentSelector"
-          @change="EDIT_COMP_CONFIG({ index, type: 'independentSelector', value: $event.target.value })"
+          @change="EDIT_COMP_CONFIG({ index, values: { independentSelector: $event.target.value } })"
         >
           <option v-for="type in IndependentType" :value="type.key" :key="type.key">{{ type.label }}</option>
         </select>
@@ -103,7 +103,7 @@ limitations under the License. -->
           max="12"
           class="rk-chart-edit-input long"
           :value="item.w"
-          @change="EDIT_COMP_CONFIG({ index, type: 'w', value: $event.target.value })"
+          @change="EDIT_COMP_CONFIG({ index, values: { w: $event.target.value } })"
         />
       </div>
       <div class="flex-h">
@@ -113,7 +113,7 @@ limitations under the License. -->
           min="1"
           class="rk-chart-edit-input long"
           :value="item.h"
-          @change="EDIT_COMP_CONFIG({ index, type: 'h', value: $event.target.value })"
+          @change="EDIT_COMP_CONFIG({ index, values: { h: $event.target.value } })"
         />
       </div>
     </div>
@@ -178,19 +178,19 @@ limitations under the License. -->
         this.getServiceObject(serviceId, params.index);
       }
       if (params.type === 'metricName') {
+        this.metricName = params.value;
         this.TYPE_METRICS({ name: params.value }).then((data: any) => {
           const { typeOfMetrics } = data;
           this.$emit('updateStatus', typeOfMetrics);
           this.queryMetricTypesList = QueryMetricTypes[typeOfMetrics] || [];
           this.queryMetricType = this.queryMetricTypesList[0] && this.queryMetricTypesList[0].value;
-          this.EDIT_COMP_CONFIG({ index: params.index, type: 'metricType', value: typeOfMetrics });
-          this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
+          this.EDIT_COMP_CONFIG({ index: params.index, values: { metricType: typeOfMetrics } });
         });
       }
       if (params.type === 'queryMetricType') {
-        this.EDIT_COMP_CONFIG({ index: params.index, type: 'c', value: MetricChartType[params.value] });
+        this.EDIT_COMP_CONFIG({ index: params.index, values: { c: MetricChartType[params.value] } });
       }
-      this.EDIT_COMP_CONFIG(params);
+      this.EDIT_COMP_CONFIG({ index: params.index, values: { [params.type]: params.value } });
     }
 
     private getServiceObject(serviceId: string, index: number, update: boolean = true) {
@@ -200,7 +200,7 @@ limitations under the License. -->
             this.endpoints = data;
             if (data.length && update) {
               this.currentEndpoint = data[0].key;
-              this.EDIT_COMP_CONFIG({ index, type: 'currentEndpoint', value: this.currentEndpoint });
+              this.EDIT_COMP_CONFIG({ index, values: { currentEndpoint: this.currentEndpoint } });
             }
           },
         );
@@ -210,7 +210,7 @@ limitations under the License. -->
             this.instances = data;
             if (data.length && update) {
               this.currentInstance = data[0].key;
-              this.EDIT_COMP_CONFIG({ index, type: 'currentInstance', value: this.currentInstance });
+              this.EDIT_COMP_CONFIG({ index, values: { currentInstance: this.currentInstance } });
             }
           },
         );

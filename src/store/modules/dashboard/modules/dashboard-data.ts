@@ -28,11 +28,13 @@ export interface State {
   group: number;
   tree: CompsTree[];
   data: any;
+  index: number;
 }
 
 const initState: State = {
   ...dashboardLayout.state,
   data: queryChartData,
+  index: 0,
 };
 
 // mutations
@@ -99,14 +101,8 @@ const actions: ActionTree<State, any> = {
   },
 };
 
-// getters
-const getters = {
-  ...dashboardQuery.getters,
-};
-
 export default {
   state: initState,
-  getters,
   actions,
   mutations,
 };

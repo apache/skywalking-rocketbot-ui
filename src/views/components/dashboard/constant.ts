@@ -20,3 +20,289 @@ export enum DASHBOARDTYPE {
   METRIC = 'metric',
   DATABASE = 'database',
 }
+
+export enum QueryTypes {
+  ReadMetricsValue = 'readMetricsValue',
+  ReadMetricsValues = 'readMetricsValues',
+  SortMetrics = 'sortMetrics',
+  ReadLabeledMetricsValues = 'readLabeledMetricsValues',
+  HEATMAP = 'HEATMAP',
+  ReadSampledRecords = 'readSampledRecords',
+}
+
+const globalHeatmap = {
+  id: '',
+  metricName: 'all_heatmap',
+  queryMetricType: 'readHeatMap',
+  currentService: '',
+  entityType: 'All',
+  independentSelector: false,
+  metricType: 'HEATMAP',
+  version: '',
+};
+
+const globalPercent = {
+  id: '',
+  metricName: 'all_percentile',
+  queryMetricType: 'readLabeledMetricsValues',
+  currentService: '',
+  entityType: 'All',
+  independentSelector: false,
+  metricType: 'LABELED_VALUE',
+  version: '',
+};
+
+const globalSlow = {
+  id: '',
+  metricName: 'endpoint_avg',
+  queryMetricType: 'sortMetrics',
+  currentService: '',
+  entityType: 'All',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const globalThroughput = {
+  id: '',
+  metricName: 'service_cpm',
+  queryMetricType: 'sortMetrics',
+  currentService: '',
+  entityType: 'All',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const serviceResponseTime = {
+  id: '',
+  metricName: 'service_resp_time',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'Service',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const serviceThroughput = {
+  id: '',
+  metricName: 'service_cpm',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'Service',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const serviceSLA = {
+  id: '',
+  metricName: 'service_sla',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'Service',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const servicePercent = {
+  id: '',
+  metricName: 'service_percentile',
+  queryMetricType: 'readLabeledMetricsValues',
+  currentService: '',
+  entityType: 'Service',
+  independentSelector: false,
+  metricType: 'LABELED_VALUE',
+  version: '',
+};
+
+const serviceSlowEndpoint = {
+  id: '',
+  metricName: 'endpoint_avg',
+  queryMetricType: 'sortMetrics',
+  currentService: '',
+  entityType: 'Service',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const serviceInstanceThroughput = {
+  id: '',
+  metricName: 'service_instance_cpm',
+  queryMetricType: 'sortMetrics',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const serviceApdexScore = {
+  id: '',
+  metricName: 'service_apdex',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'Service',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const endpointResponseTime = {
+  id: '',
+  metricName: 'endpoint_avg',
+  queryMetricType: 'readMetricsValue',
+  currentService: '',
+  entityType: 'ServiceEndpoint',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const endpointThroughput = {
+  id: '',
+  metricName: 'endpoint_cpm',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceEndpoint',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const endpointSLA = {
+  id: '',
+  metricName: 'endpoint_sla',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceEndpoint',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const endpointPercent = {
+  id: '',
+  metricName: 'endpoint_percentile',
+  queryMetricType: 'readLabeledMetricsValues',
+  currentService: '',
+  entityType: 'ServiceEndpoint',
+  independentSelector: false,
+  metricType: 'LABELED_VALUE',
+  version: '',
+};
+
+const instanceResponseTime = {
+  id: '',
+  metricName: 'service_instance_resp_time',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+const instanceResponseTimeAvg = {
+  id: '',
+  metricName: 'service_instance_resp_time',
+  queryMetricType: 'readMetricsValue',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const instanceThroughputAvg = {
+  id: '',
+  metricName: 'service_instance_cpm',
+  queryMetricType: 'readMetricsValue',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const instanceSLAAvg = {
+  id: '',
+  metricName: 'service_instance_sla',
+  queryMetricType: 'readMetricsValue',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const instanceThroughput = {
+  id: '',
+  metricName: 'service_instance_cpm',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const instanceSLA = {
+  id: '',
+  metricName: 'service_instance_sla',
+  queryMetricType: 'readMetricsValues',
+  currentService: 'ServiceInstance',
+  entityType: '',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const instanceCPU = {
+  id: '',
+  metricName: 'instance_jvm_cpu',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+// export const instanceGC = {
+//   id: '',
+//   metricName: 'instance_jvm_cpu',
+//   queryMetricType: 'readMetricsValues',
+//   currentService: '',
+//   entityType: '',
+//   independentSelector: false,
+//   metricType: 'REGULAR_VALUE',
+//   version: '',
+// };
+
+export default {
+  instanceCPU,
+  instanceSLA,
+  instanceThroughput,
+  instanceResponseTime,
+  endpointPercent,
+  endpointSLA,
+  endpointThroughput,
+  endpointResponseTime,
+  serviceApdexScore,
+  serviceInstanceThroughput,
+  serviceSlowEndpoint,
+  servicePercent,
+  serviceSLA,
+  serviceThroughput,
+  serviceResponseTime,
+  globalThroughput,
+  globalSlow,
+  globalPercent,
+  globalHeatmap,
+  instanceResponseTimeAvg,
+  instanceThroughputAvg,
+  instanceSLAAvg,
+};

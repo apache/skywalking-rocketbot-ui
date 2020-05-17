@@ -134,9 +134,12 @@ export const sortMetrics = {
 };
 
 export const readLabeledMetricsValues = {
-  variable: ['$condition: MetricsCondition!, labels: [String!]!, duration: Duration!'],
+  variable: ['$condition: MetricsCondition!, duration: Duration!'],
   fragment: `
-  readLabeledMetricsValues: readLabeledMetricsValues(condition: $condition, duration: $duration) {
+  readLabeledMetricsValues: readLabeledMetricsValues(
+    condition: $condition,
+    labels: ["50", "75", "90", "95", "99"]
+    duration: $duration) {
     label
     values {
       values {value}
@@ -148,8 +151,14 @@ export const readHeatMap = {
   variable: ['$condition: MetricsCondition!, $duration: Duration!'],
   fragment: `
   readHeatMap: readHeatMap(condition: $condition, duration: $duration) {
-    id
-    values
+    values {
+      id
+      values
+    }
+    buckets {
+      min
+      max
+    }
   }`,
 };
 

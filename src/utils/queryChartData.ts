@@ -231,7 +231,7 @@ export const queryChartData = {
     },
     {
       o: 'ServiceInstance',
-      d: 'instanceResponseTime',
+      d: 'instanceResponseTimeAvg',
       c: 'ChartNum',
       t: 'Instance Avg ResponseTime',
       w: 3,

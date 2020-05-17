@@ -15,7 +15,7 @@ limitations under the License. -->
 
 <template>
   <div class="rk-chart-num b">
-    <span>{{ (avg || 0).toFixed(2) }}</span>
+    <span>{{ (Object.values(data)[0] || 0).toFixed(2) }}</span>
     <span class="rk-chart-num-unit">{{ unit }}</span>
   </div>
 </template>
@@ -25,31 +25,27 @@ limitations under the License. -->
   @Component
   export default class ChartNum extends Vue {
     @Prop() private data!: any;
-    @Prop() private i!: any;
+    @Prop() private item!: any;
     @Prop() private intervalTime!: any;
-    get avg() {
-      const data = this.data[Object.keys(this.data)[0]].filter((i: number) => i > 0);
-      return data.reduce((acc: number, val: number) => acc + val, 0) / data.length;
-    }
     get unit() {
       let unit = 'ms' as string | null;
       if (
-        this.i.d === 'databaseThroughput' ||
-        this.i.d === 'serviceThroughput' ||
-        this.i.d === 'instanceThroughput' ||
-        this.i.d === 'endpointThroughput'
+        this.item.d === 'databaseThroughput' ||
+        this.item.d === 'serviceThroughput' ||
+        this.item.d === 'instanceThroughput' ||
+        this.item.d === 'endpointThroughput'
       ) {
         unit = 'cpm';
       }
       if (
-        this.i.d === 'databaseSLA' ||
-        this.i.d === 'serviceSLA' ||
-        this.i.d === 'instanceSLA' ||
-        this.i.d === 'endpointSLA'
+        this.item.d === 'databaseSLA' ||
+        this.item.d === 'serviceSLA' ||
+        this.item.d === 'instanceSLA' ||
+        this.item.d === 'endpointSLA'
       ) {
         unit = '%';
       }
-      if (this.i.d === 'serviceApdexScore') {
+      if (this.item.d === 'serviceApdexScore') {
         unit = null;
       }
       return unit;

@@ -62,7 +62,7 @@ limitations under the License. -->
     @State('rocketbot') private rocketGlobal: any;
     @State('rocketOption') private stateDashboardOption!: any;
     @State('rocketData') private rocketComps!: any;
-    @Mutation('SET_EVENTS') private SET_EVENTS: any;
+    // @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
@@ -106,7 +106,7 @@ limitations under the License. -->
         this.SET_COMPS_TREE(JSON.parse(data));
       }
       this.handleOption();
-      this.SET_EVENTS([this.handleRefresh]);
+      // this.SET_EVENTS([this.handleRefresh]);
     }
   }
 </script>

@@ -135,7 +135,7 @@ const mutations: MutationTree<State> = {
     const comp =
       param.type === 'database'
         ? {
-            id: uuid(),
+            // id: uuid(),
             w: 6,
             d: 'databaseThroughput',
             t: 'Database Throughput',
@@ -144,10 +144,10 @@ const mutations: MutationTree<State> = {
             currentService: param.currentService,
             entityType: 'Service',
             independentSelector: true,
-            metricsType: 'UNKNOWN',
+            metricType: 'UNKNOWN',
           }
         : {
-            id: uuid(),
+            // id: uuid(),
             w: 6,
             d: 'globalThroughput',
             t: 'Global Top Throughput',
@@ -156,7 +156,7 @@ const mutations: MutationTree<State> = {
             currentService: param.currentService,
             entityType: 'Service',
             independentSelector: true,
-            metricsType: 'UNKNOWN',
+            metricType: 'UNKNOWN',
           };
     state.tree[state.group].children[state.current].children.push(comp);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
@@ -165,10 +165,10 @@ const mutations: MutationTree<State> = {
     state.tree[state.group].children[state.current].children.splice(index, 1);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
-  [types.EDIT_COMP_CONFIG](state: State, params: any) {
-    const temp: any = state.tree[state.group].children[state.current].children[params.index];
+  [types.EDIT_COMP_CONFIG](state: State, params: { values: any; index: number }) {
+    const temp = state.tree[state.group].children[state.current].children[params.index];
 
-    temp[params.type] = params.value;
+    state.tree[state.group].children[state.current].children[params.index] = { ...temp, ...params.values };
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
   [types.SWICH_COMP](state: State, params: any) {
