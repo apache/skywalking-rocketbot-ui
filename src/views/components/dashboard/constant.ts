@@ -26,7 +26,7 @@ export enum QueryTypes {
   ReadMetricsValues = 'readMetricsValues',
   SortMetrics = 'sortMetrics',
   ReadLabeledMetricsValues = 'readLabeledMetricsValues',
-  HEATMAP = 'HEATMAP',
+  READHEATMAP = 'readHeatMap',
   ReadSampledRecords = 'readSampledRecords',
 }
 

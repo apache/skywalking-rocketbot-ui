@@ -63,7 +63,7 @@ limitations under the License. -->
     @Prop() private item!: any;
     @Prop() private index!: number;
     private status = 'UNKNOWN';
-    private chartSource = {};
+    private chartSource: any = { nodes: [] };
 
     private beforeMount() {
       const configs = metricsConfig as any;
@@ -96,22 +96,29 @@ limitations under the License. -->
 
         if (queryMetricType === QueryTypes.ReadMetricsValue) {
           this.chartSource = { [params.metricName]: resVal };
-        } else if (queryMetricType === QueryTypes.ReadMetricsValues) {
+          return;
+        }
+        if (queryMetricType === QueryTypes.ReadMetricsValues) {
           const { values } = resVal.values;
           const data = values.map((item: { value: number }) => item.value);
 
           this.chartSource = { [params.metricName]: data };
-        } else if (queryMetricType === QueryTypes.SortMetrics) {
+          return;
+        }
+        if (queryMetricType === QueryTypes.SortMetrics) {
           this.chartSource = resVal;
-        } else if (queryMetricType === QueryTypes.HEATMAP) {
-          const data = resVal.map((item: { value: number }) => item.value);
+          return;
+        }
+        if (queryMetricType === QueryTypes.READHEATMAP) {
+          const nodes = [] as any;
+          resVal.values.forEach((items: { values: number[] }, x: number) => {
+            const grids = items.values.map((val: number, y: number) => [x, y, val]);
 
-          this.chartSource = { [params.metricName]: data };
-        } else {
-          const { values } = resVal.values;
-          const data = values.map((item: { value: number }) => item.value);
+            nodes.push(...grids);
+          });
 
-          this.chartSource = { [params.metricName]: data };
+          this.chartSource = { nodes }; // nodes: number[][]
+          return;
         }
       });
     }

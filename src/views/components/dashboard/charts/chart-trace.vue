@@ -43,6 +43,9 @@ limitations under the License. -->
       const temp = { key: `${i.key}`, label: i.label };
     }
     get maxValue() {
+      if (!this.data.length) {
+        return null;
+      }
       const temp: number[] = this.data.map((i: any) => i.value);
       return Math.max.apply(null, temp);
     }

@@ -134,7 +134,7 @@ export const sortMetrics = {
 };
 
 export const readLabeledMetricsValues = {
-  variable: ['$condition: MetricsCondition!, duration: Duration!'],
+  variable: ['$condition: MetricsCondition!, $duration: Duration!'],
   fragment: `
   readLabeledMetricsValues: readLabeledMetricsValues(
     condition: $condition,
