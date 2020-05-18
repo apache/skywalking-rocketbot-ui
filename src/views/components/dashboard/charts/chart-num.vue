@@ -15,7 +15,7 @@ limitations under the License. -->
 
 <template>
   <div class="rk-chart-num b">
-    <span>{{ (Object.values(data)[0] || 0).toFixed(2) }}</span>
+    <span>{{ (data.avgNum || 0).toFixed(2) }}</span>
     <span class="rk-chart-num-unit">{{ unit }}</span>
   </div>
 </template>

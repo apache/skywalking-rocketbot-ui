@@ -63,7 +63,7 @@ limitations under the License. -->
     @Prop() private item!: any;
     @Prop() private index!: number;
     private status = 'UNKNOWN';
-    private chartSource: any = { nodes: [] };
+    private chartSource: any = { nodes: [], avgNum: 0 };
 
     private beforeMount() {
       const configs = metricsConfig as any;
@@ -95,19 +95,16 @@ limitations under the License. -->
         const resVal = params[queryMetricType];
 
         if (queryMetricType === QueryTypes.ReadMetricsValue) {
-          this.chartSource = { [params.metricName]: resVal };
-          return;
+          this.chartSource = { avgNum: resVal };
         }
         if (queryMetricType === QueryTypes.ReadMetricsValues) {
           const { values } = resVal.values;
           const data = values.map((item: { value: number }) => item.value);
 
           this.chartSource = { [params.metricName]: data };
-          return;
         }
         if (queryMetricType === QueryTypes.SortMetrics) {
           this.chartSource = resVal;
-          return;
         }
         if (queryMetricType === QueryTypes.READHEATMAP) {
           const nodes = [] as any;
@@ -118,7 +115,15 @@ limitations under the License. -->
           });
 
           this.chartSource = { nodes }; // nodes: number[][]
-          return;
+        }
+        if (queryMetricType === QueryTypes.ReadLabeledMetricsValues) {
+          // {[label: string]: number[]}
+          this.chartSource = {};
+          for (const item of resVal) {
+            const list = item.values.values.map((d: { value: number }) => d.value);
+
+            this.chartSource[item.label] = list;
+          }
         }
       });
     }

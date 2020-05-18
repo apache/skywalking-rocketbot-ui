@@ -29,7 +29,7 @@ limitations under the License. -->
     }
     get option() {
       const temp: any = [];
-      const keys = Object.keys(this.data || {});
+      const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
       keys.forEach((i: any, index: number) => {
         temp.push({
           data: this.data[i].map((item: any, itemIndex: number) => [this.intervalTime[itemIndex], item]),
