@@ -98,6 +98,10 @@ limitations under the License. -->
           this.chartSource = { avgNum: resVal };
         }
         if (queryMetricType === QueryTypes.ReadMetricsValues) {
+          if (!resVal.values) {
+            this.chartSource = { [params.metricName]: [] };
+            return;
+          }
           const { values } = resVal.values;
           const data = values.map((item: { value: number }) => item.value);
 

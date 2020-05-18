@@ -73,7 +73,7 @@ const globalThroughput = {
   metricType: 'REGULAR_VALUE',
   version: '',
 };
-
+// services
 const serviceResponseTime = {
   id: '',
   metricName: 'service_resp_time',
@@ -134,7 +134,7 @@ const serviceInstanceThroughput = {
   metricName: 'service_instance_cpm',
   queryMetricType: 'sortMetrics',
   currentService: '',
-  entityType: 'ServiceInstance',
+  entityType: 'Service',
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
@@ -150,10 +150,21 @@ const serviceApdexScore = {
   metricType: 'REGULAR_VALUE',
   version: '',
 };
-
-const endpointResponseTime = {
+// endpoint
+const endpointResponseTimeAvg = {
   id: '',
   metricName: 'endpoint_avg',
+  queryMetricType: 'readMetricsValue',
+  currentService: '',
+  entityType: 'Endpoint',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const endpointThroughputAvg = {
+  id: '',
+  metricName: 'endpoint_cpm',
   queryMetricType: 'readMetricsValue',
   currentService: '',
   entityType: 'Endpoint',
@@ -173,9 +184,31 @@ const endpointThroughput = {
   version: '',
 };
 
+const endpointSLAAvg = {
+  id: '',
+  metricName: 'endpoint_sla',
+  queryMetricType: 'readMetricsValue',
+  currentService: '',
+  entityType: 'Endpoint',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
 const endpointSLA = {
   id: '',
   metricName: 'endpoint_sla',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'Endpoint',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const endpointResponseTime = {
+  id: '',
+  metricName: 'endpoint_avg',
   queryMetricType: 'readMetricsValues',
   currentService: '',
   entityType: 'Endpoint',
@@ -194,7 +227,7 @@ const endpointPercent = {
   metricType: 'LABELED_VALUE',
   version: '',
 };
-
+// instance
 const instanceResponseTime = {
   id: '',
   metricName: 'service_instance_resp_time',
@@ -253,8 +286,8 @@ const instanceSLA = {
   id: '',
   metricName: 'service_instance_sla',
   queryMetricType: 'readMetricsValues',
-  currentService: 'ServiceInstance',
-  entityType: '',
+  currentService: '',
+  entityType: 'ServiceInstance',
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
@@ -271,12 +304,238 @@ const instanceCPU = {
   version: '',
 };
 
-// export const instanceGC = {
+const instanceGC = {
+  id: '',
+  metricName: 'instance_jvm_young_gc_time, instance_jvm_old_gc_time',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const instanceGCCount = {
+  id: '',
+  metricName: 'instance_jvm_young_gc_count, instance_jvm_old_gc_count',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const instanceHeap = {
+  id: '',
+  metricName: 'instance_jvm_memory_heap, instance_jvm_memory_heap_max',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const instanceNonheap = {
+  id: '',
+  metricName: 'instance_jvm_memory_noheap, instance_jvm_memory_noheap_max',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const instanceEnvoyCount = {
+  id: '',
+  metricName: 'envoy_total_connections_used, envoy_parent_connections_used',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const instanceClrGC = {
+  id: '',
+  metricName: 'instance_clr_gen0_collect_count, instance_clr_gen1_collect_count, instance_clr_gen2_collect_count',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+// export const youngGCTime = {
 //   id: '',
-//   metricName: 'instance_jvm_cpu',
+//   metricName: 'instance_jvm_young_gc_time',
 //   queryMetricType: 'readMetricsValues',
 //   currentService: '',
-//   entityType: '',
+//   entityType: 'ServiceInstance',
+//   independentSelector: false,
+//   metricType: 'REGULAR_VALUE',
+//   version: '',
+// };
+
+// export const oldGCTime = {
+//   id: '',
+//   metricName: 'instance_jvm_old_gc_time',
+//   queryMetricType: 'readMetricsValues',
+//   currentService: '',
+//   entityType: 'ServiceInstance',
+//   independentSelector: false,
+//   metricType: 'REGULAR_VALUE',
+//   version: '',
+// };
+
+// export const youngGCCount = {
+//   id: '',
+//   metricName: 'instance_jvm_young_gc_count',
+//   queryMetricType: 'readMetricsValues',
+//   currentService: '',
+//   entityType: 'ServiceInstance',
+//   independentSelector: false,
+//   metricType: 'REGULAR_VALUE',
+//   version: '',
+// };
+
+// export const oldGCCount = {
+//   id: '',
+//   metricName: 'instance_jvm_young_gc_count',
+//   queryMetricType: 'readMetricsValues',
+//   currentService: '',
+//   entityType: 'ServiceInstance',
+//   independentSelector: false,
+//   metricType: 'REGULAR_VALUE',
+//   version: '',
+// };
+
+// export const heap = {
+//   id: '',
+//   metricName: 'instance_jvm_memory_heap',
+//   queryMetricType: 'readMetricsValues',
+//   currentService: '',
+//   entityType: 'ServiceInstance',
+//   independentSelector: false,
+//   metricType: 'REGULAR_VALUE',
+//   version: '',
+// };
+
+// export const maxHeap = {
+//   id: '',
+//   metricName: 'instance_jvm_memory_heap',
+//   queryMetricType: 'readMetricsValues',
+//   currentService: '',
+//   entityType: 'ServiceInstance',
+//   independentSelector: false,
+//   metricType: 'REGULAR_VALUE',
+//   version: '',
+// };
+
+// export const nonheap = {
+//   id: '',
+//   metricName: 'instance_jvm_memory_noheap',
+//   queryMetricType: 'readMetricsValues',
+//   currentService: '',
+//   entityType: 'ServiceInstance',
+//   independentSelector: false,
+//   metricType: 'REGULAR_VALUE',
+//   version: '',
+// };
+
+// export const maxNonHeap = {
+//   id: '',
+//   metricName: 'instance_jvm_memory_noheap_max',
+//   queryMetricType: 'readMetricsValues',
+//   currentService: '',
+//   entityType: 'ServiceInstance',
+//   independentSelector: false,
+//   metricType: 'REGULAR_VALUE',
+//   version: '',
+// };
+
+// export const envoyTotal = {
+//   id: '',
+//   metricName: 'envoy_total_connections_used',
+//   queryMetricType: 'readMetricsValues',
+//   currentService: '',
+//   entityType: 'ServiceInstance',
+//   independentSelector: false,
+//   metricType: 'REGULAR_VALUE',
+//   version: '',
+// };
+
+// export const envoyParent = {
+//   id: '',
+//   metricName: 'envoy_parent_connections_used',
+//   queryMetricType: 'readMetricsValues',
+//   currentService: '',
+//   entityType: 'ServiceInstance',
+//   independentSelector: false,
+//   metricType: 'REGULAR_VALUE',
+//   version: '',
+// };
+
+export const instanceEnvoyHeap = {
+  id: '',
+  metricName: 'envoy_heap_memory_max_used',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+export const instanceClrHeap = {
+  id: '',
+  metricName: 'instance_clr_heap_memory',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+export const instanceClrCPU = {
+  id: '',
+  metricName: 'instance_clr_cpu',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+// export const clrGCGen0 = {
+//   id: '',
+//   metricName: 'instance_clr_gen0_collect_count',
+//   queryMetricType: 'readMetricsValues',
+//   currentService: '',
+//   entityType: 'ServiceInstance',
+//   independentSelector: false,
+//   metricType: 'REGULAR_VALUE',
+//   version: '',
+// };
+// export const clrGCGen1 = {
+//   id: '',
+//   metricName: 'instance_clr_gen1_collect_count',
+//   queryMetricType: 'readMetricsValues',
+//   currentService: '',
+//   entityType: 'ServiceInstance',
+//   independentSelector: false,
+//   metricType: 'REGULAR_VALUE',
+//   version: '',
+// };
+// export const clrGCGen2 = {
+//   id: '',
+//   metricName: 'instance_clr_gen2_collect_count',
+//   queryMetricType: 'readMetricsValues',
+//   currentService: '',
+//   entityType: 'ServiceInstance',
 //   independentSelector: false,
 //   metricType: 'REGULAR_VALUE',
 //   version: '',
@@ -288,9 +547,12 @@ export default {
   instanceThroughput,
   instanceResponseTime,
   endpointPercent,
-  endpointSLA,
+  endpointSLAAvg,
+  endpointThroughputAvg,
   endpointThroughput,
+  endpointSLA,
   endpointResponseTime,
+  endpointResponseTimeAvg,
   serviceApdexScore,
   serviceInstanceThroughput,
   serviceSlowEndpoint,
@@ -305,4 +567,14 @@ export default {
   instanceResponseTimeAvg,
   instanceThroughputAvg,
   instanceSLAAvg,
+  instanceGC,
+  instanceGCCount,
+  instanceHeap,
+  instanceNonheap,
+  instanceEnvoyCount,
+  instanceClrGC,
+  // youngGCTime,
+  // oldGCTime,
+  // youngGCCount,
+  // oldGCCount,
 };

@@ -83,6 +83,19 @@ export const readSampledRecords = {
   }`,
 };
 
+// export const labelMetrics = {
+//   globalPercent: ['50', '75', '90', '95', '99'],
+//   servicePercent: ['50', '75', '90', '95', '99'],
+//   endpointPercent: ['50', '75', '90', '95', '99'],
+//   databasePercent: ['50', '75', '90', '95', '99'],
+//   instanceClrGC: ['clrGCGen0', 'clrGCGen1', 'clrGCGen2'],
+//   instanceEnvoyCount: ['envoyTotal', 'envoyParent'],
+//   instanceNonheap: ['nonheap', 'maxNonHeap'],
+//   instanceHeap: ['heap', 'maxHeap'],
+//   instanceGCCount: ['youngGCCount', 'oldGCCount'],
+//   instanceGC: ['youngGCTime', 'oldGCTime'],
+// };
+
 export default {
   readSampledRecords,
   readHeatMap,

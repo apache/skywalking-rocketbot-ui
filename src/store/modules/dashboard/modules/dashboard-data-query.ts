@@ -23,10 +23,7 @@ import fragmentAll from './constant-metrics-query';
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_QUERY(
-    context: { commit: Commit; dispatch: Dispatch; getters: any; state: State; rootState: any },
-    params,
-  ): AxiosPromise<void> {
+  GET_QUERY(context: { commit: Commit; dispatch: Dispatch; getters: any; state: State; rootState: any }, params) {
     const { currentDatabase, currentEndpoint, currentInstance, currentService } = context.rootState.rocketOption;
     const normal = context.state.tree[context.state.group].type === 'database' ? false : true;
     const config = context.state.tree[context.state.group].children[context.state.current].children[params.index];
@@ -64,6 +61,9 @@ const actions: ActionTree<State, any> = {
           },
         };
     const globalArr: any = fragmentAll;
+    if (!config.queryMetricType) {
+      return;
+    }
     const fragments = globalArr[config.queryMetricType].fragment;
     const queryVariables = globalArr[config.queryMetricType].variable;
     const query = `query queryData(${queryVariables}) {${fragments}}`;
