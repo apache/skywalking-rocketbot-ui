@@ -83,6 +83,7 @@ export const SET_SHOW_DIALOG = 'SET_SHOW_DIALOG';
 export const SET_INSTANCE_DEPENDENCY = 'SET_INSTANCE_DEPENDENCY';
 export const SET_TOPO_COPY = 'SET_TOPO_COPY';
 export const SET_LINK = 'SET_LINK';
+export const SET_SERVICE_DETAIL = 'SET_SERVICE_DETAIL';
 
 // comparison
 export const SET_CHARTVAL = 'SET_CHARTVAL';

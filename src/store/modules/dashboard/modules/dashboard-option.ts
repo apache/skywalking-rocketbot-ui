@@ -19,6 +19,8 @@ import { Commit, ActionTree, MutationTree, Dispatch } from 'vuex';
 import * as types from '../mutation-types';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
+import { queryAlarms } from '@/graph/query/alarm';
+import constant from '@/views/components/dashboard/constant';
 
 export interface State {
   services: any;
@@ -187,26 +189,28 @@ const actions: ActionTree<State, any> = {
       context.dispatch('RUN_EVENTS', {}, { root: true });
     });
   },
-  SELECT_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: any }, params: any) {
+  SELECT_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
+    const { rocketData } = context.rootState;
+    const items = rocketData.tree[rocketData.group].children[rocketData.current].children;
+
     context.commit('SET_CURRENT_ENDPOINT', params.endpoint);
-    context.dispatch('GET_QUERY', {
-      serviceId: context.state.currentService.key || '',
-      endpointId: context.state.currentEndpoint.key || '',
-      endpointName: context.state.currentEndpoint.label || '',
-      instanceId: context.state.currentInstance.key || '',
-      databaseId: context.state.currentDatabase.key || '',
-      duration: params.duration,
+    items.forEach((item: any, index: number) => {
+      context.dispatch('GET_QUERY', {
+        duration: params.duration,
+        index,
+      });
     });
   },
-  SELECT_INSTANCE(context: { commit: Commit; dispatch: Dispatch; state: any }, params: any) {
+  SELECT_INSTANCE(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
+    const { rocketData } = context.rootState;
+    const items = rocketData.tree[rocketData.group].children[rocketData.current].children;
+
     context.commit('SET_CURRENT_INSTANCE', params.instance);
-    context.dispatch('GET_QUERY', {
-      serviceId: context.state.currentService.key || '',
-      endpointId: context.state.currentEndpoint.key || '',
-      endpointName: context.state.currentEndpoint.label || '',
-      instanceId: context.state.currentInstance.key || '',
-      databaseId: context.state.currentDatabase.key || '',
-      duration: params.duration,
+    items.forEach((item: any, index: number) => {
+      context.dispatch('GET_QUERY', {
+        duration: params.duration,
+        index,
+      });
     });
   },
   SELECT_DATABASE(context: { commit: Commit; dispatch: Dispatch }, params: any) {

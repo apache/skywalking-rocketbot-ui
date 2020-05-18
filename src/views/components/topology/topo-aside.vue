@@ -43,15 +43,15 @@ limitations under the License. -->
         </div>
         <div>
           <TopoChart
-            v-if="rocketDashboard.serviceApdexScore.ApdexScore.length"
-            :data="rocketDashboard.serviceApdexScore.ApdexScore"
+            v-if="stateTopo.serviceApdexScore.length"
+            :data="stateTopo.serviceApdexScore"
             :intervalTime="intervalTime"
             title="Service ApdexScore"
             unit=""
           />
           <TopoChart
-            v-if="rocketDashboard.serviceSLA.SLA.length"
-            :data="rocketDashboard.serviceSLA.SLA"
+            v-if="stateTopo.serviceSLA.length"
+            :data="stateTopo.serviceSLA"
             :intervalTime="intervalTime"
             title="Service SLA"
             unit="%"

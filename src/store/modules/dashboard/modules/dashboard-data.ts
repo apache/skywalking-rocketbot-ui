@@ -72,7 +72,7 @@ const actions: ActionTree<State, any> = {
     context: { commit: Commit; dispatch: Dispatch; state: State; rootState: any },
     { index, current = 0 }: { index: number; current: number },
   ): void {
-    const rocketOption = context.rootState.rocketOption;
+    const { rocketOption } = context.rootState;
     const temp: any = {};
     if (rocketOption.currentService) {
       temp.service = rocketOption.currentService;
