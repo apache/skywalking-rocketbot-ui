@@ -16,14 +16,14 @@
  */
 
 // import * as global from '@/store/modules/dashboard/fragments/global';
-import * as service from '@/store/modules/dashboard/fragments/service';
+// import * as service from '@/store/modules/dashboard/fragments/service';
 // import * as endpoint from '@/store/modules/dashboard/fragments/endpoint';
 // import * as instance from '@/store/modules/dashboard/fragments/instance';
 // import * as database from '@/store/modules/dashboard/fragments/database';
 
 export default {
   // ...global,
-  ...service,
+  // ...service,
   // ...endpoint,
   // ...instance,
   // ...database,

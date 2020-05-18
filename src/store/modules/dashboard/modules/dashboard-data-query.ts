@@ -19,7 +19,7 @@ import { Commit, ActionTree, Dispatch, MutationTree } from 'vuex';
 import axios, { AxiosPromise, AxiosResponse } from 'axios';
 import { cancelToken } from '@/utils/cancelToken';
 import { State } from './dashboard-data';
-import fragmentAll from '@/store/modules/dashboard/fragments';
+import fragmentAll from './constant-metrics-query';
 
 // actions
 const actions: ActionTree<State, any> = {
