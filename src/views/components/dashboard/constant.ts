@@ -369,177 +369,87 @@ const instanceClrGC = {
   metricType: 'REGULAR_VALUE',
   version: '',
 };
-
-// export const youngGCTime = {
-//   id: '',
-//   metricName: 'instance_jvm_young_gc_time',
-//   queryMetricType: 'readMetricsValues',
-//   currentService: '',
-//   entityType: 'ServiceInstance',
-//   independentSelector: false,
-//   metricType: 'REGULAR_VALUE',
-//   version: '',
-// };
-
-// export const oldGCTime = {
-//   id: '',
-//   metricName: 'instance_jvm_old_gc_time',
-//   queryMetricType: 'readMetricsValues',
-//   currentService: '',
-//   entityType: 'ServiceInstance',
-//   independentSelector: false,
-//   metricType: 'REGULAR_VALUE',
-//   version: '',
-// };
-
-// export const youngGCCount = {
-//   id: '',
-//   metricName: 'instance_jvm_young_gc_count',
-//   queryMetricType: 'readMetricsValues',
-//   currentService: '',
-//   entityType: 'ServiceInstance',
-//   independentSelector: false,
-//   metricType: 'REGULAR_VALUE',
-//   version: '',
-// };
-
-// export const oldGCCount = {
-//   id: '',
-//   metricName: 'instance_jvm_young_gc_count',
-//   queryMetricType: 'readMetricsValues',
-//   currentService: '',
-//   entityType: 'ServiceInstance',
-//   independentSelector: false,
-//   metricType: 'REGULAR_VALUE',
-//   version: '',
-// };
-
-// export const heap = {
-//   id: '',
-//   metricName: 'instance_jvm_memory_heap',
-//   queryMetricType: 'readMetricsValues',
-//   currentService: '',
-//   entityType: 'ServiceInstance',
-//   independentSelector: false,
-//   metricType: 'REGULAR_VALUE',
-//   version: '',
-// };
-
-// export const maxHeap = {
-//   id: '',
-//   metricName: 'instance_jvm_memory_heap',
-//   queryMetricType: 'readMetricsValues',
-//   currentService: '',
-//   entityType: 'ServiceInstance',
-//   independentSelector: false,
-//   metricType: 'REGULAR_VALUE',
-//   version: '',
-// };
-
-// export const nonheap = {
-//   id: '',
-//   metricName: 'instance_jvm_memory_noheap',
-//   queryMetricType: 'readMetricsValues',
-//   currentService: '',
-//   entityType: 'ServiceInstance',
-//   independentSelector: false,
-//   metricType: 'REGULAR_VALUE',
-//   version: '',
-// };
-
-// export const maxNonHeap = {
-//   id: '',
-//   metricName: 'instance_jvm_memory_noheap_max',
-//   queryMetricType: 'readMetricsValues',
-//   currentService: '',
-//   entityType: 'ServiceInstance',
-//   independentSelector: false,
-//   metricType: 'REGULAR_VALUE',
-//   version: '',
-// };
-
-// export const envoyTotal = {
-//   id: '',
-//   metricName: 'envoy_total_connections_used',
-//   queryMetricType: 'readMetricsValues',
-//   currentService: '',
-//   entityType: 'ServiceInstance',
-//   independentSelector: false,
-//   metricType: 'REGULAR_VALUE',
-//   version: '',
-// };
-
-// export const envoyParent = {
-//   id: '',
-//   metricName: 'envoy_parent_connections_used',
-//   queryMetricType: 'readMetricsValues',
-//   currentService: '',
-//   entityType: 'ServiceInstance',
-//   independentSelector: false,
-//   metricType: 'REGULAR_VALUE',
-//   version: '',
-// };
-
-export const instanceEnvoyHeap = {
+// database
+const databaseResponseTimeAvg = {
   id: '',
-  metricName: 'envoy_heap_memory_max_used',
-  queryMetricType: 'readMetricsValues',
+  metricName: 'database_access_resp_time',
+  queryMetricType: 'readMetricsValue',
   currentService: '',
-  entityType: 'ServiceInstance',
+  entityType: 'Database',
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
 };
-export const instanceClrHeap = {
+const databaseThroughputAvg = {
   id: '',
-  metricName: 'instance_clr_heap_memory',
-  queryMetricType: 'readMetricsValues',
+  metricName: 'database_access_cpm',
+  queryMetricType: 'readMetricsValue',
   currentService: '',
-  entityType: 'ServiceInstance',
+  entityType: 'Database',
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
 };
-export const instanceClrCPU = {
+const databaseSLAAvg = {
   id: '',
-  metricName: 'instance_clr_cpu',
-  queryMetricType: 'readMetricsValues',
+  metricName: 'database_access_sla',
+  queryMetricType: 'readMetricsValue',
   currentService: '',
-  entityType: 'ServiceInstance',
+  entityType: 'Database',
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
 };
-// export const clrGCGen0 = {
-//   id: '',
-//   metricName: 'instance_clr_gen0_collect_count',
-//   queryMetricType: 'readMetricsValues',
-//   currentService: '',
-//   entityType: 'ServiceInstance',
-//   independentSelector: false,
-//   metricType: 'REGULAR_VALUE',
-//   version: '',
-// };
-// export const clrGCGen1 = {
-//   id: '',
-//   metricName: 'instance_clr_gen1_collect_count',
-//   queryMetricType: 'readMetricsValues',
-//   currentService: '',
-//   entityType: 'ServiceInstance',
-//   independentSelector: false,
-//   metricType: 'REGULAR_VALUE',
-//   version: '',
-// };
-// export const clrGCGen2 = {
-//   id: '',
-//   metricName: 'instance_clr_gen2_collect_count',
-//   queryMetricType: 'readMetricsValues',
-//   currentService: '',
-//   entityType: 'ServiceInstance',
-//   independentSelector: false,
-//   metricType: 'REGULAR_VALUE',
-//   version: '',
-// };
+const databaseResponseTime = {
+  id: '',
+  metricName: 'database_access_resp_time',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'Database',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+const databaseThroughput = {
+  id: '',
+  metricName: 'database_access_cpm',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'Database',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+const databaseSLA = {
+  id: '',
+  metricName: 'database_access_sla',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'Database',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+const databasePercent = {
+  id: '',
+  metricName: 'database_access_percentile',
+  queryMetricType: 'readLabeledMetricsValues',
+  currentService: '',
+  entityType: 'Database',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+const databaseTopNRecords = {
+  id: '',
+  metricName: 'top_n_database_statement',
+  queryMetricType: 'sortMetrics',
+  currentService: '',
+  entityType: 'Database',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
 
 export default {
   instanceCPU,
@@ -573,8 +483,12 @@ export default {
   instanceNonheap,
   instanceEnvoyCount,
   instanceClrGC,
-  // youngGCTime,
-  // oldGCTime,
-  // youngGCCount,
-  // oldGCCount,
+  databaseResponseTime,
+  databaseThroughput,
+  databaseSLA,
+  databasePercent,
+  databaseTopNRecords,
+  databaseResponseTimeAvg,
+  databaseThroughputAvg,
+  databaseSLAAvg,
 };

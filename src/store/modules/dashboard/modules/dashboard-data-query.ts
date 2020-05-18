@@ -36,9 +36,9 @@ const actions: ActionTree<State, any> = {
           duration: params.duration,
           condition: {
             name: config.metricName,
-            parentService: config.entityType !== 'All' ? currentServiceId : null,
+            parentService: normal ? (config.entityType !== 'All' ? currentServiceId : null) : currentDatabase.key,
             normal,
-            scope: config.entityType,
+            scope: normal ? config.entityType : 'Service',
             topN: 10,
             order: 'DES',
           },
@@ -48,8 +48,8 @@ const actions: ActionTree<State, any> = {
           condition: {
             name: config.metricName,
             entity: {
-              scope: config.entityType,
-              serviceName: config.entityType !== 'All' ? currentServiceId : undefined,
+              scope: normal ? config.entityType : 'Service',
+              serviceName: normal ? (config.entityType !== 'All' ? currentServiceId : undefined) : currentDatabase.key,
               serviceInstanceName: config.entityType === 'ServiceInstance' ? currentInstanceId : undefined,
               endpointName: config.entityType === 'Endpoint' ? currentEndpointId : undefined,
               normal,
@@ -69,14 +69,7 @@ const actions: ActionTree<State, any> = {
     const query = `query queryData(${queryVariables}) {${fragments}}`;
 
     return axios
-      .post(
-        '/graphql',
-        {
-          query,
-          variables,
-        },
-        { cancelToken: cancelToken() },
-      )
+      .post('/graphql', { query, variables }, { cancelToken: cancelToken() })
       .then((res: AxiosResponse<any>) => {
         const resData = res.data.data;
         // if (resData.data && resData.data.endpointTopology) {
