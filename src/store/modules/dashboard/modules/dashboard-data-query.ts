@@ -34,41 +34,73 @@ const actions: ActionTree<State, any> = {
     const currentServiceId = config.independentSelector ? config.currentService : currentService.key;
     const currentInstanceId = config.independentSelector ? config.currentInstance : currentInstance.key;
     const currentEndpointId = config.independentSelector ? config.currentEndpoint : currentEndpoint.key;
-    const variables = names.includes(config.queryMetricType)
-      ? {
-          duration: params.duration,
-          condition: {
-            name: config.metricName,
-            parentService: normal
-              ? config.entityType !== 'All'
-                ? currentServiceId
-                : null
-              : config.independentSelector
-              ? config.currentDatabase
-              : currentDatabase.key,
-            normal,
-            scope: normal ? config.entityType : 'Service',
-            topN: 10,
-            order: 'DES',
-          },
-        }
-      : {
-          duration: params.duration,
-          condition: {
-            name: config.metricName,
-            entity: {
-              scope: normal ? config.entityType : 'Service',
-              serviceName: normal ? (config.entityType !== 'All' ? currentServiceId : undefined) : currentDatabase.key,
-              serviceInstanceName: config.entityType === 'ServiceInstance' ? currentInstanceId : undefined,
-              endpointName: config.entityType === 'Endpoint' ? currentEndpointId : undefined,
-              normal,
-              // destNormal: normal,
-              // destServiceName: '',
-              // destServiceInstanceName: '',
-              // destEndpointName: '',
+    let variables = {};
+
+    if (config.entityType === 'All') {
+      variables = names.includes(config.queryMetricType)
+        ? {
+            duration: params.duration,
+            condition: {
+              name: config.metricName,
+              parentService: null,
+              normal: true,
+              scope: config.entityType,
+              topN: 10,
+              order: 'DES',
             },
-          },
-        };
+          }
+        : {
+            duration: params.duration,
+            condition: {
+              name: config.metricName,
+              entity: {
+                scope: config.entityType,
+                normal: true,
+              },
+            },
+          };
+    } else {
+      variables = names.includes(config.queryMetricType)
+        ? {
+            duration: params.duration,
+            condition: {
+              name: config.metricName,
+              parentService: normal
+                ? config.entityType !== 'All'
+                  ? currentServiceId
+                  : null
+                : config.independentSelector
+                ? config.currentDatabase
+                : currentDatabase.key,
+              normal,
+              scope: normal ? config.entityType : 'Service',
+              topN: 10,
+              order: 'DES',
+            },
+          }
+        : {
+            duration: params.duration,
+            condition: {
+              name: config.metricName,
+              entity: {
+                scope: normal ? config.entityType : 'Service',
+                serviceName: normal
+                  ? config.entityType !== 'All'
+                    ? currentServiceId
+                    : undefined
+                  : currentDatabase.key,
+                serviceInstanceName: config.entityType === 'ServiceInstance' ? currentInstanceId : undefined,
+                endpointName: config.entityType === 'Endpoint' ? currentEndpointId : undefined,
+                normal,
+                // destNormal: normal,
+                // destServiceName: '',
+                // destServiceInstanceName: '',
+                // destEndpointName: '',
+              },
+            },
+          };
+    }
+
     const globalArr: any = fragmentAll;
     if (!config.queryMetricType) {
       return;
@@ -81,35 +113,7 @@ const actions: ActionTree<State, any> = {
       .post('/graphql', { query, variables }, { cancelToken: cancelToken() })
       .then((res: AxiosResponse<any>) => {
         const resData = res.data.data;
-        // if (resData.data && resData.data.endpointTopology) {
-        //   const endpointIds = resData.data.endpointTopology.nodes
-        //     .map((n: any) => n.name)
-        //     .filter(function onlyUnique(value: any, index: number, self: any) {
-        //       return self.indexOf(value) === index;
-        //     });
-        //   Promise.all(
-        //     endpointIds.map((id: any) => {
-        //       return axios
-        //         .post('/graphql', {
-        //           query: EndPointInfoGraphql,
-        //           variables: { endpointId: `${id}` },
-        //         })
-        //         .then((endpointRes: AxiosResponse<any>) => {
-        //           return endpointRes.data.data.endpointInfo;
-        //         });
-        //     }),
-        //   ).then((endpointInfos) => {
-        //     resData.data.endpointTopology.endpoints = endpointInfos;
-        //     context.dispatch('COOK_SOURCE', resData);
-        //   });
-        // } else {
-        //   context.dispatch('COOK_SOURCE', resData);
-        // }
-        // const data = Object.values(resData)[0] || ({} as any);
-        // context.dispatch('COOK_SOURCE', { ...data, id: config.id, metricName: config.metricName });
-        // if (Number(data)) {
-        //   return { ...resData, id: config.id, metricName: config.metricName };
-        // }
+
         return { ...resData, id: config.id, metricName: config.metricName };
       });
   },
