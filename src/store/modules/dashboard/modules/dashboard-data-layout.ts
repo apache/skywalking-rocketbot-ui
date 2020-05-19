@@ -20,6 +20,7 @@ import { CompsTree } from '@/types/dashboard';
 import groupServiceTemp from '../template/group-service-template';
 import groupDatabaseTemp from '../template/group-database-template';
 import * as types from '../mutation-types';
+import { uuid } from '@/utils/uuid.ts';
 
 export interface State {
   current: number;
@@ -134,10 +135,10 @@ const mutations: MutationTree<State> = {
     const comp =
       param.type === 'database'
         ? {
-            // id: uuid(),
+            id: uuid(),
             w: 6,
-            d: 'databaseThroughput',
-            t: 'Database Throughput',
+            d: '',
+            t: 'Title',
             h: 250,
             version: '1.0',
             currentService: param.currentService,
@@ -146,10 +147,10 @@ const mutations: MutationTree<State> = {
             metricType: 'UNKNOWN',
           }
         : {
-            // id: uuid(),
+            id: uuid(),
             w: 6,
-            d: 'globalThroughput',
-            t: 'Global Top Throughput',
+            d: '',
+            t: 'Title',
             h: 250,
             version: '1.0',
             currentService: param.currentService,

@@ -28,6 +28,9 @@ const actions: ActionTree<State, any> = {
     const normal = context.state.tree[context.state.group].type === 'database' ? false : true;
     const config = context.state.tree[context.state.group].children[context.state.current].children[params.index];
     const names = ['readSampledRecords', 'sortMetrics'];
+    if (!config) {
+      return;
+    }
     const currentServiceId = config.independentSelector ? config.currentService : currentService.key;
     const currentInstanceId = config.independentSelector ? config.currentInstance : currentInstance.key;
     const currentEndpointId = config.independentSelector ? config.currentEndpoint : currentEndpoint.key;
@@ -36,7 +39,13 @@ const actions: ActionTree<State, any> = {
           duration: params.duration,
           condition: {
             name: config.metricName,
-            parentService: normal ? (config.entityType !== 'All' ? currentServiceId : null) : currentDatabase.key,
+            parentService: normal
+              ? config.entityType !== 'All'
+                ? currentServiceId
+                : null
+              : config.independentSelector
+              ? config.currentDatabase
+              : currentDatabase.key,
             normal,
             scope: normal ? config.entityType : 'Service',
             topN: 10,

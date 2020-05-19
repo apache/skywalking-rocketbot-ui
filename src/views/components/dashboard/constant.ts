@@ -29,7 +29,7 @@ export enum QueryTypes {
   READHEATMAP = 'readHeatMap',
   ReadSampledRecords = 'readSampledRecords',
 }
-
+// global
 const globalHeatmap = {
   id: '',
   metricName: 'all_heatmap',
@@ -78,6 +78,49 @@ const serviceResponseTime = {
   id: '',
   metricName: 'service_resp_time',
   queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'Service',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const serviceResponseTimeAvg = {
+  id: '',
+  metricName: 'service_resp_time',
+  queryMetricType: 'readMetricsValue',
+  currentService: '',
+  entityType: 'Service',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const serviceThroughputAvg = {
+  id: '',
+  metricName: 'service_cpm',
+  queryMetricType: 'readMetricsValue',
+  currentService: '',
+  entityType: 'Service',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const serviceSLAAvg = {
+  id: '',
+  metricName: 'service_sla',
+  queryMetricType: 'readMetricsValue',
+  currentService: '',
+  entityType: 'Service',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+const serviceApdexScoreAvg = {
+  id: '',
+  metricName: 'service_apdex',
+  queryMetricType: 'readMetricsValue',
   currentService: '',
   entityType: 'Service',
   independentSelector: false,
@@ -369,6 +412,38 @@ const instanceClrGC = {
   metricType: 'REGULAR_VALUE',
   version: '',
 };
+
+const instanceEnvoyHeap = {
+  id: '',
+  metricName: 'envoy_heap_memory_max_used',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+
+const instanceClrHeap = {
+  id: '',
+  metricName: 'instance_clr_heap_memory',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
+const instanceClrCPU = {
+  id: '',
+  metricName: 'instance_clr_cpu',
+  queryMetricType: 'readMetricsValues',
+  currentService: '',
+  entityType: 'ServiceInstance',
+  independentSelector: false,
+  metricType: 'REGULAR_VALUE',
+  version: '',
+};
 // database
 const databaseResponseTimeAvg = {
   id: '',
@@ -470,6 +545,10 @@ export default {
   serviceSLA,
   serviceThroughput,
   serviceResponseTime,
+  serviceApdexScoreAvg,
+  serviceThroughputAvg,
+  serviceResponseTimeAvg,
+  serviceSLAAvg,
   globalThroughput,
   globalSlow,
   globalPercent,
@@ -482,7 +561,10 @@ export default {
   instanceHeap,
   instanceNonheap,
   instanceEnvoyCount,
+  instanceClrCPU,
   instanceClrGC,
+  instanceClrHeap,
+  instanceEnvoyHeap,
   databaseResponseTime,
   databaseThroughput,
   databaseSLA,

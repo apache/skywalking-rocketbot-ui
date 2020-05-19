@@ -31,7 +31,7 @@ limitations under the License. -->
           v-if="!excludeMetrics.includes(item.d)"
           :is="rocketGlobal.edit ? 'ChartEdit' : item.c"
           ref="chart"
-          :item="item"
+          :item="itemConfig"
           :index="index"
           :intervalTime="intervalTime"
           :data="chartSource"
@@ -91,6 +91,9 @@ limitations under the License. -->
     }
 
     private chartRender() {
+      if (this.rocketGlobal.edit) {
+        return;
+      }
       this.GET_QUERY({
         duration: this.durationTime,
         index: this.index,

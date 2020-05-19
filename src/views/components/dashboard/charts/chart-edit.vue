@@ -43,7 +43,7 @@ limitations under the License. -->
           }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5">
+      <div class="flex-h mb-5" v-show="!isDatabase">
         <div class="title grey sm">{{ $t('entityType') }}:</div>
         <select
           class="long"
@@ -53,7 +53,19 @@ limitations under the License. -->
           <option v-for="type in EntityType" :value="type.key" :key="type.key">{{ type.label }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="itemType !== EntityType[1].key">
+      <div class="flex-h mb-5" v-show="independentSelector && isDatabase">
+        <div class="title grey sm">{{ $t('currentDatabase') }}:</div>
+        <select
+          class="long"
+          v-model="currentDatabase"
+          @change="setItemConfig({ index, type: 'currentDatabase', value: $event.target.value })"
+        >
+          <option v-for="database in stateDashboardOption.databases" :value="database.key" :key="database.key">{{
+            database.label
+          }}</option>
+        </select>
+      </div>
+      <div class="flex-h mb-5" v-show="itemType !== EntityType[1].key && independentSelector && !isDatabase">
         <div class="title grey sm">{{ $t('currentService') }}:</div>
         <select
           class="long"
@@ -65,7 +77,7 @@ limitations under the License. -->
           }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="itemType === EntityType[2].key">
+      <div class="flex-h mb-5" v-show="itemType === EntityType[2].key && independentSelector && !isDatabase">
         <div class="title grey sm">{{ $t('currentEndpoint') }}:</div>
         <select
           class="long"
@@ -75,7 +87,7 @@ limitations under the License. -->
           <option v-for="endpoint in endpoints" :value="endpoint.key" :key="endpoint.key">{{ endpoint.label }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="itemType === EntityType[3].key">
+      <div class="flex-h mb-5" v-show="itemType === EntityType[3].key && independentSelector && !isDatabase">
         <div class="title grey sm">{{ $t('currentInstance') }}:</div>
         <select
           class="long"
@@ -90,7 +102,9 @@ limitations under the License. -->
         <select
           class="long"
           v-model="independentSelector"
-          @change="EDIT_COMP_CONFIG({ index, values: { independentSelector: $event.target.value } })"
+          @change="
+            setItemConfig({ index, type: 'independentSelector', value: $event.target.value === 'true' ? true : false })
+          "
         >
           <option v-for="type in IndependentType" :value="type.key" :key="type.key">{{ type.label }}</option>
         </select>
@@ -130,6 +144,7 @@ limitations under the License. -->
   @Component
   export default class ChartEdit extends Vue {
     @State('rocketOption') private stateDashboardOption: any;
+    @State('rocketData') private rocketComps!: any;
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
     @Action('GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
     @Action('GET_ITEM_INSTANCES') private GET_ITEM_INSTANCES: any;
@@ -146,24 +161,31 @@ limitations under the License. -->
     private currentService = '';
     private currentEndpoint = '';
     private currentInstance = '';
-    private independentSelector = true;
+    private currentDatabase = '';
+    private independentSelector: boolean | string = true;
     private metricType = '';
     private metricName = '';
     private queryMetricTypesList: any = [];
     private queryMetricType = '';
-
+    private isDatabase = false;
+    // @change="EDIT_COMP_CONFIG({ index, values: { independentSelector: $event.target.value==='true'?true:false } })"
     private created() {
+      this.isDatabase = this.rocketComps.tree[this.rocketComps.group].type === 'database' ? true : false;
       this.itemType = this.item.entityType;
+      this.independentSelector = this.item.independentSelector;
+      this.metricType = this.item.metricType;
+      this.metricName = this.item.metricName;
+      this.queryMetricType = this.item.queryMetricType;
+      this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
+      if (!this.independentSelector) {
+        return;
+      }
       this.endpoints = this.stateDashboardOption.endpoints;
       this.instances = this.stateDashboardOption.instances;
+      this.currentDatabase = this.item.currentDatabase || this.stateDashboardOption.currentDatabase;
       this.currentService = this.item.currentService || this.stateDashboardOption.currentService;
       this.currentEndpoint = this.item.currentEndpoint || this.stateDashboardOption.currentEndpoint;
       this.currentInstance = this.item.currentInstance || this.stateDashboardOption.currentInstance;
-      this.metricType = this.item.metricType;
-      this.metricName = this.item.metricName;
-      this.independentSelector = this.item.independentSelector;
-      this.queryMetricType = this.item.queryMetricType;
-      this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
       this.getServiceObject(this.currentService, this.index, false);
     }
 
@@ -189,6 +211,11 @@ limitations under the License. -->
       }
       if (params.type === 'queryMetricType') {
         this.EDIT_COMP_CONFIG({ index: params.index, values: { c: MetricChartType[params.value] } });
+      }
+      if (params.type === 'independentSelector') {
+        this.independentSelector = params.value === 'true' ? true : false;
+        this.EDIT_COMP_CONFIG({ index: params.index, values: { [params.type]: this.independentSelector } });
+        return;
       }
       this.EDIT_COMP_CONFIG({ index: params.index, values: { [params.type]: params.value } });
     }
