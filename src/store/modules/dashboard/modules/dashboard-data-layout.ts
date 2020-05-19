@@ -136,8 +136,7 @@ const mutations: MutationTree<State> = {
       param.type === 'database'
         ? {
             id: uuid(),
-            w: 6,
-            d: '',
+            w: 3,
             t: 'Title',
             h: 250,
             version: '1.0',
@@ -148,8 +147,7 @@ const mutations: MutationTree<State> = {
           }
         : {
             id: uuid(),
-            w: 6,
-            d: '',
+            w: 3,
             t: 'Title',
             h: 250,
             version: '1.0',

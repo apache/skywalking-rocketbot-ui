@@ -17,25 +17,25 @@ limitations under the License. -->
     class="rk-dashboard-item"
     :class="`g-sm-${item.w}`"
     :style="rocketGlobal.edit ? 'height:350px' : `height:${item.h}px;`"
+    v-if="item.c !== 'ChartBrief' && !excludeMetrics.includes(item.d)"
   >
     <div class="rk-dashboard-item-title ell">
       <svg class="icon cp red r" v-if="rocketGlobal.edit" @click="DELETE_COMP(index)">
         <use xlink:href="#file-deletion"></use>
       </svg>
-      <span>{{ item.t }}</span>
+      <span>{{ title }}</span>
       <span v-if="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
     </div>
     <div class="rk-dashboard-item-body">
       <div style="height:100%;">
         <component
-          v-if="!excludeMetrics.includes(item.d)"
           :is="rocketGlobal.edit ? 'ChartEdit' : item.c"
           ref="chart"
           :item="itemConfig"
           :index="index"
           :intervalTime="intervalTime"
           :data="chartSource"
-          @updateStatus="(type) => setStatus(type)"
+          @updateStatus="(type, value) => setStatus(type, value)"
         ></component>
       </div>
     </div>
@@ -64,15 +64,17 @@ limitations under the License. -->
     @Prop() private rocketGlobal!: any;
     @Prop() private item!: any;
     @Prop() private index!: number;
-    private excludeMetrics = ['endpointTopology', 'endpointTraces'];
+    private excludeMetrics = ['endpointTopology', 'endpointTraces']; // ChartBrief
     private status = 'UNKNOWN';
+    private title = 'Title';
     private chartSource: any = { nodes: [], avgNum: 0 };
     private itemConfig: any = {};
 
-    private beforeMount() {
+    private created() {
       const configs = metricsConfig as any;
       const id = this.item.id || uuid();
       this.status = this.item.metricType;
+      this.title = this.item.t;
       this.itemConfig = this.item;
       if (!this.item.version || !this.item.id) {
         let type = this.item.d;
@@ -107,6 +109,7 @@ limitations under the License. -->
 
         if (queryMetricType === QueryTypes.ReadMetricsValue) {
           this.chartSource = { avgNum: resVal };
+          return;
         }
         if (queryMetricType === QueryTypes.ReadMetricsValues) {
           if (!resVal.values) {
@@ -117,9 +120,11 @@ limitations under the License. -->
           const data = values.map((item: { value: number }) => item.value);
 
           this.chartSource = { [params.metricName]: data };
+          return;
         }
         if (queryMetricType === QueryTypes.SortMetrics) {
           this.chartSource = resVal;
+          return;
         }
         if (queryMetricType === QueryTypes.READHEATMAP) {
           const nodes = [] as any;
@@ -130,6 +135,7 @@ limitations under the License. -->
           });
 
           this.chartSource = { nodes }; // nodes: number[][]
+          return;
         }
         if (queryMetricType === QueryTypes.ReadLabeledMetricsValues) {
           // {[label: string]: number[]}
@@ -143,8 +149,13 @@ limitations under the License. -->
       });
     }
 
-    private setStatus(data: string) {
-      this.status = data;
+    private setStatus(type: string, value: string) {
+      if (type === 'metricType') {
+        this.status = value;
+      }
+      if (type === 'title') {
+        this.title = value;
+      }
     }
 
     @Watch('rocketOption.currentInstance')

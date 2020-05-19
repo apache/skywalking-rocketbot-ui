@@ -22,7 +22,7 @@ limitations under the License. -->
           type="text"
           class="rk-chart-edit-input long"
           :value="item.t"
-          @change="EDIT_COMP_CONFIG({ index, values: { t: $event.target.value } })"
+          @change="setItemConfig({ index, type: 't', value: $event.target.value })"
         />
       </div>
       <div class="flex-h mb-5">
@@ -102,9 +102,7 @@ limitations under the License. -->
         <select
           class="long"
           v-model="independentSelector"
-          @change="
-            setItemConfig({ index, type: 'independentSelector', value: $event.target.value === 'true' ? true : false })
-          "
+          @change="setItemConfig({ index, type: 'independentSelector', value: $event.target.value })"
         >
           <option v-for="type in IndependentType" :value="type.key" :key="type.key">{{ type.label }}</option>
         </select>
@@ -168,7 +166,7 @@ limitations under the License. -->
     private queryMetricTypesList: any = [];
     private queryMetricType = '';
     private isDatabase = false;
-    // @change="EDIT_COMP_CONFIG({ index, values: { independentSelector: $event.target.value==='true'?true:false } })"
+
     private created() {
       this.isDatabase = this.rocketComps.tree[this.rocketComps.group].type === 'database' ? true : false;
       this.itemType = this.item.entityType;
@@ -180,6 +178,10 @@ limitations under the License. -->
       if (!this.independentSelector) {
         return;
       }
+      this.selectorsConfig();
+    }
+
+    private selectorsConfig() {
       this.endpoints = this.stateDashboardOption.endpoints;
       this.instances = this.stateDashboardOption.instances;
       this.currentDatabase = this.item.currentDatabase || this.stateDashboardOption.currentDatabase;
@@ -199,18 +201,37 @@ limitations under the License. -->
         serviceId = params.value;
         this.getServiceObject(serviceId, params.index);
       }
+      if (params.type === 't') {
+        this.$emit('updateStatus', 'title', params.value);
+      }
       if (params.type === 'metricName') {
         this.metricName = params.value;
         this.TYPE_METRICS({ name: params.value }).then((data: any) => {
           const { typeOfMetrics } = data;
-          this.$emit('updateStatus', typeOfMetrics);
+          this.$emit('updateStatus', 'metricType', typeOfMetrics);
           this.queryMetricTypesList = QueryMetricTypes[typeOfMetrics] || [];
           this.queryMetricType = this.queryMetricTypesList[0] && this.queryMetricTypesList[0].value;
-          this.EDIT_COMP_CONFIG({ index: params.index, values: { metricType: typeOfMetrics } });
+          this.EDIT_COMP_CONFIG({
+            index: params.index,
+            values: {
+              metricType: typeOfMetrics,
+              queryMetricType: this.queryMetricType,
+              c: MetricChartType[this.queryMetricType],
+              [params.type]: params.value,
+            },
+          });
         });
+        return;
       }
       if (params.type === 'queryMetricType') {
-        this.EDIT_COMP_CONFIG({ index: params.index, values: { c: MetricChartType[params.value] } });
+        this.EDIT_COMP_CONFIG({
+          index: params.index,
+          values: {
+            c: MetricChartType[params.value],
+            [params.type]: params.value,
+          },
+        });
+        return;
       }
       if (params.type === 'independentSelector') {
         this.independentSelector = params.value === 'true' ? true : false;
