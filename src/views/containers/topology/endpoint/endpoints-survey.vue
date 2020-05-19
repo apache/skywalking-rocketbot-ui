@@ -20,6 +20,7 @@ limitations under the License. -->
       :key="index + i.t + i.w + i.d"
       :rocketGlobal="{ edit: false }"
       :item="i"
+      :index="index"
     />
   </div>
 </template>

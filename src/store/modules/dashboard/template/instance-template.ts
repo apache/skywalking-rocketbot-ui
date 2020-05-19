@@ -19,14 +19,6 @@ export default [
   {
     o: 'ServiceInstance',
     d: 'instanceResponseTime',
-    c: 'ChartInstance',
-    t: 'Instance Info',
-    w: 3,
-    h: '250',
-  },
-  {
-    o: 'ServiceInstance',
-    d: 'instanceResponseTime',
     c: 'ChartNum',
     t: 'Instance Avg ResponseTime',
     w: 3,

@@ -190,28 +190,10 @@ const actions: ActionTree<State, any> = {
     });
   },
   SELECT_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
-    const { rocketData } = context.rootState;
-    const items = rocketData.tree[rocketData.group].children[rocketData.current].children;
-
     context.commit('SET_CURRENT_ENDPOINT', params.endpoint);
-    items.forEach((item: any, index: number) => {
-      context.dispatch('GET_QUERY', {
-        duration: params.duration,
-        index,
-      });
-    });
   },
   SELECT_INSTANCE(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
-    const { rocketData } = context.rootState;
-    const items = rocketData.tree[rocketData.group].children[rocketData.current].children;
-
     context.commit('SET_CURRENT_INSTANCE', params.instance);
-    items.forEach((item: any, index: number) => {
-      context.dispatch('GET_QUERY', {
-        duration: params.duration,
-        index,
-      });
-    });
   },
   SELECT_DATABASE(context: { commit: Commit; dispatch: Dispatch }, params: any) {
     context.commit('SET_CURRENT_DATABASE', params);

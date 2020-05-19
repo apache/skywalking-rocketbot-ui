@@ -28,6 +28,7 @@ limitations under the License. -->
     <div class="rk-dashboard-item-body">
       <div style="height:100%;">
         <component
+          v-if="!excludeMetrics.includes(item.d)"
           :is="rocketGlobal.edit ? 'ChartEdit' : item.c"
           ref="chart"
           :item="item"
@@ -41,7 +42,7 @@ limitations under the License. -->
   </div>
 </template>
 <script lang="ts">
-  import { Vue, Component, Prop } from 'vue-property-decorator';
+  import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
   import charts from './charts';
   import metricsConfig, { QueryTypes } from './constant';
   import { uuid } from '@/utils/uuid.ts';
@@ -52,6 +53,7 @@ limitations under the License. -->
     components: { ...charts },
   })
   export default class DashboardItem extends Vue {
+    @State('rocketOption') private rocketOption: any;
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('SWICH_COMP') private SWICH_COMP: any;
@@ -62,21 +64,27 @@ limitations under the License. -->
     @Prop() private rocketGlobal!: any;
     @Prop() private item!: any;
     @Prop() private index!: number;
+    private excludeMetrics = ['endpointTopology', 'endpointTraces'];
     private status = 'UNKNOWN';
     private chartSource: any = { nodes: [], avgNum: 0 };
+    private itemConfig: any = {};
 
     private beforeMount() {
       const configs = metricsConfig as any;
+      const id = this.item.id || uuid();
       this.status = this.item.metricType;
-      if (this.item.id === '') {
-        this.EDIT_COMP_CONFIG({ index: this.index, values: { id: uuid() } });
-      }
-      if (!this.item.version) {
+      this.itemConfig = this.item;
+      if (!this.item.version || !this.item.id) {
         let type = this.item.d;
         if (this.item.c === 'ChartNum' && !type.includes('Avg')) {
           type = type + 'Avg';
         }
-        this.EDIT_COMP_CONFIG({ index: this.index, values: { ...configs[type], d: type, version: '1.0' } });
+        const values = { ...configs[type], d: type, version: '1.0', id };
+        this.EDIT_COMP_CONFIG({ index: this.index, values });
+        this.itemConfig = {
+          ...this.item,
+          ...values,
+        };
       }
       this.chartRender();
       this.SET_EVENTS([this.chartRender]);
@@ -91,7 +99,7 @@ limitations under the License. -->
           return;
         }
 
-        const { queryMetricType } = this.item;
+        const { queryMetricType } = this.itemConfig;
         const resVal = params[queryMetricType];
 
         if (queryMetricType === QueryTypes.ReadMetricsValue) {
@@ -134,6 +142,19 @@ limitations under the License. -->
 
     private setStatus(data: string) {
       this.status = data;
+    }
+
+    @Watch('rocketOption.currentInstance')
+    private watchCurrentInstance() {
+      this.chartRender();
+    }
+    @Watch('rocketOption.currentEndpoint')
+    private watchCurrentEndpoint() {
+      this.chartRender();
+    }
+    @Watch('rocketOption.currentService')
+    private watchCurrentService() {
+      this.chartRender();
     }
   }
 </script>

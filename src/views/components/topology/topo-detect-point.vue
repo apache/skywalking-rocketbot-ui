@@ -137,7 +137,6 @@ limitations under the License. -->
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT')
     private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
-    @Action('GET_QUERY') private GET_QUERY: any;
     @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
     @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL')
     private SET_SELECTED_INSTANCE_CALL: any;

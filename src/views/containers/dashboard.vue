@@ -66,7 +66,7 @@ limitations under the License. -->
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
-    @Action('GET_QUERY') private GET_QUERY: any;
+    // @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('durationTime') private durationTime: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
     private isRouterAlive: boolean = true;
