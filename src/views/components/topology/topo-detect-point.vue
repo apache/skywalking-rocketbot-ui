@@ -139,7 +139,6 @@ limitations under the License. -->
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
-    @State('rocketDashboard') private rocketDashboard: any;
     @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL')
     private SET_SELECTED_INSTANCE_CALL: any;
     @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY')

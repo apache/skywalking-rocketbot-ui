@@ -93,7 +93,6 @@ limitations under the License. -->
   export default class TopoInstanceDependency extends Vue {
     @Getter('durationTime') private durationTime: any;
     @State('rocketTopo') private stateTopo!: topoState;
-    @State('rocketDashboard') private rocketDashboard: any;
     @Getter('intervalTime') private intervalTime: any;
     @Mutation('rocketTopo/SET_INSTANCE_DEPEDENCE_TYPE')
     private SET_MODE_STATUS: any;

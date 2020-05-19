@@ -82,7 +82,6 @@ limitations under the License. -->
   })
   export default class TopoAside extends Vue {
     @State('rocketTopo') private stateTopo!: topoState;
-    @State('rocketDashboard') private rocketDashboard: any;
     @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;

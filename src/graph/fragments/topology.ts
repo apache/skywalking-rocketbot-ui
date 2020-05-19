@@ -338,7 +338,9 @@ export const TopoServiceDetail = {
     servicePercentile: getMultipleLinearIntValues(metric: {
       name: "service_percentile"
       id: $serviceId
-    }, numOfLinear: 5, duration: $duration) { values { value } }
+    }, numOfLinear: 5, duration: $duration) {
+      values { value }
+    }
     serviceSLA: getLinearIntValues(metric: {
       name: "service_sla"
       id: $serviceId
