@@ -33,7 +33,7 @@ limitations under the License. -->
       </DashboardItem>
       <div
         v-show="rocketGlobal.edit"
-        class="rk-add-dashboard-item"
+        class="rk-add-dashboard-item g-sm-3"
         @click="ADD_COMP({ type: compType, currentService: stateDashboardOption.services[0].key })"
       >
         + Add An Item
@@ -118,12 +118,10 @@ limitations under the License. -->
     flex-grow: 1;
   }
   .rk-add-dashboard-item {
-    width: 290px;
     height: 342px;
     text-align: center;
     line-height: 250px;
     border: 1px dashed rgba(196, 200, 225, 0.5);
-    margin: 0 5px;
     cursor: pointer;
     display: inline-block;
     font-size: 16px;

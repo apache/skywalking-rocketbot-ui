@@ -34,6 +34,7 @@ const actions: ActionTree<State, any> = {
     const currentServiceId = config.independentSelector ? config.currentService : currentService.key;
     const currentInstanceId = config.independentSelector ? config.currentInstance : currentInstance.key;
     const currentEndpointId = config.independentSelector ? config.currentEndpoint : currentEndpoint.key;
+    const currentDatabaseId = config.independentSelector ? config.currentDatabase : currentDatabase.key;
     let variables = {};
 
     if (config.entityType === 'All') {
@@ -65,13 +66,7 @@ const actions: ActionTree<State, any> = {
             duration: params.duration,
             condition: {
               name: config.metricName,
-              parentService: normal
-                ? config.entityType !== 'All'
-                  ? currentServiceId
-                  : null
-                : config.independentSelector
-                ? config.currentDatabase
-                : currentDatabase.key,
+              parentService: normal ? currentServiceId : currentDatabaseId,
               normal,
               scope: normal ? config.entityType : 'Service',
               topN: 10,
@@ -84,11 +79,7 @@ const actions: ActionTree<State, any> = {
               name: config.metricName,
               entity: {
                 scope: normal ? config.entityType : 'Service',
-                serviceName: normal
-                  ? config.entityType !== 'All'
-                    ? currentServiceId
-                    : undefined
-                  : currentDatabase.key,
+                serviceName: normal ? currentServiceId : currentDatabaseId,
                 serviceInstanceName: config.entityType === 'ServiceInstance' ? currentInstanceId : undefined,
                 endpointName: config.entityType === 'Endpoint' ? currentEndpointId : undefined,
                 normal,
