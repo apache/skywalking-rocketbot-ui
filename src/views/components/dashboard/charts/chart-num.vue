@@ -26,7 +26,6 @@ limitations under the License. -->
   export default class ChartNum extends Vue {
     @Prop() private data!: any;
     @Prop() private item!: any;
-    @Prop() private intervalTime!: any;
     get unit() {
       let unit = 'ms' as string | null;
       if (

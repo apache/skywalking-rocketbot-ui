@@ -99,32 +99,40 @@ limitations under the License. -->
       this.GET_QUERY({
         duration: this.durationTime,
         index: this.index,
-      }).then((params: { metricName: string; [key: string]: any; id: string }) => {
+      }).then((params: Array<{ metricName: string; [key: string]: any; id: string }>) => {
         if (!params) {
           return;
         }
+        if (!params.length) {
+          return;
+        }
+        const { queryMetricType } = this.itemConfig;
+        let data = params;
+        if (queryMetricType !== QueryTypes.ReadMetricsValues) {
+          data = [params[0]];
+        }
+        this.chartConfig(data);
+      });
+    }
 
+    private chartConfig(data: Array<{ metricName: string; [key: string]: any; id: string }>) {
+      this.chartSource = {};
+      for (const params of data) {
         const { queryMetricType } = this.itemConfig;
         const resVal = params[queryMetricType];
 
         if (queryMetricType === QueryTypes.ReadMetricsValue) {
           this.chartSource = { avgNum: resVal };
-          return;
         }
         if (queryMetricType === QueryTypes.ReadMetricsValues) {
           if (!resVal.values) {
-            this.chartSource = { [params.metricName]: [] };
-            return;
+            this.chartSource[params.metricName] = [];
           }
           const { values } = resVal.values;
-          const data = values.map((item: { value: number }) => item.value);
-
-          this.chartSource = { [params.metricName]: data };
-          return;
+          this.chartSource[params.metricName] = values.map((item: { value: number }) => item.value);
         }
         if (queryMetricType === QueryTypes.SortMetrics) {
           this.chartSource = resVal;
-          return;
         }
         if (queryMetricType === QueryTypes.READHEATMAP) {
           const nodes = [] as any;
@@ -135,7 +143,6 @@ limitations under the License. -->
           });
 
           this.chartSource = { nodes }; // nodes: number[][]
-          return;
         }
         if (queryMetricType === QueryTypes.ReadLabeledMetricsValues) {
           // {[label: string]: number[]}
@@ -146,7 +153,7 @@ limitations under the License. -->
             this.chartSource[item.label] = list;
           }
         }
-      });
+      }
     }
 
     private setStatus(type: string, value: string) {

@@ -97,7 +97,7 @@ limitations under the License. -->
           <option v-for="instance in instances" :value="instance.key" :key="instance.key">{{ instance.label }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5">
+      <div class="flex-h mb-5" v-show="rocketComps.tree[this.rocketComps.group].type !== 'metric'">
         <div class="title grey sm">{{ $t('independentSelector') }}:</div>
         <select
           class="long"
@@ -138,6 +138,7 @@ limitations under the License. -->
   import { Component, Prop } from 'vue-property-decorator';
 
   import { EntityType, IndependentType, MetricsType, QueryMetricTypes, MetricChartType } from './constant';
+  import { DASHBOARDTYPE } from '../constant';
 
   @Component
   export default class ChartEdit extends Vue {
@@ -160,7 +161,7 @@ limitations under the License. -->
     private currentEndpoint = '';
     private currentInstance = '';
     private currentDatabase = '';
-    private independentSelector: boolean | string = true;
+    private independentSelector = true;
     private metricType = '';
     private metricName = '';
     private queryMetricTypesList: any = [];
@@ -168,7 +169,7 @@ limitations under the License. -->
     private isDatabase = false;
 
     private created() {
-      this.isDatabase = this.rocketComps.tree[this.rocketComps.group].type === 'database' ? true : false;
+      this.isDatabase = this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.DATABASE ? true : false;
       this.itemType = this.item.entityType;
       this.independentSelector = this.item.independentSelector;
       this.metricType = this.item.metricType;

@@ -29,6 +29,14 @@ export enum QueryTypes {
   READHEATMAP = 'readHeatMap',
   ReadSampledRecords = 'readSampledRecords',
 }
+// {
+//   o: 'Service',
+//   d: 'serviceApdexScore',
+//   c: 'ChartNum',
+//   t: 'Service Avg ApdexScore',
+//   w: 3,
+//   h: 80,
+// }
 // global
 const globalHeatmap = {
   id: '',

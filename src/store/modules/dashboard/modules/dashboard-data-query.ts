@@ -23,7 +23,13 @@ import fragmentAll from './constant-metrics-query';
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_QUERY(context: { commit: Commit; dispatch: Dispatch; getters: any; state: State; rootState: any }, params) {
+  GET_QUERY(
+    context: { commit: Commit; dispatch: Dispatch; getters: any; state: State; rootState: any },
+    params: {
+      index: number;
+      duration: any;
+    },
+  ) {
     const { currentDatabase, currentEndpoint, currentInstance, currentService } = context.rootState.rocketOption;
     const normal = context.state.tree[context.state.group].type === 'database' ? false : true;
     const config = context.state.tree[context.state.group].children[context.state.current].children[params.index];
@@ -31,11 +37,15 @@ const actions: ActionTree<State, any> = {
     if (!config) {
       return;
     }
+    if (!config.metricName) {
+      return;
+    }
+    const metricNames = (config.metricName || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
     const currentServiceId = config.independentSelector ? config.currentService : currentService.key;
     const currentInstanceId = config.independentSelector ? config.currentInstance : currentInstance.key;
     const currentEndpointId = config.independentSelector ? config.currentEndpoint : currentEndpoint.key;
     const currentDatabaseId = config.independentSelector ? config.currentDatabase : currentDatabase.key;
-    let variables = {};
+    let variables = {} as any;
 
     if (config.entityType === 'All') {
       variables = names.includes(config.queryMetricType)
@@ -100,13 +110,20 @@ const actions: ActionTree<State, any> = {
     const queryVariables = globalArr[config.queryMetricType].variable;
     const query = `query queryData(${queryVariables}) {${fragments}}`;
 
-    return axios
-      .post('/graphql', { query, variables }, { cancelToken: cancelToken() })
-      .then((res: AxiosResponse<any>) => {
-        const resData = res.data.data;
+    return Promise.all(
+      metricNames.map((name: string) => {
+        variables.condition.name = name;
+        return axios
+          .post('/graphql', { query, variables }, { cancelToken: cancelToken() })
+          .then((res: AxiosResponse<any>) => {
+            const resData = res.data.data;
 
-        return { ...resData, id: config.id, metricName: config.metricName };
-      });
+            return { ...resData, id: config.id, metricName: name };
+          });
+      }),
+    ).then((data: any) => {
+      return data;
+    });
   },
 };
 
