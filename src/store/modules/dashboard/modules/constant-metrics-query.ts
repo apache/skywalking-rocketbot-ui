@@ -44,11 +44,11 @@ export const sortMetrics = {
 };
 
 export const readLabeledMetricsValues = {
-  variable: ['$condition: MetricsCondition!, $duration: Duration!'],
+  variable: ['$condition: MetricsCondition!, $labels: [String!]!, $duration: Duration!'],
   fragment: `
   readLabeledMetricsValues: readLabeledMetricsValues(
     condition: $condition,
-    labels: ["50", "75", "90", "95", "99"]
+    labels: $labels,
     duration: $duration) {
     label
     values {

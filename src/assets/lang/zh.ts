@@ -129,6 +129,7 @@ const m = {
   entityType: '实体类型',
   independentSelector: '独立选择器',
   unknownMetrics: '未知指标',
+  labels: '标签',
 };
 
 export default m;

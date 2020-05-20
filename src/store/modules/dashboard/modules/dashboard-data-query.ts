@@ -40,11 +40,13 @@ const actions: ActionTree<State, any> = {
     if (!config.metricName) {
       return;
     }
-    const metricNames = (config.metricName || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
+    const metricNames = config.metricName.split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
+    const metricLabels = (config.metricLabels || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
     const currentServiceId = config.independentSelector ? config.currentService : currentService.key;
     const currentInstanceId = config.independentSelector ? config.currentInstance : currentInstance.key;
     const currentEndpointId = config.independentSelector ? config.currentEndpoint : currentEndpoint.key;
     const currentDatabaseId = config.independentSelector ? config.currentDatabase : currentDatabase.key;
+    const labels = config.metricType === 'LABELED_VALUE' ? metricLabels : undefined;
     let variables = {} as any;
 
     if (config.entityType === 'All') {
@@ -69,6 +71,7 @@ const actions: ActionTree<State, any> = {
                 normal: true,
               },
             },
+            labels,
           };
     } else {
       variables = names.includes(config.queryMetricType)
@@ -99,6 +102,7 @@ const actions: ActionTree<State, any> = {
                 // destEndpointName: '',
               },
             },
+            labels,
           };
     }
 

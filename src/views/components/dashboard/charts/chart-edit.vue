@@ -43,6 +43,15 @@ limitations under the License. -->
           }}</option>
         </select>
       </div>
+      <div class="flex-h mb-5" v-show="isLabel">
+        <div class="title grey sm">{{ $t('labels') }}:</div>
+        <input
+          type="text"
+          class="rk-chart-edit-input long"
+          :value="metricLabels"
+          @change="setItemConfig({ index, type: 'metricLabels', value: $event.target.value })"
+        />
+      </div>
       <div class="flex-h mb-5" v-show="!isDatabase">
         <div class="title grey sm">{{ $t('entityType') }}:</div>
         <select
@@ -167,6 +176,8 @@ limitations under the License. -->
     private queryMetricTypesList: any = [];
     private queryMetricType = '';
     private isDatabase = false;
+    private isLabel = false;
+    private metricLabels = '';
 
     private created() {
       this.isDatabase = this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.DATABASE ? true : false;
@@ -176,6 +187,8 @@ limitations under the License. -->
       this.metricName = this.item.metricName;
       this.queryMetricType = this.item.queryMetricType;
       this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
+      this.isLabel = this.metricType === MetricsType.LABELED_VALUE ? true : false;
+      this.metricLabels = this.item.metricLabels;
       if (!this.independentSelector) {
         return;
       }
@@ -207,18 +220,30 @@ limitations under the License. -->
       }
       if (params.type === 'metricName') {
         this.metricName = params.value;
-        this.TYPE_METRICS({ name: params.value }).then((data: any) => {
-          const { typeOfMetrics } = data;
+        this.TYPE_METRICS({ name: params.value }).then((data: Array<{ typeOfMetrics: string }>) => {
+          if (!data.length) {
+            return;
+          }
+          if (data.length > 1) {
+            const length = data.filter((d: { typeOfMetrics: string }) => d.typeOfMetrics !== MetricsType.REGULAR_VALUE)
+              .length;
+            if (length) {
+              this.$emit('updateStatus', 'metricType', MetricsType.UNKNOWN);
+              return;
+            }
+          }
+          const { typeOfMetrics } = data[0];
           this.$emit('updateStatus', 'metricType', typeOfMetrics);
           this.queryMetricTypesList = QueryMetricTypes[typeOfMetrics] || [];
           this.queryMetricType = this.queryMetricTypesList[0] && this.queryMetricTypesList[0].value;
+          this.isLabel = typeOfMetrics === MetricsType.LABELED_VALUE ? true : false;
           this.EDIT_COMP_CONFIG({
             index: params.index,
             values: {
               metricType: typeOfMetrics,
               queryMetricType: this.queryMetricType,
               c: MetricChartType[this.queryMetricType],
-              [params.type]: params.value,
+              metricName: params.value,
             },
           });
         });

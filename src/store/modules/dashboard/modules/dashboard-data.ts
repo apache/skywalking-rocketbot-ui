@@ -90,12 +90,17 @@ const actions: ActionTree<State, any> = {
     context.dispatch('RUN_EVENTS', {}, { root: true });
   },
   TYPE_METRICS(context, params: { name: string }) {
-    return graph
-      .query('queryTypeOfMetrics')
-      .params(params)
-      .then((res: AxiosResponse) => {
-        return res.data.data;
-      });
+    const metricNames = (params.name || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
+    return Promise.all(
+      metricNames.map((item: string) => {
+        return graph
+          .query('queryTypeOfMetrics')
+          .params({ name: item })
+          .then((res: AxiosResponse) => {
+            return res.data.data;
+          });
+      }),
+    );
   },
 };
 

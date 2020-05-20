@@ -129,6 +129,7 @@ const m = {
   entityType: 'Entity type',
   independentSelector: 'Selectors',
   unknownMetrics: 'Unknown Metrics',
+  labels: 'Labels',
 };
 
 export default m;

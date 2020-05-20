@@ -88,6 +88,9 @@ limitations under the License. -->
           ...values,
         };
       }
+      if (!this.itemConfig.metricLabels && this.itemConfig.queryMetricType === QueryTypes.ReadLabeledMetricsValues) {
+        this.EDIT_COMP_CONFIG({ index: this.index, values: { metricLabels: '50, 75, 90, 95, 99' } });
+      }
       this.chartRender();
       this.SET_EVENTS([this.chartRender]);
     }
