@@ -151,7 +151,7 @@ limitations under the License. -->
         if (queryMetricType === QueryTypes.ReadLabeledMetricsValues) {
           // {[label: string]: number[]}
           this.chartSource = {};
-          for (const item of resVal) {
+          for (const item of resVal || []) {
             const list = item.values.values.map((d: { value: number }) => d.value);
 
             this.chartSource[item.label] = list;

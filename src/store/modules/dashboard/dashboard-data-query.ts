@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Commit, ActionTree, Dispatch, MutationTree } from 'vuex';
+import { Commit, ActionTree, Dispatch } from 'vuex';
 import axios, { AxiosPromise, AxiosResponse } from 'axios';
 import { cancelToken } from '@/utils/cancelToken';
 import { State } from './dashboard-data';

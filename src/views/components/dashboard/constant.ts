@@ -520,7 +520,7 @@ const databasePercent = {
   currentService: '',
   entityType: 'Database',
   independentSelector: false,
-  metricType: 'REGULAR_VALUE',
+  metricType: 'LABELED_VALUE',
   version: '',
 };
 const databaseTopNRecords = {

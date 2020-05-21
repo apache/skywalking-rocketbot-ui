@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-export const readMetricsValues = {
+const readMetricsValues = {
   variable: ['$condition: MetricsCondition!, $duration: Duration!'],
   fragment: `
   readMetricsValues: readMetricsValues(condition: $condition, duration: $duration) {
@@ -26,13 +26,13 @@ export const readMetricsValues = {
   }`,
 };
 
-export const readMetricsValue = {
+const readMetricsValue = {
   variable: ['$condition: MetricsCondition!, $duration: Duration!'],
   fragment: `
   readMetricsValue: readMetricsValue(condition: $condition, duration: $duration)`,
 };
 
-export const sortMetrics = {
+const sortMetrics = {
   variable: ['$condition: TopNCondition!, $duration: Duration!'],
   fragment: `
   sortMetrics: sortMetrics(condition: $condition, duration: $duration) {
@@ -43,7 +43,7 @@ export const sortMetrics = {
   }`,
 };
 
-export const readLabeledMetricsValues = {
+const readLabeledMetricsValues = {
   variable: ['$condition: MetricsCondition!, $labels: [String!]!, $duration: Duration!'],
   fragment: `
   readLabeledMetricsValues: readLabeledMetricsValues(
@@ -57,7 +57,7 @@ export const readLabeledMetricsValues = {
   }`,
 };
 
-export const readHeatMap = {
+const readHeatMap = {
   variable: ['$condition: MetricsCondition!, $duration: Duration!'],
   fragment: `
   readHeatMap: readHeatMap(condition: $condition, duration: $duration) {
@@ -72,7 +72,7 @@ export const readHeatMap = {
   }`,
 };
 
-export const readSampledRecords = {
+const readSampledRecords = {
   variable: ['$condition: TopNCondition!, $duration: Duration!'],
   fragment: `
   readSampledRecords: readSampledRecords(condition: $condition, duration: $duration) {
@@ -82,19 +82,6 @@ export const readSampledRecords = {
     refId
   }`,
 };
-
-// export const labelMetrics = {
-//   globalPercent: ['50', '75', '90', '95', '99'],
-//   servicePercent: ['50', '75', '90', '95', '99'],
-//   endpointPercent: ['50', '75', '90', '95', '99'],
-//   databasePercent: ['50', '75', '90', '95', '99'],
-//   instanceClrGC: ['clrGCGen0', 'clrGCGen1', 'clrGCGen2'],
-//   instanceEnvoyCount: ['envoyTotal', 'envoyParent'],
-//   instanceNonheap: ['nonheap', 'maxNonHeap'],
-//   instanceHeap: ['heap', 'maxHeap'],
-//   instanceGCCount: ['youngGCCount', 'oldGCCount'],
-//   instanceGC: ['youngGCTime', 'oldGCTime'],
-// };
 
 export default {
   readSampledRecords,
