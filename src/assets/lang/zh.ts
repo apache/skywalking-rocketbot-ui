@@ -98,7 +98,6 @@ const m = {
   serverZone: '服务器时区',
   percentResponse: '百分比响应',
   exportImage: '导出为图片',
-  comparison: '指标对比',
   queryData: '数据查询',
   previousService: '上一个服务',
   nextService: '下一个服务',

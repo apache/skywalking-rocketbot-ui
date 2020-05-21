@@ -98,7 +98,6 @@ const m = {
   serverZone: 'Server Zone',
   percentResponse: 'Response Time Percentile',
   exportImage: 'Export image',
-  comparison: 'Metrics Comparison',
   queryData: 'Query',
   previousService: 'Previous Service',
   nextService: 'Next Service',

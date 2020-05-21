@@ -49,12 +49,6 @@ limitations under the License. -->
         </svg>
         <span class="vm hide-xs ml-5">{{ this.$t('alarm') }}</span>
       </router-link>
-      <router-link class="nav-link mr-20" to="/comparison">
-        <svg class="icon sm vm">
-          <use xlink:href="#chart"></use>
-        </svg>
-        <span class="vm hide-xs ml-5">{{ this.$t('comparison') }}</span>
-      </router-link>
     </div>
     <div class="flex-h">
       <a class="rk-btn mr-5 sm" :class="auto ? 'blue' : 'ghost'" @click="handleAuto">
