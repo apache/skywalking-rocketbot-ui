@@ -19,7 +19,6 @@ import * as types from '@/store/mutation-types';
 import { Duration, DurationTime } from '@/types/global';
 import getDurationRow from '@/utils/datetime';
 import getLocalTime from '@/utils/localtime';
-import Vue from 'vue';
 import { ActionTree, Commit, MutationTree } from 'vuex';
 
 let timer: any = null;

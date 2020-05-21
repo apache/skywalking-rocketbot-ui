@@ -172,9 +172,9 @@ limitations under the License. -->
     @State('rocketOption') private stateDashboardOption: any;
     @State('rocketData') private rocketComps!: any;
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
-    @Action('GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
-    @Action('GET_ITEM_INSTANCES') private GET_ITEM_INSTANCES: any;
-    @Action('TYPE_METRICS') private TYPE_METRICS: any;
+    @Action('rocketOption/GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
+    @Action('rocketOption/GET_ITEM_INSTANCES') private GET_ITEM_INSTANCES: any;
+    @Action('rocketOption/TYPE_METRICS') private TYPE_METRICS: any;
     @Getter('durationTime') private durationTime: any;
     @Prop() private item!: any;
     @Prop() private index!: number;

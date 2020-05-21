@@ -89,19 +89,6 @@ const actions: ActionTree<State, any> = {
     context.dispatch('SET_CURRENT_STATE', context.state.tree[index].query);
     context.dispatch('RUN_EVENTS', {}, { root: true });
   },
-  TYPE_METRICS(context, params: { name: string }) {
-    const metricNames = (params.name || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
-    return Promise.all(
-      metricNames.map((item: string) => {
-        return graph
-          .query('queryTypeOfMetrics')
-          .params({ name: item })
-          .then((res: AxiosResponse) => {
-            return res.data.data;
-          });
-      }),
-    );
-  },
 };
 
 export default {
