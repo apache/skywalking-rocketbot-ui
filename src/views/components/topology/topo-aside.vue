@@ -63,7 +63,7 @@ limitations under the License. -->
   </aside>
 </template>
 <script lang="ts">
-  import { initState } from '@/store/modules/dashboard/modules/dashboard-data-layout';
+  import { initState } from '@/store/modules/dashboard/dashboard-data-layout';
   import topo, { State as topoState } from '@/store/modules/topology';
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';

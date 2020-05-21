@@ -18,13 +18,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import rocketbot, { State as RocketbotState } from './modules/global';
-import rocketOption, { State as DashboardOptionState } from './modules/dashboard/modules/dashboard-option';
-import rocketData, { State as DashboardDataState } from './modules/dashboard/modules/dashboard-data';
+import rocketOption, { State as DashboardOptionState } from './modules/dashboard/dashboard-option';
+import rocketData, { State as DashboardDataState } from './modules/dashboard/dashboard-data';
 import rocketTopo, { State as TopoState } from '@/store/modules/topology';
 import rocketTopoGroup, { State as TopoGroupState } from '@/store/modules/topology/group';
 import rocketTrace, { State as TraceState } from '@/store/modules/trace';
 import rocketAlarm, { State as AlarmState } from '@/store/modules/alarm';
-import comparisonStore, { State as ComparisonState } from '@/store/modules/comparison/comparison-store';
 import profileStore, { State as ProfileState } from '@/store/modules/profile/profile-store';
 
 Vue.use(Vuex);
@@ -37,7 +36,6 @@ export interface State {
   rocketTopoGroup: TopoGroupState;
   rocketTrace: TraceState;
   rocketAlarm: AlarmState;
-  comparisonStore: ComparisonState;
   profileStore: ProfileState;
 }
 
@@ -50,7 +48,6 @@ export default new Vuex.Store({
     rocketTopoGroup,
     rocketTrace,
     rocketAlarm,
-    comparisonStore,
     profileStore,
   },
 });

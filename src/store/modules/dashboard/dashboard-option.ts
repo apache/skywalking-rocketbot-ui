@@ -16,11 +16,9 @@
  */
 
 import { Commit, ActionTree, MutationTree, Dispatch } from 'vuex';
-import * as types from '../mutation-types';
+import * as types from './mutation-types';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
-import { queryAlarms } from '@/graph/query/alarm';
-import constant from '@/views/components/dashboard/constant';
 
 export interface State {
   services: any;
