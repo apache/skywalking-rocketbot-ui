@@ -29,6 +29,9 @@ export interface State {
   currentEndpoint: any;
   instances: any;
   currentInstance: any;
+  keywordService: string;
+  keywordEndpoint: string;
+  keywordInstance: string;
 }
 
 const initState: State = {
@@ -40,6 +43,9 @@ const initState: State = {
   currentInstance: {},
   databases: [],
   currentDatabase: {},
+  keywordService: '',
+  keywordEndpoint: '',
+  keywordInstance: '',
 };
 
 // getters
@@ -115,6 +121,15 @@ const mutations: MutationTree<State> = {
   [types.SET_CURRENT_DATABASE](state: State, service: any) {
     state.currentDatabase = service;
   },
+  [types.SET_KEYWORDSERVICE](state: State, data: string) {
+    state.keywordService = data;
+  },
+  [types.SET_KEYWORDENDPOINT](state: State, data: string) {
+    state.keywordEndpoint = data;
+  },
+  [types.SET_KEYWORDINSTANCE](state: State, data: string) {
+    state.keywordInstance = data;
+  },
 };
 
 // actions
@@ -149,7 +164,7 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_ENDPOINTS, res.data.data.endpoints);
       });
   },
-  SEARCH_ENDPOINTS(context: { commit: Commit; state: any }, params: any) {
+  SEARCH_ENDPOINTS(context: { commit: Commit; state: any }, params: string) {
     return graph
       .query('queryEndpoints')
       .params({ serviceId: context.state.currentService.key, keyword: params })

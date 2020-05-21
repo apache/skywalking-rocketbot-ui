@@ -124,13 +124,18 @@ limitations under the License. -->
     @Prop() private rocketGlobal!: any;
     @Prop() private rocketComps!: any;
     @Prop() private durationTime!: any;
+    @State('rocketOption') private rocketOption: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
+    @Mutation('SET_KEYWORDSERVICE') private SET_KEYWORDSERVICE: any;
+    @Mutation('SET_KEYWORDENDPOINT') private SET_KEYWORDENDPOINT: any;
     @Action('SET_EDIT') private SET_EDIT: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Action('SELECT_DATABASE') private SELECT_DATABASE: any;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+    @Action('GET_SERVICES') private GET_SERVICES: any;
+    @Action('SEARCH_ENDPOINTS') private SEARCH_ENDPOINTS: any;
     private dashboardType = DASHBOARDTYPE;
     get lastKey() {
       const current = this.rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children;
@@ -156,6 +161,15 @@ limitations under the License. -->
     }
     private selectInstance(i: any) {
       this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
+    }
+    private searchServices(data: { value: string; type: string }) {
+      if (data.type === 'service') {
+        this.GET_SERVICES({ duration: this.durationTime, keyword: data.value });
+        this.SET_KEYWORDSERVICE(data.value);
+      } else if (data.type === 'instance') {
+        this.SEARCH_ENDPOINTS(data.value);
+        this.SET_KEYWORDENDPOINT(data.value);
+      }
     }
   }
 </script>
