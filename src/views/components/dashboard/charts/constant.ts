@@ -41,9 +41,9 @@ export const QueryMetricTypes: { [key: string]: Array<{ label: string; value: st
     { label: 'read all values in the duration', value: 'readMetricsValues' },
     { label: 'get sorted top N values', value: 'sortMetrics' },
   ],
-  LABELED_VALUE: [{ label: 'readLabeledMetricsValues', value: 'readLabeledMetricsValues' }],
-  HEATMAP: [{ label: 'readHeatMap', value: 'readHeatMap' }],
-  SAMPLED_RECORD: [{ label: 'readSampledRecords', value: 'readSampledRecords' }],
+  LABELED_VALUE: [{ label: 'read all values of labels in the duration', value: 'readLabeledMetricsValues' }],
+  HEATMAP: [{ label: 'read heatmap values in the duration', value: 'readHeatMap' }],
+  SAMPLED_RECORD: [{ label: 'get sorted topN values', value: 'readSampledRecords' }],
 };
 
 export const MetricChartType: { [key: string]: string } = {
