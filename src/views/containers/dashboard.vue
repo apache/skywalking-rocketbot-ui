@@ -62,11 +62,9 @@ limitations under the License. -->
     @State('rocketbot') private rocketGlobal: any;
     @State('rocketOption') private stateDashboardOption!: any;
     @State('rocketData') private rocketComps!: any;
-    // @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
-    // @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('durationTime') private durationTime: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
     private isRouterAlive: boolean = true;
@@ -82,22 +80,10 @@ limitations under the License. -->
         'service'
       );
     }
-    private handleRefresh() {
-      // this.GET_QUERY({
-      //   serviceId: this.stateDashboardOption.currentService.key || '',
-      //   endpointId: this.stateDashboardOption.currentEndpoint.key || '',
-      //   endpointName: this.stateDashboardOption.currentEndpoint.label || '',
-      //   instanceId: this.stateDashboardOption.currentInstance.key || '',
-      //   databaseId: this.stateDashboardOption.currentDatabase.key || '',
-      //   duration: this.durationTime,
-      // });
-    }
     private handleOption() {
-      return this.MIXHANDLE_GET_OPTION({
+      this.MIXHANDLE_GET_OPTION({
         compType: this.compType,
         duration: this.durationTime,
-      }).then(() => {
-        // this.handleRefresh();
       });
     }
     private beforeMount() {
@@ -106,7 +92,6 @@ limitations under the License. -->
         this.SET_COMPS_TREE(JSON.parse(data));
       }
       this.handleOption();
-      // this.SET_EVENTS([this.handleRefresh]);
     }
   }
 </script>

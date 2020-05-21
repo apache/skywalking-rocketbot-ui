@@ -92,10 +92,9 @@ limitations under the License. -->
         };
       }
       if (!this.itemConfig.metricLabels && this.itemConfig.metricType === MetricsType.LABELED_VALUE) {
-        this.EDIT_COMP_CONFIG({ index: this.index, values: { metricLabels: '50, 75, 90, 95, 99' } });
+        this.EDIT_COMP_CONFIG({ index: this.index, values: { metricLabels: 'p50, p75, p90, p95, p99' } });
       }
       this.chartRender();
-      this.SET_EVENTS([this.chartRender]);
     }
 
     private chartRender() {
@@ -184,6 +183,14 @@ limitations under the License. -->
     }
     @Watch('rocketOption.currentService')
     private watchCurrentService() {
+      this.chartRender();
+    }
+    @Watch('rocketOption.currentDatabase')
+    private watchCurrentDatabase() {
+      this.chartRender();
+    }
+    @Watch('durationTime')
+    private watchDurationTime() {
       this.chartRender();
     }
   }
