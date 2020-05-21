@@ -111,7 +111,10 @@ const mutations: MutationTree<State> = {
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_SERVICES(context: { commit: Commit }, params: any): Promise<void> {
+  GET_SERVICES(context: { commit: Commit }, params: { duration: any; keyword: string }): Promise<void> {
+    if (!params.keyword) {
+      params.keyword = '';
+    }
     return graph
       .query('queryServices')
       .params(params)
@@ -127,10 +130,7 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_INSTANCES, res.data.data.instanceId);
       });
   },
-  SET_TRACE_FORM(
-    context: { commit: Commit; dispatch: Dispatch },
-    params: any,
-  ): void {
+  SET_TRACE_FORM(context: { commit: Commit; dispatch: Dispatch }, params: any): void {
     context.commit(types.SET_TRACE_FORM, params);
   },
   GET_TRACELIST(context: { state: State; commit: Commit }): Promise<void> {

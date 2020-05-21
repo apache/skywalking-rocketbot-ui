@@ -58,7 +58,6 @@ limitations under the License. -->
   })
   export default class Topology extends Vue {
     @State('rocketTopo') private stateTopo!: topoState;
-    @State('rocketOption') private stateDashboardOption!: any;
     @Action('rocketTopo/CLEAR_TOPO') private CLEAR_TOPO: any;
     @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
     @Getter('durationTime') private durationTime: any;

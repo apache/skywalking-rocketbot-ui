@@ -119,7 +119,10 @@ const mutations: MutationTree<State> = {
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_SERVICES(context: { commit: Commit; rootState: any }, params: any) {
+  GET_SERVICES(context: { commit: Commit }, params: { duration: any; keyword: string }) {
+    if (!params.keyword) {
+      params.keyword = '';
+    }
     return graph
       .query('queryServices')
       .params(params)
@@ -244,6 +247,17 @@ const actions: ActionTree<State, any> = {
           });
       }),
     );
+  },
+  GET_ITEM_SERVICES(context, params: { duration: any; keyword: string }) {
+    if (!params.keyword) {
+      params.keyword = '';
+    }
+    return graph
+      .query('queryServices')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        return res.data.data.services || [];
+      });
   },
 };
 

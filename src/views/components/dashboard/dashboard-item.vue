@@ -15,7 +15,7 @@ limitations under the License. -->
 <template>
   <div
     class="rk-dashboard-item"
-    :class="`g-sm-${item.w}`"
+    :class="`g-sm-${width}`"
     :style="rocketGlobal.edit ? 'height:350px' : `height:${item.h}px;`"
     v-if="item.c !== 'ChartBrief' && !excludeMetrics.includes(item.d)"
   >
@@ -68,6 +68,7 @@ limitations under the License. -->
     private excludeMetrics = ['endpointTopology', 'endpointTraces']; // ChartBrief
     private status = 'UNKNOWN';
     private title = 'Title';
+    private width = 3;
     private chartSource: any = { nodes: [], avgNum: 0 };
     private itemConfig: any = {};
 
@@ -76,6 +77,7 @@ limitations under the License. -->
       const id = this.item.id || uuid();
       this.status = this.item.metricType;
       this.title = this.item.t;
+      this.width = this.item.w;
       this.itemConfig = this.item;
       if (!this.item.version || !this.item.id) {
         let type = this.item.d;
@@ -160,12 +162,15 @@ limitations under the License. -->
       }
     }
 
-    private setStatus(type: string, value: string) {
+    private setStatus(type: string, value: any) {
       if (type === 'metricType') {
         this.status = value;
       }
       if (type === 'title') {
         this.title = value;
+      }
+      if (type === 'width') {
+        this.width = value;
       }
     }
 

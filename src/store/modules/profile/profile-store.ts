@@ -118,12 +118,10 @@ const mutations = {
 
 // actions
 const actions = {
-  GET_SERVICES(
-    context: { commit: Commit; dispatch: Dispatch },
-    params: {
-      duration: string;
-    },
-  ) {
+  GET_SERVICES(context: { commit: Commit; dispatch: Dispatch }, params: { duration: any; keyword: string }) {
+    if (!params.keyword) {
+      params.keyword = '';
+    }
     graph
       .query('queryServices')
       .params(params)

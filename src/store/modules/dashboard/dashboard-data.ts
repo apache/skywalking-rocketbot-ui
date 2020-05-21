@@ -16,23 +16,18 @@
  */
 
 import { ActionTree, MutationTree, Commit, Dispatch } from 'vuex';
-import { AxiosResponse } from 'axios';
 import { CompsTree } from '@/types/dashboard';
 import dashboardLayout from './dashboard-data-layout';
 import dashboardQuery from './dashboard-data-query';
-import { queryChartData } from '@/utils/queryChartData';
-import graph from '@/graph';
 
 export interface State {
   current: number;
   group: number;
   tree: CompsTree[];
-  data: any;
 }
 
 const initState: State = {
   ...dashboardLayout.state,
-  data: queryChartData,
 };
 
 // mutations

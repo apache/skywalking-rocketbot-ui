@@ -16,9 +16,9 @@
  */
 
 export const Services = {
-  variable: '$duration: Duration!',
+  variable: ['$duration: Duration!', '$keyword: String!'],
   query: `
-    services: getAllServices(duration: $duration) {
+    services: searchServices(duration: $duration, keyword: $keyword) {
       key: id
       label: name
     }

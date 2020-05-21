@@ -21,8 +21,8 @@ limitations under the License. -->
         <input
           type="text"
           class="rk-chart-edit-input long"
-          :value="item.t"
-          @change="setItemConfig({ index, type: 't', value: $event.target.value })"
+          :value="itemConfig.t"
+          @change="setItemConfig({ type: 't', value: $event.target.value })"
         />
       </div>
       <div class="flex-h mb-5">
@@ -30,13 +30,13 @@ limitations under the License. -->
         <input
           type="text"
           class="rk-chart-edit-input long"
-          :value="metricName"
-          @change="setItemConfig({ index, type: 'metricName', value: $event.target.value })"
+          :value="itemConfig.metricName"
+          @change="setItemConfig({ type: 'metricName', value: $event.target.value })"
         />
         <select
           class="long"
-          v-model="queryMetricType"
-          @change="setItemConfig({ index, type: 'queryMetricType', value: $event.target.value })"
+          v-model="itemConfig.queryMetricType"
+          @change="setItemConfig({ type: 'queryMetricType', value: $event.target.value })"
         >
           <option v-for="query in queryMetricTypesList" :value="query.value" :key="query.value">{{
             query.label
@@ -48,78 +48,87 @@ limitations under the License. -->
         <input
           type="text"
           class="rk-chart-edit-input long"
-          :value="metricLabels"
-          @change="setItemConfig({ index, type: 'metricLabels', value: $event.target.value })"
+          :value="itemConfig.metricLabels"
+          @change="setItemConfig({ type: 'metricLabels', value: $event.target.value })"
         />
       </div>
       <div class="flex-h mb-5" v-show="!isDatabase">
         <div class="title grey sm">{{ $t('entityType') }}:</div>
         <select
           class="long"
-          v-model="itemType"
-          @change="setItemConfig({ index, type: 'entityType', value: $event.target.value })"
+          v-model="itemConfig.entityType"
+          @change="setItemConfig({ type: 'entityType', value: $event.target.value })"
         >
           <option v-for="type in EntityType" :value="type.key" :key="type.key">{{ type.label }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="independentSelector && isDatabase">
+      <div class="flex-h mb-5" v-show="itemConfig.independentSelector && isDatabase">
         <div class="title grey sm">{{ $t('currentDatabase') }}:</div>
         <select
           class="long"
-          v-model="currentDatabase"
-          @change="setItemConfig({ index, type: 'currentDatabase', value: $event.target.value })"
+          v-model="itemConfig.currentDatabase"
+          @change="setItemConfig({ type: 'currentDatabase', value: $event.target.value })"
         >
           <option v-for="database in stateDashboardOption.databases" :value="database.key" :key="database.key">{{
             database.label
           }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="itemType !== EntityType[1].key && independentSelector && !isDatabase">
+      <div
+        class="flex-h mb-5"
+        v-show="itemConfig.entityType !== EntityType[1].key && itemConfig.independentSelector && !isDatabase"
+      >
         <div class="title grey sm">{{ $t('currentService') }}:</div>
         <input
           type="text"
           class="rk-chart-edit-input long"
-          :value="servicesKey"
-          @change="setItemConfig({ index, type: 'servicesKey', value: $event.target.value })"
+          :value="itemConfig.servicesKey"
+          @change="setItemConfig({ type: 'servicesKey', value: $event.target.value })"
         />
         <select
           class="long"
-          v-model="currentService"
-          @change="setItemConfig({ index, type: 'currentService', value: $event.target.value })"
+          v-model="itemConfig.currentService"
+          @change="setItemConfig({ type: 'currentService', value: $event.target.value })"
         >
-          <option v-for="service in stateDashboardOption.services" :value="service.key" :key="service.key">{{
-            service.label
-          }}</option>
+          <option v-for="service in services" :value="service.key" :key="service.key">
+            {{ service.label }}
+          </option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="itemType === EntityType[2].key && independentSelector && !isDatabase">
+      <div
+        class="flex-h mb-5"
+        v-show="itemConfig.entityType === EntityType[2].key && itemConfig.independentSelector && !isDatabase"
+      >
         <div class="title grey sm">{{ $t('currentEndpoint') }}:</div>
         <input
           type="text"
           class="rk-chart-edit-input long"
-          :value="endpointsKey"
-          @change="setItemConfig({ index, type: 'endpointsKey', value: $event.target.value })"
+          :value="itemConfig.endpointsKey"
+          @change="setItemConfig({ type: 'endpointsKey', value: $event.target.value })"
         />
         <select
           class="long"
-          v-model="currentEndpoint"
-          @change="setItemConfig({ index, type: 'currentEndpoint', value: $event.target.value })"
+          v-model="itemConfig.currentEndpoint"
+          @change="setItemConfig({ type: 'currentEndpoint', value: $event.target.value })"
         >
           <option v-for="endpoint in endpoints" :value="endpoint.key" :key="endpoint.key">{{ endpoint.label }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="itemType === EntityType[3].key && independentSelector && !isDatabase">
+      <div
+        class="flex-h mb-5"
+        v-show="itemConfig.entityType === EntityType[3].key && itemConfig.independentSelector && !isDatabase"
+      >
         <div class="title grey sm">{{ $t('currentInstance') }}:</div>
         <input
           type="text"
           class="rk-chart-edit-input long"
-          :value="instancesKey"
-          @change="setItemConfig({ index, type: 'instancesKey', value: $event.target.value })"
+          :value="itemConfig.instancesKey"
+          @change="setItemConfig({ type: 'instancesKey', value: $event.target.value })"
         />
         <select
           class="long"
-          v-model="currentInstance"
-          @change="setItemConfig({ index, type: 'currentInstance', value: $event.target.value })"
+          v-model="itemConfig.currentInstance"
+          @change="setItemConfig({ type: 'currentInstance', value: $event.target.value })"
         >
           <option v-for="instance in instances" :value="instance.key" :key="instance.key">{{ instance.label }}</option>
         </select>
@@ -128,8 +137,8 @@ limitations under the License. -->
         <div class="title grey sm">{{ $t('independentSelector') }}:</div>
         <select
           class="long"
-          v-model="independentSelector"
-          @change="setItemConfig({ index, type: 'independentSelector', value: $event.target.value })"
+          v-model="itemConfig.independentSelector"
+          @change="setItemConfig({ type: 'independentSelector', value: $event.target.value })"
         >
           <option v-for="type in IndependentType" :value="type.key" :key="type.key">{{ type.label }}</option>
         </select>
@@ -141,8 +150,8 @@ limitations under the License. -->
           min="1"
           max="12"
           class="rk-chart-edit-input long"
-          :value="item.w"
-          @change="EDIT_COMP_CONFIG({ index, values: { w: $event.target.value } })"
+          :value="itemConfig.w"
+          @change="setItemConfig({ type: 'w', value: $event.target.value })"
         />
       </div>
       <div class="flex-h">
@@ -151,7 +160,7 @@ limitations under the License. -->
           type="number"
           min="1"
           class="rk-chart-edit-input long"
-          :value="item.h"
+          :value="itemConfig.h"
           @change="EDIT_COMP_CONFIG({ index, values: { h: $event.target.value } })"
         />
       </div>
@@ -172,78 +181,56 @@ limitations under the License. -->
     @State('rocketOption') private stateDashboardOption: any;
     @State('rocketData') private rocketComps!: any;
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
-    @Action('rocketOption/GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
-    @Action('rocketOption/GET_ITEM_INSTANCES') private GET_ITEM_INSTANCES: any;
-    @Action('rocketOption/TYPE_METRICS') private TYPE_METRICS: any;
+    @Action('GET_ITEM_SERVICES') private GET_ITEM_SERVICES: any;
+    @Action('GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
+    @Action('GET_ITEM_INSTANCES') private GET_ITEM_INSTANCES: any;
+    @Action('TYPE_METRICS') private TYPE_METRICS: any;
     @Getter('durationTime') private durationTime: any;
     @Prop() private item!: any;
     @Prop() private index!: number;
     @Prop() private intervalTime!: any;
+    private itemConfig: any = {};
     private EntityType = EntityType;
     private IndependentType = IndependentType;
-    private itemType = '';
+    private services: any = [];
     private endpoints: any = [];
     private instances: any = [];
-    private currentService = '';
-    private currentEndpoint = '';
-    private currentInstance = '';
-    private currentDatabase = '';
-    private independentSelector = true;
-    private metricType = '';
-    private metricName = '';
     private queryMetricTypesList: any = [];
-    private queryMetricType = '';
     private isDatabase = false;
     private isLabel = false;
-    private metricLabels = '';
-    private servicesKey = '';
-    private endpointsKey = '';
-    private instancesKey = '';
 
     private created() {
+      this.itemConfig = this.item;
       this.isDatabase = this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.DATABASE ? true : false;
-      this.itemType = this.item.entityType;
-      this.independentSelector = this.item.independentSelector;
-      this.metricType = this.item.metricType;
-      this.metricName = this.item.metricName;
-      this.queryMetricType = this.item.queryMetricType;
       this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
-      this.isLabel = this.metricType === MetricsType.LABELED_VALUE ? true : false;
-      this.metricLabels = this.item.metricLabels;
-      this.servicesKey = this.item.servicesKey;
-      this.endpointsKey = this.item.endpointsKey;
-      this.instancesKey = this.item.instancesKey;
-      if (!this.independentSelector) {
+      this.isLabel = this.itemConfig.metricType === MetricsType.LABELED_VALUE ? true : false;
+      if (!this.itemConfig.independentSelector) {
         return;
       }
-      this.selectorsConfig();
+      this.setItemServices();
     }
 
-    private selectorsConfig() {
-      this.endpoints = this.stateDashboardOption.endpoints;
-      this.instances = this.stateDashboardOption.instances;
-      this.currentDatabase = this.item.currentDatabase || this.stateDashboardOption.currentDatabase;
-      this.currentService = this.item.currentService || this.stateDashboardOption.currentService;
-      this.currentEndpoint = this.item.currentEndpoint || this.stateDashboardOption.currentEndpoint;
-      this.currentInstance = this.item.currentInstance || this.stateDashboardOption.currentInstance;
-      this.getServiceObject(this.currentService, this.index, false);
-    }
-
-    private setItemConfig(params: { index: number; type: string; value: string }) {
-      if (params.type === 'currentService') {
-        let serviceId = this.item.currentService;
-
-        if (!this.item.version) {
-          serviceId = this.stateDashboardOption.currentService.key;
-        }
-        serviceId = params.value;
-        this.getServiceObject(serviceId, params.index);
+    private setItemConfig(params: { type: string; value: string }) {
+      this.itemConfig[params.type] = params.value;
+      const types = ['endpointsKey', 'instancesKey', 'currentService'];
+      if (params.type === 'servicesKey') {
+        this.setItemServices(true);
+      }
+      if (types.includes(params.type)) {
+        this.getServiceObject(true);
       }
       if (params.type === 't') {
         this.$emit('updateStatus', 'title', params.value);
       }
+      if (params.type === 'w') {
+        this.$emit('updateStatus', 'width', params.value);
+      }
+      if (params.type === 'entityType') {
+        if (this.itemConfig.currentService) {
+          this.getServiceObject(true);
+        }
+      }
       if (params.type === 'metricName') {
-        this.metricName = params.value;
         this.TYPE_METRICS({ name: params.value }).then((data: Array<{ typeOfMetrics: string }>) => {
           if (!data.length) {
             return;
@@ -259,59 +246,99 @@ limitations under the License. -->
           const { typeOfMetrics } = data[0];
           this.$emit('updateStatus', 'metricType', typeOfMetrics);
           this.queryMetricTypesList = QueryMetricTypes[typeOfMetrics] || [];
-          this.queryMetricType = this.queryMetricTypesList[0] && this.queryMetricTypesList[0].value;
+          this.itemConfig.queryMetricType = this.queryMetricTypesList[0] && this.queryMetricTypesList[0].value;
           this.isLabel = typeOfMetrics === MetricsType.LABELED_VALUE ? true : false;
+          const values = {
+            metricType: typeOfMetrics,
+            queryMetricType: this.itemConfig.queryMetricType,
+            c: MetricChartType[this.itemConfig.queryMetricType],
+            metricName: params.value,
+          };
           this.EDIT_COMP_CONFIG({
-            index: params.index,
-            values: {
-              metricType: typeOfMetrics,
-              queryMetricType: this.queryMetricType,
-              c: MetricChartType[this.queryMetricType],
-              metricName: params.value,
-            },
+            index: this.index,
+            values,
           });
+          this.itemConfig = {
+            ...this.itemConfig,
+            ...values,
+          };
         });
         return;
       }
       if (params.type === 'queryMetricType') {
+        const values = {
+          c: MetricChartType[params.value],
+          [params.type]: params.value,
+        };
         this.EDIT_COMP_CONFIG({
-          index: params.index,
-          values: {
-            c: MetricChartType[params.value],
-            [params.type]: params.value,
-          },
+          index: this.index,
+          values,
         });
+        this.itemConfig = {
+          ...this.itemConfig,
+          ...values,
+        };
         return;
       }
       if (params.type === 'independentSelector') {
-        this.independentSelector = params.value === 'true' ? true : false;
-        this.EDIT_COMP_CONFIG({ index: params.index, values: { [params.type]: this.independentSelector } });
+        this.itemConfig.independentSelector = params.value === 'true' ? true : false;
+        this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: this.itemConfig.independentSelector } });
         return;
       }
-      this.EDIT_COMP_CONFIG({ index: params.index, values: { [params.type]: params.value } });
+      this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: params.value } });
     }
 
-    private getServiceObject(serviceId: string, index: number, update: boolean = true) {
-      if (this.itemType === EntityType[1].key) {
-        this.GET_ITEM_ENDPOINTS({ serviceId, keyword: '', duration: this.durationTime }).then(
-          (data: Array<{ key: string; label: string }>) => {
-            this.endpoints = data;
-            if (data.length && update) {
-              this.currentEndpoint = data[0].key;
-              this.EDIT_COMP_CONFIG({ index, values: { currentEndpoint: this.currentEndpoint } });
+    private setItemServices(update: boolean = false) {
+      this.GET_ITEM_SERVICES({ keyword: this.itemConfig.servicesKey || '', duration: this.durationTime }).then(
+        (result: Array<{ label: string; key: string }>) => {
+          this.services = result;
+          if (update) {
+            if (result.length) {
+              this.itemConfig.currentService = result[0].key;
+            } else {
+              this.itemConfig.currentService = '';
             }
-          },
-        );
-      } else if (this.itemType === EntityType[2].key) {
-        this.GET_ITEM_INSTANCES({ serviceId, keyword: '', duration: this.durationTime }).then(
-          (data: Array<{ key: string; label: string }>) => {
-            this.instances = data;
-            if (data.length && update) {
-              this.currentInstance = data[0].key;
-              this.EDIT_COMP_CONFIG({ index, values: { currentInstance: this.currentInstance } });
+          }
+          if (this.itemConfig.currentService) {
+            this.getServiceObject();
+          }
+        },
+      );
+    }
+
+    private getServiceObject(update: boolean = false) {
+      if (this.itemConfig.entityType === EntityType[2].key) {
+        this.GET_ITEM_ENDPOINTS({
+          serviceId: this.itemConfig.currentService,
+          keyword: this.itemConfig.endpointsKey || '',
+          duration: this.durationTime,
+        }).then((data: Array<{ key: string; label: string }>) => {
+          this.endpoints = data;
+          if (update) {
+            if (data.length) {
+              this.itemConfig.currentEndpoint = data[0].key;
+            } else {
+              this.itemConfig.currentEndpoint = '';
             }
-          },
-        );
+            this.EDIT_COMP_CONFIG({ index: this.index, values: { currentEndpoint: this.itemConfig.currentEndpoint } });
+          }
+        });
+      } else if (this.itemConfig.entityType === EntityType[3].key) {
+        this.GET_ITEM_INSTANCES({
+          serviceId: this.itemConfig.currentService,
+          keyword: this.itemConfig.instancesKey || '',
+          duration: this.durationTime,
+        }).then((data: Array<{ key: string; label: string }>) => {
+          this.instances = data;
+          if (update) {
+            if (data.length) {
+              this.itemConfig.currentInstance = data[0].key;
+            } else {
+              this.itemConfig.currentInstance = '';
+            }
+            this.EDIT_COMP_CONFIG({ index: this.index, values: { currentInstance: this.itemConfig.currentInstance } });
+          }
+        });
       }
     }
   }
