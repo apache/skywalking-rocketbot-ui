@@ -76,6 +76,12 @@ limitations under the License. -->
       </div>
       <div class="flex-h mb-5" v-show="itemType !== EntityType[1].key && independentSelector && !isDatabase">
         <div class="title grey sm">{{ $t('currentService') }}:</div>
+        <input
+          type="text"
+          class="rk-chart-edit-input long"
+          :value="servicesKey"
+          @change="setItemConfig({ index, type: 'servicesKey', value: $event.target.value })"
+        />
         <select
           class="long"
           v-model="currentService"
@@ -88,6 +94,12 @@ limitations under the License. -->
       </div>
       <div class="flex-h mb-5" v-show="itemType === EntityType[2].key && independentSelector && !isDatabase">
         <div class="title grey sm">{{ $t('currentEndpoint') }}:</div>
+        <input
+          type="text"
+          class="rk-chart-edit-input long"
+          :value="endpointsKey"
+          @change="setItemConfig({ index, type: 'endpointsKey', value: $event.target.value })"
+        />
         <select
           class="long"
           v-model="currentEndpoint"
@@ -98,6 +110,12 @@ limitations under the License. -->
       </div>
       <div class="flex-h mb-5" v-show="itemType === EntityType[3].key && independentSelector && !isDatabase">
         <div class="title grey sm">{{ $t('currentInstance') }}:</div>
+        <input
+          type="text"
+          class="rk-chart-edit-input long"
+          :value="instancesKey"
+          @change="setItemConfig({ index, type: 'instancesKey', value: $event.target.value })"
+        />
         <select
           class="long"
           v-model="currentInstance"
@@ -178,6 +196,9 @@ limitations under the License. -->
     private isDatabase = false;
     private isLabel = false;
     private metricLabels = '';
+    private servicesKey = '';
+    private endpointsKey = '';
+    private instancesKey = '';
 
     private created() {
       this.isDatabase = this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.DATABASE ? true : false;
@@ -189,6 +210,9 @@ limitations under the License. -->
       this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
       this.isLabel = this.metricType === MetricsType.LABELED_VALUE ? true : false;
       this.metricLabels = this.item.metricLabels;
+      this.servicesKey = this.item.servicesKey;
+      this.endpointsKey = this.item.endpointsKey;
+      this.instancesKey = this.item.instancesKey;
       if (!this.independentSelector) {
         return;
       }

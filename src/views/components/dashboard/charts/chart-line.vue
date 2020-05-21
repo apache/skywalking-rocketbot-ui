@@ -50,7 +50,7 @@ limitations under the License. -->
       let color: string[] = [];
       switch (keys.length) {
         case 2:
-          color = ['#a3a0e6', '#a0b1e6'];
+          color = ['#FF6A84', '#a0b1e6'];
           break;
         case 1:
           color = ['#3f96e3'];

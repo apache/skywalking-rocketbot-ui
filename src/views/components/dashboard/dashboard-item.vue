@@ -45,6 +45,7 @@ limitations under the License. -->
   import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
   import charts from './charts';
   import metricsConfig, { QueryTypes } from './constant';
+  import { MetricsType } from './charts/constant';
   import { uuid } from '@/utils/uuid.ts';
 
   import { Mutation, State, Getter, Action } from 'vuex-class';
@@ -88,7 +89,7 @@ limitations under the License. -->
           ...values,
         };
       }
-      if (!this.itemConfig.metricLabels && this.itemConfig.queryMetricType === QueryTypes.ReadLabeledMetricsValues) {
+      if (!this.itemConfig.metricLabels && this.itemConfig.metricType === MetricsType.LABELED_VALUE) {
         this.EDIT_COMP_CONFIG({ index: this.index, values: { metricLabels: '50, 75, 90, 95, 99' } });
       }
       this.chartRender();
