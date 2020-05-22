@@ -20,7 +20,8 @@ export enum DASHBOARDTYPE {
   METRIC = 'metric',
   DATABASE = 'database',
 }
-
+export const PercentileItem = ['p50', 'p75', 'p90', 'p95', 'p99'];
+export const PercentileLabels = '0, 1, 2, 3, 4';
 export const SlaMetrics = ['service_sla', 'endpoint_sla', 'service_instance_sla', 'database_access_sla'];
 export const ApdexMetrics = ['service_apdex'];
 

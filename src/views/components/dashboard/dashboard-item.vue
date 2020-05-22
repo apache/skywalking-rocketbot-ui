@@ -44,7 +44,7 @@ limitations under the License. -->
 <script lang="ts">
   import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
   import charts from './charts';
-  import metricsConfig, { QueryTypes, SlaMetrics, ApdexMetrics } from './constant';
+  import metricsConfig, { QueryTypes, SlaMetrics, ApdexMetrics, PercentileLabels, PercentileItem } from './constant';
   import { MetricsType } from './charts/constant';
   import { uuid } from '@/utils/uuid.ts';
 
@@ -93,7 +93,7 @@ limitations under the License. -->
         };
       }
       if (!this.itemConfig.metricLabels && this.itemConfig.metricType === MetricsType.LABELED_VALUE) {
-        this.EDIT_COMP_CONFIG({ index: this.index, values: { metricLabels: 'p50, p75, p90, p95, p99' } });
+        this.EDIT_COMP_CONFIG({ index: this.index, values: { metricLabels: PercentileLabels } });
       }
       if (this.rocketGlobal.edit) {
         return;
@@ -168,7 +168,7 @@ limitations under the License. -->
           for (const item of resVal || []) {
             const list = item.values.values.map((d: { value: number }) => d.value);
 
-            this.chartSource[item.label] = list;
+            this.chartSource[PercentileItem[item.label]] = list;
           }
         }
       }
