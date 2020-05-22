@@ -44,7 +44,7 @@ limitations under the License. -->
 <script lang="ts">
   import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
   import charts from './charts';
-  import metricsConfig, { QueryTypes } from './constant';
+  import metricsConfig, { QueryTypes, SlaMetrics, ApdexMetrics } from './constant';
   import { MetricsType } from './charts/constant';
   import { uuid } from '@/utils/uuid.ts';
 
@@ -95,13 +95,13 @@ limitations under the License. -->
       if (!this.itemConfig.metricLabels && this.itemConfig.metricType === MetricsType.LABELED_VALUE) {
         this.EDIT_COMP_CONFIG({ index: this.index, values: { metricLabels: 'p50, p75, p90, p95, p99' } });
       }
+      if (this.rocketGlobal.edit) {
+        return;
+      }
       this.chartRender();
     }
 
     private chartRender() {
-      if (this.rocketGlobal.edit) {
-        return;
-      }
       this.GET_QUERY({
         duration: this.durationTime,
         index: this.index,
@@ -128,14 +128,26 @@ limitations under the License. -->
         const resVal = params[queryMetricType];
 
         if (queryMetricType === QueryTypes.ReadMetricsValue) {
-          this.chartSource = { avgNum: resVal };
+          this.chartSource = {
+            avgNum: SlaMetrics.includes(params.metricName)
+              ? resVal / 100
+              : ApdexMetrics.includes(params.metricName)
+              ? resVal / 10000
+              : resVal,
+          };
         }
         if (queryMetricType === QueryTypes.ReadMetricsValues) {
           if (!resVal.values) {
             this.chartSource[params.metricName] = [];
           }
           const { values } = resVal.values;
-          this.chartSource[params.metricName] = values.map((item: { value: number }) => item.value);
+          this.chartSource[params.metricName] = values.map((item: { value: number }) =>
+            SlaMetrics.includes(params.metricName)
+              ? item.value / 100
+              : ApdexMetrics.includes(params.metricName)
+              ? item.value / 10000
+              : item.value,
+          );
         }
         if (queryMetricType === QueryTypes.SortMetrics) {
           this.chartSource = resVal;

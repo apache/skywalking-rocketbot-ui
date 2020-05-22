@@ -21,6 +21,9 @@ export enum DASHBOARDTYPE {
   DATABASE = 'database',
 }
 
+export const SlaMetrics = ['service_sla', 'endpoint_sla', 'service_instance_sla', 'database_access_sla'];
+export const ApdexMetrics = ['service_apdex'];
+
 export enum QueryTypes {
   ReadMetricsValue = 'readMetricsValue',
   ReadMetricsValues = 'readMetricsValues',

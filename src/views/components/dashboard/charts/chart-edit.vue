@@ -90,7 +90,7 @@ limitations under the License. -->
           v-model="itemConfig.currentService"
           @change="setItemConfig({ type: 'currentService', value: $event.target.value })"
         >
-          <option v-for="service in services" :value="service.key" :key="service.key">
+          <option v-for="service in services" :value="service.label" :key="service.key">
             {{ service.label }}
           </option>
         </select>
@@ -111,7 +111,9 @@ limitations under the License. -->
           v-model="itemConfig.currentEndpoint"
           @change="setItemConfig({ type: 'currentEndpoint', value: $event.target.value })"
         >
-          <option v-for="endpoint in endpoints" :value="endpoint.key" :key="endpoint.key">{{ endpoint.label }}</option>
+          <option v-for="endpoint in endpoints" :value="endpoint.label" :key="endpoint.key">{{
+            endpoint.label
+          }}</option>
         </select>
       </div>
       <div
@@ -130,7 +132,9 @@ limitations under the License. -->
           v-model="itemConfig.currentInstance"
           @change="setItemConfig({ type: 'currentInstance', value: $event.target.value })"
         >
-          <option v-for="instance in instances" :value="instance.key" :key="instance.key">{{ instance.label }}</option>
+          <option v-for="instance in instances" :value="instance.label" :key="instance.key">{{
+            instance.label
+          }}</option>
         </select>
       </div>
       <div class="flex-h mb-5" v-show="rocketComps.tree[this.rocketComps.group].type !== 'metric'">
