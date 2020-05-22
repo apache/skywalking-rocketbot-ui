@@ -41,8 +41,13 @@ limitations under the License. -->
     private endpointComps: any = [];
 
     private created() {
-      const groupComps = this.rocketComps.tree.filter((group: any) => group.type === 'service')[0] || {};
-      const comps = groupComps.children.filter((item: any) => item.type === 'Endpoint')[0] || {};
+      const groupComps =
+        (this.rocketComps.tree || []).filter(
+          (group: { type: string; children: any[] }) => group.type === 'service',
+        )[0] || {};
+      const comps =
+        (groupComps.children || []).filter((item: { type: string; children: any[] }) => item.type === 'Endpoint')[0] ||
+        {};
       this.endpointComps = comps.children;
     }
   }
