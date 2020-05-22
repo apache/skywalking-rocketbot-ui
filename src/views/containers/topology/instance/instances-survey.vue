@@ -16,7 +16,7 @@ limitations under the License. -->
 <template>
   <div class="dashboard-container clear">
     <DashboardItem
-      v-for="(i, index) in rocketComps.tree[0].children[3].children"
+      v-for="(i, index) in instanceComps || []"
       :key="index + i.t + i.w + i.d"
       :rocketGlobal="{ edit: false }"
       :item="i"
@@ -38,6 +38,13 @@ limitations under the License. -->
   })
   export default class InstancesSurvey extends Vue {
     @State('rocketData') private rocketComps!: any;
+    private instanceComps: any[] = [];
+
+    private created() {
+      const groupComps = (this.rocketComps.tree || []).filter((group: any) => group.type === 'service')[0] || {};
+      const comps = (groupComps.children || []).filter((item: any) => item.type === 'Instance')[0] || {};
+      this.instanceComps = comps.children;
+    }
   }
 </script>
 

@@ -23,17 +23,21 @@ export default [
   {
     name: 'Global',
     children: globalTemp,
+    type: 'Global',
   },
   {
     name: 'Service',
     children: serviceTemp,
+    type: 'Service',
   },
   {
     name: 'Endpoint',
     children: endpointTemp,
+    type: 'Endpoint',
   },
   {
     name: 'Instance',
     children: instanceTemp,
+    type: 'Instance',
   },
 ];

@@ -91,17 +91,17 @@ limitations under the License. -->
       this.show = false;
     }
     private handleCreate() {
-      let template = 'nouse';
+      let template = DASHBOARDTYPE.METRIC;
       if (this.type === DASHBOARDTYPE.SERVICE) {
-        template = 'groupService';
+        template = DASHBOARDTYPE.SERVICE;
       }
       if (this.type === DASHBOARDTYPE.METRIC) {
-        template = 'nouse';
+        template = DASHBOARDTYPE.METRIC;
       }
       if (this.type === DASHBOARDTYPE.DATABASE) {
-        template = 'groupDatabase';
+        template = DASHBOARDTYPE.DATABASE;
         if (!this.template) {
-          template = 'nouse';
+          template = DASHBOARDTYPE.METRIC;
         }
       }
       this.ADD_COMPS_GROUP({ name: this.name, type: this.type, template });

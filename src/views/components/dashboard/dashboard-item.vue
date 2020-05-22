@@ -17,7 +17,7 @@ limitations under the License. -->
     class="rk-dashboard-item"
     :class="`g-sm-${width}`"
     :style="rocketGlobal.edit ? 'height:350px' : `height:${item.h}px;`"
-    v-if="item.c !== 'ChartBrief' && !excludeMetrics.includes(item.d)"
+    v-if="!excludeCharts.includes(item.c) && !excludeMetrics.includes(item.d)"
   >
     <div class="rk-dashboard-item-title ell">
       <svg class="icon cp red r" v-if="rocketGlobal.edit" @click="DELETE_COMP(index)">
@@ -65,7 +65,8 @@ limitations under the License. -->
     @Prop() private rocketGlobal!: any;
     @Prop() private item!: any;
     @Prop() private index!: number;
-    private excludeMetrics = ['endpointTopology', 'endpointTraces']; // ChartBrief
+    private excludeMetrics = ['endpointTopology', 'endpointTraces']; // ChartBrief ChartInstance
+    private excludeCharts = ['ChartBrief', 'ChartInstance'];
     private status = 'UNKNOWN';
     private title = 'Title';
     private width = 3;

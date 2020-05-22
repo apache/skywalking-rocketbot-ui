@@ -86,7 +86,7 @@ const mutations: MutationTree<State> = {
       return;
     }
     switch (params.template) {
-      case 'nouse':
+      case 'metric':
         const newTree = [];
         Object.keys(state.tree).forEach((i: any) => {
           newTree.push(state.tree[i]);
@@ -94,7 +94,7 @@ const mutations: MutationTree<State> = {
         newTree.push({ name: params.name, type: params.type, query: {}, children: [{ name: 'demo', children: [] }] });
         state.tree = newTree;
         break;
-      case 'groupService':
+      case 'service':
         const newServerTree = [];
         Object.keys(state.tree).forEach((i: any) => {
           newServerTree.push(state.tree[i]);
@@ -102,7 +102,7 @@ const mutations: MutationTree<State> = {
         newServerTree.push({ name: params.name, type: params.type, query: {}, children: groupServiceTemp });
         state.tree = newServerTree;
         break;
-      case 'groupDatabase':
+      case 'database':
         const newDatabaseTree = [];
         Object.keys(state.tree).forEach((i: any) => {
           newDatabaseTree.push(state.tree[i]);

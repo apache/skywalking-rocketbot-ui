@@ -21,9 +21,11 @@ export default [
   {
     name: 'Global',
     children: globalTemp,
+    type: 'All',
   },
   {
     name: 'Database',
     children: databaseTemp,
+    type: 'Database',
   },
 ];
