@@ -141,7 +141,7 @@ const mutations: MutationTree<State> = {
             h: 250,
             version: '1.0',
             currentService: '',
-            entityType: 'Service',
+            entityType: 'Database',
             independentSelector: true,
             metricType: 'UNKNOWN',
           }

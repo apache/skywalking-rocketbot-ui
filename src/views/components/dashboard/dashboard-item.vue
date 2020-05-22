@@ -182,10 +182,6 @@ limitations under the License. -->
     private watchCurrentEndpoint() {
       this.chartRender();
     }
-    @Watch('rocketOption.currentService')
-    private watchCurrentService() {
-      this.chartRender();
-    }
     @Watch('rocketOption.currentDatabase')
     private watchCurrentDatabase() {
       this.chartRender();
