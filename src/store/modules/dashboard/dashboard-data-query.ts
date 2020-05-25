@@ -48,67 +48,71 @@ const actions: ActionTree<State, any> = {
     const currentEndpointId = config.independentSelector ? config.currentEndpoint : currentEndpoint.label;
     const currentDatabaseId = config.independentSelector ? config.currentDatabase : currentDatabase.label;
     const labels = config.metricType === 'LABELED_VALUE' ? metricLabels : undefined;
-    let variables = {} as any;
+    const variablesList = metricNames.map((name: string) => {
+      let variables = {} as any;
 
-    if (config.entityType === 'All') {
-      variables = names.includes(config.queryMetricType)
-        ? {
-            duration: params.duration,
-            condition: {
-              name: config.metricName,
-              parentService: null,
-              normal: true,
-              scope: config.entityType,
-              topN: 10,
-              order: 'DES',
-            },
-          }
-        : {
-            duration: params.duration,
-            condition: {
-              name: config.metricName,
-              entity: {
-                scope: config.entityType,
+      if (config.entityType === 'All') {
+        variables = names.includes(config.queryMetricType)
+          ? {
+              duration: params.duration,
+              condition: {
+                name,
+                parentService: null,
                 normal: true,
+                scope: config.entityType,
+                topN: 10,
+                order: 'DES',
               },
-            },
-            labels,
-          };
-    } else {
-      variables = names.includes(config.queryMetricType)
-        ? {
-            duration: params.duration,
-            condition: {
-              name: config.metricName,
-              parentService: normal ? currentServiceId : currentDatabaseId,
-              normal,
-              scope: normal ? config.entityType : 'Service',
-              topN: 10,
-              order: 'DES',
-            },
-          }
-        : {
-            duration: params.duration,
-            condition: {
-              name: config.metricName,
-              entity: {
-                scope: normal ? config.entityType : 'Service',
-                serviceName: normal ? currentServiceId : currentDatabaseId,
-                serviceInstanceName: config.entityType === 'ServiceInstance' ? currentInstanceId : undefined,
-                endpointName: config.entityType === 'Endpoint' ? currentEndpointId : undefined,
+            }
+          : {
+              duration: params.duration,
+              condition: {
+                name,
+                entity: {
+                  scope: config.entityType,
+                  normal: true,
+                },
+              },
+              labels,
+            };
+      } else {
+        variables = names.includes(config.queryMetricType)
+          ? {
+              duration: params.duration,
+              condition: {
+                name,
+                parentService: normal ? currentServiceId : currentDatabaseId,
                 normal,
-                // destNormal: normal,
-                // destServiceName: '',
-                // destServiceInstanceName: '',
-                // destEndpointName: '',
+                scope: normal ? config.entityType : 'Service',
+                topN: 10,
+                order: 'DES',
               },
-            },
-            labels,
-          };
-    }
+            }
+          : {
+              duration: params.duration,
+              condition: {
+                name,
+                entity: {
+                  scope: normal ? config.entityType : 'Service',
+                  serviceName: normal ? currentServiceId : currentDatabaseId,
+                  serviceInstanceName: config.entityType === 'ServiceInstance' ? currentInstanceId : undefined,
+                  endpointName: config.entityType === 'Endpoint' ? currentEndpointId : undefined,
+                  normal,
+                  // destNormal: normal,
+                  // destServiceName: '',
+                  // destServiceInstanceName: '',
+                  // destEndpointName: '',
+                },
+              },
+              labels,
+            };
+      }
+
+      return variables;
+    });
 
     const globalArr: any = fragmentAll;
-    if (!config.queryMetricType) {
+    if (!config.queryMetricType || !variablesList.length) {
       return;
     }
     const fragments = globalArr[config.queryMetricType].fragment;
@@ -116,14 +120,13 @@ const actions: ActionTree<State, any> = {
     const query = `query queryData(${queryVariables}) {${fragments}}`;
 
     return Promise.all(
-      metricNames.map((name: string) => {
-        variables.condition.name = name;
+      variablesList.map((variable: string, index: string) => {
         return axios
-          .post('/graphql', { query, variables }, { cancelToken: cancelToken() })
+          .post('/graphql', { query, variables: variable }, { cancelToken: cancelToken() })
           .then((res: AxiosResponse<any>) => {
             const resData = res.data.data;
 
-            return { ...resData, id: config.id, metricName: name };
+            return { ...resData, id: config.id, metricName: variablesList[index].condition.name };
           });
       }),
     ).then((data: any) => {
