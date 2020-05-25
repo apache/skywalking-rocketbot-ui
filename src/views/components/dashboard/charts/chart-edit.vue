@@ -165,7 +165,7 @@ limitations under the License. -->
           min="1"
           class="rk-chart-edit-input long"
           :value="itemConfig.h"
-          @change="EDIT_COMP_CONFIG({ index, values: { h: $event.target.value } })"
+          @change="setItemConfig({ type: 'h', value: $event.target.value })"
         />
       </div>
     </div>
@@ -228,6 +228,9 @@ limitations under the License. -->
       }
       if (params.type === 'w') {
         this.$emit('updateStatus', 'width', params.value);
+      }
+      if (params.type === 'h') {
+        this.$emit('updateStatus', 'height', params.value);
       }
       if (params.type === 'entityType') {
         if (this.itemConfig.currentService) {

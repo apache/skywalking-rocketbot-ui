@@ -16,7 +16,7 @@ limitations under the License. -->
   <div
     class="rk-dashboard-item"
     :class="`g-sm-${width}`"
-    :style="rocketGlobal.edit ? 'height:350px' : `height:${item.h}px;`"
+    :style="`height:${height}px;`"
     v-if="!excludeCharts.includes(item.c) && !excludeMetrics.includes(item.d)"
   >
     <div class="rk-dashboard-item-title ell">
@@ -70,6 +70,7 @@ limitations under the License. -->
     private status = 'UNKNOWN';
     private title = 'Title';
     private width = 3;
+    private height = 300;
     private chartSource: any = { nodes: [], avgNum: 0 };
     private itemConfig: any = {};
 
@@ -79,6 +80,7 @@ limitations under the License. -->
       this.status = this.item.metricType;
       this.title = this.item.t;
       this.width = this.item.w;
+      this.height = this.item.h;
       this.itemConfig = this.item;
       if (!this.item.version || !this.item.id) {
         let type = this.item.d;
@@ -183,6 +185,9 @@ limitations under the License. -->
       }
       if (type === 'width') {
         this.width = value;
+      }
+      if (type === 'height') {
+        this.height = value;
       }
     }
 

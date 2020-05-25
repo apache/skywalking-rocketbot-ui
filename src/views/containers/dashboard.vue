@@ -103,7 +103,7 @@ limitations under the License. -->
     flex-grow: 1;
   }
   .rk-add-dashboard-item {
-    height: 342px;
+    height: 300px;
     text-align: center;
     line-height: 250px;
     border: 1px dashed rgba(196, 200, 225, 0.5);
