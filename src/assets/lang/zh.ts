@@ -135,6 +135,7 @@ const m = {
   labels: '标签',
   aggregation: '数据计算',
   unit: '单位',
+  labelsIndex: '标签下标',
 };
 
 export default m;

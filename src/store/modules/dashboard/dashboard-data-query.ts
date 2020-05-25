@@ -42,12 +42,12 @@ const actions: ActionTree<State, any> = {
     }
     // remove the space at the beginning and end of the string
     const metricNames = config.metricName.split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
-    const metricLabels = (config.metricLabels || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
+    const labelsIndex = (config.labelsIndex || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
     const currentServiceId = config.independentSelector ? config.currentService : currentService.label;
     const currentInstanceId = config.independentSelector ? config.currentInstance : currentInstance.label;
     const currentEndpointId = config.independentSelector ? config.currentEndpoint : currentEndpoint.label;
     const currentDatabaseId = config.independentSelector ? config.currentDatabase : currentDatabase.label;
-    const labels = config.metricType === 'LABELED_VALUE' ? metricLabels : undefined;
+    const labels = config.metricType === 'LABELED_VALUE' ? labelsIndex : undefined;
     const variablesList = metricNames.map((name: string) => {
       let variables = {} as any;
 

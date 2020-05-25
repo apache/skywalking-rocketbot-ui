@@ -20,7 +20,7 @@ export enum DASHBOARDTYPE {
   METRIC = 'metric',
   DATABASE = 'database',
 }
-export const PercentileItem = ['p50', 'p75', 'p90', 'p95', 'p99'];
+export const PercentileItem = 'p50, p75, p90, p95, p99';
 export const PercentileLabels = '0, 1, 2, 3, 4';
 
 export enum QueryTypes {
@@ -60,6 +60,8 @@ const globalPercent = {
   entityType: 'All',
   independentSelector: false,
   metricType: 'LABELED_VALUE',
+  metricLabels: PercentileItem,
+  labelsIndex: PercentileLabels,
   version: '',
   unit: '',
 };
@@ -181,6 +183,8 @@ const servicePercent = {
   entityType: 'Service',
   independentSelector: false,
   metricType: 'LABELED_VALUE',
+  metricLabels: PercentileItem,
+  labelsIndex: PercentileLabels,
   version: '',
   unit: '',
 };
@@ -307,6 +311,8 @@ const endpointPercent = {
   entityType: 'Endpoint',
   independentSelector: false,
   metricType: 'LABELED_VALUE',
+  metricLabels: PercentileItem,
+  labelsIndex: PercentileLabels,
   version: '',
   unit: '',
 };
@@ -583,6 +589,8 @@ const databasePercent = {
   entityType: 'Database',
   independentSelector: false,
   metricType: 'LABELED_VALUE',
+  metricLabels: PercentileItem,
+  labelsIndex: PercentileLabels,
   version: '',
   unit: '',
 };

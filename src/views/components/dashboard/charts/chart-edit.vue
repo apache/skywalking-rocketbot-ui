@@ -52,6 +52,15 @@ limitations under the License. -->
           @change="setItemConfig({ type: 'metricLabels', value: $event.target.value })"
         />
       </div>
+      <div class="flex-h mb-5" v-show="isLabel">
+        <div class="title grey sm">{{ $t('labelsIndex') }}:</div>
+        <input
+          type="text"
+          class="rk-chart-edit-input long"
+          :value="itemConfig.labelsIndex"
+          @change="setItemConfig({ type: 'labelsIndex', value: $event.target.value })"
+        />
+      </div>
       <div class="flex-h mb-5" v-show="!isDatabase">
         <div class="title grey sm">{{ $t('entityType') }}:</div>
         <select

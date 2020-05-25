@@ -96,9 +96,6 @@ limitations under the License. -->
           ...values,
         };
       }
-      if (!this.itemConfig.metricLabels && this.itemConfig.metricType === MetricsType.LABELED_VALUE) {
-        this.EDIT_COMP_CONFIG({ index: this.index, values: { metricLabels: PercentileLabels } });
-      }
       this.chartRender();
     }
 
@@ -128,8 +125,9 @@ limitations under the License. -->
     private chartConfig(data: Array<{ metricName: string; [key: string]: any; id: string }>) {
       this.chartSource = {};
       for (const params of data) {
-        const { queryMetricType, aggregation, aggregationNum } = this.itemConfig;
+        const { queryMetricType, aggregation, aggregationNum, metricLabels } = this.itemConfig;
         const resVal = params[queryMetricType];
+        const labels = (metricLabels || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
 
         if (queryMetricType === QueryTypes.ReadMetricsValue) {
           this.chartSource = {
@@ -174,13 +172,13 @@ limitations under the License. -->
         if (queryMetricType === QueryTypes.ReadLabeledMetricsValues) {
           // {[label: string]: number[]}
           this.chartSource = {};
-          for (const item of resVal || []) {
+          resVal.forEach((item: any, index: number) => {
             const list = item.values.values.map((d: { value: number }) =>
               this.aggregationValue({ data: d.value, type: aggregation, aggregationNum: Number(aggregationNum) }),
             );
 
-            this.chartSource[PercentileItem[item.label]] = list;
-          }
+            this.chartSource[labels[index]] = list;
+          });
         }
       }
     }

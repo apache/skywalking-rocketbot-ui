@@ -135,6 +135,7 @@ const m = {
   labels: 'Labels',
   aggregation: 'Data Calculation',
   unit: 'Unit',
+  labelsIndex: 'Label Subscript',
 };
 
 export default m;
