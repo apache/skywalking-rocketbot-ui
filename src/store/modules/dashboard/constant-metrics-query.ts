@@ -77,7 +77,6 @@ const readSampledRecords = {
   fragment: `
   readSampledRecords: readSampledRecords(condition: $condition, duration: $duration) {
     name
-    id
     value
     refId
   }`,

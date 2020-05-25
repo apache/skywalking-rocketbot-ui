@@ -56,14 +56,13 @@ limitations under the License. -->
   })
   export default class DashboardItem extends Vue {
     @State('rocketOption') private rocketOption: any;
-    @State('rocketbot') private rocketbot: any;
+    @State('rocketbot') private rocketGlobal: any;
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('SWICH_COMP') private SWICH_COMP: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
-    @Prop() private rocketGlobal!: any;
     @Prop() private item!: any;
     @Prop() private index!: number;
     private excludeMetrics = ['endpointTopology', 'endpointTraces']; // ChartBrief ChartInstance
@@ -146,7 +145,7 @@ limitations under the License. -->
             this.aggregationValue({ data: item.value, type: aggregation, aggregationNum: Number(aggregationNum) }),
           );
         }
-        if (queryMetricType === QueryTypes.SortMetrics) {
+        if (queryMetricType === QueryTypes.SortMetrics || queryMetricType === QueryTypes.ReadSampledRecords) {
           this.chartSource = (resVal || []).map((item: { value: number }) => {
             return {
               ...item,
@@ -239,7 +238,7 @@ limitations under the License. -->
     private watchDurationTime() {
       this.chartRender();
     }
-    @Watch('rocketbot.edit')
+    @Watch('rocketGlobal.edit')
     private watchRerender() {
       this.chartRender();
     }

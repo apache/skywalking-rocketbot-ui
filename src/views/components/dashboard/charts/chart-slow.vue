@@ -22,7 +22,7 @@ limitations under the License. -->
         </svg>
         <div class="mb-5 ell" v-tooltip:top.ellipsis="i.name || ''">
           <span class="calls sm mr-10">{{ i.value }}</span>
-          <span class="cp link-hover" @click="appChange(i)">{{ i.name + getTraceId(i) }}</span>
+          <span class="cp link-hover">{{ i.name + getTraceId(i) }}</span>
         </div>
         <RkProgress :precent="(i.value / maxValue) * 100" color="#bf99f8" />
       </div>
@@ -40,9 +40,6 @@ limitations under the License. -->
     @Prop() private data!: any;
     @Prop() private item!: any;
     @Prop() private intervalTime!: any;
-    private appChange(i: any) {
-      const temp = { key: `${i.key}`, label: i.name };
-    }
     get maxValue() {
       if (!this.data.length) {
         return null;
