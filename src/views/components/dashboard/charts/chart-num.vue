@@ -16,7 +16,7 @@ limitations under the License. -->
 <template>
   <div class="rk-chart-num b">
     <span>{{ (data.avgNum || 0).toFixed(2) }}</span>
-    <span class="rk-chart-num-unit">{{ unit }}</span>
+    <span class="rk-chart-num-unit">{{ item.unit }}</span>
   </div>
 </template>
 <script lang="ts">
@@ -26,29 +26,6 @@ limitations under the License. -->
   export default class ChartNum extends Vue {
     @Prop() private data!: any;
     @Prop() private item!: any;
-    get unit() {
-      let unit = 'ms' as string | null;
-      if (
-        this.item.d === 'databaseThroughput' ||
-        this.item.d === 'serviceThroughput' ||
-        this.item.d === 'instanceThroughput' ||
-        this.item.d === 'endpointThroughput'
-      ) {
-        unit = 'cpm';
-      }
-      if (
-        this.item.d === 'databaseSLA' ||
-        this.item.d === 'serviceSLA' ||
-        this.item.d === 'instanceSLA' ||
-        this.item.d === 'endpointSLA'
-      ) {
-        unit = '%';
-      }
-      if (this.item.d === 'serviceApdexScore') {
-        unit = null;
-      }
-      return unit;
-    }
   }
 </script>
 <style lang="scss">

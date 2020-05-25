@@ -148,6 +148,15 @@ limitations under the License. -->
         </select>
       </div>
       <div class="flex-h mb-5">
+        <div class="title grey sm">{{ $t('unit') }}:</div>
+        <input
+          type="text"
+          class="rk-chart-edit-input long"
+          :value="itemConfig.unit"
+          @change="setItemConfig({ type: 'unit', value: $event.target.value })"
+        />
+      </div>
+      <div class="flex-h mb-5">
         <div class="title grey sm">{{ $t('width') }}:</div>
         <input
           type="number"

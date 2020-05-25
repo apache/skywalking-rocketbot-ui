@@ -51,6 +51,7 @@ const globalHeatmap = {
   independentSelector: false,
   metricType: 'HEATMAP',
   version: '',
+  unit: '',
 };
 
 const globalPercent = {
@@ -62,6 +63,7 @@ const globalPercent = {
   independentSelector: false,
   metricType: 'LABELED_VALUE',
   version: '',
+  unit: '',
 };
 
 const globalSlow = {
@@ -73,6 +75,7 @@ const globalSlow = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 
 const globalThroughput = {
@@ -84,6 +87,7 @@ const globalThroughput = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'cpm',
 };
 // services
 const serviceResponseTime = {
@@ -95,6 +99,7 @@ const serviceResponseTime = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 
 const serviceResponseTimeAvg = {
@@ -106,6 +111,7 @@ const serviceResponseTimeAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 
 const serviceThroughputAvg = {
@@ -117,6 +123,7 @@ const serviceThroughputAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 
 const serviceSLAAvg = {
@@ -128,6 +135,7 @@ const serviceSLAAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 const serviceApdexScoreAvg = {
   id: '',
@@ -138,6 +146,7 @@ const serviceApdexScoreAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 
 const serviceThroughput = {
@@ -149,6 +158,7 @@ const serviceThroughput = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 
 const serviceSLA = {
@@ -160,6 +170,7 @@ const serviceSLA = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 
 const servicePercent = {
@@ -171,6 +182,7 @@ const servicePercent = {
   independentSelector: false,
   metricType: 'LABELED_VALUE',
   version: '',
+  unit: '',
 };
 
 const serviceSlowEndpoint = {
@@ -182,6 +194,7 @@ const serviceSlowEndpoint = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 
 const serviceInstanceThroughput = {
@@ -193,6 +206,7 @@ const serviceInstanceThroughput = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'cpm',
 };
 
 const serviceApdexScore = {
@@ -204,6 +218,7 @@ const serviceApdexScore = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 // endpoint
 const endpointResponseTimeAvg = {
@@ -215,6 +230,7 @@ const endpointResponseTimeAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 
 const endpointThroughputAvg = {
@@ -226,6 +242,7 @@ const endpointThroughputAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 
 const endpointThroughput = {
@@ -237,6 +254,7 @@ const endpointThroughput = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 
 const endpointSLAAvg = {
@@ -248,6 +266,7 @@ const endpointSLAAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 
 const endpointSLA = {
@@ -259,6 +278,7 @@ const endpointSLA = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 
 const endpointResponseTime = {
@@ -270,6 +290,7 @@ const endpointResponseTime = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 
 const endpointPercent = {
@@ -281,6 +302,7 @@ const endpointPercent = {
   independentSelector: false,
   metricType: 'LABELED_VALUE',
   version: '',
+  unit: '',
 };
 // instance
 const instanceResponseTime = {
@@ -292,6 +314,7 @@ const instanceResponseTime = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 const instanceResponseTimeAvg = {
   id: '',
@@ -302,6 +325,7 @@ const instanceResponseTimeAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 
 const instanceThroughputAvg = {
@@ -313,6 +337,7 @@ const instanceThroughputAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 
 const instanceSLAAvg = {
@@ -324,6 +349,7 @@ const instanceSLAAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 
 const instanceThroughput = {
@@ -335,6 +361,7 @@ const instanceThroughput = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 
 const instanceSLA = {
@@ -346,6 +373,7 @@ const instanceSLA = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 
 const instanceCPU = {
@@ -357,6 +385,7 @@ const instanceCPU = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 
 const instanceGC = {
@@ -368,6 +397,7 @@ const instanceGC = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 
 const instanceGCCount = {
@@ -379,6 +409,7 @@ const instanceGCCount = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 
 const instanceHeap = {
@@ -390,6 +421,7 @@ const instanceHeap = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 
 const instanceNonheap = {
@@ -401,6 +433,7 @@ const instanceNonheap = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 
 const instanceEnvoyCount = {
@@ -412,6 +445,7 @@ const instanceEnvoyCount = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 
 const instanceClrGC = {
@@ -423,6 +457,7 @@ const instanceClrGC = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 
 const instanceEnvoyHeap = {
@@ -434,6 +469,7 @@ const instanceEnvoyHeap = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 
 const instanceClrHeap = {
@@ -445,6 +481,7 @@ const instanceClrHeap = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 const instanceClrCPU = {
   id: '',
@@ -455,6 +492,7 @@ const instanceClrCPU = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: '',
 };
 // database
 const databaseResponseTimeAvg = {
@@ -466,6 +504,7 @@ const databaseResponseTimeAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 const databaseThroughputAvg = {
   id: '',
@@ -476,6 +515,7 @@ const databaseThroughputAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 const databaseSLAAvg = {
   id: '',
@@ -486,6 +526,7 @@ const databaseSLAAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 const databaseResponseTime = {
   id: '',
@@ -496,6 +537,7 @@ const databaseResponseTime = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 const databaseThroughput = {
   id: '',
@@ -506,6 +548,7 @@ const databaseThroughput = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 const databaseSLA = {
   id: '',
@@ -516,6 +559,7 @@ const databaseSLA = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
+  unit: 'ms',
 };
 const databasePercent = {
   id: '',
@@ -526,6 +570,7 @@ const databasePercent = {
   independentSelector: false,
   metricType: 'LABELED_VALUE',
   version: '',
+  unit: '',
 };
 const databaseTopNRecords = {
   id: '',
@@ -536,6 +581,7 @@ const databaseTopNRecords = {
   independentSelector: false,
   metricType: 'SAMPLED_RECORD',
   version: '',
+  unit: '',
 };
 
 export default {

@@ -21,7 +21,7 @@ limitations under the License. -->
           <use xlink:href="#review-list"></use>
         </svg>
         <div class="mb-5 ell" v-tooltip:top.ellipsis="i.name || ''">
-          <span class="calls sm mr-10">{{ i.value }} ms</span>
+          <span class="calls sm mr-10">{{ i.value }} {{ item.unit }}</span>
           <span class="cp link-hover" @click="appChange(i)">{{ i.name + getTraceId(i) }}</span>
         </div>
         <RkProgress :precent="(i.value / maxValue) * 100" color="#bf99f8" />
@@ -38,6 +38,7 @@ limitations under the License. -->
   @Component({})
   export default class ChartSlow extends Vue {
     @Prop() private data!: any;
+    @Prop() private item!: any;
     @Prop() private intervalTime!: any;
     private appChange(i: any) {
       const temp = { key: `${i.key}`, label: i.name };
