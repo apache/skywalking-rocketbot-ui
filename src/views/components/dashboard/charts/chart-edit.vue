@@ -69,7 +69,7 @@ limitations under the License. -->
           v-model="itemConfig.currentDatabase"
           @change="setItemConfig({ type: 'currentDatabase', value: $event.target.value })"
         >
-          <option v-for="database in stateDashboardOption.databases" :value="database.key" :key="database.key">{{
+          <option v-for="database in stateDashboardOption.databases" :value="database.label" :key="database.key">{{
             database.label
           }}</option>
         </select>
@@ -311,9 +311,17 @@ limitations under the License. -->
     }
 
     private getServiceObject(update: boolean = false) {
+      const service =
+        this.services.filter((d: { key: string; label: string }) => d.label === this.itemConfig.currentService)[0] ||
+        {};
+      const serviceId = service.key;
+
+      if (!serviceId) {
+        return;
+      }
       if (this.itemConfig.entityType === EntityType[2].key) {
         this.GET_ITEM_ENDPOINTS({
-          serviceId: this.itemConfig.currentService,
+          serviceId,
           keyword: this.itemConfig.endpointsKey || '',
           duration: this.durationTime,
         }).then((data: Array<{ key: string; label: string }>) => {
@@ -329,7 +337,7 @@ limitations under the License. -->
         });
       } else if (this.itemConfig.entityType === EntityType[3].key) {
         this.GET_ITEM_INSTANCES({
-          serviceId: this.itemConfig.currentService,
+          serviceId,
           keyword: this.itemConfig.instancesKey || '',
           duration: this.durationTime,
         }).then((data: Array<{ key: string; label: string }>) => {
