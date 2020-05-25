@@ -177,7 +177,9 @@ limitations under the License. -->
               this.aggregationValue({ data: d.value, type: aggregation, aggregationNum: Number(aggregationNum) }),
             );
 
-            this.chartSource[labels[index]] = list;
+            if (labels[index]) {
+              this.chartSource[labels[index]] = list;
+            }
           });
         }
       }
