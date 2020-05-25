@@ -534,7 +534,7 @@ const databaseTopNRecords = {
   currentService: '',
   entityType: 'Database',
   independentSelector: false,
-  metricType: 'REGULAR_VALUE',
+  metricType: 'SAMPLED_RECORD',
   version: '',
 };
 
