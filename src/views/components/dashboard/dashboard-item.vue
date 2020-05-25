@@ -147,7 +147,7 @@ limitations under the License. -->
           );
         }
         if (queryMetricType === QueryTypes.SortMetrics) {
-          this.chartSource = resVal.map((item: { value: number }) => {
+          this.chartSource = (resVal || []).map((item: { value: number }) => {
             return {
               ...item,
               value: this.aggregationValue({
