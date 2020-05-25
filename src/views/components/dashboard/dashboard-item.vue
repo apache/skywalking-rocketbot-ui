@@ -56,10 +56,10 @@ limitations under the License. -->
   })
   export default class DashboardItem extends Vue {
     @State('rocketOption') private rocketOption: any;
+    @State('rocketbot') private rocketbot: any;
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('SWICH_COMP') private SWICH_COMP: any;
-    @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
@@ -100,13 +100,13 @@ limitations under the License. -->
       if (!this.itemConfig.metricLabels && this.itemConfig.metricType === MetricsType.LABELED_VALUE) {
         this.EDIT_COMP_CONFIG({ index: this.index, values: { metricLabels: PercentileLabels } });
       }
-      if (this.rocketGlobal.edit) {
-        return;
-      }
       this.chartRender();
     }
 
     private chartRender() {
+      if (this.rocketGlobal.edit) {
+        return;
+      }
       this.GET_QUERY({
         duration: this.durationTime,
         index: this.index,
@@ -237,6 +237,10 @@ limitations under the License. -->
     }
     @Watch('durationTime')
     private watchDurationTime() {
+      this.chartRender();
+    }
+    @Watch('rocketbot.edit')
+    private watchRerender() {
       this.chartRender();
     }
   }
