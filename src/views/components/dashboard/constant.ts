@@ -135,7 +135,9 @@ const serviceSLAAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
-  unit: 'ms',
+  unit: '%',
+  aggregation: '/',
+  aggregationNum: 100,
 };
 const serviceApdexScoreAvg = {
   id: '',
@@ -172,7 +174,9 @@ const serviceSLA = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
-  unit: '',
+  unit: '%',
+  aggregation: '/',
+  aggregationNum: 100,
 };
 
 const servicePercent = {
@@ -272,7 +276,7 @@ const endpointSLAAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
-  unit: 'ms',
+  unit: '%',
   aggregation: '/',
   aggregationNum: 100,
 };
@@ -286,7 +290,7 @@ const endpointSLA = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
-  unit: '',
+  unit: '%',
   aggregation: '/',
   aggregationNum: 100,
 };
@@ -361,7 +365,7 @@ const instanceSLAAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
-  unit: 'ms',
+  unit: '%',
   aggregation: '/',
   aggregationNum: 100,
 };
@@ -387,7 +391,7 @@ const instanceSLA = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
-  unit: 'ms',
+  unit: '%',
   aggregation: '/',
   aggregationNum: 100,
 };
@@ -542,7 +546,7 @@ const databaseSLAAvg = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
-  unit: 'ms',
+  unit: '%',
   aggregation: '/',
   aggregationNum: 100,
 };
@@ -577,7 +581,7 @@ const databaseSLA = {
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
-  unit: 'ms',
+  unit: '%',
   aggregation: '/',
   aggregationNum: 100,
 };
