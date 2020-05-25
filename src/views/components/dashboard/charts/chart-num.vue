@@ -16,7 +16,6 @@ limitations under the License. -->
 <template>
   <div class="rk-chart-num b">
     <span>{{ (data.avgNum || 0).toFixed(2) }}</span>
-    <span class="rk-chart-num-unit">{{ item.unit }}</span>
   </div>
 </template>
 <script lang="ts">
@@ -31,8 +30,5 @@ limitations under the License. -->
 <style lang="scss">
   .rk-chart-num {
     font-size: 24px;
-  }
-  .rk-chart-num-unit {
-    font-size: 16px;
   }
 </style>

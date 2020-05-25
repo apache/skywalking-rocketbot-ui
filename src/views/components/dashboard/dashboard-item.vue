@@ -24,7 +24,8 @@ limitations under the License. -->
         <use xlink:href="#file-deletion"></use>
       </svg>
       <span>{{ title }}</span>
-      <span v-if="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
+      <span v-show="unit"> ( {{ unit }} ) </span>
+      <span v-show="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
     </div>
     <div class="rk-dashboard-item-body">
       <div style="height:100%;">
@@ -69,6 +70,7 @@ limitations under the License. -->
     private excludeCharts = ['ChartBrief', 'ChartInstance'];
     private status = 'UNKNOWN';
     private title = 'Title';
+    private unit = '';
     private width = 3;
     private height = 300;
     private chartSource: any = { nodes: [], avgNum: 0 };
@@ -81,6 +83,7 @@ limitations under the License. -->
       this.title = this.item.t;
       this.width = this.item.w;
       this.height = this.item.h;
+      this.unit = this.item.unit;
       this.itemConfig = this.item;
       if (!this.item.version || !this.item.id) {
         let type = this.item.d;
@@ -188,6 +191,9 @@ limitations under the License. -->
       }
       if (type === 'height') {
         this.height = value;
+      }
+      if (type === 'unit') {
+        this.unit = value;
       }
     }
 

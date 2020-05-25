@@ -21,7 +21,7 @@ limitations under the License. -->
           <use xlink:href="#review-list"></use>
         </svg>
         <div class="mb-5 ell" v-tooltip:top.ellipsis="i.name || ''">
-          <span class="calls sm mr-10">{{ i.value }} {{ item.unit }}</span>
+          <span class="calls sm mr-10">{{ i.value }}</span>
           <span class="cp link-hover" @click="appChange(i)">{{ i.name + getTraceId(i) }}</span>
         </div>
         <RkProgress :precent="(i.value / maxValue) * 100" color="#bf99f8" />

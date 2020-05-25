@@ -241,6 +241,9 @@ limitations under the License. -->
       if (params.type === 'h') {
         this.$emit('updateStatus', 'height', params.value);
       }
+      if (params.type === 'unit') {
+        this.$emit('updateStatus', 'unit', params.value);
+      }
       if (params.type === 'entityType') {
         if (this.itemConfig.currentService) {
           this.getServiceObject(true);
