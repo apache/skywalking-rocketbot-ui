@@ -133,6 +133,8 @@ const m = {
   independentSelector: '独立选择器',
   unknownMetrics: '未知指标',
   labels: '标签',
+  aggregation: '数据计算',
+  unit: '单位',
 };
 
 export default m;

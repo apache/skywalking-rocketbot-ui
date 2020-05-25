@@ -157,6 +157,22 @@ limitations under the License. -->
         />
       </div>
       <div class="flex-h mb-5">
+        <div class="title grey sm">{{ $t('aggregation') }}:</div>
+        <select
+          class="long"
+          v-model="itemConfig.aggregation"
+          @change="setItemConfig({ type: 'aggregation', value: $event.target.value })"
+        >
+          <option v-for="type in CalculationType" :value="type.value" :key="type.value">{{ type.label }}</option>
+        </select>
+        <input
+          type="number"
+          class="rk-chart-edit-input long"
+          :value="itemConfig.aggregationNum"
+          @change="setItemConfig({ type: 'aggregationNum', value: $event.target.value })"
+        />
+      </div>
+      <div class="flex-h mb-5">
         <div class="title grey sm">{{ $t('width') }}:</div>
         <input
           type="number"
@@ -186,7 +202,14 @@ limitations under the License. -->
   import { State, Getter, Mutation, Action } from 'vuex-class';
   import { Component, Prop } from 'vue-property-decorator';
 
-  import { EntityType, IndependentType, MetricsType, QueryMetricTypes, MetricChartType } from './constant';
+  import {
+    EntityType,
+    IndependentType,
+    MetricsType,
+    QueryMetricTypes,
+    MetricChartType,
+    CalculationType,
+  } from './constant';
   import { DASHBOARDTYPE } from '../constant';
 
   @Component
@@ -205,6 +228,7 @@ limitations under the License. -->
     private itemConfig: any = {};
     private EntityType = EntityType;
     private IndependentType = IndependentType;
+    private CalculationType = CalculationType;
     private services: any = [];
     private endpoints: any = [];
     private instances: any = [];

@@ -133,6 +133,8 @@ const m = {
   independentSelector: 'Selectors',
   unknownMetrics: 'Unknown Metrics',
   labels: 'Labels',
+  aggregation: 'Data Calculation',
+  unit: 'Unit',
 };
 
 export default m;

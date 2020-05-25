@@ -45,8 +45,8 @@ limitations under the License. -->
 <script lang="ts">
   import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
   import charts from './charts';
-  import metricsConfig, { QueryTypes, SlaMetrics, ApdexMetrics, PercentileLabels, PercentileItem } from './constant';
-  import { MetricsType } from './charts/constant';
+  import metricsConfig, { QueryTypes, PercentileLabels, PercentileItem } from './constant';
+  import { MetricsType, CalculationType } from './charts/constant';
   import { uuid } from '@/utils/uuid.ts';
 
   import { Mutation, State, Getter, Action } from 'vuex-class';
@@ -129,16 +129,12 @@ limitations under the License. -->
     private chartConfig(data: Array<{ metricName: string; [key: string]: any; id: string }>) {
       this.chartSource = {};
       for (const params of data) {
-        const { queryMetricType } = this.itemConfig;
+        const { queryMetricType, aggregation, aggregationNum } = this.itemConfig;
         const resVal = params[queryMetricType];
 
         if (queryMetricType === QueryTypes.ReadMetricsValue) {
           this.chartSource = {
-            avgNum: SlaMetrics.includes(params.metricName)
-              ? resVal / 100
-              : ApdexMetrics.includes(params.metricName)
-              ? resVal / 10000
-              : resVal,
+            avgNum: this.aggregationValue({ data: resVal, type: aggregation, aggregationNum: Number(aggregationNum) }),
           };
         }
         if (queryMetricType === QueryTypes.ReadMetricsValues) {
@@ -147,20 +143,29 @@ limitations under the License. -->
           }
           const { values } = resVal.values;
           this.chartSource[params.metricName] = values.map((item: { value: number }) =>
-            SlaMetrics.includes(params.metricName)
-              ? item.value / 100
-              : ApdexMetrics.includes(params.metricName)
-              ? item.value / 10000
-              : item.value,
+            this.aggregationValue({ data: item.value, type: aggregation, aggregationNum: Number(aggregationNum) }),
           );
         }
         if (queryMetricType === QueryTypes.SortMetrics) {
-          this.chartSource = resVal;
+          this.chartSource = resVal.map((item: { value: number }) => {
+            return {
+              ...item,
+              value: this.aggregationValue({
+                data: item.value,
+                type: aggregation,
+                aggregationNum: Number(aggregationNum),
+              }),
+            };
+          });
         }
         if (queryMetricType === QueryTypes.READHEATMAP) {
           const nodes = [] as any;
           resVal.values.forEach((items: { values: number[] }, x: number) => {
-            const grids = items.values.map((val: number, y: number) => [x, y, val]);
+            const grids = items.values.map((val: number, y: number) => [
+              x,
+              y,
+              this.aggregationValue({ data: val, type: aggregation, aggregationNum: Number(aggregationNum) }),
+            ]);
 
             nodes.push(...grids);
           });
@@ -171,12 +176,33 @@ limitations under the License. -->
           // {[label: string]: number[]}
           this.chartSource = {};
           for (const item of resVal || []) {
-            const list = item.values.values.map((d: { value: number }) => d.value);
+            const list = item.values.values.map((d: { value: number }) =>
+              this.aggregationValue({ data: d.value, type: aggregation, aggregationNum: Number(aggregationNum) }),
+            );
 
             this.chartSource[PercentileItem[item.label]] = list;
           }
         }
       }
+    }
+
+    private aggregationValue(json: { data: number; type: string; aggregationNum: number }) {
+      if (isNaN(json.aggregationNum)) {
+        return json.data;
+      }
+      if (json.type === CalculationType[0].value) {
+        return json.data + json.aggregationNum;
+      }
+      if (json.type === CalculationType[1].value) {
+        return json.data - json.aggregationNum;
+      }
+      if (json.type === CalculationType[2].value) {
+        return json.data * json.aggregationNum;
+      }
+      if (json.type === CalculationType[3].value) {
+        return json.data / json.aggregationNum;
+      }
+      return json.data;
     }
 
     private setStatus(type: string, value: any) {

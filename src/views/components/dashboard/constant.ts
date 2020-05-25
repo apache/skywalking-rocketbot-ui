@@ -22,8 +22,6 @@ export enum DASHBOARDTYPE {
 }
 export const PercentileItem = ['p50', 'p75', 'p90', 'p95', 'p99'];
 export const PercentileLabels = '0, 1, 2, 3, 4';
-export const SlaMetrics = ['service_sla', 'endpoint_sla', 'service_instance_sla', 'database_access_sla'];
-export const ApdexMetrics = ['service_apdex'];
 
 export enum QueryTypes {
   ReadMetricsValue = 'readMetricsValue',
@@ -147,6 +145,8 @@ const serviceApdexScoreAvg = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  aggregation: '/',
+  aggregationNum: 10000,
 };
 
 const serviceThroughput = {
@@ -219,6 +219,8 @@ const serviceApdexScore = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  aggregation: '/',
+  aggregationNum: 10000,
 };
 // endpoint
 const endpointResponseTimeAvg = {
@@ -267,6 +269,8 @@ const endpointSLAAvg = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  aggregation: '/',
+  aggregationNum: 100,
 };
 
 const endpointSLA = {
@@ -279,6 +283,8 @@ const endpointSLA = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  aggregation: '/',
+  aggregationNum: 100,
 };
 
 const endpointResponseTime = {
@@ -350,6 +356,8 @@ const instanceSLAAvg = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  aggregation: '/',
+  aggregationNum: 100,
 };
 
 const instanceThroughput = {
@@ -374,6 +382,8 @@ const instanceSLA = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  aggregation: '/',
+  aggregationNum: 100,
 };
 
 const instanceCPU = {
@@ -527,6 +537,8 @@ const databaseSLAAvg = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  aggregation: '/',
+  aggregationNum: 100,
 };
 const databaseResponseTime = {
   id: '',
@@ -560,6 +572,8 @@ const databaseSLA = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  aggregation: '/',
+  aggregationNum: 100,
 };
 const databasePercent = {
   id: '',

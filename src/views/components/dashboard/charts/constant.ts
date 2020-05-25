@@ -54,3 +54,10 @@ export const MetricChartType: { [key: string]: string } = {
   HEATMAP: 'ChartHeatmap',
   readSampledRecords: 'ChartSlow',
 };
+
+export const CalculationType = [
+  { label: 'Plus', value: '+' },
+  { label: 'Minus', value: '-' },
+  { label: 'Multiplication', value: '*' },
+  { label: 'Division', value: '/' },
+];
