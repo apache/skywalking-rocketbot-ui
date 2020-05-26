@@ -156,6 +156,17 @@ limitations under the License. -->
           <option v-for="type in IndependentType" :value="type.key" :key="type.key">{{ type.label }}</option>
         </select>
       </div>
+      <div class="flex-h mb-5" v-show="isParentService.includes(itemConfig.queryMetricType)">
+        <div class="title grey sm">{{ $t('parentService') }}:</div>
+        <select
+          class="long"
+          v-model="itemConfig.parentService"
+          @change="setItemConfig({ type: 'parentService', value: $event.target.value })"
+        >
+          <option :value="true">{{ $t('isParentService') }}</option>
+          <option :value="false">{{ $t('noneParentService') }}</option>
+        </select>
+      </div>
       <div class="flex-h mb-5">
         <div class="title grey sm">{{ $t('unit') }}:</div>
         <input
@@ -244,6 +255,7 @@ limitations under the License. -->
     private queryMetricTypesList: any = [];
     private isDatabase = false;
     private isLabel = false;
+    private isParentService = ['sortMetrics', 'readSampledRecords'];
 
     private created() {
       this.itemConfig = this.item;
@@ -332,9 +344,9 @@ limitations under the License. -->
         };
         return;
       }
-      if (params.type === 'independentSelector') {
-        this.itemConfig.independentSelector = params.value === 'true' ? true : false;
-        this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: this.itemConfig.independentSelector } });
+      if (params.type === 'independentSelector' || params.type === 'parentService') {
+        this.itemConfig[params.type] = params.value === 'true' ? true : false;
+        this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: this.itemConfig[params.type] } });
         return;
       }
       this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: params.value } });

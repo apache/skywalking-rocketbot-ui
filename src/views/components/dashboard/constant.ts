@@ -71,11 +71,12 @@ const globalSlow = {
   metricName: 'endpoint_avg',
   queryMetricType: 'sortMetrics',
   currentService: '',
-  entityType: 'All',
+  entityType: 'Endpiont',
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  parentService: false,
 };
 
 const globalThroughput = {
@@ -83,11 +84,12 @@ const globalThroughput = {
   metricName: 'service_cpm',
   queryMetricType: 'sortMetrics',
   currentService: '',
-  entityType: 'All',
+  entityType: 'Service',
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'cpm',
+  parentService: false,
 };
 // services
 const serviceResponseTime = {
@@ -203,6 +205,7 @@ const serviceSlowEndpoint = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  parentService: true,
 };
 
 const serviceInstanceThroughput = {
@@ -215,6 +218,7 @@ const serviceInstanceThroughput = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'cpm',
+  parentService: true,
 };
 
 const serviceApdexScore = {
@@ -608,6 +612,7 @@ const databaseTopNRecords = {
   metricType: 'SAMPLED_RECORD',
   version: '',
   unit: '',
+  parentService: true,
 };
 
 export default {

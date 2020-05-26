@@ -136,6 +136,9 @@ const m = {
   aggregation: 'Data Calculation',
   unit: 'Unit',
   labelsIndex: 'Label Subscript',
+  parentService: 'Parent Service',
+  isParentService: 'Set Parent Service',
+  noneParentService: 'No Parent Service',
 };
 
 export default m;

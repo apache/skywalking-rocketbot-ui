@@ -136,6 +136,9 @@ const m = {
   aggregation: '数据计算',
   unit: '单位',
   labelsIndex: '标签下标',
+  parentService: '父级服务',
+  isParentService: '设置父服务',
+  noneParentService: '不设置父服务',
 };
 
 export default m;

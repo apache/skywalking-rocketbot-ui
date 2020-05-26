@@ -81,7 +81,7 @@ const actions: ActionTree<State, any> = {
               duration: params.duration,
               condition: {
                 name,
-                parentService: normal ? currentServiceId : currentDatabaseId,
+                parentService: config.parentService ? (normal ? currentServiceId : currentDatabaseId) : null,
                 normal,
                 scope: normal ? config.entityType : 'Service',
                 topN: 10,
