@@ -37,14 +37,13 @@ limitations under the License. -->
     },
   })
   export default class InstancesSurvey extends Vue {
-    @State('rocketData') private rocketComps!: any;
     private instanceComps: any[] = [];
 
     private created() {
+      const dashboard: string = `${window.localStorage.getItem('dashboard')}`;
+      const tree = JSON.parse(dashboard);
       const groupComps =
-        (this.rocketComps.tree || []).filter(
-          (group: { type: string; children: any[] }) => group.type === 'service',
-        )[0] || {};
+        (tree || []).filter((group: { type: string; children: any[] }) => group.type === 'service')[0] || {};
       const comps =
         (groupComps.children || []).filter((item: { type: string; children: any[] }) => item.type === 'Instance')[0] ||
         {};

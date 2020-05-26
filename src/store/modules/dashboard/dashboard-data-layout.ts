@@ -128,34 +128,18 @@ const mutations: MutationTree<State> = {
     state.tree[state.group].children.splice(index, 1);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
-  [types.ADD_COMP](
-    state: State,
-    param: { type: string; currentService: string } = { type: 'service', currentService: '' },
-  ) {
-    const comp =
-      param.type === 'database'
-        ? {
-            id: uuid(),
-            w: 3,
-            t: 'Title',
-            h: 350,
-            version: '1.0',
-            currentService: '',
-            entityType: 'Database',
-            independentSelector: true,
-            metricType: 'UNKNOWN',
-          }
-        : {
-            id: uuid(),
-            w: 3,
-            t: 'Title',
-            h: 350,
-            version: '1.0',
-            currentService: '',
-            entityType: 'Service',
-            independentSelector: true,
-            metricType: 'UNKNOWN',
-          };
+  [types.ADD_COMP](state: State) {
+    const comp = {
+      id: uuid(),
+      w: 3,
+      t: 'Title',
+      h: 350,
+      version: '1.0',
+      currentService: '',
+      entityType: 'Service',
+      independentSelector: true,
+      metricType: 'UNKNOWN',
+    };
     state.tree[state.group].children[state.current].children.push(comp);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },

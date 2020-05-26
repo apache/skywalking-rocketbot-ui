@@ -106,13 +106,14 @@ limitations under the License. -->
       this.GET_QUERY({
         duration: this.durationTime,
         index: this.index,
-      }).then((params: Array<{ metricName: string; [key: string]: any; id: string }>) => {
+      }).then((params: Array<{ metricName: string; [key: string]: any; config: any }>) => {
         if (!params) {
           return;
         }
         if (!params.length) {
           return;
         }
+        this.itemConfig = params[0].config;
         const { queryMetricType } = this.itemConfig;
         let data = params;
         if (queryMetricType !== QueryTypes.ReadMetricsValues) {
@@ -122,10 +123,10 @@ limitations under the License. -->
       });
     }
 
-    private chartConfig(data: Array<{ metricName: string; [key: string]: any; id: string }>) {
+    private chartConfig(data: Array<{ metricName: string; [key: string]: any; config: any }>) {
       this.chartSource = {};
       for (const params of data) {
-        const { queryMetricType, aggregation, aggregationNum, metricLabels } = this.itemConfig;
+        const { queryMetricType, aggregation, aggregationNum, metricLabels } = params.config;
         const resVal = params[queryMetricType];
         const labels = (metricLabels || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
 

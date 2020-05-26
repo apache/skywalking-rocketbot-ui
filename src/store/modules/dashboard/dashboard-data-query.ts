@@ -32,7 +32,9 @@ const actions: ActionTree<State, any> = {
   ) {
     const { currentDatabase, currentEndpoint, currentInstance, currentService } = context.rootState.rocketOption;
     const normal = context.state.tree[context.state.group].type === 'database' ? false : true;
-    const config = context.state.tree[context.state.group].children[context.state.current].children[params.index];
+    const dashboard: string = `${window.localStorage.getItem('dashboard')}`;
+    const tree = JSON.parse(dashboard);
+    const config = tree[context.state.group].children[context.state.current].children[params.index];
     const names = ['readSampledRecords', 'sortMetrics'];
     if (!config) {
       return;
@@ -126,7 +128,7 @@ const actions: ActionTree<State, any> = {
           .then((res: AxiosResponse<any>) => {
             const resData = res.data.data;
 
-            return { ...resData, id: config.id, metricName: variablesList[index].condition.name };
+            return { ...resData, config, metricName: variablesList[index].condition.name };
           });
       }),
     ).then((data: any) => {

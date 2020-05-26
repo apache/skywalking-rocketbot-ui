@@ -31,11 +31,7 @@ limitations under the License. -->
         :item="i"
       >
       </DashboardItem>
-      <div
-        v-show="rocketGlobal.edit"
-        class="rk-add-dashboard-item g-sm-3"
-        @click="ADD_COMP({ type: compType, currentService: stateDashboardOption.services[0].key })"
-      >
+      <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item g-sm-3" @click="ADD_COMP">
         + Add An Item
       </div>
     </div>

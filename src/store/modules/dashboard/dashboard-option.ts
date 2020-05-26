@@ -200,6 +200,9 @@ const actions: ActionTree<State, any> = {
       });
   },
   SELECT_SERVICE(context: { commit: Commit; dispatch: Dispatch }, params: any) {
+    if (!params.service.key) {
+      return;
+    }
     context.commit('SET_CURRENT_SERVICE', params.service);
     context.dispatch('MIXHANDLE_GET_OPTION', { ...params, compType: 'service' }).then(() => {
       context.dispatch('RUN_EVENTS', {}, { root: true });
