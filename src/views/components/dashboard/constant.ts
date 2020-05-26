@@ -50,6 +50,7 @@ const globalHeatmap = {
   metricType: 'HEATMAP',
   version: '',
   unit: '',
+  normal: true,
 };
 
 const globalPercent = {
@@ -64,6 +65,7 @@ const globalPercent = {
   labelsIndex: PercentileLabels,
   version: '',
   unit: '',
+  normal: true,
 };
 
 const globalSlow = {
@@ -77,6 +79,7 @@ const globalSlow = {
   version: '',
   unit: 'ms',
   parentService: false,
+  normal: true,
 };
 
 const globalThroughput = {
@@ -90,6 +93,7 @@ const globalThroughput = {
   version: '',
   unit: 'cpm',
   parentService: false,
+  normal: true,
 };
 // services
 const serviceResponseTime = {
@@ -102,6 +106,7 @@ const serviceResponseTime = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  normal: true,
 };
 
 const serviceResponseTimeAvg = {
@@ -114,6 +119,7 @@ const serviceResponseTimeAvg = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  normal: true,
 };
 
 const serviceThroughputAvg = {
@@ -126,6 +132,7 @@ const serviceThroughputAvg = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  normal: true,
 };
 
 const serviceSLAAvg = {
@@ -140,6 +147,7 @@ const serviceSLAAvg = {
   unit: '%',
   aggregation: '/',
   aggregationNum: 100,
+  normal: true,
 };
 const serviceApdexScoreAvg = {
   id: '',
@@ -153,6 +161,7 @@ const serviceApdexScoreAvg = {
   unit: '',
   aggregation: '/',
   aggregationNum: 10000,
+  normal: true,
 };
 
 const serviceThroughput = {
@@ -165,6 +174,7 @@ const serviceThroughput = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  normal: true,
 };
 
 const serviceSLA = {
@@ -179,6 +189,7 @@ const serviceSLA = {
   unit: '%',
   aggregation: '/',
   aggregationNum: 100,
+  normal: true,
 };
 
 const servicePercent = {
@@ -193,6 +204,7 @@ const servicePercent = {
   labelsIndex: PercentileLabels,
   version: '',
   unit: '',
+  normal: true,
 };
 
 const serviceSlowEndpoint = {
@@ -206,6 +218,7 @@ const serviceSlowEndpoint = {
   version: '',
   unit: 'ms',
   parentService: true,
+  normal: true,
 };
 
 const serviceInstanceThroughput = {
@@ -219,6 +232,7 @@ const serviceInstanceThroughput = {
   version: '',
   unit: 'cpm',
   parentService: true,
+  normal: true,
 };
 
 const serviceApdexScore = {
@@ -233,6 +247,7 @@ const serviceApdexScore = {
   unit: '',
   aggregation: '/',
   aggregationNum: 10000,
+  normal: true,
 };
 // endpoint
 const endpointResponseTimeAvg = {
@@ -245,6 +260,7 @@ const endpointResponseTimeAvg = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  normal: true,
 };
 
 const endpointThroughputAvg = {
@@ -257,6 +273,7 @@ const endpointThroughputAvg = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  normal: true,
 };
 
 const endpointThroughput = {
@@ -269,6 +286,7 @@ const endpointThroughput = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  normal: true,
 };
 
 const endpointSLAAvg = {
@@ -283,6 +301,7 @@ const endpointSLAAvg = {
   unit: '%',
   aggregation: '/',
   aggregationNum: 100,
+  normal: true,
 };
 
 const endpointSLA = {
@@ -297,6 +316,7 @@ const endpointSLA = {
   unit: '%',
   aggregation: '/',
   aggregationNum: 100,
+  normal: true,
 };
 
 const endpointResponseTime = {
@@ -309,6 +329,7 @@ const endpointResponseTime = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  normal: true,
 };
 
 const endpointPercent = {
@@ -323,6 +344,7 @@ const endpointPercent = {
   labelsIndex: PercentileLabels,
   version: '',
   unit: '',
+  normal: true,
 };
 // instance
 const instanceResponseTime = {
@@ -335,6 +357,7 @@ const instanceResponseTime = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  normal: true,
 };
 const instanceResponseTimeAvg = {
   id: '',
@@ -346,6 +369,7 @@ const instanceResponseTimeAvg = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  normal: true,
 };
 
 const instanceThroughputAvg = {
@@ -358,6 +382,7 @@ const instanceThroughputAvg = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  normal: true,
 };
 
 const instanceSLAAvg = {
@@ -372,6 +397,7 @@ const instanceSLAAvg = {
   unit: '%',
   aggregation: '/',
   aggregationNum: 100,
+  normal: true,
 };
 
 const instanceThroughput = {
@@ -384,6 +410,7 @@ const instanceThroughput = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  normal: true,
 };
 
 const instanceSLA = {
@@ -398,6 +425,7 @@ const instanceSLA = {
   unit: '%',
   aggregation: '/',
   aggregationNum: 100,
+  normal: true,
 };
 
 const instanceCPU = {
@@ -410,6 +438,7 @@ const instanceCPU = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  normal: true,
 };
 
 const instanceGC = {
@@ -422,6 +451,7 @@ const instanceGC = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  normal: true,
 };
 
 const instanceGCCount = {
@@ -434,6 +464,7 @@ const instanceGCCount = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  normal: true,
 };
 
 const instanceHeap = {
@@ -446,6 +477,7 @@ const instanceHeap = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  normal: true,
 };
 
 const instanceNonheap = {
@@ -458,6 +490,7 @@ const instanceNonheap = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  normal: true,
 };
 
 const instanceEnvoyCount = {
@@ -470,6 +503,7 @@ const instanceEnvoyCount = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  normal: true,
 };
 
 const instanceClrGC = {
@@ -482,6 +516,7 @@ const instanceClrGC = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  normal: true,
 };
 
 const instanceEnvoyHeap = {
@@ -494,6 +529,7 @@ const instanceEnvoyHeap = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  normal: true,
 };
 
 const instanceClrHeap = {
@@ -506,6 +542,7 @@ const instanceClrHeap = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  normal: true,
 };
 const instanceClrCPU = {
   id: '',
@@ -517,6 +554,7 @@ const instanceClrCPU = {
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '',
+  normal: true,
 };
 // database
 const databaseResponseTimeAvg = {
@@ -524,95 +562,103 @@ const databaseResponseTimeAvg = {
   metricName: 'database_access_resp_time',
   queryMetricType: 'readMetricsValue',
   currentService: '',
-  entityType: 'Database',
+  entityType: 'Service',
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  normal: false,
 };
 const databaseThroughputAvg = {
   id: '',
   metricName: 'database_access_cpm',
   queryMetricType: 'readMetricsValue',
   currentService: '',
-  entityType: 'Database',
+  entityType: 'Service',
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  normal: false,
 };
 const databaseSLAAvg = {
   id: '',
   metricName: 'database_access_sla',
   queryMetricType: 'readMetricsValue',
   currentService: '',
-  entityType: 'Database',
+  entityType: 'Service',
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '%',
   aggregation: '/',
   aggregationNum: 100,
+  normal: false,
 };
 const databaseResponseTime = {
   id: '',
   metricName: 'database_access_resp_time',
   queryMetricType: 'readMetricsValues',
   currentService: '',
-  entityType: 'Database',
+  entityType: 'Service',
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  normal: false,
 };
 const databaseThroughput = {
   id: '',
   metricName: 'database_access_cpm',
   queryMetricType: 'readMetricsValues',
   currentService: '',
-  entityType: 'Database',
+  entityType: 'Service',
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: 'ms',
+  normal: false,
 };
 const databaseSLA = {
   id: '',
   metricName: 'database_access_sla',
   queryMetricType: 'readMetricsValues',
   currentService: '',
-  entityType: 'Database',
+  entityType: 'Service',
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
   unit: '%',
   aggregation: '/',
   aggregationNum: 100,
+  normal: false,
 };
 const databasePercent = {
   id: '',
   metricName: 'database_access_percentile',
   queryMetricType: 'readLabeledMetricsValues',
   currentService: '',
-  entityType: 'Database',
+  entityType: 'Service',
   independentSelector: false,
   metricType: 'LABELED_VALUE',
   metricLabels: PercentileItem,
   labelsIndex: PercentileLabels,
   version: '',
   unit: '',
+  normal: false,
 };
 const databaseTopNRecords = {
   id: '',
   metricName: 'top_n_database_statement',
   queryMetricType: 'readSampledRecords',
   currentService: '',
-  entityType: 'Database',
+  entityType: 'Service',
   independentSelector: false,
   metricType: 'SAMPLED_RECORD',
   version: '',
   unit: '',
   parentService: true,
+  normal: false,
 };
 
 export default {
