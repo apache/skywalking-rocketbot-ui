@@ -72,7 +72,7 @@ limitations under the License. -->
     private unit = '';
     private width = 3;
     private height = 300;
-    private chartSource: any = { nodes: [], avgNum: 0 };
+    private chartSource: any = {};
     private itemConfig: any = {};
 
     private created() {

@@ -33,7 +33,7 @@ limitations under the License. -->
       chart.myChart.resize();
     }
     get option() {
-      const source = this.data.nodes.map((d: number[]) => d[2]);
+      const source = (this.data.nodes || []).map((d: number[]) => d[2]);
       const maxItem = Math.max(...source);
       const minItem = Math.min(...source);
       const colorBox = [
@@ -104,7 +104,7 @@ limitations under the License. -->
         series: [
           {
             type: 'heatmap',
-            data: this.data.nodes,
+            data: this.data.nodes || [],
             itemStyle: {
               emphasis: {
                 shadowBlur: 10,

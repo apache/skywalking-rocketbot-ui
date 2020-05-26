@@ -15,7 +15,7 @@ limitations under the License. -->
 
 <template>
   <div class="rk-chart-num b">
-    <span>{{ (data.avgNum || 0).toFixed(2) }}</span>
+    <span>{{ isNaN(data.avgNum) ? null : data.avgNum.toFixed(2) }}</span>
   </div>
 </template>
 <script lang="ts">
