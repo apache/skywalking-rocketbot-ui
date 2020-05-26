@@ -31,9 +31,9 @@ const actions: ActionTree<State, any> = {
     },
   ) {
     const { currentDatabase, currentEndpoint, currentInstance, currentService } = context.rootState.rocketOption;
-    const normal = context.state.tree[context.state.group].type === 'database' ? false : true;
     const dashboard: string = `${window.localStorage.getItem('dashboard')}`;
     const tree = JSON.parse(dashboard);
+    const normal = tree[context.state.group].type === 'database' ? false : true;
     const config = tree[context.state.group].children[context.state.current].children[params.index];
     const names = ['readSampledRecords', 'sortMetrics'];
     if (!config) {
