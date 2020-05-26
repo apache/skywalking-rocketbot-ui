@@ -65,15 +65,6 @@ const mutations: MutationTree<State> = {
   [types.SET_CURRENT_SERVICE](state: State, service: any) {
     state.currentService = service;
   },
-  [types.SET_SEARCH_ENDPOINTS](state: State, data: any) {
-    if (!data.length) {
-      return;
-    }
-    state.endpoints = data;
-    if ((!state.currentEndpoint.key && data.length) || state.endpoints.indexOf(state.currentEndpoint) === -1) {
-      state.currentEndpoint = data[0];
-    }
-  },
   [types.SET_ENDPOINTS](state: State, data: any) {
     state.endpoints = data;
     if (!data.length) {
@@ -81,15 +72,6 @@ const mutations: MutationTree<State> = {
       return;
     }
     if ((!state.currentEndpoint.key && data.length) || state.endpoints.indexOf(state.currentEndpoint) === -1) {
-      state.currentEndpoint = data[0];
-    }
-  },
-  [types.SET_SEARCH_ENDPOINTS](state: State, data: any) {
-    state.endpoints = data;
-    if (!data.length) {
-      return;
-    }
-    if (!state.currentEndpoint.key && data.length) {
       state.currentEndpoint = data[0];
     }
   },
@@ -145,13 +127,16 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_SERVICES, res.data.data.services);
       });
   },
-  GET_SERVICE_ENDPOINTS(context: { commit: Commit; state: any }, params: any) {
+  GET_SERVICE_ENDPOINTS(context: { commit: Commit; state: any }, params: { keyword: string }) {
     if (!context.state.currentService.key) {
       return new Promise((resolve) => resolve());
     }
+    if (!params.keyword) {
+      params.keyword = '';
+    }
     return graph
       .query('queryEndpoints')
-      .params({ serviceId: context.state.currentService.key, keyword: '', ...params })
+      .params({ serviceId: context.state.currentService.key, ...params })
       .then((res: AxiosResponse) => {
         context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
       });
@@ -162,14 +147,6 @@ const actions: ActionTree<State, any> = {
       .params(params)
       .then((res: AxiosResponse) => {
         context.commit(types.SET_ENDPOINTS, res.data.data.endpoints);
-      });
-  },
-  SEARCH_ENDPOINTS(context: { commit: Commit; state: any }, params: string) {
-    return graph
-      .query('queryEndpoints')
-      .params({ serviceId: context.state.currentService.key, keyword: params })
-      .then((res: AxiosResponse) => {
-        context.commit(types.SET_SEARCH_ENDPOINTS, res.data.data.getEndpoints);
       });
   },
   GET_SERVICE_INSTANCES(context: { commit: Commit; state: any }, params: any) {
@@ -229,7 +206,7 @@ const actions: ActionTree<State, any> = {
       case 'service':
         return context
           .dispatch('GET_SERVICES', { duration: params.duration })
-          .then(() => context.dispatch('GET_SERVICE_ENDPOINTS'))
+          .then(() => context.dispatch('GET_SERVICE_ENDPOINTS', { keyword: context.state.keywordEndpoint }))
           .then(() => context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration }));
       case 'database':
         return context.dispatch('GET_DATABASES', { duration: params.duration });

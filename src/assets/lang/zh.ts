@@ -139,6 +139,8 @@ const m = {
   parentService: '父级服务',
   isParentService: '设置父服务',
   noneParentService: '不设置父服务',
+  serviceFilter: '服务过滤器',
+  endpointFilter: '端点过滤器',
 };
 
 export default m;

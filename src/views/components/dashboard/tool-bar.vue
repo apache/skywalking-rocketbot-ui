@@ -31,6 +31,15 @@ limitations under the License. -->
           <use xlink:href="#retry"></use>
         </svg>
       </div>
+      <div class="sm grey">
+        <div>{{ this.$t('serviceFilter') }}</div>
+        <input
+          type="text"
+          class="service-search"
+          :value="rocketOption.keywordService"
+          @change="searchServices($event.target.value)"
+        />
+      </div>
       <ToolBarSelect
         v-if="compType === dashboardType.SERVICE"
         @onChoose="selectService"
@@ -39,6 +48,15 @@ limitations under the License. -->
         :data="stateDashboard.services"
         icon="package"
       />
+      <div class="sm grey">
+        <div>{{ this.$t('endpointFilter') }}</div>
+        <input
+          type="text"
+          class="service-search"
+          :value="rocketOption.keywordEndpoint"
+          @change="searchEndpoint($event.target.value)"
+        />
+      </div>
       <ToolBarEndpointSelect
         v-if="compType === dashboardType.SERVICE"
         @onChoose="selectEndpoint"
@@ -56,34 +74,6 @@ limitations under the License. -->
         icon="disk"
       />
     </div>
-    <!-- <div class="rk-dashboard-bar flex-h" v-if="compType === dashboardType.METRIC">
-      <div class="rk-dashboard-bar-reload">
-        <svg class="icon vm cp rk-btn ghost" @click="handleOption">
-          <use xlink:href="#retry"></use>
-        </svg>
-      </div>
-      <ToolBarSelect
-        @onChoose="selectService"
-        title="Current Proxy"
-        :current="stateDashboard.currentService"
-        :data="stateDashboard.services"
-        icon="package"
-      />
-      <ToolBarEndpointSelect
-        @onChoose="selectEndpoint"
-        title="Current Endpoint"
-        :current="stateDashboard.currentEndpoint"
-        :data="stateDashboard.endpoints"
-        icon="code"
-      />
-      <ToolBarSelect
-        @onChoose="selectInstance"
-        title="Current Instance"
-        :current="stateDashboard.currentInstance"
-        :data="stateDashboard.instances"
-        icon="disk"
-      />
-    </div> -->
     <div class="rk-dashboard-bar flex-h" v-else>
       <div class="rk-dashboard-bar-reload">
         <svg
@@ -135,7 +125,7 @@ limitations under the License. -->
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('GET_SERVICES') private GET_SERVICES: any;
-    @Action('SEARCH_ENDPOINTS') private SEARCH_ENDPOINTS: any;
+    @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
     private dashboardType = DASHBOARDTYPE;
     get lastKey() {
       const current = this.rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children;
@@ -162,14 +152,13 @@ limitations under the License. -->
     private selectInstance(i: any) {
       this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
     }
-    private searchServices(data: { value: string; type: string }) {
-      if (data.type === 'service') {
-        this.GET_SERVICES({ duration: this.durationTime, keyword: data.value });
-        this.SET_KEYWORDSERVICE(data.value);
-      } else if (data.type === 'instance') {
-        this.SEARCH_ENDPOINTS(data.value);
-        this.SET_KEYWORDENDPOINT(data.value);
-      }
+    private searchServices(value: string) {
+      this.GET_SERVICES({ duration: this.durationTime, keyword: value });
+      this.SET_KEYWORDSERVICE(value);
+    }
+    private searchEndpoint(value: string) {
+      this.GET_SERVICE_ENDPOINTS({ keyword: value });
+      this.SET_KEYWORDENDPOINT(value);
     }
   }
 </script>
@@ -179,6 +168,13 @@ limitations under the License. -->
     flex-shrink: 0;
     color: #efefef;
     background-color: #333840;
+    .service-search {
+      border-style: unset;
+      outline: 0;
+      padding: 2px 5px;
+      border-radius: 3px;
+      width: 100px;
+    }
   }
   .rk-dashboard-bar-reload {
     padding: 15px 5px;

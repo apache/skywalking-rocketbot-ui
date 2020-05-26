@@ -136,8 +136,9 @@ limitations under the License. -->
           };
         }
         if (queryMetricType === QueryTypes.ReadMetricsValues) {
-          if (!resVal.values) {
+          if (!(resVal && resVal.values)) {
             this.chartSource[params.metricName] = [];
+            return;
           }
           const { values } = resVal.values;
           this.chartSource[params.metricName] = values.map((item: { value: number }) =>
@@ -158,6 +159,10 @@ limitations under the License. -->
         }
         if (queryMetricType === QueryTypes.READHEATMAP) {
           const nodes = [] as any;
+          if (!(resVal && resVal.values)) {
+            this.chartSource = { nodes: [] };
+            return;
+          }
           resVal.values.forEach((items: { values: number[] }, x: number) => {
             const grids = items.values.map((val: number, y: number) => [
               x,
@@ -173,7 +178,7 @@ limitations under the License. -->
         if (queryMetricType === QueryTypes.ReadLabeledMetricsValues) {
           // {[label: string]: number[]}
           this.chartSource = {};
-          resVal.forEach((item: any, index: number) => {
+          (resVal || []).forEach((item: any, index: number) => {
             const list = item.values.values.map((d: { value: number }) =>
               this.aggregationValue({ data: d.value, type: aggregation, aggregationNum: Number(aggregationNum) }),
             );

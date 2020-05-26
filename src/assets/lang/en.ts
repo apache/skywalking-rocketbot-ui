@@ -139,6 +139,8 @@ const m = {
   parentService: 'Parent Service',
   isParentService: 'Set Parent Service',
   noneParentService: 'No Parent Service',
+  serviceFilter: 'Service Filter',
+  endpointFilter: 'Endpoint Filter',
 };
 
 export default m;
