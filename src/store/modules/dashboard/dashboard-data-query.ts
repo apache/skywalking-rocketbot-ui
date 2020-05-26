@@ -83,7 +83,7 @@ const actions: ActionTree<State, any> = {
                 name,
                 parentService: config.parentService ? (normal ? currentServiceId : currentDatabaseId) : null,
                 normal,
-                scope: normal ? config.entityType : 'Service',
+                scope: normal ? config.entityType : config.parentService ? 'Service' : config.entityType,
                 topN: 10,
                 order: 'DES',
               },

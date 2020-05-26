@@ -71,7 +71,7 @@ const globalSlow = {
   metricName: 'endpoint_avg',
   queryMetricType: 'sortMetrics',
   currentService: '',
-  entityType: 'Endpiont',
+  entityType: 'Endpoint',
   independentSelector: false,
   metricType: 'REGULAR_VALUE',
   version: '',
