@@ -21,17 +21,15 @@ import { AxiosResponse } from 'axios';
 import graph from '@/graph';
 
 export interface State {
-  services: any;
+  services: any[];
   currentService: any;
   databases: any;
   currentDatabase: any;
-  endpoints: any;
+  endpoints: any[];
   currentEndpoint: any;
-  instances: any;
+  instances: any[];
   currentInstance: any;
   keywordService: string;
-  keywordEndpoint: string;
-  keywordInstance: string;
 }
 
 const initState: State = {
@@ -43,9 +41,7 @@ const initState: State = {
   currentInstance: {},
   databases: [],
   currentDatabase: {},
-  keywordService: '',
-  keywordEndpoint: '',
-  keywordInstance: '',
+  keywordService: window.localStorage.getItem('keywordServiceName') || '',
 };
 
 // getters
@@ -71,7 +67,7 @@ const mutations: MutationTree<State> = {
       state.currentEndpoint = {};
       return;
     }
-    if ((!state.currentEndpoint.key && data.length) || state.endpoints.indexOf(state.currentEndpoint) === -1) {
+    if ((!state.currentEndpoint.key && data.length) || !state.endpoints.includes(state.currentEndpoint)) {
       state.currentEndpoint = data[0];
     }
   },
@@ -105,12 +101,7 @@ const mutations: MutationTree<State> = {
   },
   [types.SET_KEYWORDSERVICE](state: State, data: string) {
     state.keywordService = data;
-  },
-  [types.SET_KEYWORDENDPOINT](state: State, data: string) {
-    state.keywordEndpoint = data;
-  },
-  [types.SET_KEYWORDINSTANCE](state: State, data: string) {
-    state.keywordInstance = data;
+    window.localStorage.setItem('keywordServiceName', data);
   },
 };
 
@@ -205,8 +196,8 @@ const actions: ActionTree<State, any> = {
     switch (params.compType) {
       case 'service':
         return context
-          .dispatch('GET_SERVICES', { duration: params.duration })
-          .then(() => context.dispatch('GET_SERVICE_ENDPOINTS', { keyword: context.state.keywordEndpoint }))
+          .dispatch('GET_SERVICES', { duration: params.duration, keyword: params.keywordServiceName })
+          .then(() => context.dispatch('GET_SERVICE_ENDPOINTS', {}))
           .then(() => context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration }));
       case 'database':
         return context.dispatch('GET_DATABASES', { duration: params.duration });

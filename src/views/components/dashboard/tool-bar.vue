@@ -48,15 +48,6 @@ limitations under the License. -->
         :data="stateDashboard.services"
         icon="package"
       />
-      <div class="sm grey" v-if="compType === dashboardType.SERVICE">
-        <div>{{ this.$t('endpointFilter') }}</div>
-        <input
-          type="text"
-          class="service-search"
-          :value="rocketOption.keywordEndpoint"
-          @change="searchEndpoint($event.target.value)"
-        />
-      </div>
       <ToolBarEndpointSelect
         v-if="compType === dashboardType.SERVICE"
         @onChoose="selectEndpoint"
@@ -117,7 +108,6 @@ limitations under the License. -->
     @State('rocketOption') private rocketOption: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
     @Mutation('SET_KEYWORDSERVICE') private SET_KEYWORDSERVICE: any;
-    @Mutation('SET_KEYWORDENDPOINT') private SET_KEYWORDENDPOINT: any;
     @Action('SET_EDIT') private SET_EDIT: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Action('SELECT_DATABASE') private SELECT_DATABASE: any;
@@ -125,7 +115,6 @@ limitations under the License. -->
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('GET_SERVICES') private GET_SERVICES: any;
-    @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
     private dashboardType = DASHBOARDTYPE;
     get lastKey() {
       const current = this.rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children;
@@ -138,6 +127,7 @@ limitations under the License. -->
       return this.MIXHANDLE_GET_OPTION({
         compType: this.compType,
         duration: this.durationTime,
+        keywordServiceName: this.rocketOption.keywordService,
       });
     }
     private handleSetEdit() {
@@ -155,10 +145,6 @@ limitations under the License. -->
     private searchServices(value: string) {
       this.GET_SERVICES({ duration: this.durationTime, keyword: value });
       this.SET_KEYWORDSERVICE(value);
-    }
-    private searchEndpoint(value: string) {
-      this.GET_SERVICE_ENDPOINTS({ keyword: value });
-      this.SET_KEYWORDENDPOINT(value);
     }
   }
 </script>

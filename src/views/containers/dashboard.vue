@@ -80,6 +80,7 @@ limitations under the License. -->
       this.MIXHANDLE_GET_OPTION({
         compType: this.compType,
         duration: this.durationTime,
+        keywordServiceName: this.stateDashboardOption.keywordService,
       });
     }
     private beforeMount() {
