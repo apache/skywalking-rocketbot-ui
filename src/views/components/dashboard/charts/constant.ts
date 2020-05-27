@@ -51,7 +51,7 @@ export const MetricChartType: { [key: string]: string } = {
   readMetricsValues: 'ChartLine',
   sortMetrics: 'ChartSlow',
   readLabeledMetricsValues: 'ChartLine',
-  HEATMAP: 'ChartHeatmap',
+  readHeatMap: 'ChartHeatmap',
   readSampledRecords: 'ChartSlow',
 };
 

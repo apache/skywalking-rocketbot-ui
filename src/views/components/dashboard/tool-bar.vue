@@ -31,7 +31,7 @@ limitations under the License. -->
           <use xlink:href="#retry"></use>
         </svg>
       </div>
-      <div class="sm grey">
+      <div class="sm grey" v-if="compType === dashboardType.SERVICE">
         <div>{{ this.$t('serviceFilter') }}</div>
         <input
           type="text"
@@ -48,7 +48,7 @@ limitations under the License. -->
         :data="stateDashboard.services"
         icon="package"
       />
-      <div class="sm grey">
+      <div class="sm grey" v-if="compType === dashboardType.SERVICE">
         <div>{{ this.$t('endpointFilter') }}</div>
         <input
           type="text"
