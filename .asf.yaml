@@ -30,7 +30,7 @@ github:
     merge:   false
     rebase:  false
 
-  notifications:
-    commits:      notifications@skywalking.apache.org
-    issues:       notifications@skywalking.apache.org
-    pullrequests: notifications@skywalking.apache.org
+notifications:
+  commits:      notifications@skywalking.apache.org
+  issues:       notifications@skywalking.apache.org
+  pullrequests: notifications@skywalking.apache.org
