@@ -30,6 +30,7 @@ limitations under the License. -->
   import { Component } from 'vue-property-decorator';
   import { State } from 'vuex-class';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
+  import TopologyInstanceTemp from '../../../../template/topology-instance-template';
 
   @Component({
     components: {
@@ -40,14 +41,7 @@ limitations under the License. -->
     private instanceComps: any[] = [];
 
     private created() {
-      const dashboard: string = `${window.localStorage.getItem('dashboard')}`;
-      const tree = JSON.parse(dashboard);
-      const groupComps =
-        (tree || []).filter((group: { type: string; children: any[] }) => group.type === 'service')[0] || {};
-      const comps =
-        (groupComps.children || []).filter((item: { type: string; children: any[] }) => item.type === 'Instance')[0] ||
-        {};
-      this.instanceComps = comps.children;
+      this.instanceComps = TopologyInstanceTemp;
     }
   }
 </script>

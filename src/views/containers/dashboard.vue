@@ -25,7 +25,7 @@ limitations under the License. -->
     <div class="dashboard-container clear">
       <DashboardItem
         v-for="(i, index) in rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children"
-        :key="index + i.t + i.w + i.d"
+        :key="index + i.title + i.width"
         :index="index"
         :rocketGlobal="rocketGlobal"
         :item="i"

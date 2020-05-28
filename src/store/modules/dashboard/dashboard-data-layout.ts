@@ -17,8 +17,8 @@
 
 import { MutationTree } from 'vuex';
 import { CompsTree } from '@/types/dashboard';
-import groupServiceTemp from './template/group-service-template';
-import groupDatabaseTemp from './template/group-database-template';
+import groupServiceTemp from '../../../template/group-service-template';
+import groupDatabaseTemp from '../../../template/group-database-template';
 import * as types from './mutation-types';
 import { uuid } from '@/utils/uuid.ts';
 

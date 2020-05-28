@@ -13,12 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div
-    class="rk-dashboard-item"
-    :class="`g-sm-${width}`"
-    :style="`height:${height}px;`"
-    v-if="!excludeCharts.includes(item.c) && !excludeMetrics.includes(item.d)"
-  >
+  <div class="rk-dashboard-item" :class="`g-sm-${width}`" :style="`height:${height}px;`">
     <div class="rk-dashboard-item-title ell">
       <svg class="icon cp red r" v-if="rocketGlobal.edit" @click="DELETE_COMP(index)">
         <use xlink:href="#file-deletion"></use>
@@ -30,7 +25,7 @@ limitations under the License. -->
     <div class="rk-dashboard-item-body">
       <div style="height:100%;">
         <component
-          :is="rocketGlobal.edit ? 'ChartEdit' : item.c"
+          :is="rocketGlobal.edit ? 'ChartEdit' : item.chartType"
           ref="chart"
           :item="itemConfig"
           :index="index"
@@ -45,7 +40,7 @@ limitations under the License. -->
 <script lang="ts">
   import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
   import charts from './charts';
-  import metricsConfig, { QueryTypes, PercentileLabels, PercentileItem } from './constant';
+  import { QueryTypes } from './constant';
   import { MetricsType, CalculationType } from './charts/constant';
   import { uuid } from '@/utils/uuid.ts';
 
@@ -65,8 +60,6 @@ limitations under the License. -->
     @Getter('durationTime') private durationTime: any;
     @Prop() private item!: any;
     @Prop() private index!: number;
-    private excludeMetrics = ['endpointTopology', 'endpointTraces']; // ChartBrief ChartInstance
-    private excludeCharts = ['ChartBrief', 'ChartInstance'];
     private status = 'UNKNOWN';
     private title = 'Title';
     private unit = '';
@@ -76,26 +69,12 @@ limitations under the License. -->
     private itemConfig: any = {};
 
     private created() {
-      const configs = metricsConfig as any;
-      const id = this.item.id || uuid();
       this.status = this.item.metricType;
-      this.title = this.item.t;
-      this.width = this.item.w;
-      this.height = this.item.h;
+      this.title = this.item.title;
+      this.width = this.item.width;
+      this.height = this.item.height;
       this.unit = this.item.unit;
       this.itemConfig = this.item;
-      if (!this.item.version || !this.item.id) {
-        let type = this.item.d;
-        if (this.item.c === 'ChartNum' && !type.includes('Avg')) {
-          type = type + 'Avg';
-        }
-        const values = { ...configs[type], d: type, version: '1.0', id };
-        this.EDIT_COMP_CONFIG({ index: this.index, values });
-        this.itemConfig = {
-          ...this.item,
-          ...values,
-        };
-      }
       this.chartRender();
     }
 
@@ -119,11 +98,11 @@ limitations under the License. -->
         if (queryMetricType !== QueryTypes.ReadMetricsValues) {
           data = [params[0]];
         }
-        this.chartConfig(data);
+        this.chartValue(data);
       });
     }
 
-    private chartConfig(data: Array<{ metricName: string; [key: string]: any; config: any }>) {
+    private chartValue(data: Array<{ metricName: string; [key: string]: any; config: any }>) {
       this.chartSource = {};
       for (const params of data) {
         const { queryMetricType, aggregation, aggregationNum, metricLabels } = params.config;
