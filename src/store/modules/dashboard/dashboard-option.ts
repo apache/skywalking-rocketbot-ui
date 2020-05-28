@@ -41,7 +41,7 @@ const initState: State = {
   currentInstance: {},
   databases: [],
   currentDatabase: {},
-  keywordService: window.localStorage.getItem('keywordServiceName') || '',
+  keywordService: localStorage.getItem('keywordServiceName') || '',
 };
 
 // getters

@@ -31,14 +31,9 @@ limitations under the License. -->
           <use xlink:href="#retry"></use>
         </svg>
       </div>
-      <div class="sm grey" v-if="compType === dashboardType.SERVICE">
+      <div class="sm grey service-search" v-if="compType === dashboardType.SERVICE">
         <div>{{ this.$t('serviceFilter') }}</div>
-        <input
-          type="text"
-          class="service-search"
-          :value="rocketOption.keywordService"
-          @change="searchServices($event.target.value)"
-        />
+        <input type="text" :value="rocketOption.keywordService" @change="searchServices($event.target.value)" />
       </div>
       <ToolBarSelect
         v-if="compType === dashboardType.SERVICE"
@@ -155,11 +150,18 @@ limitations under the License. -->
     color: #efefef;
     background-color: #333840;
     .service-search {
-      border-style: unset;
-      outline: 0;
-      padding: 2px 5px;
-      border-radius: 3px;
-      width: 100px;
+      padding: 0 5px;
+      border-right: 2px solid #252a2f;
+      input {
+        border-style: unset;
+        outline: 0;
+        padding: 2px 5px;
+        border-radius: 2px;
+        width: 120px;
+      }
+      div {
+        padding: 0 2px;
+      }
     }
   }
   .rk-dashboard-bar-reload {
