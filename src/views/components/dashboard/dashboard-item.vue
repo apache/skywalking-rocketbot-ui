@@ -180,7 +180,6 @@ limitations under the License. -->
           this.chartSource = { nodes }; // nodes: number[][]
         }
         if (queryMetricType === QueryTypes.ReadLabeledMetricsValues) {
-          // {[label: string]: number[]}
           this.chartSource = {};
           (resVal || []).forEach((item: any, index: number) => {
             const list = item.values.values.map((d: { value: number }) =>
@@ -188,7 +187,9 @@ limitations under the License. -->
             );
 
             if (labels[index]) {
-              this.chartSource[labels[index]] = list;
+              this.chartSource[labels[index]] = list; // {[label: string]: number[]}
+            } else {
+              this.chartSource[item.label] = list;
             }
           });
         }
