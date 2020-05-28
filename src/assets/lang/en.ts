@@ -141,6 +141,7 @@ const m = {
   noneParentService: 'No Parent Service',
   serviceFilter: 'Service Filter',
   endpointFilter: 'Endpoint Filter',
+  editConfig: 'Edit Config',
 };
 
 export default m;

@@ -141,6 +141,7 @@ const m = {
   noneParentService: '不设置父服务',
   serviceFilter: '服务过滤器',
   endpointFilter: '端点过滤器',
+  editConfig: '编辑',
 };
 
 export default m;

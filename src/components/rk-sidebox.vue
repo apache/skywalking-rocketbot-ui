@@ -57,6 +57,7 @@ limitations under the License. -->
     methods: {
       handleHide() {
         this.$emit('update:show', false);
+        this.$emit('closeSideboxCallback');
       },
     },
   };

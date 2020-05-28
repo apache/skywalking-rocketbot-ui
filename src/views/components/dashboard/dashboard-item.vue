@@ -21,11 +21,16 @@ limitations under the License. -->
       <span>{{ title }}</span>
       <span v-show="unit"> ( {{ unit }} ) </span>
       <span v-show="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
+      <span v-show="!rocketGlobal.edit" @click="editComponentConfig">
+        <svg class="icon cp r">
+          <use xlink:href="#lock"></use>
+        </svg>
+      </span>
     </div>
     <div class="rk-dashboard-item-body">
       <div style="height:100%;">
         <component
-          :is="rocketGlobal.edit ? 'ChartEdit' : item.chartType"
+          :is="rocketGlobal.edit ? 'ChartEdit' : itemConfig.chartType"
           ref="chart"
           :item="itemConfig"
           :index="index"
@@ -35,6 +40,25 @@ limitations under the License. -->
         ></component>
       </div>
     </div>
+    <rk-sidebox
+      class="instance-dependency"
+      width="70%"
+      :fixed="true"
+      :title="$t('editConfig')"
+      :show.sync="dialogConfigVisible"
+      @closeSideboxCallback="chartRender()"
+    >
+      <div class="config-box">
+        <component
+          :is="'ChartEdit'"
+          ref="chart"
+          :item="itemConfig"
+          :index="index"
+          :intervalTime="intervalTime"
+          :data="chartSource"
+        ></component>
+      </div>
+    </rk-sidebox>
   </div>
 </template>
 <script lang="ts">
@@ -60,6 +84,7 @@ limitations under the License. -->
     @Getter('durationTime') private durationTime: any;
     @Prop() private item!: any;
     @Prop() private index!: number;
+    private dialogConfigVisible = false;
     private status = 'UNKNOWN';
     private title = 'Title';
     private unit = '';
@@ -168,6 +193,10 @@ limitations under the License. -->
           });
         }
       }
+    }
+
+    private editComponentConfig() {
+      this.dialogConfigVisible = true;
     }
 
     private aggregationValue(json: { data: number; type: string; aggregationNum: number }) {
@@ -286,5 +315,8 @@ limitations under the License. -->
     color: red;
     display: inline-block;
     margin-left: 10px;
+  }
+  .config-box {
+    padding: 40px 30px;
   }
 </style>
