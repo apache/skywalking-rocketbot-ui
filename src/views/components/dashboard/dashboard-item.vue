@@ -13,56 +13,249 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div
-    class="rk-dashboard-item"
-    :class="`g-sm-${i.w}`"
-    :style="`height:${i.h}px;`"
-    draggable="true"
-    @dragstart="$emit('dragStart', index)"
-    @dragover="$event.preventDefault()"
-    @drop="drop"
-  >
+  <div class="rk-dashboard-item" :class="`g-sm-${width}`" :style="`height:${height}px;`">
     <div class="rk-dashboard-item-title ell">
       <svg class="icon cp red r" v-if="rocketGlobal.edit" @click="DELETE_COMP(index)">
         <use xlink:href="#file-deletion"></use>
       </svg>
-      <span>{{ i.t }}</span>
-      <span class="hint" v-if="rocketDashboard[i.d].Hint">({{ rocketDashboard[i.d].Hint }})</span>
+      <span>{{ title }}</span>
+      <span v-show="unit"> ( {{ unit }} ) </span>
+      <span v-show="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
+      <span v-show="!rocketGlobal.edit" @click="editComponentConfig">
+        <svg class="icon cp r">
+          <use xlink:href="#lock"></use>
+        </svg>
+      </span>
     </div>
     <div class="rk-dashboard-item-body">
       <div style="height:100%;">
         <component
-          :is="rocketGlobal.edit ? 'ChartEdit' : i.c"
+          :is="rocketGlobal.edit ? 'ChartEdit' : itemConfig.chartType"
           ref="chart"
-          :i="i"
+          :item="itemConfig"
           :index="index"
           :intervalTime="intervalTime"
-          :data="rocketDashboard[i.d]"
+          :data="chartSource"
+          @updateStatus="(type, value) => setStatus(type, value)"
         ></component>
       </div>
     </div>
+    <rk-sidebox
+      class="instance-dependency"
+      width="70%"
+      :fixed="true"
+      :title="$t('editConfig')"
+      :show.sync="dialogConfigVisible"
+      @closeSideboxCallback="chartRender()"
+    >
+      <div class="config-box">
+        <component
+          :is="'ChartEdit'"
+          ref="chart"
+          :item="itemConfig"
+          :index="index"
+          :intervalTime="intervalTime"
+          :data="chartSource"
+        ></component>
+      </div>
+    </rk-sidebox>
   </div>
 </template>
 <script lang="ts">
-  import { Vue, Component, Prop } from 'vue-property-decorator';
+  import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
   import charts from './charts';
+  import { QueryTypes } from './constant';
+  import { MetricsType, CalculationType } from './charts/constant';
+  import { uuid } from '@/utils/uuid.ts';
 
-  import { Mutation, Action, State, Getter } from 'vuex-class';
+  import { Mutation, State, Getter, Action } from 'vuex-class';
 
   @Component({
     components: { ...charts },
   })
   export default class DashboardItem extends Vue {
+    @State('rocketOption') private rocketOption: any;
+    @State('rocketbot') private rocketGlobal: any;
+    @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('SWICH_COMP') private SWICH_COMP: any;
-    @State('rocketDashboard') private rocketDashboard: any;
+    @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('intervalTime') private intervalTime: any;
-    @Prop() private rocketGlobal!: any;
-    @Prop() private i!: any;
+    @Getter('durationTime') private durationTime: any;
+    @Prop() private item!: any;
     @Prop() private index!: number;
-    @Prop() private dragIndex!: number;
-    private drop() {
-      this.SWICH_COMP({ start: this.dragIndex, end: this.index });
+    private dialogConfigVisible = false;
+    private status = 'UNKNOWN';
+    private title = 'Title';
+    private unit = '';
+    private width = 3;
+    private height = 300;
+    private chartSource: any = {};
+    private itemConfig: any = {};
+
+    private created() {
+      this.status = this.item.metricType;
+      this.title = this.item.title;
+      this.width = this.item.width;
+      this.height = this.item.height;
+      this.unit = this.item.unit;
+      this.itemConfig = this.item;
+      this.chartRender();
+    }
+
+    private chartRender() {
+      if (this.rocketGlobal.edit) {
+        return;
+      }
+      this.GET_QUERY({
+        duration: this.durationTime,
+        index: this.index,
+      }).then((params: Array<{ metricName: string; [key: string]: any; config: any }>) => {
+        if (!params) {
+          return;
+        }
+        if (!params.length) {
+          return;
+        }
+        this.itemConfig = params[0].config;
+        const { queryMetricType } = this.itemConfig;
+        let data = params;
+        if (queryMetricType !== QueryTypes.ReadMetricsValues) {
+          data = [params[0]];
+        }
+        this.chartValue(data);
+      });
+    }
+
+    private chartValue(data: Array<{ metricName: string; [key: string]: any; config: any }>) {
+      this.chartSource = {};
+      for (const params of data) {
+        const { queryMetricType, aggregation, aggregationNum, metricLabels } = params.config;
+        const resVal = params[queryMetricType];
+        const labels = (metricLabels || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
+
+        if (queryMetricType === QueryTypes.ReadMetricsValue) {
+          this.chartSource = {
+            avgNum: this.aggregationValue({ data: resVal, type: aggregation, aggregationNum: Number(aggregationNum) }),
+          };
+        }
+        if (queryMetricType === QueryTypes.ReadMetricsValues) {
+          if (!(resVal && resVal.values)) {
+            this.chartSource[params.metricName] = [];
+            return;
+          }
+          const { values } = resVal.values;
+          this.chartSource[params.metricName] = values.map((item: { value: number }) =>
+            this.aggregationValue({ data: item.value, type: aggregation, aggregationNum: Number(aggregationNum) }),
+          );
+        }
+        if (queryMetricType === QueryTypes.SortMetrics || queryMetricType === QueryTypes.ReadSampledRecords) {
+          this.chartSource = (resVal || []).map((item: { value: number }) => {
+            return {
+              ...item,
+              value: this.aggregationValue({
+                data: item.value,
+                type: aggregation,
+                aggregationNum: Number(aggregationNum),
+              }),
+            };
+          });
+        }
+        if (queryMetricType === QueryTypes.READHEATMAP) {
+          const nodes = [] as any;
+          if (!(resVal && resVal.values)) {
+            this.chartSource = { nodes: [] };
+            return;
+          }
+          resVal.values.forEach((items: { values: number[] }, x: number) => {
+            const grids = items.values.map((val: number, y: number) => [
+              x,
+              y,
+              this.aggregationValue({ data: val, type: aggregation, aggregationNum: Number(aggregationNum) }),
+            ]);
+
+            nodes.push(...grids);
+          });
+
+          this.chartSource = { nodes }; // nodes: number[][]
+        }
+        if (queryMetricType === QueryTypes.ReadLabeledMetricsValues) {
+          this.chartSource = {};
+          (resVal || []).forEach((item: any, index: number) => {
+            const list = item.values.values.map((d: { value: number }) =>
+              this.aggregationValue({ data: d.value, type: aggregation, aggregationNum: Number(aggregationNum) }),
+            );
+
+            if (labels[index]) {
+              this.chartSource[labels[index]] = list; // {[label: string]: number[]}
+            } else {
+              this.chartSource[item.label] = list;
+            }
+          });
+        }
+      }
+    }
+
+    private editComponentConfig() {
+      this.dialogConfigVisible = true;
+    }
+
+    private aggregationValue(json: { data: number; type: string; aggregationNum: number }) {
+      if (isNaN(json.aggregationNum)) {
+        return json.data;
+      }
+      if (json.type === CalculationType[0].value) {
+        return json.data + json.aggregationNum;
+      }
+      if (json.type === CalculationType[1].value) {
+        return json.data - json.aggregationNum;
+      }
+      if (json.type === CalculationType[2].value) {
+        return json.data * json.aggregationNum;
+      }
+      if (json.type === CalculationType[3].value) {
+        return json.data / json.aggregationNum;
+      }
+      return json.data;
+    }
+
+    private setStatus(type: string, value: any) {
+      if (type === 'metricType') {
+        this.status = value;
+      }
+      if (type === 'title') {
+        this.title = value;
+      }
+      if (type === 'width') {
+        this.width = value;
+      }
+      if (type === 'height') {
+        this.height = value;
+      }
+      if (type === 'unit') {
+        this.unit = value;
+      }
+    }
+
+    @Watch('rocketOption.currentInstance')
+    private watchCurrentInstance() {
+      this.chartRender();
+    }
+    @Watch('rocketOption.currentEndpoint')
+    private watchCurrentEndpoint() {
+      this.chartRender();
+    }
+    @Watch('rocketOption.currentDatabase')
+    private watchCurrentDatabase() {
+      this.chartRender();
+    }
+    @Watch('durationTime')
+    private watchDurationTime() {
+      this.chartRender();
+    }
+    @Watch('rocketGlobal.edit')
+    private watchRerender() {
+      this.chartRender();
     }
   }
 </script>
@@ -118,5 +311,13 @@ limitations under the License. -->
     flex-grow: 1;
     // height:100%;
     height: calc(100% - 28px);
+  }
+  .item-status {
+    color: red;
+    display: inline-block;
+    margin-left: 10px;
+  }
+  .config-box {
+    padding: 40px 30px;
   }
 </style>

@@ -25,8 +25,9 @@ limitations under the License. -->
         :class="{ active: key === current }"
         v-for="(value, key) in tree"
         :key="key"
-        >{{ $t(key.toLowerCase()) }}</a
       >
+        {{ $t(key.toLowerCase()) }}
+      </a>
       <div class="pt-10 r">
         <a class="rk-btn ghost sm" @click="configMode = !configMode">{{ $t('templateConfig') }}</a>
       </div>

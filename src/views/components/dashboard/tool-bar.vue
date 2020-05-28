@@ -14,22 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div>
-    <div class="rk-dashboard-bar flex-h" v-if="compType === 'service'">
+    <div class="rk-dashboard-bar flex-h" v-if="compType !== dashboardType.DATABASE">
       <div class="rk-dashboard-bar-reload">
-        <svg
-          class="icon lg vm cp rk-btn ghost"
-          :style="`color:${!rocketGlobal.edit ? '' : '#ffc107'}`"
-          @click="handleSetEdit"
-        >
-          <use :xlink:href="!rocketGlobal.edit ? '#lock' : '#lock-open'"></use>
-        </svg>
+        <span v-tooltip:bottom="{ content: rocketGlobal.edit ? 'view' : 'edit' }">
+          <svg
+            class="icon lg vm cp rk-btn ghost"
+            :style="`color:${!rocketGlobal.edit ? '' : '#ffc107'}`"
+            @click="handleSetEdit"
+          >
+            <use :xlink:href="!rocketGlobal.edit ? '#lock' : '#lock-open'"></use>
+          </svg>
+        </span>
       </div>
       <div class="rk-dashboard-bar-reload">
         <svg class="icon lg vm cp rk-btn ghost" @click="handleOption">
           <use xlink:href="#retry"></use>
         </svg>
       </div>
+      <div class="sm grey service-search" v-if="compType === dashboardType.SERVICE">
+        <div>{{ this.$t('serviceFilter') }}</div>
+        <input type="text" :value="rocketOption.keywordService" @change="searchServices($event.target.value)" />
+      </div>
       <ToolBarSelect
+        v-if="compType === dashboardType.SERVICE"
         @onChoose="selectService"
         :title="this.$t('currentService')"
         :current="stateDashboard.currentService"
@@ -37,6 +44,7 @@ limitations under the License. -->
         icon="package"
       />
       <ToolBarEndpointSelect
+        v-if="compType === dashboardType.SERVICE"
         @onChoose="selectEndpoint"
         :title="this.$t('currentEndpoint')"
         :current="stateDashboard.currentEndpoint"
@@ -44,6 +52,7 @@ limitations under the License. -->
         icon="code"
       />
       <ToolBarSelect
+        v-if="compType === dashboardType.SERVICE"
         @onChoose="selectInstance"
         :title="this.$t('currentInstance')"
         :current="stateDashboard.currentInstance"
@@ -51,35 +60,7 @@ limitations under the License. -->
         icon="disk"
       />
     </div>
-    <div class="rk-dashboard-bar flex-h" v-if="compType === 'proxy'">
-      <div class="rk-dashboard-bar-reload">
-        <svg class="icon vm cp rk-btn ghost" @click="handleOption">
-          <use xlink:href="#retry"></use>
-        </svg>
-      </div>
-      <ToolBarSelect
-        @onChoose="selectService"
-        title="Current Proxy"
-        :current="stateDashboard.currentService"
-        :data="stateDashboard.services"
-        icon="package"
-      />
-      <ToolBarEndpointSelect
-        @onChoose="selectEndpoint"
-        title="Current Endpoint"
-        :current="stateDashboard.currentEndpoint"
-        :data="stateDashboard.endpoints"
-        icon="code"
-      />
-      <ToolBarSelect
-        @onChoose="selectInstance"
-        title="Current Instance"
-        :current="stateDashboard.currentInstance"
-        :data="stateDashboard.instances"
-        icon="disk"
-      />
-    </div>
-    <div class="rk-dashboard-bar flex-h" v-else-if="compType === 'database'">
+    <div class="rk-dashboard-bar flex-h" v-else>
       <div class="rk-dashboard-bar-reload">
         <svg
           class="icon lg vm cp rk-btn ghost"
@@ -110,6 +91,8 @@ limitations under the License. -->
   import ToolBarSelect from './tool-bar-select.vue';
   import ToolBarEndpointSelect from './tool-bar-endpoint-select.vue';
   import { State, Action, Mutation } from 'vuex-class';
+  import { DASHBOARDTYPE } from './constant';
+
   @Component({ components: { ToolBarSelect, ToolBarEndpointSelect } })
   export default class ToolBar extends Vue {
     @Prop() private compType!: any;
@@ -117,13 +100,17 @@ limitations under the License. -->
     @Prop() private rocketGlobal!: any;
     @Prop() private rocketComps!: any;
     @Prop() private durationTime!: any;
+    @State('rocketOption') private rocketOption: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
+    @Mutation('SET_KEYWORDSERVICE') private SET_KEYWORDSERVICE: any;
     @Action('SET_EDIT') private SET_EDIT: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Action('SELECT_DATABASE') private SELECT_DATABASE: any;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+    @Action('GET_SERVICES') private GET_SERVICES: any;
+    private dashboardType = DASHBOARDTYPE;
     get lastKey() {
       const current = this.rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children;
       if (!current.length) {
@@ -135,6 +122,7 @@ limitations under the License. -->
       return this.MIXHANDLE_GET_OPTION({
         compType: this.compType,
         duration: this.durationTime,
+        keywordServiceName: this.rocketOption.keywordService,
       });
     }
     private handleSetEdit() {
@@ -149,6 +137,10 @@ limitations under the License. -->
     private selectInstance(i: any) {
       this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
     }
+    private searchServices(value: string) {
+      this.GET_SERVICES({ duration: this.durationTime, keyword: value });
+      this.SET_KEYWORDSERVICE(value);
+    }
   }
 </script>
 
@@ -157,9 +149,23 @@ limitations under the License. -->
     flex-shrink: 0;
     color: #efefef;
     background-color: #333840;
+    .service-search {
+      padding: 0 5px;
+      border-right: 2px solid #252a2f;
+      input {
+        border-style: unset;
+        outline: 0;
+        padding: 2px 5px;
+        border-radius: 2px;
+        width: 120px;
+      }
+      div {
+        padding: 0 2px;
+      }
+    }
   }
   .rk-dashboard-bar-reload {
-    padding: 0 5px;
+    padding: 15px 5px;
     border-right: 2px solid #252a2f;
   }
 </style>

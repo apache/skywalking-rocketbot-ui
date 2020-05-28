@@ -102,7 +102,6 @@ const m = {
   serverZone: '服务器时区',
   percentResponse: '百分比响应',
   exportImage: '导出为图片',
-  comparison: '指标对比',
   queryData: '数据查询',
   previousService: '上一个服务',
   nextService: '下一个服务',
@@ -129,6 +128,20 @@ const m = {
   excludeChildren: '不包含子部分',
   view: '查看',
   timeTips: '时间区间不能超过60天',
+  standardAPM: '标准APM',
+  entityType: '实体类型',
+  independentSelector: '独立选择器',
+  unknownMetrics: '未知指标',
+  labels: '标签',
+  aggregation: '数据计算',
+  unit: '单位',
+  labelsIndex: '标签下标',
+  parentService: '父级服务',
+  isParentService: '设置父服务',
+  noneParentService: '不设置父服务',
+  serviceFilter: '服务过滤器',
+  endpointFilter: '端点过滤器',
+  editConfig: '编辑',
 };
 
 export default m;

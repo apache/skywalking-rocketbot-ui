@@ -15,16 +15,17 @@
  * limitations under the License.
  */
 
-import * as global from '@/store/modules/dashboard/fragments/global';
-import * as service from '@/store/modules/dashboard/fragments/service';
-import * as endpoint from '@/store/modules/dashboard/fragments/endpoint';
-import * as instance from '@/store/modules/dashboard/fragments/instance';
-import * as database from '@/store/modules/dashboard/fragments/database';
-
-export default {
-  ...global,
-  ...service,
-  ...endpoint,
-  ...instance,
-  ...database,
-};
+import globalTemp from './global-template';
+import databaseTemp from './database-template';
+export default [
+  {
+    name: 'Global',
+    children: globalTemp,
+    type: 'All',
+  },
+  {
+    name: 'Database',
+    children: databaseTemp,
+    type: 'Database',
+  },
+];

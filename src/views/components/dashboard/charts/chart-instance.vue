@@ -22,7 +22,7 @@ limitations under the License. -->
       <span class="mr-5 mb-5 grey">Language</span>
       <span>{{ this.rocketOption.currentInstance.language }}</span>
     </div>
-    <div v-for="i in rocketOption.currentInstance.attributes">
+    <div v-for="(i, index) in rocketOption.currentInstance.attributes" :key="index">
       <span class="mr-5 mb-5 grey">{{ i.name }}</span>
       <span>{{ i.value }}</span>
     </div>

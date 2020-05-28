@@ -19,18 +19,15 @@ import { ActionTree, MutationTree, Commit, Dispatch } from 'vuex';
 import { CompsTree } from '@/types/dashboard';
 import dashboardLayout from './dashboard-data-layout';
 import dashboardQuery from './dashboard-data-query';
-import { queryChartData } from '@/utils/queryChartData';
 
 export interface State {
   current: number;
   group: number;
   tree: CompsTree[];
-  data: any;
 }
 
 const initState: State = {
   ...dashboardLayout.state,
-  data: queryChartData,
 };
 
 // mutations
@@ -42,22 +39,33 @@ const mutations: MutationTree<any> = {
 const actions: ActionTree<State, any> = {
   ...dashboardQuery.actions,
   MIXHANDLE_CHANGE_GROUP(
-    context: { commit: Commit, dispatch: Dispatch, state: State, rootState: any }, index: number): void {
+    context: { commit: Commit; dispatch: Dispatch; state: State; rootState: any },
+    index: number,
+  ): void {
     const rocketOption = context.rootState.rocketOption;
     const temp: any = {};
-    if (rocketOption.currentService) { temp.service = rocketOption.currentService; }
-    if (rocketOption.currentEndpoint) { temp.endpoint = rocketOption.currentEndpoint; }
-    if (rocketOption.currentInstance) { temp.instance = rocketOption.currentInstance; }
-    if (rocketOption.currentDatabase) { temp.database = rocketOption.currentDatabase; }
+    if (rocketOption.currentService) {
+      temp.service = rocketOption.currentService;
+    }
+    if (rocketOption.currentEndpoint) {
+      temp.endpoint = rocketOption.currentEndpoint;
+    }
+    if (rocketOption.currentInstance) {
+      temp.instance = rocketOption.currentInstance;
+    }
+    if (rocketOption.currentDatabase) {
+      temp.database = rocketOption.currentDatabase;
+    }
     context.commit('SET_GROUP_QUERY', temp);
     context.commit('SET_CURRENT_GROUP', index);
     context.dispatch('SET_CURRENT_STATE', context.state.tree[index].query);
-    context.dispatch('RUN_EVENTS', {}, {root: true});
+    context.dispatch('RUN_EVENTS', {}, { root: true });
   },
   MIXHANDLE_CHANGE_GROUP_WITH_CURRENT(
-    context: { commit: Commit, dispatch: Dispatch, state: State, rootState: any },
-    { index, current = 0 }: { index: number, current: number }): void {
-    const rocketOption = context.rootState.rocketOption;
+    context: { commit: Commit; dispatch: Dispatch; state: State; rootState: any },
+    { index, current = 0 }: { index: number; current: number },
+  ): void {
+    const { rocketOption } = context.rootState;
     const temp: any = {};
     if (rocketOption.currentService) {
       temp.service = rocketOption.currentService;
@@ -76,16 +84,10 @@ const actions: ActionTree<State, any> = {
     context.dispatch('SET_CURRENT_STATE', context.state.tree[index].query);
     context.dispatch('RUN_EVENTS', {}, { root: true });
   },
-} ;
-
-// getters
-const getters = {
-  ...dashboardQuery.getters,
 };
 
 export default {
   state: initState,
-  getters,
   actions,
   mutations,
 };

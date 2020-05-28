@@ -43,15 +43,15 @@ limitations under the License. -->
         </div>
         <div>
           <TopoChart
-            v-if="rocketDashboard.serviceApdexScore.ApdexScore.length"
-            :data="rocketDashboard.serviceApdexScore.ApdexScore"
+            v-if="stateTopo.serviceApdexScore.length"
+            :data="stateTopo.serviceApdexScore"
             :intervalTime="intervalTime"
             title="Service ApdexScore"
             unit=""
           />
           <TopoChart
-            v-if="rocketDashboard.serviceSLA.SLA.length"
-            :data="rocketDashboard.serviceSLA.SLA"
+            v-if="stateTopo.serviceSLA.length"
+            :data="stateTopo.serviceSLA"
             :intervalTime="intervalTime"
             title="Service SLA"
             unit="%"
@@ -63,7 +63,7 @@ limitations under the License. -->
   </aside>
 </template>
 <script lang="ts">
-  import { initState } from '@/store/modules/dashboard/modules/dashboard-data-layout';
+  import { initState } from '@/store/modules/dashboard/dashboard-data-layout';
   import topo, { State as topoState } from '@/store/modules/topology';
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
@@ -82,10 +82,8 @@ limitations under the License. -->
   })
   export default class TopoAside extends Vue {
     @State('rocketTopo') private stateTopo!: topoState;
-    @State('rocketDashboard') private rocketDashboard: any;
     @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
-    @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Action('rocketTopo/CLEAR_TOPO') private CLEAR_TOPO: any;
     @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;

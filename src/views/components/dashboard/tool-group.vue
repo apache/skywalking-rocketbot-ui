@@ -39,15 +39,17 @@ limitations under the License. -->
       <div class="rk-dashboard-group-add-box" v-if="show">
         <div class="mb-10 vm">{{ $t('createGroup') }}</div>
         <div class="sm grey mb-5 mr-10">{{ $t('groupType') }}</div>
-        <select v-model="type" class="rk-dashboard-group-sel mb-5 long">
-          <option value="service">{{ $t('service') }}</option>
-          <!-- <option value="proxy">Proxy</option> -->
-          <option value="database">{{ $t('database') }}</option>
+        <select v-model="type" class="rk-dashboard-group-sel">
+          <option :value="DASHBOARDTYPE.SERVICE">{{ $t('standardAPM') }}</option>
+          <option :value="DASHBOARDTYPE.METRIC">{{ $t('metrics') }}</option>
+          <option :value="DASHBOARDTYPE.DATABASE">{{ $t('database') }}</option>
         </select>
         <div class="sm grey  mb-5 mr-10">{{ $t('groupName') }}</div>
         <input class="mb-5 rk-dashboard-group-input" type="text" v-model="name" />
-        <label class="mb-10 dib"><input type="checkbox" v-model="template" />{{ $t('template') }}</label>
-        <a class="rk-btn r vm long tc" @click="handleCreate">{{ $t('confirm') }}</a>
+        <div v-show="type === 'database'">
+          <label class="mb-10 dib"><input type="checkbox" v-model="template" />{{ $t('template') }}</label>
+        </div>
+        <a class="rk-btn r vm long tc confirm" @click="handleCreate">{{ $t('confirm') }}</a>
       </div>
     </a>
   </nav>
@@ -57,6 +59,7 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import { Mutation, Action, Getter } from 'vuex-class';
+  import { DASHBOARDTYPE } from './constant';
 
   @Component({})
   export default class ToolGroup extends Vue {
@@ -68,9 +71,10 @@ limitations under the License. -->
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Getter('durationTime') private durationTime: any;
     private name: string = '';
-    private type: string = 'service';
+    private type: string = DASHBOARDTYPE.SERVICE;
     private show: boolean = false;
     private template: boolean = false;
+    private DASHBOARDTYPE = DASHBOARDTYPE;
     private get compType() {
       return this.rocketComps.tree[this.rocketComps.group].type;
     }
@@ -83,19 +87,22 @@ limitations under the License. -->
     }
     private handleHide() {
       this.name = '';
-      this.type = 'service';
+      this.type = DASHBOARDTYPE.SERVICE;
       this.show = false;
     }
     private handleCreate() {
-      let template = 'nouse';
-      if (this.type === 'service') {
-        template = 'groupService';
+      let template = DASHBOARDTYPE.METRIC;
+      if (this.type === DASHBOARDTYPE.SERVICE) {
+        template = DASHBOARDTYPE.SERVICE;
       }
-      if (this.type === 'database') {
-        template = 'groupDatabase';
+      if (this.type === DASHBOARDTYPE.METRIC) {
+        template = DASHBOARDTYPE.METRIC;
       }
-      if (!this.template) {
-        template = 'nouse';
+      if (this.type === DASHBOARDTYPE.DATABASE) {
+        template = DASHBOARDTYPE.DATABASE;
+        if (!this.template) {
+          template = DASHBOARDTYPE.METRIC;
+        }
       }
       this.ADD_COMPS_GROUP({ name: this.name, type: this.type, template });
       this.handleHide();
@@ -114,6 +121,8 @@ limitations under the License. -->
   .rk-dashboard-group-sel {
     outline: none;
     border: 0;
+    margin: 0 0 5px 0;
+    width: 160px;
   }
   .rk-dashboard-group-add {
     position: relative;
@@ -128,6 +137,9 @@ limitations under the License. -->
     color: #eee;
     background-color: #252a2f;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+    .confirm {
+      margin: 10px 0;
+    }
   }
   .rk-dashboard-group-add-box:after {
     bottom: 100%;

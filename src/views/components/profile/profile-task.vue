@@ -141,7 +141,7 @@ limitations under the License. -->
     padding: 2px 5px;
     border-radius: 3px;
     border: 1px solid #ccc;
-    height: 40px;
+    height: 30px;
     line-height: 40px;
     display: block;
     width: 100%;

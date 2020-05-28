@@ -66,7 +66,7 @@ limitations under the License. -->
     private beforeMount() {
       this.SET_CURRENT_SERVICE(this.current);
       this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 2 });
-      this.GET_SERVICE_ENDPOINTS({ duration: this.durationTime, serviceId: this.current.key }).then(() => {
+      this.GET_SERVICE_ENDPOINTS({ duration: this.durationTime, serviceId: this.current.key, keyword: '' }).then(() => {
         this.selectEndpoint(this.stateDashboardOption.endpoints[0]);
       });
     }

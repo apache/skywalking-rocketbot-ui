@@ -14,6 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import comparisonStore from './comparison-store';
 
-export { comparisonStore };
+import globalTemp from './global-template';
+import serviceTemp from './service-template';
+import endpointTemp from './endpoint-template';
+import instanceTemp from './instance-template';
+export default [
+  {
+    name: 'Global',
+    children: globalTemp,
+    type: 'Global',
+  },
+  {
+    name: 'Service',
+    children: serviceTemp,
+    type: 'Service',
+  },
+  {
+    name: 'Endpoint',
+    children: endpointTemp,
+    type: 'Endpoint',
+  },
+  {
+    name: 'Instance',
+    children: instanceTemp,
+    type: 'Instance',
+  },
+];

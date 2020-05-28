@@ -16,19 +16,20 @@
  */
 
 import { Commit, ActionTree, MutationTree, Dispatch } from 'vuex';
-import * as types from '../mutation-types';
+import * as types from './mutation-types';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
 
 export interface State {
-  services: any;
+  services: any[];
   currentService: any;
   databases: any;
   currentDatabase: any;
-  endpoints: any;
+  endpoints: any[];
   currentEndpoint: any;
-  instances: any;
+  instances: any[];
   currentInstance: any;
+  keywordService: string;
 }
 
 const initState: State = {
@@ -40,6 +41,7 @@ const initState: State = {
   currentInstance: {},
   databases: [],
   currentDatabase: {},
+  keywordService: localStorage.getItem('keywordServiceName') || '',
 };
 
 // getters
@@ -59,31 +61,13 @@ const mutations: MutationTree<State> = {
   [types.SET_CURRENT_SERVICE](state: State, service: any) {
     state.currentService = service;
   },
-  [types.SET_SEARCH_ENDPOINTS](state: State, data: any) {
-    if (!data.length) {
-      return;
-    }
-    state.endpoints = data;
-    if ((!state.currentEndpoint.key && data.length) || state.endpoints.indexOf(state.currentEndpoint) === -1) {
-      state.currentEndpoint = data[0];
-    }
-  },
   [types.SET_ENDPOINTS](state: State, data: any) {
     state.endpoints = data;
     if (!data.length) {
       state.currentEndpoint = {};
       return;
     }
-    if ((!state.currentEndpoint.key && data.length) || state.endpoints.indexOf(state.currentEndpoint) === -1) {
-      state.currentEndpoint = data[0];
-    }
-  },
-  [types.SET_SEARCH_ENDPOINTS](state: State, data: any) {
-    state.endpoints = data;
-    if (!data.length) {
-      return;
-    }
-    if (!state.currentEndpoint.key && data.length) {
+    if ((!state.currentEndpoint.key && data.length) || !state.endpoints.includes(state.currentEndpoint)) {
       state.currentEndpoint = data[0];
     }
   },
@@ -115,11 +99,18 @@ const mutations: MutationTree<State> = {
   [types.SET_CURRENT_DATABASE](state: State, service: any) {
     state.currentDatabase = service;
   },
+  [types.SET_KEYWORDSERVICE](state: State, data: string) {
+    state.keywordService = data;
+    window.localStorage.setItem('keywordServiceName', data);
+  },
 };
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_SERVICES(context: { commit: Commit; rootState: any }, params: any) {
+  GET_SERVICES(context: { commit: Commit }, params: { duration: any; keyword: string }) {
+    if (!params.keyword) {
+      params.keyword = '';
+    }
     return graph
       .query('queryServices')
       .params(params)
@@ -127,13 +118,16 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_SERVICES, res.data.data.services);
       });
   },
-  GET_SERVICE_ENDPOINTS(context: { commit: Commit; state: any }, params: any) {
+  GET_SERVICE_ENDPOINTS(context: { commit: Commit; state: any }, params: { keyword: string }) {
     if (!context.state.currentService.key) {
       return new Promise((resolve) => resolve());
     }
+    if (!params.keyword) {
+      params.keyword = '';
+    }
     return graph
       .query('queryEndpoints')
-      .params({ serviceId: context.state.currentService.key, keyword: '', ...params })
+      .params({ serviceId: context.state.currentService.key, ...params })
       .then((res: AxiosResponse) => {
         context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
       });
@@ -144,14 +138,6 @@ const actions: ActionTree<State, any> = {
       .params(params)
       .then((res: AxiosResponse) => {
         context.commit(types.SET_ENDPOINTS, res.data.data.endpoints);
-      });
-  },
-  SEARCH_ENDPOINTS(context: { commit: Commit; state: any }, params: any) {
-    return graph
-      .query('queryEndpoints')
-      .params({ serviceId: context.state.currentService.key, keyword: params })
-      .then((res: AxiosResponse) => {
-        context.commit(types.SET_SEARCH_ENDPOINTS, res.data.data.getEndpoints);
       });
   },
   GET_SERVICE_INSTANCES(context: { commit: Commit; state: any }, params: any) {
@@ -182,32 +168,19 @@ const actions: ActionTree<State, any> = {
       });
   },
   SELECT_SERVICE(context: { commit: Commit; dispatch: Dispatch }, params: any) {
+    if (!params.service.key) {
+      return;
+    }
     context.commit('SET_CURRENT_SERVICE', params.service);
     context.dispatch('MIXHANDLE_GET_OPTION', { ...params, compType: 'service' }).then(() => {
       context.dispatch('RUN_EVENTS', {}, { root: true });
     });
   },
-  SELECT_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: any }, params: any) {
+  SELECT_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
     context.commit('SET_CURRENT_ENDPOINT', params.endpoint);
-    context.dispatch('GET_QUERY', {
-      serviceId: context.state.currentService.key || '',
-      endpointId: context.state.currentEndpoint.key || '',
-      endpointName: context.state.currentEndpoint.label || '',
-      instanceId: context.state.currentInstance.key || '',
-      databaseId: context.state.currentDatabase.key || '',
-      duration: params.duration,
-    });
   },
-  SELECT_INSTANCE(context: { commit: Commit; dispatch: Dispatch; state: any }, params: any) {
+  SELECT_INSTANCE(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
     context.commit('SET_CURRENT_INSTANCE', params.instance);
-    context.dispatch('GET_QUERY', {
-      serviceId: context.state.currentService.key || '',
-      endpointId: context.state.currentEndpoint.key || '',
-      endpointName: context.state.currentEndpoint.label || '',
-      instanceId: context.state.currentInstance.key || '',
-      databaseId: context.state.currentDatabase.key || '',
-      duration: params.duration,
-    });
   },
   SELECT_DATABASE(context: { commit: Commit; dispatch: Dispatch }, params: any) {
     context.commit('SET_CURRENT_DATABASE', params);
@@ -223,14 +196,54 @@ const actions: ActionTree<State, any> = {
     switch (params.compType) {
       case 'service':
         return context
-          .dispatch('GET_SERVICES', { duration: params.duration })
-          .then(() => context.dispatch('GET_SERVICE_ENDPOINTS'))
+          .dispatch('GET_SERVICES', { duration: params.duration, keyword: params.keywordServiceName })
+          .then(() => context.dispatch('GET_SERVICE_ENDPOINTS', {}))
           .then(() => context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration }));
       case 'database':
         return context.dispatch('GET_DATABASES', { duration: params.duration });
       default:
         break;
     }
+  },
+  GET_ITEM_ENDPOINTS(context, params) {
+    return graph
+      .query('queryEndpoints')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        return res.data.data.getEndpoints;
+      });
+  },
+  GET_ITEM_INSTANCES(context, params) {
+    return graph
+      .query('queryInstances')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        return res.data.data.getServiceInstances;
+      });
+  },
+  TYPE_METRICS(context, params: { name: string }) {
+    const metricNames = (params.name || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
+    return Promise.all(
+      metricNames.map((item: string) => {
+        return graph
+          .query('queryTypeOfMetrics')
+          .params({ name: item })
+          .then((res: AxiosResponse) => {
+            return res.data.data;
+          });
+      }),
+    );
+  },
+  GET_ITEM_SERVICES(context, params: { duration: any; keyword: string }) {
+    if (!params.keyword) {
+      params.keyword = '';
+    }
+    return graph
+      .query('queryServices')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        return res.data.data.services || [];
+      });
   },
 };
 

@@ -17,12 +17,12 @@ limitations under the License. -->
   <div style="overflow: auto;height: 100%;" class="scroll_hide">
     <div class="rk-chart-slow clear">
       <div class="rk-chart-slow-i" v-for="(i, index) in data" :key="index">
-        <svg class="icon vm r grey link-hover cp" @click="handleClick((i.traceIds && i.traceIds[0]) || i.label)">
+        <svg class="icon vm r grey link-hover cp" @click="handleClick((i.traceIds && i.traceIds[0]) || i.name)">
           <use xlink:href="#review-list"></use>
         </svg>
-        <div class="mb-5 ell" v-tooltip:top.ellipsis="i.label || ''">
-          <span class="calls sm mr-10">{{ i.value }} ms</span>
-          <span class="cp link-hover" @click="appChange(i)">{{ i.label + getTraceId(i) }}</span>
+        <div class="mb-5 ell" v-tooltip:top.ellipsis="i.name || ''">
+          <span class="calls sm mr-10">{{ i.value }}</span>
+          <span class="cp link-hover">{{ i.name + getTraceId(i) }}</span>
         </div>
         <RkProgress :precent="(i.value / maxValue) * 100" color="#bf99f8" />
       </div>
@@ -38,11 +38,12 @@ limitations under the License. -->
   @Component({})
   export default class ChartSlow extends Vue {
     @Prop() private data!: any;
+    @Prop() private item!: any;
     @Prop() private intervalTime!: any;
-    private appChange(i: any) {
-      const temp = { key: `${i.key}`, label: i.label };
-    }
     get maxValue() {
+      if (!this.data.length) {
+        return null;
+      }
       const temp: number[] = this.data.map((i: any) => i.value);
       return Math.max.apply(null, temp);
     }

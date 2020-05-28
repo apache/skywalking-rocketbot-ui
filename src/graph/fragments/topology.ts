@@ -332,3 +332,42 @@ export const DependencyInstanceClientMetric = {
     }
   }`,
 };
+export const TopoServiceDetail = {
+  variable: ['$serviceId: ID!', '$duration: Duration!'],
+  query: `
+    servicePercentile: getMultipleLinearIntValues(metric: {
+      name: "service_percentile"
+      id: $serviceId
+    }, numOfLinear: 5, duration: $duration) {
+      values { value }
+    }
+    serviceSLA: getLinearIntValues(metric: {
+      name: "service_sla"
+      id: $serviceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    serviceThroughput: getLinearIntValues(metric: {
+      name: "service_cpm"
+      id: $serviceId
+    }, duration: $duration) {
+      values {
+        value
+      }
+    }
+    serviceResponseTime: getLinearIntValues(metric: {
+      name: "service_resp_time"
+      id: $serviceId
+    }, duration: $duration) {
+      values {value}
+    }
+    serviceApdexScore: getLinearIntValues(metric: {
+      name: "service_apdex"
+      id: $serviceId
+    }, duration: $duration) {
+      values {value}
+    }
+`,
+};

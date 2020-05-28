@@ -30,7 +30,9 @@ export interface CompsItem {
   n: string;
   t: string;
   type?: string;
-  w: number;
+  width: number;
+  entityType: string;
+  height: number;
 }
 export interface CompsGroup {
   name: string;

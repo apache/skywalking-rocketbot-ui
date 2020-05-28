@@ -15,17 +15,12 @@
  * limitations under the License.
  */
 
-
-import { ActionTree, MutationTree } from 'vuex';
-import { CompsItem, CompsTree } from '@/types/dashboard';
-import globalTemp from '../template/global-template';
-import serviceTemp from '../template/service-template';
-import endpointTemp from '../template/endpoint-template';
-import instanceTemp from '../template/instance-template';
-import databaseTemp from '../template/database-template';
-import groupServiceTemp from '../template/group-service-template';
-import groupDatabaseTemp from '../template/group-database-template';
-import * as types from '../mutation-types';
+import { MutationTree } from 'vuex';
+import { CompsTree } from '@/types/dashboard';
+import groupServiceTemp from '../../../template/group-service-template';
+import groupDatabaseTemp from '../../../template/group-database-template';
+import * as types from './mutation-types';
+import { uuid } from '@/utils/uuid.ts';
 
 export interface State {
   current: number;
@@ -38,27 +33,30 @@ export const initState: State = {
   current: 0,
   group: 0,
   index: 0,
-  tree: [{
-    name: 'Service Dashboard',
-    type: 'service',
-    query:  {
-      service: {},
-      endpoint: {},
-      instance: {},
-      database: {},
+  tree: [
+    {
+      name: 'Service Dashboard',
+      type: 'service',
+      query: {
+        service: {},
+        endpoint: {},
+        instance: {},
+        database: {},
+      },
+      children: groupServiceTemp,
     },
-    children: groupServiceTemp,
-  }, {
-    name: 'Database Dashboard',
-    type: 'database',
-    query:  {
-      service: {},
-      endpoint: {},
-      instance: {},
-      database: {},
+    {
+      name: 'Database Dashboard',
+      type: 'database',
+      query: {
+        service: {},
+        endpoint: {},
+        instance: {},
+        database: {},
+      },
+      children: groupDatabaseTemp,
     },
-    children: groupDatabaseTemp,
-  }],
+  ],
 };
 
 // mutations
@@ -79,64 +77,47 @@ const mutations: MutationTree<State> = {
     state.group = current;
     state.current = 0;
   },
-  [types.SET_CURRENT_GROUP_WITH_CURRENT](state: State, { index, current = 0 }: { index: number, current: number }) {
+  [types.SET_CURRENT_GROUP_WITH_CURRENT](state: State, { index, current = 0 }: { index: number; current: number }) {
     state.group = index;
     state.current = current;
   },
   [types.ADD_COMPS_GROUP](state: State, params: any) {
-    if (!params.name) {return; }
+    if (!params.name) {
+      return;
+    }
     switch (params.template) {
-      case 'nouse':
+      case 'metric':
         const newTree = [];
         Object.keys(state.tree).forEach((i: any) => {
           newTree.push(state.tree[i]);
         });
-        newTree.push({name: params.name, type: params.type, query: {}, children: [
-          {name: 'demo', children: []},
-        ]});
+        newTree.push({ name: params.name, type: params.type, query: {}, children: [{ name: 'demo', children: [] }] });
         state.tree = newTree;
         break;
-      case 'groupService':
-          const newServerTree = [];
-          Object.keys(state.tree).forEach((i: any) => {
-            newServerTree.push(state.tree[i]);
-          });
-          newServerTree.push({name: params.name, type: params.type, query: {}, children: groupServiceTemp});
-          state.tree = newServerTree;
-          break;
-      case 'groupDatabase':
+      case 'service':
+        const newServerTree = [];
+        Object.keys(state.tree).forEach((i: any) => {
+          newServerTree.push(state.tree[i]);
+        });
+        newServerTree.push({ name: params.name, type: params.type, query: {}, children: groupServiceTemp });
+        state.tree = newServerTree;
+        break;
+      case 'database':
         const newDatabaseTree = [];
         Object.keys(state.tree).forEach((i: any) => {
           newDatabaseTree.push(state.tree[i]);
         });
-        newDatabaseTree.push({name: params.name, type: params.type, query: {}, children: groupDatabaseTemp});
+        newDatabaseTree.push({ name: params.name, type: params.type, query: {}, children: groupDatabaseTemp });
         state.tree = newDatabaseTree;
         break;
     }
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
-  [types.ADD_COMPS_TREE](state: State, params: any) {
-    if (!params.name) {return; }
-    switch (params.template) {
-      case 'nouse':
-        state.tree[state.group].children.push({name: params.name, children: []});
-        break;
-      case 'global':
-        state.tree[state.group].children.push({name: params.name, children: globalTemp});
-        break;
-      case 'service':
-        state.tree[state.group].children.push({name: params.name, children: serviceTemp});
-        break;
-      case 'endpoint':
-        state.tree[state.group].children.push({name: params.name, children: endpointTemp});
-        break;
-      case 'instance':
-        state.tree[state.group].children.push({name: params.name, children: instanceTemp});
-        break;
-      case 'database':
-        state.tree[state.group].children.push({name: params.name, children: databaseTemp});
-        break;
+  [types.ADD_COMPS_TREE](state: State, params: { name: string }) {
+    if (!params.name) {
+      return;
     }
+    state.tree[state.group].children.push({ name: params.name, children: [] });
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
   [types.DELETE_COMPS_GROUP](state: State, index: number) {
@@ -147,7 +128,15 @@ const mutations: MutationTree<State> = {
     state.tree[state.group].children.splice(index, 1);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
-  [types.ADD_COMP](state: State, comp: CompsItem) {
+  [types.ADD_COMP](state: State) {
+    const comp = {
+      width: 3,
+      title: 'Title',
+      height: 350,
+      entityType: 'Service',
+      independentSelector: true,
+      metricType: 'UNKNOWN',
+    };
     state.tree[state.group].children[state.current].children.push(comp);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
@@ -155,22 +144,21 @@ const mutations: MutationTree<State> = {
     state.tree[state.group].children[state.current].children.splice(index, 1);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
-  [types.EDIT_COMP](state: State, params: any) {
-    const temp: any = state.tree[state.group].children[state.current].children[params.index];
-    temp[params.type] = params.value;
+  [types.EDIT_COMP_CONFIG](state: State, params: { values: any; index: number }) {
+    const temp = state.tree[state.group].children[state.current].children[params.index];
+
+    state.tree[state.group].children[state.current].children[params.index] = { ...temp, ...params.values };
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
   [types.SWICH_COMP](state: State, params: any) {
-    const tempStart: any =
-    state.tree[state.group].children[state.current].children[params.start];
+    const tempStart: any = state.tree[state.group].children[state.current].children[params.start];
     state.tree[state.group].children[state.current].children[params.start] =
-    state.tree[state.group].children[state.current].children[params.end];
+      state.tree[state.group].children[state.current].children[params.end];
     state.tree[state.group].children[state.current].children[params.end] = tempStart;
-    state.tree = {...state.tree};
+    state.tree = { ...state.tree };
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
 };
-
 
 export default {
   state: initState,

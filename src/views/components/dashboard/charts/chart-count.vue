@@ -16,20 +16,24 @@ limitations under the License. -->
 <template>
   <div class="rk-chart-count">
     <div class="mb-10 pt-10 b">
-      <span class="mr-10">YoungGC Count</span
-      ><span class="count r">{{
-        data.youngGC.reduce(function(preValue, curValue, index, array) {
-          return preValue + curValue;
-        }, 0)
-      }}</span>
+      <span class="mr-10">YoungGC Count</span>
+      <span class="count r">
+        {{
+          (data.instance_jvm_young_gc_count || []).reduce(function(preValue, curValue, index, array) {
+            return preValue + curValue;
+          }, 0)
+        }}
+      </span>
     </div>
     <div class="mb-10 pt-10 b">
-      <span class="mr-10">OldGC Count</span
-      ><span class="count r">{{
-        data.oldGC.reduce(function(preValue, curValue, index, array) {
-          return preValue + curValue;
-        }, 0)
-      }}</span>
+      <span class="mr-10">OldGC Count</span>
+      <span class="count r">
+        {{
+          (data.instance_jvm_old_gc_count || []).reduce(function(preValue, curValue, index, array) {
+            return preValue + curValue;
+          }, 0)
+        }}
+      </span>
     </div>
   </div>
 </template>
@@ -40,9 +44,7 @@ limitations under the License. -->
 
   @Component
   export default class ChartCount extends Vue {
-    @Prop() private title!: string;
     @Prop() private data!: any;
-    @Prop() private intervalTime!: any;
   }
 </script>
 <style lang="scss">

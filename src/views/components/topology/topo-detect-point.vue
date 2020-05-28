@@ -78,22 +78,22 @@ limitations under the License. -->
       </div>
       <div v-else-if="showServerInfo">
         <TopoChart
-          v-if="rocketDashboard.serviceResponseTime.ResponseTime.length"
-          :data="rocketDashboard.serviceResponseTime.ResponseTime"
+          v-if="stateTopo.serviceResponseTime.length"
+          :data="stateTopo.serviceResponseTime"
           :intervalTime="intervalTime"
           title="Service ResponseTime"
           unit="ms"
         />
         <TopoChart
-          v-if="rocketDashboard.serviceThroughput.Throughput.length"
-          :data="rocketDashboard.serviceThroughput.Throughput"
+          v-if="stateTopo.serviceThroughput.length"
+          :data="stateTopo.serviceThroughput"
           :intervalTime="intervalTime"
           title="Service Throughput"
           unit="cpm"
         />
         <ChartLine
-          v-if="rocketDashboard.servicePercent.p50.length"
-          :data="rocketDashboard.servicePercent"
+          v-if="stateTopo.servicePercentile.p50.length"
+          :data="stateTopo.servicePercentile"
           :intervalTime="intervalTime"
           :title="$t('percentResponse')"
         />
@@ -137,9 +137,7 @@ limitations under the License. -->
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT')
     private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
-    @Action('GET_QUERY') private GET_QUERY: any;
     @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
-    @State('rocketDashboard') private rocketDashboard: any;
     @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL')
     private SET_SELECTED_INSTANCE_CALL: any;
     @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY')
@@ -147,6 +145,7 @@ limitations under the License. -->
     @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
     @Action('rocketTopo/GET_TOPO_INSTANCE_DEPENDENCY')
     private GET_INSTANCE_DEPENDENCY: any;
+    @Action('rocketTopo/GET_TOPO_SERVICE_DETAIL') private GET_TOPO_SERVICE_DETAIL: any;
 
     private isMini: boolean = true;
     private showInfoCount: number = 0;
@@ -177,7 +176,7 @@ limitations under the License. -->
           compType: 'service',
           duration: this.durationTime,
         }).then(() => {
-          this.GET_QUERY({
+          this.GET_TOPO_SERVICE_DETAIL({
             serviceId: service.id || '',
             duration: this.durationTime,
           });

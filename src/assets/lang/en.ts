@@ -102,7 +102,6 @@ const m = {
   serverZone: 'Server Zone',
   percentResponse: 'Response Time Percentile',
   exportImage: 'Export image',
-  comparison: 'Metrics Comparison',
   queryData: 'Query',
   previousService: 'Previous Service',
   nextService: 'Next Service',
@@ -129,6 +128,20 @@ const m = {
   excludeChildren: 'Exclude Children',
   view: 'View',
   timeTips: 'Time interval cannot exceed 60 days',
+  standardAPM: 'Standard APM',
+  entityType: 'Entity type',
+  independentSelector: 'Selectors',
+  unknownMetrics: 'Unknown Metrics',
+  labels: 'Labels',
+  aggregation: 'Data Calculation',
+  unit: 'Unit',
+  labelsIndex: 'Label Subscript',
+  parentService: 'Parent Service',
+  isParentService: 'Set Parent Service',
+  noneParentService: 'No Parent Service',
+  serviceFilter: 'Service Filter',
+  endpointFilter: 'Endpoint Filter',
+  editConfig: 'Edit Config',
 };
 
 export default m;

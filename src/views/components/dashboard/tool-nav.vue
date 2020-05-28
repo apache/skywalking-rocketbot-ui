@@ -40,7 +40,7 @@ limitations under the License. -->
         <div class="mb-10 vm">{{ $t('createTab') }}</div>
         <div class="sm grey mb-5 mr-10">{{ $t('tabName') }}</div>
         <input class="mb-5 rk-dashboard-nav-input" type="text" v-model="name" />
-        <div class="sm grey mb-5 mr-10">{{ $t('template') }}</div>
+        <!-- <div class="sm grey mb-5 mr-10">{{ $t('template') }}</div>
         <label class="dib mb-5 mr-10 sm"
           ><input type="radio" v-model="template" value="nouse" />{{ $t('nouse') }}</label
         >
@@ -58,8 +58,8 @@ limitations under the License. -->
         >
         <label class="dib mb-5 mr-10 sm" v-if="type === 'database'"
           ><input type="radio" v-model="template" value="database" />{{ $t('database') }}</label
-        >
-        <a class="rk-btn r vm long tc" @click="handleCreate">{{ $t('confirm') }}</a>
+        > -->
+        <a class="rk-btn r vm long tc confirm" @click="handleCreate">{{ $t('confirm') }}</a>
       </div>
     </a>
   </nav>
@@ -79,7 +79,7 @@ limitations under the License. -->
     @Mutation('ADD_COMPS_TREE') private ADD_COMPS_TREE: any;
     @Action('RUN_EVENTS') private RUN_EVENTS: any;
     private name: string = '';
-    private template: string = 'nouse';
+    // private template: string = 'nouse';
     private show: boolean = false;
     get type() {
       return this.rocketComps.tree[this.rocketComps.group].type;
@@ -92,9 +92,9 @@ limitations under the License. -->
       if (!this.name) {
         return;
       }
-      this.ADD_COMPS_TREE({ name: this.name, template: this.template });
+      this.ADD_COMPS_TREE({ name: this.name });
       this.handleHide();
-      this.template = 'nouse';
+      // this.template = 'nouse';
     }
   }
 </script>
@@ -160,5 +160,8 @@ limitations under the License. -->
       color: #448dfe;
       border-color: #448dfe;
     }
+  }
+  .confirm {
+    margin: 10px 0;
   }
 </style>

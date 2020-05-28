@@ -23,13 +23,7 @@ limitations under the License. -->
     "
     :class="{ active: visible }"
   >
-    <div
-      class="rk-dashboard-bar-i flex-h"
-      @click="
-        visible = !visible;
-        SEARCH_ENDPOINTS('');
-      "
-    >
+    <div class="rk-dashboard-bar-i flex-h" @click="visible = !visible">
       <svg class="icon lg mr-15">
         <use :xlink:href="`#${icon}`"></use>
       </svg>
@@ -45,7 +39,7 @@ limitations under the License. -->
     </div>
     <div class="rk-dashboard-sel" v-if="visible">
       <div>
-        <input type="text" class="rk-dashboard-sel-search" v-model="search" @input="handleSearch" />
+        <input type="text" class="rk-dashboard-sel-search" v-model="search" />
         <svg class="icon sm close" style="margin-top: 3px;" @click="search = ''" v-if="search">
           <use xlink:href="#clear"></use>
         </svg>
@@ -54,7 +48,7 @@ limitations under the License. -->
         <EndpointOpt
           @handleSelect="handleSelect"
           :class="{ active: i.key === current.key }"
-          v-for="i in data"
+          v-for="i in filterData"
           :key="i.key"
           :data="i"
         />
@@ -69,15 +63,16 @@ limitations under the License. -->
   import EndpointOpt from './tool-bar-endpoint-select-opt.vue';
   @Component({ components: { EndpointOpt } })
   export default class ToolBarEndpointSelect extends Vue {
-    @Action('SEARCH_ENDPOINTS') public SEARCH_ENDPOINTS: any;
+    @Action('GET_SERVICE_ENDPOINTS') public GET_SERVICE_ENDPOINTS: any;
     @Prop() public data!: any;
     @Prop() public current!: any;
     @Prop() public title!: string;
     @Prop() public icon!: string;
     public search: string = '';
     public visible: boolean = false;
-    public handleSearch() {
-      this.SEARCH_ENDPOINTS(this.search);
+
+    get filterData() {
+      return this.data.filter((i: any) => i.label.toUpperCase().indexOf(this.search.toUpperCase()) !== -1);
     }
     public handleOpen() {
       this.visible = true;

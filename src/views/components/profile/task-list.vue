@@ -20,6 +20,7 @@ limitations under the License. -->
         Task List
       </div>
       <div class="rk-trace-t-wrapper scroll_hide">
+        <div class="rk-no-data" v-show="!taskListSource.length">No Data</div>
         <table class="rk-trace-t">
           <tr class="rk-trace-tr cp" v-for="(i, index) in taskListSource" @click="selectTask(i)" :key="index">
             <td
@@ -96,6 +97,7 @@ limitations under the License. -->
         Sampled Traces
       </div>
       <div class="rk-trace-t-wrapper scroll_hide">
+        <div class="rk-no-data" v-show="!segmentList.length">No Data</div>
         <table class="rk-trace-t">
           <tr class="rk-trace-tr cp" v-for="(i, index) in segmentList" @click="selectTrace(i)" :key="index">
             <td
@@ -171,13 +173,14 @@ limitations under the License. -->
     min-width: 350px;
     height: 100%;
     overflow: auto;
-    .profile-task-wrapper {
-      height: 100%;
+    .profile-task-wrapper,
+    .profile-trace-wrapper {
+      min-height: 100px;
       width: 100%;
     }
-    .profile-trace-wrapper {
-      height: 100%;
-      width: 100%;
+    .rk-no-data {
+      text-align: center;
+      margin-top: 10px;
     }
     .rk-trace-td {
       padding: 8px 10px;

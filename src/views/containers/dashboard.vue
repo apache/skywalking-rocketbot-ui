@@ -25,27 +25,26 @@ limitations under the License. -->
     <div class="dashboard-container clear">
       <DashboardItem
         v-for="(i, index) in rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children"
-        :key="index + i.t + i.w + i.d"
+        :key="index + i.title + i.width"
         :index="index"
         :rocketGlobal="rocketGlobal"
-        :i="i"
-        :dragIndex="dragIndex"
-        @dragStart="dragStart"
+        :item="i"
       >
       </DashboardItem>
+      <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item g-sm-3" @click="ADD_COMP">
+        + Add An Item
+      </div>
     </div>
-    <DashboardComp v-if="rocketGlobal.edit" :compType="compType" :rocketComps="rocketComps" />
   </div>
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator';
+  import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, State, Mutation } from 'vuex-class';
   import ToolBar from '@/views/components/dashboard/tool-bar.vue';
   import ToolGroup from '@/views/components/dashboard/tool-group.vue';
   import ToolNav from '@/views/components/dashboard/tool-nav.vue';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
-  import DashboardComp from '@/views/components/dashboard/dashboard-comp.vue';
 
   @Component({
     components: {
@@ -53,24 +52,18 @@ limitations under the License. -->
       ToolGroup,
       ToolNav,
       DashboardItem,
-      DashboardComp,
     },
   })
   export default class Dashboard extends Vue {
     @State('rocketbot') private rocketGlobal: any;
     @State('rocketOption') private stateDashboardOption!: any;
     @State('rocketData') private rocketComps!: any;
-    @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
-    @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('durationTime') private durationTime: any;
+    @Mutation('ADD_COMP') private ADD_COMP: any;
     private isRouterAlive: boolean = true;
-    private dragIndex: number = NaN;
-    public dragStart(index: number) {
-      this.dragIndex = index;
-    }
     public reload(): void {
       this.isRouterAlive = false;
       this.$nextTick(() => {
@@ -78,24 +71,16 @@ limitations under the License. -->
       });
     }
     private get compType() {
-      return this.rocketComps.tree[this.rocketComps.group].type;
-    }
-    private handleRefresh() {
-      this.GET_QUERY({
-        serviceId: this.stateDashboardOption.currentService.key || '',
-        endpointId: this.stateDashboardOption.currentEndpoint.key || '',
-        endpointName: this.stateDashboardOption.currentEndpoint.label || '',
-        instanceId: this.stateDashboardOption.currentInstance.key || '',
-        databaseId: this.stateDashboardOption.currentDatabase.key || '',
-        duration: this.durationTime,
-      });
+      return (
+        (this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].type) ||
+        'service'
+      );
     }
     private handleOption() {
-      return this.MIXHANDLE_GET_OPTION({
+      this.MIXHANDLE_GET_OPTION({
         compType: this.compType,
         duration: this.durationTime,
-      }).then(() => {
-        this.handleRefresh();
+        keywordServiceName: this.stateDashboardOption.keywordService,
       });
     }
     private beforeMount() {
@@ -104,7 +89,6 @@ limitations under the License. -->
         this.SET_COMPS_TREE(JSON.parse(data));
       }
       this.handleOption();
-      this.SET_EVENTS([this.handleRefresh]);
     }
   }
 </script>
@@ -114,5 +98,14 @@ limitations under the License. -->
     padding: 20px 15px;
     height: 100%;
     flex-grow: 1;
+  }
+  .rk-add-dashboard-item {
+    height: 342px;
+    text-align: center;
+    line-height: 250px;
+    border: 1px dashed rgba(196, 200, 225, 0.5);
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
   }
 </style>

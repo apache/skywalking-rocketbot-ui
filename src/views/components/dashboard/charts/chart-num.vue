@@ -15,8 +15,7 @@ limitations under the License. -->
 
 <template>
   <div class="rk-chart-num b">
-    <span>{{ (avg || 0).toFixed(2) }}</span>
-    <span class="rk-chart-num-unit">{{ unit }}</span>
+    <span>{{ isNaN(data.avgNum) ? null : data.avgNum.toFixed(2) }}</span>
   </div>
 </template>
 <script lang="ts">
@@ -25,42 +24,11 @@ limitations under the License. -->
   @Component
   export default class ChartNum extends Vue {
     @Prop() private data!: any;
-    @Prop() private i!: any;
-    @Prop() private intervalTime!: any;
-    get avg() {
-      const data = this.data[Object.keys(this.data)[0]].filter((i: number) => i > 0);
-      return data.reduce((acc: number, val: number) => acc + val, 0) / data.length;
-    }
-    get unit() {
-      let unit = 'ms' as string | null;
-      if (
-        this.i.d === 'databaseThroughput' ||
-        this.i.d === 'serviceThroughput' ||
-        this.i.d === 'instanceThroughput' ||
-        this.i.d === 'endpointThroughput'
-      ) {
-        unit = 'cpm';
-      }
-      if (
-        this.i.d === 'databaseSLA' ||
-        this.i.d === 'serviceSLA' ||
-        this.i.d === 'instanceSLA' ||
-        this.i.d === 'endpointSLA'
-      ) {
-        unit = '%';
-      }
-      if (this.i.d === 'serviceApdexScore') {
-        unit = null;
-      }
-      return unit;
-    }
+    @Prop() private item!: any;
   }
 </script>
 <style lang="scss">
   .rk-chart-num {
     font-size: 24px;
-  }
-  .rk-chart-num-unit {
-    font-size: 16px;
   }
 </style>

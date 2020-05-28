@@ -70,6 +70,11 @@ export interface State {
   selectedInstanceCall: Call | null;
   instanceDependencyMetrics: { [key: string]: any };
   queryInstanceMetricsType: string;
+  serviceThroughput: { Throughput: number[] };
+  serviceSLA: { SLA: number[] };
+  serviceResponseTime: { ResponseTime: number[] };
+  servicePercentile: { [key: string]: number[] };
+  serviceApdexScore: { ApdexScore: number[] };
 }
 
 const PercentileItem: string[] = ['p50', 'p75', 'p90', 'p95', 'p99'];
@@ -100,6 +105,17 @@ const initState: State = {
   selectedInstanceCall: null,
   instanceDependencyMetrics: {},
   queryInstanceMetricsType: '',
+  serviceThroughput: { Throughput: [] },
+  serviceSLA: { SLA: [] },
+  serviceResponseTime: { ResponseTime: [] },
+  servicePercentile: {
+    p50: [],
+    p75: [],
+    p90: [],
+    p95: [],
+    p99: [],
+  },
+  serviceApdexScore: { ApdexScore: [] },
 };
 
 // getters
@@ -179,6 +195,22 @@ const mutations = {
   [types.SET_INSTANCE_DEPEDENCE_TYPE](state: State, data: string) {
     state.queryInstanceMetricsType = data;
   },
+  [types.SET_SERVICE_DETAIL](state: State, data: any) {
+    state.serviceApdexScore = data.serviceApdexScore
+      ? data.serviceApdexScore.values.map((i: any) => Number((i.value / 10000).toFixed(2)))
+      : [];
+    state.serviceResponseTime = data.serviceResponseTime
+      ? data.serviceResponseTime.values.map((i: any) => i.value)
+      : [];
+    state.serviceThroughput = data.serviceThroughput ? data.serviceThroughput.values.map((i: any) => i.value) : [];
+    state.serviceSLA = data.serviceSLA ? data.serviceSLA.values.map((i: any) => i.value / 100) : [];
+    if (!data.servicePercentile) {
+      return;
+    }
+    data.servicePercentile.forEach((item: any, index: number) => {
+      state.servicePercentile[PercentileItem[index]] = item.values.map((i: any) => i.value);
+    });
+  },
 };
 
 // actions
@@ -257,6 +289,20 @@ const actions: ActionTree<State, any> = {
         }
         context.commit('SET_TOPO_RELATION', res.data.data);
         context.commit(types.SET_SELECTED_CALL, params);
+      });
+  },
+  GET_TOPO_SERVICE_DETAIL(context: { commit: Commit; state: State }, params: any) {
+    return graph
+      .query('queryTopoServiceDetail')
+      .params({
+        serviceId: params.serviceId,
+        duration: params.duration,
+      })
+      .then((res: AxiosResponse) => {
+        if (!res.data.data) {
+          return;
+        }
+        context.commit('SET_SERVICE_DETAIL', res.data.data);
       });
   },
   GET_TOPO(context: { commit: Commit; state: State }, params: any) {

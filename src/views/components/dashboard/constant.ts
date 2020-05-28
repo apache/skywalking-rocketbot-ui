@@ -15,15 +15,16 @@
  * limitations under the License.
  */
 
-import globalTemp from './global-template';
-import databaseTemp from './database-template';
-export default [
-  {
-    name: 'Global',
-    children: globalTemp,
-  },
-  {
-    name: 'Database',
-    children: databaseTemp,
-  },
-];
+export enum DASHBOARDTYPE {
+  SERVICE = 'service',
+  METRIC = 'metric',
+  DATABASE = 'database',
+}
+export enum QueryTypes {
+  ReadMetricsValue = 'readMetricsValue',
+  ReadMetricsValues = 'readMetricsValues',
+  SortMetrics = 'sortMetrics',
+  ReadLabeledMetricsValues = 'readLabeledMetricsValues',
+  READHEATMAP = 'readHeatMap',
+  ReadSampledRecords = 'readSampledRecords',
+}

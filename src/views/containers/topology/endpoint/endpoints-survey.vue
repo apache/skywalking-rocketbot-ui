@@ -16,10 +16,11 @@ limitations under the License. -->
 <template>
   <div class="dashboard-container clear">
     <DashboardItem
-      v-for="(i, index) in rocketComps.tree[0].children[2].children"
-      :key="index + i.t + i.w + i.d"
+      v-for="(i, index) in endpointComps || []"
+      :key="index + i.title + i.width"
       :rocketGlobal="{ edit: false }"
-      :i="i"
+      :item="i"
+      :index="index"
     />
   </div>
 </template>
@@ -29,6 +30,7 @@ limitations under the License. -->
   import { Component } from 'vue-property-decorator';
   import { State } from 'vuex-class';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
+  import TopologyEndpointTemp from '../../../../template/topology-endpoint-template';
 
   @Component({
     components: {
@@ -36,7 +38,11 @@ limitations under the License. -->
     },
   })
   export default class InstancesSurvey extends Vue {
-    @State('rocketData') private rocketComps!: any;
+    private endpointComps: any = [];
+
+    private created() {
+      this.endpointComps = TopologyEndpointTemp;
+    }
   }
 </script>
 

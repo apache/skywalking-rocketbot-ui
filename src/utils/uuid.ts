@@ -14,7 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import ConparisonConfig from './comparison-config.vue';
-import ConparisonCharts from './comparison-charts.vue';
 
-export { ConparisonConfig, ConparisonCharts };
+export function uuid() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    /* tslint:disable */
+    const r = (Math.random() * 16) | 0;
+    /* tslint:disable */
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+
+    return v.toString(16);
+  });
+}
