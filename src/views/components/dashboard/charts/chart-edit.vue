@@ -21,8 +21,8 @@ limitations under the License. -->
         <input
           type="text"
           class="rk-chart-edit-input long"
-          :value="itemConfig.t"
-          @change="setItemConfig({ type: 't', value: $event.target.value })"
+          :value="itemConfig.title"
+          @change="setItemConfig({ type: 'title', value: $event.target.value })"
         />
       </div>
       <div class="flex-h mb-5">
@@ -199,8 +199,8 @@ limitations under the License. -->
           min="1"
           max="12"
           class="rk-chart-edit-input long"
-          :value="itemConfig.w"
-          @change="setItemConfig({ type: 'w', value: $event.target.value })"
+          :value="itemConfig.width"
+          @change="setItemConfig({ type: 'width', value: $event.target.value })"
         />
       </div>
       <div class="flex-h">
@@ -209,8 +209,8 @@ limitations under the License. -->
           type="number"
           min="1"
           class="rk-chart-edit-input long"
-          :value="itemConfig.h"
-          @change="setItemConfig({ type: 'h', value: $event.target.value })"
+          :value="itemConfig.height"
+          @change="setItemConfig({ type: 'height', value: $event.target.value })"
         />
       </div>
     </div>
@@ -271,23 +271,15 @@ limitations under the License. -->
     private setItemConfig(params: { type: string; value: string }) {
       this.itemConfig[params.type] = params.value;
       const types = ['endpointsKey', 'instancesKey', 'currentService'];
+      const typesUpdate = ['title', 'width', 'height', 'unit'];
       if (params.type === 'servicesKey') {
         this.setItemServices(true);
       }
       if (types.includes(params.type)) {
         this.getServiceObject(true);
       }
-      if (params.type === 't') {
-        this.$emit('updateStatus', 'title', params.value);
-      }
-      if (params.type === 'w') {
-        this.$emit('updateStatus', 'width', params.value);
-      }
-      if (params.type === 'h') {
-        this.$emit('updateStatus', 'height', params.value);
-      }
-      if (params.type === 'unit') {
-        this.$emit('updateStatus', 'unit', params.value);
+      if (typesUpdate.includes(params.type)) {
+        this.$emit('updateStatus', params.type, params.value);
       }
       if (params.type === 'entityType') {
         if (this.itemConfig.currentService) {
