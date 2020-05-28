@@ -307,7 +307,7 @@ limitations under the License. -->
           const values = {
             metricType: typeOfMetrics,
             queryMetricType: this.itemConfig.queryMetricType,
-            c: MetricChartType[this.itemConfig.queryMetricType],
+            chartType: MetricChartType[this.itemConfig.queryMetricType],
             metricName: params.value,
           };
           this.EDIT_COMP_CONFIG({
@@ -323,7 +323,7 @@ limitations under the License. -->
       }
       if (params.type === 'queryMetricType') {
         const values = {
-          c: MetricChartType[params.value],
+          chartType: MetricChartType[params.value],
           [params.type]: params.value,
         };
         this.EDIT_COMP_CONFIG({

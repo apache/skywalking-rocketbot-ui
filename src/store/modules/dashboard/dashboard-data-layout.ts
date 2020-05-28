@@ -130,12 +130,9 @@ const mutations: MutationTree<State> = {
   },
   [types.ADD_COMP](state: State) {
     const comp = {
-      id: uuid(),
-      w: 3,
-      t: 'Title',
-      h: 350,
-      version: '1.0',
-      currentService: '',
+      width: 3,
+      title: 'Title',
+      height: 350,
       entityType: 'Service',
       independentSelector: true,
       metricType: 'UNKNOWN',
