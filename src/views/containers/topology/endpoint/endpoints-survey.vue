@@ -17,7 +17,7 @@ limitations under the License. -->
   <div class="dashboard-container clear">
     <DashboardItem
       v-for="(i, index) in endpointComps || []"
-      :key="index + i.t + i.w + i.d"
+      :key="index + i.title + i.width"
       :rocketGlobal="{ edit: false }"
       :item="i"
       :index="index"
