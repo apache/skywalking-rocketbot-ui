@@ -41,7 +41,6 @@ limitations under the License. -->
       </div>
     </div>
     <rk-sidebox
-      class="instance-dependency"
       width="70%"
       :fixed="true"
       :title="$t('editConfig')"
@@ -237,16 +236,8 @@ limitations under the License. -->
       }
     }
 
-    @Watch('rocketOption.currentInstance')
+    @Watch('rocketOption.isUpdateDashboard')
     private watchCurrentInstance() {
-      this.chartRender();
-    }
-    @Watch('rocketOption.currentEndpoint')
-    private watchCurrentEndpoint() {
-      this.chartRender();
-    }
-    @Watch('rocketOption.currentDatabase')
-    private watchCurrentDatabase() {
       this.chartRender();
     }
     @Watch('durationTime')

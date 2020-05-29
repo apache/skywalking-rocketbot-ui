@@ -30,6 +30,7 @@ export interface State {
   instances: any[];
   currentInstance: any;
   keywordService: string;
+  updateDashboard: string;
 }
 
 const initState: State = {
@@ -42,6 +43,7 @@ const initState: State = {
   databases: [],
   currentDatabase: {},
   keywordService: localStorage.getItem('keywordServiceName') || '',
+  updateDashboard: '',
 };
 
 // getters
@@ -60,6 +62,7 @@ const mutations: MutationTree<State> = {
   },
   [types.SET_CURRENT_SERVICE](state: State, service: any) {
     state.currentService = service;
+    state.updateDashboard = service;
   },
   [types.SET_ENDPOINTS](state: State, data: any) {
     state.endpoints = data;
@@ -73,6 +76,7 @@ const mutations: MutationTree<State> = {
   },
   [types.SET_CURRENT_ENDPOINT](state: State, endpoint: any) {
     state.currentEndpoint = endpoint;
+    state.updateDashboard = endpoint;
   },
   [types.SET_INSTANCES](state: State, data: any) {
     state.instances = data;
@@ -80,12 +84,13 @@ const mutations: MutationTree<State> = {
       state.currentInstance = {};
       return;
     }
-    if (!state.currentInstance.key && data.length) {
+    if ((!state.currentInstance.key && data.length) || !state.instances.includes(state.currentInstance)) {
       state.currentInstance = data[0];
     }
   },
   [types.SET_CURRENT_INSTANCE](state: State, instance: any) {
     state.currentInstance = instance;
+    state.updateDashboard = instance;
   },
   [types.SET_DATABASES](state: State, data: any) {
     state.databases = data;
@@ -172,9 +177,8 @@ const actions: ActionTree<State, any> = {
       return;
     }
     context.commit('SET_CURRENT_SERVICE', params.service);
-    context.dispatch('MIXHANDLE_GET_OPTION', { ...params, compType: 'service' }).then(() => {
-      context.dispatch('RUN_EVENTS', {}, { root: true });
-    });
+    context.dispatch('GET_SERVICE_ENDPOINTS', {});
+    context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration });
   },
   SELECT_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
     context.commit('SET_CURRENT_ENDPOINT', params.endpoint);
