@@ -236,7 +236,7 @@ limitations under the License. -->
       }
     }
 
-    @Watch('rocketOption.isUpdateDashboard')
+    @Watch('rocketOption.updateDashboard')
     private watchCurrentInstance() {
       this.chartRender();
     }
