@@ -22,6 +22,7 @@ import * as trace from './query/trace';
 import * as topology from './query/topology';
 import * as alarm from './query/alarm';
 import * as profile from './query/profile';
+import * as dashboard from './query/dashboard';
 
 const query: any = {
   ...option,
@@ -29,6 +30,7 @@ const query: any = {
   ...topology,
   ...alarm,
   ...profile,
+  ...dashboard,
 };
 
 class Graph {

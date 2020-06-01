@@ -17,6 +17,8 @@
 
 import { ActionTree, MutationTree, Commit, Dispatch } from 'vuex';
 import { CompsTree } from '@/types/dashboard';
+import { AxiosResponse } from 'axios';
+import graph from '@/graph';
 import dashboardLayout from './dashboard-data-layout';
 import dashboardQuery from './dashboard-data-query';
 
@@ -83,6 +85,30 @@ const actions: ActionTree<State, any> = {
     context.commit('SET_CURRENT_GROUP_WITH_CURRENT', { index, current });
     context.dispatch('SET_CURRENT_STATE', context.state.tree[index].query);
     context.dispatch('RUN_EVENTS', {}, { root: true });
+  },
+  TYPE_METRICS(context, params: { name: string }) {
+    const metricNames = (params.name || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
+    return Promise.all(
+      metricNames.map((item: string) => {
+        return graph
+          .query('queryTypeOfMetrics')
+          .params({ name: item })
+          .then((res: AxiosResponse) => {
+            return res.data.data;
+          });
+      }),
+    );
+  },
+  GET_ALL_TEMPLATES(context) {
+    return graph
+      .query('queryGetAllTemplates')
+      .params({ includingDisabled: false })
+      .then((res: AxiosResponse) => {
+        if (!res.data.data) {
+          return;
+        }
+        return res.data.data.allTemplates || [];
+      });
   },
 };
 

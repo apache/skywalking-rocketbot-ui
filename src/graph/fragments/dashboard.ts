@@ -15,56 +15,50 @@
  * limitations under the License.
  */
 
-export const Services = {
-  variable: ['$duration: Duration!', '$keyword: String!'],
+export const TypeOfMetrics = {
+  variable: '$name: String!',
+  query: `typeOfMetrics(name: $name)`,
+};
+
+export const getAllTemplates = {
+  variable: '$includingDisabled: includingDisabled!',
   query: `
-    services: searchServices(duration: $duration, keyword: $keyword) {
-      key: id
-      label: name
+    allTemplates(includingDisabled: $includingDisabled) {
+      name,
+      type
+      configuration,
+      activated,
+      disabled,
     }
   `,
 };
 
-export const Database = {
-  variable: '$duration: Duration!',
+export const addTemplate = {
+  variable: '$setting: DashboardSetting!',
   query: `
-    services: getAllDatabases(duration: $duration) {
-      key: id
-      label: name
+    addTemplate(setting: $setting) {
+      status
+      message
     }
   `,
 };
 
-export const Endpoints = {
-  variable: '$serviceId: ID!, $keyword: String!',
+export const changeTemplate = {
+  variable: '$setting: DashboardSetting!',
   query: `
-    getEndpoints: searchEndpoint(serviceId: $serviceId, keyword: $keyword, limit: 100) {
-      key: id
-      label: name
-    }
-`,
-};
-
-export const Instances = {
-  variable: '$serviceId: ID!, $duration: Duration!',
-  query: `
-    getServiceInstances(duration: $duration, serviceId: $serviceId) {
-      key: id
-      label: name
-      language
-      attributes {
-        name
-        value
-      }
+    changeTemplate(setting: $setting) {
+      status
+      message
     }
   `,
 };
 
-export const OAPTimeInfo = {
+export const disableTemplate = {
+  variable: '$setting: DashboardSetting!',
   query: `
-    getTimeInfo {
-      timezone
-      currentTimestamp
+    disableTemplate(setting: $setting) {
+      status
+      message
     }
   `,
 };

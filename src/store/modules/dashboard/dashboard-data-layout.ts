@@ -16,20 +16,21 @@
  */
 
 import { MutationTree } from 'vuex';
-import { CompsTree } from '@/types/dashboard';
-import groupServiceTemp from '../../../template/group-service-template';
-import groupDatabaseTemp from '../../../template/group-database-template';
+import { CompsTree, DashboardTemplate } from '@/types/dashboard';
+// import groupServiceTemp from '../../../template/group-service-template';
+// import groupDatabaseTemp from '../../../template/group-database-template';
 import * as types from './mutation-types';
-import { uuid } from '@/utils/uuid.ts';
 
 export interface State {
   current: number;
   group: number;
   index: number;
   tree: CompsTree[];
+  allTemplates: DashboardTemplate[];
 }
 
 export const initState: State = {
+  allTemplates: [],
   current: 0,
   group: 0,
   index: 0,
@@ -43,7 +44,7 @@ export const initState: State = {
         instance: {},
         database: {},
       },
-      children: groupServiceTemp,
+      children: [{}], // groupServiceTemp
     },
     {
       name: 'Database Dashboard',
@@ -54,13 +55,16 @@ export const initState: State = {
         instance: {},
         database: {},
       },
-      children: groupDatabaseTemp,
+      children: [{}], // groupDatabaseTemp
     },
   ],
 };
 
 // mutations
 const mutations: MutationTree<State> = {
+  [types.SET_ALL_TEMPLATES](state: State, data: DashboardTemplate[]) {
+    state.allTemplates = data;
+  },
   [types.SET_COMPS_TREE](state: State, data: CompsTree[]) {
     state.tree = data;
   },
@@ -85,6 +89,8 @@ const mutations: MutationTree<State> = {
     if (!params.name) {
       return;
     }
+    const groupServiceTemp = [] as any;
+    const groupDatabaseTemp = [] as any;
     switch (params.template) {
       case 'metric':
         const newTree = [];

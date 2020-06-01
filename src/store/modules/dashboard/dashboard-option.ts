@@ -225,19 +225,6 @@ const actions: ActionTree<State, any> = {
         return res.data.data.getServiceInstances;
       });
   },
-  TYPE_METRICS(context, params: { name: string }) {
-    const metricNames = (params.name || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
-    return Promise.all(
-      metricNames.map((item: string) => {
-        return graph
-          .query('queryTypeOfMetrics')
-          .params({ name: item })
-          .then((res: AxiosResponse) => {
-            return res.data.data;
-          });
-      }),
-    );
-  },
   GET_ITEM_SERVICES(context, params: { duration: any; keyword: string }) {
     if (!params.keyword) {
       params.keyword = '';
