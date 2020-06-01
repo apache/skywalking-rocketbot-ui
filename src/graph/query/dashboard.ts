@@ -19,7 +19,8 @@ import { TypeOfMetrics, getAllTemplates, addTemplate, changeTemplate, disableTem
 
 export const queryTypeOfMetrics = `query queryTypeOfMetrics(${TypeOfMetrics.variable}) {${TypeOfMetrics.query}}`;
 
-export const queryGetAllTemplates = `query queryGetAllTemplates(${getAllTemplates.variable}) {${getAllTemplates.query}}`;
+export const queryGetAllTemplates = `query queryGetAllTemplates(
+  ${getAllTemplates.variable}) {${getAllTemplates.query}}`;
 
 export const mutationAddTemplate = `mutation mutationAddTemplate(${addTemplate.variable}) {${addTemplate.query}}`;
 

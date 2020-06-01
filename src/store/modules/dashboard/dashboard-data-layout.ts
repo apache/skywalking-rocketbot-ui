@@ -89,6 +89,8 @@ const mutations: MutationTree<State> = {
     if (!params.name) {
       return;
     }
+
+    const template = state.allTemplates.filter((item: any) => item.type === 'DASHBOARD')[0] || {};
     const groupServiceTemp = [] as any;
     const groupDatabaseTemp = [] as any;
     switch (params.template) {
