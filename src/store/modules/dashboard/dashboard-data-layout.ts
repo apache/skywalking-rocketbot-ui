@@ -64,6 +64,10 @@ const mutations: MutationTree<State> = {
   [types.SET_COMPS_TREE](state: State, data: CompsTree[]) {
     state.tree = data;
   },
+  [types.IMPORT_TREE](state: State, data: CompsTree[]) {
+    state.tree.push(...data);
+    window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
+  },
   [types.SET_GROUP_QUERY](state: State, params: any) {
     state.tree[state.group].query = params;
   },

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-h">
+  <div class="flex-h btn-box">
     <div class="rk-dashboard-bar-btn">
       <span v-tooltip:bottom="{ content: rocketGlobal.edit ? 'view' : 'edit' }">
         <svg
@@ -48,6 +48,7 @@
     @Prop() private durationTime!: any;
     @Prop() private rocketOption: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
+    @Mutation('IMPORT_TREE') private IMPORT_TREE: any;
     @Action('SET_EDIT') private SET_EDIT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
 
@@ -67,10 +68,9 @@
         if (!Array.isArray(data)) {
           throw new Error();
         }
-        const { children, name, query, type } = data[0];
-        if (children && name && query && type) {
-          this.SET_COMPS_TREE(data);
-          window.localStorage.setItem('dashboard', JSON.stringify(data));
+        const { children, name, type } = data[0];
+        if (children && name && type) {
+          this.IMPORT_TREE(data);
         } else {
           throw new Error('error');
         }
@@ -100,5 +100,8 @@
   .input-label {
     display: inline;
     line-height: inherit;
+  }
+  .btn-box {
+    height: 58px;
   }
 </style>

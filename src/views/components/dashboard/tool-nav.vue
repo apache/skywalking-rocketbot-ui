@@ -117,8 +117,8 @@ limitations under the License. -->
     private async importData(event: any) {
       try {
         const data: any = await readFile(event);
-        const { children, name, query, type } = data;
-        if (children && name && type && !query ) {
+        const { children, name } = data;
+        if (children && name && children[0] && children[0].width) {
           this.IMPORT_COMPS_TREE(data);
         } else {
           throw new Error();
@@ -205,7 +205,7 @@ limitations under the License. -->
   }
   .rk-dashboard-import {
     .icon.open {
-      margin-top: 2px;
+      margin-top: 4px;
     }
     .ipt {
       display: none;
