@@ -87,7 +87,7 @@ const mutations: MutationTree<State> = {
       return;
     }
 
-    const templates = state.allTemplates.filter((item: any) => item.type === 'DASHBOARD')[0] || {};
+    const templates = state.allTemplates.filter((item: any) => item.type === 'DASHBOARD' && item.activated)[0] || {};
     const tree = JSON.parse(templates.configuration) || [];
     const groupServiceTemp = tree.filter((item: any) => item.type === 'service')[0] || {};
     const groupDatabaseTemp = tree.filter((item: any) => item.type === 'database')[0] || {};

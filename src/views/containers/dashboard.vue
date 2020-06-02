@@ -111,7 +111,7 @@ limitations under the License. -->
             const data: string = `${window.localStorage.getItem('dashboard')}`;
             this.SET_COMPS_TREE(JSON.parse(data));
           } else {
-            const template = allTemplate.filter((item: any) => item.type === 'DASHBOARD')[0] || {};
+            const template = allTemplate.filter((item: any) => item.type === 'DASHBOARD' && item.activated)[0] || {};
             this.SET_COMPS_TREE(JSON.parse(template.configuration) || []);
           }
         },

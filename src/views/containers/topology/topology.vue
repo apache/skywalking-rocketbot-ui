@@ -78,9 +78,11 @@ limitations under the License. -->
             disabled: boolean;
           }>,
         ) => {
-          const template = allTemplates.filter((item: any) => item.type === 'TOPOLOGY_INSTANCE')[0] || {};
+          const template =
+            allTemplates.filter((item: any) => item.type === 'TOPOLOGY_INSTANCE' && item.activated)[0] || {};
           this.instanceComps = JSON.parse(template.configuration) || [];
-          const endpointTemplate = allTemplates.filter((item: any) => item.type === 'TOPOLOGY_ENDPOINT')[0] || {};
+          const endpointTemplate =
+            allTemplates.filter((item: any) => item.type === 'TOPOLOGY_ENDPOINT' && item.activated)[0] || {};
           this.endpointComps = JSON.parse(endpointTemplate.configuration) || [];
         },
       );
