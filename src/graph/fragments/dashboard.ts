@@ -21,9 +21,8 @@ export const TypeOfMetrics = {
 };
 
 export const getAllTemplates = {
-  variable: '$includingDisabled: includingDisabled!',
   query: `
-    allTemplates(includingDisabled: $includingDisabled) {
+    getAllTemplates(includingDisabled: false) {
       name,
       type
       configuration,

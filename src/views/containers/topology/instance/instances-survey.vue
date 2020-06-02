@@ -30,7 +30,6 @@ limitations under the License. -->
   import { Component } from 'vue-property-decorator';
   import { State } from 'vuex-class';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
-  // import TopologyInstanceTemp from '../../../../template/topology-instance-template';
 
   @Component({
     components: {
@@ -44,7 +43,6 @@ limitations under the License. -->
     private created() {
       const template = this.rocketData.allTemplates.filter((item: any) => item.type === 'TOPOLOGY_INSTANCE')[0] || {};
       this.instanceComps = JSON.parse(template.configuration) || [];
-      // this.instanceComps = TopologyInstanceTemp;
     }
   }
 </script>

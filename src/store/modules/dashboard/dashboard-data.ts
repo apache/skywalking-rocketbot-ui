@@ -102,12 +102,23 @@ const actions: ActionTree<State, any> = {
   GET_ALL_TEMPLATES(context) {
     return graph
       .query('queryGetAllTemplates')
-      .params({ includingDisabled: false })
+      .params({})
       .then((res: AxiosResponse) => {
         if (!res.data.data) {
           return;
         }
-        return res.data.data.allTemplates || [];
+        return res.data.data.getAllTemplates || [];
+      });
+  },
+  ADD_TEMPLATE(context, params) {
+    return graph
+      .query('mutationAddTemplate')
+      .params({ setting: params })
+      .then((res: AxiosResponse) => {
+        if (!res.data.data) {
+          return;
+        }
+        return res.data.data.addTemplate || [];
       });
   },
 };

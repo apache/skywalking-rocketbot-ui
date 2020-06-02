@@ -190,7 +190,7 @@ const actions: ActionTree<State, any> = {
     context.commit('SET_CURRENT_DATABASE', params);
     context.dispatch('RUN_EVENTS', {}, { root: true });
   },
-  SET_CURRENT_STATE(context: { commit: Commit }, params: any) {
+  SET_CURRENT_STATE(context: { commit: Commit }, params: any = {}) {
     context.commit(types.SET_CURRENT_SERVICE, params.service ? params.service : {});
     context.commit(types.SET_CURRENT_DATABASE, params.database ? params.database : {});
     context.commit(types.SET_CURRENT_ENDPOINT, params.endpoint ? params.endpoint : {});

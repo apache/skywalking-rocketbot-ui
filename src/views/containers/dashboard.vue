@@ -60,6 +60,7 @@ limitations under the License. -->
     @State('rocketData') private rocketComps!: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('GET_ALL_TEMPLATES') private GET_ALL_TEMPLATES: any;
+    // @Action('ADD_TEMPLATE') private ADD_TEMPLATE: any;
     @Getter('durationTime') private durationTime: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
@@ -87,6 +88,14 @@ limitations under the License. -->
       });
     }
     private beforeMount() {
+      // this.ADD_TEMPLATE({
+      //   name: 'Topology Instance',
+      //   type: 'TOPOLOGY_INSTANCE',
+      //   active: true,
+      //   configuration: JSON.stringify(TopologyInstanceTemp),
+      // }).then((data: any) => {
+      //   console.log(data);
+      // });
       this.GET_ALL_TEMPLATES().then(
         (
           allTemplate: Array<{
@@ -102,8 +111,8 @@ limitations under the License. -->
             const data: string = `${window.localStorage.getItem('dashboard')}`;
             this.SET_COMPS_TREE(JSON.parse(data));
           } else {
-            const template = allTemplate.filter((item: any) => item.type === 'DASHBOARD');
-            this.SET_COMPS_TREE(template);
+            const template = allTemplate.filter((item: any) => item.type === 'DASHBOARD')[0] || {};
+            this.SET_COMPS_TREE(JSON.parse(template.configuration) || []);
           }
         },
       );

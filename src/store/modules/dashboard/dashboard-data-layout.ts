@@ -17,8 +17,6 @@
 
 import { MutationTree } from 'vuex';
 import { CompsTree, DashboardTemplate } from '@/types/dashboard';
-// import groupServiceTemp from '../../../template/group-service-template';
-// import groupDatabaseTemp from '../../../template/group-database-template';
 import * as types from './mutation-types';
 
 export interface State {
