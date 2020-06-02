@@ -21,6 +21,7 @@ limitations under the License. -->
       :rocketGlobal="{ edit: false }"
       :item="i"
       :index="index"
+      :type="'TOPOLOGY_INSTANCE'"
     />
   </div>
 </template>
