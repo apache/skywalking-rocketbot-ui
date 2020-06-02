@@ -83,6 +83,8 @@ limitations under the License. -->
     @Getter('durationTime') private durationTime: any;
     @Prop() private item!: any;
     @Prop() private index!: number;
+    @Prop() private type!: string;
+
     private dialogConfigVisible = false;
     private status = 'UNKNOWN';
     private title = 'Title';
@@ -99,6 +101,10 @@ limitations under the License. -->
       this.height = this.item.height;
       this.unit = this.item.unit;
       this.itemConfig = this.item;
+      const pageTypes = ['TOPOLOGY_ENDPOINT', 'TOPOLOGY_INSTANCE'];
+      if (pageTypes.includes(this.type)) {
+        return;
+      }
       this.chartRender();
     }
 

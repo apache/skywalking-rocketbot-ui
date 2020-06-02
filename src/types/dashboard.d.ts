@@ -50,3 +50,19 @@ interface Fragment {
   fragment: string;
   variable: string;
 }
+export enum TemplateType {
+  DASHBOARD,
+  TOPOLOGY_SERVICE,
+  TOPOLOGY_INSTANCE,
+  TOPOLOGY_ENDPOINT,
+  TOPOLOGY_SERVICE_RELATION,
+  TOPOLOGY_SERVICE_INSTANCE_RELATION,
+}
+
+export interface DashboardTemplate {
+  name: string;
+  type: TemplateType;
+  configuration: string;
+  activated: boolean;
+  disabled: boolean;
+}

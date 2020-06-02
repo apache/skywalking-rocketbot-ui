@@ -15,17 +15,49 @@
  * limitations under the License.
  */
 
-import globalTemp from './global-template';
-import databaseTemp from './database-template';
-export default [
-  {
-    name: 'Global',
-    children: globalTemp,
-    type: 'All',
-  },
-  {
-    name: 'Database',
-    children: databaseTemp,
-    type: 'Database',
-  },
-];
+export const TypeOfMetrics = {
+  variable: '$name: String!',
+  query: `typeOfMetrics(name: $name)`,
+};
+
+export const getAllTemplates = {
+  query: `
+    getAllTemplates(includingDisabled: false) {
+      name,
+      type
+      configuration,
+      activated,
+      disabled,
+    }
+  `,
+};
+
+export const addTemplate = {
+  variable: '$setting: DashboardSetting!',
+  query: `
+    addTemplate(setting: $setting) {
+      status
+      message
+    }
+  `,
+};
+
+export const changeTemplate = {
+  variable: '$setting: DashboardSetting!',
+  query: `
+    changeTemplate(setting: $setting) {
+      status
+      message
+    }
+  `,
+};
+
+export const disableTemplate = {
+  variable: '$setting: DashboardSetting!',
+  query: `
+    disableTemplate(setting: $setting) {
+      status
+      message
+    }
+  `,
+};

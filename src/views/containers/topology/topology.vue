@@ -25,8 +25,8 @@ limitations under the License. -->
     <TopoAside />
     <TopoGroup />
     <rk-sidebox :show="dialog.length" @update:show="dialog = ''" :fixed="true" width="80%">
-      <window-endpoint v-if="dialog === 'endpoint'" :current="this.current" />
-      <window-instance v-if="dialog === 'instance'" :current="this.current" />
+      <window-endpoint v-if="dialog === 'endpoint'" :current="this.current" :endpointComps="endpointComps" />
+      <window-instance v-if="dialog === 'instance'" :current="this.current" :instanceComps="instanceComps" />
       <window-trace v-if="dialog === 'trace'" :current="this.current" />
       <window-alarm v-if="dialog === 'alarm'" :current="this.current" />
     </rk-sidebox>
@@ -60,10 +60,33 @@ limitations under the License. -->
     @State('rocketTopo') private stateTopo!: topoState;
     @Action('rocketTopo/CLEAR_TOPO') private CLEAR_TOPO: any;
     @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
+    @Action('GET_ALL_TEMPLATES') private GET_ALL_TEMPLATES: any;
     @Getter('durationTime') private durationTime: any;
 
     private current: any = {};
     private dialog: string = '';
+    private instanceComps: any = [];
+    private endpointComps: any = [];
+    private created() {
+      this.GET_ALL_TEMPLATES().then(
+        (
+          allTemplates: Array<{
+            name: string;
+            type: string;
+            configuration: string;
+            activated: boolean;
+            disabled: boolean;
+          }>,
+        ) => {
+          const template =
+            allTemplates.filter((item: any) => item.type === 'TOPOLOGY_INSTANCE' && item.activated)[0] || {};
+          this.instanceComps = JSON.parse(template.configuration) || [];
+          const endpointTemplate =
+            allTemplates.filter((item: any) => item.type === 'TOPOLOGY_ENDPOINT' && item.activated)[0] || {};
+          this.endpointComps = JSON.parse(endpointTemplate.configuration) || [];
+        },
+      );
+    }
     private setCurrent(d: any): void {
       this.current = d;
     }

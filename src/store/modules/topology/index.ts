@@ -265,6 +265,9 @@ const actions: ActionTree<State, any> = {
     }
   },
   GET_TOPO_SERVICE_INFO(context: { commit: Commit; state: State }, params: any) {
+    if (!params.id) {
+      return;
+    }
     return graph
       .query('queryTopoServiceInfo')
       .params({

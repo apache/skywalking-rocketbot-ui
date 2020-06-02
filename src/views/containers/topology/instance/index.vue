@@ -25,7 +25,7 @@ limitations under the License. -->
         icon="disk"
       />
     </div>
-    <instances-survey />
+    <instances-survey :instanceComps="instanceComps" />
   </div>
 </template>
 
@@ -59,6 +59,7 @@ limitations under the License. -->
     @Action('GET_SERVICE_INSTANCES') private GET_SERVICE_INSTANCES: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
     @Prop() private current!: { key: number | string; label: number | string };
+    @Prop() private instanceComps: any;
 
     private selectInstance(i: any) {
       this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
