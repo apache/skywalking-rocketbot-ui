@@ -15,29 +15,14 @@
  * limitations under the License.
  */
 
-import globalTemp from './global-template';
-import serviceTemp from './service-template';
-import endpointTemp from './endpoint-template';
-import instanceTemp from './instance-template';
-export default [
-  {
-    name: 'Global',
-    children: globalTemp,
-    type: 'Global',
-  },
-  {
-    name: 'Service',
-    children: serviceTemp,
-    type: 'Service',
-  },
-  {
-    name: 'Endpoint',
-    children: endpointTemp,
-    type: 'Endpoint',
-  },
-  {
-    name: 'Instance',
-    children: instanceTemp,
-    type: 'Instance',
-  },
-];
+import { TypeOfMetrics, getAllTemplates, addTemplate, changeTemplate, disableTemplate } from '../fragments/dashboard';
+
+export const queryTypeOfMetrics = `query queryTypeOfMetrics(${TypeOfMetrics.variable}) {${TypeOfMetrics.query}}`;
+
+export const mutationAddTemplate = `mutation mutationAddTemplate(${addTemplate.variable}) {${addTemplate.query}}`;
+
+export const mutationChangeTemplate = `mutation mutationChangeTemplate(${changeTemplate.variable}) {${changeTemplate.query}}`;
+
+export const mutationDisableTemplate = `mutation mutationDisableTemplate(${disableTemplate.variable}) {${disableTemplate.query}}`;
+
+export const queryGetAllTemplates = `query queryGetAllTemplates {${getAllTemplates.query}}`;

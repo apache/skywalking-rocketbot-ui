@@ -24,7 +24,7 @@ limitations under the License. -->
         icon="code"
       />
     </div>
-    <endpoints-survey />
+    <endpoints-survey :endpointComps="endpointComps" />
   </div>
 </template>
 
@@ -58,6 +58,7 @@ limitations under the License. -->
     @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
     @Prop() private current!: { key: number | string; label: number | string };
+    @Prop() private endpointComps: any;
 
     private selectEndpoint(i: any) {
       this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });

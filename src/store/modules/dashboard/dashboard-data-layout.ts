@@ -16,20 +16,18 @@
  */
 
 import { MutationTree } from 'vuex';
-import { CompsTree } from '@/types/dashboard';
-import groupServiceTemp from '../../../template/group-service-template';
-import groupDatabaseTemp from '../../../template/group-database-template';
+import { CompsTree, DashboardTemplate } from '@/types/dashboard';
 import * as types from './mutation-types';
-import { uuid } from '@/utils/uuid.ts';
-
 export interface State {
   current: number;
   group: number;
   index: number;
   tree: CompsTree[];
+  allTemplates: DashboardTemplate[];
 }
 
 export const initState: State = {
+  allTemplates: [],
   current: 0,
   group: 0,
   index: 0,
@@ -43,7 +41,7 @@ export const initState: State = {
         instance: {},
         database: {},
       },
-      children: groupServiceTemp,
+      children: [{}], // groupServiceTemp
     },
     {
       name: 'Database Dashboard',
@@ -54,13 +52,16 @@ export const initState: State = {
         instance: {},
         database: {},
       },
-      children: groupDatabaseTemp,
+      children: [{}], // groupDatabaseTemp
     },
   ],
 };
 
 // mutations
 const mutations: MutationTree<State> = {
+  [types.SET_ALL_TEMPLATES](state: State, data: DashboardTemplate[]) {
+    state.allTemplates = data;
+  },
   [types.SET_COMPS_TREE](state: State, data: CompsTree[]) {
     state.tree = data;
   },
@@ -89,6 +90,12 @@ const mutations: MutationTree<State> = {
     if (!params.name) {
       return;
     }
+
+    const templates = state.allTemplates.filter((item: any) => item.type === 'DASHBOARD' && item.activated)[0] || {};
+    const tree = JSON.parse(templates.configuration) || [];
+    const groupServiceTemp = tree.filter((item: any) => item.type === 'service')[0] || {};
+    const groupDatabaseTemp = tree.filter((item: any) => item.type === 'database')[0] || {};
+
     switch (params.template) {
       case 'metric':
         const newTree = [];
@@ -103,7 +110,12 @@ const mutations: MutationTree<State> = {
         Object.keys(state.tree).forEach((i: any) => {
           newServerTree.push(state.tree[i]);
         });
-        newServerTree.push({ name: params.name, type: params.type, query: {}, children: groupServiceTemp });
+        newServerTree.push({
+          name: params.name,
+          type: params.type,
+          query: {},
+          children: groupServiceTemp.children || [],
+        });
         state.tree = newServerTree;
         break;
       case 'database':
@@ -111,7 +123,12 @@ const mutations: MutationTree<State> = {
         Object.keys(state.tree).forEach((i: any) => {
           newDatabaseTree.push(state.tree[i]);
         });
-        newDatabaseTree.push({ name: params.name, type: params.type, query: {}, children: groupDatabaseTemp });
+        newDatabaseTree.push({
+          name: params.name,
+          type: params.type,
+          query: {},
+          children: groupDatabaseTemp.children || [],
+        });
         state.tree = newDatabaseTree;
         break;
     }
