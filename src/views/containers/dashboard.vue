@@ -24,7 +24,8 @@ limitations under the License. -->
     <ToolNav :rocketGlobal="rocketGlobal" :rocketComps="rocketComps" />
     <div class="dashboard-container clear">
       <DashboardItem
-        v-for="(i, index) in rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children"
+        v-for="(i, index) in rocketComps.tree[rocketComps.group].children[rocketComps.current] &&
+          rocketComps.tree[rocketComps.group].children[rocketComps.current].children"
         :key="index + i.title + i.width"
         :index="index"
         :rocketGlobal="rocketGlobal"
@@ -66,6 +67,7 @@ limitations under the License. -->
     @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
     @Mutation('SET_ALL_TEMPLATES') private SET_ALL_TEMPLATES: any;
+    @Mutation('SET_EDIT') private SET_EDIT: any;
 
     private isRouterAlive: boolean = true;
     public reload(): void {
@@ -117,6 +119,9 @@ limitations under the License. -->
         },
       );
       this.handleOption();
+    }
+    private beforeDestroy() {
+      this.SET_EDIT(false);
     }
   }
 </script>
