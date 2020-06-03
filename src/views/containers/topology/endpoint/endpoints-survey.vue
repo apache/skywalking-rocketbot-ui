@@ -22,7 +22,6 @@ limitations under the License. -->
       :item="i"
       :index="index"
       :type="'TOPOLOGY_ENDPOINT'"
-      :dataList="endpointComps"
     />
   </div>
 </template>

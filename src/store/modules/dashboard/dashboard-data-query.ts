@@ -28,14 +28,17 @@ const actions: ActionTree<State, any> = {
     params: {
       index: number;
       duration: any;
+      itemConfig: any;
     },
   ) {
     const { currentDatabase, currentEndpoint, currentInstance, currentService } = context.rootState.rocketOption;
     const dashboard: string = `${window.localStorage.getItem('dashboard')}`;
     const tree = JSON.parse(dashboard) || context.state.tree;
     const normal = tree[context.state.group].type === 'database' ? false : true;
-    const config = tree[context.state.group].children[context.state.current].children[params.index];
+    const config =
+      params.itemConfig || tree[context.state.group].children[context.state.current].children[params.index];
     const names = ['readSampledRecords', 'sortMetrics'];
+
     if (!config) {
       return;
     }

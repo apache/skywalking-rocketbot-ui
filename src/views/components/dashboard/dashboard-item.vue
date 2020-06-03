@@ -84,7 +84,6 @@ limitations under the License. -->
     @Prop() private item!: any;
     @Prop() private index!: number;
     @Prop() private type!: string;
-    @Prop() private dataList: any;
 
     private dialogConfigVisible = false;
     private status = 'UNKNOWN';
@@ -102,10 +101,6 @@ limitations under the License. -->
       this.height = this.item.height;
       this.unit = this.item.unit;
       this.itemConfig = this.item;
-      const pageTypes = ['TOPOLOGY_ENDPOINT', 'TOPOLOGY_INSTANCE'];
-      if (pageTypes.includes(this.type)) {
-        return;
-      }
       this.chartRender();
     }
 
@@ -113,9 +108,12 @@ limitations under the License. -->
       if (this.rocketGlobal.edit) {
         return;
       }
+      const pageTypes = ['TOPOLOGY_ENDPOINT', 'TOPOLOGY_INSTANCE'];
+
       this.GET_QUERY({
         duration: this.durationTime,
         index: this.index,
+        itemConfig: pageTypes.includes(this.type) ? this.itemConfig : undefined,
       }).then((params: Array<{ metricName: string; [key: string]: any; config: any }>) => {
         if (!params) {
           return;
@@ -253,10 +251,6 @@ limitations under the License. -->
     }
     @Watch('rocketGlobal.edit')
     private watchRerender() {
-      this.chartRender();
-    }
-    @Watch('dataList')
-    private watchDataList() {
       this.chartRender();
     }
   }

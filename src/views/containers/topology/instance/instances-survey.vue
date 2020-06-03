@@ -22,7 +22,6 @@ limitations under the License. -->
       :item="i"
       :index="index"
       :type="'TOPOLOGY_INSTANCE'"
-      :dataList="instanceComps"
     />
   </div>
 </template>
