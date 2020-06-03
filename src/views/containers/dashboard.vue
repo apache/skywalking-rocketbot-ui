@@ -17,6 +17,7 @@ limitations under the License. -->
     <ToolGroup :rocketGlobal="rocketGlobal" :rocketComps="rocketComps" />
     <ToolBar
       :rocketGlobal="rocketGlobal"
+      :rocketComps="rocketComps"
       :compType="compType"
       :durationTime="durationTime"
       :stateDashboard="stateDashboardOption"
@@ -24,7 +25,8 @@ limitations under the License. -->
     <ToolNav :rocketGlobal="rocketGlobal" :rocketComps="rocketComps" />
     <div class="dashboard-container clear">
       <DashboardItem
-        v-for="(i, index) in rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children"
+        v-for="(i, index) in rocketComps.tree[rocketComps.group].children[rocketComps.current] &&
+          rocketComps.tree[rocketComps.group].children[rocketComps.current].children"
         :key="index + i.title + i.width"
         :index="index"
         :rocketGlobal="rocketGlobal"
@@ -35,6 +37,7 @@ limitations under the License. -->
         + Add An Item
       </div>
     </div>
+    <v-dialog width="300px" />
   </div>
 </template>
 
@@ -58,11 +61,16 @@ limitations under the License. -->
     @State('rocketbot') private rocketGlobal: any;
     @State('rocketOption') private stateDashboardOption!: any;
     @State('rocketData') private rocketComps!: any;
+    @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+    @Action('GET_ALL_TEMPLATES') private GET_ALL_TEMPLATES: any;
+    // @Action('ADD_TEMPLATE') private ADD_TEMPLATE: any;
+    @Getter('durationTime') private durationTime: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
-    @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
-    @Getter('durationTime') private durationTime: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
+    @Mutation('SET_ALL_TEMPLATES') private SET_ALL_TEMPLATES: any;
+    @Mutation('SET_EDIT') private SET_EDIT: any;
+
     private isRouterAlive: boolean = true;
     public reload(): void {
       this.isRouterAlive = false;
@@ -84,11 +92,38 @@ limitations under the License. -->
       });
     }
     private beforeMount() {
-      if (window.localStorage.getItem('dashboard')) {
-        const data: string = `${window.localStorage.getItem('dashboard')}`;
-        this.SET_COMPS_TREE(JSON.parse(data));
-      }
+      // this.ADD_TEMPLATE({
+      //   name: 'Topology Instance',
+      //   type: 'TOPOLOGY_INSTANCE',
+      //   active: true,
+      //   configuration: JSON.stringify(TopologyInstanceTemp),
+      // }).then((data: any) => {
+      //   console.log(data);
+      // });
+      this.GET_ALL_TEMPLATES().then(
+        (
+          allTemplate: Array<{
+            name: string;
+            type: string;
+            configuration: string;
+            activated: boolean;
+            disabled: boolean;
+          }>,
+        ) => {
+          this.SET_ALL_TEMPLATES(allTemplate);
+          if (window.localStorage.getItem('dashboard')) {
+            const data: string = `${window.localStorage.getItem('dashboard')}`;
+            this.SET_COMPS_TREE(JSON.parse(data));
+          } else {
+            const template = allTemplate.filter((item: any) => item.type === 'DASHBOARD' && item.activated)[0] || {};
+            this.SET_COMPS_TREE(JSON.parse(template.configuration) || []);
+          }
+        },
+      );
       this.handleOption();
+    }
+    private beforeDestroy() {
+      this.SET_EDIT(false);
     }
   }
 </script>

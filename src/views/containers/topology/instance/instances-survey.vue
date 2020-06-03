@@ -21,16 +21,17 @@ limitations under the License. -->
       :rocketGlobal="{ edit: false }"
       :item="i"
       :index="index"
+      :type="'TOPOLOGY_INSTANCE'"
+      :updateObjects="updateObjects"
     />
   </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
-  import { Component } from 'vue-property-decorator';
+  import { Component, Prop } from 'vue-property-decorator';
   import { State } from 'vuex-class';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
-  import TopologyInstanceTemp from '../../../../template/topology-instance-template';
 
   @Component({
     components: {
@@ -38,11 +39,8 @@ limitations under the License. -->
     },
   })
   export default class InstancesSurvey extends Vue {
-    private instanceComps: any[] = [];
-
-    private created() {
-      this.instanceComps = TopologyInstanceTemp;
-    }
+    @Prop() private instanceComps: any;
+    @Prop() private updateObjects!: string;
   }
 </script>
 

@@ -16,6 +16,25 @@ limitations under the License. -->
 <template>
   <div style="height: 100%">
     <div class="rk-dashboard-bar flex-h">
+      <span class="flex-h">
+        <div class="rk-dashboard-bar-btn">
+          <span v-tooltip:bottom="{ content: 'import' }">
+            <input id="instance-file" type="file" name="file" title="" accept=".json" @change="importData" />
+            <label class="rk-btn ghost input-label" for="instance-file">
+              <svg class="icon lg vm cp " :style="`marginTop: 0px`">
+                <use :xlink:href="'#folder_open'"></use>
+              </svg>
+            </label>
+          </span>
+        </div>
+        <div class="rk-dashboard-bar-btn">
+          <span v-tooltip:bottom="{ content: 'export' }">
+            <svg class="icon lg vm cp rk-btn ghost" @click="exportData">
+              <use :xlink:href="'#save_alt'"></use>
+            </svg>
+          </span>
+        </div>
+      </span>
       <ToolBarSelect :selectable="false" :title="this.$t('currentService')" :current="current" icon="package" />
       <ToolBarSelect
         @onChoose="selectInstance"
@@ -25,7 +44,7 @@ limitations under the License. -->
         icon="disk"
       />
     </div>
-    <instances-survey />
+    <instances-survey :instanceComps="instanceComps" :updateObjects="updateObjects" />
   </div>
 </template>
 
@@ -37,6 +56,8 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, PropSync, Watch, Prop } from 'vue-property-decorator';
   import { Action, Getter, State } from 'vuex-class';
+  import { readFile } from '@/utils/readFile';
+  import { saveFile } from '@/utils/saveFile';
 
   interface Instance {
     label: string;
@@ -59,6 +80,8 @@ limitations under the License. -->
     @Action('GET_SERVICE_INSTANCES') private GET_SERVICE_INSTANCES: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
     @Prop() private current!: { key: number | string; label: number | string };
+    @Prop() private instanceComps: any;
+    @Prop() private updateObjects!: string;
 
     private selectInstance(i: any) {
       this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
@@ -70,7 +93,38 @@ limitations under the License. -->
         this.selectInstance(this.stateDashboardOption.instances[0]);
       });
     }
+    private async importData(event: any) {
+      try {
+        const data: any = await readFile(event);
+        if (!Array.isArray(data)) {
+          throw new Error();
+        }
+        this.$emit('changeInstanceComps', data);
+        const el: any = document.getElementById('instance-file');
+        el!.value = '';
+      } catch (e) {
+        this.$modal.show('dialog', { text: 'ERROR' });
+      }
+    }
+    private exportData() {
+      const data = this.instanceComps;
+      const name = 'instanceComps.json';
+      saveFile(data, name);
+    }
   }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="scss" scoped>
+  .rk-dashboard-bar-btn {
+    padding: 0 5px;
+    border-right: 2px solid #252a2f;
+    height: 19px;
+  }
+  #instance-file {
+    display: none;
+  }
+  .input-label {
+    display: inline;
+    line-height: inherit;
+  }
+</style>

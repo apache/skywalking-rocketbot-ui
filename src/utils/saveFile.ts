@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-import { Services, Endpoints, Instances, Database, OAPTimeInfo } from '../fragments/option';
-
-export const queryServices = `query queryServices(${Services.variable}) {${Services.query}}`;
-
-export const queryDatabases = `query queryDatabases(${Database.variable}) {${Database.query}}`;
-
-export const queryEndpoints = `query queryEndpoints(${Endpoints.variable}) {${Endpoints.query}}`;
-
-export const queryInstances = `query queryInstances(${Instances.variable}) {${Instances.query}}`;
-
-export const queryOAPTimeInfo = `query queryOAPTimeInfo {${OAPTimeInfo.query}}`;
+export const saveFile = (data: any, name: string) => {
+  const newData = JSON.stringify(data);
+  const tagA = document.createElement('a');
+  tagA.download = name;
+  tagA.style.display = 'none';
+  const blob = new Blob([newData]);
+  tagA.href = URL.createObjectURL(blob);
+  document.body.appendChild(tagA);
+  tagA.click();
+  document.body.removeChild(tagA);
+};

@@ -15,14 +15,49 @@
  * limitations under the License.
  */
 
-import { Services, Endpoints, Instances, Database, OAPTimeInfo } from '../fragments/option';
+export const TypeOfMetrics = {
+  variable: '$name: String!',
+  query: `typeOfMetrics(name: $name)`,
+};
 
-export const queryServices = `query queryServices(${Services.variable}) {${Services.query}}`;
+export const getAllTemplates = {
+  query: `
+    getAllTemplates(includingDisabled: false) {
+      name,
+      type
+      configuration,
+      activated,
+      disabled,
+    }
+  `,
+};
 
-export const queryDatabases = `query queryDatabases(${Database.variable}) {${Database.query}}`;
+export const addTemplate = {
+  variable: '$setting: DashboardSetting!',
+  query: `
+    addTemplate(setting: $setting) {
+      status
+      message
+    }
+  `,
+};
 
-export const queryEndpoints = `query queryEndpoints(${Endpoints.variable}) {${Endpoints.query}}`;
+export const changeTemplate = {
+  variable: '$setting: DashboardSetting!',
+  query: `
+    changeTemplate(setting: $setting) {
+      status
+      message
+    }
+  `,
+};
 
-export const queryInstances = `query queryInstances(${Instances.variable}) {${Instances.query}}`;
-
-export const queryOAPTimeInfo = `query queryOAPTimeInfo {${OAPTimeInfo.query}}`;
+export const disableTemplate = {
+  variable: '$setting: DashboardSetting!',
+  query: `
+    disableTemplate(setting: $setting) {
+      status
+      message
+    }
+  `,
+};

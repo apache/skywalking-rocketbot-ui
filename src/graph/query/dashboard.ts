@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-import { Services, Endpoints, Instances, Database, OAPTimeInfo } from '../fragments/option';
+import { TypeOfMetrics, getAllTemplates, addTemplate, changeTemplate, disableTemplate } from '../fragments/dashboard';
 
-export const queryServices = `query queryServices(${Services.variable}) {${Services.query}}`;
+export const queryTypeOfMetrics = `query queryTypeOfMetrics(${TypeOfMetrics.variable}) {${TypeOfMetrics.query}}`;
 
-export const queryDatabases = `query queryDatabases(${Database.variable}) {${Database.query}}`;
+export const mutationAddTemplate = `mutation mutationAddTemplate(${addTemplate.variable}) {${addTemplate.query}}`;
 
-export const queryEndpoints = `query queryEndpoints(${Endpoints.variable}) {${Endpoints.query}}`;
+export const mutationChangeTemplate = `mutation mutationChangeTemplate(${changeTemplate.variable}) {${changeTemplate.query}}`;
 
-export const queryInstances = `query queryInstances(${Instances.variable}) {${Instances.query}}`;
+export const mutationDisableTemplate = `mutation mutationDisableTemplate(${disableTemplate.variable}) {${disableTemplate.query}}`;
 
-export const queryOAPTimeInfo = `query queryOAPTimeInfo {${OAPTimeInfo.query}}`;
+export const queryGetAllTemplates = `query queryGetAllTemplates {${getAllTemplates.query}}`;

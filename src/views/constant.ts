@@ -15,17 +15,12 @@
  * limitations under the License.
  */
 
-import globalTemp from './global-template';
-import databaseTemp from './database-template';
-export default [
-  {
-    name: 'Global',
-    children: globalTemp,
-    type: 'All',
-  },
-  {
-    name: 'Database',
-    children: databaseTemp,
-    type: 'Database',
-  },
-];
+export enum TopologyType {
+  TOPOLOGY_ENDPOINT = 'TOPOLOGY_ENDPOINT',
+  TOPOLOGY_INSTANCE = 'TOPOLOGY_INSTANCE',
+}
+
+export enum ObjectsType {
+  UPDATE_INSTANCES = 'UPDATE_INSTANCES',
+  UPDATE_ENDPOINTS = 'UPDATE_ENDPOINTS',
+}
