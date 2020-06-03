@@ -43,7 +43,7 @@ limitations under the License. -->
         icon="code"
       />
     </div>
-    <endpoints-survey :endpointComps="endpointComps" />
+    <endpoints-survey :endpointComps="endpointComps" :updateObjects="updateObjects" />
   </div>
 </template>
 
@@ -80,6 +80,7 @@ limitations under the License. -->
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
     @Prop() private current!: { key: number | string; label: number | string };
     @Prop() private endpointComps: any;
+    @Prop() private updateObjects!: string;
 
     private selectEndpoint(i: any) {
       this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });

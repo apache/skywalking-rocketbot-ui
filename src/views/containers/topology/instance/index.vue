@@ -44,7 +44,7 @@ limitations under the License. -->
         icon="disk"
       />
     </div>
-    <instances-survey :instanceComps="instanceComps" />
+    <instances-survey :instanceComps="instanceComps" :updateObjects="updateObjects" />
   </div>
 </template>
 
@@ -81,6 +81,7 @@ limitations under the License. -->
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
     @Prop() private current!: { key: number | string; label: number | string };
     @Prop() private instanceComps: any;
+    @Prop() private updateObjects!: string;
 
     private selectInstance(i: any) {
       this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });

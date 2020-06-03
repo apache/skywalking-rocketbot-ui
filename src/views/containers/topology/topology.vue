@@ -30,12 +30,14 @@ limitations under the License. -->
         :current="this.current"
         :endpointComps="endpointComps"
         @changeEndpointComps="changeEndpointComps"
+        :updateObjects="updateObjects"
       />
       <window-instance
         v-if="dialog === 'instance'"
         :current="this.current"
         :instanceComps="instanceComps"
         @changeInstanceComps="changeInstanceComps"
+        :updateObjects="updateObjects"
       />
       <window-trace v-if="dialog === 'trace'" :current="this.current" />
       <window-alarm v-if="dialog === 'alarm'" :current="this.current" />
@@ -47,6 +49,7 @@ limitations under the License. -->
   import { State, Action, Getter, Mutation } from 'vuex-class';
   import { AxiosResponse } from 'axios';
   import { State as topoState } from '@/store/modules/topology';
+  import { TopologyType, ObjectsType } from '../../constant';
   import WindowEndpoint from '@/views/containers/topology/endpoint/index.vue';
   import WindowInstance from '@/views/containers/topology/instance/index.vue';
   import WindowTrace from '@/views/containers/topology/trace/index.vue';
@@ -77,6 +80,8 @@ limitations under the License. -->
     private dialog: string = '';
     private instanceComps: any = [];
     private endpointComps: any = [];
+    private updateObjects: string = '';
+
     private created() {
       this.GET_ALL_TEMPLATES().then(
         (
@@ -89,10 +94,10 @@ limitations under the License. -->
           }>,
         ) => {
           const template =
-            allTemplates.filter((item: any) => item.type === 'TOPOLOGY_INSTANCE' && item.activated)[0] || {};
+            allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_INSTANCE && item.activated)[0] || {};
           this.instanceComps = JSON.parse(template.configuration) || [];
           const endpointTemplate =
-            allTemplates.filter((item: any) => item.type === 'TOPOLOGY_ENDPOINT' && item.activated)[0] || {};
+            allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_ENDPOINT && item.activated)[0] || {};
           this.endpointComps = JSON.parse(endpointTemplate.configuration) || [];
         },
       );
@@ -105,9 +110,11 @@ limitations under the License. -->
       this.CLEAR_TOPO();
     }
     private changeInstanceComps(data: any) {
+      this.updateObjects = ObjectsType.UPDATE_INSTANCES;
       this.instanceComps.push(...data);
     }
     private changeEndpointComps(data: any) {
+      this.updateObjects = ObjectsType.UPDATE_ENDPOINTS;
       this.endpointComps.push(...data);
     }
   }

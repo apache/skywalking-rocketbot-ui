@@ -64,6 +64,7 @@ limitations under the License. -->
   import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
   import charts from './charts';
   import { QueryTypes } from './constant';
+  import { TopologyType, ObjectsType } from '../../constant';
   import { MetricsType, CalculationType } from './charts/constant';
   import { uuid } from '@/utils/uuid.ts';
 
@@ -84,6 +85,7 @@ limitations under the License. -->
     @Prop() private item!: any;
     @Prop() private index!: number;
     @Prop() private type!: string;
+    @Prop() private updateObjects!: string;
 
     private dialogConfigVisible = false;
     private status = 'UNKNOWN';
@@ -101,6 +103,11 @@ limitations under the License. -->
       this.height = this.item.height;
       this.unit = this.item.unit;
       this.itemConfig = this.item;
+      const types = [ObjectsType.UPDATE_INSTANCES, ObjectsType.UPDATE_ENDPOINTS] as any[];
+
+      if (!types.includes(this.updateObjects)) {
+        return;
+      }
       this.chartRender();
     }
 
@@ -108,7 +115,7 @@ limitations under the License. -->
       if (this.rocketGlobal.edit) {
         return;
       }
-      const pageTypes = ['TOPOLOGY_ENDPOINT', 'TOPOLOGY_INSTANCE'];
+      const pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as any[];
 
       this.GET_QUERY({
         duration: this.durationTime,
