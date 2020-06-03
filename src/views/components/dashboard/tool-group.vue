@@ -52,20 +52,6 @@ limitations under the License. -->
         <a class="rk-btn r vm long tc confirm" @click="handleCreate">{{ $t('confirm') }}</a>
       </div>
     </a>
-
-    <a class="rk-dashboard-import ml-10" v-if="rocketGlobal.edit">
-      <input id="tool-group-file" class="ipt" type="file" name="file" title="" accept=".json" @change="importData" />
-      <label for="tool-group-file" class="input-label">
-        <svg class="icon open vm">
-          <use xlink:href="#folder_open"></use>
-        </svg>
-      </label>
-    </a>
-    <a class="ml-10" v-if="rocketGlobal.edit">
-      <svg class="icon vm" @click="exportData">
-        <use xlink:href="#save_alt"></use>
-      </svg>
-    </a>
   </nav>
 </template>
 
@@ -81,7 +67,6 @@ limitations under the License. -->
   export default class ToolGroup extends Vue {
     @Prop() private rocketGlobal: any;
     @Prop() private rocketComps: any;
-    @Mutation('IMPORT_COMPS_GROUP') private IMPORT_COMPS_GROUP: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('DELETE_COMPS_GROUP') private DELETE_COMPS_GROUP: any;
     @Mutation('ADD_COMPS_GROUP') private ADD_COMPS_GROUP: any;
@@ -125,26 +110,6 @@ limitations under the License. -->
       this.ADD_COMPS_GROUP({ name: this.name, type: this.type, template });
       this.handleHide();
       this.template = false;
-    }
-    private async importData(event: any) {
-      try {
-        const data: any = await readFile(event);
-        const { children, name, type } = data;
-        if (children && name && type && children[0] && !children[0].width) {
-          this.IMPORT_COMPS_GROUP(data);
-        } else {
-          throw new Error();
-        }
-        const el: any = document.getElementById('tool-group-file');
-        el!.value = '';
-      } catch (e) {
-        this.$modal.show('dialog', { text: 'ERROR' });
-      }
-    }
-    private exportData() {
-      const group = this.rocketComps.tree[this.rocketComps.group];
-      const name = `${group.name}.group.json`;
-      saveFile(group, name);
     }
   }
 </script>
@@ -218,19 +183,6 @@ limitations under the License. -->
       background-color: #448dfe;
       top: 9px;
       left: 4px;
-    }
-  }
-  .rk-dashboard-import {
-    .icon.open {
-      margin-top: 4px;
-    }
-    .ipt {
-      display: none;
-    }
-    .input-label {
-      display: inline;
-      line-height: inherit;
-      cursor: pointer;
     }
   }
 </style>

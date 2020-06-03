@@ -25,8 +25,18 @@ limitations under the License. -->
     <TopoAside />
     <TopoGroup />
     <rk-sidebox :show="dialog.length" @update:show="dialog = ''" :fixed="true" width="80%">
-      <window-endpoint v-if="dialog === 'endpoint'" :current="this.current" :endpointComps="endpointComps" />
-      <window-instance v-if="dialog === 'instance'" :current="this.current" :instanceComps="instanceComps" />
+      <window-endpoint
+        v-if="dialog === 'endpoint'"
+        :current="this.current"
+        :endpointComps="endpointComps"
+        @changeEndpointComps="changeEndpointComps"
+      />
+      <window-instance
+        v-if="dialog === 'instance'"
+        :current="this.current"
+        :instanceComps="instanceComps"
+        @changeInstanceComps="changeInstanceComps"
+      />
       <window-trace v-if="dialog === 'trace'" :current="this.current" />
       <window-alarm v-if="dialog === 'alarm'" :current="this.current" />
     </rk-sidebox>
@@ -93,6 +103,12 @@ limitations under the License. -->
     private beforeDestroy() {
       this.CLEAR_TOPO_INFO();
       this.CLEAR_TOPO();
+    }
+    private changeInstanceComps(data: any) {
+      this.instanceComps.push(...data);
+    }
+    private changeEndpointComps(data: any) {
+      this.endpointComps.push(...data);
     }
   }
 </script>

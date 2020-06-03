@@ -141,10 +141,6 @@ const mutations: MutationTree<State> = {
     state.tree[state.group].children.push({ name: params.name, children: [] });
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
-  [types.IMPORT_COMPS_GROUP](state: State, params: any) {
-    state.tree.push(params);
-    window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
-  },
   [types.IMPORT_COMPS_TREE](state: State, params: any) {
     state.tree[state.group].children.push(params);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));

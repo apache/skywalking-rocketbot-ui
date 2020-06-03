@@ -84,6 +84,7 @@ limitations under the License. -->
     @Prop() private item!: any;
     @Prop() private index!: number;
     @Prop() private type!: string;
+    @Prop() private dataList: any;
 
     private dialogConfigVisible = false;
     private status = 'UNKNOWN';
@@ -252,6 +253,10 @@ limitations under the License. -->
     }
     @Watch('rocketGlobal.edit')
     private watchRerender() {
+      this.chartRender();
+    }
+    @Watch('dataList')
+    private watchDataList() {
       this.chartRender();
     }
   }

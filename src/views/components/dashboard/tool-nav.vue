@@ -32,7 +32,7 @@ limitations under the License. -->
         <use xlink:href="#file-deletion"></use>
       </svg>
     </span>
-    <a class="rk-dashboard-nav-add" v-clickout="handleHide" v-if="rocketGlobal.edit">
+    <a class="rk-dashboard-nav-add mr-10" v-clickout="handleHide" v-if="rocketGlobal.edit">
       <svg class="icon vm" @click="show = !show">
         <use xlink:href="#todo-add"></use>
       </svg>
@@ -62,21 +62,19 @@ limitations under the License. -->
         <a class="rk-btn r vm long tc confirm" @click="handleCreate">{{ $t('confirm') }}</a>
       </div>
     </a>
-    <template v-if="rocketGlobal.edit">
-      <a class="rk-dashboard-import ml-10">
-        <input id="tool-nav-file" class="ipt" type="file" name="file" title="" accept=".json" @change="importData" />
-        <label for="tool-nav-file" class="input-label">
-          <svg class="icon open vm">
-            <use xlink:href="#folder_open"></use>
-          </svg>
-        </label>
-      </a>
-      <a class="ml-10">
-        <svg class="icon vm" @click="exportData">
-          <use xlink:href="#save_alt"></use>
+    <a class="rk-dashboard-import mr-10">
+      <input id="tool-nav-file" class="ipt" type="file" name="file" title="" accept=".json" @change="importData" />
+      <label for="tool-nav-file" class="input-label">
+        <svg class="icon open vm">
+          <use xlink:href="#folder_open"></use>
         </svg>
-      </a>
-    </template>
+      </label>
+    </a>
+    <a>
+      <svg class="icon vm" @click="exportData">
+        <use xlink:href="#save_alt"></use>
+      </svg>
+    </a>
   </nav>
 </template>
 
@@ -205,7 +203,7 @@ limitations under the License. -->
   }
   .rk-dashboard-import {
     .icon.open {
-      margin-top: 4px;
+      margin-top: 2px;
     }
     .ipt {
       display: none;

@@ -15,6 +15,25 @@ limitations under the License. -->
 <template>
   <div>
     <div class="rk-dashboard-bar flex-h">
+      <span class="flex-h">
+        <div class="rk-dashboard-bar-btn">
+          <span v-tooltip:bottom="{ content: 'import' }">
+            <input id="endpoint-file" type="file" name="file" title="" accept=".json" @change="importData" />
+            <label class="rk-btn ghost input-label" for="endpoint-file">
+              <svg class="icon lg vm cp " :style="`marginTop: 0px`">
+                <use :xlink:href="'#folder_open'"></use>
+              </svg>
+            </label>
+          </span>
+        </div>
+        <div class="rk-dashboard-bar-btn">
+          <span v-tooltip:bottom="{ content: 'export' }">
+            <svg class="icon lg vm cp rk-btn ghost" @click="exportData">
+              <use :xlink:href="'#save_alt'"></use>
+            </svg>
+          </span>
+        </div>
+      </span>
       <ToolBarSelect :selectable="false" :title="this.$t('currentService')" :current="current" icon="package" />
       <ToolBarEndpointSelect
         @onChoose="selectEndpoint"
@@ -35,6 +54,8 @@ limitations under the License. -->
   import EndpointsSurvey from './endpoints-survey.vue';
   import ToolBarSelect from '@/views/components/dashboard/tool-bar-select.vue';
   import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar-endpoint-select.vue';
+  import { readFile } from '@/utils/readFile';
+  import { saveFile } from '@/utils/saveFile';
 
   interface Endpoint {
     label: string;
@@ -71,6 +92,24 @@ limitations under the License. -->
         this.selectEndpoint(this.stateDashboardOption.endpoints[0]);
       });
     }
+    private async importData(event: any) {
+      try {
+        const data: any = await readFile(event);
+        if (!Array.isArray(data)) {
+          throw new Error();
+        }
+        this.$emit('changeEndpointComps', data);
+        const el: any = document.getElementById('endpoint-file');
+        el!.value = '';
+      } catch (e) {
+        this.$modal.show('dialog', { text: 'ERROR' });
+      }
+    }
+    private exportData() {
+      const data = this.endpointComps;
+      const name = 'endpointComps.json';
+      saveFile(data, name);
+    }
   }
 </script>
 
@@ -79,5 +118,20 @@ limitations under the License. -->
     flex-shrink: 0;
     color: #efefef;
     background-color: #333840;
+  }
+  .rk-dashboard-bar-btn {
+    padding: 0 5px;
+    border-right: 2px solid #252a2f;
+    height: 19px;
+  }
+  #endpoint-file {
+    display: none;
+  }
+  .input-label {
+    display: inline !important;
+    line-height: inherit;
+  }
+  .input-label.rk-btn {
+    line-height: 22px !important;
   }
 </style>

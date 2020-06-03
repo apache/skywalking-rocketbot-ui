@@ -11,20 +11,22 @@
         </svg>
       </span>
     </div>
-    <div v-if="rocketGlobal.edit" class="rk-dashboard-bar-btn">
+    <div class="rk-dashboard-bar-btn">
       <span v-tooltip:bottom="{ content: 'import' }">
-        <input id="tool-bar-file" type="file" name="file" title="" accept=".json" @change="importData"/>
+        <input id="tool-bar-file" type="file" name="file" title="" accept=".json" @change="importData" />
         <label class="rk-btn ghost input-label" for="tool-bar-file">
-          <svg class="icon lg vm cp " :style="`color: #ffc107; marginTop: 0px`">
+          <svg class="icon lg vm cp " :style="`marginTop: 0px`">
             <use :xlink:href="'#folder_open'"></use>
-          </svg> </label
-      ></span>
+          </svg>
+        </label>
+      </span>
     </div>
-    <div v-if="rocketGlobal.edit" class="rk-dashboard-bar-btn">
+    <div class="rk-dashboard-bar-btn">
       <span v-tooltip:bottom="{ content: 'export' }">
-        <svg class="icon lg vm cp rk-btn ghost" :style="`color: #ffc107`" @click="exportData">
-          <use :xlink:href="'#save_alt'"></use></svg
-      ></span>
+        <svg class="icon lg vm cp rk-btn ghost" @click="exportData">
+          <use :xlink:href="'#save_alt'"></use>
+        </svg>
+      </span>
     </div>
 
     <div class="rk-dashboard-bar-btn">
