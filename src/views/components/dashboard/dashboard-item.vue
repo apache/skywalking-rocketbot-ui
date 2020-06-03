@@ -105,7 +105,7 @@ limitations under the License. -->
       this.itemConfig = this.item;
       const types = [ObjectsType.UPDATE_INSTANCES, ObjectsType.UPDATE_ENDPOINTS] as any[];
 
-      if (!types.includes(this.updateObjects)) {
+      if (this.updateObjects && !types.includes(this.updateObjects)) {
         return;
       }
       this.chartRender();

@@ -83,6 +83,16 @@ limitations under the License. -->
     private updateObjects: string = '';
 
     private created() {
+      if (window.localStorage.getItem('topologyInstances') || window.localStorage.getItem('topologyEndpoints')) {
+        const instanceComps: string = `${window.localStorage.getItem('topologyInstances')}`;
+        this.instanceComps = JSON.parse(instanceComps);
+        const endpointComps: string = `${window.localStorage.getItem('topologyEndpoints')}`;
+        this.endpointComps = JSON.parse(endpointComps);
+      } else {
+        this.queryTemplates();
+      }
+    }
+    private queryTemplates() {
       this.GET_ALL_TEMPLATES().then(
         (
           allTemplates: Array<{
@@ -96,9 +106,11 @@ limitations under the License. -->
           const template =
             allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_INSTANCE && item.activated)[0] || {};
           this.instanceComps = JSON.parse(template.configuration) || [];
+          window.localStorage.setItem('topologyInstances', JSON.stringify(this.instanceComps));
           const endpointTemplate =
             allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_ENDPOINT && item.activated)[0] || {};
           this.endpointComps = JSON.parse(endpointTemplate.configuration) || [];
+          window.localStorage.setItem('topologyEndpoints', JSON.stringify(this.endpointComps));
         },
       );
     }
@@ -112,10 +124,12 @@ limitations under the License. -->
     private changeInstanceComps(data: any) {
       this.updateObjects = ObjectsType.UPDATE_INSTANCES;
       this.instanceComps.push(...data);
+      window.localStorage.setItem('topologyInstances', JSON.stringify(this.instanceComps));
     }
     private changeEndpointComps(data: any) {
       this.updateObjects = ObjectsType.UPDATE_ENDPOINTS;
       this.endpointComps.push(...data);
+      window.localStorage.setItem('topologyEndpoints', JSON.stringify(this.endpointComps));
     }
   }
 </script>
