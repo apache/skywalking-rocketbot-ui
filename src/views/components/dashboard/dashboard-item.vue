@@ -21,7 +21,7 @@ limitations under the License. -->
       <span>{{ title }}</span>
       <span v-show="unit"> ( {{ unit }} ) </span>
       <span v-show="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
-      <span v-show="!rocketGlobal.edit" @click="editComponentConfig">
+      <span v-show="!rocketGlobal.edit && !pageTypes.includes(type)" @click="editComponentConfig">
         <svg class="icon cp r">
           <use xlink:href="#lock"></use>
         </svg>
@@ -85,6 +85,7 @@ limitations under the License. -->
     @Prop() private index!: number;
     @Prop() private type!: string;
 
+    private pageTypes = ['TOPOLOGY_ENDPOINT', 'TOPOLOGY_INSTANCE'];
     private dialogConfigVisible = false;
     private status = 'UNKNOWN';
     private title = 'Title';
@@ -101,8 +102,8 @@ limitations under the License. -->
       this.height = this.item.height;
       this.unit = this.item.unit;
       this.itemConfig = this.item;
-      const pageTypes = ['TOPOLOGY_ENDPOINT', 'TOPOLOGY_INSTANCE'];
-      if (pageTypes.includes(this.type)) {
+
+      if (this.pageTypes.includes(this.type)) {
         return;
       }
       this.chartRender();
