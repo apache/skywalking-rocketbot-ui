@@ -22,6 +22,7 @@ limitations under the License. -->
       :item="i"
       :index="index"
       :type="'TOPOLOGY_ENDPOINT'"
+      :updateObjects="updateObjects"
     />
   </div>
 </template>
@@ -39,6 +40,7 @@ limitations under the License. -->
   })
   export default class InstancesSurvey extends Vue {
     @Prop() private endpointComps: any;
+    @Prop() private updateObjects!: string;
   }
 </script>
 

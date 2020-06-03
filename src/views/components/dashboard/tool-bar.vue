@@ -13,24 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div>
+  <div class="rk-dashboard-bar flex-h">
+    <ToolBarBtns
+      :rocketGlobal="rocketGlobal"
+      :rocketComps="rocketComps"
+      :compType="compType"
+      :durationTime="durationTime"
+      :rocketOption="rocketOption"
+    ></ToolBarBtns>
     <div class="rk-dashboard-bar flex-h" v-if="compType !== dashboardType.DATABASE">
-      <div class="rk-dashboard-bar-reload">
-        <span v-tooltip:bottom="{ content: rocketGlobal.edit ? 'view' : 'edit' }">
-          <svg
-            class="icon lg vm cp rk-btn ghost"
-            :style="`color:${!rocketGlobal.edit ? '' : '#ffc107'}`"
-            @click="handleSetEdit"
-          >
-            <use :xlink:href="!rocketGlobal.edit ? '#lock' : '#lock-open'"></use>
-          </svg>
-        </span>
-      </div>
-      <div class="rk-dashboard-bar-reload">
-        <svg class="icon lg vm cp rk-btn ghost" @click="handleOption">
-          <use xlink:href="#retry"></use>
-        </svg>
-      </div>
       <div class="sm grey service-search" v-if="compType === dashboardType.SERVICE">
         <div>{{ this.$t('serviceFilter') }}</div>
         <input type="text" :value="rocketOption.keywordService" @change="searchServices($event.target.value)" />
@@ -61,20 +52,6 @@ limitations under the License. -->
       />
     </div>
     <div class="rk-dashboard-bar flex-h" v-else>
-      <div class="rk-dashboard-bar-reload">
-        <svg
-          class="icon lg vm cp rk-btn ghost"
-          :style="`color:${!rocketGlobal.edit ? '' : '#ffc107'}`"
-          @click="handleSetEdit"
-        >
-          <use :xlink:href="!rocketGlobal.edit ? '#lock' : '#lock-open'"></use>
-        </svg>
-      </div>
-      <div class="rk-dashboard-bar-reload">
-        <svg class="icon lg vm cp rk-btn ghost" @click="handleOption">
-          <use xlink:href="#retry"></use>
-        </svg>
-      </div>
       <ToolBarSelect
         @onChoose="SELECT_DATABASE"
         :title="this.$t('currentDatabase')"
@@ -90,10 +67,11 @@ limitations under the License. -->
   import { Vue, Component, Prop } from 'vue-property-decorator';
   import ToolBarSelect from './tool-bar-select.vue';
   import ToolBarEndpointSelect from './tool-bar-endpoint-select.vue';
+  import ToolBarBtns from './tool-bar-btns.vue';
   import { State, Action, Mutation } from 'vuex-class';
   import { DASHBOARDTYPE } from './constant';
 
-  @Component({ components: { ToolBarSelect, ToolBarEndpointSelect } })
+  @Component({ components: { ToolBarSelect, ToolBarEndpointSelect, ToolBarBtns } })
   export default class ToolBar extends Vue {
     @Prop() private compType!: any;
     @Prop() private stateDashboard!: any;
@@ -103,7 +81,6 @@ limitations under the License. -->
     @State('rocketOption') private rocketOption: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
     @Mutation('SET_KEYWORDSERVICE') private SET_KEYWORDSERVICE: any;
-    @Action('SET_EDIT') private SET_EDIT: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Action('SELECT_DATABASE') private SELECT_DATABASE: any;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
@@ -117,16 +94,6 @@ limitations under the License. -->
         return 0;
       }
       return current[current.length - 1].k;
-    }
-    private handleOption() {
-      return this.MIXHANDLE_GET_OPTION({
-        compType: this.compType,
-        duration: this.durationTime,
-        keywordServiceName: this.rocketOption.keywordService,
-      });
-    }
-    private handleSetEdit() {
-      this.SET_EDIT(this.rocketGlobal.edit ? false : true);
     }
     private selectService(i: any) {
       this.SELECT_SERVICE({ service: i, duration: this.durationTime });
@@ -163,9 +130,5 @@ limitations under the License. -->
         padding: 0 2px;
       }
     }
-  }
-  .rk-dashboard-bar-reload {
-    padding: 15px 5px;
-    border-right: 2px solid #252a2f;
   }
 </style>

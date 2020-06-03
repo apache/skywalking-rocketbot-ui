@@ -64,6 +64,7 @@ limitations under the License. -->
   import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
   import charts from './charts';
   import { QueryTypes } from './constant';
+  import { TopologyType, ObjectsType } from '../../constant';
   import { MetricsType, CalculationType } from './charts/constant';
   import { uuid } from '@/utils/uuid.ts';
 
@@ -84,6 +85,7 @@ limitations under the License. -->
     @Prop() private item!: any;
     @Prop() private index!: number;
     @Prop() private type!: string;
+    @Prop() private updateObjects!: string;
 
     private pageTypes = ['TOPOLOGY_ENDPOINT', 'TOPOLOGY_INSTANCE'];
     private dialogConfigVisible = false;
@@ -102,8 +104,9 @@ limitations under the License. -->
       this.height = this.item.height;
       this.unit = this.item.unit;
       this.itemConfig = this.item;
+      const types = [ObjectsType.UPDATE_INSTANCES, ObjectsType.UPDATE_ENDPOINTS] as any[];
 
-      if (this.pageTypes.includes(this.type)) {
+      if (this.updateObjects && !types.includes(this.updateObjects)) {
         return;
       }
       this.chartRender();
@@ -113,9 +116,12 @@ limitations under the License. -->
       if (this.rocketGlobal.edit) {
         return;
       }
+      const pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as any[];
+
       this.GET_QUERY({
         duration: this.durationTime,
         index: this.index,
+        itemConfig: pageTypes.includes(this.type) ? this.itemConfig : undefined,
       }).then((params: Array<{ metricName: string; [key: string]: any; config: any }>) => {
         if (!params) {
           return;
