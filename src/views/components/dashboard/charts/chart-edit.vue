@@ -156,7 +156,7 @@ limitations under the License. -->
           <option v-for="type in IndependentType" :value="type.key" :key="type.key">{{ type.label }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="isParentService.includes(itemConfig.queryMetricType)">
+      <div class="flex-h mb-5" v-show="nameMetrics.includes(itemConfig.queryMetricType)">
         <div class="title grey sm">{{ $t('parentService') }}:</div>
         <select
           class="long"
@@ -167,7 +167,7 @@ limitations under the License. -->
           <option :value="false">{{ $t('noneParentService') }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="isParentService.includes(itemConfig.queryMetricType)">
+      <div class="flex-h mb-5" v-show="nameMetrics.includes(itemConfig.queryMetricType)">
         <div class="title grey sm">{{ $t('sortOrder') }}:</div>
         <select
           class="long"
@@ -266,7 +266,7 @@ limitations under the License. -->
     private queryMetricTypesList: any = [];
     private isDatabase = false;
     private isLabel = false;
-    private isParentService = ['sortMetrics', 'readSampledRecords'];
+    private nameMetrics = ['sortMetrics', 'readSampledRecords'];
 
     private created() {
       this.itemConfig = this.item;
