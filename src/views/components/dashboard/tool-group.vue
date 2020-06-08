@@ -37,14 +37,14 @@ limitations under the License. -->
         <use xlink:href="#todo-add"></use>
       </svg>
       <div class="rk-dashboard-group-add-box" v-if="show">
-        <div class="mb-10 vm">{{ $t('createGroup') }}</div>
-        <div class="sm grey mb-5 mr-10">{{ $t('groupType') }}</div>
+        <div class="mb-10 vm">{{ $t('createTemplate') }}</div>
+        <div class="sm grey mb-5 mr-10">{{ $t('templateType') }}</div>
         <select v-model="type" class="rk-dashboard-group-sel">
           <option :value="DASHBOARDTYPE.SERVICE">{{ $t('standardAPM') }}</option>
           <option :value="DASHBOARDTYPE.METRIC">{{ $t('metricsView') }}</option>
           <option :value="DASHBOARDTYPE.DATABASE">{{ $t('databaseView') }}</option>
         </select>
-        <div class="sm grey  mb-5 mr-10">{{ $t('groupName') }}</div>
+        <div class="sm grey  mb-5 mr-10">{{ $t('templateName') }}</div>
         <input class="mb-5 rk-dashboard-group-input" type="text" v-model="name" />
         <div v-show="type === 'database'">
           <label class="mb-10 dib"><input type="checkbox" v-model="template" />{{ $t('template') }}</label>

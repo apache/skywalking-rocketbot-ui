@@ -111,7 +111,6 @@ limitations under the License. -->
             disabled: boolean;
           }>,
         ) => {
-          allTemplate = json.data.getAllTemplates;
           this.SET_ALL_TEMPLATES(allTemplate);
           if (window.localStorage.getItem('dashboard')) {
             const data: string = `${window.localStorage.getItem('dashboard')}`;
