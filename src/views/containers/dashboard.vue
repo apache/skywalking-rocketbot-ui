@@ -109,7 +109,7 @@ limitations under the License. -->
       // });
       this.GET_ALL_TEMPLATES().then((allTemplate: ITemplate[]) => {
         this.SET_ALL_TEMPLATES(allTemplate);
-        if (!window.localStorage.getItem('version')) {
+        if (window.localStorage.getItem('version') !== '8.0') {
           window.localStorage.removeItem('dashboard');
           this.setDashboardTemplates(allTemplate);
           this.handleOption();
