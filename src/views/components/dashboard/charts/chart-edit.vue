@@ -167,6 +167,17 @@ limitations under the License. -->
           <option :value="false">{{ $t('noneParentService') }}</option>
         </select>
       </div>
+      <div class="flex-h mb-5" v-show="isParentService.includes(itemConfig.queryMetricType)">
+        <div class="title grey sm">{{ $t('sortOrder') }}:</div>
+        <select
+          class="long"
+          v-model="itemConfig.sortOrder"
+          @change="setItemConfig({ type: 'sortOrder', value: $event.target.value })"
+        >
+          <option :value="'DES'">{{ $t('descendOrder') }}</option>
+          <option :value="'ASC'">{{ $t('increaseOrder') }}</option>
+        </select>
+      </div>
       <div class="flex-h mb-5">
         <div class="title grey sm">{{ $t('unit') }}:</div>
         <input

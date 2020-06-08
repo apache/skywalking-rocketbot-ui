@@ -144,6 +144,9 @@ const m = {
   editConfig: 'Edit Config',
   databaseView: 'Database',
   metricsView: 'NOC - Network Operation Center',
+  sortOrder: 'Sort Order',
+  descendOrder: 'Descend Order',
+  increaseOrder: 'Increase Order',
 };
 
 export default m;

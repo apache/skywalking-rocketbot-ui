@@ -66,7 +66,7 @@ const actions: ActionTree<State, any> = {
                 normal: true,
                 scope: config.entityType,
                 topN: 10,
-                order: 'DES',
+                order: config.sortOrder || 'DES',
               },
             }
           : {
@@ -90,7 +90,7 @@ const actions: ActionTree<State, any> = {
                 normal,
                 scope: normal ? config.entityType : config.parentService ? 'Service' : config.entityType,
                 topN: 10,
-                order: 'DES',
+                order: config.sortOrder || 'DES',
               },
             }
           : {

@@ -144,6 +144,9 @@ const m = {
   editConfig: '编辑',
   databaseView: '数据库视图',
   metricsView: '大屏视图',
+  sortOrder: '排序方式',
+  descendOrder: '递减顺序',
+  increaseOrder: '递增顺序',
 };
 
 export default m;
