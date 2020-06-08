@@ -142,6 +142,8 @@ const m = {
   serviceFilter: '服务过滤器',
   endpointFilter: '端点过滤器',
   editConfig: '编辑',
+  databaseView: '数据库视图',
+  metricsView: '大屏视图',
 };
 
 export default m;

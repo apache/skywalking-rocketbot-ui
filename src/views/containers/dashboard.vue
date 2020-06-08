@@ -48,6 +48,7 @@ limitations under the License. -->
   import ToolGroup from '@/views/components/dashboard/tool-group.vue';
   import ToolNav from '@/views/components/dashboard/tool-nav.vue';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
+  import { json } from './test';
 
   @Component({
     components: {
@@ -110,6 +111,7 @@ limitations under the License. -->
             disabled: boolean;
           }>,
         ) => {
+          allTemplate = json.data.getAllTemplates;
           this.SET_ALL_TEMPLATES(allTemplate);
           if (window.localStorage.getItem('dashboard')) {
             const data: string = `${window.localStorage.getItem('dashboard')}`;

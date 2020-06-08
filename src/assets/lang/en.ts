@@ -128,7 +128,7 @@ const m = {
   excludeChildren: 'Exclude Children',
   view: 'View',
   timeTips: 'Time interval cannot exceed 60 days',
-  standardAPM: 'Standard APM',
+  standardAPM: 'Standard',
   entityType: 'Entity type',
   independentSelector: 'Selectors',
   unknownMetrics: 'Unknown Metrics',
@@ -142,6 +142,8 @@ const m = {
   serviceFilter: 'Service Filter',
   endpointFilter: 'Endpoint Filter',
   editConfig: 'Edit Config',
+  databaseView: 'Database',
+  metricsView: 'NOC - Network Operation Center',
 };
 
 export default m;

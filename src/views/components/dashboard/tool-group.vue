@@ -41,8 +41,8 @@ limitations under the License. -->
         <div class="sm grey mb-5 mr-10">{{ $t('groupType') }}</div>
         <select v-model="type" class="rk-dashboard-group-sel">
           <option :value="DASHBOARDTYPE.SERVICE">{{ $t('standardAPM') }}</option>
-          <option :value="DASHBOARDTYPE.METRIC">{{ $t('metrics') }}</option>
-          <option :value="DASHBOARDTYPE.DATABASE">{{ $t('database') }}</option>
+          <option :value="DASHBOARDTYPE.METRIC">{{ $t('metricsView') }}</option>
+          <option :value="DASHBOARDTYPE.DATABASE">{{ $t('databaseView') }}</option>
         </select>
         <div class="sm grey  mb-5 mr-10">{{ $t('groupName') }}</div>
         <input class="mb-5 rk-dashboard-group-input" type="text" v-model="name" />
