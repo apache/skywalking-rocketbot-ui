@@ -32,9 +32,9 @@ const m = {
   copy: 'Copy',
   reset: 'Reset',
   apply: 'Apply',
-  createGroup: 'Create Group',
-  groupType: 'Group Type',
-  groupName: 'Group Name',
+  createTemplate: 'Create Template',
+  templateType: 'Template Type',
+  templateName: 'Template Name',
   template: 'Template',
   confirm: 'Confirm',
   cancel: 'Cancel',
@@ -128,7 +128,7 @@ const m = {
   excludeChildren: 'Exclude Children',
   view: 'View',
   timeTips: 'Time interval cannot exceed 60 days',
-  standardAPM: 'Standard APM',
+  standardAPM: 'Standard',
   entityType: 'Entity type',
   independentSelector: 'Selectors',
   unknownMetrics: 'Unknown Metrics',
@@ -142,6 +142,11 @@ const m = {
   serviceFilter: 'Service Filter',
   endpointFilter: 'Endpoint Filter',
   editConfig: 'Edit Config',
+  databaseView: 'Database',
+  metricsView: 'NOC - Network Operation Center',
+  sortOrder: 'Sort Order',
+  descendOrder: 'Descend Order',
+  increaseOrder: 'Increase Order',
 };
 
 export default m;

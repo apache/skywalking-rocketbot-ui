@@ -32,9 +32,9 @@ const m = {
   copy: '拷贝',
   reset: '重制',
   apply: '应用',
-  createGroup: '创建分组',
-  groupType: '分组类型',
-  groupName: '分组名',
+  createTemplate: '创建模板',
+  templateType: '模板类型',
+  templateName: '模板名称',
   template: '模版',
   confirm: '确定',
   cancel: '取消',
@@ -142,6 +142,11 @@ const m = {
   serviceFilter: '服务过滤器',
   endpointFilter: '端点过滤器',
   editConfig: '编辑',
+  databaseView: '数据库视图',
+  metricsView: '大屏视图',
+  sortOrder: '排序方式',
+  descendOrder: '递减顺序',
+  increaseOrder: '递增顺序',
 };
 
 export default m;

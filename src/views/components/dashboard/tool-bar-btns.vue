@@ -83,9 +83,11 @@
       }
     }
     private exportData() {
-      const data = this.rocketComps.tree;
+      const group = this.rocketComps.tree[this.rocketComps.group];
+      delete group.query;
       const name = 'dashboard.json';
-      saveFile(data, name);
+
+      saveFile([group], name);
     }
   }
 </script>

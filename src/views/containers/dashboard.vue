@@ -49,6 +49,13 @@ limitations under the License. -->
   import ToolNav from '@/views/components/dashboard/tool-nav.vue';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
 
+  interface ITemplate {
+    name: string;
+    type: string;
+    configuration: string;
+    activated: boolean;
+    disabled: boolean;
+  }
   @Component({
     components: {
       ToolBar,
@@ -100,27 +107,30 @@ limitations under the License. -->
       // }).then((data: any) => {
       //   console.log(data);
       // });
-      this.GET_ALL_TEMPLATES().then(
-        (
-          allTemplate: Array<{
-            name: string;
-            type: string;
-            configuration: string;
-            activated: boolean;
-            disabled: boolean;
-          }>,
-        ) => {
-          this.SET_ALL_TEMPLATES(allTemplate);
-          if (window.localStorage.getItem('dashboard')) {
-            const data: string = `${window.localStorage.getItem('dashboard')}`;
-            this.SET_COMPS_TREE(JSON.parse(data));
-          } else {
-            const template = allTemplate.filter((item: any) => item.type === 'DASHBOARD' && item.activated)[0] || {};
-            this.SET_COMPS_TREE(JSON.parse(template.configuration) || []);
-          }
-        },
-      );
+      this.GET_ALL_TEMPLATES().then((allTemplate: ITemplate[]) => {
+        this.SET_ALL_TEMPLATES(allTemplate);
+        if (window.localStorage.getItem('version') !== '8.0') {
+          window.localStorage.removeItem('dashboard');
+          this.setDashboardTemplates(allTemplate);
+          this.handleOption();
+          return;
+        }
+        if (window.localStorage.getItem('dashboard')) {
+          const data: string = `${window.localStorage.getItem('dashboard')}`;
+          this.SET_COMPS_TREE(JSON.parse(data));
+        } else {
+          this.setDashboardTemplates(allTemplate);
+        }
+      });
       this.handleOption();
+    }
+    private setDashboardTemplates(allTemplate: ITemplate[]) {
+      const template = allTemplate.filter((item: ITemplate) => item.type === 'DASHBOARD' && item.activated);
+      const templatesConfiguration = template.map((item: ITemplate) => JSON.parse(item.configuration)).flat(1);
+
+      this.SET_COMPS_TREE(templatesConfiguration || []);
+      window.localStorage.setItem('version', '8.0');
+      window.localStorage.setItem('dashboard', JSON.stringify(templatesConfiguration));
     }
     private beforeDestroy() {
       this.SET_EDIT(false);
