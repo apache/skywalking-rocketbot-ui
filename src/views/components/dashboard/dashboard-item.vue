@@ -263,7 +263,9 @@ limitations under the License. -->
 
     @Watch('rocketOption.updateDashboard')
     private watchCurrentSelectors() {
-      this.chartRender();
+      setTimeout(() => {
+        this.chartRender();
+      }, 200);
     }
     @Watch('durationTime')
     private watchDurationTime() {
