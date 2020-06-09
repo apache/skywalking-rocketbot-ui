@@ -15,7 +15,7 @@ limitations under the License. -->
 <template>
   <div class="rk-dashboard-item" :class="`g-sm-${width}`" :style="`height:${height}px;`">
     <div class="rk-dashboard-item-title ell">
-      <svg class="icon cp red r" v-if="rocketGlobal.edit" @click="DELETE_COMP(index)">
+      <svg class="icon cp red r" v-show="rocketGlobal.edit" @click="deleteItem(index)">
         <use xlink:href="#file-deletion"></use>
       </svg>
       <span>{{ title }}</span>
@@ -36,6 +36,7 @@ limitations under the License. -->
           :index="index"
           :intervalTime="intervalTime"
           :data="chartSource"
+          :type="type"
           @updateStatus="(type, value) => setStatus(type, value)"
         ></component>
       </div>
@@ -79,6 +80,8 @@ limitations under the License. -->
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('SWICH_COMP') private SWICH_COMP: any;
+    @Mutation('rocketTopo/DELETE_TOPO_ENDPOINT') private DELETE_TOPO_ENDPOINT: any;
+    @Mutation('rocketTopo/DELETE_TOPO_INSTANCE') private DELETE_TOPO_INSTANCE: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
@@ -87,7 +90,7 @@ limitations under the License. -->
     @Prop() private type!: string;
     @Prop() private updateObjects!: string;
 
-    private pageTypes = ['TOPOLOGY_ENDPOINT', 'TOPOLOGY_INSTANCE'];
+    private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as any[];
     private dialogConfigVisible = false;
     private status = 'UNKNOWN';
     private title = 'Title';
@@ -116,12 +119,11 @@ limitations under the License. -->
       if (this.rocketGlobal.edit) {
         return;
       }
-      const pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as any[];
 
       this.GET_QUERY({
         duration: this.durationTime,
         index: this.index,
-        itemConfig: pageTypes.includes(this.type) ? this.itemConfig : undefined,
+        type: this.type,
       }).then((params: Array<{ metricName: string; [key: string]: any; config: any }>) => {
         if (!params) {
           return;
@@ -246,6 +248,16 @@ limitations under the License. -->
       }
       if (type === 'unit') {
         this.unit = value;
+      }
+    }
+
+    private deleteItem(index: number) {
+      if (this.type === this.pageTypes[0]) {
+        this.DELETE_TOPO_ENDPOINT(index);
+      } else if (this.type === this.pageTypes[1]) {
+        this.DELETE_TOPO_INSTANCE(index);
+      } else {
+        this.DELETE_COMP(index);
       }
     }
 

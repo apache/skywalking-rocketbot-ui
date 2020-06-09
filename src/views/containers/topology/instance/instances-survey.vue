@@ -18,7 +18,7 @@ limitations under the License. -->
     <DashboardItem
       v-for="(i, index) in instanceComps || []"
       :key="index + i.title + i.with"
-      :rocketGlobal="{ edit: false }"
+      :rocketGlobal="rocketGlobal"
       :item="i"
       :index="index"
       :type="'TOPOLOGY_INSTANCE'"
@@ -39,6 +39,7 @@ limitations under the License. -->
     },
   })
   export default class InstancesSurvey extends Vue {
+    @State('rocketbot') private rocketGlobal: any;
     @Prop() private instanceComps: any;
     @Prop() private updateObjects!: string;
   }

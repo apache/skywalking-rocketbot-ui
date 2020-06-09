@@ -75,6 +75,8 @@ export interface State {
   serviceResponseTime: { ResponseTime: number[] };
   servicePercentile: { [key: string]: number[] };
   serviceApdexScore: { ApdexScore: number[] };
+  topoEndpoints: any[];
+  topoInstances: any[];
 }
 
 const PercentileItem: string[] = ['p50', 'p75', 'p90', 'p95', 'p99'];
@@ -116,6 +118,8 @@ const initState: State = {
     p99: [],
   },
   serviceApdexScore: { ApdexScore: [] },
+  topoEndpoints: [],
+  topoInstances: [],
 };
 
 // getters
@@ -210,6 +214,30 @@ const mutations = {
     data.servicePercentile.forEach((item: any, index: number) => {
       state.servicePercentile[PercentileItem[index]] = item.values.map((i: any) => i.value);
     });
+  },
+  [types.SET_TOPO_ENDPOINT](state: State, data: any[]) {
+    state.topoEndpoints = data;
+    window.localStorage.setItem('topologyEndpoints', JSON.stringify(data));
+  },
+  [types.SET_TOPO_INSTANCE](state: State, data: any[]) {
+    state.topoInstances = data;
+    window.localStorage.setItem('topologyInstances', JSON.stringify(data));
+  },
+  [types.EDIT_TOPO_INSTANCE_CONFIG](state: State, params: { values: any; index: number }) {
+    state.topoInstances[params.index] = { ...state.topoInstances[params.index], ...params.values };
+    window.localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
+  },
+  [types.EDIT_TOPO_ENDPOINT_CONFIG](state: State, params: { values: any; index: number }) {
+    state.topoEndpoints[params.index] = { ...state.topoEndpoints[params.index], ...params.values };
+    window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
+  },
+  [types.DELETE_TOPO_ENDPOINT](state: State, index: number) {
+    state.topoEndpoints.splice(index, 1);
+    window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
+  },
+  [types.DELETE_TOPO_INSTANCE](state: State, index: number) {
+    state.topoInstances.splice(index, 1);
+    window.localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
   },
 };
 

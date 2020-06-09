@@ -21,6 +21,11 @@ import { cancelToken } from '@/utils/cancelToken';
 import { State } from './dashboard-data';
 import fragmentAll from './constant-metrics-query';
 
+export enum TopologyType {
+  TOPOLOGY_ENDPOINT = 'TOPOLOGY_ENDPOINT',
+  TOPOLOGY_INSTANCE = 'TOPOLOGY_INSTANCE',
+}
+
 // actions
 const actions: ActionTree<State, any> = {
   GET_QUERY(
@@ -28,17 +33,27 @@ const actions: ActionTree<State, any> = {
     params: {
       index: number;
       duration: any;
-      itemConfig: any;
+      type: string;
     },
   ) {
     const { currentDatabase, currentEndpoint, currentInstance, currentService } = context.rootState.rocketOption;
     const dashboard: string = `${window.localStorage.getItem('dashboard')}`;
     const tree = dashboard ? JSON.parse(dashboard) : context.state.tree;
-    const normal = tree[context.state.group].type === 'database' ? false : true;
-    const config =
-      params.itemConfig || tree[context.state.group].children[context.state.current].children[params.index];
+    const normal = params.type ? true : tree[context.state.group].type === 'database' ? false : true;
+    let config = {} as any;
     const names = ['readSampledRecords', 'sortMetrics'];
 
+    if (params.type === TopologyType.TOPOLOGY_ENDPOINT) {
+      const endpointComps: string = `${window.localStorage.getItem('topologyEndpoints')}`;
+      const topoEndpoint = endpointComps ? JSON.parse(endpointComps) : [];
+      config = topoEndpoint[params.index];
+    } else if (params.type === TopologyType.TOPOLOGY_INSTANCE) {
+      const instanceComps: string = `${window.localStorage.getItem('topologyInstances')}`;
+      const topoInstance = instanceComps ? JSON.parse(instanceComps) : [];
+      config = topoInstance[params.index];
+    } else {
+      config = tree[context.state.group].children[context.state.current].children[params.index];
+    }
     if (!config) {
       return;
     }
