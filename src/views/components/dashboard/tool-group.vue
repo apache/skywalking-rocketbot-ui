@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <nav class="rk-dashboard-group">
-    <span v-for="(i, index) in rocketComps.tree" :key="index" class="mr-15">
+    <span v-for="(i, index) in rocketComps.tree || []" :key="index" class="mr-15">
       <a
         class="rk-dashboard-group-i mb-10"
         @click="handleOption(index)"
@@ -78,8 +78,12 @@ limitations under the License. -->
     private show: boolean = false;
     private template: boolean = false;
     private DASHBOARDTYPE = DASHBOARDTYPE;
+
     private get compType() {
-      return this.rocketComps.tree[this.rocketComps.group].type;
+      return (
+        (this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].type) ||
+        'service'
+      );
     }
     private handleOption(index: any) {
       this.MIXHANDLE_CHANGE_GROUP(index);

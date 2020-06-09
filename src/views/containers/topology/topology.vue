@@ -123,12 +123,12 @@ limitations under the License. -->
     }
     private changeInstanceComps(data: any) {
       this.updateObjects = ObjectsType.UPDATE_INSTANCES;
-      this.instanceComps.push(...data);
+      this.instanceComps = data;
       window.localStorage.setItem('topologyInstances', JSON.stringify(this.instanceComps));
     }
     private changeEndpointComps(data: any) {
       this.updateObjects = ObjectsType.UPDATE_ENDPOINTS;
-      this.endpointComps.push(...data);
+      this.endpointComps = data;
       window.localStorage.setItem('topologyEndpoints', JSON.stringify(this.endpointComps));
     }
   }
