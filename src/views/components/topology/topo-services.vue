@@ -80,6 +80,11 @@ limitations under the License. -->
             duration: this.durationTime,
           });
         }
+      } else {
+        this.GET_TOPO({
+          serviceId: this.service.key,
+          duration: this.durationTime,
+        });
       }
     }
   }

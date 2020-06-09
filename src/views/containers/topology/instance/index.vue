@@ -18,6 +18,17 @@ limitations under the License. -->
     <div class="rk-dashboard-bar flex-h">
       <span class="flex-h">
         <div class="rk-dashboard-bar-btn">
+          <span v-tooltip:bottom="{ content: rocketGlobal.edit ? 'view' : 'edit' }">
+            <svg
+              class="icon lg vm cp rk-btn ghost"
+              :style="`color:${!rocketGlobal.edit ? '' : '#ffc107'}`"
+              @click="() => SET_EDIT(!rocketGlobal.edit)"
+            >
+              <use :xlink:href="!rocketGlobal.edit ? '#lock' : '#lock-open'"></use>
+            </svg>
+          </span>
+        </div>
+        <div class="rk-dashboard-bar-btn">
           <span v-tooltip:bottom="{ content: 'import' }">
             <input id="instance-file" type="file" name="file" title="" accept=".json" @change="importData" />
             <label class="rk-btn ghost input-label" for="instance-file">
@@ -55,7 +66,7 @@ limitations under the License. -->
   import _ from 'lodash';
   import Vue from 'vue';
   import { Component, PropSync, Watch, Prop } from 'vue-property-decorator';
-  import { Action, Getter, State } from 'vuex-class';
+  import { Action, Getter, State, Mutation } from 'vuex-class';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
 
@@ -75,10 +86,12 @@ limitations under the License. -->
   export default class WindowInstance extends Vue {
     @State('rocketOption') private stateDashboardOption!: any;
     @State('rocketData') private rocketComps!: any;
+    @State('rocketbot') private rocketGlobal: any;
     @Getter('durationTime') private durationTime: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('GET_SERVICE_INSTANCES') private GET_SERVICE_INSTANCES: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
+    @Mutation('SET_EDIT') private SET_EDIT: any;
     @Prop() private current!: { key: number | string; label: number | string };
     @Prop() private instanceComps: any;
     @Prop() private updateObjects!: string;
@@ -93,6 +106,7 @@ limitations under the License. -->
         this.selectInstance(this.stateDashboardOption.instances[0]);
       });
     }
+
     private async importData(event: any) {
       try {
         const data: any = await readFile(event);
@@ -110,6 +124,10 @@ limitations under the License. -->
       const data = this.instanceComps;
       const name = 'instanceComps.json';
       saveFile(data, name);
+    }
+
+    private beforeDestroy() {
+      this.SET_EDIT(false);
     }
   }
 </script>

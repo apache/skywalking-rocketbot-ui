@@ -18,7 +18,7 @@ limitations under the License. -->
     <DashboardItem
       v-for="(i, index) in endpointComps || []"
       :key="index + i.title + i.width"
-      :rocketGlobal="{ edit: false }"
+      :rocketGlobal="rocketGlobal"
       :item="i"
       :index="index"
       :type="'TOPOLOGY_ENDPOINT'"
@@ -39,6 +39,7 @@ limitations under the License. -->
     },
   })
   export default class InstancesSurvey extends Vue {
+    @State('rocketbot') private rocketGlobal: any;
     @Prop() private endpointComps: any;
     @Prop() private updateObjects!: string;
   }

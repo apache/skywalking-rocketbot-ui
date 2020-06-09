@@ -28,14 +28,14 @@ limitations under the License. -->
       <window-endpoint
         v-if="dialog === 'endpoint'"
         :current="this.current"
-        :endpointComps="endpointComps"
+        :endpointComps="stateTopo.topoEndpoints"
         @changeEndpointComps="changeEndpointComps"
         :updateObjects="updateObjects"
       />
       <window-instance
         v-if="dialog === 'instance'"
         :current="this.current"
-        :instanceComps="instanceComps"
+        :instanceComps="stateTopo.topoInstances"
         @changeInstanceComps="changeInstanceComps"
         :updateObjects="updateObjects"
       />
@@ -74,20 +74,22 @@ limitations under the License. -->
     @Action('rocketTopo/CLEAR_TOPO') private CLEAR_TOPO: any;
     @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
     @Action('GET_ALL_TEMPLATES') private GET_ALL_TEMPLATES: any;
+    @Mutation('rocketTopo/SET_TOPO_ENDPOINT') private SET_TOPO_ENDPOINT: any;
+    @Mutation('rocketTopo/SET_TOPO_INSTANCE') private SET_TOPO_INSTANCE: any;
     @Getter('durationTime') private durationTime: any;
 
     private current: any = {};
     private dialog: string = '';
-    private instanceComps: any = [];
-    private endpointComps: any = [];
     private updateObjects: string = '';
 
     private created() {
       if (window.localStorage.getItem('topologyInstances') || window.localStorage.getItem('topologyEndpoints')) {
         const instanceComps: string = `${window.localStorage.getItem('topologyInstances')}`;
-        this.instanceComps = JSON.parse(instanceComps);
+        const topoInstance = instanceComps ? JSON.parse(instanceComps) : [];
         const endpointComps: string = `${window.localStorage.getItem('topologyEndpoints')}`;
-        this.endpointComps = JSON.parse(endpointComps);
+        const topoEndpoint = endpointComps ? JSON.parse(endpointComps) : [];
+        this.SET_TOPO_INSTANCE(topoInstance);
+        this.SET_TOPO_ENDPOINT(topoEndpoint);
       } else {
         this.queryTemplates();
       }
@@ -105,12 +107,12 @@ limitations under the License. -->
         ) => {
           const template =
             allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_INSTANCE && item.activated)[0] || {};
-          this.instanceComps = JSON.parse(template.configuration) || [];
-          window.localStorage.setItem('topologyInstances', JSON.stringify(this.instanceComps));
+          const instanceComps = JSON.parse(template.configuration) || [];
+          this.SET_TOPO_INSTANCE(instanceComps);
           const endpointTemplate =
             allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_ENDPOINT && item.activated)[0] || {};
-          this.endpointComps = JSON.parse(endpointTemplate.configuration) || [];
-          window.localStorage.setItem('topologyEndpoints', JSON.stringify(this.endpointComps));
+          const endpointComps = JSON.parse(endpointTemplate.configuration) || [];
+          this.SET_TOPO_ENDPOINT(endpointComps);
         },
       );
     }
@@ -123,13 +125,11 @@ limitations under the License. -->
     }
     private changeInstanceComps(data: any) {
       this.updateObjects = ObjectsType.UPDATE_INSTANCES;
-      this.instanceComps.push(...data);
-      window.localStorage.setItem('topologyInstances', JSON.stringify(this.instanceComps));
+      this.SET_TOPO_INSTANCE(data);
     }
     private changeEndpointComps(data: any) {
       this.updateObjects = ObjectsType.UPDATE_ENDPOINTS;
-      this.endpointComps.push(...data);
-      window.localStorage.setItem('topologyEndpoints', JSON.stringify(this.endpointComps));
+      this.SET_TOPO_ENDPOINT(data);
     }
   }
 </script>
