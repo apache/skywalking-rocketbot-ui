@@ -95,32 +95,26 @@ limitations under the License. -->
       }
     }
     private queryTemplates() {
-      this.GET_ALL_TEMPLATES()
-        .then(
-          (
-            allTemplates: Array<{
-              name: string;
-              type: string;
-              configuration: string;
-              activated: boolean;
-              disabled: boolean;
-            }>,
-          ) => {
-            const template =
-              allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_INSTANCE && item.activated)[0] ||
-              {};
-            const instanceComps = JSON.parse(template.configuration) || [];
-            this.SET_TOPO_INSTANCE(instanceComps);
-            const endpointTemplate =
-              allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_ENDPOINT && item.activated)[0] ||
-              {};
-            const endpointComps = JSON.parse(endpointTemplate.configuration) || [];
-            this.SET_TOPO_ENDPOINT(endpointComps);
-          },
-        )
-        .then(() => {
-          console.log(this.stateTopo.topoEndpoints);
-        });
+      this.GET_ALL_TEMPLATES().then(
+        (
+          allTemplates: Array<{
+            name: string;
+            type: string;
+            configuration: string;
+            activated: boolean;
+            disabled: boolean;
+          }>,
+        ) => {
+          const template =
+            allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_INSTANCE && item.activated)[0] || {};
+          const instanceComps = JSON.parse(template.configuration) || [];
+          this.SET_TOPO_INSTANCE(instanceComps);
+          const endpointTemplate =
+            allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_ENDPOINT && item.activated)[0] || {};
+          const endpointComps = JSON.parse(endpointTemplate.configuration) || [];
+          this.SET_TOPO_ENDPOINT(endpointComps);
+        },
+      );
     }
     private setCurrent(d: any): void {
       this.current = d;
