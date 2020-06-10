@@ -18,19 +18,22 @@ limitations under the License. -->
     <DashboardItem
       v-for="(i, index) in instanceComps || []"
       :key="index + i.title + i.with"
-      :rocketGlobal="{ edit: false }"
+      :rocketGlobal="rocketGlobal"
       :item="i"
       :index="index"
       :type="'TOPOLOGY_INSTANCE'"
       :updateObjects="updateObjects"
     />
+    <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item g-sm-3" @click="ADD_TOPO_INSTANCE_COMP">
+      + Add An Item
+    </div>
   </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
-  import { State } from 'vuex-class';
+  import { State, Mutation } from 'vuex-class';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
 
   @Component({
@@ -39,6 +42,8 @@ limitations under the License. -->
     },
   })
   export default class InstancesSurvey extends Vue {
+    @State('rocketbot') private rocketGlobal: any;
+    @Mutation('rocketTopo/ADD_TOPO_INSTANCE_COMP') private ADD_TOPO_INSTANCE_COMP: any;
     @Prop() private instanceComps: any;
     @Prop() private updateObjects!: string;
   }

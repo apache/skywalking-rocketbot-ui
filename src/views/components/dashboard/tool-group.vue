@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <nav class="rk-dashboard-group">
-    <span v-for="(i, index) in rocketComps.tree" :key="index" class="mr-15">
+    <span v-for="(i, index) in rocketComps.tree || []" :key="index" class="mr-15">
       <a
         class="rk-dashboard-group-i mb-10"
         @click="handleOption(index)"
@@ -46,9 +46,6 @@ limitations under the License. -->
         </select>
         <div class="sm grey  mb-5 mr-10">{{ $t('templateName') }}</div>
         <input class="mb-5 rk-dashboard-group-input" type="text" v-model="name" />
-        <div v-show="type === 'database'">
-          <label class="mb-10 dib"><input type="checkbox" v-model="template" />{{ $t('template') }}</label>
-        </div>
         <a class="rk-btn r vm long tc confirm" @click="handleCreate">{{ $t('confirm') }}</a>
       </div>
     </a>
@@ -76,10 +73,13 @@ limitations under the License. -->
     private name: string = '';
     private type: string = DASHBOARDTYPE.SERVICE;
     private show: boolean = false;
-    private template: boolean = false;
     private DASHBOARDTYPE = DASHBOARDTYPE;
+
     private get compType() {
-      return this.rocketComps.tree[this.rocketComps.group].type;
+      return (
+        (this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].type) ||
+        'service'
+      );
     }
     private handleOption(index: any) {
       this.MIXHANDLE_CHANGE_GROUP(index);
@@ -94,22 +94,8 @@ limitations under the License. -->
       this.show = false;
     }
     private handleCreate() {
-      let template = DASHBOARDTYPE.METRIC;
-      if (this.type === DASHBOARDTYPE.SERVICE) {
-        template = DASHBOARDTYPE.SERVICE;
-      }
-      if (this.type === DASHBOARDTYPE.METRIC) {
-        template = DASHBOARDTYPE.METRIC;
-      }
-      if (this.type === DASHBOARDTYPE.DATABASE) {
-        template = DASHBOARDTYPE.DATABASE;
-        if (!this.template) {
-          template = DASHBOARDTYPE.METRIC;
-        }
-      }
-      this.ADD_COMPS_GROUP({ name: this.name, type: this.type, template });
+      this.ADD_COMPS_GROUP({ name: this.name, type: this.type });
       this.handleHide();
-      this.template = false;
     }
   }
 </script>

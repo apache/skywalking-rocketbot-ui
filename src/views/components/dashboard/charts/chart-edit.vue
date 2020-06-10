@@ -61,7 +61,7 @@ limitations under the License. -->
           @change="setItemConfig({ type: 'labelsIndex', value: $event.target.value })"
         />
       </div>
-      <div class="flex-h mb-5" v-show="!isDatabase">
+      <div class="flex-h mb-5" v-show="!isDatabase && !pageTypes.includes(type)">
         <div class="title grey sm">{{ $t('entityType') }}:</div>
         <select
           class="long"
@@ -146,7 +146,7 @@ limitations under the License. -->
           }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="rocketComps.tree[this.rocketComps.group].type !== 'metric'">
+      <div class="flex-h mb-5" v-show="!isIndependentSelector">
         <div class="title grey sm">{{ $t('independentSelector') }}:</div>
         <select
           class="long"
@@ -233,6 +233,7 @@ limitations under the License. -->
   import { State, Getter, Mutation, Action } from 'vuex-class';
   import { Component, Prop } from 'vue-property-decorator';
 
+  import { TopologyType, ObjectsType } from '../../../constant';
   import {
     EntityType,
     IndependentType,
@@ -248,6 +249,8 @@ limitations under the License. -->
     @State('rocketOption') private stateDashboardOption: any;
     @State('rocketData') private rocketComps!: any;
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
+    @Mutation('rocketTopo/EDIT_TOPO_INSTANCE_CONFIG') private EDIT_TOPO_INSTANCE_CONFIG: any;
+    @Mutation('rocketTopo/EDIT_TOPO_ENDPOINT_CONFIG') private EDIT_TOPO_ENDPOINT_CONFIG: any;
     @Action('GET_ITEM_SERVICES') private GET_ITEM_SERVICES: any;
     @Action('GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
     @Action('GET_ITEM_INSTANCES') private GET_ITEM_INSTANCES: any;
@@ -256,6 +259,7 @@ limitations under the License. -->
     @Prop() private item!: any;
     @Prop() private index!: number;
     @Prop() private intervalTime!: any;
+    @Prop() private type!: string;
     private itemConfig: any = {};
     private EntityType = EntityType;
     private IndependentType = IndependentType;
@@ -266,14 +270,22 @@ limitations under the License. -->
     private queryMetricTypesList: any = [];
     private isDatabase = false;
     private isLabel = false;
+    private isIndependentSelector = false;
     private nameMetrics = ['sortMetrics', 'readSampledRecords'];
+    private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as any[];
 
     private created() {
       this.itemConfig = this.item;
-      this.isDatabase = this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.DATABASE ? true : false;
+      this.isDatabase = this.pageTypes.includes(this.type)
+        ? false
+        : this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.DATABASE
+        ? true
+        : false;
       this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
       this.isLabel = this.itemConfig.metricType === MetricsType.LABELED_VALUE ? true : false;
-      if (!this.itemConfig.independentSelector) {
+      this.isIndependentSelector =
+        this.rocketComps.tree[this.rocketComps.group].type === 'metric' || this.pageTypes.includes(this.type);
+      if (!this.itemConfig.independentSelector || this.pageTypes.includes(this.type)) {
         return;
       }
       this.setItemServices();
@@ -321,10 +333,22 @@ limitations under the License. -->
             chartType: MetricChartType[this.itemConfig.queryMetricType],
             metricName: params.value,
           };
-          this.EDIT_COMP_CONFIG({
-            index: this.index,
-            values,
-          });
+          if (this.type === this.pageTypes[0]) {
+            this.EDIT_TOPO_ENDPOINT_CONFIG({
+              index: this.index,
+              values,
+            });
+          } else if (this.type === this.pageTypes[1]) {
+            this.EDIT_TOPO_INSTANCE_CONFIG({
+              index: this.index,
+              values,
+            });
+          } else {
+            this.EDIT_COMP_CONFIG({
+              index: this.index,
+              values,
+            });
+          }
           this.itemConfig = {
             ...this.itemConfig,
             ...values,
@@ -337,10 +361,22 @@ limitations under the License. -->
           chartType: MetricChartType[params.value],
           [params.type]: params.value,
         };
-        this.EDIT_COMP_CONFIG({
-          index: this.index,
-          values,
-        });
+        if (this.type === this.pageTypes[0]) {
+          this.EDIT_TOPO_ENDPOINT_CONFIG({
+            index: this.index,
+            values,
+          });
+        } else if (this.type === this.pageTypes[1]) {
+          this.EDIT_TOPO_INSTANCE_CONFIG({
+            index: this.index,
+            values,
+          });
+        } else {
+          this.EDIT_COMP_CONFIG({
+            index: this.index,
+            values,
+          });
+        }
         this.itemConfig = {
           ...this.itemConfig,
           ...values,
@@ -349,10 +385,35 @@ limitations under the License. -->
       }
       if (params.type === 'independentSelector' || params.type === 'parentService') {
         this.itemConfig[params.type] = params.value === 'true' ? true : false;
-        this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: this.itemConfig[params.type] } });
+        if (this.type === this.pageTypes[0]) {
+          this.EDIT_TOPO_ENDPOINT_CONFIG({
+            index: this.index,
+            values: { [params.type]: this.itemConfig[params.type] },
+          });
+        } else if (this.type === this.pageTypes[1]) {
+          this.EDIT_TOPO_INSTANCE_CONFIG({
+            index: this.index,
+            values: { [params.type]: this.itemConfig[params.type] },
+          });
+        } else {
+          this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: this.itemConfig[params.type] } });
+        }
+
         return;
       }
-      this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: params.value } });
+      if (this.type === this.pageTypes[0]) {
+        this.EDIT_TOPO_ENDPOINT_CONFIG({
+          index: this.index,
+          values: { [params.type]: params.value },
+        });
+      } else if (this.type === this.pageTypes[1]) {
+        this.EDIT_TOPO_INSTANCE_CONFIG({
+          index: this.index,
+          values: { [params.type]: params.value },
+        });
+      } else {
+        this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: params.value } });
+      }
     }
 
     private setItemServices(update: boolean = false) {
