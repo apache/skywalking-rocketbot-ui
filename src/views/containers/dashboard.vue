@@ -31,6 +31,7 @@ limitations under the License. -->
         :index="index"
         :rocketGlobal="rocketGlobal"
         :item="i"
+        :updateObjects="ObjectsType.UPDATE_DASHBOARD"
       >
       </DashboardItem>
       <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item g-sm-3" @click="ADD_COMP">
@@ -48,6 +49,7 @@ limitations under the License. -->
   import ToolGroup from '@/views/components/dashboard/tool-group.vue';
   import ToolNav from '@/views/components/dashboard/tool-nav.vue';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
+  import { ObjectsType } from '../constant';
 
   interface ITemplate {
     name: string;
@@ -77,6 +79,8 @@ limitations under the License. -->
     @Mutation('ADD_COMP') private ADD_COMP: any;
     @Mutation('SET_ALL_TEMPLATES') private SET_ALL_TEMPLATES: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
+
+    private ObjectsType = ObjectsType;
 
     private isRouterAlive: boolean = true;
     public reload(): void {

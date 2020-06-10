@@ -23,4 +23,5 @@ export enum TopologyType {
 export enum ObjectsType {
   UPDATE_INSTANCES = 'UPDATE_INSTANCES',
   UPDATE_ENDPOINTS = 'UPDATE_ENDPOINTS',
+  UPDATE_DASHBOARD = 'UPDATE_DASHBOARD',
 }
