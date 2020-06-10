@@ -49,7 +49,7 @@ limitations under the License. -->
   import { State, Action, Getter, Mutation } from 'vuex-class';
   import { AxiosResponse } from 'axios';
   import { State as topoState } from '@/store/modules/topology';
-  import { TopologyType, ObjectsType } from '../../constant';
+  import { TopologyType } from '../../constant';
   import WindowEndpoint from '@/views/containers/topology/endpoint/index.vue';
   import WindowInstance from '@/views/containers/topology/instance/index.vue';
   import WindowTrace from '@/views/containers/topology/trace/index.vue';
@@ -125,13 +125,19 @@ limitations under the License. -->
       this.CLEAR_TOPO_INFO();
       this.CLEAR_TOPO();
     }
-    private changeInstanceComps(data: any) {
-      this.updateObjects = ObjectsType.UPDATE_INSTANCES;
-      this.SET_TOPO_INSTANCE(data);
+    private changeInstanceComps(data: { type: string; json: any }) {
+      this.updateObjects = data.type;
+      if (!data.json) {
+        return;
+      }
+      this.SET_TOPO_INSTANCE(data.json);
     }
-    private changeEndpointComps(data: any) {
-      this.updateObjects = ObjectsType.UPDATE_ENDPOINTS;
-      this.SET_TOPO_ENDPOINT(data);
+    private changeEndpointComps(data: { type: string; json: any }) {
+      this.updateObjects = data.type;
+      if (!data.json) {
+        return;
+      }
+      this.SET_TOPO_ENDPOINT(data.json);
     }
   }
 </script>
