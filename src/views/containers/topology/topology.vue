@@ -76,6 +76,7 @@ limitations under the License. -->
     @Action('GET_ALL_TEMPLATES') private GET_ALL_TEMPLATES: any;
     @Mutation('rocketTopo/SET_TOPO_ENDPOINT') private SET_TOPO_ENDPOINT: any;
     @Mutation('rocketTopo/SET_TOPO_INSTANCE') private SET_TOPO_INSTANCE: any;
+    @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Getter('durationTime') private durationTime: any;
 
     private current: any = {};
@@ -118,6 +119,7 @@ limitations under the License. -->
     }
     private setCurrent(d: any): void {
       this.current = d;
+      this.SET_CURRENT_SERVICE(d);
     }
     private beforeDestroy() {
       this.CLEAR_TOPO_INFO();
