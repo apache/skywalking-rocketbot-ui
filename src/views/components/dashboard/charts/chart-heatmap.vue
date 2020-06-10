@@ -28,6 +28,7 @@ limitations under the License. -->
     @Prop() private type!: string;
     @Prop() private data!: any;
     @Prop() private intervalTime!: any;
+    @Prop() private item!: any;
     public resize() {
       const chart: any = this.$refs.chart;
       chart.myChart.resize();
@@ -61,7 +62,7 @@ limitations under the License. -->
       return {
         tooltip: {
           position: 'top',
-          formatter: (a: any) => `${a.data[1] * 100}ms  [ ${a.data[2]} ]`,
+          formatter: (a: any) => `${a.data[1] * 100}${this.item.unit}  [ ${a.data[2]} ]`,
           textStyle: {
             fontSize: 13,
           },
@@ -95,11 +96,12 @@ limitations under the License. -->
           },
         ],
         yAxis: {
-          type: 'value',
+          type: 'category',
           axisLine: { show: false },
           axisTick: { show: false },
           splitLine: { lineStyle: { color: '#c1c5ca', type: 'dashed' } },
-          axisLabel: { color: '#9da5b2', fontSize: '11', formatter: (a: number) => `${a * 100}ms` },
+          axisLabel: { color: '#9da5b2', fontSize: '11' },
+          data: this.data.buckets,
         },
         series: [
           {

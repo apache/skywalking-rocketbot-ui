@@ -189,8 +189,12 @@ limitations under the License. -->
 
             nodes.push(...grids);
           });
+          let buckets = [] as any;
+          if (resVal.buckets.length) {
+            buckets = [resVal.buckets[0].min, ...resVal.buckets.map((item: { min: string; max: string }) => item.max)];
+          }
 
-          this.chartSource = { nodes }; // nodes: number[][]
+          this.chartSource = { nodes, buckets }; // nodes: number[][]
         }
         if (queryMetricType === QueryTypes.ReadLabeledMetricsValues) {
           const labels = (metricLabels || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
@@ -203,7 +207,7 @@ limitations under the License. -->
             );
 
             const indexNum = indexList.findIndex((d: string) => d === item.label);
-            if (labels[indexNum]) {
+            if (labels[indexNum] && indexNum > -1) {
               this.chartSource[labels[indexNum]] = list; // {[label: string]: number[]}
             } else {
               this.chartSource[item.label] = list;
