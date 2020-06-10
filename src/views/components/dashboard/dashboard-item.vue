@@ -107,9 +107,9 @@ limitations under the License. -->
       this.height = this.item.height;
       this.unit = this.item.unit;
       this.itemConfig = this.item;
-      const types = [ObjectsType.UPDATE_INSTANCES, ObjectsType.UPDATE_ENDPOINTS] as any[];
+      const types = [ObjectsType.UPDATE_INSTANCES, ObjectsType.UPDATE_ENDPOINTS, ObjectsType.UPDATE_DASHBOARD] as any[];
 
-      if (this.updateObjects && !types.includes(this.updateObjects)) {
+      if (!types.includes(this.updateObjects)) {
         return;
       }
       this.chartRender();

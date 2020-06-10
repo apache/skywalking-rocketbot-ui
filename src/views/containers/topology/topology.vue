@@ -49,7 +49,7 @@ limitations under the License. -->
   import { State, Action, Getter, Mutation } from 'vuex-class';
   import { AxiosResponse } from 'axios';
   import { State as topoState } from '@/store/modules/topology';
-  import { TopologyType, ObjectsType } from '../../constant';
+  import { TopologyType } from '../../constant';
   import WindowEndpoint from '@/views/containers/topology/endpoint/index.vue';
   import WindowInstance from '@/views/containers/topology/instance/index.vue';
   import WindowTrace from '@/views/containers/topology/trace/index.vue';
@@ -76,6 +76,7 @@ limitations under the License. -->
     @Action('GET_ALL_TEMPLATES') private GET_ALL_TEMPLATES: any;
     @Mutation('rocketTopo/SET_TOPO_ENDPOINT') private SET_TOPO_ENDPOINT: any;
     @Mutation('rocketTopo/SET_TOPO_INSTANCE') private SET_TOPO_INSTANCE: any;
+    @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Getter('durationTime') private durationTime: any;
 
     private current: any = {};
@@ -118,18 +119,25 @@ limitations under the License. -->
     }
     private setCurrent(d: any): void {
       this.current = d;
+      this.SET_CURRENT_SERVICE(d);
     }
     private beforeDestroy() {
       this.CLEAR_TOPO_INFO();
       this.CLEAR_TOPO();
     }
-    private changeInstanceComps(data: any) {
-      this.updateObjects = ObjectsType.UPDATE_INSTANCES;
-      this.SET_TOPO_INSTANCE(data);
+    private changeInstanceComps(data: { type: string; json: any }) {
+      this.updateObjects = data.type;
+      if (!data.json) {
+        return;
+      }
+      this.SET_TOPO_INSTANCE(data.json);
     }
-    private changeEndpointComps(data: any) {
-      this.updateObjects = ObjectsType.UPDATE_ENDPOINTS;
-      this.SET_TOPO_ENDPOINT(data);
+    private changeEndpointComps(data: { type: string; json: any }) {
+      this.updateObjects = data.type;
+      if (!data.json) {
+        return;
+      }
+      this.SET_TOPO_ENDPOINT(data.json);
     }
   }
 </script>

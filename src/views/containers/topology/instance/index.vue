@@ -69,6 +69,7 @@ limitations under the License. -->
   import { Action, Getter, State, Mutation } from 'vuex-class';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
+  import { ObjectsType } from '../../../constant';
 
   interface Instance {
     label: string;
@@ -113,7 +114,7 @@ limitations under the License. -->
         if (!Array.isArray(data)) {
           throw new Error();
         }
-        this.$emit('changeInstanceComps', data);
+        this.$emit('changeInstanceComps', { json: data, type: ObjectsType.UPDATE_ENDPOINTS });
         const el: any = document.getElementById('instance-file');
         el!.value = '';
       } catch (e) {
@@ -127,6 +128,7 @@ limitations under the License. -->
     }
 
     private beforeDestroy() {
+      this.$emit('changeInstanceComps', { type: '' });
       this.SET_EDIT(false);
     }
   }

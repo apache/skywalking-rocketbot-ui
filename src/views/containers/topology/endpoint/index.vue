@@ -67,6 +67,7 @@ limitations under the License. -->
   import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar-endpoint-select.vue';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
+  import { ObjectsType } from '../../../constant';
 
   interface Endpoint {
     label: string;
@@ -113,7 +114,7 @@ limitations under the License. -->
         if (!Array.isArray(data)) {
           throw new Error();
         }
-        this.$emit('changeEndpointComps', data);
+        this.$emit('changeEndpointComps', { json: data, type: ObjectsType.UPDATE_ENDPOINTS });
         const el: any = document.getElementById('endpoint-file');
         el!.value = '';
       } catch (e) {
@@ -129,6 +130,7 @@ limitations under the License. -->
 
     private beforeDestroy() {
       this.SET_EDIT(false);
+      this.$emit('changeEndpointComps', { type: '' });
     }
   }
 </script>
