@@ -239,6 +239,30 @@ const mutations = {
     state.topoInstances.splice(index, 1);
     window.localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
   },
+  [types.ADD_TOPO_INSTANCE_COMP](state: State) {
+    const comp = {
+      width: 3,
+      title: 'Title',
+      height: 350,
+      entityType: 'ServiceInstance',
+      independentSelector: false,
+      metricType: 'UNKNOWN',
+    };
+    state.topoInstances.push(comp);
+    window.localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
+  },
+  [types.ADD_TOPO_ENDPOINT_COMP](state: State) {
+    const comp = {
+      width: 3,
+      title: 'Title',
+      height: 350,
+      entityType: 'Endpoint',
+      independentSelector: false,
+      metricType: 'UNKNOWN',
+    };
+    state.topoEndpoints.push(comp);
+    window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
+  },
 };
 
 // actions

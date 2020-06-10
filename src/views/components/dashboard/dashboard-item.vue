@@ -144,9 +144,8 @@ limitations under the License. -->
     private chartValue(data: Array<{ metricName: string; [key: string]: any; config: any }>) {
       this.chartSource = {};
       for (const params of data) {
-        const { queryMetricType, aggregation, aggregationNum, metricLabels } = params.config;
+        const { queryMetricType, aggregation, aggregationNum, metricLabels, labelsIndex } = params.config;
         const resVal = params[queryMetricType];
-        const labels = (metricLabels || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
 
         if (queryMetricType === QueryTypes.ReadMetricsValue) {
           this.chartSource = {
@@ -190,22 +189,30 @@ limitations under the License. -->
 
             nodes.push(...grids);
           });
+          let buckets = [] as any;
+          if (resVal.buckets.length) {
+            buckets = [resVal.buckets[0].min, ...resVal.buckets.map((item: { min: string; max: string }) => item.max)];
+          }
 
-          this.chartSource = { nodes }; // nodes: number[][]
+          this.chartSource = { nodes, buckets }; // nodes: number[][]
         }
         if (queryMetricType === QueryTypes.ReadLabeledMetricsValues) {
+          const labels = (metricLabels || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
+          const indexList = (labelsIndex || '').split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
+
           this.chartSource = {};
-          (resVal || []).forEach((item: any, index: number) => {
+          for (const item of resVal || []) {
             const list = item.values.values.map((d: { value: number }) =>
               this.aggregationValue({ data: d.value, type: aggregation, aggregationNum: Number(aggregationNum) }),
             );
 
-            if (labels[index]) {
-              this.chartSource[labels[index]] = list; // {[label: string]: number[]}
+            const indexNum = indexList.findIndex((d: string) => d === item.label);
+            if (labels[indexNum] && indexNum > -1) {
+              this.chartSource[labels[indexNum]] = list; // {[label: string]: number[]}
             } else {
               this.chartSource[item.label] = list;
             }
-          });
+          }
         }
       }
     }

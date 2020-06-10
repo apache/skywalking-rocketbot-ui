@@ -89,7 +89,7 @@ limitations under the License. -->
   .rk-sidebox-inner-fixed {
     height: 100%;
     padding: 0;
-    overflow: hidden;
+    overflow: auto;
   }
   .rk-sidebox-title {
     font-size: 16px;

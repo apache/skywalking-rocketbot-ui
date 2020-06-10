@@ -86,17 +86,12 @@ const mutations: MutationTree<State> = {
     state.group = index;
     state.current = current;
   },
-  [types.ADD_COMPS_GROUP](state: State, params: any) {
+  [types.ADD_COMPS_GROUP](state: State, params: { type: string; name: string }) {
     if (!params.name) {
       return;
     }
 
-    const templates = state.allTemplates.filter((item: any) => item.type === 'DASHBOARD' && item.activated)[0] || {};
-    const tree = JSON.parse(templates.configuration) || [];
-    const groupServiceTemp = tree.filter((item: any) => item.type === 'service')[0] || {};
-    const groupDatabaseTemp = tree.filter((item: any) => item.type === 'database')[0] || {};
-
-    switch (params.template) {
+    switch (params.type) {
       case 'metric':
         const newTree = [];
         Object.keys(state.tree).forEach((i: any) => {
@@ -114,7 +109,7 @@ const mutations: MutationTree<State> = {
           name: params.name,
           type: params.type,
           query: {},
-          children: groupServiceTemp.children || [],
+          children: [{ name: 'demo', children: [] }],
         });
         state.tree = newServerTree;
         break;
@@ -127,7 +122,7 @@ const mutations: MutationTree<State> = {
           name: params.name,
           type: params.type,
           query: {},
-          children: groupDatabaseTemp.children || [],
+          children: [{ name: 'demo', children: [] }],
         });
         state.tree = newDatabaseTree;
         break;
