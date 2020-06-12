@@ -16,7 +16,7 @@
  */
 
 import { MutationTree } from 'vuex';
-import { CompsTree, DashboardTemplate } from '@/types/dashboard';
+import { CompsTree } from '@/types/dashboard';
 import * as types from './mutation-types';
 export interface State {
   current: number;
@@ -39,7 +39,7 @@ export const initState: State = {
         instance: {},
         database: {},
       },
-      children: [], // groupServiceTemp
+      children: [],
     },
   ],
 };

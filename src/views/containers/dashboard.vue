@@ -76,7 +76,6 @@ limitations under the License. -->
     // @Action('ADD_TEMPLATE') private ADD_TEMPLATE: any;
     @Getter('durationTime') private durationTime: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
-    @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
 

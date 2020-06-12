@@ -111,7 +111,9 @@ limitations under the License. -->
       if (!types.includes(this.updateObjects)) {
         return;
       }
-      this.chartRender();
+      setTimeout(() => {
+        this.chartRender();
+      }, 200);
     }
 
     private chartRender() {
