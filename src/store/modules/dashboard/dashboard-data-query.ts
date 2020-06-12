@@ -96,36 +96,53 @@ const actions: ActionTree<State, any> = {
               labels,
             };
       } else {
-        variables = names.includes(config.queryMetricType)
-          ? {
-              duration: params.duration,
-              condition: {
-                name,
-                parentService: config.parentService ? (normal ? currentServiceId : currentDatabaseId) : null,
+        if (names.includes(config.queryMetricType)) {
+          const parentService = normal ? currentServiceId : currentDatabaseId;
+
+          if (config.parentService && !parentService) {
+            return;
+          }
+          variables = {
+            duration: params.duration,
+            condition: {
+              name,
+              parentService: config.parentService ? parentService : null,
+              normal,
+              scope: normal ? config.entityType : config.parentService ? 'Service' : config.entityType,
+              topN: 10,
+              order: config.sortOrder || 'DES',
+            },
+          };
+        } else {
+          const serviceName = normal ? currentServiceId : currentDatabaseId;
+          if (!serviceName) {
+            return null;
+          }
+          if (config.entityType === 'ServiceInstance' && !currentInstanceId) {
+            return null;
+          }
+          if (config.entityType === 'Endpoint' && !currentEndpointId) {
+            return null;
+          }
+          variables = {
+            duration: params.duration,
+            condition: {
+              name,
+              entity: {
+                scope: normal ? config.entityType : 'Service',
+                serviceName,
+                serviceInstanceName: config.entityType === 'ServiceInstance' ? currentInstanceId : undefined,
+                endpointName: config.entityType === 'Endpoint' ? currentEndpointId : undefined,
                 normal,
-                scope: normal ? config.entityType : config.parentService ? 'Service' : config.entityType,
-                topN: 10,
-                order: config.sortOrder || 'DES',
+                // destNormal: normal,
+                // destServiceName: '',
+                // destServiceInstanceName: '',
+                // destEndpointName: '',
               },
-            }
-          : {
-              duration: params.duration,
-              condition: {
-                name,
-                entity: {
-                  scope: normal ? config.entityType : 'Service',
-                  serviceName: normal ? currentServiceId : currentDatabaseId,
-                  serviceInstanceName: config.entityType === 'ServiceInstance' ? currentInstanceId : undefined,
-                  endpointName: config.entityType === 'Endpoint' ? currentEndpointId : undefined,
-                  normal,
-                  // destNormal: normal,
-                  // destServiceName: '',
-                  // destServiceInstanceName: '',
-                  // destEndpointName: '',
-                },
-              },
-              labels,
-            };
+            },
+            labels,
+          };
+        }
       }
 
       return variables;
@@ -140,14 +157,18 @@ const actions: ActionTree<State, any> = {
     const query = `query queryData(${queryVariables}) {${fragments}}`;
 
     return Promise.all(
-      variablesList.map((variable: string, index: string) => {
-        return axios
-          .post('/graphql', { query, variables: variable }, { cancelToken: cancelToken() })
-          .then((res: AxiosResponse<any>) => {
-            const resData = res.data.data;
+      variablesList.map((variable: any) => {
+        if (variable) {
+          return axios
+            .post('/graphql', { query, variables: variable }, { cancelToken: cancelToken() })
+            .then((res: AxiosResponse<any>) => {
+              const resData = res.data.data;
 
-            return { ...resData, config, metricName: variablesList[index].condition.name };
-          });
+              return { ...resData, config, metricName: variable.condition.name };
+            });
+        } else {
+          return { config };
+        }
       }),
     ).then((data: any) => {
       return data;

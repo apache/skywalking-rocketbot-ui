@@ -25,7 +25,8 @@ limitations under the License. -->
     <ToolNav :rocketGlobal="rocketGlobal" :rocketComps="rocketComps" />
     <div class="dashboard-container clear">
       <DashboardItem
-        v-for="(i, index) in rocketComps.tree[rocketComps.group].children[rocketComps.current] &&
+        v-for="(i, index) in rocketComps.tree[rocketComps.group] &&
+          rocketComps.tree[rocketComps.group].children[rocketComps.current] &&
           rocketComps.tree[rocketComps.group].children[rocketComps.current].children"
         :key="index + i.title + i.width"
         :index="index"
