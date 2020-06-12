@@ -23,11 +23,9 @@ export interface State {
   group: number;
   index: number;
   tree: CompsTree[];
-  allTemplates: DashboardTemplate[];
 }
 
 export const initState: State = {
-  allTemplates: [],
   current: 0,
   group: 0,
   index: 0,
@@ -48,9 +46,6 @@ export const initState: State = {
 
 // mutations
 const mutations: MutationTree<State> = {
-  [types.SET_ALL_TEMPLATES](state: State, data: DashboardTemplate[]) {
-    state.allTemplates = data;
-  },
   [types.SET_COMPS_TREE](state: State, data: CompsTree[]) {
     state.tree = data;
   },
@@ -134,14 +129,6 @@ const mutations: MutationTree<State> = {
     const temp = state.tree[state.group].children[state.current].children[params.index];
 
     state.tree[state.group].children[state.current].children[params.index] = { ...temp, ...params.values };
-    window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
-  },
-  [types.SWICH_COMP](state: State, params: any) {
-    const tempStart: any = state.tree[state.group].children[state.current].children[params.start];
-    state.tree[state.group].children[state.current].children[params.start] =
-      state.tree[state.group].children[state.current].children[params.end];
-    state.tree[state.group].children[state.current].children[params.end] = tempStart;
-    state.tree = { ...state.tree };
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
 };

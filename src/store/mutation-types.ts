@@ -24,7 +24,6 @@ export const DELETE_COMPS_GROUP = 'DELETE_COMPS_GROUP';
 export const DELETE_COMPS_TREE = 'DELETE_COMPS_TREE';
 export const ADD_COMP = 'ADD_COMP';
 export const DELETE_COMP = 'DELETE_COMP';
-export const SWICH_COMP = 'SWICH_COMP';
 export const SET_COMPS_TREE = 'SET_COMPS_TREE';
 export const SWICH_CURRENTCOMP = 'SWICH_CURRENTCOMP';
 export const EDIT_COMP = 'EDIT_COMP';

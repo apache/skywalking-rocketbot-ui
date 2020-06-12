@@ -78,7 +78,6 @@ limitations under the License. -->
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
-    @Mutation('SET_ALL_TEMPLATES') private SET_ALL_TEMPLATES: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
 
     private ObjectsType = ObjectsType;
@@ -112,21 +111,16 @@ limitations under the License. -->
       // }).then((data: any) => {
       //   console.log(data);
       // });
-      this.GET_ALL_TEMPLATES().then((allTemplate: ITemplate[]) => {
-        this.SET_ALL_TEMPLATES(allTemplate);
-        if (window.localStorage.getItem('version') !== '8.0') {
+      if (window.localStorage.getItem('version') !== '8.0') {
+        this.GET_ALL_TEMPLATES().then((allTemplate: ITemplate[]) => {
           window.localStorage.removeItem('dashboard');
           this.setDashboardTemplates(allTemplate);
           this.handleOption();
-          return;
-        }
-        if (window.localStorage.getItem('dashboard')) {
-          const data: string = `${window.localStorage.getItem('dashboard')}`;
-          this.SET_COMPS_TREE(JSON.parse(data));
-        } else {
-          this.setDashboardTemplates(allTemplate);
-        }
-      });
+        });
+      } else {
+        const data: string = `${window.localStorage.getItem('dashboard')}`;
+        this.SET_COMPS_TREE(JSON.parse(data));
+      }
       this.handleOption();
     }
     private setDashboardTemplates(allTemplate: ITemplate[]) {
