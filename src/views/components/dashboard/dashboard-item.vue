@@ -79,7 +79,6 @@ limitations under the License. -->
     @State('rocketbot') private rocketGlobal: any;
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
-    @Mutation('SWICH_COMP') private SWICH_COMP: any;
     @Mutation('rocketTopo/DELETE_TOPO_ENDPOINT') private DELETE_TOPO_ENDPOINT: any;
     @Mutation('rocketTopo/DELETE_TOPO_INSTANCE') private DELETE_TOPO_INSTANCE: any;
     @Action('GET_QUERY') private GET_QUERY: any;
@@ -112,7 +111,9 @@ limitations under the License. -->
       if (!types.includes(this.updateObjects)) {
         return;
       }
-      this.chartRender();
+      setTimeout(() => {
+        this.chartRender();
+      }, 200);
     }
 
     private chartRender() {

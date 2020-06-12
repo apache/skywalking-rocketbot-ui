@@ -14,7 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <nav class="rk-dashboard-nav">
-    <span v-for="(i, index) in rocketComps.tree[rocketComps.group].children" :key="index" class="mr-20">
+    <span
+      v-for="(i, index) in rocketComps.tree[rocketComps.group] && rocketComps.tree[rocketComps.group].children"
+      :key="index"
+      class="mr-20"
+    >
       <a
         class="rk-dashboard-nav-i b"
         @click="
