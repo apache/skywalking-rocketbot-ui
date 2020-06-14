@@ -16,7 +16,14 @@ limitations under the License. -->
 <template>
   <div class="profile">
     <div class="profile-header">
-      <div class="thread">
+      <div class="thread" :style="`width: ${thread}px`">
+        <span class="r cp" ref="dragger">
+          <svg
+            class="icon"
+          >
+            <use xlink:href="#settings_ethernet"></use>
+          </svg>
+        </span>
         Thread Stack
       </div>
       <div class="self">
@@ -37,20 +44,39 @@ limitations under the License. -->
         Dump Count
       </div>
     </div>
-    <slot> </slot>
+    <Item :thread="thread" :highlightTop="highlightTop" v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+    <slot></slot>
   </div>
 </template>
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator';
   import { Mutation } from 'vuex-class';
+  import Item from './profile-item.vue';
 
-  @Component
+
+  @Component({components: {Item}})
   export default class ProfileContainer extends Vue {
     @Mutation('profileStore/SET_HIGHLIGHT_TOP') private SET_HIGHLIGHT_TOP: any;
     @Prop() private highlightTop!: boolean;
-
+    @Prop() private tableData!: any[];
+    private thread: number = 500;
     private updateHighlightTop() {
       this.SET_HIGHLIGHT_TOP();
+    }
+    private mounted() {
+      const drag: any = this.$refs.dragger;
+      drag.onmousedown = (event: any) => {
+        const diffX = event.clientX;
+        const copy = this.thread;
+        document.onmousemove = (documentEvent) => {
+          const moveX = documentEvent.clientX - diffX;
+          this.thread = copy + moveX;
+        };
+        document.onmouseup = () => {
+          document.onmousemove = null;
+          document.onmouseup = null;
+        };
+      };
     }
   }
 </script>
@@ -78,6 +104,7 @@ limitations under the License. -->
   }
   .profile-header {
     display: flex;
+    user-select: none;
     border-left: 0;
     border-right: 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);

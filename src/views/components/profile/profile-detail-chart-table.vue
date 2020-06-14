@@ -15,21 +15,18 @@ limitations under the License. -->
 
 <template>
   <div class="profile-detail-chart-table">
-    <ProfileContainer :highlightTop="highlightTop">
-      <Item :highlightTop="highlightTop" v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+    <ProfileContainer :highlightTop="highlightTop" :tableData="tableData">
       <div class="profile-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
     </ProfileContainer>
   </div>
 </template>
 <script lang="js">
   import copy from '@/utils/copy';
-  import Item from './profile-item';
   import ProfileContainer from './profile-container';
   import _ from 'lodash';
 
   export default {
     components: {
-      Item,
       ProfileContainer,
     },
     props: ['data', 'highlightTop'],

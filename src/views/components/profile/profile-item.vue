@@ -15,8 +15,8 @@ limitations under the License. -->
 
 <template>
   <div>
-    <div :class="['profile-item', 'level' + data.parentId]" :style="{ color: data.topDur ? '#448dfe' : '#3d444f' }">
-      <div :class="['thread', 'level' + data.parentId]" :style="{ 'text-indent': data.parentId * 4 + 'px' }">
+    <div :class="['profile-item', 'level' + data.parentId]" :style="{ color: data.topDur ? '#448dfe' : '#3d444f'}">
+      <div :class="['thread', 'level' + data.parentId]" :style="{ 'text-indent': data.parentId * 4 + 'px',width: `${thread}px`  }">
         <svg
           class="icon vm cp trans"
           :style="!displayChildren ? 'transform: rotate(-90deg);' : ''"
@@ -34,14 +34,14 @@ limitations under the License. -->
       <div class="dump-count">{{ data.count }}</div>
     </div>
     <div v-show="data.children && data.children.length && displayChildren" class="children-trace">
-      <item v-for="(item, index) in data.children" :key="index" :data="item" />
+      <item :thread="thread" v-for="(item, index) in data.children" :key="index" :data="item" />
     </div>
   </div>
 </template>
 <script lang="js">
   export default {
     name: 'item',
-    props: ['data', 'highlightTop'],
+    props: ['data', 'highlightTop', 'thread'],
     data() {
       return {
         displayChildren: true,
