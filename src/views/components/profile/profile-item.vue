@@ -75,8 +75,8 @@ limitations under the License. -->
   }
 
   .profile-item {
-    display: flex;
     position: relative;
+    white-space: nowrap;
   }
   .profile-item.selected {
     background: rgba(0, 0, 0, 0.04);
@@ -87,6 +87,7 @@ limitations under the License. -->
   }
 
   .profile-item > div {
+    display: inline-block;
     padding: 0 5px;
     border: 1px solid transparent;
     border-right: 1px dotted silver;
