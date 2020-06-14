@@ -85,7 +85,6 @@ limitations under the License. -->
   .profile {
     font-size: 12px;
     height: 100%;
-    min-width: 1200px;
     .profile-set-btn {
       font-size: 12px;
       border: 1px solid #ccc;
@@ -103,7 +102,7 @@ limitations under the License. -->
     }
   }
   .profile-header {
-    display: flex;
+    white-space: nowrap;
     user-select: none;
     border-left: 0;
     border-right: 0;
@@ -111,6 +110,7 @@ limitations under the License. -->
   }
 
   .profile-header div {
+    display: inline-block;
     padding: 0 4px;
     border: 1px solid transparent;
     border-right: 1px dotted silver;
