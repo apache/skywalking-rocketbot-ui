@@ -15,32 +15,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-.method {
-  width: 50%;
-}
 .argument {
-  width: 15%;
+  width: 150px;
 }
 .start-time {
-  width: 5%;
-  min-width: 100px;
+  width: 100px;
 }
 .exec-ms {
-  width: 6%;
+  width: 60px;
 }
 .exec-percent {
-  width: 10%;
+  width: 100px;
 }
 .self {
-  width: 5%;
+  width: 50px;
 }
 .api {
-  width: 10%;
+  width: 100px;
 }
 .agent {
-  width: 15%;
+  width: 150px;
 }
 .application {
-  width: 15%;
+  width: 150px;
   text-align: center;
 }

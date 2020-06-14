@@ -16,21 +16,54 @@ limitations under the License. -->
 <template>
   <div class="trace">
     <div class="trace-header">
-      <div :class="item.label" v-for="(item, index) in data" :key="index">
+      <div class="method" :style="`width: ${method}px`">
+        <span class="r cp" ref="dragger">
+          <svg
+            class="icon"
+          >
+            <use xlink:href="#settings_ethernet"></use>
+          </svg>
+        </span>
+        {{ data[0].value }}
+      </div>
+      <div :class="item.label" v-for="(item, index) in data.slice(1)" :key="index">
         {{ item.value }}
       </div>
     </div>
-    <slot> </slot>
+    <Item :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" :type="type" />
+    <slot></slot>
   </div>
 </template>
 <script lang="js">
   import { ProfileConstant, TraceConstant } from './trace-constant';
+  import Item from './trace-item';
 
   export default {
+    components: {Item},
     name: 'TraceContainer',
-    props: ['type'],
+    props: ['type', 'tableData'],
+    data() {
+      return {
+        method: 300,
+      };
+    },
     created() {
       this.data = this.type === 'profile' ? ProfileConstant : TraceConstant;
+    },
+    mounted() {
+      const drag = this.$refs.dragger;
+      drag.onmousedown = (event) => {
+        const diffX = event.clientX;
+        const copy = this.method;
+        document.onmousemove = (documentEvent) => {
+          const moveX = documentEvent.clientX - diffX;
+          this.method = copy + moveX;
+        };
+        document.onmouseup = () => {
+          document.onmousemove = null;
+          document.onmouseup = null;
+        };
+      };
     },
   };
 </script>
@@ -42,13 +75,15 @@ limitations under the License. -->
     overflow: auto;
   }
   .trace-header {
-    display: flex;
+    white-space: nowrap;
+    user-select: none;
     border-left: 0;
     border-right: 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   .trace-header div {
+    display: inline-block;
     padding: 0 4px;
     border: 1px solid transparent;
     border-right: 1px dotted silver;
