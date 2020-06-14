@@ -19,8 +19,7 @@ limitations under the License. -->
         <use xlink:href="#spinner"></use>
       </svg>
     </div>
-    <TraceContainer :type="HeaderType">
-      <Item v-for="(item, index) in tableData" :data="item" :key="'key' + index" :type="HeaderType" />
+    <TraceContainer :tableData="tableData" :type="HeaderType">
       <div class="trace-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
     </TraceContainer>
     <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('spanInfo')">
@@ -93,14 +92,12 @@ limitations under the License. -->
 
 <script lang="js">
   import copy from '@/utils/copy';
-  import Item from './trace-chart-table/trace-item';
   import TraceContainer from './trace-chart-table/trace-container';
   import _ from 'lodash';
   /* eslint-disable */
   /* tslint:disable */
   export default {
     components: {
-      Item,
       TraceContainer,
     },
     props: ['data', 'traceId', 'showBtnDetail', 'HeaderType'],

@@ -16,7 +16,7 @@ limitations under the License. -->
 <template>
   <div>
     <div @click="showSelectSpan" :class="['trace-item', 'level' + (data.level - 1)]" ref="traceItem">
-      <div :class="['method', 'level' + (data.level - 1)]" :style="{ 'text-indent': (data.level - 1) * 10 + 'px' }">
+      <div  :class="['method', 'level' + (data.level - 1)]" :style="{ 'text-indent': (data.level - 1) * 10 + 'px', width: `${method}px`}">
         <svg
           class="icon vm cp trans"
           :style="!displayChildren ? 'transform: rotate(-90deg);' : ''"
@@ -54,14 +54,14 @@ limitations under the License. -->
       </div>
     </div>
     <div v-show="data.children && data.children.length > 0 && displayChildren" class="children-trace">
-      <item v-for="(item, index) in data.children" :key="index" :data="item" :type="type"> </item>
+      <item :method="method" v-for="(item, index) in data.children" :key="index" :data="item" :type="type"> </item>
     </div>
   </div>
 </template>
 <script lang="js">
   export default {
     name: 'item',
-    props: ['data', 'type'],
+    props: ['data', 'type', 'method'],
     watch: {
       data() {
         const items = document.querySelectorAll('.trace-item');
@@ -140,7 +140,8 @@ limitations under the License. -->
   }
 
   .trace-item {
-    display: flex;
+    // display: flex;
+    white-space: nowrap;
     position: relative;
     cursor: pointer;
   }
@@ -154,6 +155,7 @@ limitations under the License. -->
 
   .trace-item > div {
     padding: 0 5px;
+    display: inline-block;
     border: 1px solid transparent;
     border-right: 1px dotted silver;
     overflow: hidden;
@@ -166,7 +168,7 @@ limitations under the License. -->
     padding-left: 10px;
   }
   .trace-item div.exec-percent {
-    width: 10%;
+    width: 100px;
     padding-left: 8px;
     padding-right: 8px;
     .outer-progress_bar {
