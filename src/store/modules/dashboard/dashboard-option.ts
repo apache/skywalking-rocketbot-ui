@@ -103,6 +103,7 @@ const mutations: MutationTree<State> = {
   },
   [types.SET_CURRENT_DATABASE](state: State, service: any) {
     state.currentDatabase = service;
+    state.updateDashboard = service;
   },
   [types.SET_KEYWORDSERVICE](state: State, data: string) {
     state.keywordService = data;
