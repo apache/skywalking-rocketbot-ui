@@ -61,3 +61,9 @@ export const CalculationType = [
   { label: 'Multiplication', value: '*' },
   { label: 'Division', value: '/' },
 ];
+
+export const ChartTypeOptions = [
+  { value: 'ChartLine', label: 'Line Chart' },
+  { value: 'ChartArea', label: 'Area Chart' },
+  { value: 'ChartBar', label: 'Bar Chart' },
+];

@@ -43,6 +43,18 @@ limitations under the License. -->
           }}</option>
         </select>
       </div>
+      <div class="flex-h mb-5" v-show="isChartType">
+        <div class="title grey sm">{{ $t('chartType') }}:</div>
+        <select
+          class="long"
+          v-model="itemConfig.chartType"
+          @change="setItemConfig({ type: 'chartType', value: $event.target.value })"
+        >
+          <option v-for="chart in ChartTypeOptions" :value="chart.value" :key="chart.value">
+            {{ chart.label }}
+          </option>
+        </select>
+      </div>
       <div class="flex-h mb-5" v-show="isLabel">
         <div class="title grey sm">{{ $t('labels') }}:</div>
         <input
@@ -241,6 +253,7 @@ limitations under the License. -->
     QueryMetricTypes,
     MetricChartType,
     CalculationType,
+    ChartTypeOptions,
   } from './constant';
   import { DASHBOARDTYPE } from '../constant';
 
@@ -264,6 +277,7 @@ limitations under the License. -->
     private EntityType = EntityType;
     private IndependentType = IndependentType;
     private CalculationType = CalculationType;
+    private ChartTypeOptions = ChartTypeOptions;
     private services: any = [];
     private endpoints: any = [];
     private instances: any = [];
@@ -273,6 +287,7 @@ limitations under the License. -->
     private isIndependentSelector = false;
     private nameMetrics = ['sortMetrics', 'readSampledRecords'];
     private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as any[];
+    private isChartType = false;
 
     private created() {
       this.itemConfig = this.item;
@@ -285,6 +300,7 @@ limitations under the License. -->
       this.isLabel = this.itemConfig.metricType === MetricsType.LABELED_VALUE ? true : false;
       this.isIndependentSelector =
         this.rocketComps.tree[this.rocketComps.group].type === 'metric' || this.pageTypes.includes(this.type);
+      this.isChartType = ['readMetricsValues', 'readLabeledMetricsValues'].includes(this.itemConfig.queryMetricType);
       if (!this.itemConfig.independentSelector || this.pageTypes.includes(this.type)) {
         return;
       }
@@ -381,6 +397,7 @@ limitations under the License. -->
           ...this.itemConfig,
           ...values,
         };
+        this.isChartType = ['readMetricsValues', 'readLabeledMetricsValues'].includes(this.itemConfig.queryMetricType);
         return;
       }
       if (params.type === 'independentSelector' || params.type === 'parentService') {

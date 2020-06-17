@@ -22,15 +22,15 @@ limitations under the License. -->
   @Component
   export default class ChartLine extends Vue {
     @Prop() private data!: any;
+    @Prop() private type!: string;
     @Prop() private intervalTime!: any;
     public resize() {
       const chart: any = this.$refs.chart;
       chart.myChart.resize();
     }
     get option() {
-      const temp: any = [];
       const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
-      keys.forEach((i: any, index: number) => {
+      const temp = keys.map((i: any, index: number) => {
         const serie: any = {
           data: this.data[i].map((item: any, itemIndex: number) => [this.intervalTime[itemIndex], item]),
           name: i,
@@ -42,10 +42,10 @@ limitations under the License. -->
             type: 'solid',
           },
         };
-        if (keys.length === 2) {
+        if (this.type === 'areaChart') {
           serie.areaStyle = {};
         }
-        temp.push(serie);
+        return serie;
       });
       let color: string[] = [];
       switch (keys.length) {

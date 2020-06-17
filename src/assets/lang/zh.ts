@@ -147,6 +147,7 @@ const m = {
   sortOrder: '排序方式',
   descendOrder: '递减顺序',
   increaseOrder: '递增顺序',
+  chartType: '图表类型',
 };
 
 export default m;

@@ -18,6 +18,7 @@
 import ChartBrief from './chart-brief.vue';
 import ChartNum from './chart-num.vue';
 import ChartLine from './chart-line.vue';
+import ChartArea from './chart-area.vue';
 import ChartBar from './chart-bar.vue';
 import ChartHeatmap from './chart-heatmap.vue';
 import ChartSlow from './chart-slow.vue';
@@ -38,5 +39,6 @@ export default {
   ChartSlow,
   ChartTrace,
   ChartSankey,
+  ChartArea,
   ChartEdit,
 };

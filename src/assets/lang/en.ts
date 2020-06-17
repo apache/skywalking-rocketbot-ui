@@ -147,6 +147,7 @@ const m = {
   sortOrder: 'Sort Order',
   descendOrder: 'Descend Order',
   increaseOrder: 'Increase Order',
+  chartType: 'Chart Type',
 };
 
 export default m;

@@ -28,10 +28,9 @@ limitations under the License. -->
       chart.myChart.resize();
     }
     get option() {
-      const temp: any = [];
       const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
-      keys.forEach((i: any, index: number) => {
-        temp.push({
+      const temp = keys.map((i: string, index: number) => {
+        return {
           data: this.data[i].map((item: any, itemIndex: number) => [this.intervalTime[itemIndex], item]),
           name: i,
           type: 'bar',
@@ -42,10 +41,10 @@ limitations under the License. -->
             width: 1.5,
             type: 'dotted',
           },
-        });
+        };
       });
       return {
-        color: ['#3f96e3', '#3f96e3', '#3fa9e1', '#3fbcde', '#3fcfdc', '#3fe1da'],
+        color: ['#30A4EB', '#45BFC0', '#FFCC55', '#FF6A84', '#a0a7e6'],
         tooltip: {
           trigger: 'axis',
           backgroundColor: 'rgb(50,50,50)',
