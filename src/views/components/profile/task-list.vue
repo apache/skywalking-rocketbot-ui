@@ -103,8 +103,6 @@ limitations under the License. -->
             <td
               class="rk-trace-td"
               :class="{
-                'rk-trace-success': !i.isError,
-                'rk-trace-error': i.isError,
                 selected: selectedKey == i.segmentId,
               }"
             >

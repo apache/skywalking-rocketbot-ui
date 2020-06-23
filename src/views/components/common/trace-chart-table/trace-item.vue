@@ -15,8 +15,15 @@ limitations under the License. -->
 
 <template>
   <div>
-    <div @click="showSelectSpan" :class="['trace-item', 'level' + (data.level - 1)]" ref="traceItem">
-      <div  :class="['method', 'level' + (data.level - 1)]" :style="{ 'text-indent': (data.level - 1) * 10 + 'px', width: `${method}px`}">
+    <div
+      @click="showSelectSpan"
+      :class="['trace-item', 'level' + (data.level - 1), ...{ 'trace-item-error': data.isError }]"
+      ref="traceItem"
+    >
+      <div
+        :class="['method', 'level' + (data.level - 1)]"
+        :style="{ 'text-indent': (data.level - 1) * 10 + 'px', width: `${method}px` }"
+      >
         <svg
           class="icon vm cp trans"
           :style="!displayChildren ? 'transform: rotate(-90deg);' : ''"
@@ -138,7 +145,9 @@ limitations under the License. -->
       left: 0;
     }
   }
-
+  .trace-item-error {
+    color: #e54c17;
+  }
   .trace-item {
     // display: flex;
     white-space: nowrap;
