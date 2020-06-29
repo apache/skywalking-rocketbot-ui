@@ -67,6 +67,10 @@ export interface State {
     calls: Call[];
     nodes: Node[];
   };
+  endpointDependency: {
+    calls: Call[];
+    nodes: Node[];
+  };
   selectedInstanceCall: Call | null;
   instanceDependencyMetrics: { [key: string]: any };
   queryInstanceMetricsType: string;
@@ -101,6 +105,10 @@ const initState: State = {
   getThroughputTrend: [],
   responsePercentile: {},
   instanceDependency: {
+    calls: [],
+    nodes: [],
+  },
+  endpointDependency: {
     calls: [],
     nodes: [],
   },
@@ -263,10 +271,38 @@ const mutations = {
     state.topoEndpoints.push(comp);
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
   },
+  [types.SET_ENDPOINT_DEPENDENCY](state: State, data: any) {
+    state.endpointDependency = data;
+  },
 };
 
 // actions
 const actions: ActionTree<State, any> = {
+  GET_SERVICES(context: { commit: Commit }, params: { duration: any; keyword: string }) {
+    if (!params.keyword) {
+      params.keyword = '';
+    }
+    return graph
+      .query('queryServices')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        return res.data.data.services || [];
+      });
+  },
+  GET_SERVICE_ENDPOINTS(context: { commit: Commit }, params: { serviceId: string; keyword: string }) {
+    if (!params.serviceId) {
+      return new Promise((resolve) => resolve());
+    }
+    if (!params.keyword) {
+      params.keyword = '';
+    }
+    return graph
+      .query('queryEndpoints')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        return res.data.data.getEndpoints || [];
+      });
+  },
   FILTER_TOPO(context: { commit: Commit; state: State }, params: { services: string[]; group: string }) {
     const tempCalls = [...context.state._calls];
     const tempNodes = [...context.state._nodes];
@@ -437,6 +473,21 @@ const actions: ActionTree<State, any> = {
             context.commit(types.SET_TOPO_COPY, { calls, nodes });
             context.commit(types.SET_TOPO, { calls, nodes });
           });
+      });
+  },
+  GET_ENDPOINT_TOPO(context: { commit: Commit; state: State }, params: { endpointId: string; duration: any }) {
+    return graph
+      .query('queryEndpointTopology')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        if (res.data.errors) {
+          context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });
+          return;
+        }
+        const calls = res.data.data.topo.calls;
+        const nodes = res.data.data.topo.nodes;
+
+        context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls, nodes });
       });
   },
   async GET_TOPO_INSTANCE_DEPENDENCY(

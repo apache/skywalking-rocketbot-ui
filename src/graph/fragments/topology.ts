@@ -228,6 +228,23 @@ export const ServicesTopo = {
     }
   }`,
 };
+export const endpointTopology = {
+  variable: ['$endpointId: ID!', '$duration: Duration!'],
+  query: `
+  endpointTopology: getEndpointTopology(endpointId: $endpointId, duration: $duration) {
+    nodes {
+      id
+      name
+      type
+    }
+    calls {
+      id
+      source
+      target
+      detectPoints
+    }
+  }`,
+};
 export const TopoMetric = {
   variable: '$ids: [ID!]!',
   query: `
