@@ -484,8 +484,8 @@ const actions: ActionTree<State, any> = {
           context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });
           return;
         }
-        const calls = res.data.data.topo.calls;
-        const nodes = res.data.data.topo.nodes;
+        const calls = res.data.data.endpointTopology.calls;
+        const nodes = res.data.data.endpointTopology.nodes;
 
         context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls, nodes });
       });

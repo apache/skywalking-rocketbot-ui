@@ -108,7 +108,7 @@ limitations under the License. -->
       },
       // endpoint dependency hexagon
       handleGoEndpointDependency() {
-        // this.$emit('setDialog', 'endpoint_dependency');
+        this.$emit('setDialog', 'endpoint_dependency');
       },
       handleNodeClick(d) {
         this.$emit('setCurrent', { key: d.id, label: d.name });

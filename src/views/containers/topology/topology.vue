@@ -41,6 +41,11 @@ limitations under the License. -->
       />
       <window-trace v-if="dialog === 'trace'" :current="this.current" />
       <window-alarm v-if="dialog === 'alarm'" :current="this.current" />
+      <window-endpoint-dependency
+        v-if="dialog === 'endpoint_dependency'"
+        @changeEndpointComps="changeEndpointComps"
+        :current="this.current"
+      />
     </rk-sidebox>
   </div>
 </template>
@@ -57,6 +62,7 @@ limitations under the License. -->
   import Topo from '../../components/topology/chart/topo.vue';
   import TopoAside from '../../components/topology/topo-aside.vue';
   import TopoGroup from '../../components/topology/topo-group/index.vue';
+  import WindowEndpointDependency from '@/views/containers/topology/endpoint-dependency/index.vue';
 
   @Component({
     components: {
@@ -67,6 +73,7 @@ limitations under the License. -->
       WindowInstance,
       WindowTrace,
       WindowAlarm,
+      WindowEndpointDependency,
     },
   })
   export default class Topology extends Vue {
