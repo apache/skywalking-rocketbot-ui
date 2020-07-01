@@ -231,11 +231,14 @@ export const ServicesTopo = {
 export const endpointTopology = {
   variable: ['$endpointId: ID!', '$duration: Duration!'],
   query: `
-  endpointTopology: getEndpointTopology(endpointId: $endpointId, duration: $duration) {
+  endpointTopology: getEndpointDependencies(endpointId: $endpointId, duration: $duration) {
     nodes {
       id
       name
+      serviceId
+      serviceName
       type
+      isReal
     }
     calls {
       id

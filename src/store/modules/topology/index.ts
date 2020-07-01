@@ -18,7 +18,8 @@
 import { Commit, ActionTree, Dispatch } from 'vuex';
 import graph from '@/graph';
 import * as types from '../../mutation-types';
-import { AxiosResponse } from 'axios';
+import axios, { AxiosPromise, AxiosResponse } from 'axios';
+import { cancelToken } from '@/utils/cancelToken';
 
 interface Option {
   key: string;
@@ -484,10 +485,55 @@ const actions: ActionTree<State, any> = {
           context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });
           return;
         }
-        const calls = res.data.data.endpointTopology.calls;
-        const nodes = res.data.data.endpointTopology.nodes;
-
-        context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls, nodes });
+        const calls = res.data.data.endpointTopology.calls || [];
+        const nodes = res.data.data.endpointTopology.nodes || [];
+        const queryVariables = ['$duration: Duration!'];
+        const fragments = calls
+          .map((call: Call, index: number) => {
+            let source = {} as any;
+            let target = {} as any;
+            for (const node of nodes) {
+              if (node.id === call.source) {
+                source = node;
+              }
+              if (node.id === call.target) {
+                target = node;
+              }
+            }
+            return `cpm_${index}: readMetricsValue(condition: {
+            name: "endpoint_relation_cpm"
+            entity: {
+              scope: EndpointRelation
+              serviceName: "${source.serviceName}"
+              normal: true
+              endpointName: "${source.name}"
+              destNormal: true
+              destServiceName: "${target.serviceName}"
+              destEndpointName: "${target.name}"
+            }
+          }, duration: $duration)`;
+          })
+          .join(' ');
+        const query = `query queryData(${queryVariables}) {${fragments}}`;
+        return axios
+          .post('/graphql', { query, variables: { duration: params.duration } }, { cancelToken: cancelToken() })
+          .then((json: AxiosResponse<any>) => {
+            if (json.data.errors) {
+              context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });
+              return;
+            }
+            const cpms = json.data.data;
+            const keys = Object.keys(cpms);
+            for (const key of keys) {
+              const index = Number(key.split('_')[1]);
+              // calls[index].value = cpms[key];
+              calls[index].value = 1;
+            }
+            context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls, nodes });
+          })
+          .catch(() => {
+            context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });
+          });
       });
   },
   async GET_TOPO_INSTANCE_DEPENDENCY(

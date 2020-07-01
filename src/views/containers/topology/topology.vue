@@ -24,7 +24,7 @@ limitations under the License. -->
     />
     <TopoAside />
     <TopoGroup />
-    <rk-sidebox :show="dialog.length" @update:show="dialog = ''" :fixed="true" width="80%">
+    <rk-sidebox :show="dialog.length" @update:show="dialog = ''" :fixed="true" width="100%">
       <window-endpoint
         v-if="dialog === 'endpoint'"
         :current="this.current"

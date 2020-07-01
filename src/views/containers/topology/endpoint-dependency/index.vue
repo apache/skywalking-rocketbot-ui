@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div>
+  <div class="endpoint-dependency-page">
     <div class="rk-dashboard-bar flex-h">
       <ToolBarSelect :selectable="false" :title="this.$t('currentService')" :current="current" icon="package" />
       <ToolBarEndpointSelect
@@ -24,7 +24,7 @@ limitations under the License. -->
         icon="code"
       />
     </div>
-    <div class="rk-dependency-chart">
+    <div class="rk-endpoint-dependency">
       <DependencySankey :data="stateTopo.endpointDependency" />
     </div>
   </div>
@@ -74,7 +74,6 @@ limitations under the License. -->
       this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 2 });
       this.GET_SERVICE_ENDPOINTS({ duration: this.durationTime, serviceId: this.current.key, keyword: '' }).then(() => {
         this.selectEndpoint(this.stateDashboardOption.endpoints[0]);
-        this.GET_ENDPOINT_TOPO({ endpointId: this.stateDashboardOption.endpoints[0].key, duration: this.durationTime });
       });
     }
 
@@ -86,28 +85,17 @@ limitations under the License. -->
 </script>
 
 <style lang="scss">
-  .rk-dashboard-bar {
-    flex-shrink: 0;
-    color: #efefef;
-    background-color: #333840;
-  }
-  .rk-dashboard-bar-btn {
-    padding: 0 5px;
-    border-right: 2px solid #252a2f;
-    height: 19px;
-  }
-  #endpoint-file {
-    display: none;
-  }
-  .input-label {
-    display: inline !important;
-    line-height: inherit;
-  }
-  .input-label.rk-btn {
-    line-height: 22px !important;
-  }
-  .rk-dependency-chart {
-    height: 500px;
-    // background: #333840;
+  .endpoint-dependency-page {
+    height: calc(100% - 48px);
+    .rk-dashboard-bar {
+      flex-shrink: 0;
+      color: #efefef;
+      background-color: #333840;
+      border-bottom: 1px solid #252a2f;
+    }
+    .rk-endpoint-dependency {
+      background: #333840;
+      height: 100%;
+    }
   }
 </style>
