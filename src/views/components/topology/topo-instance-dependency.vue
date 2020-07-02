@@ -15,7 +15,7 @@ limitations under the License. -->
 <template>
   <div class="rk-topo-instance-dependency">
     <div class="rk-dependency-chart">
-      <DependencySankey :data="stateTopo.instanceDependency" />
+      <DependencySankey :data="stateTopo.instanceDependency" @showMetrics="showDependencyMetrics" />
     </div>
     <div class="rk-instance-metric-box">
       <div v-if="!stateTopo.instanceDependency.nodes.length">
@@ -106,6 +106,13 @@ limitations under the License. -->
         ...this.stateTopo.selectedInstanceCall,
         durationTime: this.durationTime,
         mode,
+      });
+    }
+    private showDependencyMetrics(data: any) {
+      this.GET_INSTANCE_DEPENDENCY_METRICS({
+        ...data,
+        durationTime: this.durationTime,
+        mode: data.detectPoints[0],
       });
     }
   }

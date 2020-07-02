@@ -24,9 +24,7 @@ limitations under the License. -->
         icon="code"
       />
     </div>
-    <div class="rk-endpoint-dependency">
-      <DependencySankey :data="stateTopo.endpointDependency" />
-    </div>
+    <TopoEndpointDependency />
   </div>
 </template>
 
@@ -36,24 +34,16 @@ limitations under the License. -->
   import { Action, Getter, State, Mutation } from 'vuex-class';
   import ToolBarSelect from '@/views/components/dashboard/tool-bar-select.vue';
   import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar-endpoint-select.vue';
-  import DependencySankey from '@/views/components/topology/dependency-sankey.vue';
-  import { State as topoState } from '@/store/modules/topology';
-
-  interface Endpoint {
-    label: string;
-    key: string;
-    name?: string;
-  }
+  import TopoEndpointDependency from '@/views/components/topology/topo-endpoint-dependency.vue';
 
   @Component({
     components: {
       ToolBarSelect,
       ToolBarEndpointSelect,
-      DependencySankey,
+      TopoEndpointDependency,
     },
   })
   export default class WindowEndpointDependency extends Vue {
-    @State('rocketTopo') private stateTopo!: topoState;
     @State('rocketOption') private stateDashboardOption!: any;
     @Getter('durationTime') private durationTime: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
@@ -88,14 +78,7 @@ limitations under the License. -->
   .endpoint-dependency-page {
     height: calc(100% - 48px);
     .rk-dashboard-bar {
-      flex-shrink: 0;
-      color: #efefef;
-      background-color: #333840;
       border-bottom: 1px solid #252a2f;
-    }
-    .rk-endpoint-dependency {
-      background: #333840;
-      height: 100%;
     }
   }
 </style>
