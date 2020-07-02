@@ -14,23 +14,60 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div class="rk-endpoint-dependency">
-    <DependencySankey :data="stateTopo.endpointDependency" @showMetrics="showEndpointMetrics" />
+    <div class="endpoint-dependency-chart">
+      <DependencySankey :data="stateTopo.endpointDependency" @showMetrics="showEndpointMetrics" />
+      <div v-if="!stateTopo.endpointDependency.nodes.length">
+        No Endpoint Dependency
+      </div>
+    </div>
+    <div class="endpoint-dependency-metrics">
+      <div v-if="stateTopo.endpointDependencyMetrics.respTime">
+        <TopoChart
+          :data="stateTopo.endpointDependencyMetrics.respTime"
+          :intervalTime="intervalTime"
+          :title="$t('avgResponseTime')"
+          unit="ms"
+        />
+      </div>
+      <div v-if="stateTopo.endpointDependencyMetrics.cpm">
+        <TopoChart
+          :data="stateTopo.endpointDependencyMetrics.cpm"
+          :intervalTime="intervalTime"
+          :title="$t('avgThroughput')"
+          unit="cpm"
+        />
+      </div>
+      <div v-if="stateTopo.endpointDependencyMetrics.sla">
+        <TopoChart
+          :data="stateTopo.endpointDependencyMetrics.sla"
+          :intervalTime="intervalTime"
+          :precent="true"
+          :title="$t('avgSLA')"
+          unit="%"
+        />
+      </div>
+      <div v-if="stateTopo.endpointDependencyMetrics.percentile">
+        <ChartLine
+          :data="stateTopo.endpointDependencyMetrics.percentile"
+          :intervalTime="intervalTime"
+          :title="$t('percentResponse')"
+        />
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">
   import { Vue, Component, Prop } from 'vue-property-decorator';
   import { State, Action, Getter, Mutation } from 'vuex-class';
   import { State as topoState } from '@/store/modules/topology';
-  // import Topo from './chart/topo.vue';
-  // import TopoChart from './topo-chart.vue';
+  import TopoChart from './topo-chart.vue';
   import DependencySankey from './dependency-sankey.vue';
-  // import ChartLine from './chart-line.vue';
+  import ChartLine from './chart-line.vue';
 
   @Component({
     components: {
-      // Topo,
-      // ChartLine,
-      // TopoChart,
+      ChartLine,
+      TopoChart,
       DependencySankey,
     },
   })
@@ -38,9 +75,16 @@ limitations under the License. -->
     @Getter('durationTime') private durationTime: any;
     @Getter('intervalTime') private intervalTime: any;
     @State('rocketTopo') private stateTopo!: topoState;
+    @Action('rocketTopo/GET_ENDPOINT_DEPENDENCY_METRICS') private GET_ENDPOINT_DEPENDENCY_METRICS: any;
 
     private showEndpointMetrics(data: any) {
-      console.log(data);
+      this.GET_ENDPOINT_DEPENDENCY_METRICS({
+        serviceName: data.serviceName,
+        endpointName: data.endpointName,
+        destServiceName: data.destServiceName,
+        destEndpointName: data.destEndpointName,
+        duration: this.durationTime,
+      });
     }
   }
 </script>
@@ -48,5 +92,23 @@ limitations under the License. -->
   .rk-endpoint-dependency {
     background: #333840;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+    .endpoint-dependency-chart {
+      height: 80%;
+      min-height: 500px;
+    }
+    .endpoint-dependency-metrics {
+      height: 20%;
+      min-height: 100px;
+      display: flex;
+      flex-direction: row;
+      padding-left: 10px;
+      > div {
+        width: 25%;
+        height: 100%;
+      }
+    }
   }
 </style>

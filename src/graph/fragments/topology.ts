@@ -397,7 +397,6 @@ export const TopoEndpointDependencyMetrics = {
     '$endpointName: String',
     '$destServiceName: String',
     '$destEndpointName: String',
-    '$labels: [String!]!',
     '$duration: Duration!',
   ],
   query: `
@@ -412,7 +411,7 @@ export const TopoEndpointDependencyMetrics = {
         destServiceName:  $destServiceName
         destEndpointName: $destEndpointName
       }
-    }, labels: $labels, duration: $duration) {
+    }, labels: ["0", "1", "2", "3", "4"], duration: $duration) {
       label
       values {
         values {value}

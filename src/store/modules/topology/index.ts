@@ -58,7 +58,6 @@ interface EndpointDependencyConidition {
   endpointName: string;
   destServiceName: string;
   destEndpointName: string;
-  labels: string[];
   duration: Duration;
 }
 
@@ -222,7 +221,24 @@ const mutations = {
     });
   },
   [types.SET_ENDPOINT_DEPENDENCY_METRICS](state: State, data: any) {
-    state.instanceDependencyMetrics = data;
+    state.endpointDependencyMetrics.cpm = data.endpointRelationCpm
+      ? data.endpointRelationCpm.values.values.map((i: any) => i.value)
+      : [];
+    state.endpointDependencyMetrics.respTime = data.endpointRelationRespTime
+      ? data.endpointRelationRespTime.values.values.map((i: any) => i.value)
+      : [];
+    state.endpointDependencyMetrics.sla = data.endpointRelationSla
+      ? data.endpointRelationSla.values.values.map((i: any) => i.value)
+      : [];
+    state.endpointDependencyMetrics.percentile = {};
+    if (!data.endpointRelationPercentile) {
+      return;
+    }
+    for (const item of data.endpointRelationPercentile) {
+      state.endpointDependencyMetrics.percentile[PercentileItem[Number(item.label)]] = item.values.values.map(
+        (i: any) => i.value,
+      );
+    }
   },
   [types.SET_INSTANCE_DEPEDENCE_TYPE](state: State, data: string) {
     state.queryInstanceMetricsType = data;
@@ -511,15 +527,19 @@ const actions: ActionTree<State, any> = {
         const nodes = res.data.data.endpointTopology.nodes || [];
         const queryVariables = ['$duration: Duration!'];
         const fragments = calls
-          .map((call: Call, index: number) => {
+          .map((call: Call & EndpointDependencyConidition, index: number) => {
             let source = {} as any;
             let target = {} as any;
             for (const node of nodes) {
               if (node.id === call.source) {
                 source = node;
+                call.serviceName = node.serviceName;
+                call.endpointName = node.name;
               }
               if (node.id === call.target) {
                 target = node;
+                call.destServiceName = node.serviceName;
+                call.destEndpointName = node.name;
               }
             }
             return `cpm_${index}: readMetricsValue(condition: {
