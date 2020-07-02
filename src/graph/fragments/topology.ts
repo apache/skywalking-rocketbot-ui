@@ -391,3 +391,83 @@ export const TopoServiceDetail = {
     }
 `,
 };
+export const TopoEndpointDependencyMetrics = {
+  variable: [
+    '$serviceName: String',
+    '$endpointName: String',
+    '$destServiceName: String',
+    '$destEndpointName: String',
+    '$labels: [String!]!',
+    '$duration: Duration!',
+  ],
+  query: `
+    endpointRelationPercentile: readLabeledMetricsValues(condition: {
+      name: "endpoint_relation_percentile"
+      entity: {
+        scope: EndpointRelation
+        serviceName: $serviceName
+        normal: true
+        endpointName: $endpointName
+        destNormal: true
+        destServiceName:  $destServiceName
+        destEndpointName: $destEndpointName
+      }
+    }, labels: $labels, duration: $duration) {
+      label
+      values {
+        values {value}
+      }
+    }
+    endpointRelationCpm: readMetricsValues(condition: {
+      name: "endpoint_relation_cpm"
+      entity: {
+        scope: EndpointRelation
+        serviceName: $serviceName
+        normal: true
+        endpointName: $endpointName
+        destNormal: true
+        destServiceName:  $destServiceName
+        destEndpointName: $destEndpointName
+      }
+    }, duration: $duration) {
+      label
+      values {
+        values {value}
+      }
+    }
+    endpointRelationRespTime: readMetricsValues(condition: {
+      name: "endpoint_relation_resp_time"
+      entity: {
+        scope: EndpointRelation
+        serviceName: $serviceName
+        normal: true
+        endpointName: $endpointName
+        destNormal: true
+        destServiceName:  $destServiceName
+        destEndpointName: $destEndpointName
+      }
+    }, duration: $duration) {
+      label
+      values {
+        values {value}
+      }
+    }
+    endpointRelationSla: readMetricsValues(condition: {
+      name: "endpoint_relation_sla"
+      entity: {
+        scope: EndpointRelation
+        serviceName: $serviceName
+        normal: true
+        endpointName: $endpointName
+        destNormal: true
+        destServiceName:  $destServiceName
+        destEndpointName: $destEndpointName
+      }
+    }, duration: $duration) {
+      label
+      values {
+        values {value}
+      }
+    }
+`,
+};

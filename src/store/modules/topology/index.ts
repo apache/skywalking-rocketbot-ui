@@ -25,6 +25,11 @@ interface Option {
   key: string;
   label: string;
 }
+interface Duration {
+  start: string;
+  end: string;
+  step: string;
+}
 interface Call {
   avgResponseTime: number;
   cpm: number;
@@ -46,6 +51,15 @@ interface Node {
   numOfServiceAlarm: number;
   sla: number;
   type: string;
+}
+
+interface EndpointDependencyConidition {
+  serviceName: string;
+  endpointName: string;
+  destServiceName: string;
+  destEndpointName: string;
+  labels: string[];
+  duration: Duration;
 }
 
 export interface State {
@@ -74,6 +88,7 @@ export interface State {
   };
   selectedInstanceCall: Call | null;
   instanceDependencyMetrics: { [key: string]: any };
+  endpointDependencyMetrics: { [key: string]: any };
   queryInstanceMetricsType: string;
   serviceThroughput: { Throughput: number[] };
   serviceSLA: { SLA: number[] };
@@ -115,6 +130,7 @@ const initState: State = {
   },
   selectedInstanceCall: null,
   instanceDependencyMetrics: {},
+  endpointDependencyMetrics: {},
   queryInstanceMetricsType: '',
   serviceThroughput: { Throughput: [] },
   serviceSLA: { SLA: [] },
@@ -205,6 +221,9 @@ const mutations = {
       state.instanceDependencyMetrics.percentResponse[PercentileItem[index]] = item.values.map((i: any) => i.value);
     });
   },
+  [types.SET_ENDPOINT_DEPENDENCY_METRICS](state: State, data: any) {
+    state.instanceDependencyMetrics = data;
+  },
   [types.SET_INSTANCE_DEPEDENCE_TYPE](state: State, data: string) {
     state.queryInstanceMetricsType = data;
   },
@@ -279,7 +298,7 @@ const mutations = {
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_SERVICES(context: { commit: Commit }, params: { duration: any; keyword: string }) {
+  GET_SERVICES(context: { commit: Commit }, params: { duration: Duration; keyword: string }) {
     if (!params.keyword) {
       params.keyword = '';
     }
@@ -353,7 +372,7 @@ const actions: ActionTree<State, any> = {
       context.dispatch('INSTANCE_RELATION_INFO', params);
     }
   },
-  GET_TOPO_SERVICE_INFO(context: { commit: Commit; state: State }, params: any) {
+  GET_TOPO_SERVICE_INFO(context: { commit: Commit; state: State }, params: { id: string; duration: Duration }) {
     if (!params.id) {
       return;
     }
@@ -383,7 +402,10 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_SELECTED_CALL, params);
       });
   },
-  GET_TOPO_SERVICE_DETAIL(context: { commit: Commit; state: State }, params: any) {
+  GET_TOPO_SERVICE_DETAIL(
+    context: { commit: Commit; state: State },
+    params: { serviceId: string; duration: Duration },
+  ) {
     return graph
       .query('queryTopoServiceDetail')
       .params({
@@ -476,7 +498,7 @@ const actions: ActionTree<State, any> = {
           });
       });
   },
-  GET_ENDPOINT_TOPO(context: { commit: Commit; state: State }, params: { endpointId: string; duration: any }) {
+  GET_ENDPOINT_TOPO(context: { commit: Commit; state: State }, params: { endpointId: string; duration: Duration }) {
     return graph
       .query('queryEndpointTopology')
       .params(params)
@@ -526,8 +548,7 @@ const actions: ActionTree<State, any> = {
             const keys = Object.keys(cpms);
             for (const key of keys) {
               const index = Number(key.split('_')[1]);
-              // calls[index].value = cpms[key];
-              calls[index].value = 1;
+              calls[index].value = cpms[key];
             }
             context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls, nodes });
           })
@@ -541,7 +562,7 @@ const actions: ActionTree<State, any> = {
     params: {
       clientServiceId: string;
       serverServiceId: string;
-      duration: string;
+      duration: Duration;
     },
   ) {
     graph
@@ -608,7 +629,7 @@ const actions: ActionTree<State, any> = {
   },
   INSTANCE_RELATION_INFO(
     context: { commit: Commit; state: State },
-    params: Call & { mode: string; queryType: string; durationTime: string },
+    params: Call & { mode: string; queryType: string; durationTime: Duration },
   ) {
     graph
       .query(params.queryType)
@@ -623,6 +644,17 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_SELECTED_INSTANCE_CALL, params);
         context.commit(types.SET_INSTANCE_DEPEDENCE_TYPE, params.mode);
         context.commit(types.SET_INSTANCE_DEPEDENCE_METRICS, res.data.data);
+      });
+  },
+  GET_ENDPOINT_DEPENDENCY_METRICS(context: { commit: Commit }, params: EndpointDependencyConidition) {
+    graph
+      .query('queryTopoEndpointDependencyMetrics')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        if (!(res.data && res.data.data)) {
+          return;
+        }
+        context.commit(types.SET_ENDPOINT_DEPENDENCY_METRICS, res.data.data);
       });
   },
 };
