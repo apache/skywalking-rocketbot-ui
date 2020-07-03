@@ -21,37 +21,17 @@ limitations under the License. -->
       </div>
     </div>
     <div class="endpoint-dependency-metrics">
-      <div v-if="endpointDependencyMetrics.respTime">
-        <TopoChart
-          :data="endpointDependencyMetrics.respTime"
-          :intervalTime="intervalTime"
-          :title="$t('avgResponseTime')"
-          unit="ms"
-        />
+      <div v-if="respTime.length">
+        <TopoChart :data="respTime" :intervalTime="intervalTime" :title="$t('avgResponseTime')" unit="ms" />
       </div>
-      <div v-if="endpointDependencyMetrics.cpm">
-        <TopoChart
-          :data="endpointDependencyMetrics.cpm"
-          :intervalTime="intervalTime"
-          :title="$t('avgThroughput')"
-          unit="cpm"
-        />
+      <div v-if="cpm.length">
+        <TopoChart :data="cpm" :intervalTime="intervalTime" :title="$t('avgThroughput')" unit="cpm" />
       </div>
-      <div v-if="endpointDependencyMetrics.sla">
-        <TopoChart
-          :data="endpointDependencyMetrics.sla"
-          :intervalTime="intervalTime"
-          :precent="true"
-          :title="$t('avgSLA')"
-          unit="%"
-        />
+      <div v-if="sla.length">
+        <TopoChart :data="sla" :intervalTime="intervalTime" :precent="true" :title="$t('avgSLA')" unit="%" />
       </div>
-      <div v-if="endpointDependencyMetrics.percentile">
-        <ChartLine
-          :data="endpointDependencyMetrics.percentile"
-          :intervalTime="intervalTime"
-          :title="$t('percentResponse')"
-        />
+      <div v-if="percentile.p50">
+        <ChartLine :data="percentile" :intervalTime="intervalTime" :title="$t('percentResponse')" />
       </div>
     </div>
   </div>
@@ -76,7 +56,10 @@ limitations under the License. -->
     @Getter('intervalTime') private intervalTime: any;
     @State('rocketTopo') private stateTopo!: topoState;
     @Action('rocketTopo/GET_ENDPOINT_DEPENDENCY_METRICS') private GET_ENDPOINT_DEPENDENCY_METRICS: any;
-    private endpointDependencyMetrics: { [key: string]: any[] } = {};
+    private respTime: number[] = [];
+    private cpm: number[] = [];
+    private sla: number[] = [];
+    private percentile: { [key: string]: number[] } = {};
 
     private showEndpointMetrics(data: any) {
       this.GET_ENDPOINT_DEPENDENCY_METRICS({
@@ -86,7 +69,10 @@ limitations under the License. -->
         destEndpointName: data.destEndpointName,
         duration: this.durationTime,
       }).then(() => {
-        this.endpointDependencyMetrics = this.stateTopo.endpointDependencyMetrics;
+        this.respTime = this.stateTopo.endpointDependencyMetrics.respTime;
+        this.cpm = this.stateTopo.endpointDependencyMetrics.cpm;
+        this.sla = this.stateTopo.endpointDependencyMetrics.sla;
+        this.percentile = this.stateTopo.endpointDependencyMetrics.percentile;
       });
     }
   }
