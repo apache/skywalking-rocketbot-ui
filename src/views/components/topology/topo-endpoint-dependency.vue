@@ -15,8 +15,12 @@ limitations under the License. -->
 <template>
   <div class="rk-endpoint-dependency">
     <div class="endpoint-dependency-chart">
-      <DependencySankey :data="stateTopo.endpointDependency" @showMetrics="showEndpointMetrics" />
-      <div v-if="!stateTopo.endpointDependency.nodes.length">
+      <DependencySankey
+        v-if="stateTopo.endpointDependency.nodes.length"
+        :data="stateTopo.endpointDependency"
+        @showMetrics="showEndpointMetrics"
+      />
+      <div v-else class="endpoint-dependency-empty">
         No Endpoint Dependency
       </div>
     </div>
@@ -37,9 +41,9 @@ limitations under the License. -->
   </div>
 </template>
 <script lang="ts">
-  import { Vue, Component, Prop } from 'vue-property-decorator';
+  import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
   import { State, Action, Getter, Mutation } from 'vuex-class';
-  import { State as topoState } from '@/store/modules/topology';
+  import { State as topoState, EndpointDependencyConidition, Call, Duration } from '@/store/modules/topology';
   import TopoChart from './topo-chart.vue';
   import DependencySankey from './dependency-sankey.vue';
   import ChartLine from './chart-line.vue';
@@ -52,16 +56,17 @@ limitations under the License. -->
     },
   })
   export default class TopoEndpointDependency extends Vue {
-    @Getter('durationTime') private durationTime: any;
+    @Getter('durationTime') private durationTime!: Duration;
     @Getter('intervalTime') private intervalTime: any;
     @State('rocketTopo') private stateTopo!: topoState;
     @Action('rocketTopo/GET_ENDPOINT_DEPENDENCY_METRICS') private GET_ENDPOINT_DEPENDENCY_METRICS: any;
+
     private respTime: number[] = [];
     private cpm: number[] = [];
     private sla: number[] = [];
     private percentile: { [key: string]: number[] } = {};
 
-    private showEndpointMetrics(data: any) {
+    private showEndpointMetrics(data: EndpointDependencyConidition & Call) {
       this.GET_ENDPOINT_DEPENDENCY_METRICS({
         serviceName: data.serviceName,
         endpointName: data.endpointName,
@@ -69,11 +74,23 @@ limitations under the License. -->
         destEndpointName: data.destEndpointName,
         duration: this.durationTime,
       }).then(() => {
-        this.respTime = this.stateTopo.endpointDependencyMetrics.respTime;
-        this.cpm = this.stateTopo.endpointDependencyMetrics.cpm;
-        this.sla = this.stateTopo.endpointDependencyMetrics.sla;
-        this.percentile = this.stateTopo.endpointDependencyMetrics.percentile;
+        this.updateMetrics();
       });
+    }
+
+    @Watch('stateTopo.endpointDependency.nodes')
+    private updateMetrics() {
+      this.respTime = this.stateTopo.endpointDependencyMetrics.respTime;
+      this.cpm = this.stateTopo.endpointDependencyMetrics.cpm;
+      this.sla = this.stateTopo.endpointDependencyMetrics.sla;
+      this.percentile = this.stateTopo.endpointDependencyMetrics.percentile;
+    }
+
+    private beforeDestroy() {
+      this.stateTopo.endpointDependency = {
+        calls: [],
+        nodes: [],
+      };
     }
   }
 </script>
@@ -98,6 +115,12 @@ limitations under the License. -->
         width: 25%;
         height: 100%;
       }
+    }
+    .endpoint-dependency-empty {
+      color: #fff;
+      text-align: center;
+      height: 500px;
+      line-height: 500px;
     }
   }
 </style>

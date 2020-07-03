@@ -25,12 +25,12 @@ interface Option {
   key: string;
   label: string;
 }
-interface Duration {
+export interface Duration {
   start: string;
   end: string;
   step: string;
 }
-interface Call {
+export interface Call {
   avgResponseTime: number;
   cpm: number;
   isAlert: boolean;
@@ -53,7 +53,7 @@ interface Node {
   type: string;
 }
 
-interface EndpointDependencyConidition {
+export interface EndpointDependencyConidition {
   serviceName: string;
   endpointName: string;
   destServiceName: string;
@@ -220,7 +220,7 @@ const mutations = {
       state.instanceDependencyMetrics.percentResponse[PercentileItem[index]] = item.values.map((i: any) => i.value);
     });
   },
-  [types.SET_ENDPOINT_DEPENDENCY_METRICS](state: State, data: any) {
+  [types.SET_ENDPOINT_DEPENDENCY_METRICS](state: State, data: { [key: string]: any }) {
     state.endpointDependencyMetrics.cpm = data.endpointRelationCpm
       ? data.endpointRelationCpm.values.values.map((i: any) => i.value)
       : [];
@@ -307,7 +307,7 @@ const mutations = {
     state.topoEndpoints.push(comp);
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
   },
-  [types.SET_ENDPOINT_DEPENDENCY](state: State, data: any) {
+  [types.SET_ENDPOINT_DEPENDENCY](state: State, data: { calls: Call[]; nodes: Node[] }) {
     state.endpointDependency = data;
   },
 };
@@ -568,7 +568,7 @@ const actions: ActionTree<State, any> = {
             const keys = Object.keys(cpms);
             for (const key of keys) {
               const index = Number(key.split('_')[1]);
-              calls[index].value = cpms[key];
+              calls[index].value = cpms[key] || 0.0001;
             }
             context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls, nodes });
           })
