@@ -21,34 +21,34 @@ limitations under the License. -->
       </div>
     </div>
     <div class="endpoint-dependency-metrics">
-      <div v-if="stateTopo.endpointDependencyMetrics.respTime">
+      <div v-if="endpointDependencyMetrics.respTime">
         <TopoChart
-          :data="stateTopo.endpointDependencyMetrics.respTime"
+          :data="endpointDependencyMetrics.respTime"
           :intervalTime="intervalTime"
           :title="$t('avgResponseTime')"
           unit="ms"
         />
       </div>
-      <div v-if="stateTopo.endpointDependencyMetrics.cpm">
+      <div v-if="endpointDependencyMetrics.cpm">
         <TopoChart
-          :data="stateTopo.endpointDependencyMetrics.cpm"
+          :data="endpointDependencyMetrics.cpm"
           :intervalTime="intervalTime"
           :title="$t('avgThroughput')"
           unit="cpm"
         />
       </div>
-      <div v-if="stateTopo.endpointDependencyMetrics.sla">
+      <div v-if="endpointDependencyMetrics.sla">
         <TopoChart
-          :data="stateTopo.endpointDependencyMetrics.sla"
+          :data="endpointDependencyMetrics.sla"
           :intervalTime="intervalTime"
           :precent="true"
           :title="$t('avgSLA')"
           unit="%"
         />
       </div>
-      <div v-if="stateTopo.endpointDependencyMetrics.percentile">
+      <div v-if="endpointDependencyMetrics.percentile">
         <ChartLine
-          :data="stateTopo.endpointDependencyMetrics.percentile"
+          :data="endpointDependencyMetrics.percentile"
           :intervalTime="intervalTime"
           :title="$t('percentResponse')"
         />
@@ -76,6 +76,7 @@ limitations under the License. -->
     @Getter('intervalTime') private intervalTime: any;
     @State('rocketTopo') private stateTopo!: topoState;
     @Action('rocketTopo/GET_ENDPOINT_DEPENDENCY_METRICS') private GET_ENDPOINT_DEPENDENCY_METRICS: any;
+    private endpointDependencyMetrics: { [key: string]: any[] } = {};
 
     private showEndpointMetrics(data: any) {
       this.GET_ENDPOINT_DEPENDENCY_METRICS({
@@ -84,6 +85,8 @@ limitations under the License. -->
         destServiceName: data.destServiceName,
         destEndpointName: data.destEndpointName,
         duration: this.durationTime,
+      }).then(() => {
+        this.endpointDependencyMetrics = this.stateTopo.endpointDependencyMetrics;
       });
     }
   }

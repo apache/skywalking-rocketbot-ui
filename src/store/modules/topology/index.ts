@@ -666,8 +666,8 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_INSTANCE_DEPEDENCE_METRICS, res.data.data);
       });
   },
-  GET_ENDPOINT_DEPENDENCY_METRICS(context: { commit: Commit }, params: EndpointDependencyConidition) {
-    graph
+  GET_ENDPOINT_DEPENDENCY_METRICS(context: { commit: Commit; state: State }, params: EndpointDependencyConidition) {
+    return graph
       .query('queryTopoEndpointDependencyMetrics')
       .params(params)
       .then((res: AxiosResponse) => {
