@@ -78,8 +78,9 @@ limitations under the License. -->
         },
         series: [
           {
-            data: this.data.map((i: any, index: number) => [this.intervalTime[index], i]),
-            type: this.precent ? 'bar' : 'line',
+            data: this.data.map((i: any, index: number) => [this.intervalTime[index], this.precent ? i / 100 : i]),
+            // type: this.precent ? 'bar' : 'line',
+            type: 'line',
             symbol: 'none',
             barMaxWidth: 5,
             lineStyle: {
