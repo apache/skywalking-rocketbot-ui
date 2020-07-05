@@ -18,8 +18,10 @@ limitations under the License. -->
       :rocketGlobal="rocketGlobal"
       :rocketComps="rocketComps"
       :compType="compType"
+      :dashboardType="dashboardType"
       :durationTime="durationTime"
       :rocketOption="rocketOption"
+      @searchServices="searchServices"
     ></ToolBarBtns>
     <div class="rk-dashboard-bar flex-h" v-if="compType !== dashboardType.DATABASE">
       <div class="sm grey service-search" v-if="compType === dashboardType.SERVICE">

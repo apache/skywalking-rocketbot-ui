@@ -60,6 +60,7 @@ limitations under the License. -->
   @Component({})
   export default class ToolBarBtns extends Vue {
     @Prop() private compType!: any;
+    @Prop() private dashboardType!: any;
     @Prop() private rocketGlobal!: any;
     @Prop() private rocketComps!: any;
     @Prop() private durationTime!: any;
@@ -85,11 +86,14 @@ limitations under the License. -->
         if (!Array.isArray(data)) {
           throw new Error();
         }
-        const { children, name, type } = data[0];
+        const [{ children, name, type }, { keywordService } = { keywordService: '' }] = data;
         if (children && name && type) {
-          this.IMPORT_TREE(data);
+          this.IMPORT_TREE(data[0]);
         } else {
           throw new Error('error');
+        }
+        if (keywordService && keywordService !== this.rocketOption.keywordService) {
+          this.$emit('searchServices', keywordService);
         }
         const el: any = document.getElementById('tool-bar-file');
         el!.value = '';
@@ -101,8 +105,12 @@ limitations under the License. -->
       const group = this.rocketComps.tree[this.rocketComps.group];
       delete group.query;
       const name = 'dashboard.json';
-
-      saveFile([group], name);
+      const data = [group];
+      if (this.compType === this.dashboardType.SERVICE) {
+        const { keywordService } = this.rocketOption;
+        data.push({ keywordService });
+      }
+      saveFile(data, name);
     }
   }
 </script>

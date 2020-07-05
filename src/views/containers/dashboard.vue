@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div class="flex-v wrapper" style="flex-grow:1;height: 100%;overflow:hidden">
-    <ToolGroup :rocketGlobal="rocketGlobal" :rocketComps="rocketComps" />
+    <ToolGroup :rocketGlobal="rocketGlobal" :rocketComps="rocketComps" :stateDashboard="stateDashboardOption" />
     <ToolBar
       :rocketGlobal="rocketGlobal"
       :rocketComps="rocketComps"
@@ -119,8 +119,8 @@ limitations under the License. -->
       } else {
         const data: string = `${window.localStorage.getItem('dashboard')}`;
         this.SET_COMPS_TREE(JSON.parse(data));
+        this.handleOption();
       }
-      this.handleOption();
     }
     private setDashboardTemplates(allTemplate: ITemplate[]) {
       const template = allTemplate.filter((item: ITemplate) => item.type === 'DASHBOARD' && item.activated);
