@@ -148,6 +148,7 @@ const m = {
   descendOrder: 'Descend Order',
   increaseOrder: 'Increase Order',
   chartType: 'Chart Type',
+  currentDepth: 'Current Depth',
 };
 
 export default m;

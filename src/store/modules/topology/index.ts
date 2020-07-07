@@ -86,6 +86,7 @@ export interface State {
   selectedInstanceCall: Call | null;
   instanceDependencyMetrics: { [key: string]: any };
   endpointDependencyMetrics: { [key: string]: any };
+  currentEndpointDepth: { key: number; label: string };
   queryInstanceMetricsType: string;
   serviceThroughput: { Throughput: number[] };
   serviceSLA: { SLA: number[] };
@@ -126,6 +127,7 @@ const initState: State = {
   selectedInstanceCall: null,
   instanceDependencyMetrics: {},
   endpointDependencyMetrics: {},
+  currentEndpointDepth: { key: 2, label: '2' },
   queryInstanceMetricsType: '',
   serviceThroughput: { Throughput: [] },
   serviceSLA: { SLA: [] },
@@ -302,6 +304,9 @@ const mutations = {
   [types.SET_ENDPOINT_DEPENDENCY](state: State, data: { calls: Call[]; nodes: Node[] }) {
     state.endpointDependency = data;
   },
+  [types.SET_ENDPOINT_DEPTH](state: State, data: { key: number; label: string }) {
+    state.currentEndpointDepth = data;
+  },
 };
 
 // actions
@@ -473,17 +478,91 @@ const actions: ActionTree<State, any> = {
           });
       });
   },
-  GET_ENDPOINT_TOPO(context: { commit: Commit; state: State }, params: { endpointId: string; duration: Duration }) {
-    return graph
-      .query('queryEndpointTopology')
-      .params(params)
+  // todo sync
+  GET_ALL_ENDPOINT_DEPENDENCY(
+    context: { commit: Commit; state: State; dispatch: Dispatch },
+    params: { endpointIds: string[]; duration: Duration },
+  ) {
+    context.dispatch('GET_ENDPOINT_TOPO', params).then((res) => {
+      if (context.state.currentEndpointDepth.key > 1) {
+        const endpointIds = res.nodes.map((item: Node) => item.id);
+
+        context.dispatch('GET_ENDPOINT_TOPO', { endpointIds, duration: params.duration }).then((json) => {
+          if (context.state.currentEndpointDepth.key > 2) {
+            const ids = json.nodes.map((item: Node) => item.id);
+
+            context.dispatch('GET_ENDPOINT_TOPO', { endpointIds: ids, duration: params.duration }).then((topo) => {
+              if (context.state.currentEndpointDepth.key > 3) {
+                const endpoints = topo.nodes.map((item: Node) => item.id);
+                context
+                  .dispatch('GET_ENDPOINT_TOPO', { endpointIds: endpoints, duration: params.duration })
+                  .then((data) => {
+                    if (context.state.currentEndpointDepth.key > 4) {
+                      context
+                        .dispatch('GET_ENDPOINT_TOPO', { endpointIds: endpoints, duration: params.duration })
+                        .then((topos) => {
+                          context.commit(types.SET_ENDPOINT_DEPENDENCY, topos);
+                        });
+                    } else {
+                      context.commit(types.SET_ENDPOINT_DEPENDENCY, data);
+                    }
+                  });
+              } else {
+                context.commit(types.SET_ENDPOINT_DEPENDENCY, topo);
+              }
+            });
+          } else {
+            context.commit(types.SET_ENDPOINT_DEPENDENCY, json);
+          }
+        });
+      } else {
+        context.commit(types.SET_ENDPOINT_DEPENDENCY, res);
+      }
+    });
+  },
+  GET_ENDPOINT_TOPO(context: { commit: Commit; state: State }, params: { endpointIds: string[]; duration: Duration }) {
+    const variables = ['$duration: Duration!'];
+    const fragment = params.endpointIds.map((id: string, index: number) => {
+      return `endpointTopology${index}: getEndpointDependencies(endpointId: "${id}", duration: $duration) {
+        nodes {
+          id
+          name
+          serviceId
+          serviceName
+          type
+          isReal
+        }
+        calls {
+          id
+          source
+          target
+          detectPoints
+        }
+      }`;
+    });
+    const querys = `query queryData(${variables}) {${fragment}}`;
+    return axios
+      .post('/graphql', { query: querys, variables: { duration: params.duration } }, { cancelToken: cancelToken() })
       .then((res: AxiosResponse) => {
         if (res.data.errors) {
           context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });
           return;
         }
-        const calls = res.data.data.endpointTopology.calls || [];
-        const nodes = res.data.data.endpointTopology.nodes || [];
+        const topo = res.data.data;
+        const calls = [] as any;
+        let nodes = [] as any;
+        for (const key of Object.keys(topo)) {
+          calls.push(...topo[key].calls);
+          nodes.push(...topo[key].nodes);
+        }
+        const obj = {} as any;
+        nodes = nodes.reduce((prev: Node[], next: Node) => {
+          if (!obj[next.id]) {
+            obj[next.id] = true;
+            prev.push(next);
+          }
+          return prev;
+        }, []);
         const queryVariables = ['$duration: Duration!'];
         const fragments = calls
           .map((call: Call & EndpointDependencyConidition, index: number) => {
@@ -527,9 +606,9 @@ const actions: ActionTree<State, any> = {
             const keys = Object.keys(cpms);
             for (const key of keys) {
               const index = Number(key.split('_')[1]);
-              calls[index].value = cpms[key] || 0.0001;
+              calls[index].value = cpms[key] || 0.01;
             }
-            context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls, nodes });
+            return { calls, nodes };
           })
           .catch(() => {
             context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });

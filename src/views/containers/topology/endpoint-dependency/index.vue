@@ -23,6 +23,13 @@ limitations under the License. -->
         :data="stateDashboardOption.endpoints"
         icon="code"
       />
+      <ToolBarEndpointSelect
+        @onChoose="selectDepth"
+        :title="$t('currentDepth')"
+        :current="rocketTopo.currentEndpointDepth"
+        :data="depths"
+        icon="code"
+      />
     </div>
     <TopoEndpointDependency />
   </div>
@@ -45,21 +52,19 @@ limitations under the License. -->
   })
   export default class WindowEndpointDependency extends Vue {
     @State('rocketOption') private stateDashboardOption!: any;
+    @State('rocketTopo') private rocketTopo!: any;
     @Getter('durationTime') private durationTime: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
     @Mutation('rocketTopo/SET_ENDPOINT_DEPENDENCY_METRICS') private SET_ENDPOINT_DEPENDENCY_METRICS: any;
+    @Mutation('rocketTopo/SET_ENDPOINT_DEPTH') private SET_ENDPOINT_DEPTH: any;
     @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
-    @Action('rocketTopo/GET_ENDPOINT_TOPO') private GET_ENDPOINT_TOPO: any;
-    @Prop() private current!: { key: number | string; label: number | string };
+    @Action('rocketTopo/GET_ALL_ENDPOINT_DEPENDENCY') private GET_ALL_ENDPOINT_DEPENDENCY: any;
+    @Prop() private current!: { key: number | string; label: string };
 
-    private selectEndpoint(i: any) {
-      this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
-      this.GET_ENDPOINT_TOPO({ endpointId: i.key, duration: this.durationTime });
-      this.SET_ENDPOINT_DEPENDENCY_METRICS({ respTime: [], sla: [], cpm: [], percentile: {} });
-    }
+    private depths: Array<{ key: number; label: string }> = [{ key: 2, label: '2' }];
 
     private beforeMount() {
       this.SET_CURRENT_SERVICE(this.current);
@@ -67,10 +72,28 @@ limitations under the License. -->
       this.GET_SERVICE_ENDPOINTS({ duration: this.durationTime, serviceId: this.current.key, keyword: '' }).then(() => {
         this.selectEndpoint(this.stateDashboardOption.endpoints[0]);
       });
+      this.depths = [1, 2, 3, 4, 5].map((item: number) => ({ key: item, label: String(item) }));
+    }
+
+    private selectEndpoint(i: any) {
+      this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
+      this.GET_ALL_ENDPOINT_DEPENDENCY({ endpointIds: [i.key], duration: this.durationTime });
+      this.SET_ENDPOINT_DEPENDENCY_METRICS({ respTime: [], sla: [], cpm: [], percentile: {} });
+    }
+
+    private selectDepth(i: { key: number; label: string }) {
+      this.SET_ENDPOINT_DEPTH(i);
+      this.GET_ALL_ENDPOINT_DEPENDENCY({
+        endpointIds: [this.stateDashboardOption.currentEndpoint.key],
+        duration: this.durationTime,
+      });
+
+      this.SET_ENDPOINT_DEPENDENCY_METRICS({ respTime: [], sla: [], cpm: [], percentile: {} });
     }
 
     private beforeDestroy() {
       this.SET_EDIT(false);
+      this.SET_ENDPOINT_DEPTH({ key: 2, label: '2' });
       this.$emit('changeEndpointComps', { type: '' });
     }
   }
