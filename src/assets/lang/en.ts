@@ -52,9 +52,9 @@ const m = {
   cpm: 'Cpm',
   sla: 'SLA',
   latency: 'Latency',
-  avgResponseTime: 'Avg Response Time',
-  avgThroughput: 'Avg Throughput',
-  avgSLA: 'Avg SLA',
+  avgResponseTime: 'Avg Response Time ( ms )',
+  avgThroughput: 'Load (CPM - calls per minute)',
+  avgSLA: 'Successful Rate ( % )',
   all: 'All',
   success: 'Success',
   error: 'Error',
@@ -100,7 +100,7 @@ const m = {
   weekCutTip: 'Last 1 week',
   monthCutTip: 'Last 1 month',
   serverZone: 'Server Zone',
-  percentResponse: 'Response Time Percentile',
+  percentResponse: 'Response Time Percentile ( ms )',
   exportImage: 'Export image',
   queryData: 'Query',
   previousService: 'Previous Service',
@@ -148,6 +148,7 @@ const m = {
   descendOrder: 'Descend Order',
   increaseOrder: 'Increase Order',
   chartType: 'Chart Type',
+  currentDepth: 'Current Depth',
 };
 
 export default m;

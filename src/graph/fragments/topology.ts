@@ -228,6 +228,26 @@ export const ServicesTopo = {
     }
   }`,
 };
+export const endpointTopology = {
+  variable: ['$endpointId: ID!', '$duration: Duration!'],
+  query: `
+  endpointTopology: getEndpointDependencies(endpointId: $endpointId, duration: $duration) {
+    nodes {
+      id
+      name
+      serviceId
+      serviceName
+      type
+      isReal
+    }
+    calls {
+      id
+      source
+      target
+      detectPoints
+    }
+  }`,
+};
 export const TopoMetric = {
   variable: '$ids: [ID!]!',
   query: `
@@ -368,6 +388,85 @@ export const TopoServiceDetail = {
       id: $serviceId
     }, duration: $duration) {
       values {value}
+    }
+`,
+};
+export const TopoEndpointDependencyMetrics = {
+  variable: [
+    '$serviceName: String',
+    '$endpointName: String',
+    '$destServiceName: String',
+    '$destEndpointName: String',
+    '$duration: Duration!',
+  ],
+  query: `
+    endpointRelationPercentile: readLabeledMetricsValues(condition: {
+      name: "endpoint_relation_percentile"
+      entity: {
+        scope: EndpointRelation
+        serviceName: $serviceName
+        normal: true
+        endpointName: $endpointName
+        destNormal: true
+        destServiceName:  $destServiceName
+        destEndpointName: $destEndpointName
+      }
+    }, labels: ["0", "1", "2", "3", "4"], duration: $duration) {
+      label
+      values {
+        values {value}
+      }
+    }
+    endpointRelationCpm: readMetricsValues(condition: {
+      name: "endpoint_relation_cpm"
+      entity: {
+        scope: EndpointRelation
+        serviceName: $serviceName
+        normal: true
+        endpointName: $endpointName
+        destNormal: true
+        destServiceName:  $destServiceName
+        destEndpointName: $destEndpointName
+      }
+    }, duration: $duration) {
+      label
+      values {
+        values {value}
+      }
+    }
+    endpointRelationRespTime: readMetricsValues(condition: {
+      name: "endpoint_relation_resp_time"
+      entity: {
+        scope: EndpointRelation
+        serviceName: $serviceName
+        normal: true
+        endpointName: $endpointName
+        destNormal: true
+        destServiceName:  $destServiceName
+        destEndpointName: $destEndpointName
+      }
+    }, duration: $duration) {
+      label
+      values {
+        values {value}
+      }
+    }
+    endpointRelationSla: readMetricsValues(condition: {
+      name: "endpoint_relation_sla"
+      entity: {
+        scope: EndpointRelation
+        serviceName: $serviceName
+        normal: true
+        endpointName: $endpointName
+        destNormal: true
+        destServiceName:  $destServiceName
+        destEndpointName: $destEndpointName
+      }
+    }, duration: $duration) {
+      label
+      values {
+        values {value}
+      }
     }
 `,
 };
