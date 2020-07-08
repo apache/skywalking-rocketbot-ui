@@ -39,7 +39,7 @@ limitations under the License. -->
       </router-link>
       <router-link class="nav-link mr-20" to="/profile">
         <svg class="icon sm vm">
-          <use xlink:href="#merge"></use>
+          <use xlink:href="#timeline"></use>
         </svg>
         <span class="vm hide-xs ml-5">{{ this.$t('profile') }}</span>
       </router-link>
