@@ -41,6 +41,7 @@ export interface CompsGroup {
 
 export interface CompsTree {
   name?: string;
+  keyword?: string;
   type: string;
   query: any;
   children: any;

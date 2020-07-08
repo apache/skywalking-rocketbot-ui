@@ -17,7 +17,7 @@ limitations under the License. -->
     <span v-for="(i, index) in rocketComps.tree || []" :key="index" class="mr-15">
       <a
         class="rk-dashboard-group-i mb-10"
-        @click="handleOption(index)"
+        @click="handleOption(index, i.keyword)"
         :class="{
           active: rocketComps.group == index,
           grey: rocketComps.group != index,
@@ -64,7 +64,6 @@ limitations under the License. -->
   export default class ToolGroup extends Vue {
     @Prop() private rocketGlobal: any;
     @Prop() private rocketComps: any;
-    @Prop() private stateDashboard!: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('DELETE_COMPS_GROUP') private DELETE_COMPS_GROUP: any;
     @Mutation('ADD_COMPS_GROUP') private ADD_COMPS_GROUP: any;
@@ -82,12 +81,12 @@ limitations under the License. -->
         'service'
       );
     }
-    private handleOption(index: any) {
+    private handleOption(index: any, keyword: string) {
       this.MIXHANDLE_CHANGE_GROUP(index);
       return this.MIXHANDLE_GET_OPTION({
         compType: this.compType,
         duration: this.durationTime,
-        keywordServiceName: this.stateDashboard.keywordService,
+        keywordServiceName: keyword,
       });
     }
     private handleHide() {

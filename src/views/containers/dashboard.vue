@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div class="flex-v wrapper" style="flex-grow:1;height: 100%;overflow:hidden">
-    <ToolGroup :rocketGlobal="rocketGlobal" :rocketComps="rocketComps" :stateDashboard="stateDashboardOption" />
+    <ToolGroup :rocketGlobal="rocketGlobal" :rocketComps="rocketComps" />
     <ToolBar
       :rocketGlobal="rocketGlobal"
       :rocketComps="rocketComps"
@@ -98,7 +98,8 @@ limitations under the License. -->
       this.MIXHANDLE_GET_OPTION({
         compType: this.compType,
         duration: this.durationTime,
-        keywordServiceName: this.stateDashboardOption.keywordService,
+        keywordServiceName:
+          this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].keyword,
       });
     }
     private beforeMount() {
@@ -125,7 +126,6 @@ limitations under the License. -->
     private setDashboardTemplates(allTemplate: ITemplate[]) {
       const template = allTemplate.filter((item: ITemplate) => item.type === 'DASHBOARD' && item.activated);
       const templatesConfiguration = template.map((item: ITemplate) => JSON.parse(item.configuration)).flat(1);
-
       this.SET_COMPS_TREE(templatesConfiguration || []);
       window.localStorage.setItem('version', '8.0');
       window.localStorage.setItem('dashboard', JSON.stringify(templatesConfiguration));

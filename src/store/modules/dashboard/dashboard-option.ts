@@ -29,7 +29,6 @@ export interface State {
   currentEndpoint: any;
   instances: any[];
   currentInstance: any;
-  keywordService: string;
   updateDashboard: string;
 }
 
@@ -42,7 +41,6 @@ const initState: State = {
   currentInstance: {},
   databases: [],
   currentDatabase: {},
-  keywordService: localStorage.getItem('keywordServiceName') || '',
   updateDashboard: '',
 };
 
@@ -104,10 +102,6 @@ const mutations: MutationTree<State> = {
   [types.SET_CURRENT_DATABASE](state: State, service: any) {
     state.currentDatabase = service;
     state.updateDashboard = service;
-  },
-  [types.SET_KEYWORDSERVICE](state: State, data: string) {
-    state.keywordService = data;
-    window.localStorage.setItem('keywordServiceName', data);
   },
 };
 

@@ -26,7 +26,11 @@ limitations under the License. -->
     <div class="rk-dashboard-bar flex-h" v-if="compType !== dashboardType.DATABASE">
       <div class="sm grey service-search" v-if="compType === dashboardType.SERVICE">
         <div>{{ this.$t('serviceFilter') }}</div>
-        <input type="text" :value="rocketOption.keywordService" @change="searchServices($event.target.value)" />
+        <input
+          type="text"
+          :value="rocketComps.tree[rocketComps.group].keyword"
+          @change="searchServices($event.target.value)"
+        />
       </div>
       <ToolBarSelect
         v-if="compType === dashboardType.SERVICE"
@@ -82,7 +86,7 @@ limitations under the License. -->
     @Prop() private durationTime!: any;
     @State('rocketOption') private rocketOption: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
-    @Mutation('SET_KEYWORDSERVICE') private SET_KEYWORDSERVICE: any;
+    @Mutation('SET_CURRENT_KEYWORD') private SET_CURRENT_KEYWORD: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Action('SELECT_DATABASE') private SELECT_DATABASE: any;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
@@ -108,7 +112,7 @@ limitations under the License. -->
     }
     private searchServices(value: string) {
       this.GET_SERVICES({ duration: this.durationTime, keyword: value });
-      this.SET_KEYWORDSERVICE(value);
+      this.SET_CURRENT_KEYWORD(value);
     }
   }
 </script>

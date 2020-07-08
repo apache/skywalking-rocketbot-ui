@@ -32,6 +32,7 @@ export const initState: State = {
   tree: [
     {
       name: '',
+      keyword: '',
       type: 'service',
       query: {
         service: {},
@@ -49,8 +50,8 @@ const mutations: MutationTree<State> = {
   [types.SET_COMPS_TREE](state: State, data: CompsTree[]) {
     state.tree = data;
   },
-  [types.IMPORT_TREE](state: State, data: CompsTree) {
-    state.tree.push(data);
+  [types.IMPORT_TREE](state: State, data: CompsTree[]) {
+    state.tree.push(...data);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
   [types.SET_GROUP_QUERY](state: State, params: any) {
@@ -65,6 +66,10 @@ const mutations: MutationTree<State> = {
   [types.SET_CURRENT_GROUP](state: State, current: number) {
     state.group = current;
     state.current = 0;
+  },
+  [types.SET_CURRENT_KEYWORD](state: State, keyword: string) {
+    state.tree.splice(state.group, 1, Object.assign(state.tree[state.group], { keyword }));
+    window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
   [types.SET_CURRENT_GROUP_WITH_CURRENT](state: State, { index, current = 0 }: { index: number; current: number }) {
     state.group = index;

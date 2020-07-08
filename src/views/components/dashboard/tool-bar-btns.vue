@@ -74,7 +74,8 @@ limitations under the License. -->
       return this.MIXHANDLE_GET_OPTION({
         compType: this.compType,
         duration: this.durationTime,
-        keywordServiceName: this.rocketOption.keywordService,
+        keywordServiceName:
+          this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].keyword,
       });
     }
     private handleSetEdit() {
@@ -86,14 +87,11 @@ limitations under the License. -->
         if (!Array.isArray(data)) {
           throw new Error();
         }
-        const [{ children, name, type }, { keywordService } = { keywordService: '' }] = data;
+        const [{ children, name, type }] = data;
         if (children && name && type) {
-          this.IMPORT_TREE(data[0]);
+          this.IMPORT_TREE(data);
         } else {
           throw new Error('error');
-        }
-        if (keywordService && keywordService !== this.rocketOption.keywordService) {
-          this.$emit('searchServices', keywordService);
         }
         const el: any = document.getElementById('tool-bar-file');
         el!.value = '';
@@ -105,12 +103,7 @@ limitations under the License. -->
       const group = this.rocketComps.tree[this.rocketComps.group];
       delete group.query;
       const name = 'dashboard.json';
-      const data = [group];
-      if (this.compType === this.dashboardType.SERVICE) {
-        const { keywordService } = this.rocketOption;
-        data.push({ keywordService });
-      }
-      saveFile(data, name);
+      saveFile([group], name);
     }
   }
 </script>
