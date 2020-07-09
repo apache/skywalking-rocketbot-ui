@@ -112,11 +112,13 @@ limitations under the License. -->
       //   console.log(data);
       // });
       this.GET_ALL_TEMPLATES().then((allTemplate: ITemplate[]) => {
-        const template = allTemplate.filter((item: ITemplate) => item.type === 'DASHBOARD' && item.activated);
-        const templatesConfiguration = template.map((item: ITemplate) => JSON.parse(item.configuration)).flat(1);
-        this.SET_TEMPLATES(templatesConfiguration);
+        const dashboardTemplate = allTemplate.filter((item: ITemplate) => item.type === 'DASHBOARD');
+        const templatesConfig = dashboardTemplate.map((item: ITemplate) => JSON.parse(item.configuration)).flat(1);
+        this.SET_TEMPLATES(templatesConfig);
         if (window.localStorage.getItem('version') !== '8.0') {
           window.localStorage.removeItem('dashboard');
+          const template = allTemplate.filter((item: ITemplate) => item.type === 'DASHBOARD' && item.activated);
+          const templatesConfiguration = template.map((item: ITemplate) => JSON.parse(item.configuration)).flat(1);
           this.SET_COMPS_TREE(templatesConfiguration || []);
           window.localStorage.setItem('version', '8.0');
           window.localStorage.setItem('dashboard', JSON.stringify(templatesConfiguration));

@@ -103,7 +103,7 @@ limitations under the License. -->
     }
     private get templates() {
       let templates = [];
-      if (this.type === DASHBOARDTYPE.SERVICE) {
+      if (this.type === DASHBOARDTYPE.SERVICE || this.type === DASHBOARDTYPE.METRIC) {
         templates = this.servicesTemplates;
       } else if (this.type === DASHBOARDTYPE.DATABASE) {
         templates = this.databaseTemplates;
