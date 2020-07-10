@@ -76,8 +76,7 @@ const mutations: MutationTree<State> = {
     if (!params.name) {
       return;
     }
-    const type = params.type === 'metric' ? 'service' : params.type;
-    const template = state.templates.filter((item) => item.name === params.templateName && type === item.type);
+    const template = state.templates.filter((item) => item.name === params.templateName && params.type === item.type);
     let group = { name: params.name, type: params.type, query: {}, children: [{ name: 'demo', children: [] }] };
 
     if (template.length) {
