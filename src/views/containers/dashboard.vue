@@ -78,6 +78,7 @@ limitations under the License. -->
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
+    @Mutation('SET_TEMPLATES') private SET_TEMPLATES: any;
 
     private ObjectsType = ObjectsType;
 
@@ -111,17 +112,24 @@ limitations under the License. -->
       // }).then((data: any) => {
       //   console.log(data);
       // });
-      if (window.localStorage.getItem('version') !== '8.0') {
-        this.GET_ALL_TEMPLATES().then((allTemplate: ITemplate[]) => {
+      this.GET_ALL_TEMPLATES().then((allTemplate: ITemplate[]) => {
+        const dashboardTemplate = allTemplate.filter((item: ITemplate) => item.type === 'DASHBOARD');
+        const templatesConfig = dashboardTemplate.map((item: ITemplate) => JSON.parse(item.configuration)).flat(1);
+        this.SET_TEMPLATES(templatesConfig);
+        if (window.localStorage.getItem('version') !== '8.0') {
           window.localStorage.removeItem('dashboard');
-          this.setDashboardTemplates(allTemplate);
+          const template = allTemplate.filter((item: ITemplate) => item.type === 'DASHBOARD' && item.activated);
+          const templatesConfiguration = template.map((item: ITemplate) => JSON.parse(item.configuration)).flat(1);
+          this.SET_COMPS_TREE(templatesConfiguration || []);
+          window.localStorage.setItem('version', '8.0');
+          window.localStorage.setItem('dashboard', JSON.stringify(templatesConfiguration));
           this.handleOption();
-        });
-      } else {
-        const data: string = `${window.localStorage.getItem('dashboard')}`;
-        this.SET_COMPS_TREE(JSON.parse(data));
-        this.handleOption();
-      }
+        } else {
+          const data: string = `${window.localStorage.getItem('dashboard')}`;
+          this.SET_COMPS_TREE(JSON.parse(data));
+          this.handleOption();
+        }
+      });
     }
     private setDashboardTemplates(allTemplate: ITemplate[]) {
       const template = allTemplate.filter((item: ITemplate) => item.type === 'DASHBOARD' && item.activated);
