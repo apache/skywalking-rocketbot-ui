@@ -28,7 +28,7 @@ const m = {
   currentEndpoint: 'Current Endpoint',
   currentInstance: 'Current Instance',
   currentDatabase: 'Current Database',
-  templateConfig: 'Template Config',
+  templateConfig: 'Template configuration',
   copy: 'Copy',
   reset: 'Reset',
   apply: 'Apply',
