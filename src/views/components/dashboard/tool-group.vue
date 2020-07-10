@@ -89,24 +89,33 @@ limitations under the License. -->
     }
     private get servicesTemplates() {
       const templates = this.rocketComps.templates.filter(
-        (item: { type: string; name: string; children: any[] }) => item.type === 'service',
+        (item: { type: string; name: string; children: any[] }) => item.type === DASHBOARDTYPE.SERVICE,
       );
 
       return templates;
     }
     private get databaseTemplates() {
       const templates = this.rocketComps.templates.filter(
-        (item: { type: string; name: string; children: any[] }) => item.type === 'database',
+        (item: { type: string; name: string; children: any[] }) => item.type === DASHBOARDTYPE.DATABASE,
+      );
+
+      return templates;
+    }
+    private get metricsTemplates() {
+      const templates = this.rocketComps.templates.filter(
+        (item: { type: string; name: string; children: any[] }) => item.type === DASHBOARDTYPE.METRIC,
       );
 
       return templates;
     }
     private get templates() {
       let templates = [];
-      if (this.type === DASHBOARDTYPE.SERVICE || this.type === DASHBOARDTYPE.METRIC) {
+      if (this.type === DASHBOARDTYPE.SERVICE) {
         templates = this.servicesTemplates;
       } else if (this.type === DASHBOARDTYPE.DATABASE) {
         templates = this.databaseTemplates;
+      } else if (this.type === DASHBOARDTYPE.METRIC) {
+        templates = this.metricsTemplates;
       }
 
       return templates;
