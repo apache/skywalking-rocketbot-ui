@@ -44,8 +44,8 @@ limitations under the License. -->
           <option :value="DASHBOARDTYPE.METRIC">{{ $t('metricsView') }}</option>
           <option :value="DASHBOARDTYPE.DATABASE">{{ $t('databaseView') }}</option>
         </select>
-        <div class="sm grey  mb-5 mr-10">{{ $t('templateConfig') }}</div>
-        <select v-model="templateName" class="rk-dashboard-group-sel">
+        <div class="sm grey  mb-5 mr-10" v-show="type !== DASHBOARDTYPE.METRIC">{{ $t('templateConfig') }}</div>
+        <select v-model="templateName" class="rk-dashboard-group-sel" v-show="type !== DASHBOARDTYPE.METRIC">
           <option :value="''">None</option>
           <option v-for="template in templates" :key="template.name" :value="template.name">{{ template.name }}</option>
         </select>
@@ -101,21 +101,12 @@ limitations under the License. -->
 
       return templates;
     }
-    private get metricsTemplates() {
-      const templates = this.rocketComps.templates.filter(
-        (item: { type: string; name: string; children: any[] }) => item.type === DASHBOARDTYPE.METRIC,
-      );
-
-      return templates;
-    }
     private get templates() {
       let templates = [];
       if (this.type === DASHBOARDTYPE.SERVICE) {
         templates = this.servicesTemplates;
       } else if (this.type === DASHBOARDTYPE.DATABASE) {
         templates = this.databaseTemplates;
-      } else if (this.type === DASHBOARDTYPE.METRIC) {
-        templates = this.metricsTemplates;
       }
 
       return templates;
