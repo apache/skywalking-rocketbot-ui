@@ -60,6 +60,7 @@ limitations under the License. -->
   @Component({})
   export default class ToolBarBtns extends Vue {
     @Prop() private compType!: any;
+    @Prop() private dashboardType!: any;
     @Prop() private rocketGlobal!: any;
     @Prop() private rocketComps!: any;
     @Prop() private durationTime!: any;
@@ -73,7 +74,8 @@ limitations under the License. -->
       return this.MIXHANDLE_GET_OPTION({
         compType: this.compType,
         duration: this.durationTime,
-        keywordServiceName: this.rocketOption.keywordService,
+        keywordServiceName:
+          this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].serviceFilter,
       });
     }
     private handleSetEdit() {
@@ -85,7 +87,7 @@ limitations under the License. -->
         if (!Array.isArray(data)) {
           throw new Error();
         }
-        const { children, name, type } = data[0];
+        const [{ children, name, type }] = data;
         if (children && name && type) {
           this.IMPORT_TREE(data);
         } else {
@@ -101,7 +103,6 @@ limitations under the License. -->
       const group = this.rocketComps.tree[this.rocketComps.group];
       delete group.query;
       const name = 'dashboard.json';
-
       saveFile([group], name);
     }
   }

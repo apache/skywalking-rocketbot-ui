@@ -17,7 +17,7 @@ limitations under the License. -->
     <span v-for="(i, index) in rocketComps.tree || []" :key="index" class="mr-15">
       <a
         class="rk-dashboard-group-i mb-10"
-        @click="handleOption(index)"
+        @click="handleOption(index, i.serviceFilter)"
         :class="{
           active: rocketComps.group == index,
           grey: rocketComps.group != index,
@@ -111,11 +111,12 @@ limitations under the License. -->
 
       return templates;
     }
-    private handleOption(index: number) {
+    private handleOption(index: number, serviceFilter: string) {
       this.MIXHANDLE_CHANGE_GROUP(index);
       return this.MIXHANDLE_GET_OPTION({
         compType: this.compType,
         duration: this.durationTime,
+        keywordServiceName: serviceFilter,
       });
     }
     private handleHide() {
