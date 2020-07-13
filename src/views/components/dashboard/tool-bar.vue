@@ -86,6 +86,7 @@ limitations under the License. -->
     @State('rocketOption') private rocketOption: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
     @Mutation('SET_CURRENT_SERVICE_FILTER') private SET_CURRENT_SERVICE_FILTER: any;
+    @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Action('SELECT_DATABASE') private SELECT_DATABASE: any;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
@@ -114,6 +115,8 @@ limitations under the License. -->
         compType: this.dashboardType.SERVICE,
         duration: this.durationTime,
         keywordServiceName: value,
+      }).then(() => {
+        this.UPDATE_DASHBOARD();
       });
     }
   }

@@ -57,16 +57,19 @@ const mutations: MutationTree<State> = {
     state.currentService = service;
     state.updateDashboard = service;
   },
+
+  [types.UPDATE_DASHBOARD](state: State) {
+    state.updateDashboard = { _: +new Date() };
+  },
+
   [types.SET_ENDPOINTS](state: State, data: any) {
     state.endpoints = data;
     if (!data.length) {
       state.currentEndpoint = {};
-      state.updateDashboard = {};
       return;
     }
     if ((!state.currentEndpoint.key && data.length) || !state.endpoints.includes(state.currentEndpoint)) {
       state.currentEndpoint = data[0];
-      state.updateDashboard = data[0];
     }
   },
   [types.SET_CURRENT_ENDPOINT](state: State, endpoint: any) {
@@ -77,12 +80,10 @@ const mutations: MutationTree<State> = {
     state.instances = data;
     if (!data.length) {
       state.currentInstance = {};
-      state.updateDashboard = {};
       return;
     }
     if ((!state.currentInstance.key && data.length) || !state.instances.includes(state.currentInstance)) {
       state.currentInstance = data[0];
-      state.updateDashboard = data[0];
     }
   },
   [types.SET_CURRENT_INSTANCE](state: State, instance: any) {
