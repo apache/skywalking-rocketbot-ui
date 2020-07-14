@@ -29,7 +29,7 @@ export interface State {
   currentEndpoint: any;
   instances: any[];
   currentInstance: any;
-  updateDashboard: string;
+  updateDashboard: object;
 }
 
 const initState: State = {
@@ -41,7 +41,7 @@ const initState: State = {
   currentInstance: {},
   databases: [],
   currentDatabase: {},
-  updateDashboard: '',
+  updateDashboard: {},
 };
 
 // getters
@@ -50,18 +50,18 @@ const getters = {};
 // mutations
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: any) {
-    if (!data.length) {
-      return;
-    }
     state.services = data;
-    if (!state.currentService.key && data.length) {
-      state.currentService = data[0];
-    }
+    state.currentService = data[0] || {};
   },
   [types.SET_CURRENT_SERVICE](state: State, service: any) {
     state.currentService = service;
     state.updateDashboard = service;
   },
+
+  [types.UPDATE_DASHBOARD](state: State) {
+    state.updateDashboard = { _: +new Date() };
+  },
+
   [types.SET_ENDPOINTS](state: State, data: any) {
     state.endpoints = data;
     if (!data.length) {
@@ -119,15 +119,12 @@ const actions: ActionTree<State, any> = {
       });
   },
   GET_SERVICE_ENDPOINTS(context: { commit: Commit; state: any }, params: { keyword: string }) {
-    if (!context.state.currentService.key) {
-      return new Promise((resolve) => resolve());
-    }
     if (!params.keyword) {
       params.keyword = '';
     }
     return graph
       .query('queryEndpoints')
-      .params({ serviceId: context.state.currentService.key, ...params })
+      .params({ serviceId: context.state.currentService.key || '', ...params })
       .then((res: AxiosResponse) => {
         context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
       });
@@ -141,12 +138,9 @@ const actions: ActionTree<State, any> = {
       });
   },
   GET_SERVICE_INSTANCES(context: { commit: Commit; state: any }, params: any) {
-    if (!context.state.currentService.key) {
-      return new Promise((resolve) => resolve());
-    }
     return graph
       .query('queryInstances')
-      .params({ serviceId: context.state.currentService.key, ...params })
+      .params({ serviceId: context.state.currentService.key || '', ...params })
       .then((res: AxiosResponse) => {
         context.commit(types.SET_INSTANCES, res.data.data.getServiceInstances);
       });
