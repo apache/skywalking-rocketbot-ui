@@ -17,7 +17,7 @@ limitations under the License. -->
     <span v-for="(i, index) in rocketComps.tree || []" :key="index" class="mr-15">
       <a
         class="rk-dashboard-group-i mb-10"
-        @click="handleOption(index)"
+        @click="handleOption(index, i.serviceFilter)"
         :class="{
           active: rocketComps.group == index,
           grey: rocketComps.group != index,
@@ -43,6 +43,11 @@ limitations under the License. -->
           <option :value="DASHBOARDTYPE.SERVICE">{{ $t('standardAPM') }}</option>
           <option :value="DASHBOARDTYPE.METRIC">{{ $t('metricsView') }}</option>
           <option :value="DASHBOARDTYPE.DATABASE">{{ $t('databaseView') }}</option>
+        </select>
+        <div class="sm grey  mb-5 mr-10" v-show="type !== DASHBOARDTYPE.METRIC">{{ $t('templateConfig') }}</div>
+        <select v-model="templateName" class="rk-dashboard-group-sel" v-show="type !== DASHBOARDTYPE.METRIC">
+          <option :value="''">None</option>
+          <option v-for="template in templates" :key="template.name" :value="template.name">{{ template.name }}</option>
         </select>
         <div class="sm grey  mb-5 mr-10">{{ $t('templateName') }}</div>
         <input class="mb-5 rk-dashboard-group-input" type="text" v-model="name" />
@@ -74,6 +79,7 @@ limitations under the License. -->
     private type: string = DASHBOARDTYPE.SERVICE;
     private show: boolean = false;
     private DASHBOARDTYPE = DASHBOARDTYPE;
+    private templateName: string = '';
 
     private get compType() {
       return (
@@ -81,20 +87,46 @@ limitations under the License. -->
         'service'
       );
     }
-    private handleOption(index: any) {
+    private get servicesTemplates() {
+      const templates = this.rocketComps.templates.filter(
+        (item: { type: string; name: string; children: any[] }) => item.type === DASHBOARDTYPE.SERVICE,
+      );
+
+      return templates;
+    }
+    private get databaseTemplates() {
+      const templates = this.rocketComps.templates.filter(
+        (item: { type: string; name: string; children: any[] }) => item.type === DASHBOARDTYPE.DATABASE,
+      );
+
+      return templates;
+    }
+    private get templates() {
+      let templates = [];
+      if (this.type === DASHBOARDTYPE.SERVICE) {
+        templates = this.servicesTemplates;
+      } else if (this.type === DASHBOARDTYPE.DATABASE) {
+        templates = this.databaseTemplates;
+      }
+
+      return templates;
+    }
+    private handleOption(index: number, serviceFilter: string) {
       this.MIXHANDLE_CHANGE_GROUP(index);
       return this.MIXHANDLE_GET_OPTION({
         compType: this.compType,
         duration: this.durationTime,
+        keywordServiceName: serviceFilter,
       });
     }
     private handleHide() {
       this.name = '';
       this.type = DASHBOARDTYPE.SERVICE;
       this.show = false;
+      this.templateName = '';
     }
     private handleCreate() {
-      this.ADD_COMPS_GROUP({ name: this.name, type: this.type });
+      this.ADD_COMPS_GROUP({ name: this.name, type: this.type, templateName: this.templateName });
       this.handleHide();
     }
   }

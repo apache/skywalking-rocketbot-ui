@@ -20,7 +20,6 @@ limitations under the License. -->
 <script lang="ts">
   import { DurationTime } from '@/types/global';
   import compareObj from '@/utils/comparison';
-  import Axios, { AxiosResponse } from 'axios';
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation } from 'vuex-class';
   import TopoSelect from './topo-select.vue';
@@ -29,26 +28,14 @@ limitations under the License. -->
   export default class TopoServices extends Vue {
     @Getter('durationTime') public durationTime: any;
     @Action('rocketTopo/GET_TOPO') public GET_TOPO: any;
+    @Action('rocketTopo/GET_SERVICES') private GET_SERVICES: any;
     @Mutation('rocketTopoGroup/UNSELECT_GROUP') private UNSELECT_GROUP: any;
     private services = [{ key: 0, label: 'All services' }];
     private service = { key: 0, label: 'All services' };
 
     private fetchData() {
-      Axios.post('/graphql', {
-        query: `
-      query queryServices($duration: Duration!) {
-        services: getAllServices(duration: $duration) {
-          key: id
-          label: name
-        }
-      }`,
-        variables: {
-          duration: this.durationTime,
-        },
-      }).then((res: AxiosResponse) => {
-        this.services = res.data.data.services
-          ? [{ key: 0, label: 'All services' }, ...res.data.data.services]
-          : [{ key: 0, label: 'All services' }];
+      this.GET_SERVICES({ duration: this.durationTime }).then((json: any[]) => {
+        this.services = [...this.services, ...json];
       });
     }
 

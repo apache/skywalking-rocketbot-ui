@@ -23,6 +23,7 @@ export interface State {
   group: number;
   index: number;
   tree: CompsTree[];
+  templates: CompsTree[];
 }
 
 export const initState: State = {
@@ -32,6 +33,7 @@ export const initState: State = {
   tree: [
     {
       name: '',
+      serviceFilter: '',
       type: 'service',
       query: {
         service: {},
@@ -42,6 +44,7 @@ export const initState: State = {
       children: [],
     },
   ],
+  templates: [],
 };
 
 // mutations
@@ -66,21 +69,25 @@ const mutations: MutationTree<State> = {
     state.group = current;
     state.current = 0;
   },
+  [types.SET_CURRENT_SERVICE_FILTER](state: State, serviceFilter: string) {
+    state.tree.splice(state.group, 1, Object.assign(state.tree[state.group], { serviceFilter }));
+    window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
+  },
   [types.SET_CURRENT_GROUP_WITH_CURRENT](state: State, { index, current = 0 }: { index: number; current: number }) {
     state.group = index;
     state.current = current;
   },
-  [types.ADD_COMPS_GROUP](state: State, params: { type: string; name: string }) {
+  [types.ADD_COMPS_GROUP](state: State, params: { type: string; name: string; templateName: string }) {
     if (!params.name) {
       return;
     }
+    const template = state.templates.filter((item) => item.name === params.templateName && params.type === item.type);
+    let group = { name: params.name, type: params.type, query: {}, children: [{ name: 'demo', children: [] }] };
 
-    const newTree = [];
-    Object.keys(state.tree).forEach((i: any) => {
-      newTree.push(state.tree[i]);
-    });
-    newTree.push({ name: params.name, type: params.type, query: {}, children: [{ name: 'demo', children: [] }] });
-    state.tree = newTree;
+    if (template.length) {
+      group = { ...group, children: template[0].children };
+    }
+    state.tree.push(group);
 
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
@@ -130,6 +137,9 @@ const mutations: MutationTree<State> = {
 
     state.tree[state.group].children[state.current].children[params.index] = { ...temp, ...params.values };
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
+  },
+  [types.SET_TEMPLATES](state: State, templates) {
+    state.templates = templates;
   },
 };
 

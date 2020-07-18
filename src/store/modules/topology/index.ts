@@ -18,13 +18,19 @@
 import { Commit, ActionTree, Dispatch } from 'vuex';
 import graph from '@/graph';
 import * as types from '../../mutation-types';
-import { AxiosResponse } from 'axios';
+import axios, { AxiosPromise, AxiosResponse } from 'axios';
+import { cancelToken } from '@/utils/cancelToken';
 
 interface Option {
   key: string;
   label: string;
 }
-interface Call {
+export interface Duration {
+  start: string;
+  end: string;
+  step: string;
+}
+export interface Call {
   avgResponseTime: number;
   cpm: number;
   isAlert: boolean;
@@ -47,12 +53,18 @@ interface Node {
   type: string;
 }
 
+export interface EndpointDependencyConidition {
+  serviceName: string;
+  endpointName: string;
+  destServiceName: string;
+  destEndpointName: string;
+  duration: Duration;
+}
+
 export interface State {
   callback: any;
   calls: Call[];
   nodes: Node[];
-  _calls: Call[];
-  _nodes: Node[];
   detectPoints: string[];
   selectedServiceCall: Call | null;
   currentNode: any;
@@ -67,8 +79,14 @@ export interface State {
     calls: Call[];
     nodes: Node[];
   };
+  endpointDependency: {
+    calls: Call[];
+    nodes: Node[];
+  };
   selectedInstanceCall: Call | null;
   instanceDependencyMetrics: { [key: string]: any };
+  endpointDependencyMetrics: { [key: string]: any };
+  currentEndpointDepth: { key: number; label: string };
   queryInstanceMetricsType: string;
   serviceThroughput: { Throughput: number[] };
   serviceSLA: { SLA: number[] };
@@ -88,8 +106,6 @@ const initState: State = {
   selectedServiceCall: null,
   calls: [],
   nodes: [],
-  _calls: [],
-  _nodes: [],
   currentNode: {},
   currentLink: {},
   current: {
@@ -104,8 +120,14 @@ const initState: State = {
     calls: [],
     nodes: [],
   },
+  endpointDependency: {
+    calls: [],
+    nodes: [],
+  },
   selectedInstanceCall: null,
   instanceDependencyMetrics: {},
+  endpointDependencyMetrics: {},
+  currentEndpointDepth: { key: 2, label: '2' },
   queryInstanceMetricsType: '',
   serviceThroughput: { Throughput: [] },
   serviceSLA: { SLA: [] },
@@ -150,10 +172,6 @@ const mutations = {
     state.calls = data.calls;
     state.nodes = data.nodes;
   },
-  [types.SET_TOPO_COPY](state: State, data: any) {
-    state._calls = data.calls;
-    state._nodes = data.nodes;
-  },
   [types.SET_SELECTED_CALL](state: State, data: any) {
     state.selectedServiceCall = data;
   },
@@ -195,6 +213,26 @@ const mutations = {
     data.getPercentile.forEach((item: any, index: number) => {
       state.instanceDependencyMetrics.percentResponse[PercentileItem[index]] = item.values.map((i: any) => i.value);
     });
+  },
+  [types.SET_ENDPOINT_DEPENDENCY_METRICS](state: State, data: { [key: string]: any }) {
+    state.endpointDependencyMetrics.cpm = data.endpointRelationCpm
+      ? data.endpointRelationCpm.values.values.map((i: any) => i.value)
+      : [];
+    state.endpointDependencyMetrics.respTime = data.endpointRelationRespTime
+      ? data.endpointRelationRespTime.values.values.map((i: any) => i.value)
+      : [];
+    state.endpointDependencyMetrics.sla = data.endpointRelationSla
+      ? data.endpointRelationSla.values.values.map((i: any) => i.value)
+      : [];
+    state.endpointDependencyMetrics.percentile = {};
+    if (!data.endpointRelationPercentile) {
+      return;
+    }
+    for (const item of data.endpointRelationPercentile) {
+      state.endpointDependencyMetrics.percentile[PercentileItem[Number(item.label)]] = item.values.values.map(
+        (i: any) => i.value,
+      );
+    }
   },
   [types.SET_INSTANCE_DEPEDENCE_TYPE](state: State, data: string) {
     state.queryInstanceMetricsType = data;
@@ -263,41 +301,43 @@ const mutations = {
     state.topoEndpoints.push(comp);
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
   },
+  [types.SET_ENDPOINT_DEPENDENCY](state: State, data: { calls: Call[]; nodes: Node[] }) {
+    state.endpointDependency = data;
+  },
+  [types.SET_ENDPOINT_DEPTH](state: State, data: { key: number; label: string }) {
+    state.currentEndpointDepth = data;
+  },
 };
 
 // actions
 const actions: ActionTree<State, any> = {
-  FILTER_TOPO(context: { commit: Commit; state: State }, params: { services: string[]; group: string }) {
-    const tempCalls = [...context.state._calls];
-    const tempNodes = [...context.state._nodes];
-    if (params.group === 'all') {
-      context.commit(types.SET_TOPO, { calls: context.state._calls, nodes: context.state._nodes });
-      return;
+  GET_SERVICES(context: { commit: Commit }, params: { duration: Duration; keyword: string }) {
+    if (!params.keyword) {
+      params.keyword = '';
     }
-    const nodeInCalls: string[] = [];
-    const resultNodes: Node[] = [];
-    const resultCalls: Call[] = [];
-    tempCalls.forEach((call: any) => {
-      if (
-        params.services.some((i: string) => call.source.id === i) ||
-        params.services.some((i: string) => call.target.id === i)
-      ) {
-        nodeInCalls.push(call.source.id);
-        nodeInCalls.push(call.target.id);
-        resultCalls.push(call);
-      }
-    });
-    const setNodes: string[] = Array.from(new Set(nodeInCalls));
-    tempNodes.forEach((node: any) => {
-      if (setNodes.some((i: string) => node.id === i)) {
-        resultNodes.push(node);
-      }
-    });
-    context.commit(types.SET_TOPO, { calls: resultCalls, nodes: resultNodes });
+    return graph
+      .query('queryServices')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        return res.data.data.services || [];
+      });
+  },
+  GET_SERVICE_ENDPOINTS(context: { commit: Commit }, params: { serviceId: string; keyword: string }) {
+    if (!params.serviceId) {
+      return new Promise((resolve) => resolve());
+    }
+    if (!params.keyword) {
+      params.keyword = '';
+    }
+    return graph
+      .query('queryEndpoints')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        return res.data.data.getEndpoints || [];
+      });
   },
   CLEAR_TOPO(context: { commit: Commit; state: State }) {
     context.commit(types.SET_TOPO, { calls: [], nodes: [] });
-    context.commit(types.SET_TOPO_COPY, { calls: [], nodes: [] });
   },
   CLEAR_TOPO_INFO(context: { commit: Commit; state: State }) {
     context.commit(types.SET_TOPO_RELATION, {});
@@ -316,7 +356,7 @@ const actions: ActionTree<State, any> = {
       context.dispatch('INSTANCE_RELATION_INFO', params);
     }
   },
-  GET_TOPO_SERVICE_INFO(context: { commit: Commit; state: State }, params: any) {
+  GET_TOPO_SERVICE_INFO(context: { commit: Commit; state: State }, params: { id: string; duration: Duration }) {
     if (!params.id) {
       return;
     }
@@ -346,7 +386,10 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_SELECTED_CALL, params);
       });
   },
-  GET_TOPO_SERVICE_DETAIL(context: { commit: Commit; state: State }, params: any) {
+  GET_TOPO_SERVICE_DETAIL(
+    context: { commit: Commit; state: State },
+    params: { serviceId: string; duration: Duration },
+  ) {
     return graph
       .query('queryTopoServiceDetail')
       .params({
@@ -387,7 +430,6 @@ const actions: ActionTree<State, any> = {
           .then((info: AxiosResponse) => {
             const resInfo = info.data.data;
             if (!resInfo.sla) {
-              context.commit(types.SET_TOPO_COPY, { calls, nodes });
               return context.commit(types.SET_TOPO, { calls, nodes });
             }
             for (let i = 0; i < resInfo.sla.values.length; i += 1) {
@@ -404,7 +446,6 @@ const actions: ActionTree<State, any> = {
               }
             }
             if (!resInfo.cpmC) {
-              context.commit(types.SET_TOPO_COPY, { calls, nodes });
               return context.commit(types.SET_TOPO, { calls, nodes });
             }
             for (let i = 0; i < resInfo.cpmC.values.length; i += 1) {
@@ -420,7 +461,6 @@ const actions: ActionTree<State, any> = {
               }
             }
             if (!resInfo.cpmS) {
-              context.commit(types.SET_TOPO_COPY, { calls, nodes });
               return context.commit(types.SET_TOPO, { calls, nodes });
             }
             for (let i = 0; i < resInfo.cpmS.values.length; i += 1) {
@@ -434,8 +474,144 @@ const actions: ActionTree<State, any> = {
                 }
               }
             }
-            context.commit(types.SET_TOPO_COPY, { calls, nodes });
             context.commit(types.SET_TOPO, { calls, nodes });
+          });
+      });
+  },
+  // todo sync
+  GET_ALL_ENDPOINT_DEPENDENCY(
+    context: { commit: Commit; state: State; dispatch: Dispatch },
+    params: { endpointIds: string[]; duration: Duration },
+  ) {
+    context.dispatch('GET_ENDPOINT_TOPO', params).then((res) => {
+      if (context.state.currentEndpointDepth.key > 1) {
+        const endpointIds = res.nodes.map((item: Node) => item.id);
+
+        context.dispatch('GET_ENDPOINT_TOPO', { endpointIds, duration: params.duration }).then((json) => {
+          if (context.state.currentEndpointDepth.key > 2) {
+            const ids = json.nodes.map((item: Node) => item.id);
+
+            context.dispatch('GET_ENDPOINT_TOPO', { endpointIds: ids, duration: params.duration }).then((topo) => {
+              if (context.state.currentEndpointDepth.key > 3) {
+                const endpoints = topo.nodes.map((item: Node) => item.id);
+                context
+                  .dispatch('GET_ENDPOINT_TOPO', { endpointIds: endpoints, duration: params.duration })
+                  .then((data) => {
+                    if (context.state.currentEndpointDepth.key > 4) {
+                      context
+                        .dispatch('GET_ENDPOINT_TOPO', { endpointIds: endpoints, duration: params.duration })
+                        .then((topos) => {
+                          context.commit(types.SET_ENDPOINT_DEPENDENCY, topos);
+                        });
+                    } else {
+                      context.commit(types.SET_ENDPOINT_DEPENDENCY, data);
+                    }
+                  });
+              } else {
+                context.commit(types.SET_ENDPOINT_DEPENDENCY, topo);
+              }
+            });
+          } else {
+            context.commit(types.SET_ENDPOINT_DEPENDENCY, json);
+          }
+        });
+      } else {
+        context.commit(types.SET_ENDPOINT_DEPENDENCY, res);
+      }
+    });
+  },
+  GET_ENDPOINT_TOPO(context: { commit: Commit; state: State }, params: { endpointIds: string[]; duration: Duration }) {
+    const variables = ['$duration: Duration!'];
+    const fragment = params.endpointIds.map((id: string, index: number) => {
+      return `endpointTopology${index}: getEndpointDependencies(endpointId: "${id}", duration: $duration) {
+        nodes {
+          id
+          name
+          serviceId
+          serviceName
+          type
+          isReal
+        }
+        calls {
+          id
+          source
+          target
+          detectPoints
+        }
+      }`;
+    });
+    const querys = `query queryData(${variables}) {${fragment}}`;
+    return axios
+      .post('/graphql', { query: querys, variables: { duration: params.duration } }, { cancelToken: cancelToken() })
+      .then((res: AxiosResponse) => {
+        if (res.data.errors) {
+          context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });
+          return;
+        }
+        const topo = res.data.data;
+        const calls = [] as any;
+        let nodes = [] as any;
+        for (const key of Object.keys(topo)) {
+          calls.push(...topo[key].calls);
+          nodes.push(...topo[key].nodes);
+        }
+        const obj = {} as any;
+        nodes = nodes.reduce((prev: Node[], next: Node) => {
+          if (!obj[next.id]) {
+            obj[next.id] = true;
+            prev.push(next);
+          }
+          return prev;
+        }, []);
+        const queryVariables = ['$duration: Duration!'];
+        const fragments = calls
+          .map((call: Call & EndpointDependencyConidition, index: number) => {
+            let source = {} as any;
+            let target = {} as any;
+            for (const node of nodes) {
+              if (node.id === call.source) {
+                source = node;
+                call.serviceName = node.serviceName;
+                call.endpointName = node.name;
+              }
+              if (node.id === call.target) {
+                target = node;
+                call.destServiceName = node.serviceName;
+                call.destEndpointName = node.name;
+              }
+            }
+            return `cpm_${index}: readMetricsValue(condition: {
+            name: "endpoint_relation_cpm"
+            entity: {
+              scope: EndpointRelation
+              serviceName: "${source.serviceName}"
+              normal: true
+              endpointName: "${source.name}"
+              destNormal: true
+              destServiceName: "${target.serviceName}"
+              destEndpointName: "${target.name}"
+            }
+          }, duration: $duration)`;
+          })
+          .join(' ');
+        const query = `query queryData(${queryVariables}) {${fragments}}`;
+        return axios
+          .post('/graphql', { query, variables: { duration: params.duration } }, { cancelToken: cancelToken() })
+          .then((json: AxiosResponse<any>) => {
+            if (json.data.errors) {
+              context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });
+              return;
+            }
+            const cpms = json.data.data;
+            const keys = Object.keys(cpms);
+            for (const key of keys) {
+              const index = Number(key.split('_')[1]);
+              calls[index].value = cpms[key] || 0.01;
+            }
+            return { calls, nodes };
+          })
+          .catch(() => {
+            context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });
           });
       });
   },
@@ -444,7 +620,7 @@ const actions: ActionTree<State, any> = {
     params: {
       clientServiceId: string;
       serverServiceId: string;
-      duration: string;
+      duration: Duration;
     },
   ) {
     graph
@@ -511,7 +687,7 @@ const actions: ActionTree<State, any> = {
   },
   INSTANCE_RELATION_INFO(
     context: { commit: Commit; state: State },
-    params: Call & { mode: string; queryType: string; durationTime: string },
+    params: Call & { mode: string; queryType: string; durationTime: Duration },
   ) {
     graph
       .query(params.queryType)
@@ -526,6 +702,17 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_SELECTED_INSTANCE_CALL, params);
         context.commit(types.SET_INSTANCE_DEPEDENCE_TYPE, params.mode);
         context.commit(types.SET_INSTANCE_DEPEDENCE_METRICS, res.data.data);
+      });
+  },
+  GET_ENDPOINT_DEPENDENCY_METRICS(context: { commit: Commit; state: State }, params: EndpointDependencyConidition) {
+    return graph
+      .query('queryTopoEndpointDependencyMetrics')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        if (!(res.data && res.data.data)) {
+          return;
+        }
+        context.commit(types.SET_ENDPOINT_DEPENDENCY_METRICS, res.data.data);
       });
   },
 };

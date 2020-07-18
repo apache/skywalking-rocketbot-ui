@@ -43,7 +43,9 @@ limitations under the License. -->
           },
         };
         if (this.type === 'areaChart') {
-          serie.areaStyle = {};
+          serie.areaStyle = {
+            opacity: 0.4,
+          };
         }
         return serie;
       });

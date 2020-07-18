@@ -63,11 +63,7 @@ limitations under the License. -->
 
     private clickLinks(params: any) {
       if (params.dataType === 'edge' && params.data) {
-        this.GET_INSTANCE_DEPENDENCY_METRICS({
-          ...params.data,
-          durationTime: this.durationTime,
-          mode: params.data.detectPoints[0],
-        });
+        this.$emit('showMetrics', params.data);
       }
     }
   }
