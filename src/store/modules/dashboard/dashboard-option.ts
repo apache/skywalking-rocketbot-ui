@@ -59,7 +59,7 @@ const mutations: MutationTree<State> = {
   },
 
   [types.UPDATE_DASHBOARD](state: State) {
-    state.updateDashboard = { _: +new Date() };
+    state.updateDashboard = { key: +new Date() };
   },
 
   [types.SET_ENDPOINTS](state: State, data: any) {
@@ -119,6 +119,10 @@ const actions: ActionTree<State, any> = {
       });
   },
   GET_SERVICE_ENDPOINTS(context: { commit: Commit; state: any }, params: { keyword: string }) {
+    if (!context.state.currentService.key) {
+      context.commit(types.SET_ENDPOINTS, []);
+      return;
+    }
     if (!params.keyword) {
       params.keyword = '';
     }
@@ -138,6 +142,10 @@ const actions: ActionTree<State, any> = {
       });
   },
   GET_SERVICE_INSTANCES(context: { commit: Commit; state: any }, params: any) {
+    if (!context.state.currentService.key) {
+      context.commit(types.SET_INSTANCES, []);
+      return;
+    }
     return graph
       .query('queryInstances')
       .params({ serviceId: context.state.currentService.key || '', ...params })
