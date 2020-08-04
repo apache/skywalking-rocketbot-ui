@@ -37,7 +37,7 @@ export enum MetricsType {
 
 export const QueryMetricTypes: { [key: string]: Array<{ label: string; value: string }> } = {
   REGULAR_VALUE: [
-    { label: 'read avg value in the duration', value: 'readMetricsValue' },
+    { label: 'read the single value in the duration', value: 'readMetricsValue' },
     { label: 'read all values in the duration', value: 'readMetricsValues' },
     { label: 'get sorted top N values', value: 'sortMetrics' },
   ],
@@ -60,6 +60,8 @@ export const CalculationType = [
   { label: 'Minus', value: '-' },
   { label: 'Multiplication', value: '*' },
   { label: 'Division', value: '/' },
+  { label: 'Convert Unix Timestamp(milliseconds)', value: 'milliseconds' },
+  { label: 'Convert Unix Timestamp(seconds)', value: 'seconds' },
 ];
 
 export const ChartTypeOptions = [
