@@ -209,7 +209,7 @@ limitations under the License. -->
           <option v-for="type in CalculationType" :value="type.value" :key="type.value">{{ type.label }}</option>
         </select>
         <input
-          type="number"
+          type="text"
           class="rk-chart-edit-input long"
           :value="itemConfig.aggregationNum"
           @change="setItemConfig({ type: 'aggregationNum', value: $event.target.value })"
@@ -416,6 +416,21 @@ limitations under the License. -->
           this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: this.itemConfig[params.type] } });
         }
 
+        return;
+      }
+      if (params.type === 'aggregation' && ['milliseconds', 'seconds'].includes(this.itemConfig.aggregation)) {
+        const values = {
+          aggregationNum: 'YYYY-MM-DD HH:mm:ss',
+          [params.type]: params.value,
+        };
+        this.itemConfig = {
+          ...this.itemConfig,
+          ...values,
+        };
+        this.EDIT_COMP_CONFIG({
+          index: this.index,
+          values,
+        });
         return;
       }
       if (this.type === this.pageTypes[0]) {

@@ -63,13 +63,14 @@ limitations under the License. -->
 </template>
 <script lang="ts">
   import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+  import { Mutation, State, Getter, Action } from 'vuex-class';
   import charts from './charts';
+  import dayjs from 'dayjs';
+
   import { QueryTypes } from './constant';
   import { TopologyType, ObjectsType } from '../../constant';
   import { MetricsType, CalculationType } from './charts/constant';
   import { uuid } from '@/utils/uuid.ts';
-
-  import { Mutation, State, Getter, Action } from 'vuex-class';
 
   @Component({
     components: { ...charts },
@@ -150,7 +151,9 @@ limitations under the License. -->
 
         if (queryMetricType === QueryTypes.ReadMetricsValue) {
           this.chartSource = {
-            avgNum: this.aggregationValue({ data: resVal, type: aggregation, aggregationNum: Number(aggregationNum) }),
+            avgNum: [CalculationType[4].value, CalculationType[5].value].includes(aggregation)
+              ? this.formatDate({ data: resVal, type: aggregation, aggregationNum })
+              : this.aggregationValue({ data: resVal, type: aggregation, aggregationNum: Number(aggregationNum) }),
           };
         }
         if (queryMetricType === QueryTypes.ReadMetricsValues) {
@@ -220,6 +223,20 @@ limitations under the License. -->
 
     private editComponentConfig() {
       this.dialogConfigVisible = true;
+    }
+
+    private formatDate(json: { data: number; type: string; aggregationNum: string }) {
+      let { aggregationNum } = json;
+      if (!aggregationNum) {
+        aggregationNum = 'YYYY-MM-DD HH:mm:ss';
+      }
+      if (json.type === CalculationType[4].value) {
+        return dayjs(json.data).format(aggregationNum);
+      } else if (json.type === CalculationType[5].value) {
+        return dayjs.unix(json.data).format(aggregationNum);
+      } else {
+        return json.data;
+      }
     }
 
     private aggregationValue(json: { data: number; type: string; aggregationNum: number }) {
