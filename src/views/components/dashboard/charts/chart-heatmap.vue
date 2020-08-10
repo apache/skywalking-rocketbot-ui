@@ -21,7 +21,6 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import 'echarts/lib/component/visualMap';
-  import moment from 'dayjs';
   @Component
   export default class ChartHeatmap extends Vue {
     @Prop() private title!: string;

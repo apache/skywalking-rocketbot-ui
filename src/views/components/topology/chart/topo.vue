@@ -69,7 +69,7 @@ limitations under the License. -->
         {icon: 'INSTANCE', click: this.handleGoInstance},
         {icon: 'TRACE', click: this.handleGoTrace},
         {icon: 'ALARM', click: this.handleGoAlarm},
-        {icon: ''},
+        {icon: 'ENDPOINT', click: this.handleGoEndpointDependency},
         {icon: ''},
       ]);
       this.svg.on('click', (d, i) => {
@@ -105,6 +105,10 @@ limitations under the License. -->
           duration: this.$store.getters.durationTime,
         });
         this.$emit('setDialog', 'endpoint');
+      },
+      // endpoint dependency hexagon
+      handleGoEndpointDependency() {
+        this.$emit('setDialog', 'endpoint_dependency');
       },
       handleNodeClick(d) {
         this.$emit('setCurrent', { key: d.id, label: d.name });

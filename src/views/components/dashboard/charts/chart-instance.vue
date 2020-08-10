@@ -32,7 +32,6 @@ limitations under the License. -->
 <script lang="ts">
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
-  import moment from 'dayjs';
   import { State } from 'vuex-class';
   @Component
   export default class ChartInstance extends Vue {

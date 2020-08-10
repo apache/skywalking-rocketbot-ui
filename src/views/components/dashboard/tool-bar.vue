@@ -18,13 +18,18 @@ limitations under the License. -->
       :rocketGlobal="rocketGlobal"
       :rocketComps="rocketComps"
       :compType="compType"
+      :dashboardType="dashboardType"
       :durationTime="durationTime"
       :rocketOption="rocketOption"
     ></ToolBarBtns>
     <div class="rk-dashboard-bar flex-h" v-if="compType !== dashboardType.DATABASE">
       <div class="sm grey service-search" v-if="compType === dashboardType.SERVICE">
         <div>{{ this.$t('serviceFilter') }}</div>
-        <input type="text" :value="rocketOption.keywordService" @change="searchServices($event.target.value)" />
+        <input
+          type="text"
+          :value="rocketComps.tree[rocketComps.group].serviceFilter"
+          @change="searchServices($event.target.value)"
+        />
       </div>
       <ToolBarSelect
         v-if="compType === dashboardType.SERVICE"
@@ -80,13 +85,13 @@ limitations under the License. -->
     @Prop() private durationTime!: any;
     @State('rocketOption') private rocketOption: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
-    @Mutation('SET_KEYWORDSERVICE') private SET_KEYWORDSERVICE: any;
+    @Mutation('SET_CURRENT_SERVICE_FILTER') private SET_CURRENT_SERVICE_FILTER: any;
+    @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Action('SELECT_DATABASE') private SELECT_DATABASE: any;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
-    @Action('GET_SERVICES') private GET_SERVICES: any;
     private dashboardType = DASHBOARDTYPE;
     get lastKey() {
       const current = this.rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children;
@@ -105,8 +110,14 @@ limitations under the License. -->
       this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
     }
     private searchServices(value: string) {
-      this.GET_SERVICES({ duration: this.durationTime, keyword: value });
-      this.SET_KEYWORDSERVICE(value);
+      this.SET_CURRENT_SERVICE_FILTER(value);
+      this.MIXHANDLE_GET_OPTION({
+        compType: this.dashboardType.SERVICE,
+        duration: this.durationTime,
+        keywordServiceName: value,
+      }).then(() => {
+        this.UPDATE_DASHBOARD();
+      });
     }
   }
 </script>

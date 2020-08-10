@@ -15,7 +15,7 @@ limitations under the License. -->
 <template>
   <div>
     <div class="grey sm mb-5">{{ title }}</div>
-    <h5 class="mt-0 mb-0">{{ content.toFixed(2) }} {{ unit }}</h5>
+    <h5 class="grey mt-0 mb-0">{{ content.toFixed(2) }} {{ unit }}</h5>
     <RkEcharts height="100px" :option="responseConfig" />
   </div>
 </template>
@@ -78,8 +78,9 @@ limitations under the License. -->
         },
         series: [
           {
-            data: this.data.map((i: any, index: number) => [this.intervalTime[index], i]),
-            type: this.precent ? 'bar' : 'line',
+            data: this.data.map((i: any, index: number) => [this.intervalTime[index], this.precent ? i / 100 : i]),
+            // type: this.precent ? 'bar' : 'line',
+            type: 'line',
             symbol: 'none',
             barMaxWidth: 5,
             lineStyle: {

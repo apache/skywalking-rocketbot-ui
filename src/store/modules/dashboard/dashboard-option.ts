@@ -29,8 +29,7 @@ export interface State {
   currentEndpoint: any;
   instances: any[];
   currentInstance: any;
-  keywordService: string;
-  updateDashboard: string;
+  updateDashboard: object;
 }
 
 const initState: State = {
@@ -42,8 +41,7 @@ const initState: State = {
   currentInstance: {},
   databases: [],
   currentDatabase: {},
-  keywordService: localStorage.getItem('keywordServiceName') || '',
-  updateDashboard: '',
+  updateDashboard: {},
 };
 
 // getters
@@ -52,18 +50,18 @@ const getters = {};
 // mutations
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: any) {
-    if (!data.length) {
-      return;
-    }
     state.services = data;
-    if (!state.currentService.key && data.length) {
-      state.currentService = data[0];
-    }
+    state.currentService = data[0] || {};
   },
   [types.SET_CURRENT_SERVICE](state: State, service: any) {
     state.currentService = service;
     state.updateDashboard = service;
   },
+
+  [types.UPDATE_DASHBOARD](state: State) {
+    state.updateDashboard = { key: +new Date() };
+  },
+
   [types.SET_ENDPOINTS](state: State, data: any) {
     state.endpoints = data;
     if (!data.length) {
@@ -105,10 +103,6 @@ const mutations: MutationTree<State> = {
     state.currentDatabase = service;
     state.updateDashboard = service;
   },
-  [types.SET_KEYWORDSERVICE](state: State, data: string) {
-    state.keywordService = data;
-    window.localStorage.setItem('keywordServiceName', data);
-  },
 };
 
 // actions
@@ -126,14 +120,15 @@ const actions: ActionTree<State, any> = {
   },
   GET_SERVICE_ENDPOINTS(context: { commit: Commit; state: any }, params: { keyword: string }) {
     if (!context.state.currentService.key) {
-      return new Promise((resolve) => resolve());
+      context.commit(types.SET_ENDPOINTS, []);
+      return;
     }
     if (!params.keyword) {
       params.keyword = '';
     }
     return graph
       .query('queryEndpoints')
-      .params({ serviceId: context.state.currentService.key, ...params })
+      .params({ serviceId: context.state.currentService.key || '', ...params })
       .then((res: AxiosResponse) => {
         context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
       });
@@ -148,11 +143,12 @@ const actions: ActionTree<State, any> = {
   },
   GET_SERVICE_INSTANCES(context: { commit: Commit; state: any }, params: any) {
     if (!context.state.currentService.key) {
-      return new Promise((resolve) => resolve());
+      context.commit(types.SET_INSTANCES, []);
+      return;
     }
     return graph
       .query('queryInstances')
-      .params({ serviceId: context.state.currentService.key, ...params })
+      .params({ serviceId: context.state.currentService.key || '', ...params })
       .then((res: AxiosResponse) => {
         context.commit(types.SET_INSTANCES, res.data.data.getServiceInstances);
       });
