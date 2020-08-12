@@ -20,7 +20,7 @@ export const Traces = {
   query: `
   data: queryBasicTraces(condition: $condition) {
     traces {
-      segmentId
+      key: segmentId
       endpointNames
       duration
       start
