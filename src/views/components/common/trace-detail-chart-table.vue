@@ -137,7 +137,7 @@ limitations under the License. -->
         return arr;
       },
       traverseTree(node, spanId, segmentId, data) {
-        if (!node) {
+        if (!node || node.isBroken) {
           return;
         }
         if (node.spanId === spanId && node.segmentId === segmentId) {
