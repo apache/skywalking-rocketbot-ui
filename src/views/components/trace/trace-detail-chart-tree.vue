@@ -127,7 +127,7 @@ limitations under the License. -->
         this.showDetail = true;
       },
       traverseTree(node, spanId, segmentId, data){
-        if (!node) return;
+        if (!node || node.isBroken) return;
         if(node.spanId == spanId && node.segmentId == segmentId) {node.children.push(data);return;}
         if (node.children && node.children.length > 0) {
           for (let i = 0; i < node.children.length; i++) {
