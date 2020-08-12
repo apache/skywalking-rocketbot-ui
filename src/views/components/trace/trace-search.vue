@@ -234,7 +234,7 @@ limitations under the License. -->
       }
       if (this.tags) {
         const traceTags = this.tags
-          .split(';')
+          .split(',')
           .map((item: string) => item.replace(/^\s*|\s*$/g, ''))
           .filter((item) => item);
         const tagsMap = traceTags.map((item: string) => {
