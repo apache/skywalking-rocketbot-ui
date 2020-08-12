@@ -69,7 +69,7 @@ export default class Trace {
     L${d.target.y} ${d.target.x - 20}
     L${d.target.y} ${d.target.x - 5}`;
   }
-  init(data, row) {
+  init(data, row, fixSpansSize) {
     d3.select('.trace-xaxis').remove();
     this.row = row;
     this.data = data;
@@ -85,7 +85,7 @@ export default class Trace {
       if (d >= 1000) return d / 1000 + 's';
       return d;
     });
-    this.svg.attr('height', (this.row.length + 1) * this.barHeight);
+    this.svg.attr('height', (this.row.length + fixSpansSize + 1) * this.barHeight);
     this.svg
       .append('g')
       .attr('class', 'trace-xaxis')
