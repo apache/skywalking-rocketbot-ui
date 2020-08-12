@@ -57,10 +57,6 @@ limitations under the License. -->
           <div class="sm grey">{{ this.$t('endpointName') }}</div>
           <input type="text" v-model="endpointName" class="rk-trace-search-input" />
         </div>
-        <div class="mr-10" style="padding: 3px 15px 0">
-          <div class="sm grey">{{ this.$t('tags') }}</div>
-          <input type="text" v-model="tags" class="rk-trace-search-input" />
-        </div>
       </div>
     </div>
     <div class="rk-trace-search-more flex-h" v-show="status">
@@ -79,6 +75,21 @@ limitations under the License. -->
       <div>
         <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
         <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
+      </div>
+      <div class="mr-10" style="padding: 3px 15px 0">
+        <span class="sm grey">{{ this.$t('tags') }}: </span>
+        <input type="text" v-model="tags" class="rk-trace-search-input" />
+        <span class="trace-tips" v-tooltip:bottom="{ content: this.$t('traceTagsTip') }">
+          <a
+            target="blank"
+            href="https://github.com/apache/skywalking/blob/master/docs/en/setup/backend/configuration-vocabulary.md"
+          >
+            {{ this.$t('traceLink') }}
+          </a>
+          <svg class="icon mr-5 vm">
+            <use xlink:href="#help"></use>
+          </svg>
+        </span>
       </div>
     </div>
   </div>
@@ -222,7 +233,10 @@ limitations under the License. -->
         localStorage.setItem('traceId', this.traceId);
       }
       if (this.tags) {
-        const traceTags = this.tags.split(';').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
+        const traceTags = this.tags
+          .split(';')
+          .map((item: string) => item.replace(/^\s*|\s*$/g, ''))
+          .filter((item) => item);
         const tagsMap = traceTags.map((item: string) => {
           const t = item.split('=');
           return {
@@ -293,6 +307,9 @@ limitations under the License. -->
     color: #eee;
     width: 100%;
     padding: 3px 15px 8px;
+    .trace-tips {
+      margin-left: 5px;
+    }
   }
 
   .rk-trace-search-input {
