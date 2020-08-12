@@ -57,6 +57,10 @@ limitations under the License. -->
           <div class="sm grey">{{ this.$t('endpointName') }}</div>
           <input type="text" v-model="endpointName" class="rk-trace-search-input" />
         </div>
+        <div class="mr-10" style="padding: 3px 15px 0">
+          <div class="sm grey">{{ this.$t('tags') }}</div>
+          <input type="text" v-model="tags" class="rk-trace-search-input" />
+        </div>
       </div>
     </div>
     <div class="rk-trace-search-more flex-h" v-show="status">
@@ -108,6 +112,7 @@ limitations under the License. -->
     private endpointName: string = localStorage.getItem('endpointName') || '';
     private traceId: string = localStorage.getItem('traceId') || '';
     private traceState: Option = { label: 'All', key: 'ALL' };
+    private tags: string = '';
 
     private dateFormat(date: Date, step: string) {
       const year = date.getFullYear();
@@ -216,6 +221,18 @@ limitations under the License. -->
         temp.traceId = this.traceId;
         localStorage.setItem('traceId', this.traceId);
       }
+      if (this.tags) {
+        const traceTags = this.tags.split(';').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
+        const tagsMap = traceTags.map((item: string) => {
+          const t = item.split('=');
+          return {
+            key: t[0],
+            value: t[1],
+          };
+        });
+        temp.tags = tagsMap;
+        localStorage.setItem('traceTags', this.tags);
+      }
       this.SET_TRACE_FORM(temp);
 
       this.$eventBus.$emit('SET_LOADING_TRUE', () => {
@@ -236,6 +253,8 @@ limitations under the License. -->
       this.instance = { label: 'All', key: '' };
       this.endpointName = '';
       localStorage.removeItem('endpointName');
+      this.tags = '';
+      localStorage.removeItem('traceTags');
       this.traceId = '';
       localStorage.removeItem('traceId');
       this.traceState = { label: 'All', key: 'ALL' };
