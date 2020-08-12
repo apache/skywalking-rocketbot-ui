@@ -18,7 +18,7 @@
 export const Traces = {
   variable: '$condition: TraceQueryCondition',
   query: `
-  traces: queryBasicTraces(condition: $condition) {
+  data: queryBasicTraces(condition: $condition) {
     traces {
       segmentId
       endpointNames
