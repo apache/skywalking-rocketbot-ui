@@ -84,7 +84,13 @@ limitations under the License. -->
             <span class="remove-icon" @click="removeTags(index)">×</span>
           </span>
         </span>
-        <input type="text" placeholder="add tag" v-model="tags" class="rk-trace-new-tag" @keyup="addLabels" />
+        <input
+          type="text"
+          :placeholder="this.$t('traceAddTag')"
+          v-model="tags"
+          class="rk-trace-new-tag"
+          @keyup="addLabels"
+        />
         <span class="trace-tips" v-tooltip:bottom="{ content: this.$t('traceTagsTip') }">
           <a
             target="blank"
