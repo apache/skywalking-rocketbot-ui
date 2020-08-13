@@ -101,6 +101,7 @@ limitations under the License. -->
         list: [],
         currentSpan: [],
         loading: true,
+        fixSpansSize: 0,
       };
     },
     watch: {
@@ -108,7 +109,7 @@ limitations under the License. -->
         if (!this.data.length) { return; }
         this.loading = true;
         this.changeTree();
-        this.tree.init({label: 'TRACE_ROOT', children: this.segmentId}, this.data);
+        this.tree.init({label: 'TRACE_ROOT', children: this.segmentId}, this.data, this.fixSpansSize);
         this.tree.draw(() => {
           setTimeout(() => {
             this.loading = false;
@@ -124,7 +125,7 @@ limitations under the License. -->
       // this.loading = true;
       this.changeTree();
       this.tree = new Trace(this.$refs.traceList, this);
-      this.tree.init({label: 'TRACE_ROOT', children: this.segmentId}, this.data);
+      this.tree.init({label: 'TRACE_ROOT', children: this.segmentId}, this.data, this.fixSpansSize);
       this.tree.draw();
       this.loading = false;
       // this.computedScale();
@@ -136,7 +137,7 @@ limitations under the License. -->
         this.showDetail = true;
       },
       traverseTree(node, spanId, segmentId, data) {
-        if (!node) { return; }
+        if (!node || node.isBroken) { return; }
         if (node.spanId === spanId && node.segmentId === segmentId) {
           node.children.push(data);
           return;
@@ -263,6 +264,7 @@ limitations under the License. -->
             segmentGroup[i.segmentId].push(i);
           }
         });
+        this.fixSpansSize = fixSpans.length;
         segmentIdGroup.forEach((id) => {
           const currentSegment = segmentGroup[id].sort((a, b) => b.parentSpanId - a.parentSpanId);
           currentSegment.forEach((s) => {
