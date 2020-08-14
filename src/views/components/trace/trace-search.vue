@@ -59,49 +59,53 @@ limitations under the License. -->
         </div>
       </div>
     </div>
-    <div class="rk-trace-search-more flex-h" v-show="status">
-      <div class="mr-15">
-        <span class="sm b grey mr-10">{{ this.$t('traceID') }}:</span>
-        <input type="text" v-model="traceId" class="rk-trace-search-input dib" />
-      </div>
-      <div class="mr-15">
-        <span class="sm b grey mr-10">{{ this.$t('duration') }}:</span>
-        <div class="rk-trace-search-range dib">
-          <input class="vm tc" v-model="minTraceDuration" />
-          <span class="grey vm">-</span>
-          <input class="vm tc" v-model="maxTraceDuration" />
+    <div class="rk-trace-search-more" v-show="status">
+      <div class="flex-h">
+        <div class="mr-15">
+          <span class="sm b grey mr-10">{{ this.$t('traceID') }}:</span>
+          <input type="text" v-model="traceId" class="rk-trace-search-input dib" />
+        </div>
+        <div class="mr-15">
+          <span class="sm b grey mr-10">{{ this.$t('duration') }}:</span>
+          <div class="rk-trace-search-range dib">
+            <input class="vm tc" v-model="minTraceDuration" />
+            <span class="grey vm">-</span>
+            <input class="vm tc" v-model="maxTraceDuration" />
+          </div>
+        </div>
+        <div>
+          <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
+          <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
         </div>
       </div>
-      <div>
-        <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
-        <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
-      </div>
-      <div class="mr-10" style="padding: 3px 15px 0">
-        <span class="sm grey">{{ this.$t('tags') }}: </span>
-        <span class="rk-trace-tags">
-          <span class="selected" v-for="(item, index) in tagsList" :key="index">
-            <span>{{ item }}</span>
-            <span class="remove-icon" @click="removeTags(index)">×</span>
+      <div class="flex-h">
+        <div class="mr-10" style="padding-top: 5px">
+          <span class="sm grey">{{ this.$t('tags') }}: </span>
+          <span class="rk-trace-tags">
+            <span class="selected" v-for="(item, index) in tagsList" :key="index">
+              <span>{{ item }}</span>
+              <span class="remove-icon" @click="removeTags(index)">×</span>
+            </span>
           </span>
-        </span>
-        <input
-          type="text"
-          :placeholder="this.$t('traceAddTag')"
-          v-model="tags"
-          class="rk-trace-new-tag"
-          @keyup="addLabels"
-        />
-        <span class="trace-tips" v-tooltip:bottom="{ content: this.$t('traceTagsTip') }">
-          <a
-            target="blank"
-            href="https://github.com/apache/skywalking/blob/master/docs/en/setup/backend/configuration-vocabulary.md"
-          >
-            {{ this.$t('traceLink') }}
-          </a>
-          <svg class="icon mr-5 vm">
-            <use xlink:href="#help"></use>
-          </svg>
-        </span>
+          <input
+            type="text"
+            :placeholder="this.$t('traceAddTag')"
+            v-model="tags"
+            class="rk-trace-new-tag"
+            @keyup="addLabels"
+          />
+          <span class="trace-tips" v-tooltip:bottom="{ content: this.$t('traceTagsTip') }">
+            <a
+              target="blank"
+              href="https://github.com/apache/skywalking/blob/master/docs/en/setup/backend/configuration-vocabulary.md"
+            >
+              {{ this.$t('traceLink') }}
+            </a>
+            <svg class="icon mr-5 vm">
+              <use xlink:href="#help"></use>
+            </svg>
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -357,7 +361,7 @@ limitations under the License. -->
     outline: 0;
     padding: 2px 5px;
     border-radius: 3px;
-    width: 120px;
+    width: 175px;
     margin-right: 3px;
   }
   .rk-trace-tags {
