@@ -71,6 +71,7 @@ limitations under the License. -->
           },
         },
         legend: {
+          type: 'scroll',
           show: keys.length === 1 ? false : true,
           icon: 'circle',
           top: 0,
