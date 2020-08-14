@@ -139,8 +139,8 @@ const actions: ActionTree<State, any> = {
       .query('queryTraces')
       .params({ condition: context.state.traceForm })
       .then((res: AxiosResponse) => {
-        context.commit(types.SET_TRACELIST, res.data.data.traces.data);
-        context.commit(types.SET_TRACELIST_TOTAL, res.data.data.traces.total);
+        context.commit(types.SET_TRACELIST, res.data.data.data.traces);
+        context.commit(types.SET_TRACELIST_TOTAL, res.data.data.data.total);
       });
   },
   GET_TRACE_SPANS(context: { commit: Commit }, params: any): Promise<void> {
