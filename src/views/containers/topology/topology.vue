@@ -126,7 +126,9 @@ limitations under the License. -->
     }
     private setCurrent(d: any): void {
       this.current = d;
-      this.SET_CURRENT_SERVICE(d);
+      if (d.isReal) {
+        this.SET_CURRENT_SERVICE(d);
+      }
     }
     private beforeDestroy() {
       this.CLEAR_TOPO_INFO();
