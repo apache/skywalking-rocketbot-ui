@@ -149,6 +149,10 @@ const m = {
   increaseOrder: 'Increase Order',
   chartType: 'Chart Type',
   currentDepth: 'Current Depth',
+  traceTagsTip:
+    'Only tags defined in the core/default/searchableTagKeys are searchable. Check more details on the Configuration Vocabulary page',
+  traceLink: 'Configuration Vocabulary page',
+  traceAddTag: 'Please add a tag',
 };
 
 export default m;

@@ -59,22 +59,53 @@ limitations under the License. -->
         </div>
       </div>
     </div>
-    <div class="rk-trace-search-more flex-h" v-show="status">
-      <div class="mr-15">
-        <span class="sm b grey mr-10">{{ this.$t('traceID') }}:</span>
-        <input type="text" v-model="traceId" class="rk-trace-search-input dib" />
-      </div>
-      <div class="mr-15">
-        <span class="sm b grey mr-10">{{ this.$t('duration') }}:</span>
-        <div class="rk-trace-search-range dib">
-          <input class="vm tc" v-model="minTraceDuration" />
-          <span class="grey vm">-</span>
-          <input class="vm tc" v-model="maxTraceDuration" />
+    <div class="rk-trace-search-more" v-show="status">
+      <div class="flex-h">
+        <div class="mr-15">
+          <span class="sm b grey mr-10">{{ this.$t('traceID') }}:</span>
+          <input type="text" v-model="traceId" class="rk-trace-search-input dib" />
+        </div>
+        <div class="mr-15">
+          <span class="sm b grey mr-10">{{ this.$t('duration') }}:</span>
+          <div class="rk-trace-search-range dib">
+            <input class="vm tc" v-model="minTraceDuration" />
+            <span class="grey vm">-</span>
+            <input class="vm tc" v-model="maxTraceDuration" />
+          </div>
+        </div>
+        <div>
+          <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
+          <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
         </div>
       </div>
-      <div>
-        <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
-        <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
+      <div class="flex-h">
+        <div class="mr-10" style="padding-top: 5px">
+          <span class="sm grey">{{ this.$t('tags') }}: </span>
+          <span class="rk-trace-tags">
+            <span class="selected" v-for="(item, index) in tagsList" :key="index">
+              <span>{{ item }}</span>
+              <span class="remove-icon" @click="removeTags(index)">×</span>
+            </span>
+          </span>
+          <input
+            type="text"
+            :placeholder="this.$t('traceAddTag')"
+            v-model="tags"
+            class="rk-trace-new-tag"
+            @keyup="addLabels"
+          />
+          <span class="trace-tips" v-tooltip:bottom="{ content: this.$t('traceTagsTip') }">
+            <a
+              target="blank"
+              href="https://github.com/apache/skywalking/blob/master/docs/en/setup/backend/configuration-vocabulary.md"
+            >
+              {{ this.$t('traceLink') }}
+            </a>
+            <svg class="icon mr-5 vm">
+              <use xlink:href="#help"></use>
+            </svg>
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -108,7 +139,26 @@ limitations under the License. -->
     private endpointName: string = localStorage.getItem('endpointName') || '';
     private traceId: string = localStorage.getItem('traceId') || '';
     private traceState: Option = { label: 'All', key: 'ALL' };
+    private tags: string = '';
+    private tagsList: string[] = [];
 
+    private created() {
+      this.endpointName = this.$route.query.endpointname
+        ? this.$route.query.endpointname.toString()
+        : this.endpointName;
+      this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
+      this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
+      this.tagsList = localStorage.getItem('traceTags') ? JSON.parse(localStorage.getItem('traceTags') || '') : [];
+    }
+    private mounted() {
+      this.getTraceList();
+      if (this.service && this.service.key) {
+        this.GET_INSTANCES({
+          duration: this.durationTime,
+          serviceId: this.service.key,
+        });
+      }
+    }
     private dateFormat(date: Date, step: string) {
       const year = date.getFullYear();
       const monthTemp = date.getMonth() + 1;
@@ -216,6 +266,17 @@ limitations under the License. -->
         temp.traceId = this.traceId;
         localStorage.setItem('traceId', this.traceId);
       }
+      if (this.tagsList.length) {
+        const tagsMap = this.tagsList.map((item: string) => {
+          const t = item.split('=');
+          return {
+            key: t[0],
+            value: t[1],
+          };
+        });
+        temp.tags = tagsMap;
+        localStorage.setItem('traceTags', JSON.stringify(this.tagsList));
+      }
       this.SET_TRACE_FORM(temp);
 
       this.$eventBus.$emit('SET_LOADING_TRUE', () => {
@@ -236,6 +297,8 @@ limitations under the License. -->
       this.instance = { label: 'All', key: '' };
       this.endpointName = '';
       localStorage.removeItem('endpointName');
+      this.tagsList = [];
+      localStorage.removeItem('traceTags');
       this.traceId = '';
       localStorage.removeItem('traceId');
       this.traceState = { label: 'All', key: 'ALL' };
@@ -243,26 +306,21 @@ limitations under the License. -->
       this.getTraceList();
     }
 
+    private addLabels(event: KeyboardEvent) {
+      if (event.keyCode !== 13 || !this.tags) {
+        return;
+      }
+      this.tagsList.push(this.tags);
+      this.tags = '';
+    }
+
+    private removeTags(index: number) {
+      this.tagsList.splice(index, 1);
+    }
+
     @Watch('rocketbotGlobal.durationRow')
     private durationRowWatch(value: Duration) {
       this.time = [value.start, value.end];
-    }
-
-    private created() {
-      this.endpointName = this.$route.query.endpointname
-        ? this.$route.query.endpointname.toString()
-        : this.endpointName;
-      this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
-      this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
-    }
-    private mounted() {
-      this.getTraceList();
-      if (this.service && this.service.key) {
-        this.GET_INSTANCES({
-          duration: this.durationTime,
-          serviceId: this.service.key,
-        });
-      }
     }
   }
 </script>
@@ -274,6 +332,22 @@ limitations under the License. -->
     color: #eee;
     width: 100%;
     padding: 3px 15px 8px;
+    .selected {
+      display: inline-block;
+      padding: 0 3px;
+      border-radius: 3px;
+      overflow: hidden;
+      color: rgba(0, 0, 0, 0.65);
+      border: 1px dashed #aaa;
+      color: #eee;
+      font-size: 12px;
+      margin: 0 2px;
+    }
+    .remove-icon {
+      display: inline-block;
+      margin-left: 3px;
+      cursor: pointer;
+    }
   }
 
   .rk-trace-search-input {
@@ -281,6 +355,21 @@ limitations under the License. -->
     outline: 0;
     padding: 2px 5px;
     border-radius: 3px;
+  }
+  .rk-trace-new-tag {
+    border-style: unset;
+    outline: 0;
+    padding: 2px 5px;
+    border-radius: 3px;
+    width: 175px;
+    margin-right: 3px;
+  }
+  .rk-trace-tags {
+    padding: 1px 5px 0 0;
+    border-radius: 3px;
+    height: 24px;
+    display: inline-block;
+    vertical-align: top;
   }
 
   .rk-trace-search-range,
