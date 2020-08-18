@@ -58,7 +58,24 @@ limitations under the License. -->
           color = ['#3f96e3'];
           break;
         default:
-          color = ['#30A4EB', '#45BFC0', '#FFCC55', '#FF6A84', '#a0a7e6'];
+          color = [
+            '#30A4EB',
+            '#45BFC0',
+            '#FFCC55',
+            '#FF6A84',
+            '#a0a7e6',
+            '#c23531',
+            '#2f4554',
+            '#61a0a8',
+            '#d48265',
+            '#91c7ae',
+            '#749f83',
+            '#ca8622',
+            '#bda29a',
+            '#6e7074',
+            '#546570',
+            '#c4ccd3',
+          ];
           break;
       }
       return {
