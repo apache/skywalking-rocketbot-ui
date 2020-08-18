@@ -70,7 +70,7 @@ limitations under the License. -->
             fontSize: 13,
           },
           enterable: true,
-          extraCssText: 'max-height: 100px; overflow: scroll;',
+          extraCssText: 'max-height: 300px; overflow: scroll;',
         },
         legend: {
           type: 'scroll',
