@@ -69,6 +69,8 @@ limitations under the License. -->
           textStyle: {
             fontSize: 13,
           },
+          enterable: true,
+          extraCssText: 'max-height: 100px; overflow: scroll;',
         },
         legend: {
           type: 'scroll',
