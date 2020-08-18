@@ -43,16 +43,48 @@ limitations under the License. -->
           },
         };
       });
+      let color: string[] = [];
+      switch (keys.length) {
+        case 2:
+          color = ['#FF6A84', '#a0b1e6'];
+          break;
+        case 1:
+          color = ['#3f96e3'];
+          break;
+        default:
+          color = [
+            '#30A4EB',
+            '#45BFC0',
+            '#FFCC55',
+            '#FF6A84',
+            '#a0a7e6',
+            '#c23531',
+            '#2f4554',
+            '#61a0a8',
+            '#d48265',
+            '#91c7ae',
+            '#749f83',
+            '#ca8622',
+            '#bda29a',
+            '#6e7074',
+            '#546570',
+            '#c4ccd3',
+          ];
+          break;
+      }
       return {
-        color: ['#30A4EB', '#45BFC0', '#FFCC55', '#FF6A84', '#a0a7e6'],
+        color,
         tooltip: {
           trigger: 'axis',
           backgroundColor: 'rgb(50,50,50)',
           textStyle: {
             fontSize: 13,
           },
+          enterable: true,
+          extraCssText: 'max-height: 300px; overflow: scroll;',
         },
         legend: {
+          type: 'scroll',
           show: keys.length === 1 ? false : true,
           icon: 'circle',
           top: 0,
