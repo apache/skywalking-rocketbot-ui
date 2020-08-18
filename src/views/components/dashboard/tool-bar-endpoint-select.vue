@@ -63,7 +63,6 @@ limitations under the License. -->
   import EndpointOpt from './tool-bar-endpoint-select-opt.vue';
   @Component({ components: { EndpointOpt } })
   export default class ToolBarEndpointSelect extends Vue {
-    @Action('GET_SERVICE_ENDPOINTS') public GET_SERVICE_ENDPOINTS: any;
     @Prop() public data!: any;
     @Prop() public current!: any;
     @Prop() public title!: string;

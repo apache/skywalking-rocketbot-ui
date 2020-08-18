@@ -20,6 +20,7 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop, Watch } from 'vue-property-decorator';
   import echarts from 'echarts/lib/echarts';
+  import 'echarts/lib/component/legendScroll';
   import { Action } from 'vuex-class';
   @Component
   export default class RkEcharts extends Vue {

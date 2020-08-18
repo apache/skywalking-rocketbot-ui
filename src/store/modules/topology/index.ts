@@ -484,6 +484,9 @@ const actions: ActionTree<State, any> = {
     params: { endpointIds: string[]; duration: Duration },
   ) {
     context.dispatch('GET_ENDPOINT_TOPO', params).then((res) => {
+      if (!res) {
+        return;
+      }
       if (context.state.currentEndpointDepth.key > 1) {
         const endpointIds = res.nodes.map((item: Node) => item.id);
 
@@ -554,6 +557,10 @@ const actions: ActionTree<State, any> = {
         for (const key of Object.keys(topo)) {
           calls.push(...topo[key].calls);
           nodes.push(...topo[key].nodes);
+        }
+        if (!nodes.length) {
+          context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });
+          return;
         }
         const obj = {} as any;
         nodes = nodes.reduce((prev: Node[], next: Node) => {

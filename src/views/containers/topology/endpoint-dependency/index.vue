@@ -70,7 +70,7 @@ limitations under the License. -->
       this.SET_CURRENT_SERVICE(this.current);
       this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 2 });
       this.GET_SERVICE_ENDPOINTS({ duration: this.durationTime, serviceId: this.current.key, keyword: '' }).then(() => {
-        this.selectEndpoint(this.stateDashboardOption.endpoints[0]);
+        this.selectEndpoint(this.stateDashboardOption.endpoints[0] || {});
       });
       this.depths = [1, 2, 3, 4, 5].map((item: number) => ({ key: item, label: String(item) }));
     }
