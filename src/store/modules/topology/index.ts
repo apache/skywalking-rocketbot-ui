@@ -523,47 +523,6 @@ const actions: ActionTree<State, any> = {
       }
     });
   },
-  // GET_ALL_ENDPOINT_DEPENDENCY(
-  //   context: { commit: Commit; state: State; dispatch: Dispatch },
-  //   params: { endpointIds: string[]; duration: Duration },
-  // ) {
-  //   context.dispatch('GET_ENDPOINT_TOPO', params).then((res) => {
-  //     if (context.state.currentEndpointDepth.key > 1) {
-  //       const endpointIds = res.nodes.map((item: Node) => item.id);
-
-  //       context.dispatch('GET_ENDPOINT_TOPO', { endpointIds, duration: params.duration }).then((json) => {
-  //         if (context.state.currentEndpointDepth.key > 2) {
-  //           const ids = json.nodes.map((item: Node) => item.id);
-
-  //           context.dispatch('GET_ENDPOINT_TOPO', { endpointIds: ids, duration: params.duration }).then((topo) => {
-  //             if (context.state.currentEndpointDepth.key > 3) {
-  //               const endpoints = topo.nodes.map((item: Node) => item.id);
-  //               context
-  //                 .dispatch('GET_ENDPOINT_TOPO', { endpointIds: endpoints, duration: params.duration })
-  //                 .then((data) => {
-  //                   if (context.state.currentEndpointDepth.key > 4) {
-  //                     context
-  //                       .dispatch('GET_ENDPOINT_TOPO', { endpointIds: endpoints, duration: params.duration })
-  //                       .then((topos) => {
-  //                         context.commit(types.SET_ENDPOINT_DEPENDENCY, topos);
-  //                       });
-  //                   } else {
-  //                     context.commit(types.SET_ENDPOINT_DEPENDENCY, data);
-  //                   }
-  //                 });
-  //             } else {
-  //               context.commit(types.SET_ENDPOINT_DEPENDENCY, topo);
-  //             }
-  //           });
-  //         } else {
-  //           context.commit(types.SET_ENDPOINT_DEPENDENCY, json);
-  //         }
-  //       });
-  //     } else {
-  //       context.commit(types.SET_ENDPOINT_DEPENDENCY, res);
-  //     }
-  //   });
-  // },
   GET_ENDPOINT_TOPO(context: { commit: Commit; state: State }, params: { endpointIds: string[]; duration: Duration }) {
     const variables = ['$duration: Duration!'];
     const fragment = params.endpointIds.map((id: string, index: number) => {
