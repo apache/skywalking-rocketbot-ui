@@ -17,6 +17,7 @@
 
 import Vue from 'vue';
 import moment from 'dayjs';
+import utcPlugin from 'dayjs/plugin/utc';
 import clickout from '@/utils/clickout';
 import tooltip from '@/utils/tooltip';
 import zh from '@/assets/lang/zh';
@@ -46,11 +47,14 @@ Vue.use(VModal, { dialog: true });
 Vue.directive('clickout', clickout);
 Vue.directive('tooltip', tooltip);
 
-Vue.filter(
-  'dateformat',
-  (dataStr: any, pattern: string = 'YYYY-MM-DD HH:mm:ss') =>
-    moment(dataStr).format(pattern),
-);
+moment.extend(utcPlugin);
+
+Vue.filter('dateformat', (dataStr: any, pattern: string = 'YYYY-MM-DD HH:mm:ss') => {
+  let utc: string = window.localStorage.getItem('utc') || (-(new Date().getTimezoneOffset() / 60)).toString();
+  return moment(dataStr)
+    .utcOffset(Number(utc) * 60)
+    .format(pattern);
+});
 
 const savedLanguage = window.localStorage.getItem('lang');
 let language = navigator.language.split('-')[0];
