@@ -118,6 +118,14 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_SERVICES, res.data.data.services);
       });
   },
+  GET_BROWSER_SERVICES(context: { commit: Commit }, params: { duration: any }) {
+    return graph
+      .query('queryBrowserServices')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_SERVICES, res.data.data.services);
+      });
+  },
   GET_SERVICE_ENDPOINTS(context: { commit: Commit; state: any }, params: { keyword: string }) {
     if (!context.state.currentService.key) {
       context.commit(types.SET_ENDPOINTS, []);
@@ -202,6 +210,11 @@ const actions: ActionTree<State, any> = {
           .then(() => context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration }));
       case 'database':
         return context.dispatch('GET_DATABASES', { duration: params.duration });
+      case 'browser':
+        return context
+          .dispatch('GET_BROWSER_SERVICES', { duration: params.duration })
+          .then(() => context.dispatch('GET_SERVICE_ENDPOINTS', {}))
+          .then(() => context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration }));
       default:
         break;
     }

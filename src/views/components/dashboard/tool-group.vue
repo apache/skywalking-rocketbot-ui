@@ -43,6 +43,7 @@ limitations under the License. -->
           <option :value="DASHBOARDTYPE.SERVICE">{{ $t('standardAPM') }}</option>
           <option :value="DASHBOARDTYPE.METRIC">{{ $t('metricsView') }}</option>
           <option :value="DASHBOARDTYPE.DATABASE">{{ $t('databaseView') }}</option>
+          <option :value="DASHBOARDTYPE.BROWSER">{{ $t('browserView') }}</option>
         </select>
         <div class="sm grey  mb-5 mr-10" v-show="type !== DASHBOARDTYPE.METRIC">{{ $t('templateConfig') }}</div>
         <select v-model="templateName" class="rk-dashboard-group-sel" v-show="type !== DASHBOARDTYPE.METRIC">

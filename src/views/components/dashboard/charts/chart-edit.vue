@@ -95,9 +95,23 @@ limitations under the License. -->
           }}</option>
         </select>
       </div>
+      <div class="flex-h mb-5" v-show="itemConfig.independentSelector && isBrowser">
+        <div class="title grey sm">{{ $t('currentAPP') }}:</div>
+        <select
+          class="long"
+          v-model="itemConfig.currentService"
+          @change="setItemConfig({ type: 'currentService', value: $event.target.value })"
+        >
+          <option v-for="service in stateDashboardOption.services" :value="service.label" :key="service.key">{{
+            service.label
+          }}</option>
+        </select>
+      </div>
       <div
         class="flex-h mb-5"
-        v-show="itemConfig.entityType !== EntityType[1].key && itemConfig.independentSelector && !isDatabase"
+        v-show="
+          itemConfig.entityType !== EntityType[1].key && itemConfig.independentSelector && !isDatabase && !isBrowser
+        "
       >
         <div class="title grey sm">{{ $t('currentService') }}:</div>
         <input
@@ -118,7 +132,9 @@ limitations under the License. -->
       </div>
       <div
         class="flex-h mb-5"
-        v-show="itemConfig.entityType === EntityType[2].key && itemConfig.independentSelector && !isDatabase"
+        v-show="
+          itemConfig.entityType === EntityType[2].key && itemConfig.independentSelector && !isDatabase && !isBrowser
+        "
       >
         <div class="title grey sm">{{ $t('currentEndpoint') }}:</div>
         <input
@@ -139,7 +155,9 @@ limitations under the License. -->
       </div>
       <div
         class="flex-h mb-5"
-        v-show="itemConfig.entityType === EntityType[3].key && itemConfig.independentSelector && !isDatabase"
+        v-show="
+          itemConfig.entityType === EntityType[3].key && itemConfig.independentSelector && !isDatabase && !isBrowser
+        "
       >
         <div class="title grey sm">{{ $t('currentInstance') }}:</div>
         <input
@@ -283,6 +301,7 @@ limitations under the License. -->
     private instances: any = [];
     private queryMetricTypesList: any = [];
     private isDatabase = false;
+    private isBrowser = false;
     private isLabel = false;
     private isIndependentSelector = false;
     private nameMetrics = ['sortMetrics', 'readSampledRecords'];
@@ -296,6 +315,7 @@ limitations under the License. -->
         : this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.DATABASE
         ? true
         : false;
+      this.isBrowser = this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.BROWSER;
       this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
       this.isLabel = this.itemConfig.metricType === MetricsType.LABELED_VALUE ? true : false;
       this.isIndependentSelector =
