@@ -50,9 +50,20 @@ limitations under the License. -->
           v-model="itemConfig.chartType"
           @change="setItemConfig({ type: 'chartType', value: $event.target.value })"
         >
-          <option v-for="chart in ChartTypeOptions" :value="chart.value" :key="chart.value">
-            {{ chart.label }}
-          </option>
+          <template v-if="isBrowser">
+            <option v-for="chart in ChartTypeOptions" :value="chart.value" :key="chart.value">
+              {{ chart.label }}
+            </option>
+          </template>
+          <template v-else>
+            <option
+              v-for="chart in ChartTypeOptions.filter((i) => i.value !== 'ChartTable')"
+              :value="chart.value"
+              :key="chart.value"
+            >
+              {{ chart.label }}
+            </option>
+          </template>
         </select>
       </div>
       <div class="flex-h mb-5" v-show="isLabel">
@@ -102,7 +113,7 @@ limitations under the License. -->
           v-model="itemConfig.currentService"
           @change="setItemConfig({ type: 'currentService', value: $event.target.value })"
         >
-          <option v-for="service in stateDashboardOption.services" :value="service.label" :key="service.key">{{
+          <option v-for="service in stateDashboardOption.services" :value="service.key" :key="service.key">{{
             service.label
           }}</option>
         </select>
@@ -176,7 +187,7 @@ limitations under the License. -->
           }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="!isIndependentSelector">
+      <div class="flex-h mb-5" v-show="!isIndependentSelector && !isBrowser">
         <div class="title grey sm">{{ $t('independentSelector') }}:</div>
         <select
           class="long"
@@ -261,7 +272,7 @@ limitations under the License. -->
 <script lang="ts">
   import Vue from 'vue';
   import { State, Getter, Mutation, Action } from 'vuex-class';
-  import { Component, Prop } from 'vue-property-decorator';
+  import { Component, Prop, Watch } from 'vue-property-decorator';
 
   import { TopologyType, ObjectsType } from '../../../constant';
   import {
@@ -346,6 +357,20 @@ limitations under the License. -->
         }
       }
       if (params.type === 'metricName') {
+        if (params.value === 'BrowserErrorLogs') {
+          this.queryMetricTypesList = [];
+          this.itemConfig.queryMetricType = 'queryBrowserErrorLogs';
+          this.itemConfig.chartType = 'ChartTable';
+          const values = {
+            queryMetricType: 'queryBrowserErrorLogs',
+            chartType: 'ChartTable',
+          };
+          this.EDIT_COMP_CONFIG({
+            index: this.index,
+            values,
+          });
+          return;
+        }
         this.TYPE_METRICS({ name: params.value }).then((data: Array<{ typeOfMetrics: string }>) => {
           if (!data.length) {
             return;

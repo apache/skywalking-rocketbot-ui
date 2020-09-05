@@ -82,6 +82,21 @@ const readSampledRecords = {
   }`,
 };
 
+const queryBrowserErrorLogs = {
+  variable: ['$condition: BrowserErrorLogQueryCondition'],
+  fragment: `
+    queryBrowserErrorLogs(condition: $condition) {
+        logs {
+          message
+          service
+          serviceVersion
+          time
+          pagePath
+          category
+        }
+        total
+    }`,
+};
 export default {
   readSampledRecords,
   readHeatMap,
@@ -89,4 +104,5 @@ export default {
   sortMetrics,
   readMetricsValue,
   readMetricsValues,
+  queryBrowserErrorLogs,
 };
