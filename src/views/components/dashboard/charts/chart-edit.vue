@@ -66,6 +66,17 @@ limitations under the License. -->
           </template>
         </select>
       </div>
+      <div class="flex-h mb-5" v-if="isReadSingleValue">
+        <div class="title grey sm">{{ $t('chartType') }}:</div>
+        <select
+          class="long"
+          v-model="itemConfig.chartType"
+          @change="setItemConfig({ type: 'chartType', value: $event.target.value })"
+        >
+          <option value="ChartNum" :key="`ChartNum`">no chart</option>
+          <option value="ChartSlow" :key="`ChartSlow`">Bar Chart</option>
+        </select>
+      </div>
       <div class="flex-h mb-5" v-show="isLabel">
         <div class="title grey sm">{{ $t('labels') }}:</div>
         <input
@@ -318,6 +329,7 @@ limitations under the License. -->
     private nameMetrics = ['sortMetrics', 'readSampledRecords'];
     private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as any[];
     private isChartType = false;
+    private isReadSingleValue = false;
 
     private created() {
       this.itemConfig = this.item;
@@ -387,6 +399,9 @@ limitations under the License. -->
           this.$emit('updateStatus', 'metricType', typeOfMetrics);
           this.queryMetricTypesList = QueryMetricTypes[typeOfMetrics] || [];
           this.itemConfig.queryMetricType = this.queryMetricTypesList[0] && this.queryMetricTypesList[0].value;
+          this.isChartType = ['readMetricsValues', 'readLabeledMetricsValues'].includes(
+            this.itemConfig.queryMetricType,
+          );
           this.isLabel = typeOfMetrics === MetricsType.LABELED_VALUE ? true : false;
           const values = {
             metricType: typeOfMetrics,
@@ -553,6 +568,11 @@ limitations under the License. -->
           }
         });
       }
+    }
+
+    @Watch('itemConfig.queryMetricType')
+    private watchQueryMetricType(val: string) {
+      this.isReadSingleValue = ['readMetricsValue'].includes(val);
     }
   }
 </script>

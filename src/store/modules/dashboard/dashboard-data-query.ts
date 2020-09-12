@@ -70,7 +70,7 @@ const actions: ActionTree<State, any> = {
     const currentDatabaseId = config.independentSelector ? config.currentDatabase : currentDatabase.label;
     const labels = config.metricType === 'LABELED_VALUE' ? labelsIndex : undefined;
     let variablesList;
-    if (config.chartType === 'ChartTable') {
+    if (config.metricName === 'BrowserErrorLogs' && config.chartType === 'ChartTable') {
       const condition: any = {
         queryDuration: params.duration,
         paging: params.paging.pageNum ? params.paging : { pageNum: 1, pageSize: 10, needTotal: true },
@@ -180,7 +180,6 @@ const actions: ActionTree<State, any> = {
     const fragments = globalArr[config.queryMetricType].fragment;
     const queryVariables = globalArr[config.queryMetricType].variable;
     const query = `query queryData(${queryVariables}) {${fragments}}`;
-
     return Promise.all(
       variablesList.map((variable: any) => {
         if (variable) {
