@@ -37,8 +37,9 @@ export const queryOAPTimeInfo = async () => {
   let utc = window.localStorage.getItem('utc');
   if (!utc) {
     const res: AxiosResponse = await graph.query('queryOAPTimeInfo').params({});
-    if (!res.data) {
+    if (!res.data || !res.data.data || !res.data.data.getTimeInfo || !res.data.data.getTimeInfo.timezone) {
       setTimezoneOffset();
+      return;
     }
     utc = res.data.data.getTimeInfo.timezone / 100 + '';
     window.localStorage.setItem('utc', utc);
