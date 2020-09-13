@@ -34,7 +34,6 @@ const actions: ActionTree<State, any> = {
       index: number;
       duration: any;
       type: string;
-      paging: { pageNum: number; pageSize: number; needTotal: boolean };
     },
   ) {
     const { currentDatabase, currentEndpoint, currentInstance, currentService } = context.rootState.rocketOption;
@@ -69,109 +68,85 @@ const actions: ActionTree<State, any> = {
     const currentEndpointId = config.independentSelector ? config.currentEndpoint : currentEndpoint.label;
     const currentDatabaseId = config.independentSelector ? config.currentDatabase : currentDatabase.label;
     const labels = config.metricType === 'LABELED_VALUE' ? labelsIndex : undefined;
-    let variablesList;
-    if (config.metricName === 'BrowserErrorLogs' && config.chartType === 'ChartTable') {
-      const condition: any = {
-        queryDuration: params.duration,
-        paging: params.paging.pageNum ? params.paging : { pageNum: 1, pageSize: 10, needTotal: true },
-      };
-      switch (config.entityType) {
-        case 'All':
-          condition.serviceId = currentService.key;
-          break;
-        case 'ServiceInstance':
-          condition.serviceVersionId = currentInstance.key;
-          break;
-        case 'Endpoint':
-          condition.pagePathId = currentEndpoint.key;
-          break;
-      }
-      variablesList = [
-        {
-          condition,
-        },
-      ];
-    } else {
-      variablesList = metricNames.map((name: string) => {
-        let variables = {} as any;
+    const variablesList = metricNames.map((name: string) => {
+      let variables = {} as any;
 
-        if (config.entityType === 'All') {
-          variables = names.includes(config.queryMetricType)
-            ? {
-                duration: params.duration,
-                condition: {
-                  name,
-                  parentService: null,
-                  normal: true,
-                  scope: config.entityType,
-                  topN: 10,
-                  order: config.sortOrder || 'DES',
-                },
-              }
-            : {
-                duration: params.duration,
-                condition: {
-                  name,
-                  entity: {
-                    scope: config.entityType,
-                    normal: true,
-                  },
-                },
-                labels,
-              };
-        } else {
-          if (names.includes(config.queryMetricType)) {
-            const parentService = normal ? currentServiceId : currentDatabaseId;
-
-            if (config.parentService && !parentService) {
-              return;
-            }
-            variables = {
+      if (config.entityType === 'All') {
+        variables = names.includes(config.queryMetricType)
+          ? {
               duration: params.duration,
               condition: {
                 name,
-                parentService: config.parentService ? parentService : null,
-                normal,
-                scope: normal ? config.entityType : config.parentService ? 'Service' : config.entityType,
+                parentService: null,
+                normal: true,
+                scope: config.entityType,
                 topN: 10,
                 order: config.sortOrder || 'DES',
               },
-            };
-          } else {
-            const serviceName = normal ? currentServiceId : currentDatabaseId;
-            if (!serviceName) {
-              return null;
             }
-            if (config.entityType === 'ServiceInstance' && !currentInstanceId) {
-              return null;
-            }
-            if (config.entityType === 'Endpoint' && !currentEndpointId) {
-              return null;
-            }
-            variables = {
+          : {
               duration: params.duration,
               condition: {
                 name,
                 entity: {
-                  scope: normal ? config.entityType : 'Service',
-                  serviceName,
-                  serviceInstanceName: config.entityType === 'ServiceInstance' ? currentInstanceId : undefined,
-                  endpointName: config.entityType === 'Endpoint' ? currentEndpointId : undefined,
-                  normal,
-                  // destNormal: normal,
-                  // destServiceName: '',
-                  // destServiceInstanceName: '',
-                  // destEndpointName: '',
+                  scope: config.entityType,
+                  normal: true,
                 },
               },
               labels,
             };
-          }
-        }
+      } else {
+        if (names.includes(config.queryMetricType)) {
+          const parentService = normal ? currentServiceId : currentDatabaseId;
 
-        return variables;
-      });
-    }
+          if (config.parentService && !parentService) {
+            return;
+          }
+          variables = {
+            duration: params.duration,
+            condition: {
+              name,
+              parentService: config.parentService ? parentService : null,
+              normal,
+              scope: normal ? config.entityType : config.parentService ? 'Service' : config.entityType,
+              topN: 10,
+              order: config.sortOrder || 'DES',
+            },
+          };
+        } else {
+          const serviceName = normal ? currentServiceId : currentDatabaseId;
+          if (!serviceName) {
+            return null;
+          }
+          if (config.entityType === 'ServiceInstance' && !currentInstanceId) {
+            return null;
+          }
+          if (config.entityType === 'Endpoint' && !currentEndpointId) {
+            return null;
+          }
+          variables = {
+            duration: params.duration,
+            condition: {
+              name,
+              entity: {
+                scope: normal ? config.entityType : 'Service',
+                serviceName,
+                serviceInstanceName: config.entityType === 'ServiceInstance' ? currentInstanceId : undefined,
+                endpointName: config.entityType === 'Endpoint' ? currentEndpointId : undefined,
+                normal,
+                // destNormal: normal,
+                // destServiceName: '',
+                // destServiceInstanceName: '',
+                // destEndpointName: '',
+              },
+            },
+            labels,
+          };
+        }
+      }
+
+      return variables;
+    });
 
     const globalArr: any = fragmentAll;
     if (!config.queryMetricType || !variablesList.length) {

@@ -17,7 +17,6 @@
 
 import ChartBrief from './chart-brief.vue';
 import ChartNum from './chart-num.vue';
-import ChartTable from './chart-table.vue';
 import ChartLine from './chart-line.vue';
 import ChartArea from './chart-area.vue';
 import ChartBar from './chart-bar.vue';
@@ -32,7 +31,6 @@ import ChartEdit from './chart-edit.vue';
 export default {
   ChartCount,
   ChartNum,
-  ChartTable,
   ChartBrief,
   ChartLine,
   ChartBar,

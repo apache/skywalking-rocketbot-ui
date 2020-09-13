@@ -20,9 +20,7 @@ limitations under the License. -->
       </svg>
       <span>{{ title }}</span>
       <span v-show="unit"> ( {{ unit }} ) </span>
-      <span v-show="status === 'UNKNOWN' && itemConfig.chartType !== 'ChartTable'" class="item-status"
-        >( {{ $t('unknownMetrics') }} )</span
-      >
+      <span v-show="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
       <span v-show="!rocketGlobal.edit && !pageTypes.includes(type)" @click="editComponentConfig">
         <svg class="icon cp r">
           <use xlink:href="#lock"></use>
@@ -101,7 +99,6 @@ limitations under the License. -->
     private height = 300;
     private chartSource: any = {};
     private itemConfig: any = {};
-    private paging: any = {};
 
     private created() {
       this.status = this.item.metricType;
@@ -129,7 +126,6 @@ limitations under the License. -->
         duration: this.durationTime,
         index: this.index,
         type: this.type,
-        paging: this.paging,
       }).then((params: Array<{ metricName: string; [key: string]: any; config: any }>) => {
         if (!params) {
           return;
@@ -250,9 +246,6 @@ limitations under the License. -->
             }
           }
         }
-        if (queryMetricType === QueryTypes.QueryBrowserErrorLogs) {
-          this.chartSource = data[0][QueryTypes.QueryBrowserErrorLogs];
-        }
       }
     }
 
@@ -309,9 +302,6 @@ limitations under the License. -->
       if (type === 'unit') {
         this.unit = value;
       }
-      if (type === 'paging') {
-        this.paging = value;
-      }
     }
 
     private deleteItem(index: number) {
@@ -336,10 +326,6 @@ limitations under the License. -->
     }
     @Watch('rocketGlobal.edit')
     private watchRerender() {
-      this.chartRender();
-    }
-    @Watch('paging')
-    private watchPaging() {
       this.chartRender();
     }
   }

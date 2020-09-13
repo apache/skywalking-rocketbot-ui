@@ -50,20 +50,9 @@ limitations under the License. -->
           v-model="itemConfig.chartType"
           @change="setItemConfig({ type: 'chartType', value: $event.target.value })"
         >
-          <template v-if="isBrowser">
-            <option v-for="chart in ChartTypeOptions" :value="chart.value" :key="chart.value">
-              {{ chart.label }}
-            </option>
-          </template>
-          <template v-else>
-            <option
-              v-for="chart in ChartTypeOptions.filter((i) => i.value !== 'ChartTable')"
-              :value="chart.value"
-              :key="chart.value"
-            >
-              {{ chart.label }}
-            </option>
-          </template>
+          <option v-for="chart in ChartTypeOptions" :value="chart.value" :key="chart.value">
+            {{ chart.label }}
+          </option>
         </select>
       </div>
       <div class="flex-h mb-5" v-if="isReadSingleValue">
@@ -369,20 +358,6 @@ limitations under the License. -->
         }
       }
       if (params.type === 'metricName') {
-        if (params.value === 'BrowserErrorLogs') {
-          this.queryMetricTypesList = [];
-          this.itemConfig.queryMetricType = 'queryBrowserErrorLogs';
-          this.itemConfig.chartType = 'ChartTable';
-          const values = {
-            queryMetricType: 'queryBrowserErrorLogs',
-            chartType: 'ChartTable',
-          };
-          this.EDIT_COMP_CONFIG({
-            index: this.index,
-            values,
-          });
-          return;
-        }
         this.TYPE_METRICS({ name: params.value }).then((data: Array<{ typeOfMetrics: string }>) => {
           if (!data.length) {
             return;
