@@ -15,29 +15,47 @@
  * limitations under the License.
  */
 
-module.exports = {
-  devServer: {
-    proxy: {
-      '/graphql': {
-        // target: `${process.env.SW_PROXY_TARGET || 'http://127.0.0.1:12800'}`,
-        // target: `${process.env.SW_PROXY_TARGET || 'http://122.112.182.72:8080'}`,
-
-        // target: `${process.env.SW_PROXY_TARGET || 'http://hz.zhangwei.asia:50018'}`,
-
-        target: `${process.env.SW_PROXY_TARGET || 'http://hz.zhangwei.asia:58080'}`,
-
-        changeOrigin: true,
-      },
-    },
+export const ServiceLogConstants = [
+  {
+    label: '',
+    value: '',
   },
-  chainWebpack: (config) => {
-    const svgRule = config.module.rule('svg');
-    svgRule.uses.clear();
-    svgRule
-      .use('svg-sprite-loader')
-      .loader('svg-sprite-loader')
-      .options({
-        symbolId: '[name]',
-      });
+];
+export const BrowserLogConstants = [
+  {
+    label: 'message',
+    value: 'error info',
   },
-};
+  {
+    label: 'time',
+    value: 'time',
+  },
+  {
+    label: 'pagePath',
+    value: 'page path',
+  },
+  {
+    label: 'category',
+    value: 'category',
+  },
+  {
+    label: 'service',
+    value: 'Service',
+  },
+  {
+    label: 'serviceVersion',
+    value: 'serviceVersion',
+  },
+  {
+    label: 'errorUrl',
+    value: 'errorUrl',
+  },
+  {
+    label: 'grade',
+    value: 'grade',
+  },
+  {
+    label: 'stack',
+    value: 'stack',
+  },
+];

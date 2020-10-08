@@ -28,5 +28,4 @@ export enum QueryTypes {
   ReadLabeledMetricsValues = 'readLabeledMetricsValues',
   READHEATMAP = 'readHeatMap',
   ReadSampledRecords = 'readSampledRecords',
-  QueryBrowserErrorLogs = 'queryBrowserErrorLogs',
 }

@@ -156,6 +156,10 @@ const m = {
   traceTagsTip: '只有core/default/searchableTagKeys中定义的标记才可搜索。查看配置词汇表页面上的更多详细信息。',
   traceLink: '配置词汇页',
   traceAddTag: '请添加标签',
+  log: '日志',
+  logCategory: '日志类别',
+  errorCatalog: '错误类目',
+  logDetail: '日志详情',
 };
 
 export default m;

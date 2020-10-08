@@ -47,8 +47,8 @@ limitations under the License. -->
       <div class="rk-dashboard-opt-wrapper scroll_hide">
         <div
           class="rk-dashboard-opt ell"
-          @click="handleSelect(i)"
-          :class="{ active: i.key === current.key }"
+          @click="i.disabled ? () => {} : handleSelect(i)"
+          :class="{ active: i.key === current.key, disabled: i.disabled }"
           v-for="i in filterData"
           :key="i.key"
         >
@@ -131,6 +131,9 @@ limitations under the License. -->
     &.active,
     &:hover {
       background-color: #40454e;
+    }
+    &.disabled {
+      cursor: not-allowed;
     }
   }
   .rk-dashboard-sel-search {

@@ -157,6 +157,10 @@ const m = {
     'Only tags defined in the core/default/searchableTagKeys are searchable. Check more details on the Configuration Vocabulary page',
   traceLink: 'Configuration Vocabulary page',
   traceAddTag: 'Please add a tag',
+  log: 'Log',
+  logCategory: 'Log Category',
+  errorCatalog: 'Error Catalog',
+  logDetail: 'Log Detail ',
 };
 
 export default m;
