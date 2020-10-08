@@ -11,10 +11,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div class="flex-v rk-browser">
+  <div class="flex-v rk-log">
     <LogBar :logState="logState"></LogBar>
-    <div class="browser-container">
-      <LogDetailTable :data="logState.logs" v-if="logState.type.key === 'browser'"></LogDetailTable>
+    <div class="log-container">
+      <LogDetailTable
+        :data="logState.logs"
+        :loading="logState.loading"
+        v-if="logState.type.key === 'browser'"
+      ></LogDetailTable>
     </div>
   </div>
 </template>
@@ -40,12 +44,12 @@ limitations under the License. -->
 </script>
 
 <style scoped lang="scss">
-  .rk-browser {
+  .rk-log {
     flex-grow: 1;
     height: 100%;
     /*overflow: hidden;*/
   }
-  .browser-container {
+  .log-container {
     overflow: auto;
     padding: 5px 15px 15px;
     height: 100%;

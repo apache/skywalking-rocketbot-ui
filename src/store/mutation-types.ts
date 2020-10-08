@@ -115,3 +115,4 @@ export const SELECT_LOG_TYPE = 'SELECT_LOG_TYPE';
 export const SELECT_ERROR_CATALOG = 'SELECT_ERROR_CATALOG';
 export const SET_LOGS = 'SET_LOGS';
 export const SET_LOGS_TOTAL = 'SET_LOGS_TOTAL';
+export const SET_LOADING = 'SET_LOADING';

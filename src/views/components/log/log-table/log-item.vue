@@ -22,28 +22,25 @@ limitations under the License. -->
         :class="['method']"
         :style="{
           lineHeight: 1.3,
-          width: `${index === 0 ? method : ''}px`,
+          width: `${item.drag ? item.method : ''}px`,
         }"
       >
-        <template v-if="item.label === 'message'">
-          <span
-            class="text w360"
-            v-tooltip:bottom="lineBreak(data.message) || '-'"
-            v-html="lineBreak(data.message)"
-          ></span>
-        </template>
+        <span
+          v-if="item.label === 'message'"
+          class="text w360"
+          v-tooltip:bottom="lineBreak(data.message + `\ntestjdsjfjsjdfkjf\r\nfsdjflfsd`) || '-'"
+          v-html="lineBreak(data.message + `\ntestjdsjfjsjdfkjf\r\nfsdjflfsd`)"
+        ></span>
         <template v-else-if="item.label === 'time'">
           {{ data.time | dateformat }}
         </template>
-        <template v-else>
-          <span class="text" v-tooltip:bottom="data[item.label] || '-'">{{ data[item.label] || '-' }}</span>
-        </template>
+        <span v-else class="text" v-tooltip:bottom="data[item.label] || '-'">{{ data[item.label] || '-' }}</span>
       </div>
     </div>
   </div>
 </template>
 <script lang="js">
-  import {  BrowserLogConstants } from './log-constant';
+  import { BrowserLogConstants } from './log-constant';
 
   export default {
     name: 'item',
@@ -54,7 +51,7 @@ limitations under the License. -->
     },
     data() {
       return {
-        columns:BrowserLogConstants,
+        columns: BrowserLogConstants,
         displayChildren: true,
         selectedSpan: 0,
       };
@@ -67,8 +64,8 @@ limitations under the License. -->
         let s = str
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
-                .replace(/\n/g, '<br />')
-                .replace(/\r\n/g, '<br />');
+                .replace(/\r\n/g, '<br />')
+                .replace(/\n/g, '<br />');
         return s;
       },
       showSelectSpan() {
@@ -109,7 +106,6 @@ limitations under the License. -->
     border-right: 1px dotted silver;
     overflow: hidden;
     line-height: 30px;
-    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }

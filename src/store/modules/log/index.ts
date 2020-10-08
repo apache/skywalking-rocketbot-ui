@@ -43,21 +43,22 @@ export interface State {
   logCategories: any[];
   logs: any[];
   total: number;
-
   categories: any[];
   category: any;
+  loading: boolean;
 }
 
 const initState: State = {
   type: { label: 'browser', key: 'browser' },
   logCategories: [
     { label: 'browser', key: 'browser' },
-    { label: 'service', key: 'service', disabled: false },
+    { label: 'service', key: 'service', disabled: true },
   ],
   logs: [],
   total: 0,
   categories,
   category: { label: 'ALL', key: 'ALL' },
+  loading: false,
 };
 
 // getters
@@ -77,6 +78,9 @@ const mutations: MutationTree<State> = {
   [types.SET_LOGS_TOTAL](state: State, data: any) {
     state.total = data;
   },
+  [types.SET_LOADING](state: State, data: any) {
+    state.loading = data;
+  },
 };
 
 // actions
@@ -84,12 +88,16 @@ const actions: ActionTree<State, any> = {
   QUERY_LOGS(context: { commit: Commit; state: State }, params: any) {
     switch (context.state.type.key) {
       case 'browser':
+        context.commit('SET_LOADING', true);
         return graph
           .query('queryBrowserErrorLogs')
           .params(params)
           .then((res: AxiosResponse<any>) => {
             context.commit('SET_LOGS', res.data.data.queryBrowserErrorLogs.logs);
             context.commit('SET_LOGS_TOTAL', res.data.data.queryBrowserErrorLogs.total);
+          })
+          .finally(() => {
+            context.commit('SET_LOADING', false);
           });
       case 'service':
         break;

@@ -16,17 +16,31 @@ limitations under the License. -->
 <template>
   <div class="log">
     <div class="log-header">
-      <div class="method" :style="`width: ${method}px`">
-        <span class="r cp" ref="dragger">
-          <svg class="icon">
-            <use xlink:href="#settings_ethernet"></use>
-          </svg>
-        </span>
-        {{ data[0].value }}
-      </div>
-      <div :class="item.label" v-for="(item, index) in columns.slice(1)" :key="index">
-        {{ item.value }}
-      </div>
+      <template v-for="(item, index) in columns">
+        <div class="method" :style="`width: ${item.method}px`" v-if="item.drag" :key="index">
+          <span class="r cp" ref="dragger" :data-index="index">
+            <svg class="icon">
+              <use xlink:href="#settings_ethernet"></use>
+            </svg>
+          </span>
+          {{ item.value }}
+        </div>
+        <div v-else :class="item.label" :key="index">
+          {{ item.value }}
+        </div>
+      </template>
+
+      <!--      <div class="method" :style="`width: ${method}px`">-->
+      <!--        <span class="r cp" ref="dragger">-->
+      <!--          <svg class="icon">-->
+      <!--            <use xlink:href="#settings_ethernet"></use>-->
+      <!--          </svg>-->
+      <!--        </span>-->
+      <!--        {{ data[0].value }}-->
+      <!--      </div>-->
+      <!--      <div :class="item.label" v-for="(item, index) in columns.slice(1)" :key="index">-->
+      <!--        {{ item.value }}-->
+      <!--      </div>-->
     </div>
     <Item :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" :type="type" />
     <slot></slot>
@@ -37,13 +51,13 @@ limitations under the License. -->
   import Item from './log-item';
 
   export default {
-    components: {Item},
+    components: { Item },
     name: 'LogContainer',
     props: ['type', 'tableData'],
     data() {
       return {
         method: 380,
-        columns:BrowserLogConstants
+        columns: BrowserLogConstants,
       };
     },
     created() {
@@ -51,7 +65,7 @@ limitations under the License. -->
         case 'browser':
           this.data = BrowserLogConstants;
           break;
-          case 'service':
+        case 'service':
           this.data = ServiceLogConstants;
           break;
         default:
@@ -59,19 +73,29 @@ limitations under the License. -->
       }
     },
     mounted() {
-      const drag = this.$refs.dragger;
-      drag.onmousedown = (event) => {
-        const diffX = event.clientX;
-        const copy = this.method;
-        document.onmousemove = (documentEvent) => {
-          const moveX = documentEvent.clientX - diffX;
-          this.method = copy + moveX;
+      const drags = this.$refs.dragger;
+      console.log(drags);
+
+      drags.forEach(drag => {
+        drag.onmousedown = (event) => {
+          const diffX = event.clientX;
+          const copy = this.method;
+          console.log(drag);
+          document.onmousemove = (documentEvent) => {
+
+
+            const moveX = documentEvent.clientX - diffX;
+            this.method = copy + moveX;
+            const index = +drag.dataset.index;
+            this.$set(this.data, index, { ...BrowserLogConstants[index], 'method': this.method });
+          };
+          document.onmouseup = () => {
+            document.onmousemove = null;
+            document.onmouseup = null;
+          };
         };
-        document.onmouseup = () => {
-          document.onmousemove = null;
-          document.onmouseup = null;
-        };
-      };
+      });
+
     },
   };
 </script>
@@ -82,6 +106,7 @@ limitations under the License. -->
     height: 100%;
     overflow: auto;
   }
+
   .log-header {
     /*display: flex;*/
     white-space: nowrap;

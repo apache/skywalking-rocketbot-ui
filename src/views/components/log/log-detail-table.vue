@@ -13,17 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div class="trace-detail-chart-table">
-    <div class="rk-trace-t-loading" v-show="loading">
+  <div class="log-detail-chart-table">
+    <div class="rk-log-t-loading" v-show="loading">
       <svg class="icon loading">
         <use xlink:href="#spinner"></use>
       </svg>
     </div>
     <LogTable :tableData="data" :type="`browser`">
-      <div class="trace-tips" v-if="!data.length">{{ $t('noData') }}</div>
+      <div class="log-tips" v-if="!data.length">{{ $t('noData') }}</div>
     </LogTable>
     <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('logDetail')">
-      <div class="rk-trace-detail">
+      <div class="rk-log-detail">
         <div class="mb-10 clear rk-flex" v-for="(value, name) in this.currentSpan">
           <template>
             <span class="g-sm-4 grey">{{ $t(name) }}:</span>
@@ -39,10 +39,10 @@ limitations under the License. -->
   </div>
 </template>
 <style lang="scss">
-  .rk-tooltip-popper.trace-table-tooltip .rk-tooltip-inner {
+  .rk-tooltip-popper.log-table-tooltip .rk-tooltip-inner {
     max-width: 600px;
   }
-  .trace-detail-chart-table {
+  .log-detail-chart-table {
     position: relative;
     min-height: 300px;
     border-bottom: none;
@@ -57,11 +57,8 @@ limitations under the License. -->
     components: {
       LogTable,
     },
-    props: ['data', 'traceId', 'showBtnDetail', 'HeaderType'],
+    props: ['data', 'loading', 'showBtnDetail'],
     watch: {
-    },
-    computed:{
-
     },
     data() {
       return {
@@ -70,7 +67,6 @@ limitations under the License. -->
         showDetail: false,
         list: [],
         currentSpan: {},
-        loading: true,
       };
     },
     methods: {
@@ -78,8 +74,8 @@ limitations under the License. -->
         let s = str
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
-                .replace(/\n/g, '<br />')
-                .replace(/\r\n/g, '<br />');
+                .replace(/\r\n/g, '<br />')
+                .replace(/\n/g, '<br />');
         return s;
       },
       handleSelectSpan(data) {
@@ -94,18 +90,15 @@ limitations under the License. -->
       }
     },
     created() {
-      this.loading = true;
     },
     mounted() {
-      this.loading = false;
       this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
       this.$eventBus.$on('HANDLE-VIEW-SPAN', this, this.handleViewSpan);
-      this.$eventBus.$on('TRACE-TABLE-LOADING', this, ()=>{ this.loading = true });
     },
   };
 </script>
 <style lang="scss" scoped>
-  .rk-trace-t-loading {
+  .rk-log-t-loading {
     text-align: center;
     position: absolute;
     width: 100%;
@@ -123,7 +116,7 @@ limitations under the License. -->
     overflow: auto;
     font-family: monospace;
   }
-  .trace-tips {
+  .log-tips {
     width: 100%;
     text-align: center;
     margin-top: 10px;

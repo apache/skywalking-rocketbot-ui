@@ -113,7 +113,7 @@
           serviceVersionId: currentInstance.key,
           pagePathId: currentEndpoint.key,
           category: category.key,
-          paging: { pageNum: this.pageNum, pageSize: 15, needTotal: true },
+          paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
           queryDuration: this.durationTime,
         },
       });

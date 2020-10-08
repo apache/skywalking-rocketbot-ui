@@ -21,41 +21,45 @@ export const ServiceLogConstants = [
     value: '',
   },
 ];
+// The order of columns should be time, service, error, stack, version, url, catalog, and grade.
 export const BrowserLogConstants = [
   {
-    label: 'message',
-    value: 'error info',
-  },
-  {
     label: 'time',
-    value: 'time',
-  },
-  {
-    label: 'pagePath',
-    value: 'page path',
-  },
-  {
-    label: 'category',
-    value: 'category',
+    value: 'Time',
   },
   {
     label: 'service',
     value: 'Service',
   },
   {
-    label: 'serviceVersion',
-    value: 'serviceVersion',
-  },
-  {
-    label: 'errorUrl',
-    value: 'errorUrl',
-  },
-  {
-    label: 'grade',
-    value: 'grade',
+    label: 'message',
+    value: 'Error Info',
+    drag: true,
   },
   {
     label: 'stack',
-    value: 'stack',
+    value: 'Stack',
+    drag: true,
+  },
+  {
+    label: 'serviceVersion',
+    value: 'Service Version',
+  },
+  {
+    label: 'errorUrl',
+    value: 'Error Url',
+  },
+  // {
+  //   label: 'pagePath',
+  //   value: 'Page Path',
+  // },
+  {
+    label: 'category',
+    value: 'Catalog',
+  },
+
+  {
+    label: 'grade',
+    value: 'Grade',
   },
 ];
