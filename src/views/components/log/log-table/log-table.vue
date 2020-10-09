@@ -29,18 +29,6 @@ limitations under the License. -->
           {{ item.value }}
         </div>
       </template>
-
-      <!--      <div class="method" :style="`width: ${method}px`">-->
-      <!--        <span class="r cp" ref="dragger">-->
-      <!--          <svg class="icon">-->
-      <!--            <use xlink:href="#settings_ethernet"></use>-->
-      <!--          </svg>-->
-      <!--        </span>-->
-      <!--        {{ data[0].value }}-->
-      <!--      </div>-->
-      <!--      <div :class="item.label" v-for="(item, index) in columns.slice(1)" :key="index">-->
-      <!--        {{ item.value }}-->
-      <!--      </div>-->
     </div>
     <Item :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" :type="type" />
     <slot></slot>
@@ -79,15 +67,14 @@ limitations under the License. -->
       drags.forEach(drag => {
         drag.onmousedown = (event) => {
           const diffX = event.clientX;
-          const copy = this.method;
-          console.log(drag);
+          const index = +drag.dataset.index;
+
+          const item = this.data[index];
+          const copy = item.method;
           document.onmousemove = (documentEvent) => {
-
-
             const moveX = documentEvent.clientX - diffX;
-            this.method = copy + moveX;
-            const index = +drag.dataset.index;
-            this.$set(this.data, index, { ...BrowserLogConstants[index], 'method': this.method });
+            const method = copy + moveX;
+            this.$set(this.data, index, { ...item, 'method': method });
           };
           document.onmouseup = () => {
             document.onmousemove = null;

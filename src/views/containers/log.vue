@@ -37,9 +37,6 @@ limitations under the License. -->
   export default class Log extends Vue {
     @Getter('durationTime') private durationTime: any;
     @State('rocketLog') private logState: any;
-    @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
-
-    private beforeMount() {}
   }
 </script>
 

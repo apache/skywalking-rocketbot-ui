@@ -27,7 +27,7 @@ limitations under the License. -->
       >
         <span
           v-if="item.label === 'message'"
-          class="text w360"
+          class="text"
           v-tooltip:bottom="lineBreak(data.message + `\ntestjdsjfjsjdfkjf\r\nfsdjflfsd`) || '-'"
           v-html="lineBreak(data.message + `\ntestjdsjfjsjdfkjf\r\nfsdjflfsd`)"
         ></span>
@@ -110,7 +110,8 @@ limitations under the License. -->
     white-space: nowrap;
   }
   .log-item .text {
-    width: 120px;
+    width: 100% !important;
+
     /*padding: 0 5px;*/
     display: inline-block;
     overflow: hidden;
@@ -120,11 +121,8 @@ limitations under the License. -->
   .log-item > div.method {
     /*padding-left: 10px;*/
     padding: 3px 8px;
-    &:not(first-child) {
-      vertical-align: middle;
-    }
-  }
-  .w360 {
-    width: 360px !important;
+    /*&:not(first-child) {*/
+    /*  vertical-align: middle;*/
+    /*}*/
   }
 </style>
