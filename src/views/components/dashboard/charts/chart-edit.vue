@@ -106,18 +106,6 @@ limitations under the License. -->
           }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="itemConfig.independentSelector && isBrowser">
-        <div class="title grey sm">{{ $t('currentAPP') }}:</div>
-        <select
-          class="long"
-          v-model="itemConfig.currentService"
-          @change="setItemConfig({ type: 'currentService', value: $event.target.value })"
-        >
-          <option v-for="service in stateDashboardOption.services" :value="service.key" :key="service.key">{{
-            service.label
-          }}</option>
-        </select>
-      </div>
       <div
         class="flex-h mb-5"
         v-show="

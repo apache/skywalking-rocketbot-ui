@@ -27,7 +27,7 @@ const m = {
   currentService: 'Current Service',
   currentEndpoint: 'Current Endpoint',
   currentInstance: 'Current Instance',
-  currentAPP: 'Current APP',
+  currentApp: 'Current App',
   currentVersion: 'Current Version',
   currentPage: 'Current Page',
   currentDatabase: 'Current Database',

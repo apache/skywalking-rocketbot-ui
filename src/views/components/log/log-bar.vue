@@ -10,7 +10,7 @@
       />
       <ToolBarSelect
         @onChoose="selectService"
-        :title="this.$t('currentAPP')"
+        :title="this.$t('currentApp')"
         :current="rocketOption.currentService"
         :data="rocketOption.services"
         icon="package"
