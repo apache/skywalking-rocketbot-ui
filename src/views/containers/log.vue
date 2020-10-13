@@ -44,7 +44,7 @@ limitations under the License. -->
   .rk-log {
     flex-grow: 1;
     height: 100%;
-    /*overflow: hidden;*/
+    overflow: hidden;
   }
   .log-container {
     overflow: auto;

@@ -24,12 +24,16 @@ limitations under the License. -->
     </LogTable>
     <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('logDetail')">
       <div class="rk-log-detail">
-        <div class="mb-10 clear rk-flex" v-for="(value, name) in this.currentSpan">
+        <div class="mb-10 clear rk-flex" v-for="(item, index) in columns">
           <template>
-            <span class="g-sm-4 grey">{{ $t(name) }}:</span>
-            <span v-if="name === 'message'" class="text" v-html="lineBreak(value)"></span>
-            <span v-else-if="name === 'time'" class="g-sm-8 wba">{{ value | dateformat }}</span>
-            <span v-else class="g-sm-8 wba">{{ value }}</span>
+            <span class="g-sm-4 grey">{{ $t(item.value) }}:</span>
+            <span
+              v-if="['message', 'stack'].includes(item.label)"
+              class="text"
+              v-html="lineBreak(currentSpan[item.label]) || '-'"
+            ></span>
+            <span v-else-if="item.label === 'time'" class="g-sm-8 wba">{{ currentSpan[item.label] | dateformat }}</span>
+            <span v-else class="g-sm-8 wba">{{ currentSpan[item.label] || '-' }}</span>
           </template>
         </div>
       </div>
@@ -51,6 +55,7 @@ limitations under the License. -->
 
 <script lang="js">
   import LogTable from './log-table/log-table.vue';
+  import { BrowserLogConstants } from './log-table/log-constant';
   /* eslint-disable */
   /* tslint:disable */
   export default {
@@ -63,7 +68,7 @@ limitations under the License. -->
     data() {
       return {
         diaplay: true,
-        // segmentId: [],
+        columns: BrowserLogConstants,
         showDetail: false,
         list: [],
         currentSpan: {},

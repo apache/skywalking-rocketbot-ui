@@ -14,28 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 
 <template>
-  <div>
-    <div @click="showSelectSpan" :class="['log-item']" ref="logItem">
-      <div
-        v-for="(item, index) in columns"
-        :key="index"
-        :class="['method']"
-        :style="{
-          lineHeight: 1.3,
-          width: `${item.drag ? item.method : ''}px`,
-        }"
-      >
-        <span
-          v-if="item.label === 'message'"
-          class="text"
-          v-tooltip:bottom="lineBreak(data.message + `\ntestjdsjfjsjdfkjf\r\nfsdjflfsd`) || '-'"
-          v-html="lineBreak(data.message + `\ntestjdsjfjsjdfkjf\r\nfsdjflfsd`)"
-        ></span>
-        <template v-else-if="item.label === 'time'">
-          {{ data.time | dateformat }}
-        </template>
-        <span v-else class="text" v-tooltip:bottom="data[item.label] || '-'">{{ data[item.label] || '-' }}</span>
-      </div>
+  <div @click="showSelectSpan" :class="['log-item', 'clearfix']" ref="logItem">
+    <div
+      v-for="(item, index) in columns"
+      :key="index"
+      :class="['method', ['message', 'stack'].includes(item.label) ? 'autoHeight' : '']"
+      :style="{
+        lineHeight: 1.3,
+        width: `${item.drag ? item.method : ''}px`,
+      }"
+    >
+      <span v-if="['message', 'stack'].includes(item.label)" class="text" v-html="lineBreak(data[item.label])"></span>
+      <template v-else-if="item.label === 'time'">
+        {{ data.time | dateformat }}
+      </template>
+      <span v-else class="" v-tooltip:bottom="data[item.label] || '-'">{{ data[item.label] || '-' }}</span>
     </div>
   </div>
 </template>
@@ -48,6 +41,13 @@ limitations under the License. -->
     created() {
     },
     watch: {
+      data: {
+        handler: function() {
+          this.setLogItemHeight();
+        },
+        deep: true,
+        immediate: true,
+      },
     },
     data() {
       return {
@@ -56,17 +56,30 @@ limitations under the License. -->
         selectedSpan: 0,
       };
     },
-    computed: {
-
-    },
+    computed: {},
     methods: {
       lineBreak(str = '') {
         let s = str
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/\r\n/g, '<br />')
-                .replace(/\n/g, '<br />');
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\r\n/g, '<br />')
+          .replace(/\n/g, '<br />');
         return s;
+      },
+      setLogItemHeight() {
+        this.$nextTick(() => {
+          const heights = [];
+          this.$refs.logItem.childNodes.forEach(item => {
+            if (item.getAttribute('class').indexOf('autoHeight') > -1) {
+              const autoHeightChild = item.childNodes[0];
+              const height = autoHeightChild.getBoundingClientRect().height;
+              heights.push(height + 11);
+            }
+          });
+          const max = Math.max(...heights);
+          this.$refs.logItem.style.height = max + 'px';
+        });
+
       },
       showSelectSpan() {
         const items = document.querySelectorAll('.log-item');
@@ -81,12 +94,12 @@ limitations under the License. -->
 </script>
 <style lang="scss" scoped>
   .log-item {
-    /*display: flex;*/
-    align-items: center;
     white-space: nowrap;
     position: relative;
     cursor: pointer;
+    /*height: 100px;*/
   }
+
   .log-item.selected {
     background: rgba(0, 0, 0, 0.04);
   }
@@ -94,6 +107,7 @@ limitations under the License. -->
   .log-item:not(.level0):hover {
     background: rgba(0, 0, 0, 0.04);
   }
+
   .log-item:hover {
     background: rgba(0, 0, 0, 0.04) !important;
   }
@@ -109,20 +123,18 @@ limitations under the License. -->
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
   .log-item .text {
     width: 100% !important;
-
     /*padding: 0 5px;*/
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
   .log-item > div.method {
-    /*padding-left: 10px;*/
+    height: 100%;
     padding: 3px 8px;
-    /*&:not(first-child) {*/
-    /*  vertical-align: middle;*/
-    /*}*/
   }
 </style>

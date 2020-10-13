@@ -35,13 +35,13 @@ export const BrowserLogConstants = [
     label: 'message',
     value: 'Error Info',
     drag: true,
-    method: 320,
+    method: 350,
   },
   {
     label: 'stack',
     value: 'Stack',
     drag: true,
-    method: 320,
+    method: 350,
   },
   {
     label: 'serviceVersion',
