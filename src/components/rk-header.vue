@@ -51,7 +51,7 @@ limitations under the License. -->
       </router-link>
       <router-link class="nav-link mr-20" to="/log">
         <svg class="icon sm vm">
-          <use xlink:href="#spam"></use>
+          <use xlink:href="#assignment"></use>
         </svg>
         <span class="vm hide-xs ml-5">{{ this.$t('log') }}</span>
       </router-link>

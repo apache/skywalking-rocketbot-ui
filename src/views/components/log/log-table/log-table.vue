@@ -62,8 +62,6 @@ limitations under the License. -->
     },
     mounted() {
       const drags = this.$refs.dragger;
-      console.log(drags);
-
       drags.forEach(drag => {
         drag.onmousedown = (event) => {
           const diffX = event.clientX;

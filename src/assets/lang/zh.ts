@@ -151,6 +151,7 @@ const m = {
   sortOrder: '排序方式',
   descendOrder: '递减顺序',
   increaseOrder: '递增顺序',
+  defaultOrder: '默认顺序',
   chartType: '图表类型',
   currentDepth: '当前深度',
   traceTagsTip: '只有core/default/searchableTagKeys中定义的标记才可搜索。查看配置词汇表页面上的更多详细信息。',

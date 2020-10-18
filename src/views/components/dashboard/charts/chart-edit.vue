@@ -38,9 +38,9 @@ limitations under the License. -->
           v-model="itemConfig.queryMetricType"
           @change="setItemConfig({ type: 'queryMetricType', value: $event.target.value })"
         >
-          <option v-for="query in queryMetricTypesList" :value="query.value" :key="query.value">{{
-            query.label
-          }}</option>
+          <option v-for="query in queryMetricTypesList" :value="query.value" :key="query.value"
+            >{{ query.label }}
+          </option>
         </select>
       </div>
       <div class="flex-h mb-5" v-show="isChartType">
@@ -101,9 +101,9 @@ limitations under the License. -->
           v-model="itemConfig.currentDatabase"
           @change="setItemConfig({ type: 'currentDatabase', value: $event.target.value })"
         >
-          <option v-for="database in stateDashboardOption.databases" :value="database.label" :key="database.key">{{
-            database.label
-          }}</option>
+          <option v-for="database in stateDashboardOption.databases" :value="database.label" :key="database.key"
+            >{{ database.label }}
+          </option>
         </select>
       </div>
       <div
@@ -147,9 +147,9 @@ limitations under the License. -->
           v-model="itemConfig.currentEndpoint"
           @change="setItemConfig({ type: 'currentEndpoint', value: $event.target.value })"
         >
-          <option v-for="endpoint in endpoints" :value="endpoint.label" :key="endpoint.key">{{
-            endpoint.label
-          }}</option>
+          <option v-for="endpoint in endpoints" :value="endpoint.label" :key="endpoint.key"
+            >{{ endpoint.label }}
+          </option>
         </select>
       </div>
       <div
@@ -170,9 +170,9 @@ limitations under the License. -->
           v-model="itemConfig.currentInstance"
           @change="setItemConfig({ type: 'currentInstance', value: $event.target.value })"
         >
-          <option v-for="instance in instances" :value="instance.label" :key="instance.key">{{
-            instance.label
-          }}</option>
+          <option v-for="instance in instances" :value="instance.label" :key="instance.key"
+            >{{ instance.label }}
+          </option>
         </select>
       </div>
       <div class="flex-h mb-5" v-show="!isIndependentSelector && !isBrowser">
@@ -196,7 +196,7 @@ limitations under the License. -->
           <option :value="false">{{ $t('noneParentService') }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="nameMetrics.includes(itemConfig.queryMetricType)">
+      <div class="flex-h mb-5" v-show="nameMetrics.includes(itemConfig.queryMetricType) || isBrowser">
         <div class="title grey sm">{{ $t('sortOrder') }}:</div>
         <select
           class="long"
@@ -205,6 +205,7 @@ limitations under the License. -->
         >
           <option :value="'DES'">{{ $t('descendOrder') }}</option>
           <option :value="'ASC'">{{ $t('increaseOrder') }}</option>
+          <!--                    <option :value="''" v-if="isBrowser">{{ $t('defaultOrder') }}</option>-->
         </select>
       </div>
       <div class="flex-h mb-5">
@@ -223,7 +224,7 @@ limitations under the License. -->
           v-model="itemConfig.aggregation"
           @change="setItemConfig({ type: 'aggregation', value: $event.target.value })"
         >
-          <option v-for="type in CalculationType" :value="type.value" :key="type.value">{{ type.label }}</option>
+          <option v-for="type in CalculationType" :value="type.value" :key="type.value">{{ type.label }} </option>
         </select>
         <input
           type="text"
@@ -265,6 +266,7 @@ limitations under the License. -->
   import { TopologyType, ObjectsType } from '../../../constant';
   import {
     EntityType,
+    BrowserEntityType,
     IndependentType,
     MetricsType,
     QueryMetricTypes,
@@ -316,6 +318,10 @@ limitations under the License. -->
         ? true
         : false;
       this.isBrowser = this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.BROWSER;
+      if (this.isBrowser) {
+        this.setItemConfig({ type: 'independentSelector', value: 'false' });
+        this.EntityType = BrowserEntityType;
+      }
       this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
       this.isLabel = this.itemConfig.metricType === MetricsType.LABELED_VALUE ? true : false;
       this.isIndependentSelector =
@@ -544,6 +550,7 @@ limitations under the License. -->
     margin: 0 -10px;
     height: 100%;
     overflow: auto;
+
     select {
       margin: 0;
       height: 30px;
@@ -558,11 +565,13 @@ limitations under the License. -->
     border: 1px dashed rgba(196, 200, 225, 0.5);
     border-radius: 4px;
     height: 100%;
+
     .title {
       width: 120px;
       flex-shrink: 0;
     }
   }
+
   .rk-chart-edit-input {
     border: 0;
     outline: 0;

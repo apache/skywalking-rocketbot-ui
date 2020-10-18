@@ -6,8 +6,8 @@
         :title="this.$t('logCategory')"
         :current="logState.type"
         :data="logState.logCategories"
-        icon="package"
-      />
+        icon="token"
+      />sortOrder
       <ToolBarSelect
         @onChoose="selectService"
         :title="this.$t('currentApp')"
@@ -34,7 +34,7 @@
         :title="this.$t('errorCatalog')"
         :current="logState.category"
         :data="logState.categories"
-        icon="disk"
+        icon="epic"
       />
     </div>
 

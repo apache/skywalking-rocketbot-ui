@@ -151,6 +151,7 @@ const m = {
   sortOrder: 'Sort Order',
   descendOrder: 'Descend Order',
   increaseOrder: 'Increase Order',
+  defaultOrder: 'Default Order',
   chartType: 'Chart Type',
   currentDepth: 'Current Depth',
   traceTagsTip:

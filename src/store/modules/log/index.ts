@@ -49,10 +49,10 @@ export interface State {
 }
 
 const initState: State = {
-  type: { label: 'browser', key: 'browser' },
+  type: { label: 'Browser', key: 'browser' },
   logCategories: [
-    { label: 'browser', key: 'browser' },
-    { label: 'service', key: 'service', disabled: true },
+    { label: 'Browser', key: 'browser' },
+    { label: 'Service', key: 'service', disabled: true },
   ],
   logs: [],
   total: 0,
