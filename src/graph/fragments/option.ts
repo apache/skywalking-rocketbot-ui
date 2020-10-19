@@ -25,6 +25,16 @@ export const Services = {
   `,
 };
 
+export const BrowserServices = {
+  variable: ['$duration: Duration!'],
+  query: `
+    services: getAllBrowserServices(duration: $duration) {
+      key: id
+      label: name
+    }
+  `,
+};
+
 export const Database = {
   variable: '$duration: Duration!',
   query: `

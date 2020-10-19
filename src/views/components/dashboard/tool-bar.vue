@@ -55,6 +55,30 @@ limitations under the License. -->
         :data="stateDashboard.instances"
         icon="disk"
       />
+
+      <template v-if="compType === dashboardType.BROWSER">
+        <ToolBarSelect
+          @onChoose="selectService"
+          :title="this.$t('currentApp')"
+          :current="stateDashboard.currentService"
+          :data="stateDashboard.services"
+          icon="package"
+        />
+        <ToolBarSelect
+          @onChoose="selectInstance"
+          :title="this.$t('currentVersion')"
+          :current="stateDashboard.currentInstance"
+          :data="stateDashboard.instances"
+          icon="disk"
+        />
+        <ToolBarEndpointSelect
+          @onChoose="selectEndpoint"
+          :title="this.$t('currentPage')"
+          :current="stateDashboard.currentEndpoint"
+          :data="stateDashboard.endpoints"
+          icon="code"
+        />
+      </template>
     </div>
     <div class="rk-dashboard-bar flex-h" v-else>
       <ToolBarSelect

@@ -15,24 +15,53 @@
  * limitations under the License.
  */
 
-module.exports = {
-  devServer: {
-    proxy: {
-      '/graphql': {
-        target: `${process.env.SW_PROXY_TARGET || 'http://127.0.0.1:12800'}`,
+export const ServiceLogConstants = [
+  {
+    label: '',
+    value: '',
+  },
+];
+// The order of columns should be time, service, error, stack, version, url, catalog, and grade.
+export const BrowserLogConstants = [
+  {
+    label: 'time',
+    value: 'Time',
+  },
+  {
+    label: 'service',
+    value: 'Service',
+  },
+  {
+    label: 'message',
+    value: 'Error Info',
+    drag: true,
+    method: 350,
+  },
+  {
+    label: 'stack',
+    value: 'Stack',
+    drag: true,
+    method: 350,
+  },
+  {
+    label: 'serviceVersion',
+    value: 'Service Version',
+  },
+  {
+    label: 'errorUrl',
+    value: 'Error Url',
+  },
+  // {
+  //   label: 'pagePath',
+  //   value: 'Page Path',
+  // },
+  {
+    label: 'category',
+    value: 'Catalog',
+  },
 
-        changeOrigin: true,
-      },
-    },
+  {
+    label: 'grade',
+    value: 'Grade',
   },
-  chainWebpack: (config) => {
-    const svgRule = config.module.rule('svg');
-    svgRule.uses.clear();
-    svgRule
-      .use('svg-sprite-loader')
-      .loader('svg-sprite-loader')
-      .options({
-        symbolId: '[name]',
-      });
-  },
-};
+];
