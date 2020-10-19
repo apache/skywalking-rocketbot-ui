@@ -23,7 +23,7 @@ limitations under the License. -->
       />
       <ToolBarSelect
         @onChoose="selectService"
-        :title="this.$t('app')"
+        :title="this.$t('service')"
         :current="rocketOption.currentService"
         :data="rocketOption.services"
         icon="package"

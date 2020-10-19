@@ -30,7 +30,6 @@ const m = {
   currentApp: '当前应用',
   currentVersion: '当前版本',
   currentPage: '当前页面',
-  app: '应用',
   version: '版本',
   page: '页面',
   currentDatabase: '当前数据库',
