@@ -196,7 +196,7 @@ limitations under the License. -->
           <option :value="false">{{ $t('noneParentService') }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="nameMetrics.includes(itemConfig.queryMetricType) || isBrowser">
+      <div class="flex-h mb-5" v-show="nameMetrics.includes(itemConfig.queryMetricType)">
         <div class="title grey sm">{{ $t('sortOrder') }}:</div>
         <select
           class="long"
@@ -320,6 +320,7 @@ limitations under the License. -->
       this.isBrowser = this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.BROWSER;
       if (this.isBrowser) {
         this.setItemConfig({ type: 'independentSelector', value: 'false' });
+        this.setItemConfig({ type: 'sortOrder', value: 'DES' });
         this.EntityType = BrowserEntityType;
       }
       this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];

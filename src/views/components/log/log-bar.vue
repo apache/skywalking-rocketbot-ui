@@ -6,25 +6,25 @@
         :title="this.$t('logCategory')"
         :current="logState.type"
         :data="logState.logCategories"
-        icon="token"
-      />sortOrder
+        icon="chart"
+      />
       <ToolBarSelect
         @onChoose="selectService"
-        :title="this.$t('currentApp')"
+        :title="this.$t('app')"
         :current="rocketOption.currentService"
         :data="rocketOption.services"
         icon="package"
       />
       <ToolBarSelect
         @onChoose="selectInstance"
-        :title="this.$t('currentVersion')"
+        :title="this.$t('version')"
         :current="rocketOption.currentInstance"
         :data="rocketOption.instances"
         icon="disk"
       />
       <ToolBarEndpointSelect
         @onChoose="selectEndpoint"
-        :title="this.$t('currentPage')"
+        :title="this.$t('page')"
         :current="rocketOption.currentEndpoint"
         :data="rocketOption.endpoints"
         icon="code"
