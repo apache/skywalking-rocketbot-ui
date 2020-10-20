@@ -35,7 +35,7 @@ limitations under the License. -->
         :data="rocketOption.instances"
         icon="disk"
       />
-      <ToolBarEndpointSelect
+      <ToolBarSelect
         @onChoose="selectEndpoint"
         :title="this.$t('page')"
         :current="rocketOption.currentEndpoint"
@@ -52,6 +52,12 @@ limitations under the License. -->
     </div>
 
     <span class="flex-h rk-right">
+      <a class="rk-log-clear-btn r mr-10" @click="clearSearch">
+        <svg class="icon mr-5 vm">
+          <use xlink:href="#clear"></use>
+        </svg>
+        <span class="vm">{{ this.$t('clear') }}</span>
+      </a>
       <a class="rk-log-search-btn bg-blue mr-10" @click="queryLogs">
         <svg class="icon mr-5 vm">
           <use xlink:href="#search"></use>
@@ -81,7 +87,7 @@ limitations under the License. -->
     @Mutation('SELECT_LOG_TYPE') private SELECT_LOG_TYPE: any;
     @Mutation('SELECT_ERROR_CATALOG') private SELECT_ERROR_CATALOG: any;
 
-    @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
+    @Action('SELECT_LOG_SERVICE') private SELECT_LOG_SERVICE: any;
     @Action('SELECT_DATABASE') private SELECT_DATABASE: any;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
@@ -91,6 +97,7 @@ limitations under the License. -->
     @Getter('durationTime') private durationTime: any;
 
     private pageNum: number = 1;
+
     private beforeMount() {
       this.MIXHANDLE_GET_OPTION({
         compType: this.logState.type.key,
@@ -106,7 +113,7 @@ limitations under the License. -->
     }
 
     private selectService(i: any) {
-      this.SELECT_SERVICE({ service: i, duration: this.durationTime });
+      this.SELECT_LOG_SERVICE({ service: i, duration: this.durationTime });
     }
 
     private selectEndpoint(i: any) {
@@ -115,6 +122,10 @@ limitations under the License. -->
 
     private selectInstance(i: any) {
       this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
+    }
+    private clearSearch() {
+      this.SELECT_LOG_SERVICE({ service: { label: 'All', key: '' }, duration: this.durationTime });
+      this.SELECT_ERROR_CATALOG({ label: 'All', key: 'ALL' });
     }
 
     private queryLogs() {
@@ -157,5 +168,10 @@ limitations under the License. -->
     &.bg-blue {
       background-color: #448dfe;
     }
+  }
+  .rk-log-clear-btn {
+    padding: 3px 9px;
+    background-color: #484b55;
+    border-radius: 4px;
   }
 </style>

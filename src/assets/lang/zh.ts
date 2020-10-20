@@ -27,7 +27,6 @@ const m = {
   currentService: '当前服务',
   currentEndpoint: '当前端点',
   currentInstance: '当前实例',
-  currentApp: '当前应用',
   currentVersion: '当前版本',
   currentPage: '当前页面',
   version: '版本',
