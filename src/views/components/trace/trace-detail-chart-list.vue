@@ -32,6 +32,10 @@ limitations under the License. -->
       <div class="rk-trace-detail">
         <h5 class="mb-15">{{ $t('tags') }}.</h5>
         <div class="mb-10 clear">
+          <span class="g-sm-4 grey">{{ $t('service') }}:</span
+          ><span class="g-sm-8 wba">{{ this.currentSpan.serviceCode }}</span>
+        </div>
+        <div class="mb-10 clear">
           <span class="g-sm-4 grey">{{ $t('endpoint') }}:</span
           ><span class="g-sm-8 wba">{{ this.currentSpan.label }}</span>
         </div>

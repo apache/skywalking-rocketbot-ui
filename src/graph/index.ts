@@ -23,8 +23,10 @@ import * as topology from './query/topology';
 import * as alarm from './query/alarm';
 import * as profile from './query/profile';
 import * as dashboard from './query/dashboard';
+import * as errorLog from './query/log';
 
 const query: any = {
+  ...errorLog,
   ...option,
   ...trace,
   ...topology,

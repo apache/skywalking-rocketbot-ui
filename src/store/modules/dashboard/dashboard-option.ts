@@ -19,6 +19,7 @@ import { Commit, ActionTree, MutationTree, Dispatch } from 'vuex';
 import * as types from './mutation-types';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
+import router from '../../../router';
 
 export interface State {
   services: any[];
@@ -44,12 +45,17 @@ const initState: State = {
   updateDashboard: {},
 };
 
+const concatOption = (data: any) => {
+  const isLog: boolean = router.app.$route.fullPath === '/log';
+  return isLog ? [{ label: 'All', key: '' }].concat(data) : data;
+};
 // getters
 const getters = {};
 
 // mutations
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: any) {
+    data = concatOption(data);
     state.services = data;
     state.currentService = data[0] || {};
   },
@@ -63,6 +69,7 @@ const mutations: MutationTree<State> = {
   },
 
   [types.SET_ENDPOINTS](state: State, data: any) {
+    data = concatOption(data);
     state.endpoints = data;
     if (!data.length) {
       state.currentEndpoint = {};
@@ -77,6 +84,7 @@ const mutations: MutationTree<State> = {
     state.updateDashboard = endpoint;
   },
   [types.SET_INSTANCES](state: State, data: any) {
+    data = concatOption(data);
     state.instances = data;
     if (!data.length) {
       state.currentInstance = {};
@@ -113,6 +121,14 @@ const actions: ActionTree<State, any> = {
     }
     return graph
       .query('queryServices')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_SERVICES, res.data.data.services);
+      });
+  },
+  GET_BROWSER_SERVICES(context: { commit: Commit }, params: { duration: any }) {
+    return graph
+      .query('queryBrowserServices')
       .params(params)
       .then((res: AxiosResponse) => {
         context.commit(types.SET_SERVICES, res.data.data.services);
@@ -177,6 +193,11 @@ const actions: ActionTree<State, any> = {
     context.dispatch('GET_SERVICE_ENDPOINTS', {});
     context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration });
   },
+  SELECT_LOG_SERVICE(context: { commit: Commit; dispatch: Dispatch }, params: any) {
+    context.commit('SET_CURRENT_SERVICE', params.service);
+    context.dispatch('GET_SERVICE_ENDPOINTS', {});
+    context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration });
+  },
   SELECT_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
     context.commit('SET_CURRENT_ENDPOINT', params.endpoint);
   },
@@ -202,6 +223,11 @@ const actions: ActionTree<State, any> = {
           .then(() => context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration }));
       case 'database':
         return context.dispatch('GET_DATABASES', { duration: params.duration });
+      case 'browser':
+        return context
+          .dispatch('GET_BROWSER_SERVICES', { duration: params.duration })
+          .then(() => context.dispatch('GET_SERVICE_ENDPOINTS', {}))
+          .then(() => context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration }));
       default:
         break;
     }

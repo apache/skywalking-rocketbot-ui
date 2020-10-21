@@ -16,7 +16,7 @@ limitations under the License. -->
 <template>
   <div style="overflow: auto;height: 100%;" class="scroll_hide">
     <div class="rk-chart-slow clear">
-      <div class="rk-chart-slow-i" v-for="(i, index) in data" :key="index">
+      <div class="rk-chart-slow-i" v-for="(i, index) in datas" :key="index">
         <svg class="icon vm r grey link-hover cp" @click="handleClick((i.traceIds && i.traceIds[0]) || i.name)">
           <use xlink:href="#review-list"></use>
         </svg>
@@ -39,6 +39,7 @@ limitations under the License. -->
   export default class ChartSlow extends Vue {
     @Prop() private data!: any;
     @Prop() private item!: any;
+    @Prop() private type!: any;
     @Prop() private intervalTime!: any;
     get maxValue() {
       if (!this.data.length) {
@@ -52,6 +53,20 @@ limitations under the License. -->
     }
     private handleClick(i: any) {
       copy(i);
+    }
+    get datas() {
+      const val = this.item.sortOrder;
+      switch (val) {
+        case 'DES':
+          this.data.length && this.data.sort((a: any, b: any) => b.value - a.value);
+          break;
+        case 'ASC':
+          this.data.length && this.data.sort((a: any, b: any) => a.value - b.value);
+          break;
+        default:
+          break;
+      }
+      return this.data;
     }
   }
 </script>

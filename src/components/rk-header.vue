@@ -43,6 +43,12 @@ limitations under the License. -->
         </svg>
         <span class="vm hide-xs ml-5">{{ this.$t('profile') }}</span>
       </router-link>
+      <router-link class="nav-link mr-20" to="/log">
+        <svg class="icon sm vm">
+          <use xlink:href="#assignment"></use>
+        </svg>
+        <span class="vm hide-xs ml-5">{{ this.$t('log') }}</span>
+      </router-link>
       <router-link class="nav-link mr-20" to="/alarm">
         <svg class="icon sm vm">
           <use xlink:href="#spam"></use>

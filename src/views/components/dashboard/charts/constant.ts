@@ -21,6 +21,12 @@ export const EntityType = [
   { key: 'Endpoint', label: 'Service Endpoint' },
   { key: 'ServiceInstance', label: 'Service Instance' },
 ];
+export const BrowserEntityType = [
+  { key: 'Service', label: 'Service' },
+  { key: 'All', label: 'All' },
+  { key: 'Endpoint', label: 'Page Path' },
+  { key: 'ServiceInstance', label: 'Service Version' },
+];
 
 export const IndependentType = [
   { key: 'true', label: 'Self selectors' },
