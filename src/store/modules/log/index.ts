@@ -20,23 +20,14 @@ import * as types from '@/store/mutation-types';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
 
-enum ErrorCategory {
-  ALL,
-  AJAX,
-  RESOURCE,
-  VUE,
-  PROMISE,
-  JS,
-  UNKNOWN,
-}
-
-const categories = [];
-for (const key in ErrorCategory) {
-  const keyToAny: any = key;
-  if (isNaN(keyToAny)) {
-    categories.push({ label: keyToAny, key: keyToAny });
-  }
-}
+const categories: any = [
+  { label: 'All', key: 'ALL' },
+  { label: 'Ajax', key: 'AJAX' },
+  { label: 'Resource', key: 'RESOURCE' },
+  { label: 'Vue', key: 'VUE' },
+  { label: 'Js', key: 'JS' },
+  { label: 'Unknown', key: 'UNKNOWN' },
+];
 
 export interface State {
   type: any;
@@ -57,7 +48,7 @@ const initState: State = {
   logs: [],
   total: 0,
   categories,
-  category: { label: 'ALL', key: 'ALL' },
+  category: { label: 'All', key: 'ALL' },
   loading: false,
 };
 

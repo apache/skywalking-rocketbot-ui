@@ -59,7 +59,7 @@ limitations under the License. -->
       <template v-if="compType === dashboardType.BROWSER">
         <ToolBarSelect
           @onChoose="selectService"
-          :title="this.$t('currentApp')"
+          :title="this.$t('currentService')"
           :current="stateDashboard.currentService"
           :data="stateDashboard.services"
           icon="package"

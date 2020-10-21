@@ -49,7 +49,7 @@ export const BrowserLogConstants = [
   },
   {
     label: 'errorUrl',
-    value: 'Error Url',
+    value: 'Error Page',
   },
   // {
   //   label: 'pagePath',
