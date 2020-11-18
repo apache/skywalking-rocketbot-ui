@@ -67,7 +67,7 @@ limitations under the License. -->
   import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar-endpoint-select.vue';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
-  import { ObjectsType } from '../../../constant';
+  import { ObjectsType } from '../../../../constants/constant';
 
   interface Endpoint {
     label: string;

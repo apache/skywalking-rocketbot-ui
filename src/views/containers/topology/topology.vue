@@ -54,7 +54,7 @@ limitations under the License. -->
   import { State, Action, Getter, Mutation } from 'vuex-class';
   import { AxiosResponse } from 'axios';
   import { State as topoState } from '@/store/modules/topology';
-  import { TopologyType } from '../../constant';
+  import { TopologyType } from '../../../constants/constant';
   import WindowEndpoint from '@/views/containers/topology/endpoint/index.vue';
   import WindowInstance from '@/views/containers/topology/instance/index.vue';
   import WindowTrace from '@/views/containers/topology/trace/index.vue';

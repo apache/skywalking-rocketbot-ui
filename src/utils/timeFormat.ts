@@ -16,16 +16,17 @@
  */
 
 import { Duration } from '@/types/global';
+import { TimeType } from '@/constants/constant';
 
 const timeFormat = (time: Date[]): Duration => {
-  let step = 'MINUTE';
+  let step: TimeType;
   const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
   if (unix <= 60 * 60 * 1000) {
-    step = 'MINUTE';
+    step = TimeType.MINUTE_TIME;
   } else if (unix <= 24 * 60 * 60 * 1000) {
-    step = 'HOUR';
+    step = TimeType.HOUR_TIME;
   } else {
-    step = 'DAY';
+    step = TimeType.DAY_TIME;
   }
   return { start: time[0], end: time[1], step };
 };
