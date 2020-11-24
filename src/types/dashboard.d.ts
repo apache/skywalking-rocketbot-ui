@@ -41,7 +41,7 @@ export interface CompsGroup {
 
 export interface CompsTree {
   name?: string;
-  serviceFilter?: string;
+  serviceGroup?: string;
   type: string;
   query: any;
   children: any;
