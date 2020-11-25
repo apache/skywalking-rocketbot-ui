@@ -75,7 +75,7 @@ limitations under the License. -->
         compType: this.compType,
         duration: this.durationTime,
         keywordServiceName:
-          this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].serviceFilter,
+          this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].serviceGroup,
       });
     }
     private handleSetEdit() {

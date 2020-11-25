@@ -143,8 +143,7 @@ const m = {
   parentService: 'Parent Service',
   isParentService: 'Set Parent Service',
   noneParentService: 'No Parent Service',
-  // TODO: var name should be updated to "serviceGroup" correspondingly.
-  serviceFilter: 'Service Group',
+  serviceGroup: 'Service Group',
   endpointFilter: 'Endpoint Filter',
   editConfig: 'Edit Config',
   databaseView: 'Database',
