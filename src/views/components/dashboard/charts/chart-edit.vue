@@ -263,7 +263,7 @@ limitations under the License. -->
   import { State, Getter, Mutation, Action } from 'vuex-class';
   import { Component, Prop, Watch } from 'vue-property-decorator';
 
-  import { TopologyType, ObjectsType } from '../../../constant';
+  import { TopologyType, ObjectsType } from '../../../../constants/constant';
   import {
     EntityType,
     BrowserEntityType,
