@@ -25,6 +25,7 @@ const categories: any = [
   { label: 'Ajax', key: 'AJAX' },
   { label: 'Resource', key: 'RESOURCE' },
   { label: 'Vue', key: 'VUE' },
+  { label: 'Promise', key: 'PROMISE' },
   { label: 'Js', key: 'JS' },
   { label: 'Unknown', key: 'UNKNOWN' },
 ];
