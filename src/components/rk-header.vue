@@ -57,7 +57,12 @@ limitations under the License. -->
       </router-link>
     </div>
     <div class="flex-h">
-      <a class="rk-btn mr-5 sm" :class="auto ? 'blue' : 'ghost'" @click="handleAuto">
+      <a
+        class="rk-btn mr-5 sm"
+        :class="auto ? 'blue' : 'ghost'"
+        @click="handleAuto"
+        v-tooltip:bottom="{ content: this.$t('timeReload') }"
+      >
         <span class="vm">{{ this.$t('auto') }}</span>
       </a>
       <div class="auto-time">
@@ -96,6 +101,9 @@ limitations under the License. -->
       this.SET_DURATION(timeFormat(time));
     }
     private handleAuto() {
+      if (this.autoTime < 1) {
+        return;
+      }
       this.auto = !this.auto;
       if (this.auto) {
         this.handleReload();
@@ -115,6 +123,9 @@ limitations under the License. -->
       this.$router.push('/login');
     }
     private changeAutoTime() {
+      if (this.autoTime < 1) {
+        return;
+      }
       clearInterval(this.timer);
       if (this.auto) {
         this.handleReload();
