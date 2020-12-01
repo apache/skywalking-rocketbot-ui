@@ -162,6 +162,7 @@ const m = {
   logCategory: '日志类别',
   errorCatalog: '错误类目',
   logDetail: '日志详情',
+  timeReload: '时间间隔必须大于0',
 };
 
 export default m;

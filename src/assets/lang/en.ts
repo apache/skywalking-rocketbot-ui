@@ -163,6 +163,7 @@ const m = {
   logCategory: 'Log Category',
   errorCatalog: 'Error Catalog',
   logDetail: 'Log Detail ',
+  timeReload: 'The time interval must be greater than 0',
 };
 
 export default m;
