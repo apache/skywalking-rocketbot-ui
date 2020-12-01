@@ -164,6 +164,12 @@ const m = {
   errorCatalog: 'Error Catalog',
   logDetail: 'Log Detail ',
   timeReload: 'The time interval must be greater than 0',
+  errorInfo: 'Error Info',
+  stack: 'Stack',
+  serviceVersion: 'Service Version',
+  errorPage: 'Error Page',
+  category: 'Category',
+  grade: 'Grade',
 };
 
 export default m;
