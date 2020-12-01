@@ -162,6 +162,12 @@ const m = {
   logCategory: '日志类别',
   errorCatalog: '错误类目',
   logDetail: '日志详情',
+  errorInfo: '错误信息',
+  stack: '堆栈',
+  serviceVersion: '服务版本',
+  errorPage: '错误页面',
+  category: '类别',
+  grade: '等级',
 };
 
 export default m;

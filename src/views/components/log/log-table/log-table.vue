@@ -23,10 +23,10 @@ limitations under the License. -->
               <use xlink:href="#settings_ethernet"></use>
             </svg>
           </span>
-          {{ item.value }}
+          {{ $t(item.value) }}
         </div>
         <div v-else :class="item.label" :key="index">
-          {{ item.value }}
+          {{ $t(item.value) }}
         </div>
       </template>
     </div>

@@ -163,6 +163,12 @@ const m = {
   logCategory: 'Log Category',
   errorCatalog: 'Error Catalog',
   logDetail: 'Log Detail ',
+  errorInfo: 'Error Info',
+  stack: 'Stack',
+  serviceVersion: 'Service Version',
+  errorPage: 'Error Page',
+  category: 'Category',
+  grade: 'Grade',
 };
 
 export default m;

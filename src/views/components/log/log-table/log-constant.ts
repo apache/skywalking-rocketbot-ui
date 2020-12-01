@@ -25,31 +25,31 @@ export const ServiceLogConstants = [
 export const BrowserLogConstants = [
   {
     label: 'time',
-    value: 'Time',
+    value: 'time',
   },
   {
     label: 'service',
-    value: 'Service',
+    value: 'service',
   },
   {
     label: 'message',
-    value: 'Error Info',
+    value: 'errorInfo',
     drag: true,
     method: 350,
   },
   {
     label: 'stack',
-    value: 'Stack',
+    value: 'stack',
     drag: true,
     method: 350,
   },
   {
     label: 'serviceVersion',
-    value: 'Service Version',
+    value: 'serviceVersion',
   },
   {
     label: 'errorUrl',
-    value: 'Error Page',
+    value: 'errorPage',
   },
   // {
   //   label: 'pagePath',
@@ -57,11 +57,11 @@ export const BrowserLogConstants = [
   // },
   {
     label: 'category',
-    value: 'Catalog',
+    value: 'category',
   },
 
   {
     label: 'grade',
-    value: 'Grade',
+    value: 'grade',
   },
 ];
