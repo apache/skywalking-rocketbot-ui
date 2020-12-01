@@ -16,7 +16,6 @@ limitations under the License. -->
 <template>
   <div class="rk-chart-num">
     <div v-for="(item, index) in data" :key="index" class="rk-num-detail">
-      <span>{{ item.name }}</span>
       <span class="b">{{
         typeof item.avgNum === 'string' ? item.avgNum : isNaN(item.avgNum) ? null : item.avgNum.toFixed(2)
       }}</span>
