@@ -15,23 +15,6 @@
  * limitations under the License.
  */
 
-import {
-  QueryBrowserErrorLogs,
-  // GetAllBrowserServices,
-  // readMetricsValues,
-  // readMetricsValue,
-  // OverviewServiceDetail,
-} from '../fragments/log';
+import { QueryBrowserErrorLogs } from '../fragments/log';
 
 export const queryBrowserErrorLogs = `query queryBrowserErrorLogs(${QueryBrowserErrorLogs.variable}) {${QueryBrowserErrorLogs.query}}`;
-// export const getAllBrowserServices = `query getAllBrowserServices(${GetAllBrowserServices.variable}) {${GetAllBrowserServices.query}}`;
-// export const readBrowserMetricsValue = `query readMetricsValue(${readMetricsValue.variable}) {${readMetricsValue.fragment}}`;
-// export const overviewServiceDetail = `query readMetricsValue(${OverviewServiceDetail.variable}) {${OverviewServiceDetail.query}}`;
-
-// export const mutationAddTemplate = `mutation mutationAddTemplate(${addTemplate.variable}) {${addTemplate.query}}`;
-//
-// export const mutationChangeTemplate = `mutation mutationChangeTemplate(${changeTemplate.variable}) {${changeTemplate.query}}`;
-//
-// export const mutationDisableTemplate = `mutation mutationDisableTemplate(${disableTemplate.variable}) {${disableTemplate.query}}`;
-//
-// export const queryGetAllTemplates = `query queryGetAllTemplates {${getAllTemplates.query}}`;

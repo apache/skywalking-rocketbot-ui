@@ -38,11 +38,9 @@ limitations under the License. -->
   export default {
     name: 'item',
     props: ['data', 'type', 'method'],
-    created() {
-    },
     watch: {
       data: {
-        handler: function() {
+        handler() {
           this.setLogItemHeight();
         },
         deep: true,
@@ -59,17 +57,17 @@ limitations under the License. -->
     computed: {},
     methods: {
       lineBreak(str = '') {
-        let s = str
+        const param = str
           .replace(/</g, '&lt;')
           .replace(/>/g, '&gt;')
           .replace(/\r\n/g, '<br />')
           .replace(/\n/g, '<br />');
-        return s;
+        return param;
       },
       setLogItemHeight() {
         this.$nextTick(() => {
           const heights = [];
-          this.$refs.logItem.childNodes.forEach(item => {
+          this.$refs.logItem.childNodes.forEach((item) => {
             if (item.getAttribute('class').indexOf('autoHeight') > -1) {
               const autoHeightChild = item.childNodes[0];
               const height = autoHeightChild.getBoundingClientRect().height;
