@@ -32,12 +32,12 @@ export interface State {
   categories: any[];
   category: any;
   loading: boolean;
-  logServices: Array<{ key: string; label: string }>;
-  currentLogService: { key: string; label: string };
-  logEndpoints: Array<{ key: string; label: string }>;
-  currentLogEndpoint: { key: string; label: string };
-  logInstances: Array<{ key: string; label: string }>;
-  currentLogInstance: { key: string; label: string };
+  logServices: Options[];
+  currentLogService: Options;
+  logEndpoints: Options[];
+  currentLogEndpoint: Options;
+  logInstances: Options[];
+  currentLogInstance: Options;
 }
 
 const categories: any = [
@@ -71,26 +71,26 @@ const initState: State = {
 
 // mutations
 const mutations: MutationTree<State> = {
-  [types.SELECT_LOG_TYPE](state: State, data: any) {
+  [types.SELECT_LOG_TYPE](state: State, data: Options) {
     state.type = data;
   },
-  [types.SELECT_ERROR_CATALOG](state: State, data: any) {
+  [types.SELECT_ERROR_CATALOG](state: State, data: Options) {
     state.category = data;
   },
-  [types.SET_LOGS](state: State, data: any) {
+  [types.SET_LOGS](state: State, data: any[]) {
     state.logs = data;
   },
-  [types.SET_LOGS_TOTAL](state: State, data: any) {
+  [types.SET_LOGS_TOTAL](state: State, data: number) {
     state.total = data;
   },
-  [types.SET_LOADING](state: State, data: any) {
+  [types.SET_LOADING](state: State, data: boolean) {
     state.loading = data;
   },
-  [types.SET_LOG_SERVICES](state: State, data: any) {
+  [types.SET_LOG_SERVICES](state: State, data: Options[]) {
     state.logServices = [{ label: 'All', key: '' }, ...data];
     state.currentLogService = state.logServices[0];
   },
-  [types.SET_LOG_ENDPOINTS](state: State, data: any) {
+  [types.SET_LOG_ENDPOINTS](state: State, data: Options[]) {
     state.logEndpoints = [{ label: 'All', key: '' }, ...data];
     state.currentLogEndpoint = state.logEndpoints[0];
   },
