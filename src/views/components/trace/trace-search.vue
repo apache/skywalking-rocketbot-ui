@@ -130,6 +130,7 @@ limitations under the License. -->
     @Action('rocketTrace/SET_TRACE_FORM') private SET_TRACE_FORM: any;
     @Mutation('rocketTrace/SET_TRACE_FORM_ITEM')
     private SET_TRACE_FORM_ITEM: any;
+    @Mutation('rocketTrace/SET_INSTANCES') private SET_INSTANCES: any;
     private service: Option = { label: 'All', key: '' };
     private time!: Date[];
     private status: boolean = true;
@@ -217,6 +218,7 @@ limitations under the License. -->
       this.instance = { label: 'All', key: '' };
       this.service = i;
       if (i.key === '') {
+        this.SET_INSTANCES([]);
         return;
       }
       this.GET_INSTANCES({ duration: this.durationTime, serviceId: i.key });

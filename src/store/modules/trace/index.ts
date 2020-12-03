@@ -52,9 +52,6 @@ const initState: State = {
   },
 };
 
-// getters
-const getters = {};
-
 // mutations
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: Option[]): void {
@@ -157,7 +154,6 @@ const actions: ActionTree<State, any> = {
 export default {
   namespaced: true,
   state: initState,
-  getters,
   actions,
   mutations,
 };
