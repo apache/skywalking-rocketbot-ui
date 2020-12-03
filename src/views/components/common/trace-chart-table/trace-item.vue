@@ -178,8 +178,8 @@ limitations under the License. -->
   }
   .trace-item div.exec-percent {
     width: 100px;
-    padding-left: 8px;
-    padding-right: 8px;
+    height: 30px;
+    padding: 0 8px;
     .outer-progress_bar {
       width: 100%;
       height: 6px;

@@ -86,10 +86,10 @@ limitations under the License. -->
     @State('rocketOption') private rocketOption: any;
     @Mutation('SELECT_LOG_TYPE') private SELECT_LOG_TYPE: any;
     @Mutation('SELECT_ERROR_CATALOG') private SELECT_ERROR_CATALOG: any;
-    @Action('rocketLog/SELECT_LOG_SERVICE') private SELECT_LOG_SERVICE: any;
-    @Action('rocketLog/SELECT_LOG_ENDPOINT') private SELECT_LOG_ENDPOINT: any;
-    @Action('rocketLog/SELECT_LOG_INSTANCE') private SELECT_LOG_INSTANCE: any;
-    @Action('rocketLog/LOG_GET_OPTION') private LOG_GET_OPTION: any;
+    @Action('SELECT_LOG_SERVICE') private SELECT_LOG_SERVICE: any;
+    @Action('SELECT_LOG_ENDPOINT') private SELECT_LOG_ENDPOINT: any;
+    @Action('SELECT_LOG_INSTANCE') private SELECT_LOG_INSTANCE: any;
+    @Action('LOG_GET_OPTION') private LOG_GET_OPTION: any;
     @Action('QUERY_LOGS') private QUERY_LOGS: any;
     @Getter('durationTime') private durationTime: any;
 
