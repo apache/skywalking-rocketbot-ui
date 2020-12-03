@@ -50,11 +50,11 @@ const initState: State = {
 
 // mutations
 const mutations: MutationTree<State> = {
-  [types.SET_SERVICES](state: State, data: any) {
+  [types.SET_SERVICES](state: State, data: Options[]) {
     state.services = data;
     state.currentService = data[0] || {};
   },
-  [types.SET_CURRENT_SERVICE](state: State, service: any) {
+  [types.SET_CURRENT_SERVICE](state: State, service: Options) {
     state.currentService = service;
     state.updateDashboard = service;
   },
@@ -63,44 +63,39 @@ const mutations: MutationTree<State> = {
     state.updateDashboard = { key: +new Date() };
   },
 
-  [types.SET_ENDPOINTS](state: State, data: any) {
+  [types.SET_ENDPOINTS](state: State, data: Options[]) {
     state.endpoints = data;
     if (!data.length) {
       state.currentEndpoint = { key: '', label: '' };
       return;
     }
-    if (!state.currentEndpoint.key && data.length) {
-      state.currentEndpoint = data[0];
-    }
+    state.currentEndpoint = data[0];
   },
-  [types.SET_CURRENT_ENDPOINT](state: State, endpoint: any) {
+  [types.SET_CURRENT_ENDPOINT](state: State, endpoint: Options) {
     state.currentEndpoint = endpoint;
     state.updateDashboard = endpoint;
   },
-  [types.SET_INSTANCES](state: State, data: any) {
+  [types.SET_INSTANCES](state: State, data: Options[]) {
     state.instances = data;
     if (!data.length) {
       state.currentInstance = { key: '', label: '' };
       return;
     }
-    if (!state.currentInstance.key && data.length) {
-      state.currentInstance = data[0];
-    }
+    state.currentInstance = data[0];
   },
-  [types.SET_CURRENT_INSTANCE](state: State, instance: any) {
+  [types.SET_CURRENT_INSTANCE](state: State, instance: Options) {
     state.currentInstance = instance;
     state.updateDashboard = instance;
   },
-  [types.SET_DATABASES](state: State, data: any) {
+  [types.SET_DATABASES](state: State, data: Options[]) {
     state.databases = data;
     if (!data.length) {
+      state.currentDatabase = { key: '', label: '' };
       return;
     }
-    if (!state.currentDatabase.key && data.length) {
-      state.currentDatabase = data[0];
-    }
+    state.currentDatabase = data[0];
   },
-  [types.SET_CURRENT_DATABASE](state: State, service: any) {
+  [types.SET_CURRENT_DATABASE](state: State, service: Options) {
     state.currentDatabase = service;
     state.updateDashboard = service;
   },
