@@ -38,7 +38,7 @@ limitations under the License. -->
       <ToolBarSelect
         @onChoose="selectEndpoint"
         :title="this.$t('page')"
-        :current="logState.currentLogEndpoints"
+        :current="logState.currentLogEndpoint"
         :data="logState.logEndpoints"
         icon="code"
       />
@@ -126,13 +126,13 @@ limitations under the License. -->
     }
 
     private queryLogs() {
-      const { currentService, currentInstance, currentEndpoint } = this.rocketOption;
-      const { category } = this.logState;
+      const { category, currentLogService, currentLogInstance, currentLogEndpoint } = this.logState;
+
       this.QUERY_LOGS({
         condition: {
-          serviceId: currentService.key,
-          serviceVersionId: currentInstance.key,
-          pagePathId: currentEndpoint.key,
+          serviceId: currentLogService.key,
+          serviceVersionId: currentLogInstance.key,
+          pagePathId: currentLogEndpoint.key,
           category: category.key,
           paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
           queryDuration: this.durationTime,

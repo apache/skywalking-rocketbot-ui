@@ -35,7 +35,7 @@ export interface State {
   logServices: Array<{ key: string; label: string }>;
   currentLogService: { key: string; label: string };
   logEndpoints: Array<{ key: string; label: string }>;
-  currentLogEndpoints: { key: string; label: string };
+  currentLogEndpoint: { key: string; label: string };
   logInstances: Array<{ key: string; label: string }>;
   currentLogInstance: { key: string; label: string };
 }
@@ -64,7 +64,7 @@ const initState: State = {
   logServices: [],
   currentLogService: { key: '', label: '' },
   logEndpoints: [],
-  currentLogEndpoints: { key: '', label: '' },
+  currentLogEndpoint: { key: '', label: '' },
   logInstances: [],
   currentLogInstance: { key: '', label: '' },
 };
@@ -87,30 +87,22 @@ const mutations: MutationTree<State> = {
     state.loading = data;
   },
   [types.SET_LOG_SERVICES](state: State, data: any) {
-    state.logServices = data;
-    state.currentLogService = data[0] || {};
+    state.logServices = [{ label: 'All', key: '' }, ...data];
+    state.currentLogService = state.logServices[0];
   },
   [types.SET_LOG_ENDPOINTS](state: State, data: any) {
-    state.logEndpoints = data;
-    if (!data.length) {
-      state.currentLogEndpoints = { key: '', label: '' };
-      return;
-    }
-    state.currentLogEndpoints = data[0];
+    state.logEndpoints = [{ label: 'All', key: '' }, ...data];
+    state.currentLogEndpoint = state.logEndpoints[0];
   },
   [types.SET_LOG_INSTANCES](state: State, data: Options[]) {
-    state.logInstances = data;
-    if (!data.length) {
-      state.currentLogInstance = { key: '', label: '' };
-      return;
-    }
-    state.currentLogInstance = data[0];
+    state.logInstances = [{ label: 'All', key: '' }, ...data];
+    state.currentLogInstance = state.logInstances[0];
   },
   [types.SET_CURRENT_LOG_SERVICE](state: State, service: Options) {
     state.currentLogService = service;
   },
   [types.SET_CURRENT_LOG_ENDPOINT](state: State, endpoint: Options) {
-    state.currentLogEndpoints = endpoint;
+    state.currentLogEndpoint = endpoint;
   },
   [types.SET_CURRENT_LOG_INSTANCE](state: State, instance: Options) {
     state.currentLogInstance = instance;
@@ -154,7 +146,7 @@ const actions: ActionTree<State, any> = {
       .then(() => context.dispatch('GET_LOG_INSTANCES', { duration: params.duration }));
   },
   GET_LOG_ENDPOINTS(context: { commit: Commit; state: any }, params: { keyword: string }) {
-    if (!context.state.currentLogEndpoints.key) {
+    if (!context.state.currentLogEndpoint.key) {
       context.commit(types.SET_LOG_ENDPOINTS, []);
       return;
     }
@@ -163,7 +155,7 @@ const actions: ActionTree<State, any> = {
     }
     return graph
       .query('queryEndpoints')
-      .params({ serviceId: context.state.currentLogEndpoints.key || '', ...params })
+      .params({ serviceId: context.state.currentLogEndpoint.key || '', ...params })
       .then((res: AxiosResponse) => {
         context.commit(types.SET_LOG_ENDPOINTS, res.data.data.getEndpoints);
       });
