@@ -20,6 +20,26 @@ import * as types from '@/store/mutation-types';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
 
+interface Options {
+  key: string;
+  label: string;
+}
+export interface State {
+  type: any;
+  logCategories: any[];
+  logs: any[];
+  total: number;
+  categories: any[];
+  category: any;
+  loading: boolean;
+  logServices: Array<{ key: string; label: string }>;
+  currentLogService: { key: string; label: string };
+  logEndpoints: Array<{ key: string; label: string }>;
+  currentLogEndpoints: { key: string; label: string };
+  logInstances: Array<{ key: string; label: string }>;
+  currentLogInstance: { key: string; label: string };
+}
+
 const categories: any = [
   { label: 'All', key: 'ALL' },
   { label: 'Ajax', key: 'AJAX' },
@@ -29,16 +49,6 @@ const categories: any = [
   { label: 'Js', key: 'JS' },
   { label: 'Unknown', key: 'UNKNOWN' },
 ];
-
-export interface State {
-  type: any;
-  logCategories: any[];
-  logs: any[];
-  total: number;
-  categories: any[];
-  category: any;
-  loading: boolean;
-}
 
 const initState: State = {
   type: { label: 'Browser', key: 'browser' },
@@ -51,10 +61,13 @@ const initState: State = {
   categories,
   category: { label: 'All', key: 'ALL' },
   loading: false,
+  logServices: [],
+  currentLogService: { key: '', label: '' },
+  logEndpoints: [],
+  currentLogEndpoints: { key: '', label: '' },
+  logInstances: [],
+  currentLogInstance: { key: '', label: '' },
 };
-
-// getters
-const getters = {};
 
 // mutations
 const mutations: MutationTree<State> = {
@@ -72,6 +85,35 @@ const mutations: MutationTree<State> = {
   },
   [types.SET_LOADING](state: State, data: any) {
     state.loading = data;
+  },
+  [types.SET_LOG_SERVICES](state: State, data: any) {
+    state.logServices = data;
+    state.currentLogService = data[0] || {};
+  },
+  [types.SET_LOG_ENDPOINTS](state: State, data: any) {
+    state.logEndpoints = data;
+    if (!data.length) {
+      state.currentLogEndpoints = { key: '', label: '' };
+      return;
+    }
+    state.currentLogEndpoints = data[0];
+  },
+  [types.SET_LOG_INSTANCES](state: State, data: Options[]) {
+    state.logInstances = data;
+    if (!data.length) {
+      state.currentLogInstance = { key: '', label: '' };
+      return;
+    }
+    state.currentLogInstance = data[0];
+  },
+  [types.SET_CURRENT_LOG_SERVICE](state: State, service: Options) {
+    state.currentLogService = service;
+  },
+  [types.SET_CURRENT_LOG_ENDPOINT](state: State, endpoint: Options) {
+    state.currentLogEndpoints = endpoint;
+  },
+  [types.SET_CURRENT_LOG_INSTANCE](state: State, instance: Options) {
+    state.currentLogInstance = instance;
   },
 };
 
@@ -97,12 +139,63 @@ const actions: ActionTree<State, any> = {
         break;
     }
   },
+  GET_LOG_SERVICES(context: { commit: Commit }, params: { duration: any }) {
+    return graph
+      .query('queryBrowserServices')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_LOG_SERVICES, res.data.data.services);
+      });
+  },
+  LOG_GET_OPTION(context: { dispatch: Dispatch; state: State }, params: any) {
+    context
+      .dispatch('GET_LOG_SERVICES', { duration: params.duration })
+      .then(() => context.dispatch('GET_LOG_ENDPOINTS', {}))
+      .then(() => context.dispatch('GET_LOG_INSTANCES', { duration: params.duration }));
+  },
+  GET_LOG_ENDPOINTS(context: { commit: Commit; state: any }, params: { keyword: string }) {
+    if (!context.state.currentLogEndpoints.key) {
+      context.commit(types.SET_LOG_ENDPOINTS, []);
+      return;
+    }
+    if (!params.keyword) {
+      params.keyword = '';
+    }
+    return graph
+      .query('queryEndpoints')
+      .params({ serviceId: context.state.currentLogEndpoints.key || '', ...params })
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_LOG_ENDPOINTS, res.data.data.getEndpoints);
+      });
+  },
+  GET_LOG_INSTANCES(context: { commit: Commit; state: any }, params: any) {
+    if (!context.state.currentLogInstance.key) {
+      context.commit(types.SET_LOG_INSTANCES, []);
+      return;
+    }
+    return graph
+      .query('queryInstances')
+      .params({ serviceId: context.state.currentLogInstance.key || '', ...params })
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_LOG_INSTANCES, res.data.data.getServiceInstances);
+      });
+  },
+  SELECT_LOG_SERVICE(context: { commit: Commit; dispatch: Dispatch }, params: any) {
+    context.commit('SET_CURRENT_LOG_SERVICE', params.service);
+    context.dispatch('GET_LOG_ENDPOINTS', {});
+    context.dispatch('GET_LOG_INSTANCES', { duration: params.duration });
+  },
+  SELECT_LOG_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
+    context.commit('SET_CURRENT_LOG_ENDPOINT', params.endpoint);
+  },
+  SELECT_LOG_INSTANCE(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
+    context.commit('SET_CURRENT_LOG_INSTANCE', params.instance);
+  },
 };
 
 export default {
   // namespaced: true,
   state: initState,
-  getters,
   actions,
   mutations,
 };

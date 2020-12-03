@@ -24,22 +24,22 @@ limitations under the License. -->
       <ToolBarSelect
         @onChoose="selectService"
         :title="this.$t('service')"
-        :current="rocketOption.currentService"
-        :data="rocketOption.services"
+        :current="logState.currentLogService"
+        :data="logState.logServices"
         icon="package"
       />
       <ToolBarSelect
         @onChoose="selectInstance"
         :title="this.$t('version')"
-        :current="rocketOption.currentInstance"
-        :data="rocketOption.instances"
+        :current="logState.currentLogInstance"
+        :data="logState.logInstances"
         icon="disk"
       />
       <ToolBarSelect
         @onChoose="selectEndpoint"
         :title="this.$t('page')"
-        :current="rocketOption.currentEndpoint"
-        :data="rocketOption.endpoints"
+        :current="logState.currentLogEndpoints"
+        :data="logState.logEndpoints"
         icon="code"
       />
       <ToolBarSelect
@@ -86,20 +86,17 @@ limitations under the License. -->
     @State('rocketOption') private rocketOption: any;
     @Mutation('SELECT_LOG_TYPE') private SELECT_LOG_TYPE: any;
     @Mutation('SELECT_ERROR_CATALOG') private SELECT_ERROR_CATALOG: any;
-
-    @Action('SELECT_LOG_SERVICE') private SELECT_LOG_SERVICE: any;
-    @Action('SELECT_DATABASE') private SELECT_DATABASE: any;
-    @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
-    @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
-    @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
-
+    @Action('rocketLog/SELECT_LOG_SERVICE') private SELECT_LOG_SERVICE: any;
+    @Action('rocketLog/SELECT_LOG_ENDPOINT') private SELECT_LOG_ENDPOINT: any;
+    @Action('rocketLog/SELECT_LOG_INSTANCE') private SELECT_LOG_INSTANCE: any;
+    @Action('rocketLog/LOG_GET_OPTION') private LOG_GET_OPTION: any;
     @Action('QUERY_LOGS') private QUERY_LOGS: any;
     @Getter('durationTime') private durationTime: any;
 
     private pageNum: number = 1;
 
     private beforeMount() {
-      this.MIXHANDLE_GET_OPTION({
+      this.LOG_GET_OPTION({
         compType: this.logState.type.key,
         duration: this.durationTime,
       }).then(() => {
@@ -117,11 +114,11 @@ limitations under the License. -->
     }
 
     private selectEndpoint(i: any) {
-      this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
+      this.SELECT_LOG_ENDPOINT({ endpoint: i, duration: this.durationTime });
     }
 
     private selectInstance(i: any) {
-      this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
+      this.SELECT_LOG_INSTANCE({ instance: i, duration: this.durationTime });
     }
     private clearSearch() {
       this.SELECT_LOG_SERVICE({ service: { label: 'All', key: '' }, duration: this.durationTime });
