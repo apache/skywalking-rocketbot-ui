@@ -29,10 +29,9 @@ limitations under the License. -->
     @Prop() private intervalTime!: any;
 
     get option() {
-      const temp: any = [];
       const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
-      keys.forEach((i: any, index: number) => {
-        const serie: any = {
+      const temp = keys.map((i: string, index: number) => {
+        return {
           data: this.data[i].map((item: any, itemIndex: number) => [this.intervalTime[itemIndex], item]),
           name: i,
           type: 'line',
@@ -43,7 +42,6 @@ limitations under the License. -->
             type: 'solid',
           },
         };
-        temp.push(serie);
       });
       const color: string[] = [
         '#30A4EB',

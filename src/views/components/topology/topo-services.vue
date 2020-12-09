@@ -33,6 +33,11 @@ limitations under the License. -->
     private services = [{ key: 0, label: 'All services' }];
     private service = { key: 0, label: 'All services' };
 
+    private created() {
+      this.fetchData();
+      this.renderTopo();
+    }
+
     private fetchData() {
       this.GET_SERVICES({ duration: this.durationTime }).then((json: any[]) => {
         this.services = [...this.services, ...json];
@@ -44,6 +49,7 @@ limitations under the License. -->
       // Avoid repeating fetchData() after enter the component for the first time.
       if (compareObj(newValue, oldValue)) {
         this.fetchData();
+        this.renderTopo();
       }
     }
 
@@ -56,8 +62,7 @@ limitations under the License. -->
       });
     }
 
-    private created() {
-      this.fetchData();
+    private renderTopo() {
       const groups = localStorage.getItem('topology-groups');
       if (groups) {
         const jsonGroup = JSON.parse(groups);

@@ -70,7 +70,7 @@ limitations under the License. -->
           unit="%"
         />
         <ChartLine
-          v-if="stateTopo.responsePercentile"
+          v-if="stateTopo.responsePercentile.p50.length"
           :data="stateTopo.responsePercentile"
           :intervalTime="intervalTime"
           :title="$t('percentResponse')"
@@ -104,7 +104,7 @@ limitations under the License. -->
       <rk-sidebox
         class="instance-dependency"
         width="80%"
-        :fixed="true"
+        :fixed="false"
         :title="
           `${stateTopo.selectedServiceCall.source.name} -> ${stateTopo.selectedServiceCall.target.name} Instance Dependency`
         "
@@ -122,6 +122,8 @@ limitations under the License. -->
   import TopoChart from './topo-chart.vue';
   import TopoInstanceDependency from './topo-instance-dependency.vue';
   import ChartLine from './chart-line.vue';
+  import { DurationTime } from '@/types/global';
+  import compareObj from '@/utils/comparison';
 
   @Component({
     components: {
@@ -136,7 +138,6 @@ limitations under the License. -->
     @Getter('durationTime') private durationTime: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT')
     private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
-    @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
     @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL')
     private SET_SELECTED_INSTANCE_CALL: any;
@@ -154,41 +155,6 @@ limitations under the License. -->
 
     private get showServerInfo() {
       return this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal;
-    }
-
-    @Watch('stateTopo.selectedServiceCall')
-    private watchDetectPointNodeId(newValue: string) {
-      if (newValue || this.stateTopo.currentNode.isReal) {
-        this.showInfo = true;
-      } else {
-        this.showInfo = false;
-        this.showInfoCount = 0;
-        this.isMini = true;
-      }
-    }
-
-    @Watch('stateTopo.currentNode.name')
-    private watchCurrentNodeIsReal(newValue: boolean) {
-      const service = this.stateTopo.currentNode;
-      if (this.stateTopo.currentNode.isReal) {
-        this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 1 });
-        this.MIXHANDLE_GET_OPTION({
-          compType: 'service',
-          duration: this.durationTime,
-        }).then(() => {
-          this.GET_TOPO_SERVICE_DETAIL({
-            serviceId: service.id || '',
-            duration: this.durationTime,
-          });
-        });
-      }
-      if (newValue || this.stateTopo.selectedServiceCall) {
-        this.showInfo = true;
-      } else {
-        this.showInfo = false;
-        this.showInfoCount = 0;
-        this.isMini = true;
-      }
     }
 
     private setShowInfo() {
@@ -211,6 +177,7 @@ limitations under the License. -->
     }
 
     private openInstanceModal() {
+      this.stateTopo.selectedInstanceCall = null;
       this.dialogTopoVisible = true;
       if (!(this.stateTopo.selectedServiceCall && this.stateTopo.selectedServiceCall.source)) {
         return;
@@ -220,6 +187,48 @@ limitations under the License. -->
         clientServiceId: this.stateTopo.selectedServiceCall.target.id,
         duration: this.durationTime,
       });
+    }
+
+    @Watch('durationTime')
+    private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
+      if (compareObj(newValue, oldValue)) {
+        const service = this.stateTopo.currentNode;
+
+        this.GET_TOPO_SERVICE_DETAIL({
+          serviceId: service.id || '',
+          duration: this.durationTime,
+        });
+      }
+    }
+
+    @Watch('stateTopo.selectedServiceCall')
+    private watchDetectPointNodeId(newValue: string) {
+      if (newValue || this.stateTopo.currentNode.isReal) {
+        this.showInfo = true;
+      } else {
+        this.showInfo = false;
+        this.showInfoCount = 0;
+        this.isMini = true;
+      }
+    }
+
+    @Watch('stateTopo.currentNode.name')
+    private watchCurrentNodeIsReal(newValue: boolean) {
+      const service = this.stateTopo.currentNode;
+      if (this.stateTopo.currentNode.isReal) {
+        this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 1 });
+        this.GET_TOPO_SERVICE_DETAIL({
+          serviceId: service.id || '',
+          duration: this.durationTime,
+        });
+      }
+      if (newValue || this.stateTopo.selectedServiceCall) {
+        this.showInfo = true;
+      } else {
+        this.showInfo = false;
+        this.showInfoCount = 0;
+        this.isMini = true;
+      }
     }
   }
 </script>
