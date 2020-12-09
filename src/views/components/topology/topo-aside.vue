@@ -71,6 +71,8 @@ limitations under the License. -->
   import TopoChart from './topo-chart.vue';
   import TopoService from './topo-services.vue';
   import TopoDetectPoint from './topo-detect-point.vue';
+  import { DurationTime } from '@/types/global';
+  import compareObj from '@/utils/comparison';
 
   @Component({
     components: {
@@ -87,7 +89,6 @@ limitations under the License. -->
     @Action('rocketTopo/CLEAR_TOPO') private CLEAR_TOPO: any;
     @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
-    @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
     private dialogTopoVisible = false;
     private drawerMainBodyHeight = '100%';
@@ -101,10 +102,6 @@ limitations under the License. -->
 
     private resize() {
       this.drawerMainBodyHeight = `${document.body.clientHeight - 50}px`;
-    }
-
-    private beforeMount() {
-      this.SET_EVENTS([this.handleRefresh]);
     }
 
     private created() {
@@ -127,7 +124,6 @@ limitations under the License. -->
       window.removeEventListener('resize', this.resize);
       this.CLEAR_TOPO_INFO();
       this.CLEAR_TOPO();
-      this.SET_EVENTS([]);
     }
 
     get types() {
@@ -144,6 +140,13 @@ limitations under the License. -->
 
     private showRadial() {
       this.radioStatus = !this.radioStatus;
+    }
+
+    @Watch('durationTime')
+    private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
+      if (compareObj(newValue, oldValue)) {
+        this.handleRefresh();
+      }
     }
   }
 </script>

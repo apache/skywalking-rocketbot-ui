@@ -30,14 +30,12 @@ limitations under the License. -->
     @Action('rocketTopo/GET_TOPO') public GET_TOPO: any;
     @Action('rocketTopo/GET_SERVICES') private GET_SERVICES: any;
     @Mutation('rocketTopoGroup/UNSELECT_GROUP') private UNSELECT_GROUP: any;
-    @Mutation('SET_EVENTS') private SET_EVENTS: any;
     private services = [{ key: 0, label: 'All services' }];
     private service = { key: 0, label: 'All services' };
 
     private created() {
       this.fetchData();
       this.renderTopo();
-      this.SET_EVENTS([this.renderTopo]);
     }
 
     private fetchData() {
@@ -51,6 +49,7 @@ limitations under the License. -->
       // Avoid repeating fetchData() after enter the component for the first time.
       if (compareObj(newValue, oldValue)) {
         this.fetchData();
+        this.renderTopo();
       }
     }
 
@@ -79,10 +78,6 @@ limitations under the License. -->
           duration: this.durationTime,
         });
       }
-    }
-
-    private beforeDestroy() {
-      this.SET_EVENTS([]);
     }
   }
 </script>

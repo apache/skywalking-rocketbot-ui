@@ -122,6 +122,8 @@ limitations under the License. -->
   import TopoChart from './topo-chart.vue';
   import TopoInstanceDependency from './topo-instance-dependency.vue';
   import ChartLine from './chart-line.vue';
+  import { DurationTime } from '@/types/global';
+  import compareObj from '@/utils/comparison';
 
   @Component({
     components: {
@@ -136,7 +138,6 @@ limitations under the License. -->
     @Getter('durationTime') private durationTime: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT')
     private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
-    @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
     @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL')
     private SET_SELECTED_INSTANCE_CALL: any;
@@ -172,14 +173,9 @@ limitations under the License. -->
       const service = this.stateTopo.currentNode;
       if (this.stateTopo.currentNode.isReal) {
         this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 1 });
-        this.MIXHANDLE_GET_OPTION({
-          compType: 'service',
+        this.GET_TOPO_SERVICE_DETAIL({
+          serviceId: service.id || '',
           duration: this.durationTime,
-        }).then(() => {
-          this.GET_TOPO_SERVICE_DETAIL({
-            serviceId: service.id || '',
-            duration: this.durationTime,
-          });
         });
       }
       if (newValue || this.stateTopo.selectedServiceCall) {
@@ -220,6 +216,18 @@ limitations under the License. -->
         clientServiceId: this.stateTopo.selectedServiceCall.target.id,
         duration: this.durationTime,
       });
+    }
+
+    @Watch('durationTime')
+    private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
+      if (compareObj(newValue, oldValue)) {
+        const service = this.stateTopo.currentNode;
+
+        this.GET_TOPO_SERVICE_DETAIL({
+          serviceId: service.id || '',
+          duration: this.durationTime,
+        });
+      }
     }
   }
 </script>
