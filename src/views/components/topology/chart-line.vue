@@ -29,7 +29,6 @@ limitations under the License. -->
     @Prop() private intervalTime!: any;
 
     get option() {
-      console.log(this.data);
       const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
       const temp = keys.map((i: string, index: number) => {
         return {
