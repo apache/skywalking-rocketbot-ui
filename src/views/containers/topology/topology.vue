@@ -130,10 +130,6 @@ limitations under the License. -->
         this.SET_CURRENT_SERVICE(d);
       }
     }
-    private beforeDestroy() {
-      this.CLEAR_TOPO_INFO();
-      this.CLEAR_TOPO();
-    }
     private changeInstanceComps(data: { type: string; json: any }) {
       this.updateObjects = data.type;
       if (!data.json) {
@@ -147,6 +143,10 @@ limitations under the License. -->
         return;
       }
       this.SET_TOPO_ENDPOINT(data.json);
+    }
+    private beforeDestroy() {
+      this.CLEAR_TOPO_INFO();
+      this.CLEAR_TOPO();
     }
   }
 </script>
