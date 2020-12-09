@@ -70,7 +70,7 @@ limitations under the License. -->
           unit="%"
         />
         <ChartLine
-          v-if="stateTopo.responsePercentile"
+          v-if="stateTopo.responsePercentile.p50.length"
           :data="stateTopo.responsePercentile"
           :intervalTime="intervalTime"
           :title="$t('percentResponse')"
@@ -157,36 +157,6 @@ limitations under the License. -->
       return this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal;
     }
 
-    @Watch('stateTopo.selectedServiceCall')
-    private watchDetectPointNodeId(newValue: string) {
-      if (newValue || this.stateTopo.currentNode.isReal) {
-        this.showInfo = true;
-      } else {
-        this.showInfo = false;
-        this.showInfoCount = 0;
-        this.isMini = true;
-      }
-    }
-
-    @Watch('stateTopo.currentNode.name')
-    private watchCurrentNodeIsReal(newValue: boolean) {
-      const service = this.stateTopo.currentNode;
-      if (this.stateTopo.currentNode.isReal) {
-        this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 1 });
-        this.GET_TOPO_SERVICE_DETAIL({
-          serviceId: service.id || '',
-          duration: this.durationTime,
-        });
-      }
-      if (newValue || this.stateTopo.selectedServiceCall) {
-        this.showInfo = true;
-      } else {
-        this.showInfo = false;
-        this.showInfoCount = 0;
-        this.isMini = true;
-      }
-    }
-
     private setShowInfo() {
       this.showInfo = false;
       this.showInfoCount = 1;
@@ -228,6 +198,36 @@ limitations under the License. -->
           serviceId: service.id || '',
           duration: this.durationTime,
         });
+      }
+    }
+
+    @Watch('stateTopo.selectedServiceCall')
+    private watchDetectPointNodeId(newValue: string) {
+      if (newValue || this.stateTopo.currentNode.isReal) {
+        this.showInfo = true;
+      } else {
+        this.showInfo = false;
+        this.showInfoCount = 0;
+        this.isMini = true;
+      }
+    }
+
+    @Watch('stateTopo.currentNode.name')
+    private watchCurrentNodeIsReal(newValue: boolean) {
+      const service = this.stateTopo.currentNode;
+      if (this.stateTopo.currentNode.isReal) {
+        this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 1 });
+        this.GET_TOPO_SERVICE_DETAIL({
+          serviceId: service.id || '',
+          duration: this.durationTime,
+        });
+      }
+      if (newValue || this.stateTopo.selectedServiceCall) {
+        this.showInfo = true;
+      } else {
+        this.showInfo = false;
+        this.showInfoCount = 0;
+        this.isMini = true;
       }
     }
   }
