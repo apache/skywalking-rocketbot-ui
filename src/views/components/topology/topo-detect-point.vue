@@ -207,6 +207,7 @@ limitations under the License. -->
     }
 
     private openInstanceModal() {
+      this.stateTopo.selectedInstanceCall = null;
       this.dialogTopoVisible = true;
       if (!(this.stateTopo.selectedServiceCall && this.stateTopo.selectedServiceCall.source)) {
         return;
