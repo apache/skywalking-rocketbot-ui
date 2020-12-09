@@ -104,7 +104,7 @@ limitations under the License. -->
       <rk-sidebox
         class="instance-dependency"
         width="80%"
-        :fixed="true"
+        :fixed="false"
         :title="
           `${stateTopo.selectedServiceCall.source.name} -> ${stateTopo.selectedServiceCall.target.name} Instance Dependency`
         "
