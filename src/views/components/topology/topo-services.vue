@@ -13,7 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div class="link-topo-aside-box" style="padding:0;">
+  <div class="selector-topo-aside-box">
+    <TopoSelect :current="service" :data="services" @onChoose="changeGroup" />
     <TopoSelect :current="service" :data="services" @onChoose="handleChange" />
   </div>
 </template>
@@ -30,8 +31,8 @@ limitations under the License. -->
     @Action('rocketTopo/GET_TOPO') public GET_TOPO: any;
     @Action('rocketTopo/GET_SERVICES') private GET_SERVICES: any;
     @Mutation('rocketTopoGroup/UNSELECT_GROUP') private UNSELECT_GROUP: any;
-    private services = [{ key: 0, label: 'All services' }];
-    private service = { key: 0, label: 'All services' };
+    private services = [{ key: '', label: 'All services' }];
+    private service = { key: '', label: 'All services' };
 
     private created() {
       this.fetchData();
@@ -44,22 +45,17 @@ limitations under the License. -->
       });
     }
 
-    @Watch('durationTime')
-    private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
-      // Avoid repeating fetchData() after enter the component for the first time.
-      if (compareObj(newValue, oldValue)) {
-        this.fetchData();
-        this.renderTopo();
-      }
-    }
-
-    private handleChange(i: any) {
+    private handleChange(i: { key: string; label: string }) {
       this.service = i;
       this.UNSELECT_GROUP();
       this.GET_TOPO({
         serviceId: this.service.key,
         duration: this.durationTime,
       });
+    }
+
+    private changeGroup(i: { key: string; label: string }) {
+      console.log(i);
     }
 
     private renderTopo() {
@@ -79,10 +75,28 @@ limitations under the License. -->
         });
       }
     }
+
+    @Watch('durationTime')
+    private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
+      // Avoid repeating fetchData() after enter the component for the first time.
+      if (compareObj(newValue, oldValue)) {
+        this.fetchData();
+        this.renderTopo();
+      }
+    }
   }
 </script>
 <style lang="scss">
   .topo-server.dao-select .dao-select-main .dao-select-switch {
     border: 0;
+  }
+  .selector-topo-aside-box {
+    > div {
+      background-color: #2b3037;
+      color: #ddd;
+    }
+    > div:last-child {
+      margin-top: 150px;
+    }
   }
 </style>
