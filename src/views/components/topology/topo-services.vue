@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div class="selector-topo-aside-box">
-    <TopoSelect :current="service" :data="services" @onChoose="changeGroup" />
+    <TopoSelect :current="group" :data="groups" @onChoose="changeGroup" />
     <TopoSelect :current="service" :data="services" @onChoose="handleChange" />
   </div>
 </template>
@@ -33,6 +33,8 @@ limitations under the License. -->
     @Mutation('rocketTopoGroup/UNSELECT_GROUP') private UNSELECT_GROUP: any;
     private services = [{ key: '', label: 'All services' }];
     private service = { key: '', label: 'All services' };
+    private groups = [{ key: '', label: 'All groups' }];
+    private group = { key: '', label: 'All groups' };
 
     private created() {
       this.fetchData();
@@ -55,7 +57,7 @@ limitations under the License. -->
     }
 
     private changeGroup(i: { key: string; label: string }) {
-      console.log(i);
+      this.group = i;
     }
 
     private renderTopo() {
@@ -96,7 +98,7 @@ limitations under the License. -->
       color: #ddd;
     }
     > div:last-child {
-      margin-top: 150px;
+      margin-top: 250px;
     }
   }
 </style>
