@@ -15,7 +15,7 @@ limitations under the License. -->
 <template>
   <div>
     <div v-if="create">
-      <input class="group-create-input mr-5" placeholder="Group Name" v-model="name" />
+      <input class="group-create-input mr-5" placeholder="Add local view" v-model="name" />
       <RkButton class="mr-5" @click="handleCreateGroup">Confirm</RkButton>
       <RkButton @click="create = false">Cancel</RkButton>
     </div>
