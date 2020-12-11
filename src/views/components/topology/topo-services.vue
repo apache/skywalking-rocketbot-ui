@@ -83,10 +83,10 @@ limitations under the License. -->
           duration: this.durationTime,
         });
       } else {
-        const serviceIds = this.currentServices.map((item) => item.key);
+        const serviceIds = this.group.key ? this.currentServices.map((item) => item.key) : undefined;
 
         this.GET_TOPO({
-          serviceIds: this.group.key ? serviceIds : undefined,
+          serviceIds,
           duration: this.durationTime,
         });
       }

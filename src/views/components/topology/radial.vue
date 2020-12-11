@@ -74,7 +74,7 @@ limitations under the License. -->
             '#96dee8',
           ],
            legend: {
-              top: 25,
+              top: 50,
               textStyle: {
                 color: '#ddd',
               },
