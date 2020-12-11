@@ -125,6 +125,9 @@ limitations under the License. -->
     border: 0;
   }
   .selector-topo-aside-box {
+    z-index: 101;
+    position: absolute;
+    width: 280px;
     > div {
       background-color: #2b3037;
       color: #ddd;
