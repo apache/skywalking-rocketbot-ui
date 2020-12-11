@@ -32,7 +32,7 @@ limitations under the License. -->
         <TopoChart :data="cpm" :intervalTime="intervalTime" :title="$t('avgThroughput')" unit="cpm" />
       </div>
       <div v-if="sla.length">
-        <TopoChart :data="sla" :intervalTime="intervalTime" :precent="true" :title="$t('avgSLA')" unit="%" />
+        <TopoChart :data="sla" :intervalTime="intervalTime" :precent="true" :title="$t('avgSLA')" unit="" />
       </div>
       <div v-if="percentile.p50">
         <ChartLine :data="percentile" :intervalTime="intervalTime" :title="$t('percentResponse')" />

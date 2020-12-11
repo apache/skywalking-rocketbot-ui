@@ -16,7 +16,7 @@ limitations under the License. -->
 <template>
   <aside class="link-topo-aside">
     <Radial v-if="radioStatus" :datas="{ nodes: stateTopo.nodes, calls: stateTopo.calls }" />
-    <svg class="link-topo-aside-btn icon cp lg" @click="showRadial()" :style="`position:absolute;left:290px;`">
+    <svg class="link-topo-aside-btn icon cp lg" @click="showRadial()" :style="`position:absolute;left:580px;`">
       <use xlink:href="#issues" />
     </svg>
     <svg
@@ -53,8 +53,8 @@ limitations under the License. -->
             v-if="stateTopo.serviceSLA.length"
             :data="stateTopo.serviceSLA"
             :intervalTime="intervalTime"
-            title="Service SLA"
-            unit="%"
+            :title="$t('avgSLA')"
+            unit=""
           />
         </div>
       </div>
@@ -168,7 +168,7 @@ limitations under the License. -->
     display: block;
     background: #252a2f9a;
     color: #ddd;
-    border-radius: 4px 4px 4px 4px;
+    border-radius: 4px;
     text-align: center;
     padding: 10px;
     z-index: 101;

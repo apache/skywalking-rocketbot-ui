@@ -21,6 +21,7 @@ export const Services = {
     services: getAllServices(duration: $duration, group: $keyword) {
       key: id
       label: name
+      group
     }
   `,
 };
