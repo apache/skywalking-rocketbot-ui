@@ -15,7 +15,7 @@ limitations under the License. -->
 <template>
   <div class="selector-topo-aside-box">
     <TopoSelect :current="group" :data="groups" @onChoose="changeGroup" />
-    <TopoSelect :current="service" :data="currentServices" @onChoose="handleChange" />
+    <TopoSelect :current="service" :data="currentServices" @onChoose="changeService" />
   </div>
 </template>
 <script lang="ts">
@@ -42,9 +42,9 @@ limitations under the License. -->
     }
 
     get currentServiceList() {
-      const services = this.services.filter((item) => item.group === this.group.key);
+      const services = this.group.key ? this.services.filter((item) => item.group === this.group.key) : this.services;
 
-      return this.group.key ? services : [{ key: '', label: 'All services' }, ...this.services];
+      return [{ key: '', label: 'All services' }, ...services];
     }
 
     private fetchData() {
@@ -68,25 +68,34 @@ limitations under the License. -->
           this.group = this.groups[0];
           this.services = json;
           this.currentServices = this.currentServiceList;
-          this.service = this.currentServices[0];
+          this.service = this.currentServiceList.length > 1 ? this.currentServices[1] : this.currentServices[0];
           this.renderTopo();
         },
       );
     }
 
-    private handleChange(i: { key: string; label: string; group: string }) {
+    private changeService(i: { key: string; label: string; group: string }) {
       this.service = i;
       this.UNSELECT_GROUP();
-      this.GET_TOPO({
-        serviceId: this.service.key,
-        duration: this.durationTime,
-      });
+      if (this.service.key) {
+        this.GET_TOPO({
+          serviceId: this.service.key,
+          duration: this.durationTime,
+        });
+      } else {
+        const serviceIds = this.currentServices.map((item) => item.key);
+
+        this.GET_TOPO({
+          serviceIds: this.group.key ? serviceIds : undefined,
+          duration: this.durationTime,
+        });
+      }
     }
 
     private changeGroup(i: { key: string; label: string }) {
       this.group = i;
       this.currentServices = this.currentServiceList;
-      this.service = this.currentServices[0];
+      this.service = this.currentServiceList.length > 1 ? this.currentServices[1] : this.currentServices[0];
       this.GET_TOPO({
         serviceId: this.service.key,
         duration: this.durationTime,
