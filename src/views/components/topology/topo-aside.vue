@@ -53,8 +53,8 @@ limitations under the License. -->
             v-if="stateTopo.serviceSLA.length"
             :data="stateTopo.serviceSLA"
             :intervalTime="intervalTime"
-            title="Service SLA"
-            unit="%"
+            :title="$t('avgSLA')"
+            unit=""
           />
         </div>
       </div>

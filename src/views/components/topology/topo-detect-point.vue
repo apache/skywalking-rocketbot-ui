@@ -67,7 +67,7 @@ limitations under the License. -->
           :intervalTime="intervalTime"
           :precent="true"
           :title="$t('avgSLA')"
-          unit="%"
+          unit=""
         />
         <ChartLine
           v-if="stateTopo.responsePercentile.p50.length"

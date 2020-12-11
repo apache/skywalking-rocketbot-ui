@@ -49,8 +49,8 @@ limitations under the License. -->
 
     private fetchData() {
       this.GET_SERVICES({ duration: this.durationTime })
-        .then((json: { key: string; label: string; group: string }[]) => {
-          const groups = [] as any[];
+        .then((json: Array<{ key: string; label: string; group: string }>) => {
+          const groups = [] as string[];
           for (const g of json) {
             if (!groups.includes(g.group)) {
               groups.push(g.group);
