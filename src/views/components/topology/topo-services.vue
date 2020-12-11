@@ -44,7 +44,7 @@ limitations under the License. -->
     get currentServiceList() {
       const services = this.services.filter((item) => item.group === this.group.key);
 
-      return this.group.key ? services : [{ key: '', label: 'All services' }, ...services];
+      return this.group.key ? services : [{ key: '', label: 'All services' }, ...this.services];
     }
 
     private fetchData() {
