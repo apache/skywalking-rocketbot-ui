@@ -127,13 +127,9 @@ limitations under the License. -->
   .selector-topo-aside-box {
     z-index: 101;
     position: absolute;
-    width: 280px;
-    > div {
-      background-color: #2b3037;
-      color: #ddd;
-    }
+    display: flex;
     > div:last-child {
-      margin-top: 250px;
+      margin-left: 10px;
     }
   }
 </style>
