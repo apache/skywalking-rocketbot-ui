@@ -15,7 +15,7 @@ limitations under the License. -->
 <template>
   <div class="selector-topo-aside-box">
     <TopoSelect :current="group" :data="groups" @onChoose="changeGroup" />
-    <TopoSelect :current="service" :data="services" @onChoose="handleChange" />
+    <TopoSelect :current="service" :data="currentServices" @onChoose="handleChange" />
   </div>
 </template>
 <script lang="ts">
@@ -31,23 +31,50 @@ limitations under the License. -->
     @Action('rocketTopo/GET_TOPO') public GET_TOPO: any;
     @Action('rocketTopo/GET_SERVICES') private GET_SERVICES: any;
     @Mutation('rocketTopoGroup/UNSELECT_GROUP') private UNSELECT_GROUP: any;
-    private services = [{ key: '', label: 'All services' }];
+    private services = [{ key: '', label: 'All services', group: '' }];
+    private currentServices = [{ key: '', label: 'All services' }];
     private service = { key: '', label: 'All services' };
     private groups = [{ key: '', label: 'All groups' }];
     private group = { key: '', label: 'All groups' };
 
     private created() {
       this.fetchData();
-      this.renderTopo();
+    }
+
+    get currentServiceList() {
+      const services = this.services.filter((item) => item.group === this.group.key);
+      return this.group.key ? services : [{ key: '', label: 'All services' }, ...services];
     }
 
     private fetchData() {
-      this.GET_SERVICES({ duration: this.durationTime }).then((json: any[]) => {
-        this.services = [...this.services, ...json];
-      });
+      this.GET_SERVICES({ duration: this.durationTime })
+        .then((json: any[]) => {
+          const groups = [] as any[];
+          for (const g of json) {
+            if (!groups.includes(g.group)) {
+              groups.push(g.group);
+            }
+          }
+          this.groups = [
+            ...groups.map((g) => {
+              return {
+                key: g,
+                label: g,
+              };
+            }),
+            { key: '', label: 'All groups' },
+          ];
+          this.group = this.groups[0];
+          this.services = json;
+          this.currentServices = this.currentServiceList;
+          this.service = this.currentServices[0];
+        })
+        .then(() => {
+          this.renderTopo();
+        });
     }
 
-    private handleChange(i: { key: string; label: string }) {
+    private handleChange(i: { key: string; label: string; group: string }) {
       this.service = i;
       this.UNSELECT_GROUP();
       this.GET_TOPO({
@@ -58,6 +85,12 @@ limitations under the License. -->
 
     private changeGroup(i: { key: string; label: string }) {
       this.group = i;
+      this.currentServices = this.currentServiceList;
+      this.service = this.currentServices[0];
+      this.GET_TOPO({
+        serviceId: this.service.key,
+        duration: this.durationTime,
+      });
     }
 
     private renderTopo() {
@@ -66,7 +99,7 @@ limitations under the License. -->
         const jsonGroup = JSON.parse(groups);
         if (!jsonGroup.length) {
           this.GET_TOPO({
-            serviceId: 0,
+            serviceId: this.service.key,
             duration: this.durationTime,
           });
         }
@@ -83,7 +116,6 @@ limitations under the License. -->
       // Avoid repeating fetchData() after enter the component for the first time.
       if (compareObj(newValue, oldValue)) {
         this.fetchData();
-        this.renderTopo();
       }
     }
   }
