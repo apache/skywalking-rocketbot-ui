@@ -43,12 +43,13 @@ limitations under the License. -->
 
     get currentServiceList() {
       const services = this.services.filter((item) => item.group === this.group.key);
+
       return this.group.key ? services : [{ key: '', label: 'All services' }, ...services];
     }
 
     private fetchData() {
       this.GET_SERVICES({ duration: this.durationTime })
-        .then((json: any[]) => {
+        .then((json: { key: string; label: string; group: string }[]) => {
           const groups = [] as any[];
           for (const g of json) {
             if (!groups.includes(g.group)) {
