@@ -68,7 +68,7 @@ limitations under the License. -->
           this.group = this.groups[0];
           this.services = json;
           this.currentServices = this.currentServiceList;
-          this.service = this.currentServiceList.length > 1 ? this.currentServices[1] : this.currentServices[0];
+          this.service = this.currentServices[0];
           this.renderTopo();
         },
       );
@@ -83,19 +83,14 @@ limitations under the License. -->
           duration: this.durationTime,
         });
       } else {
-        const serviceIds = this.group.key ? this.currentServices.map((item) => item.key) : undefined;
-
-        this.GET_TOPO({
-          serviceIds,
-          duration: this.durationTime,
-        });
+        this.getServicesTopo();
       }
     }
 
     private changeGroup(i: { key: string; label: string }) {
       this.group = i;
       this.currentServices = this.currentServiceList;
-      this.service = this.currentServiceList.length > 1 ? this.currentServices[1] : this.currentServices[0];
+      this.service = this.currentServices[0];
       this.GET_TOPO({
         serviceId: this.service.key,
         duration: this.durationTime,
@@ -107,17 +102,20 @@ limitations under the License. -->
       if (groups) {
         const jsonGroup = JSON.parse(groups);
         if (!jsonGroup.length) {
-          this.GET_TOPO({
-            serviceId: this.service.key,
-            duration: this.durationTime,
-          });
+          this.getServicesTopo();
         }
       } else {
-        this.GET_TOPO({
-          serviceId: this.service.key,
-          duration: this.durationTime,
-        });
+        this.getServicesTopo();
       }
+    }
+
+    private getServicesTopo() {
+      const serviceIds = this.group.key ? this.currentServices.map((item) => item.key) : undefined;
+
+      this.GET_TOPO({
+        serviceIds,
+        duration: this.durationTime,
+      });
     }
 
     @Watch('durationTime')
