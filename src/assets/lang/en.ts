@@ -143,7 +143,7 @@ const m = {
   parentService: 'Parent Service',
   isParentService: 'Set Parent Service',
   noneParentService: 'No Parent Service',
-  serviceFilter: 'Service Filter',
+  serviceGroup: 'Service Group',
   endpointFilter: 'Endpoint Filter',
   editConfig: 'Edit Config',
   databaseView: 'Database',
@@ -163,6 +163,13 @@ const m = {
   logCategory: 'Log Category',
   errorCatalog: 'Error Catalog',
   logDetail: 'Log Detail ',
+  timeReload: 'The time interval must be greater than 0',
+  errorInfo: 'Error Info',
+  stack: 'Stack',
+  serviceVersion: 'Service Version',
+  errorPage: 'Error Page',
+  category: 'Category',
+  grade: 'Grade',
 };
 
 export default m;

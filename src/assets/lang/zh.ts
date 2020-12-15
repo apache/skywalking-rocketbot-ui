@@ -143,7 +143,7 @@ const m = {
   parentService: '父级服务',
   isParentService: '设置父服务',
   noneParentService: '不设置父服务',
-  serviceFilter: '服务过滤器',
+  serviceGroup: '服务组',
   endpointFilter: '端点过滤器',
   editConfig: '编辑',
   databaseView: '数据库视图',
@@ -162,6 +162,13 @@ const m = {
   logCategory: '日志类别',
   errorCatalog: '错误类目',
   logDetail: '日志详情',
+  timeReload: '时间间隔必须大于0',
+  errorInfo: '错误信息',
+  stack: '堆栈',
+  serviceVersion: '服务版本',
+  errorPage: '错误页面',
+  category: '类别',
+  grade: '等级',
 };
 
 export default m;

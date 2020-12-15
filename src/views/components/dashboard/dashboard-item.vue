@@ -68,7 +68,7 @@ limitations under the License. -->
   import dayjs from 'dayjs';
 
   import { QueryTypes } from './constant';
-  import { TopologyType, ObjectsType } from '../../constant';
+  import { TopologyType, ObjectsType } from '../../../constants/constant';
   import { MetricsType, CalculationType } from './charts/constant';
   import { uuid } from '@/utils/uuid.ts';
 

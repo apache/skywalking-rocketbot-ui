@@ -50,7 +50,7 @@ limitations under the License. -->
   import ToolGroup from '@/views/components/dashboard/tool-group.vue';
   import ToolNav from '@/views/components/dashboard/tool-nav.vue';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
-  import { ObjectsType } from '../constant';
+  import { ObjectsType } from '../../constants/constant';
 
   interface ITemplate {
     name: string;
@@ -100,7 +100,7 @@ limitations under the License. -->
         compType: this.compType,
         duration: this.durationTime,
         keywordServiceName:
-          this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].serviceFilter,
+          this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].serviceGroup,
       });
     }
     private beforeMount() {

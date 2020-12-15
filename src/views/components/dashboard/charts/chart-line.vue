@@ -87,7 +87,7 @@ limitations under the License. -->
             fontSize: 13,
           },
           enterable: true,
-          extraCssText: 'max-height: 300px; overflow: scroll;',
+          extraCssText: 'max-height: 300px; overflow: auto;',
         },
         legend: {
           type: 'scroll',

@@ -23,10 +23,10 @@ limitations under the License. -->
               <use xlink:href="#settings_ethernet"></use>
             </svg>
           </span>
-          {{ item.value }}
+          {{ $t(item.value) }}
         </div>
         <div v-else :class="item.label" :key="index">
-          {{ item.value }}
+          {{ $t(item.value) }}
         </div>
       </template>
     </div>
@@ -62,7 +62,7 @@ limitations under the License. -->
     },
     mounted() {
       const drags = this.$refs.dragger;
-      drags.forEach(drag => {
+      drags.forEach((drag) => {
         drag.onmousedown = (event) => {
           const diffX = event.clientX;
           const index = +drag.dataset.index;
@@ -72,7 +72,7 @@ limitations under the License. -->
           document.onmousemove = (documentEvent) => {
             const moveX = documentEvent.clientX - diffX;
             const method = copy + moveX;
-            this.$set(this.data, index, { ...item, 'method': method });
+            this.$set(this.data, index, { ...item, method });
           };
           document.onmouseup = () => {
             document.onmousemove = null;

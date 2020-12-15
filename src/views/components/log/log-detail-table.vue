@@ -63,8 +63,6 @@ limitations under the License. -->
       LogTable,
     },
     props: ['data', 'loading', 'showBtnDetail'],
-    watch: {
-    },
     data() {
       return {
         diaplay: true,

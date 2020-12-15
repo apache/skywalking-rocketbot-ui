@@ -16,10 +16,9 @@
  */
 
 import { Commit, ActionTree, Dispatch } from 'vuex';
-import axios, { AxiosPromise, AxiosResponse } from 'axios';
-import { cancelToken } from '@/utils/cancelToken';
+import { AxiosResponse } from 'axios';
 import { State } from './dashboard-data';
-import fragmentAll from './constant-metrics-query';
+import graph from '@/graph';
 
 export enum TopologyType {
   TOPOLOGY_ENDPOINT = 'TOPOLOGY_ENDPOINT',
@@ -148,19 +147,16 @@ const actions: ActionTree<State, any> = {
       return variables;
     });
 
-    const globalArr: any = fragmentAll;
     if (!config.queryMetricType || !variablesList.length) {
       return;
     }
-    const fragments = globalArr[config.queryMetricType].fragment;
-    const queryVariables = globalArr[config.queryMetricType].variable;
-    const query = `query queryData(${queryVariables}) {${fragments}}`;
     return Promise.all(
       variablesList.map((variable: any) => {
         if (variable) {
-          return axios
-            .post('/graphql', { query, variables: variable }, { cancelToken: cancelToken() })
-            .then((res: AxiosResponse<any>) => {
+          return graph
+            .query(config.queryMetricType)
+            .params(variable)
+            .then((res: AxiosResponse) => {
               const resData = res.data.data;
 
               return { ...resData, config, metricName: variable.condition.name };

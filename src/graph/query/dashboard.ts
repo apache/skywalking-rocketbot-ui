@@ -15,7 +15,19 @@
  * limitations under the License.
  */
 
-import { TypeOfMetrics, getAllTemplates, addTemplate, changeTemplate, disableTemplate } from '../fragments/dashboard';
+import {
+  TypeOfMetrics,
+  getAllTemplates,
+  addTemplate,
+  changeTemplate,
+  disableTemplate,
+  querySampledRecords,
+  queryHeatMap,
+  queryLabeledMetricsValues,
+  querySortMetrics,
+  queryMetricsValue,
+  queryMetricsValues,
+} from '../fragments/dashboard';
 
 export const queryTypeOfMetrics = `query queryTypeOfMetrics(${TypeOfMetrics.variable}) {${TypeOfMetrics.query}}`;
 
@@ -26,3 +38,15 @@ export const mutationChangeTemplate = `mutation mutationChangeTemplate(${changeT
 export const mutationDisableTemplate = `mutation mutationDisableTemplate(${disableTemplate.variable}) {${disableTemplate.query}}`;
 
 export const queryGetAllTemplates = `query queryGetAllTemplates {${getAllTemplates.query}}`;
+
+export const readHeatMap = `query queryData(${queryHeatMap.variable}) {${queryHeatMap.query}}`;
+
+export const readSampledRecords = `query queryData(${querySampledRecords.variable}) {${querySampledRecords.query}}`;
+
+export const readLabeledMetricsValues = `query queryData(${queryLabeledMetricsValues.variable}) {${queryLabeledMetricsValues.query}}`;
+
+export const sortMetrics = `query queryData(${querySortMetrics.variable}) {${querySortMetrics.query}}`;
+
+export const readMetricsValue = `query queryData(${queryMetricsValue.variable}) {${queryMetricsValue.query}}`;
+
+export const readMetricsValues = `query queryData(${queryMetricsValues.variable}) {${queryMetricsValues.query}}`;

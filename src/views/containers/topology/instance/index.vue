@@ -69,7 +69,7 @@ limitations under the License. -->
   import { Action, Getter, State, Mutation } from 'vuex-class';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
-  import { ObjectsType } from '../../../constant';
+  import { ObjectsType } from '../../../../constants/constant';
 
   interface Instance {
     label: string;

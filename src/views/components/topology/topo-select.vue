@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div
-    class="rk-topo-bar-select cp flex-h"
+    class="rk-topo-bar-select cp"
     v-clickout="
       () => {
         visible = false;
@@ -85,6 +85,9 @@ limitations under the License. -->
     z-index: 1;
     height: 40px;
     justify-content: space-between;
+    background-color: #2b3037;
+    color: #ddd;
+    width: 280px;
     .sm {
       line-height: 12px;
     }

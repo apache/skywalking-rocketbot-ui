@@ -55,13 +55,17 @@ limitations under the License. -->
       copy(i);
     }
     get datas() {
+      if (!this.data.length) {
+        return [];
+      }
       const val = this.item.sortOrder;
+
       switch (val) {
         case 'DES':
-          this.data.length && this.data.sort((a: any, b: any) => b.value - a.value);
+          this.data.sort((a: any, b: any) => b.value - a.value);
           break;
         case 'ASC':
-          this.data.length && this.data.sort((a: any, b: any) => a.value - b.value);
+          this.data.sort((a: any, b: any) => a.value - b.value);
           break;
         default:
           break;

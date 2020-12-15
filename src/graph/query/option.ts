@@ -19,7 +19,8 @@ import { Services, BrowserServices, Endpoints, Instances, Database, OAPTimeInfo 
 
 export const queryServices = `query queryServices(${Services.variable}) {${Services.query}}`;
 
-export const queryBrowserServices = `query queryBrowserServices(${BrowserServices.variable}) {${BrowserServices.query}}`;
+export const queryBrowserServices = `query queryBrowserServices(
+  ${BrowserServices.variable}) {${BrowserServices.query}}`;
 
 export const queryDatabases = `query queryDatabases(${Database.variable}) {${Database.query}}`;
 
