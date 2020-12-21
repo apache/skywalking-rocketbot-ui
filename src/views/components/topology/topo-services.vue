@@ -77,24 +77,14 @@ limitations under the License. -->
     private changeService(i: { key: string; label: string; group: string }) {
       this.service = i;
       this.UNSELECT_GROUP();
-      if (this.service.key) {
-        this.GET_TOPO({
-          serviceId: this.service.key,
-          duration: this.durationTime,
-        });
-      } else {
-        this.getServicesTopo();
-      }
+      this.changeTopo();
     }
 
     private changeGroup(i: { key: string; label: string }) {
       this.group = i;
       this.currentServices = this.currentServiceList;
       this.service = this.currentServices[0];
-      this.GET_TOPO({
-        serviceId: this.service.key,
-        duration: this.durationTime,
-      });
+      this.changeTopo();
     }
 
     private renderTopo() {
@@ -116,6 +106,17 @@ limitations under the License. -->
         serviceIds,
         duration: this.durationTime,
       });
+    }
+
+    private changeTopo() {
+      if (this.service.key) {
+        this.GET_TOPO({
+          serviceId: this.service.key,
+          duration: this.durationTime,
+        });
+      } else {
+        this.getServicesTopo();
+      }
     }
 
     @Watch('durationTime')
