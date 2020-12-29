@@ -93,7 +93,7 @@ limitations under the License. -->
     background: 0;
     border: 0;
     outline: none;
-    width: 27px;
+    width: auto;
     padding-bottom: 0;
   }
   .rk-footer-inner {

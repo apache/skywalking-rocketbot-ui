@@ -22,7 +22,7 @@ limitations under the License. -->
       loading: loading,
     }"
   >
-    <use :xlink:href="icon"></use>
+    <use :xlink:href="`#${icon}`"></use>
   </svg>
 </template>
 
