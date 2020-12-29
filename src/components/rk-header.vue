@@ -20,39 +20,27 @@ limitations under the License. -->
       </svg>
       <span class="grey rocketbot">Rocketbot</span>
       <router-link class="nav-link mr-20" to="/" exact>
-        <svg class="icon sm vm">
-          <use xlink:href="#chart"></use>
-        </svg>
+        <rk-icon size="sm" icon="chart" />
         <span class="vm hide-xs ml-5">{{ this.$t('dashboard') }}</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/topology">
-        <svg class="icon sm vm">
-          <use xlink:href="#issues"></use>
-        </svg>
+        <rk-icon size="sm" icon="issues" />
         <span class="vm hide-xs ml-5">{{ this.$t('topology') }}</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/trace">
-        <svg class="icon sm vm">
-          <use xlink:href="#merge"></use>
-        </svg>
+        <rk-icon size="sm" icon="merge" />
         <span class="vm hide-xs ml-5">{{ this.$t('trace') }}</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/profile">
-        <svg class="icon sm vm">
-          <use xlink:href="#timeline"></use>
-        </svg>
+        <rk-icon size="sm" icon="timeline" />
         <span class="vm hide-xs ml-5">{{ this.$t('profile') }}</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/log">
-        <svg class="icon sm vm">
-          <use xlink:href="#assignment"></use>
-        </svg>
+        <rk-icon size="sm" icon="assignment" />
         <span class="vm hide-xs ml-5">{{ this.$t('log') }}</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/alarm">
-        <svg class="icon sm vm">
-          <use xlink:href="#spam"></use>
-        </svg>
+        <rk-icon size="sm" icon="spam" />
         <span class="vm hide-xs ml-5">{{ this.$t('alarm') }}</span>
       </router-link>
     </div>
@@ -72,9 +60,7 @@ limitations under the License. -->
         {{ this.$t('second') }}
       </div>
       <a class="rk-btn sm ghost" @click="handleReload">
-        <svg class="icon mr-5 vm" :class="{ loading: auto }">
-          <use xlink:href="#retry"></use>
-        </svg>
+        <rk-icon icon="retry" :loading="auto" />
         <span class="vm">{{ this.$t('reload') }}</span>
       </a>
     </div>
