@@ -36,8 +36,8 @@ limitations under the License. -->
     @State('rocketbot') private rocketbotGlobal: any;
     @Action('SET_DURATION') private SET_DURATION: any;
     @Action('SET_UTC') private SET_UTC: any;
-    private lang: any = '';
-    private utc: any = window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60);
+    private lang: string | null = '';
+    private utc: number = 0;
     @Watch('utc')
     private onUtcUpdate() {
       if (this.utc < -12) {
@@ -46,7 +46,7 @@ limitations under the License. -->
       if (this.utc > 14) {
         this.utc = 14;
       }
-      if (this.utc === '') {
+      if (!this.utc) {
         this.utc = 0;
       }
       this.SET_UTC(this.utc);
@@ -64,6 +64,7 @@ limitations under the License. -->
       }
     }
     private beforeMount() {
+      this.utc = Number(window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60));
       this.lang = window.localStorage.getItem('lang');
     }
   }
