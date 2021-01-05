@@ -57,7 +57,7 @@ limitations under the License. -->
             }
           }
           this.groups = [
-            ...groups.map((g) => {
+            ...groups.sort().map((g) => {
               return {
                 key: g,
                 label: g,
