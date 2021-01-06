@@ -22,15 +22,15 @@ export default function topoLegend(graph, clientHeight, clientWidth) {
       .append('image')
       .attr('width', 30)
       .attr('height', 30)
-      .attr('x', clientWidth - (item === 'CUBEERROR' ? 80 : 140))
-      .attr('y', clientHeight - 40)
+      .attr('x', clientWidth - (item === 'CUBEERROR' ? 340 : 440))
+      .attr('y', clientHeight - 50)
       .attr('xlink:href', () => (item === 'CUBEERROR' ? icons.CUBEERROR : icons.CUBE));
     graph
       .append('text')
-      .attr('x', clientWidth - (item === 'CUBEERROR' ? 100 : 140))
-      .attr('y', clientHeight - 50)
+      .attr('x', clientWidth - (item === 'CUBEERROR' ? 310 : 410))
+      .attr('y', clientHeight - 30)
       .text(() => {
-        return item === 'CUBEERROR' ? 'Cube Error' : 'Cube';
+        return item === 'CUBEERROR' ? 'Unhealthy (Successful Rate < 95% and Traffic > 1 call/min)' : 'Healthy';
       })
       .style('fill', '#efeff1')
       .style('font-size', '11px');
