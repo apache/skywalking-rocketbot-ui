@@ -118,7 +118,9 @@ limitations under the License. -->
       if (!types.includes(this.updateObjects)) {
         return;
       }
-      this.chartRender();
+      setTimeout(() => {
+        this.chartRender();
+      }, 1000);
     }
 
     private chartRender() {
@@ -323,7 +325,7 @@ limitations under the License. -->
     private watchCurrentSelectors() {
       setTimeout(() => {
         this.chartRender();
-      }, 200);
+      }, 1000);
     }
     @Watch('durationTime')
     private watchDurationTime() {
