@@ -27,7 +27,7 @@ export default function topoLegend(graph, clientHeight, clientWidth) {
       .attr('xlink:href', () => (item === 'CUBEERROR' ? icons.CUBEERROR : icons.CUBE));
     graph
       .append('text')
-      .attr('x', clientWidth - (item === 'CUBEERROR' ? 100 : 150))
+      .attr('x', clientWidth - (item === 'CUBEERROR' ? 100 : 140))
       .attr('y', clientHeight - 50)
       .text(() => {
         return item === 'CUBEERROR' ? 'Cube Error' : 'Cube';
