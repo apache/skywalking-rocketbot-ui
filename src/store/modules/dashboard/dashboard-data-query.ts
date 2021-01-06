@@ -33,9 +33,10 @@ const actions: ActionTree<State, any> = {
       index: number;
       duration: any;
       type: string;
+      rocketOption: any;
     },
   ) {
-    const { currentDatabase, currentEndpoint, currentInstance, currentService } = context.rootState.rocketOption;
+    const { currentDatabase, currentEndpoint, currentInstance, currentService } = params.rocketOption;
     const dashboard: string = `${window.localStorage.getItem('dashboard')}`;
     const tree = dashboard ? JSON.parse(dashboard) : context.state.tree;
     const normal = params.type ? true : tree[context.state.group].type === 'database' ? false : true;

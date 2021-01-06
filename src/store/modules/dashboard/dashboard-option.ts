@@ -60,7 +60,7 @@ const mutations: MutationTree<State> = {
   },
 
   [types.UPDATE_DASHBOARD](state: State) {
-    state.updateDashboard = { key: +new Date() };
+    state.updateDashboard = { key: new Date().getTime() };
   },
 
   [types.SET_ENDPOINTS](state: State, data: Options[]) {
