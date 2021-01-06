@@ -71,13 +71,14 @@ limitations under the License. -->
   import { TopologyType, ObjectsType } from '../../../constants/constant';
   import { MetricsType, CalculationType } from './charts/constant';
   import { uuid } from '@/utils/uuid.ts';
+  import { State as globalState } from '@/store/modules/global';
+  import { State as optionState } from '@/store/modules/dashboard/dashboard-option';
 
   @Component({
     components: { ...charts },
   })
   export default class DashboardItem extends Vue {
-    @State('rocketOption') private rocketOption: any;
-    @State('rocketbot') private rocketGlobal: any;
+    @State('rocketbot') private rocketGlobal!: globalState;
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('rocketTopo/DELETE_TOPO_ENDPOINT') private DELETE_TOPO_ENDPOINT: any;
@@ -89,6 +90,7 @@ limitations under the License. -->
     @Prop() private index!: number;
     @Prop() private type!: string;
     @Prop() private updateObjects!: string;
+    @Prop() private rocketOption!: optionState;
 
     private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as any[];
     private dialogConfigVisible = false;
@@ -107,14 +109,18 @@ limitations under the License. -->
       this.height = this.item.height;
       this.unit = this.item.unit;
       this.itemConfig = this.item;
-      const types = [ObjectsType.UPDATE_INSTANCES, ObjectsType.UPDATE_ENDPOINTS, ObjectsType.UPDATE_DASHBOARD] as any[];
+      const types = [
+        ObjectsType.UPDATE_INSTANCES,
+        ObjectsType.UPDATE_ENDPOINTS,
+        ObjectsType.UPDATE_DASHBOARD,
+      ] as string[];
 
       if (!types.includes(this.updateObjects)) {
         return;
       }
       setTimeout(() => {
         this.chartRender();
-      }, 200);
+      }, 1000);
     }
 
     private chartRender() {
@@ -126,6 +132,7 @@ limitations under the License. -->
         duration: this.durationTime,
         index: this.index,
         type: this.type,
+        rocketOption: this.rocketOption,
       }).then((params: Array<{ metricName: string; [key: string]: any; config: any }>) => {
         if (!params) {
           return;
@@ -318,7 +325,7 @@ limitations under the License. -->
     private watchCurrentSelectors() {
       setTimeout(() => {
         this.chartRender();
-      }, 200);
+      }, 1000);
     }
     @Watch('durationTime')
     private watchDurationTime() {
