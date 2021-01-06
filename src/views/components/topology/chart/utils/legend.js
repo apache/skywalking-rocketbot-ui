@@ -15,4 +15,23 @@
  * limitations under the License.
  */
 import icons from './icons';
-export default function topoLegend(d3, graph) {}
+
+export default function topoLegend(graph, clientHeight, clientWidth) {
+  for (const item of ['CUBE', 'CUBEERROR']) {
+    graph
+      .append('image')
+      .attr('width', 30)
+      .attr('height', 30)
+      .attr('x', clientWidth - (item === 'CUBEERROR' ? 80 : 140))
+      .attr('y', clientHeight - 40)
+      .attr('xlink:href', () => (item === 'CUBEERROR' ? icons.CUBEERROR : icons.CUBE));
+    graph
+      .append('text')
+      .attr('x', clientWidth - (item === 'CUBEERROR' ? 100 : 150))
+      .attr('y', clientHeight - 50)
+      .text(() => {
+        return item === 'CUBEERROR' ? 'Cube Error' : 'Cube';
+      })
+      .style('fill', '#efeff1');
+  }
+}

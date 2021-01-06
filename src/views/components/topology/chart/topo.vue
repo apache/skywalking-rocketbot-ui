@@ -23,6 +23,7 @@ limitations under the License. -->
   import nodeElement from './utils/nodeElement';
   import { linkElement, anchorElement } from './utils/linkElement';
   import tool from './utils/tool';
+  import topoLegend from './utils/legend';
   export default {
     props: {
       current: {
@@ -72,6 +73,9 @@ limitations under the License. -->
         {icon: 'ENDPOINT', click: this.handleGoEndpointDependency},
         {icon: ''},
       ]);
+      // legend
+      this.legend = this.graph.append('g').attr('class', 'topo-legend');
+      topoLegend(this.legend, this.$el.clientHeight, this.$el.clientWidth);
       this.svg.on('click', (d, i) => {
         event.stopPropagation();
         event.preventDefault();
@@ -135,7 +139,6 @@ limitations under the License. -->
       },
       update() {
         // node element
-        const that = this;
         this.node = this.node.data(this.nodes, (d) => d.id);
         this.node.exit().remove();
         this.node = nodeElement(d3, this.node.enter(), this.tool, {
