@@ -32,6 +32,7 @@ export default function topoLegend(graph, clientHeight, clientWidth) {
       .text(() => {
         return item === 'CUBEERROR' ? 'Cube Error' : 'Cube';
       })
-      .style('fill', '#efeff1');
+      .style('fill', '#efeff1')
+      .style('font-size', '11px');
   }
 }
