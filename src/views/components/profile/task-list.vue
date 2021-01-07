@@ -31,8 +31,8 @@ limitations under the License. -->
             >
               <div class="ell mb-5">
                 <span class="b">{{ i.endpointName }}</span>
-                <a class="profile-btn bg-blue r" @click="viewTask(i)">
-                  <span class="vm">{{ $t('taskView') }}</span>
+                <a class="profile-btn r" @click="viewTask(i)" v-tooltip:bottom="{ content: $t('taskView') }">
+                  <rk-icon icon="library_books" />
                 </a>
               </div>
               <div class="grey ell sm">
@@ -197,7 +197,7 @@ limitations under the License. -->
       margin-top: 20px;
     }
     .profile-btn {
-      color: #fff;
+      color: #448dfe;
       padding: 1px 3px;
       border-radius: 2px;
       font-size: 12px;
