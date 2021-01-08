@@ -31,8 +31,8 @@ limitations under the License. -->
             >
               <div class="ell mb-5">
                 <span class="b">{{ i.endpointName }}</span>
-                <a class="profile-btn bg-blue r" @click="viewTask(i)">
-                  <span class="vm">{{ $t('taskView') }}</span>
+                <a class="profile-btn r" @click="viewTask(i)" v-tooltip:bottom="{ content: $t('taskView') }">
+                  <rk-icon icon="library_books" />
                 </a>
               </div>
               <div class="grey ell sm">
@@ -173,7 +173,7 @@ limitations under the License. -->
     overflow: auto;
     .profile-task-wrapper,
     .profile-trace-wrapper {
-      min-height: 100px;
+      min-height: 340px;
       width: 100%;
     }
     .rk-no-data {
@@ -192,12 +192,13 @@ limitations under the License. -->
       font-weight: bold;
       border-right: 1px solid rgba(0, 0, 0, 0.07);
       border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+      background: #f3f4f9;
     }
     .log-item {
       margin-top: 20px;
     }
     .profile-btn {
-      color: #fff;
+      color: #3d444f;
       padding: 1px 3px;
       border-radius: 2px;
       font-size: 12px;
