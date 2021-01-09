@@ -270,10 +270,11 @@ limitations under the License. -->
       }
       if (this.tagsList.length) {
         const tagsMap = this.tagsList.map((item: string) => {
-          const t = item.split('=');
+          const key = item.substring(0, item.indexOf('='));
+
           return {
-            key: t[0],
-            value: t[1],
+            key,
+            value: item.split(key + '=')[1],
           };
         });
         temp.tags = tagsMap;
