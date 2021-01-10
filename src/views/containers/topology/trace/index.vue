@@ -38,8 +38,6 @@ limitations under the License. -->
   })
   export default class WindowTrace extends Vue {
     @State('rocketTrace') private stateTrace!: any;
-    @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
-    @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
     @Prop() private current!: Option;
   }
 </script>
