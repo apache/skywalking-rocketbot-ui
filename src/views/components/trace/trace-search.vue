@@ -274,7 +274,7 @@ limitations under the License. -->
 
           return {
             key,
-            value: item.split(key + '=')[1],
+            value: item.substring(item.indexOf('=') + 1, item.length),
           };
         });
         temp.tags = tagsMap;
