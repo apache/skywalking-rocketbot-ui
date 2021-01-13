@@ -26,8 +26,8 @@ limitations under the License. -->
 <script lang="ts">
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, State, Mutation } from 'vuex-class';
-  import LogBar from '@/views/components/log/log-bar.vue';
-  import LogDetailTable from '@/views/components/log/log-detail-table.vue';
+  import LogBar from '@/views/components/log/browser-logs/log-bar.vue';
+  import LogDetailTable from '@/views/components/log/browser-logs/log-detail-table.vue';
   @Component({
     components: {
       LogBar,
