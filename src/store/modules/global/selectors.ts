@@ -196,7 +196,7 @@ const actions: ActionTree<State, any> = {
       .query('queryBrowserServices')
       .params(params)
       .then((res: AxiosResponse) => {
-        context.commit(types.SET_SERVICES, res.data.data.services);
+        context.commit(types.SET_SERVICES, [{ label: 'All', key: '' }, ...res.data.data.services]);
       });
   },
   GET_ITEM_ENDPOINTS(context, params) {

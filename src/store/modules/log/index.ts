@@ -32,12 +32,6 @@ export interface State {
   categories: Options[];
   category: Options;
   loading: boolean;
-  logServices: Options[];
-  currentLogService: Options;
-  logEndpoints: Options[];
-  currentLogEndpoint: Options;
-  logInstances: Options[];
-  currentLogInstance: Options;
 }
 
 const categories: Options[] = [
@@ -61,12 +55,6 @@ const initState: State = {
   categories,
   category: { label: 'All', key: 'ALL' },
   loading: false,
-  logServices: [],
-  currentLogService: { key: '', label: '' },
-  logEndpoints: [],
-  currentLogEndpoint: { key: '', label: '' },
-  logInstances: [],
-  currentLogInstance: { key: '', label: '' },
 };
 
 // mutations
@@ -85,27 +73,6 @@ const mutations: MutationTree<State> = {
   },
   [types.SET_LOADING](state: State, data: boolean) {
     state.loading = data;
-  },
-  [types.SET_LOG_SERVICES](state: State, data: Options[]) {
-    state.logServices = [{ label: 'All', key: '' }, ...data];
-    state.currentLogService = state.logServices[0];
-  },
-  [types.SET_LOG_ENDPOINTS](state: State, data: Options[]) {
-    state.logEndpoints = [{ label: 'All', key: '' }, ...data];
-    state.currentLogEndpoint = state.logEndpoints[0];
-  },
-  [types.SET_LOG_INSTANCES](state: State, data: Options[]) {
-    state.logInstances = [{ label: 'All', key: '' }, ...data];
-    state.currentLogInstance = state.logInstances[0];
-  },
-  [types.SET_CURRENT_LOG_SERVICE](state: State, service: Options) {
-    state.currentLogService = service;
-  },
-  [types.SET_CURRENT_LOG_ENDPOINT](state: State, endpoint: Options) {
-    state.currentLogEndpoint = endpoint;
-  },
-  [types.SET_CURRENT_LOG_INSTANCE](state: State, instance: Options) {
-    state.currentLogInstance = instance;
   },
 };
 
@@ -131,60 +98,9 @@ const actions: ActionTree<State, any> = {
         break;
     }
   },
-  GET_LOG_SERVICES(context: { commit: Commit }, params: { duration: any }) {
-    return graph
-      .query('queryBrowserServices')
-      .params(params)
-      .then((res: AxiosResponse) => {
-        context.commit(types.SET_LOG_SERVICES, res.data.data.services);
-      });
-  },
-  LOG_GET_OPTION(context: { dispatch: Dispatch; state: State }, params: any) {
-    context
-      .dispatch('GET_LOG_SERVICES', { duration: params.duration })
-      .then(() => context.dispatch('GET_LOG_ENDPOINTS', {}))
-      .then(() => context.dispatch('GET_LOG_INSTANCES', { duration: params.duration }));
-  },
-  GET_LOG_ENDPOINTS(context: { commit: Commit; state: any }, params: { keyword: string }) {
-    if (!context.state.currentLogEndpoint.key) {
-      context.commit(types.SET_LOG_ENDPOINTS, []);
-      return;
-    }
-    if (!params.keyword) {
-      params.keyword = '';
-    }
-    return graph
-      .query('queryEndpoints')
-      .params({ serviceId: context.state.currentLogEndpoint.key || '', ...params })
-      .then((res: AxiosResponse) => {
-        context.commit(types.SET_LOG_ENDPOINTS, res.data.data.getEndpoints);
-      });
-  },
-  GET_LOG_INSTANCES(context: { commit: Commit; state: any }, params: any) {
-    if (!context.state.currentLogInstance.key) {
-      context.commit(types.SET_LOG_INSTANCES, []);
-      return;
-    }
-    return graph
-      .query('queryInstances')
-      .params({ serviceId: context.state.currentLogInstance.key || '', ...params })
-      .then((res: AxiosResponse) => {
-        context.commit(types.SET_LOG_INSTANCES, res.data.data.getServiceInstances);
-      });
-  },
-  SELECT_LOG_SERVICE(context: { commit: Commit; dispatch: Dispatch }, params: any) {
-    context.commit('SET_CURRENT_LOG_SERVICE', params.service);
-    context.dispatch('GET_LOG_ENDPOINTS', {});
-    context.dispatch('GET_LOG_INSTANCES', { duration: params.duration });
-  },
-  SELECT_LOG_ENDPOINT(context: { commit: Commit }, params: any) {
-    context.commit('SET_CURRENT_LOG_ENDPOINT', params.endpoint);
-  },
-  SELECT_LOG_INSTANCE(context: { commit: Commit }, params: any) {
-    context.commit('SET_CURRENT_LOG_INSTANCE', params.instance);
-  },
-  SELECT_LOG_CATEGORY(context: { commit: Commit }, params: Options) {
-    context.commit('SELECT_LOG_TYPE', params);
+  SELECT_LOG_CATEGORY(context: { commit: Commit; dispatch: Dispatch }, params: { type: Options; duration: any }) {
+    context.commit('SELECT_LOG_TYPE', params.type);
+    context.dispatch('MIXHANDLE_GET_OPTION', { compType: params.type.key, duration: params.duration });
   },
 };
 

@@ -15,7 +15,7 @@ limitations under the License. -->
   <div class="rk-error-log-bar flex-h">
     <div class="flex-h">
       <ToolBarSelect
-        @onChoose="SELECT_LOG_CATEGORY"
+        @onChoose="selectCategroy"
         :title="this.$t('logCategory')"
         :current="logState.type"
         :data="logState.logCategories"
@@ -24,22 +24,22 @@ limitations under the License. -->
       <ToolBarSelect
         @onChoose="selectService"
         :title="this.$t('service')"
-        :current="logState.currentLogService"
-        :data="logState.logServices"
+        :current="rocketOption.currentService"
+        :data="rocketOption.services"
         icon="package"
       />
       <ToolBarSelect
         @onChoose="selectInstance"
-        :title="this.$t('version')"
-        :current="logState.currentLogInstance"
-        :data="logState.logInstances"
+        :title="logState.type.key === cateGoryType ? this.$t('version') : this.$t('currentInstance')"
+        :current="rocketOption.currentInstance"
+        :data="rocketOption.instances"
         icon="disk"
       />
       <ToolBarSelect
         @onChoose="selectEndpoint"
-        :title="this.$t('page')"
-        :current="logState.currentLogEndpoint"
-        :data="logState.logEndpoints"
+        :title="logState.type.key === cateGoryType ? this.$t('page') : this.$t('currentEndpoint')"
+        :current="rocketOption.currentEndpoint"
+        :data="rocketOption.endpoints"
         icon="code"
       />
       <ToolBarSelect
@@ -86,18 +86,19 @@ limitations under the License. -->
     @State('rocketOption') private rocketOption: any;
     @Mutation('SELECT_LOG_TYPE') private SELECT_LOG_TYPE: any;
     @Mutation('SELECT_ERROR_CATALOG') private SELECT_ERROR_CATALOG: any;
-    @Action('SELECT_LOG_SERVICE') private SELECT_LOG_SERVICE: any;
-    @Action('SELECT_LOG_ENDPOINT') private SELECT_LOG_ENDPOINT: any;
-    @Action('SELECT_LOG_INSTANCE') private SELECT_LOG_INSTANCE: any;
-    @Action('LOG_GET_OPTION') private LOG_GET_OPTION: any;
+    @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
+    @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
+    @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
+    @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('QUERY_LOGS') private QUERY_LOGS: any;
     @Action('SELECT_LOG_CATEGORY') private SELECT_LOG_CATEGORY: any;
     @Getter('durationTime') private durationTime: any;
 
     private pageNum: number = 1;
+    private cateGoryType = 'browser';
 
     private beforeMount() {
-      this.LOG_GET_OPTION({
+      this.MIXHANDLE_GET_OPTION({
         compType: this.logState.type.key,
         duration: this.durationTime,
       }).then(() => {
@@ -111,29 +112,35 @@ limitations under the License. -->
     }
 
     private selectService(i: { key: string; label: string }) {
-      this.SELECT_LOG_SERVICE({ service: i, duration: this.durationTime });
+      this.SELECT_SERVICE({ service: i, duration: this.durationTime });
     }
 
     private selectEndpoint(i: { key: string; label: string }) {
-      this.SELECT_LOG_ENDPOINT({ endpoint: i, duration: this.durationTime });
+      this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
     }
 
     private selectInstance(i: { key: string; label: string }) {
-      this.SELECT_LOG_INSTANCE({ instance: i, duration: this.durationTime });
+      this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
     }
+
+    private selectCategroy(i: { key: string; label: string }) {
+      this.SELECT_LOG_CATEGORY({ type: i, duration: this.durationTime });
+    }
+
     private clearSearch() {
-      this.SELECT_LOG_SERVICE({ service: { label: 'All', key: '' }, duration: this.durationTime });
+      this.SELECT_SERVICE({ service: { label: 'All', key: '' }, duration: this.durationTime });
       this.SELECT_ERROR_CATALOG({ label: 'All', key: 'ALL' });
     }
 
     private queryLogs() {
-      const { category, currentLogService, currentLogInstance, currentLogEndpoint } = this.logState;
+      const { category } = this.logState;
+      const { currentService, currentInstance, currentEndpoint } = this.rocketOption;
 
       this.QUERY_LOGS({
         condition: {
-          serviceId: currentLogService.key,
-          serviceVersionId: currentLogInstance.key,
-          pagePathId: currentLogEndpoint.key,
+          serviceId: currentService.key,
+          serviceVersionId: currentInstance.key,
+          pagePathId: currentEndpoint.key,
           category: category.key,
           paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
           queryDuration: this.durationTime,
