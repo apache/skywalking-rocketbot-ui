@@ -74,9 +74,9 @@ limitations under the License. -->
   import { Duration, Option } from '@/types/global';
   import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
-  import TraceSelect from '../../common/trace-select.vue';
-  import ToolBarSelect from '../../dashboard/tool-bar-select.vue';
-  import ToolBarEndpointSelect from '../../dashboard/tool-bar-endpoint-select.vue';
+  import TraceSelect from '../common/trace-select.vue';
+  import ToolBarSelect from '../dashboard/tool-bar-select.vue';
+  import ToolBarEndpointSelect from '../dashboard/tool-bar-endpoint-select.vue';
 
   @Component({
     components: { TraceSelect, ToolBarSelect, ToolBarEndpointSelect },

@@ -38,7 +38,6 @@ limitations under the License. -->
         </div>
       </div>
     </rk-sidebox>
-
     <v-dialog width="90%" />
   </div>
 </template>
@@ -54,8 +53,8 @@ limitations under the License. -->
 </style>
 
 <script lang="js">
-  import LogTable from '../log-table/log-table.vue';
-  import { BrowserLogConstants } from '../log-table/log-constant';
+  import LogTable from './log-table/log-table.vue';
+  import { BrowserLogConstants } from './log-table/log-constant';
   /* eslint-disable */
   /* tslint:disable */
   export default {

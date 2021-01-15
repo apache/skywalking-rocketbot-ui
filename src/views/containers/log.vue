@@ -14,11 +14,7 @@ limitations under the License. -->
   <div class="flex-v rk-log">
     <LogBar :logState="logState"></LogBar>
     <div class="log-container">
-      <LogDetailTable
-        :data="logState.logs"
-        :loading="logState.loading"
-        v-if="logState.type.key === 'browser'"
-      ></LogDetailTable>
+      <LogServiceDetail :data="logState.logs" :loading="logState.loading" v-if="logState.type.key === 'browser'" />
     </div>
   </div>
 </template>
@@ -26,12 +22,12 @@ limitations under the License. -->
 <script lang="ts">
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, State, Mutation } from 'vuex-class';
-  import LogBar from '@/views/components/log/browser-logs/log-bar.vue';
-  import LogDetailTable from '@/views/components/log/browser-logs/log-detail-table.vue';
+  import LogBar from '@/views/components/log/log-bar.vue';
+  import LogServiceDetail from '@/views/components/log/log-service-detail.vue';
   @Component({
     components: {
       LogBar,
-      LogDetailTable,
+      LogServiceDetail,
     },
   })
   export default class Log extends Vue {
