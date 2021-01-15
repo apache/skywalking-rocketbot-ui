@@ -177,19 +177,18 @@ const actions: ActionTree<State, any> = {
     context.dispatch('GET_LOG_ENDPOINTS', {});
     context.dispatch('GET_LOG_INSTANCES', { duration: params.duration });
   },
-  SELECT_LOG_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: State }, params: any) {
+  SELECT_LOG_ENDPOINT(context: { commit: Commit }, params: any) {
     context.commit('SET_CURRENT_LOG_ENDPOINT', params.endpoint);
   },
-  SELECT_LOG_INSTANCE(context: { commit: Commit; dispatch: Dispatch; state: State }, params: any) {
+  SELECT_LOG_INSTANCE(context: { commit: Commit }, params: any) {
     context.commit('SET_CURRENT_LOG_INSTANCE', params.instance);
   },
-  // SELECT_LOG_CATEGORY(context: { commit: Commit;}) {
-  //   context.commit('SELECT_LOG_TYPE')
-  // }
+  SELECT_LOG_CATEGORY(context: { commit: Commit }, params: Options) {
+    context.commit('SELECT_LOG_TYPE', params);
+  },
 };
 
 export default {
-  // namespaced: true,
   state: initState,
   actions,
   mutations,
