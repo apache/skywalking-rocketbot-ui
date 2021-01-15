@@ -15,7 +15,7 @@ limitations under the License. -->
   <div class="rk-error-log-bar flex-h">
     <div class="flex-h">
       <ToolBarSelect
-        @onChoose="SELECT_LOG_TYPE"
+        @onChoose="SELECT_LOG_CATEGORY"
         :title="this.$t('logCategory')"
         :current="logState.type"
         :data="logState.logCategories"
@@ -91,6 +91,7 @@ limitations under the License. -->
     @Action('SELECT_LOG_INSTANCE') private SELECT_LOG_INSTANCE: any;
     @Action('LOG_GET_OPTION') private LOG_GET_OPTION: any;
     @Action('QUERY_LOGS') private QUERY_LOGS: any;
+    @Action('SELECT_LOG_CATEGORY') private SELECT_LOG_CATEGORY: any;
     @Getter('durationTime') private durationTime: any;
 
     private pageNum: number = 1;
@@ -109,15 +110,15 @@ limitations under the License. -->
       this.queryLogs();
     }
 
-    private selectService(i: any) {
+    private selectService(i: { key: string; label: string }) {
       this.SELECT_LOG_SERVICE({ service: i, duration: this.durationTime });
     }
 
-    private selectEndpoint(i: any) {
+    private selectEndpoint(i: { key: string; label: string }) {
       this.SELECT_LOG_ENDPOINT({ endpoint: i, duration: this.durationTime });
     }
 
-    private selectInstance(i: any) {
+    private selectInstance(i: { key: string; label: string }) {
       this.SELECT_LOG_INSTANCE({ instance: i, duration: this.durationTime });
     }
     private clearSearch() {

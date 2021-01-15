@@ -26,7 +26,7 @@ interface Options {
 }
 export interface State {
   type: any;
-  logCategories: any[];
+  logCategories: { label: string; key: string }[];
   logs: any[];
   total: number;
   categories: any[];
@@ -54,7 +54,7 @@ const initState: State = {
   type: { label: 'Browser', key: 'browser' },
   logCategories: [
     { label: 'Browser', key: 'browser' },
-    { label: 'Service', key: 'service', disabled: true },
+    { label: 'Service', key: 'service' },
   ],
   logs: [],
   total: 0,
@@ -177,12 +177,15 @@ const actions: ActionTree<State, any> = {
     context.dispatch('GET_LOG_ENDPOINTS', {});
     context.dispatch('GET_LOG_INSTANCES', { duration: params.duration });
   },
-  SELECT_LOG_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
+  SELECT_LOG_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: State }, params: any) {
     context.commit('SET_CURRENT_LOG_ENDPOINT', params.endpoint);
   },
-  SELECT_LOG_INSTANCE(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
+  SELECT_LOG_INSTANCE(context: { commit: Commit; dispatch: Dispatch; state: State }, params: any) {
     context.commit('SET_CURRENT_LOG_INSTANCE', params.instance);
   },
+  // SELECT_LOG_CATEGORY(context: { commit: Commit;}) {
+  //   context.commit('SELECT_LOG_TYPE')
+  // }
 };
 
 export default {
