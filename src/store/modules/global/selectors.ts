@@ -16,7 +16,7 @@
  */
 
 import { Commit, ActionTree, MutationTree, Dispatch } from 'vuex';
-import * as types from './mutation-types';
+import * as types from '../dashboard/mutation-types';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
 

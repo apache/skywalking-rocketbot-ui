@@ -25,12 +25,12 @@ interface Options {
   label: string;
 }
 export interface State {
-  type: any;
-  logCategories: { label: string; key: string }[];
+  type: Options;
+  logCategories: Options[];
   logs: any[];
   total: number;
-  categories: any[];
-  category: any;
+  categories: Options[];
+  category: Options;
   loading: boolean;
   logServices: Options[];
   currentLogService: Options;
@@ -40,7 +40,7 @@ export interface State {
   currentLogInstance: Options;
 }
 
-const categories: any = [
+const categories: Options[] = [
   { label: 'All', key: 'ALL' },
   { label: 'Ajax', key: 'AJAX' },
   { label: 'Resource', key: 'RESOURCE' },
