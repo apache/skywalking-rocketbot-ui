@@ -60,7 +60,6 @@ const actions: ActionTree<State, any> = {
     }
     context.commit('SET_GROUP_QUERY', temp);
     context.commit('SET_CURRENT_GROUP', index);
-    context.dispatch('SET_CURRENT_STATE', context.state.tree[index].query);
     context.dispatch('RUN_EVENTS', {}, { root: true });
   },
   MIXHANDLE_CHANGE_GROUP_WITH_CURRENT(
@@ -83,7 +82,6 @@ const actions: ActionTree<State, any> = {
     }
     context.commit('SET_GROUP_QUERY', temp);
     context.commit('SET_CURRENT_GROUP_WITH_CURRENT', { index, current });
-    context.dispatch('SET_CURRENT_STATE', context.state.tree[index].query);
     context.dispatch('RUN_EVENTS', {}, { root: true });
   },
   TYPE_METRICS(context, params: { name: string }) {

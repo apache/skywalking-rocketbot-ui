@@ -34,6 +34,7 @@ export interface State {
   instances: Options[];
   currentInstance: Options;
   updateDashboard: object;
+  selectorType: string;
 }
 
 const initState: State = {
@@ -46,12 +47,13 @@ const initState: State = {
   databases: [],
   currentDatabase: { key: '', label: '' },
   updateDashboard: {},
+  selectorType: 'service',
 };
 
 // mutations
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: Options[]) {
-    state.services = data;
+    state.services = state.selectorType === 'browser' ? [{ label: 'All', key: '' }, ...data] : data;
     state.currentService = data[0] || {};
   },
   [types.SET_CURRENT_SERVICE](state: State, service: Options) {
@@ -64,24 +66,24 @@ const mutations: MutationTree<State> = {
   },
 
   [types.SET_ENDPOINTS](state: State, data: Options[]) {
-    state.endpoints = data;
-    if (!data.length) {
+    state.endpoints = state.selectorType === 'browser' ? [{ label: 'All', key: '' }, ...data] : data;
+    if (!state.endpoints.length) {
       state.currentEndpoint = { key: '', label: '' };
       return;
     }
-    state.currentEndpoint = data[0];
+    state.currentEndpoint = state.endpoints[0];
   },
   [types.SET_CURRENT_ENDPOINT](state: State, endpoint: Options) {
     state.currentEndpoint = endpoint;
     state.updateDashboard = endpoint;
   },
   [types.SET_INSTANCES](state: State, data: Options[]) {
-    state.instances = data;
-    if (!data.length) {
+    state.instances = state.selectorType === 'browser' ? [{ label: 'All', key: '' }, ...data] : data;
+    if (!state.instances.length) {
       state.currentInstance = { key: '', label: '' };
       return;
     }
-    state.currentInstance = data[0];
+    state.currentInstance = state.instances[0];
   },
   [types.SET_CURRENT_INSTANCE](state: State, instance: Options) {
     state.currentInstance = instance;
@@ -98,6 +100,9 @@ const mutations: MutationTree<State> = {
   [types.SET_CURRENT_DATABASE](state: State, service: Options) {
     state.currentDatabase = service;
     state.updateDashboard = service;
+  },
+  [types.SET_SELECTOR_TYPE](state: State, type: string) {
+    state.selectorType = type;
   },
 };
 
@@ -167,13 +172,8 @@ const actions: ActionTree<State, any> = {
     context.commit('SET_CURRENT_DATABASE', params);
     context.dispatch('RUN_EVENTS', {}, { root: true });
   },
-  SET_CURRENT_STATE(context: { commit: Commit }, params: any = {}) {
-    context.commit(types.SET_CURRENT_SERVICE, params.service ? params.service : {});
-    context.commit(types.SET_CURRENT_DATABASE, params.database ? params.database : {});
-    context.commit(types.SET_CURRENT_ENDPOINT, params.endpoint ? params.endpoint : {});
-    context.commit(types.SET_CURRENT_INSTANCE, params.instance ? params.instance : {});
-  },
-  MIXHANDLE_GET_OPTION(context: { dispatch: Dispatch; state: State }, params: any) {
+  MIXHANDLE_GET_OPTION(context: { dispatch: Dispatch; commit: Commit }, params: any) {
+    context.commit('SET_SELECTOR_TYPE', params.compType);
     switch (params.compType) {
       case 'service':
         return context
@@ -196,7 +196,7 @@ const actions: ActionTree<State, any> = {
       .query('queryBrowserServices')
       .params(params)
       .then((res: AxiosResponse) => {
-        context.commit(types.SET_SERVICES, [{ label: 'All', key: '' }, ...res.data.data.services]);
+        context.commit(types.SET_SERVICES, res.data.data.services);
       });
   },
   GET_ITEM_ENDPOINTS(context, params) {
