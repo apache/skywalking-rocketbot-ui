@@ -79,13 +79,19 @@ const mutations: MutationTree<State> = {
 // actions
 const actions: ActionTree<State, any> = {
   QUERY_LOGS(context: { commit: Commit; state: State }, params: any) {
+    context.commit('SET_LOADING', true);
     switch (context.state.type.key) {
       case 'browser':
-        context.commit('SET_LOADING', true);
         return graph
           .query('queryBrowserErrorLogs')
           .params(params)
           .then((res: AxiosResponse<any>) => {
+            if (res.data && res.data.errors) {
+              context.commit('SET_LOGS', []);
+              context.commit('SET_LOGS_TOTAL', 0);
+
+              return;
+            }
             context.commit('SET_LOGS', res.data.data.queryBrowserErrorLogs.logs);
             context.commit('SET_LOGS_TOTAL', res.data.data.queryBrowserErrorLogs.total);
           })
@@ -93,14 +99,19 @@ const actions: ActionTree<State, any> = {
             context.commit('SET_LOADING', false);
           });
       case 'service':
-        break;
+        return graph
+          .query('queryServiceLogs')
+          .params(params)
+          .then((res: AxiosResponse<any>) => {
+            // context.commit('SET_LOGS', res.data.data.queryBrowserErrorLogs.logs);
+            // context.commit('SET_LOGS_TOTAL', res.data.data.queryBrowserErrorLogs.total);
+          })
+          .finally(() => {
+            context.commit('SET_LOADING', false);
+          });
       default:
         break;
     }
-  },
-  SELECT_LOG_CATEGORY(context: { commit: Commit; dispatch: Dispatch }, params: { type: Options; duration: any }) {
-    context.commit('SELECT_LOG_TYPE', params.type);
-    context.dispatch('MIXHANDLE_GET_OPTION', { compType: params.type.key, duration: params.duration });
   },
 };
 

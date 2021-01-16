@@ -91,7 +91,6 @@ limitations under the License. -->
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('QUERY_LOGS') private QUERY_LOGS: any;
-    @Action('SELECT_LOG_CATEGORY') private SELECT_LOG_CATEGORY: any;
     @Getter('durationTime') private durationTime: any;
 
     private pageNum: number = 1;
@@ -124,7 +123,13 @@ limitations under the License. -->
     }
 
     private selectCategroy(i: { key: string; label: string }) {
-      this.SELECT_LOG_CATEGORY({ type: i, duration: this.durationTime });
+      this.SELECT_LOG_TYPE(i);
+      this.MIXHANDLE_GET_OPTION({
+        compType: i.key,
+        duration: this.durationTime,
+      }).then(() => {
+        this.queryLogs();
+      });
     }
 
     private clearSearch() {
@@ -137,14 +142,28 @@ limitations under the License. -->
       const { currentService, currentInstance, currentEndpoint } = this.rocketOption;
 
       this.QUERY_LOGS({
-        condition: {
-          serviceId: currentService.key,
-          serviceVersionId: currentInstance.key,
-          pagePathId: currentEndpoint.key,
-          category: category.key,
-          paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
-          queryDuration: this.durationTime,
-        },
+        condition:
+          this.logState.type === this.cateGoryType
+            ? {
+                serviceId: currentService.key,
+                serviceVersionId: currentInstance.key,
+                pagePathId: currentEndpoint.key,
+                category: category.key,
+                paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
+                queryDuration: this.durationTime,
+              }
+            : {
+                metricName: '',
+                serviceId: currentService.key,
+                // serviceInstanceId: currentInstance.key,
+                endpointId: currentEndpoint.key,
+                state: category.key,
+                // excludingKeywordsOfContent: [],
+                // keywordsOfContent: [],
+                // tags: [],
+                paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
+                queryDuration: this.durationTime,
+              },
       });
     }
   }

@@ -34,6 +34,32 @@ export const QueryBrowserErrorLogs = {
     }`,
 };
 
+export const QueryServiceLogs = {
+  variable: '$condition: LogQueryCondition',
+  query: `
+    queryLogs(condition: $condition) {
+        logs {
+          serviceName
+          serviceId
+          serviceInstanceName
+          serviceInstanceId
+          endpointName
+          endpointId
+          traceId
+          timestamp
+          isError
+          statusCode
+          contentType
+          content
+          tags {
+            key
+            value
+          }
+        }
+        total
+    }`,
+};
+
 export const GetProfileAnalyze = {
   variable: '$segmentId: String!, $timeRanges: [ProfileAnalyzeTimeRange!]!',
   query: `

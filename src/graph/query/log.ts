@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
-import { QueryBrowserErrorLogs } from '../fragments/log';
+import { QueryBrowserErrorLogs, QueryServiceLogs } from '../fragments/log';
 
 export const queryBrowserErrorLogs = `query queryBrowserErrorLogs(${QueryBrowserErrorLogs.variable}) {${QueryBrowserErrorLogs.query}}`;
+export const queryServiceLogs = `query queryLogs(${QueryServiceLogs.variable}) {${QueryServiceLogs.query}}`;
