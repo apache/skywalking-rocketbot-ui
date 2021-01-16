@@ -54,7 +54,7 @@ const initState: State = {
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: Options[]) {
     state.services = state.selectorType === 'browser' ? [{ label: 'All', key: '' }, ...data] : data;
-    state.currentService = data[0] || {};
+    state.currentService = state.services[0] || {};
   },
   [types.SET_CURRENT_SERVICE](state: State, service: Options) {
     state.currentService = service;
