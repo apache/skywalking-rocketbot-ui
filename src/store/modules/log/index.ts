@@ -45,10 +45,10 @@ const categories: Options[] = [
 ];
 
 const initState: State = {
-  type: { label: 'Browser', key: 'browser' },
+  type: { label: 'Service', key: 'service' },
   logCategories: [
-    { label: 'Browser', key: 'browser' },
     { label: 'Service', key: 'service' },
+    { label: 'Browser', key: 'browser' },
   ],
   logs: [],
   total: 0,

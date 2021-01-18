@@ -186,6 +186,8 @@ const m = {
   errorPage: 'Error Page',
   category: 'Category',
   grade: 'Grade',
+  setConditions: 'Set Conditions',
+  metricName: 'Metric Name',
 };
 
 export default m;

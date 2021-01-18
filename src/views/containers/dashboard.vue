@@ -40,7 +40,6 @@ limitations under the License. -->
         + Add An Item
       </div>
     </div>
-    <v-dialog width="300px" />
   </div>
 </template>
 

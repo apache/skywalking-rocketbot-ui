@@ -185,6 +185,8 @@ const m = {
   errorPage: '错误页面',
   category: '类别',
   grade: '等级',
+  setConditions: '设置条件',
+  metricName: '指标名称',
 };
 
 export default m;

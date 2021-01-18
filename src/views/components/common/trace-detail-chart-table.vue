@@ -80,7 +80,6 @@ limitations under the License. -->
         </div>
       </div>
     </rk-sidebox>
-    <v-dialog width="90%" />
   </div>
 </template>
 <style lang="scss">

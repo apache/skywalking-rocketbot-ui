@@ -30,14 +30,14 @@ limitations under the License. -->
       />
       <ToolBarSelect
         @onChoose="selectInstance"
-        :title="logState.type.key === cateGoryType ? this.$t('version') : this.$t('currentInstance')"
+        :title="logState.type.key === cateGoryBrowser ? this.$t('version') : this.$t('currentInstance')"
         :current="rocketOption.currentInstance"
         :data="rocketOption.instances"
         icon="disk"
       />
       <ToolBarSelect
         @onChoose="selectEndpoint"
-        :title="logState.type.key === cateGoryType ? this.$t('page') : this.$t('currentEndpoint')"
+        :title="logState.type.key === cateGoryBrowser ? this.$t('page') : this.$t('currentEndpoint')"
         :current="rocketOption.currentEndpoint"
         :data="rocketOption.endpoints"
         icon="code"
@@ -52,21 +52,28 @@ limitations under the License. -->
     </div>
 
     <span class="flex-h rk-right">
-      <a class="rk-log-clear-btn r mr-10" @click="clearSearch">
-        <svg class="icon mr-5 vm">
-          <use xlink:href="#clear"></use>
-        </svg>
-        <span class="vm">{{ this.$t('clear') }}</span>
+      <a
+        class="rk-log-search-btn bg-blue mr-10"
+        v-if="logState.type.key !== cateGoryBrowser"
+        @click="openConditionsBox"
+      >
+        <rk-icon icon="settings" class="mr-5" />
+        <span class="vm">{{ $t('setConditions') }}</span>
       </a>
       <a class="rk-log-search-btn bg-blue mr-10" @click="queryLogs">
-        <svg class="icon mr-5 vm">
-          <use xlink:href="#search"></use>
-        </svg>
+        <rk-icon icon="search" class="mr-5" />
         <span class="vm">{{ this.$t('search') }}</span>
+      </a>
+      <a class="rk-log-clear-btn r mr-10" @click="clearSearch">
+        <rk-icon icon="clear" class="mr-5" />
+        <span class="vm">{{ this.$t('clear') }}</span>
       </a>
 
       <RkPage :currentSize="10" :currentPage="pageNum" @changePage="handleRefresh" :total="logState.total" />
     </span>
+    <rk-sidebox class="log-condition-box" width="600px" :title="$t('setConditions')" :show.sync="showConditionsBox">
+      <LogConditions />
+    </rk-sidebox>
   </div>
 </template>
 
@@ -77,9 +84,10 @@ limitations under the License. -->
   import TraceSelect from '../common/trace-select.vue';
   import ToolBarSelect from '../dashboard/tool-bar-select.vue';
   import ToolBarEndpointSelect from '../dashboard/tool-bar-endpoint-select.vue';
+  import LogConditions from './log-conditions.vue';
 
   @Component({
-    components: { TraceSelect, ToolBarSelect, ToolBarEndpointSelect },
+    components: { TraceSelect, ToolBarSelect, ToolBarEndpointSelect, LogConditions },
   })
   export default class Bar extends Vue {
     @State('rocketLog') private logState: any;
@@ -94,7 +102,8 @@ limitations under the License. -->
     @Getter('durationTime') private durationTime: any;
 
     private pageNum: number = 1;
-    private cateGoryType = 'browser';
+    private cateGoryBrowser = 'browser';
+    private showConditionsBox = false;
 
     private beforeMount() {
       this.MIXHANDLE_GET_OPTION({
@@ -143,7 +152,7 @@ limitations under the License. -->
 
       this.QUERY_LOGS({
         condition:
-          this.logState.type === this.cateGoryType
+          this.logState.type === this.cateGoryBrowser
             ? {
                 serviceId: currentService.key,
                 serviceVersionId: currentInstance.key,
@@ -165,6 +174,10 @@ limitations under the License. -->
                 queryDuration: this.durationTime,
               },
       });
+    }
+
+    private openConditionsBox() {
+      this.showConditionsBox = true;
     }
   }
 </script>
@@ -197,5 +210,8 @@ limitations under the License. -->
     padding: 3px 9px;
     background-color: #484b55;
     border-radius: 4px;
+  }
+  .log-condition-box {
+    color: #333840;
   }
 </style>
