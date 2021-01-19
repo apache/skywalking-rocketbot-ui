@@ -171,10 +171,10 @@ const m = {
   defaultOrder: 'Default Order',
   chartType: 'Chart Type',
   currentDepth: 'Current Depth',
-  traceTagsTip:
+  tagsTip:
     'Only tags defined in the core/default/searchableTagKeys are searchable. Check more details on the Configuration Vocabulary page',
-  traceLink: 'Configuration Vocabulary page',
-  traceAddTag: 'Please add a tag',
+  tagsLink: 'Configuration Vocabulary page',
+  addTag: 'Please add a tag',
   log: 'Log',
   logCategory: 'Log Category',
   errorCatalog: 'Error Catalog',
@@ -186,8 +186,10 @@ const m = {
   errorPage: 'Error Page',
   category: 'Category',
   grade: 'Grade',
-  setConditions: 'Set Conditions',
+  setConditions: 'Set More Conditions',
   metricName: 'Metric Name',
+  keywordsOfContent: 'Keywords Of Content',
+  excludingKeywordsOfContent: 'Excluding Keywords Of Content',
 };
 
 export default m;
