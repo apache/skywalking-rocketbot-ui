@@ -23,6 +23,7 @@ limitations under the License. -->
       :index="index"
       :type="'TOPOLOGY_ENDPOINT'"
       :updateObjects="updateObjects"
+      :rocketOption="stateDashboardOption"
     />
     <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item g-sm-3" @click="ADD_TOPO_ENDPOINT_COMP">
       + Add An Item
@@ -34,6 +35,7 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import { State, Mutation } from 'vuex-class';
+  import { State as optionState } from '@/store/modules/dashboard/dashboard-option';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
 
   @Component({
@@ -43,6 +45,7 @@ limitations under the License. -->
   })
   export default class InstancesSurvey extends Vue {
     @State('rocketbot') private rocketGlobal: any;
+    @State('rocketOption') private stateDashboardOption!: optionState;
     @Mutation('rocketTopo/ADD_TOPO_ENDPOINT_COMP') private ADD_TOPO_ENDPOINT_COMP: any;
     @Prop() private endpointComps: any;
     @Prop() private updateObjects!: string;
