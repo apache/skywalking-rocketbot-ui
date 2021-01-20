@@ -32,6 +32,8 @@ export interface State {
   categories: Options[];
   category: Options;
   loading: boolean;
+  conditions: any;
+  supportQueryLogsByKeywords: boolean;
 }
 
 const categories: Options[] = [
@@ -44,7 +46,7 @@ const categories: Options[] = [
   { label: 'Unknown', key: 'UNKNOWN' },
 ];
 
-const initState: State = {
+const logState: State = {
   type: { label: 'Service', key: 'service' },
   logCategories: [
     { label: 'Service', key: 'service' },
@@ -55,6 +57,8 @@ const initState: State = {
   categories,
   category: { label: 'All', key: 'ALL' },
   loading: false,
+  conditions: {},
+  supportQueryLogsByKeywords: true,
 };
 
 // mutations
@@ -73,6 +77,15 @@ const mutations: MutationTree<State> = {
   },
   [types.SET_LOADING](state: State, data: boolean) {
     state.loading = data;
+  },
+  [types.SET_LOG_CONDITIONS](state: State, item: Options) {
+    state.conditions = {
+      ...state.conditions,
+      [item.label]: item.key,
+    };
+  },
+  [types.SET_SUPPORT_QUERY_LOGS_KEYWORDS](state: State, isSupport: boolean) {
+    state.supportQueryLogsByKeywords = isSupport;
   },
 };
 
@@ -103,8 +116,14 @@ const actions: ActionTree<State, any> = {
           .query('queryServiceLogs')
           .params(params)
           .then((res: AxiosResponse<any>) => {
-            // context.commit('SET_LOGS', res.data.data.queryBrowserErrorLogs.logs);
-            // context.commit('SET_LOGS_TOTAL', res.data.data.queryBrowserErrorLogs.total);
+            if (res.data && res.data.errors) {
+              context.commit('SET_LOGS', []);
+              context.commit('SET_LOGS_TOTAL', 0);
+
+              return;
+            }
+            context.commit('SET_LOGS', res.data.data.queryLogs.logs);
+            context.commit('SET_LOGS_TOTAL', res.data.data.queryLogs.total);
           })
           .finally(() => {
             context.commit('SET_LOADING', false);
@@ -113,10 +132,21 @@ const actions: ActionTree<State, any> = {
         break;
     }
   },
+  QUERY_LOGS_BYKEYWORDS(context: { commit: Commit }) {
+    return graph
+      .query('queryLogsByKeywords')
+      .params({})
+      .then((res: AxiosResponse<any>) => {
+        if (res.data && res.data.errors) {
+          return;
+        }
+        context.commit('SET_SUPPORT_QUERY_LOGS_KEYWORDS', res.data.data.support);
+      });
+  },
 };
 
 export default {
-  state: initState,
+  state: logState,
   actions,
   mutations,
 };

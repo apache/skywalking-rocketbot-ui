@@ -19,7 +19,7 @@ limitations under the License. -->
         <use xlink:href="#spinner"></use>
       </svg>
     </div>
-    <LogTable :tableData="data" :type="`service`">
+    <LogTable :tableData="data" :type="`browser`">
       <div class="log-tips" v-if="!data.length">{{ $t('noData') }}</div>
     </LogTable>
     <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('logDetail')">
@@ -27,8 +27,13 @@ limitations under the License. -->
         <div class="mb-10 clear rk-flex" v-for="(item, index) in columns">
           <template>
             <span class="g-sm-4 grey">{{ $t(item.value) }}:</span>
-            <span v-if="item.label === 'timestamp'" class="g-sm-8 wba">{{ currentSpan[item.label] | dateformat }}</span>
-            <span v-else class="g-sm-8 wba">{{ currentSpan[item.label] }}</span>
+            <span
+              v-if="['message', 'stack'].includes(item.label)"
+              class="text"
+              v-html="lineBreak(currentSpan[item.label]) || '-'"
+            ></span>
+            <span v-else-if="item.label === 'time'" class="g-sm-8 wba">{{ currentSpan[item.label] | dateformat }}</span>
+            <span v-else class="g-sm-8 wba">{{ currentSpan[item.label] || '-' }}</span>
           </template>
         </div>
       </div>
@@ -40,24 +45,32 @@ limitations under the License. -->
   import { Component, Prop, Vue } from 'vue-property-decorator';
   import { Mutation, State } from 'vuex-class';
   import LogTable from './log-table/log-table.vue';
-  import { ServiceLogConstants } from './log-table/log-constant';
+  import { BrowserLogConstants } from './log-table/log-constant';
 
   @Component({
     components: { LogTable },
   })
-  export default class LogServiceDetail extends Vue {
+  export default class LogBrowserDetail extends Vue {
     @State('rocketLog') private logState: any;
     @Prop() private data: any;
     @Prop() private loading!: true;
     @Prop() private showBtnDetail: any;
 
-    private columns = ServiceLogConstants;
+    private columns = BrowserLogConstants;
     private showDetail = false;
     private list = [];
     private currentSpan = {};
     private created() {
       this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
       this.$eventBus.$on('HANDLE-VIEW-SPAN', this, this.handleViewSpan);
+    }
+    private lineBreak(str = '') {
+      const s = str
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\r\n/g, '<br />')
+        .replace(/\n/g, '<br />');
+      return s;
     }
     private handleSelectSpan(data: any) {
       this.currentSpan = data;
@@ -71,6 +84,16 @@ limitations under the License. -->
     }
   }
 </script>
+<style lang="scss">
+  .rk-tooltip-popper.log-table-tooltip .rk-tooltip-inner {
+    max-width: 600px;
+  }
+  .log-detail-chart-table {
+    position: relative;
+    min-height: 300px;
+    border-bottom: none;
+  }
+</style>
 <style lang="scss" scoped>
   .rk-log-t-loading {
     text-align: center;

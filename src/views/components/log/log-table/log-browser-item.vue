@@ -37,7 +37,7 @@ limitations under the License. -->
 
   export default {
     name: 'item',
-    props: ['data', 'type', 'method'],
+    props: ['data', 'method'],
     watch: {
       data: {
         handler() {

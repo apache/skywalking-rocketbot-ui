@@ -60,21 +60,8 @@ export const QueryServiceLogs = {
     }`,
 };
 
-export const GetProfileAnalyze = {
-  variable: '$segmentId: String!, $timeRanges: [ProfileAnalyzeTimeRange!]!',
+export const QueryLogsByKeywords = {
+  variable: '',
   query: `
-  getProfileAnalyze: getProfileAnalyze(segmentId: $segmentId, timeRanges: $timeRanges) {
-    tip
-    trees {
-      elements {
-        id
-        parentId
-        codeSignature
-        duration
-        durationChildExcluded
-        count
-      }
-    }
-  }
-  `,
+  support: supportQueryLogsByKeywords`,
 };

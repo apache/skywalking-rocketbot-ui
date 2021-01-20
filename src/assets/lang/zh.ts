@@ -185,10 +185,14 @@ const m = {
   errorPage: '错误页面',
   category: '类别',
   grade: '等级',
-  setConditions: '设置更多条件',
+  setConditions: '更多条件',
   metricName: '指标名称',
   keywordsOfContent: '内容关键词',
   excludingKeywordsOfContent: '内容不包含的关键词',
+  return: '返回',
+  isError: '错误',
+  contentType: '内容类型',
+  content: '内容',
 };
 
 export default m;

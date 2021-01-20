@@ -72,14 +72,14 @@ limitations under the License. -->
       <RkPage :currentSize="10" :currentPage="pageNum" @changePage="handleRefresh" :total="logState.total" />
     </span>
     <rk-sidebox class="log-condition-box" width="600px" :title="$t('setConditions')" :show.sync="showConditionsBox">
-      <LogConditions />
+      <LogConditions @backUp="backUp" />
     </rk-sidebox>
   </div>
 </template>
 
 <script lang="ts">
   import { Duration, Option } from '@/types/global';
-  import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+  import { Component, Vue } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import TraceSelect from '../common/trace-select.vue';
   import ToolBarSelect from '../dashboard/tool-bar-select.vue';
@@ -99,6 +99,7 @@ limitations under the License. -->
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('QUERY_LOGS') private QUERY_LOGS: any;
+    @Action('QUERY_LOGS_BYKEYWORDS') private QUERY_LOGS_BYKEYWORDS: any;
     @Getter('durationTime') private durationTime: any;
 
     private pageNum: number = 1;
@@ -109,9 +110,13 @@ limitations under the License. -->
       this.MIXHANDLE_GET_OPTION({
         compType: this.logState.type.key,
         duration: this.durationTime,
-      }).then(() => {
-        this.queryLogs();
-      });
+      })
+        .then(() => {
+          this.QUERY_LOGS_BYKEYWORDS();
+        })
+        .then(() => {
+          this.queryLogs();
+        });
     }
 
     private handleRefresh(pageNum: number) {
@@ -147,12 +152,12 @@ limitations under the License. -->
     }
 
     private queryLogs() {
-      const { category } = this.logState;
+      const { category, conditions, type } = this.logState;
       const { currentService, currentInstance, currentEndpoint } = this.rocketOption;
 
       this.QUERY_LOGS({
         condition:
-          this.logState.type === this.cateGoryBrowser
+          type.key === this.cateGoryBrowser
             ? {
                 serviceId: currentService.key,
                 serviceVersionId: currentInstance.key,
@@ -162,22 +167,30 @@ limitations under the License. -->
                 queryDuration: this.durationTime,
               }
             : {
-                metricName: '',
-                serviceId: currentService.key,
-                serviceInstanceId: currentInstance.key,
-                endpointId: currentEndpoint.key,
+                metricName: conditions.metricName || 'log',
+                // serviceId: currentService.key,
+                // serviceInstanceId: currentInstance.key,
+                // endpointId: currentEndpoint.key,
+                // endpointName: conditions.endpointName || '',
                 state: category.key,
-                excludingKeywordsOfContent: [],
-                keywordsOfContent: [],
-                tags: [],
+                // excludingKeywordsOfContent: this.logState.supportQueryLogsByKeywords ?
+                //   (conditions.excludingKeywordsOfContent || '').split(',') : undefined,
+                // keywordsOfContent: this.logState.supportQueryLogsByKeywords ?
+                //   (conditions.keywordsOfContent || '').split(',') : undefined,
+                // relatedTrace: conditions.traceId ? {traceId: conditions.traceId} : undefined,
+                // tags: conditions.tags,
                 paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
-                queryDuration: this.durationTime,
+                queryDuration: conditions.traceId ? undefined : this.durationTime,
               },
       });
     }
 
     private openConditionsBox() {
       this.showConditionsBox = true;
+    }
+
+    private backUp() {
+      this.showConditionsBox = false;
     }
   }
 </script>

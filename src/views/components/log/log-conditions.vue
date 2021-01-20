@@ -14,11 +14,11 @@ limitations under the License. -->
 <template>
   <div class="rk-log-condition">
     <label>{{ this.$t('metricName') }}</label>
-    <input type="text" class="rk-log-input" @change="changeConditions($event, updateLogOpt.metricName)" />
+    <input type="text" class="rk-log-input" @change="changeConditions($event, LogConditionsOpt.MetricName)" />
     <label>{{ this.$t('endpointName') }}</label>
-    <input type="text" class="rk-log-input" @change="changeConditions($event, updateLogOpt.EndpointName)" />
+    <input type="text" class="rk-log-input" @change="changeConditions($event, LogConditionsOpt.EndpointName)" />
     <label>{{ this.$t('traceID') }}</label>
-    <input type="text" class="rk-log-input" @change="changeConditions($event, updateLogOpt.EndpointName)" />
+    <input type="text" class="rk-log-input" @change="changeConditions($event, LogConditionsOpt.TraceID)" />
     <label>
       {{ this.$t('tags') }}
       <span class="tags-tips" v-tooltip:bottom="{ content: this.$t('tagsTip') }">
@@ -41,26 +41,53 @@ limitations under the License. -->
       <input type="text" :placeholder="this.$t('addTag')" v-model="tags" class="rk-log-tag" @keyup="addLabels" />
     </div>
     <label>{{ this.$t('keywordsOfContent') }}</label>
-    <input type="text" class="rk-log-input" @change="changeConditions($event, updateLogOpt.EndpointName)" />
+    <input type="text" class="rk-log-input" @change="changeConditions($event, LogConditionsOpt.KeywordsOfContent)" />
     <label>{{ this.$t('excludingKeywordsOfContent') }}</label>
-    <input type="text" class="rk-log-input" @change="changeConditions($event, updateLogOpt.EndpointName)" />
+    <input
+      type="text"
+      class="rk-log-input"
+      @change="changeConditions($event, LogConditionsOpt.ExcludingKeywordsOfContent)"
+    />
+    <div @click="backLog">
+      <a class="rk-log-btn r">
+        <rk-icon icon="keyboard_return" class="mr-5" />
+        <span class="mr-5 vm">{{ this.$t('return') }}</span>
+      </a>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
   import { Duration, Option } from '@/types/global';
-  import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-  import { Action, Getter, Mutation, State } from 'vuex-class';
+  import { Component, Vue } from 'vue-property-decorator';
+  import { Mutation, State } from 'vuex-class';
 
   @Component({
     components: {},
   })
   export default class LogConditions extends Vue {
-    private updateLogOpt = {};
+    @State('rocketLog') private rocketLog: any;
+    @Mutation('SET_LOG_CONDITIONS') private SET_LOG_CONDITIONS: any;
+
     private tagsList: string[] = [];
     private tags: string = '';
+    private LogConditionsOpt = {
+      MetricName: 'metricName',
+      EndpointName: 'endpointName',
+      TraceID: 'traceID',
+      Tags: 'tags',
+      KeywordsOfContent: 'keywordsOfContent',
+      ExcludingKeywordsOfContent: 'excludingKeywordsOfContent',
+    };
+    private created() {
+      this.tagsList = localStorage.getItem('logTags') ? JSON.parse(localStorage.getItem('logTags') || '') : [];
+    }
     private changeConditions(item: any, type: string) {
-      // console.log(item);
+      item = {
+        label: type,
+        key: item.target.value,
+      };
+      this.SET_LOG_CONDITIONS(item);
     }
     private addLabels(event: KeyboardEvent) {
       if (event.keyCode !== 13 || !this.tags) {
@@ -68,10 +95,29 @@ limitations under the License. -->
       }
       this.tagsList.push(this.tags);
       this.tags = '';
+      this.updateTags();
     }
     private removeTags(index: number) {
       this.tagsList.splice(index, 1);
+      this.updateTags();
+    }
+    private updateTags() {
+      const tagsMap = this.tagsList.map((item: string) => {
+        const key = item.substring(0, item.indexOf('='));
+
+        return {
+          key,
+          value: item.substring(item.indexOf('=') + 1, item.length),
+        };
+      });
+      this.SET_LOG_CONDITIONS({
+        label: this.LogConditionsOpt.Tags,
+        key: tagsMap,
+      });
       localStorage.setItem('logTags', JSON.stringify(this.tagsList));
+    }
+    private backLog() {
+      this.$emit('backUp');
     }
   }
 </script>
@@ -127,6 +173,14 @@ limitations under the License. -->
       height: 24px;
       display: inline-block;
       vertical-align: top;
+    }
+    .rk-log-btn {
+      border: 1px solid #ccc;
+      padding: 10px 9px;
+      border-radius: 4px;
+      margin-top: 40px;
+      width: 100%;
+      text-align: center;
     }
   }
 </style>

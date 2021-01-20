@@ -186,10 +186,14 @@ const m = {
   errorPage: 'Error Page',
   category: 'Category',
   grade: 'Grade',
-  setConditions: 'Set More Conditions',
+  setConditions: 'More Conditions',
   metricName: 'Metric Name',
   keywordsOfContent: 'Keywords Of Content',
   excludingKeywordsOfContent: 'Excluding Keywords Of Content',
+  return: 'Return',
+  isError: 'Error',
+  contentType: 'Content Type',
+  content: 'Content',
 };
 
 export default m;
