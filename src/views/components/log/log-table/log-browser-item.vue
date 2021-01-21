@@ -85,7 +85,7 @@ limitations under the License. -->
           item.style.background = '#fff';
         }
         this.$refs.logItem.style.background = 'rgba(0, 0, 0, 0.1)';
-        this.$eventBus.$emit('HANDLE-SELECT-SPAN', this.data);
+        this.$eventBus.$emit('HANDLE-SELECT-LOG', this.data);
       },
     },
   };

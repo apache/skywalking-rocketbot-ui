@@ -30,10 +30,10 @@ limitations under the License. -->
             <span
               v-if="['message', 'stack'].includes(item.label)"
               class="text"
-              v-html="lineBreak(currentSpan[item.label]) || '-'"
+              v-html="lineBreak(currentLog[item.label]) || '-'"
             ></span>
-            <span v-else-if="item.label === 'time'" class="g-sm-8 wba">{{ currentSpan[item.label] | dateformat }}</span>
-            <span v-else class="g-sm-8 wba">{{ currentSpan[item.label] || '-' }}</span>
+            <span v-else-if="item.label === 'time'" class="g-sm-8 wba">{{ currentLog[item.label] | dateformat }}</span>
+            <span v-else class="g-sm-8 wba">{{ currentLog[item.label] || '-' }}</span>
           </template>
         </div>
       </div>
@@ -59,10 +59,9 @@ limitations under the License. -->
     private columns = BrowserLogConstants;
     private showDetail = false;
     private list = [];
-    private currentSpan = {};
+    private currentLog = {};
     private created() {
-      this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
-      this.$eventBus.$on('HANDLE-VIEW-SPAN', this, this.handleViewSpan);
+      this.$eventBus.$on('HANDLE-SELECT-LOG', this, this.handleSelectLog);
     }
     private lineBreak(str = '') {
       const s = str
@@ -72,15 +71,11 @@ limitations under the License. -->
         .replace(/\n/g, '<br />');
       return s;
     }
-    private handleSelectSpan(data: any) {
-      this.currentSpan = data;
+    private handleSelectLog(data: any) {
+      this.currentLog = data;
       if (!this.showBtnDetail) {
         this.showDetail = true;
       }
-      this.$emit('selectSpan', data);
-    }
-    private handleViewSpan(data: any) {
-      this.showDetail = true;
     }
   }
 </script>

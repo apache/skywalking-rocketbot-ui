@@ -60,8 +60,7 @@ limitations under the License. -->
     private logContent: any = '';
     private formatJson = formatJson;
     private created() {
-      this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectLog);
-      this.$eventBus.$on('HANDLE-VIEW-SPAN', this, this.handleViewLog);
+      this.$eventBus.$on('HANDLE-SELECT-LOG', this, this.handleSelectLog);
     }
     private handleSelectLog(data: any) {
       this.currentLog = data;
@@ -75,10 +74,6 @@ limitations under the License. -->
       if (!this.showBtnDetail) {
         this.showDetail = true;
       }
-      this.$emit('selectSpan', data);
-    }
-    private handleViewLog(data: any) {
-      this.showDetail = true;
     }
   }
 </script>
