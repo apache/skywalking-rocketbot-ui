@@ -22,13 +22,14 @@ limitations under the License. -->
     <LogTable :tableData="data" :type="`service`">
       <div class="log-tips" v-if="!data.length">{{ $t('noData') }}</div>
     </LogTable>
-    <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('logDetail')">
+    <rk-sidebox :width="'800px'" :show.sync="showDetail" :title="$t('logDetail')">
       <div class="rk-log-detail">
-        <div class="mb-10 clear rk-flex" v-for="(item, index) in columns">
+        <div class="mb-10 clear rk-flex" v-for="(item, index) in columns" :key="index">
           <template>
             <span class="g-sm-4 grey">{{ $t(item.value) }}:</span>
-            <span v-if="item.label === 'timestamp'" class="g-sm-8 wba">{{ currentSpan[item.label] | dateformat }}</span>
-            <span v-else class="g-sm-8 wba">{{ currentSpan[item.label] }}</span>
+            <span v-if="item.label === 'timestamp'" class="g-sm-8">{{ currentLog[item.label] | dateformat }}</span>
+            <textarea class="content" readonly="readonly" v-else-if="item.label === 'content'" v-model="logContent" />
+            <span v-else class="g-sm-8">{{ currentLog[item.label] }}</span>
           </template>
         </div>
       </div>
@@ -41,6 +42,7 @@ limitations under the License. -->
   import { Mutation, State } from 'vuex-class';
   import LogTable from './log-table/log-table.vue';
   import { ServiceLogConstants } from './log-table/log-constant';
+  import { formatJson } from '../../../utils/formatJson';
 
   @Component({
     components: { LogTable },
@@ -54,19 +56,28 @@ limitations under the License. -->
     private columns = ServiceLogConstants;
     private showDetail = false;
     private list = [];
-    private currentSpan = {};
+    private currentLog: any = {};
+    private logContent: any = '';
+    private formatJson = formatJson;
     private created() {
-      this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
-      this.$eventBus.$on('HANDLE-VIEW-SPAN', this, this.handleViewSpan);
+      this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectLog);
+      this.$eventBus.$on('HANDLE-VIEW-SPAN', this, this.handleViewLog);
     }
-    private handleSelectSpan(data: any) {
-      this.currentSpan = data;
+    private handleSelectLog(data: any) {
+      this.currentLog = data;
+      if (this.currentLog.contentType === 'JSON') {
+        this.logContent = formatJson(JSON.parse(this.currentLog.content));
+      } else if (this.currentLog.contentType === 'TEXT') {
+        this.logContent = this.currentLog.content;
+      } else {
+        this.logContent = this.currentLog.content;
+      }
       if (!this.showBtnDetail) {
         this.showDetail = true;
       }
       this.$emit('selectSpan', data);
     }
-    private handleViewSpan(data: any) {
+    private handleViewLog(data: any) {
       this.showDetail = true;
     }
   }
@@ -100,5 +111,12 @@ limitations under the License. -->
   }
   .g-sm-4.grey {
     flex-shrink: 0;
+  }
+  .content {
+    width: 500px;
+    height: 500px;
+    border: none;
+    outline: none;
+    color: #3d444f;
   }
 </style>

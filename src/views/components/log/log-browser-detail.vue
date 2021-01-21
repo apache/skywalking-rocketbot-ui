@@ -24,7 +24,7 @@ limitations under the License. -->
     </LogTable>
     <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('logDetail')">
       <div class="rk-log-detail">
-        <div class="mb-10 clear rk-flex" v-for="(item, index) in columns">
+        <div class="mb-10 clear rk-flex" v-for="(item, index) in columns" :key="index">
           <template>
             <span class="g-sm-4 grey">{{ $t(item.value) }}:</span>
             <span
