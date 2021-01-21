@@ -29,6 +29,9 @@ limitations under the License. -->
             <span class="g-sm-4 grey">{{ $t(item.value) }}:</span>
             <span v-if="item.label === 'timestamp'" class="g-sm-8">{{ currentLog[item.label] | dateformat }}</span>
             <textarea class="content" readonly="readonly" v-else-if="item.label === 'content'" v-model="logContent" />
+            <span v-else-if="item.label === 'tags'" class="g-sm-8">
+              <div v-for="(d, index) in logTags" :key="index">{{ d }}</div>
+            </span>
             <span v-else class="g-sm-8">{{ currentLog[item.label] }}</span>
           </template>
         </div>
@@ -58,12 +61,16 @@ limitations under the License. -->
     private list = [];
     private currentLog: any = {};
     private logContent: any = '';
+    private logTags: any = '';
     private formatJson = formatJson;
     private created() {
       this.$eventBus.$on('HANDLE-SELECT-LOG', this, this.handleSelectLog);
     }
     private handleSelectLog(data: any) {
       this.currentLog = data;
+      this.logTags = this.currentLog.tags.map((d: any) => {
+        return `${d.key} = ${d.value}`;
+      });
       if (this.currentLog.contentType === 'JSON') {
         this.logContent = formatJson(JSON.parse(this.currentLog.content));
       } else if (this.currentLog.contentType === 'TEXT') {
