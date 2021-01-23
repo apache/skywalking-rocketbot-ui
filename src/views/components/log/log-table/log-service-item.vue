@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 
 <template>
-  <div @click="showSelectSpan" :class="['log-item', 'clearfix']" ref="logItem">
+  <div @click="showSelectSpan" :class="['log-item', 'clearfix']">
     <div
       v-for="(item, index) in columns"
       :key="index"
@@ -31,74 +31,29 @@ limitations under the License. -->
     </div>
   </div>
 </template>
-<script lang="js">
+<script lang="ts">
+  import { Component, Prop, Vue } from 'vue-property-decorator';
   import { ServiceLogConstants } from './log-constant';
 
-  export default {
-    name: 'item',
-    props: ['data', 'method'],
-    watch: {
-      data: {
-        handler() {
-          this.setLogItemHeight();
-        },
-        deep: true,
-        immediate: true,
-      },
-    },
-    data() {
-      return {
-        columns: ServiceLogConstants,
-        displayChildren: true,
-        selectedSpan: 0,
-      };
-    },
-    computed: {},
-    methods: {
-      setLogItemHeight() {
-        this.$nextTick(() => {
-          const heights = [];
-          this.$refs.logItem.childNodes.forEach((item) => {
-            if (item.getAttribute('class').indexOf('autoHeight') > -1) {
-              const autoHeightChild = item.childNodes[0];
-              const height = autoHeightChild.getBoundingClientRect().height;
-              heights.push(height + 11);
-            }
-          });
-          const max = Math.max(...heights);
-          this.$refs.logItem.style.height = max + 'px';
-        });
-
-      },
-      showSelectSpan() {
-        const items = document.querySelectorAll('.log-item');
-        for (const item of items) {
-          item.style.background = '#fff';
-        }
-        this.$refs.logItem.style.background = 'rgba(0, 0, 0, 0.1)';
-        this.$eventBus.$emit('HANDLE-SELECT-LOG', this.data);
-      },
-    },
-  };
+  @Component
+  export default class ServiceItem extends Vue {
+    @Prop() private data: any;
+    @Prop() private method: any;
+    private columns = ServiceLogConstants;
+    private showSelectSpan() {
+      this.$eventBus.$emit('HANDLE-SELECT-LOG', this.data);
+    }
+  }
 </script>
 <style lang="scss" scoped>
   .log-item {
     white-space: nowrap;
     position: relative;
     cursor: pointer;
-    /*height: 100px;*/
-  }
-
-  .log-item.selected {
-    background: rgba(0, 0, 0, 0.04);
-  }
-
-  .log-item:not(.level0):hover {
-    background: rgba(0, 0, 0, 0.04);
   }
 
   .log-item:hover {
-    background: rgba(0, 0, 0, 0.04) !important;
+    background: rgba(0, 0, 0, 0.04);
   }
 
   .log-item > div {
