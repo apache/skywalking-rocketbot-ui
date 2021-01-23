@@ -38,6 +38,8 @@ export interface State {
   pageType: string;
 }
 
+const LOG = 'Log';
+
 const initState: State = {
   services: [],
   currentService: { key: '', label: '' },
@@ -54,7 +56,7 @@ const initState: State = {
 // mutations
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: Options[]) {
-    state.services = state.pageType === 'Log' ? [{ label: 'All', key: '' }, ...data] : data;
+    state.services = state.pageType === LOG ? [{ label: 'All', key: '' }, ...data] : data;
     state.currentService = state.services[0] || {};
   },
   [types.SET_CURRENT_SERVICE](state: State, service: Options) {
@@ -67,7 +69,7 @@ const mutations: MutationTree<State> = {
   },
 
   [types.SET_ENDPOINTS](state: State, data: Options[]) {
-    state.endpoints = state.pageType === 'Log' ? [{ label: 'All', key: '' }, ...data] : data;
+    state.endpoints = state.pageType === LOG ? [{ label: 'All', key: '' }, ...data] : data;
     if (!state.endpoints.length) {
       state.currentEndpoint = { key: '', label: '' };
       return;
@@ -79,7 +81,7 @@ const mutations: MutationTree<State> = {
     state.updateDashboard = endpoint;
   },
   [types.SET_INSTANCES](state: State, data: Options[]) {
-    state.instances = state.pageType === 'Log' ? [{ label: 'All', key: '' }, ...data] : data;
+    state.instances = state.pageType === LOG ? [{ label: 'All', key: '' }, ...data] : data;
     if (!state.instances.length) {
       state.currentInstance = { key: '', label: '' };
       return;
@@ -156,9 +158,6 @@ const actions: ActionTree<State, any> = {
       });
   },
   SELECT_SERVICE(context: { commit: Commit; dispatch: Dispatch }, params: any) {
-    if (!params.service.key) {
-      return;
-    }
     context.commit('SET_CURRENT_SERVICE', params.service);
     context.dispatch('GET_SERVICE_ENDPOINTS', {});
     context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration });

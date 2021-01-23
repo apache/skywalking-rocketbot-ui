@@ -13,10 +13,6 @@ limitations under the License. -->
 
 <template>
   <div class="rk-log-condition">
-    <label>{{ this.$t('metricName') }}</label>
-    <input type="text" class="rk-log-input" @change="changeConditions($event, LogConditionsOpt.MetricName)" />
-    <label>{{ this.$t('endpointName') }}</label>
-    <input type="text" class="rk-log-input" @change="changeConditions($event, LogConditionsOpt.EndpointName)" />
     <label>{{ this.$t('traceID') }}</label>
     <input type="text" class="rk-log-input" @change="changeConditions($event, LogConditionsOpt.TraceID)" />
     <label>
@@ -72,8 +68,6 @@ limitations under the License. -->
     private tagsList: string[] = [];
     private tags: string = '';
     private LogConditionsOpt = {
-      MetricName: 'metricName',
-      EndpointName: 'endpointName',
       TraceID: 'traceID',
       Tags: 'tags',
       KeywordsOfContent: 'keywordsOfContent',
