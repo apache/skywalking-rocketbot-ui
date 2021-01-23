@@ -17,6 +17,14 @@
 
 export const ServiceLogConstants = [
   {
+    label: 'serviceName',
+    value: 'currentService',
+  },
+  {
+    label: 'serviceInstanceName',
+    value: 'currentInstance',
+  },
+  {
     label: 'timestamp',
     value: 'time',
   },
@@ -32,8 +40,20 @@ export const ServiceLogConstants = [
     label: 'traceId',
     value: 'traceID',
   },
+  {
+    label: 'content',
+    value: 'content',
+  },
 ];
 export const ServiceLogDetail = [
+  {
+    label: 'serviceName',
+    value: 'currentService',
+  },
+  {
+    label: 'serviceInstanceName',
+    value: 'currentInstance',
+  },
   {
     label: 'timestamp',
     value: 'time',

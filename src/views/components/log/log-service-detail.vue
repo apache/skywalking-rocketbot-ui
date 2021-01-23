@@ -67,7 +67,6 @@ limitations under the License. -->
       this.$eventBus.$on('HANDLE-SELECT-LOG', this, this.handleSelectLog);
     }
     private handleSelectLog(data: any) {
-      console.log(data);
       this.currentLog = data;
       this.logTags = this.currentLog.tags.map((d: any) => {
         return `${d.key} = ${d.value}`;
