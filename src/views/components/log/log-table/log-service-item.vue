@@ -14,20 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 
 <template>
-  <div @click="showSelectSpan" :class="['log-item', 'clearfix']">
-    <div
-      v-for="(item, index) in columns"
-      :key="index"
-      :class="['method']"
-      :style="{
-        lineHeight: 1.3,
-        width: `${item.drag ? item.method : ''}px`,
-      }"
-    >
+  <div @click="showSelectSpan" class="log-item">
+    <div v-for="(item, index) in columns" :key="index" :class="item.label">
       <span v-if="item.label === 'timestamp'">
         {{ data.time | dateformat }}
       </span>
-      <span v-else v-tooltip:bottom="data[item.label]">{{ data[item.label] }}</span>
+      <span v-else>{{ data[item.label] }}</span>
     </div>
   </div>
 </template>
@@ -38,7 +30,6 @@ limitations under the License. -->
   @Component
   export default class ServiceItem extends Vue {
     @Prop() private data: any;
-    @Prop() private method: any;
     private columns = ServiceLogConstants;
     private showSelectSpan() {
       this.$eventBus.$emit('HANDLE-SELECT-LOG', this.data);
@@ -50,6 +41,9 @@ limitations under the License. -->
     white-space: nowrap;
     position: relative;
     cursor: pointer;
+    .traceId {
+      width: 390px;
+    }
   }
 
   .log-item:hover {
@@ -57,6 +51,7 @@ limitations under the License. -->
   }
 
   .log-item > div {
+    line-height: 1.3;
     width: 140px;
     padding: 0 5px;
     display: inline-block;
@@ -69,8 +64,7 @@ limitations under the License. -->
   }
 
   .log-item .text {
-    width: 100% !important;
-    /*padding: 0 5px;*/
+    width: 100%;
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;

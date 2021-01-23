@@ -44,7 +44,7 @@ limitations under the License. -->
   import { Component, Prop, Vue } from 'vue-property-decorator';
   import { Mutation, State } from 'vuex-class';
   import LogTable from './log-table/log-table.vue';
-  import { ServiceLogConstants } from './log-table/log-constant';
+  import { ServiceLogDetail } from './log-table/log-constant';
   import { formatJson } from '../../../utils/formatJson';
 
   @Component({
@@ -56,7 +56,7 @@ limitations under the License. -->
     @Prop() private loading!: true;
     @Prop() private showBtnDetail: any;
 
-    private columns = ServiceLogConstants;
+    private columns = ServiceLogDetail;
     private showDetail = false;
     private list = [];
     private currentLog: any = {};
@@ -67,6 +67,7 @@ limitations under the License. -->
       this.$eventBus.$on('HANDLE-SELECT-LOG', this, this.handleSelectLog);
     }
     private handleSelectLog(data: any) {
+      console.log(data);
       this.currentLog = data;
       this.logTags = this.currentLog.tags.map((d: any) => {
         return `${d.key} = ${d.value}`;

@@ -32,6 +32,24 @@ export const ServiceLogConstants = [
     label: 'traceId',
     value: 'traceID',
   },
+];
+export const ServiceLogDetail = [
+  {
+    label: 'timestamp',
+    value: 'time',
+  },
+  {
+    label: 'contentType',
+    value: 'contentType',
+  },
+  {
+    label: 'isError',
+    value: 'isError',
+  },
+  {
+    label: 'traceId',
+    value: 'traceID',
+  },
   {
     label: 'tags',
     value: 'tags',

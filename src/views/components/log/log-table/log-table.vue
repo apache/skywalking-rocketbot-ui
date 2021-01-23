@@ -32,7 +32,7 @@ limitations under the License. -->
       <BrowserItem :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
     </div>
     <div v-else>
-      <ServiceItem :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+      <ServiceItem v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
     </div>
     <slot></slot>
   </div>
@@ -104,6 +104,9 @@ limitations under the License. -->
     border-right: 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     /*background-color: #f3f4f9;*/
+    .traceId {
+      width: 390px;
+    }
   }
 
   .log-header div {
