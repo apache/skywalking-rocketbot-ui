@@ -110,6 +110,7 @@ limitations under the License. -->
       this.MIXHANDLE_GET_OPTION({
         compType: this.logState.type.key,
         duration: this.durationTime,
+        pageType: 'Log',
       })
         .then(() => {
           this.QUERY_LOGS_BYKEYWORDS();
@@ -141,6 +142,7 @@ limitations under the License. -->
       this.MIXHANDLE_GET_OPTION({
         compType: i.key,
         duration: this.durationTime,
+        pageType: 'Log',
       }).then(() => {
         this.queryLogs();
       });

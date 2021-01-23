@@ -19,6 +19,7 @@ import { Commit, ActionTree, MutationTree, Dispatch } from 'vuex';
 import * as types from '../dashboard/mutation-types';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
+import { Duration } from '@/types/global';
 
 interface Options {
   key: string;
@@ -34,7 +35,7 @@ export interface State {
   instances: Options[];
   currentInstance: Options;
   updateDashboard: object;
-  selectorType: string;
+  pageType: string;
 }
 
 const initState: State = {
@@ -47,13 +48,13 @@ const initState: State = {
   databases: [],
   currentDatabase: { key: '', label: '' },
   updateDashboard: {},
-  selectorType: 'service',
+  pageType: '',
 };
 
 // mutations
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: Options[]) {
-    state.services = state.selectorType === 'browser' ? [{ label: 'All', key: '' }, ...data] : data;
+    state.services = state.pageType === 'Log' ? [{ label: 'All', key: '' }, ...data] : data;
     state.currentService = state.services[0] || {};
   },
   [types.SET_CURRENT_SERVICE](state: State, service: Options) {
@@ -66,7 +67,7 @@ const mutations: MutationTree<State> = {
   },
 
   [types.SET_ENDPOINTS](state: State, data: Options[]) {
-    state.endpoints = state.selectorType === 'browser' ? [{ label: 'All', key: '' }, ...data] : data;
+    state.endpoints = state.pageType === 'Log' ? [{ label: 'All', key: '' }, ...data] : data;
     if (!state.endpoints.length) {
       state.currentEndpoint = { key: '', label: '' };
       return;
@@ -78,7 +79,7 @@ const mutations: MutationTree<State> = {
     state.updateDashboard = endpoint;
   },
   [types.SET_INSTANCES](state: State, data: Options[]) {
-    state.instances = state.selectorType === 'browser' ? [{ label: 'All', key: '' }, ...data] : data;
+    state.instances = state.pageType === 'Log' ? [{ label: 'All', key: '' }, ...data] : data;
     if (!state.instances.length) {
       state.currentInstance = { key: '', label: '' };
       return;
@@ -101,8 +102,8 @@ const mutations: MutationTree<State> = {
     state.currentDatabase = service;
     state.updateDashboard = service;
   },
-  [types.SET_SELECTOR_TYPE](state: State, type: string) {
-    state.selectorType = type;
+  [types.SET_PAGE_TYPE](state: State, type: string) {
+    state.pageType = type;
   },
 };
 
@@ -172,8 +173,16 @@ const actions: ActionTree<State, any> = {
     context.commit('SET_CURRENT_DATABASE', params);
     context.dispatch('RUN_EVENTS', {}, { root: true });
   },
-  MIXHANDLE_GET_OPTION(context: { dispatch: Dispatch; commit: Commit }, params: any) {
-    context.commit('SET_SELECTOR_TYPE', params.compType);
+  MIXHANDLE_GET_OPTION(
+    context: { dispatch: Dispatch; commit: Commit },
+    params: {
+      compType: string;
+      duration: Duration;
+      keywordServiceName?: string;
+      pageType?: string;
+    },
+  ) {
+    context.commit('SET_PAGE_TYPE', params.pageType);
     switch (params.compType) {
       case 'service':
         return context
