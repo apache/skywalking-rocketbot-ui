@@ -87,6 +87,9 @@ const mutations: MutationTree<State> = {
   [types.SET_SUPPORT_QUERY_LOGS_KEYWORDS](state: State, isSupport: boolean) {
     state.supportQueryLogsByKeywords = isSupport;
   },
+  [types.CLEAR_LOG_CONDITIONS](state: State) {
+    state.conditions = {};
+  },
 };
 
 // actions

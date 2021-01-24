@@ -96,6 +96,7 @@ limitations under the License. -->
     @Mutation('SELECT_LOG_TYPE') private SELECT_LOG_TYPE: any;
     @Mutation('SELECT_ERROR_CATALOG') private SELECT_ERROR_CATALOG: any;
     @Mutation('SET_EVENTS') private SET_EVENTS: any;
+    @Mutation('CLEAR_LOG_CONDITIONS') private CLEAR_LOG_CONDITIONS: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
@@ -162,6 +163,9 @@ limitations under the License. -->
     private clearSearch() {
       this.SELECT_SERVICE({ service: { label: 'All', key: '' }, duration: this.durationTime });
       this.SELECT_ERROR_CATALOG({ label: 'All', key: 'ALL' });
+      this.CLEAR_LOG_CONDITIONS();
+      window.localStorage.removeItem('logTags');
+      this.queryLogs();
     }
 
     private queryLogs() {
