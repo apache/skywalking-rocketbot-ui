@@ -97,6 +97,7 @@ limitations under the License. -->
     @Mutation('SELECT_ERROR_CATALOG') private SELECT_ERROR_CATALOG: any;
     @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Mutation('CLEAR_LOG_CONDITIONS') private CLEAR_LOG_CONDITIONS: any;
+    @Mutation('SET_TAG_LIST') private SET_TAG_LIST: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
@@ -108,12 +109,13 @@ limitations under the License. -->
     private pageNum: number = 1;
     private cateGoryBrowser = 'browser';
     private showConditionsBox = true;
+    private logPage = 'Log';
 
     private beforeMount() {
       this.MIXHANDLE_GET_OPTION({
         compType: this.logState.type.key,
         duration: this.durationTime,
-        pageType: 'Log',
+        pageType: this.logPage,
       })
         .then(() => {
           this.QUERY_LOGS_BYKEYWORDS();
@@ -154,7 +156,7 @@ limitations under the License. -->
       this.MIXHANDLE_GET_OPTION({
         compType: i.key,
         duration: this.durationTime,
-        pageType: 'Log',
+        pageType: this.logPage,
       }).then(() => {
         this.queryLogs();
       });
@@ -164,8 +166,9 @@ limitations under the License. -->
       this.SELECT_SERVICE({ service: { label: 'All', key: '' }, duration: this.durationTime });
       this.SELECT_ERROR_CATALOG({ label: 'All', key: 'ALL' });
       this.CLEAR_LOG_CONDITIONS();
-      window.localStorage.removeItem('logTags');
       this.queryLogs();
+      window.localStorage.removeItem('logTags');
+      this.SET_TAG_LIST([]);
     }
 
     private queryLogs() {

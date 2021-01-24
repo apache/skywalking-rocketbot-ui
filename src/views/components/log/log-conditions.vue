@@ -42,7 +42,7 @@ limitations under the License. -->
     <div class="mr-10" style="padding-top: 10px">
       <span class="sm grey">{{ this.$t('tags') }}: </span>
       <span class="rk-trace-tags">
-        <span class="selected" v-for="(item, index) in tagsList" :key="index">
+        <span class="selected" v-for="(item, index) in rocketLog.tagsList" :key="index">
           <span>{{ item }}</span>
           <span class="remove-icon" @click="removeTags(index)">×</span>
         </span>
@@ -72,8 +72,9 @@ limitations under the License. -->
   export default class LogConditions extends Vue {
     @State('rocketLog') private rocketLog: any;
     @Mutation('SET_LOG_CONDITIONS') private SET_LOG_CONDITIONS: any;
+    @Mutation('SET_TAG_LIST') private SET_TAG_LIST: any;
 
-    private tagsList: string[] = [];
+    // private tagsList: string[] = [];
     private tags: string = '';
     private LogConditionsOpt = {
       TraceID: 'traceId',
@@ -82,7 +83,7 @@ limitations under the License. -->
       ExcludingKeywordsOfContent: 'excludingKeywordsOfContent',
     };
     private created() {
-      this.tagsList = localStorage.getItem('logTags') ? JSON.parse(localStorage.getItem('logTags') || '') : [];
+      // this.tagsList = this.rocketLog.tagsList;
       this.updateTags();
     }
     private changeConditions(item: any, type: string) {
@@ -96,16 +97,20 @@ limitations under the License. -->
       if (event.keyCode !== 13 || !this.tags) {
         return;
       }
-      this.tagsList.push(this.tags);
+      const tagsList = this.rocketLog.tagsList;
+      tagsList.push(this.tags);
+      this.SET_TAG_LIST(tagsList);
       this.tags = '';
       this.updateTags();
     }
     private removeTags(index: number) {
-      this.tagsList.splice(index, 1);
+      const tagsList = this.rocketLog.tagsList;
+      tagsList.splice(index, 1);
+      this.SET_TAG_LIST(tagsList);
       this.updateTags();
     }
     private updateTags() {
-      const tagsMap = this.tagsList.map((item: string) => {
+      const tagsMap = this.rocketLog.tagsList.map((item: string) => {
         const key = item.substring(0, item.indexOf('='));
 
         return {
@@ -117,7 +122,7 @@ limitations under the License. -->
         label: this.LogConditionsOpt.Tags,
         key: tagsMap,
       });
-      localStorage.setItem('logTags', JSON.stringify(this.tagsList));
+      localStorage.setItem('logTags', JSON.stringify(this.rocketLog.tagsList));
     }
   }
 </script>

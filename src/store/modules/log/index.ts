@@ -34,6 +34,7 @@ export interface State {
   loading: boolean;
   conditions: any;
   supportQueryLogsByKeywords: boolean;
+  tagsList: string[];
 }
 
 const categories: Options[] = [
@@ -59,6 +60,7 @@ const logState: State = {
   loading: false,
   conditions: {},
   supportQueryLogsByKeywords: true,
+  tagsList: localStorage.getItem('logTags') ? JSON.parse(localStorage.getItem('logTags') || '') : [],
 };
 
 // mutations
@@ -89,6 +91,9 @@ const mutations: MutationTree<State> = {
   },
   [types.CLEAR_LOG_CONDITIONS](state: State) {
     state.conditions = {};
+  },
+  [types.SET_TAG_LIST](state: State, data: string[]) {
+    state.tagsList = data;
   },
 };
 
