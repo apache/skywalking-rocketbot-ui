@@ -12,68 +12,69 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 
 <template>
-  <div class="rk-error-log-bar flex-h">
-    <div class="flex-h">
-      <ToolBarSelect
-        @onChoose="selectCategroy"
-        :title="this.$t('logCategory')"
-        :current="logState.type"
-        :data="logState.logCategories"
-        icon="chart"
-      />
-      <ToolBarSelect
-        @onChoose="selectService"
-        :title="this.$t('service')"
-        :current="rocketOption.currentService"
-        :data="rocketOption.services"
-        icon="package"
-      />
-      <ToolBarSelect
-        @onChoose="selectInstance"
-        :title="logState.type.key === cateGoryBrowser ? this.$t('version') : this.$t('currentInstance')"
-        :current="rocketOption.currentInstance"
-        :data="rocketOption.instances"
-        icon="disk"
-      />
-      <ToolBarSelect
-        @onChoose="selectEndpoint"
-        :title="logState.type.key === cateGoryBrowser ? this.$t('page') : this.$t('currentEndpoint')"
-        :current="rocketOption.currentEndpoint"
-        :data="rocketOption.endpoints"
-        icon="code"
-      />
-      <ToolBarSelect
-        @onChoose="SELECT_ERROR_CATALOG"
-        :title="this.$t('errorCatalog')"
-        :current="logState.category"
-        :data="logState.categories"
-        icon="epic"
-      />
+  <div class="rk-log-nav">
+    <div class="rk-error-log-bar flex-h">
+      <div class="flex-h">
+        <ToolBarSelect
+          @onChoose="selectCategroy"
+          :title="this.$t('logCategory')"
+          :current="logState.type"
+          :data="logState.logCategories"
+          icon="chart"
+        />
+        <ToolBarSelect
+          @onChoose="selectService"
+          :title="this.$t('service')"
+          :current="rocketOption.currentService"
+          :data="rocketOption.services"
+          icon="package"
+        />
+        <ToolBarSelect
+          @onChoose="selectInstance"
+          :title="logState.type.key === cateGoryBrowser ? this.$t('version') : this.$t('currentInstance')"
+          :current="rocketOption.currentInstance"
+          :data="rocketOption.instances"
+          icon="disk"
+        />
+        <ToolBarSelect
+          @onChoose="selectEndpoint"
+          :title="logState.type.key === cateGoryBrowser ? this.$t('page') : this.$t('currentEndpoint')"
+          :current="rocketOption.currentEndpoint"
+          :data="rocketOption.endpoints"
+          icon="code"
+        />
+        <ToolBarSelect
+          @onChoose="SELECT_ERROR_CATALOG"
+          :title="this.$t('errorCatalog')"
+          :current="logState.category"
+          :data="logState.categories"
+          icon="epic"
+        />
+      </div>
+      <span class="flex-h rk-right">
+        <a
+          class="rk-log-search-btn bg-blue mr-10"
+          v-if="logState.type.key !== cateGoryBrowser"
+          @click="openConditionsBox"
+        >
+          <rk-icon icon="settings" class="mr-5" />
+          <span class="vm">{{ $t('setConditions') }}</span>
+        </a>
+        <a class="rk-log-search-btn bg-blue mr-10" @click="queryLogs">
+          <rk-icon icon="search" class="mr-5" />
+          <span class="vm">{{ this.$t('search') }}</span>
+        </a>
+        <a class="rk-log-clear-btn r mr-10" @click="clearSearch">
+          <rk-icon icon="clear" class="mr-5" />
+          <span class="vm">{{ this.$t('clear') }}</span>
+        </a>
+
+        <RkPage :currentSize="10" :currentPage="pageNum" @changePage="handleRefresh" :total="logState.total" />
+      </span>
     </div>
-
-    <span class="flex-h rk-right">
-      <a
-        class="rk-log-search-btn bg-blue mr-10"
-        v-if="logState.type.key !== cateGoryBrowser"
-        @click="openConditionsBox"
-      >
-        <rk-icon icon="settings" class="mr-5" />
-        <span class="vm">{{ $t('setConditions') }}</span>
-      </a>
-      <a class="rk-log-search-btn bg-blue mr-10" @click="queryLogs">
-        <rk-icon icon="search" class="mr-5" />
-        <span class="vm">{{ this.$t('search') }}</span>
-      </a>
-      <a class="rk-log-clear-btn r mr-10" @click="clearSearch">
-        <rk-icon icon="clear" class="mr-5" />
-        <span class="vm">{{ this.$t('clear') }}</span>
-      </a>
-
-      <RkPage :currentSize="10" :currentPage="pageNum" @changePage="handleRefresh" :total="logState.total" />
-    </span>
-    <rk-sidebox class="log-condition-box" width="600px" :title="$t('setConditions')" :show.sync="showConditionsBox">
-      <LogConditions @backUp="backUp" />
-    </rk-sidebox>
+    <div class="flex-h" v-show="showConditionsBox">
+      <LogConditions />
+    </div>
   </div>
 </template>
 
@@ -104,7 +105,7 @@ limitations under the License. -->
 
     private pageNum: number = 1;
     private cateGoryBrowser = 'browser';
-    private showConditionsBox = false;
+    private showConditionsBox = true;
 
     private beforeMount() {
       this.MIXHANDLE_GET_OPTION({
@@ -169,11 +170,9 @@ limitations under the License. -->
                 queryDuration: this.durationTime,
               }
             : {
-                metricName: conditions.metricName || 'log',
                 // serviceId: currentService.key,
                 // serviceInstanceId: currentInstance.key,
                 // endpointId: currentEndpoint.key,
-                // endpointName: conditions.endpointName || '',
                 state: category.key,
                 // excludingKeywordsOfContent: this.logState.supportQueryLogsByKeywords ?
                 //   (conditions.excludingKeywordsOfContent || '').split(',') : undefined,
@@ -188,22 +187,22 @@ limitations under the License. -->
     }
 
     private openConditionsBox() {
-      this.showConditionsBox = true;
-    }
-
-    private backUp() {
-      this.showConditionsBox = false;
+      this.showConditionsBox = !this.showConditionsBox;
     }
   }
 </script>
 
 <style scoped lang="scss">
+  .rk-log-nav {
+    width: 100%;
+    background: #333840;
+  }
   .rk-error-log-bar {
     flex-shrink: 0;
     background-color: #333840;
     color: #eee;
     width: 100%;
-    padding: 8px 15px 12px;
+    // padding: 8px 15px 12px;
     height: 52px;
     justify-content: space-between;
   }

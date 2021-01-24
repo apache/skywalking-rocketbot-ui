@@ -12,43 +12,51 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 
 <template>
-  <div class="rk-log-condition">
-    <label>{{ this.$t('traceID') }}</label>
-    <input type="text" class="rk-log-input" @change="changeConditions($event, LogConditionsOpt.TraceID)" />
-    <label>
-      {{ this.$t('tags') }}
-      <span class="tags-tips" v-tooltip:bottom="{ content: this.$t('tagsTip') }">
-        (<a
-          target="blank"
-          href="https://github.com/apache/skywalking/blob/master/docs/en/setup/backend/configuration-vocabulary.md"
-        >
-          {{ this.$t('tagsLink') }}
-        </a>
-        <rk-icon icon="help" class="mr-5" />)
-      </span>
-    </label>
-    <div class="mr-10">
-      <span class="rk-log-tags">
+  <div class="rk-search-conditions flex-v">
+    <div class="flex-h">
+      <div class="mr-15">
+        <span class="sm b grey mr-10">{{ this.$t('traceID') }}:</span>
+        <input
+          type="text"
+          class="rk-trace-search-input dib"
+          @change="changeConditions($event, LogConditionsOpt.TraceID)"
+        />
+      </div>
+      <div class="mr-15">
+        <span class="sm b grey mr-10">{{ this.$t('keywordsOfContent') }}:</span>
+        <input
+          type="text"
+          class="rk-trace-search-input dib"
+          @change="changeConditions($event, LogConditionsOpt.KeywordsOfContent)"
+        />
+      </div>
+      <div class="mr-15">
+        <span class="sm b grey mr-10">{{ this.$t('excludingKeywordsOfContent') }}:</span>
+        <input
+          type="text"
+          class="rk-trace-search-input dib"
+          @change="changeConditions($event, LogConditionsOpt.ExcludingKeywordsOfContent)"
+        />
+      </div>
+    </div>
+    <div class="mr-10" style="padding-top: 10px">
+      <span class="sm grey">{{ this.$t('tags') }}: </span>
+      <span class="rk-trace-tags">
         <span class="selected" v-for="(item, index) in tagsList" :key="index">
           <span>{{ item }}</span>
           <span class="remove-icon" @click="removeTags(index)">×</span>
         </span>
       </span>
-      <input type="text" :placeholder="this.$t('addTag')" v-model="tags" class="rk-log-tag" @keyup="addLabels" />
-    </div>
-    <label>{{ this.$t('keywordsOfContent') }}</label>
-    <input type="text" class="rk-log-input" @change="changeConditions($event, LogConditionsOpt.KeywordsOfContent)" />
-    <label>{{ this.$t('excludingKeywordsOfContent') }}</label>
-    <input
-      type="text"
-      class="rk-log-input"
-      @change="changeConditions($event, LogConditionsOpt.ExcludingKeywordsOfContent)"
-    />
-    <div @click="backLog">
-      <a class="rk-log-btn r">
-        <rk-icon icon="keyboard_return" class="mr-5" />
-        <span class="mr-5 vm">{{ this.$t('return') }}</span>
-      </a>
+      <input type="text" :placeholder="this.$t('addTag')" v-model="tags" class="rk-trace-new-tag" @keyup="addLabels" />
+      <span class="trace-tips" v-tooltip:bottom="{ content: this.$t('tagsTip') }">
+        <a
+          target="blank"
+          href="https://github.com/apache/skywalking/blob/master/docs/en/setup/backend/configuration-vocabulary.md"
+        >
+          {{ this.$t('tagsLink') }}
+        </a>
+        <rk-icon icon="help" class="mr-5" />
+      </span>
     </div>
   </div>
 </template>
@@ -110,30 +118,32 @@ limitations under the License. -->
       });
       localStorage.setItem('logTags', JSON.stringify(this.tagsList));
     }
-    private backLog() {
-      this.$emit('backUp');
-    }
   }
 </script>
 
 <style scoped lang="scss">
-  .rk-log-condition {
-    margin: 20px 0 0 0;
-    label {
-      display: inline-block;
-      margin: 10px 0;
-      font-size: 12px;
-    }
-    .rk-log-input {
-      border-style: unset;
-      outline: 0;
-      padding: 2px 5px;
-      border-radius: 3px;
-      border: 1px solid #ccc;
-      height: 30px;
-      line-height: 30px;
-      display: block;
-      width: 100%;
+  .rk-search-conditions {
+    width: 100%;
+    background-color: #484b55;
+    padding: 10px;
+    border-radius: 3px;
+    margin-top: 4px;
+    position: relative;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+
+    &:after {
+      bottom: 100%;
+      right: 370px;
+      border: solid transparent;
+      content: ' ';
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-color: rgba(0, 0, 0, 0);
+      border-bottom-color: #484b55;
+      border-width: 8px;
+      margin-right: 0px;
     }
     .rk-log-tag {
       width: 30%;
@@ -153,28 +163,16 @@ limitations under the License. -->
     }
     .selected {
       display: inline-block;
-      padding: 4px 5px;
+      padding: 0 3px;
       border-radius: 3px;
       overflow: hidden;
-      color: rgba(0, 0, 0, 0.65);
+      color: #eee;
       border: 1px dashed #aaa;
       font-size: 12px;
       margin: 0 2px;
     }
-    .rk-log-tags {
-      padding: 1px 5px 0 0;
-      border-radius: 3px;
-      height: 24px;
-      display: inline-block;
-      vertical-align: top;
-    }
-    .rk-log-btn {
-      border: 1px solid #ccc;
-      padding: 10px 9px;
-      border-radius: 4px;
-      margin-top: 40px;
-      width: 100%;
-      text-align: center;
+    .trace-tips {
+      color: #eee;
     }
   }
 </style>
