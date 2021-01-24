@@ -95,6 +95,7 @@ limitations under the License. -->
     @State('rocketOption') private rocketOption: any;
     @Mutation('SELECT_LOG_TYPE') private SELECT_LOG_TYPE: any;
     @Mutation('SELECT_ERROR_CATALOG') private SELECT_ERROR_CATALOG: any;
+    @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
@@ -119,6 +120,15 @@ limitations under the License. -->
         .then(() => {
           this.queryLogs();
         });
+      this.SET_EVENTS([
+        () => {
+          this.queryLogs();
+        },
+      ]);
+    }
+
+    private beforeDestroy() {
+      this.SET_EVENTS([]);
     }
 
     private handleRefresh(pageNum: number) {
@@ -204,7 +214,6 @@ limitations under the License. -->
     background-color: #333840;
     color: #eee;
     width: 100%;
-    // padding: 8px 15px 12px;
     height: 52px;
     justify-content: space-between;
   }
@@ -217,7 +226,6 @@ limitations under the License. -->
     padding: 3px 9px;
     background-color: #484b55;
     border-radius: 4px;
-    /*margin-top: 12px;*/
     &.bg-blue {
       background-color: #448dfe;
     }
