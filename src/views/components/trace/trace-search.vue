@@ -101,9 +101,7 @@ limitations under the License. -->
             >
               {{ this.$t('tagsLink') }}
             </a>
-            <svg class="icon mr-5 vm">
-              <use xlink:href="#help"></use>
-            </svg>
+            <rk-icon icon="help" class="mr-5" />
           </span>
         </div>
       </div>

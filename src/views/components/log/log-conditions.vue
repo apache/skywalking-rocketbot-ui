@@ -76,13 +76,14 @@ limitations under the License. -->
     private tagsList: string[] = [];
     private tags: string = '';
     private LogConditionsOpt = {
-      TraceID: 'traceID',
+      TraceID: 'traceId',
       Tags: 'tags',
       KeywordsOfContent: 'keywordsOfContent',
       ExcludingKeywordsOfContent: 'excludingKeywordsOfContent',
     };
     private created() {
       this.tagsList = localStorage.getItem('logTags') ? JSON.parse(localStorage.getItem('logTags') || '') : [];
+      this.updateTags();
     }
     private changeConditions(item: any, type: string) {
       item = {
