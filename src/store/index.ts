@@ -18,7 +18,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import rocketbot, { State as RocketbotState } from './modules/global';
-import rocketOption, { State as DashboardOptionState } from './modules/dashboard/dashboard-option';
+import rocketOption, { State as DashboardOptionState } from './modules/global/selectors';
 import rocketData, { State as DashboardDataState } from './modules/dashboard/dashboard-data';
 import rocketTopo, { State as TopoState } from '@/store/modules/topology';
 import rocketTopoGroup, { State as TopoGroupState } from '@/store/modules/topology/group';

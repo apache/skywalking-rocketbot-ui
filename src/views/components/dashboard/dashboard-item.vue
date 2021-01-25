@@ -72,7 +72,7 @@ limitations under the License. -->
   import { MetricsType, CalculationType } from './charts/constant';
   import { uuid } from '@/utils/uuid.ts';
   import { State as globalState } from '@/store/modules/global';
-  import { State as optionState } from '@/store/modules/dashboard/dashboard-option';
+  import { State as optionState } from '@/store/modules/global/selectors';
 
   @Component({
     components: { ...charts },

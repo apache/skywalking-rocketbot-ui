@@ -171,9 +171,9 @@ const m = {
   defaultOrder: '默认顺序',
   chartType: '图表类型',
   currentDepth: '当前深度',
-  traceTagsTip: '只有core/default/searchableTagKeys中定义的标记才可搜索。查看配置词汇表页面上的更多详细信息。',
-  traceLink: '配置词汇页',
-  traceAddTag: '请添加标签',
+  tagsTip: '只有core/default/searchableTagKeys中定义的标记才可搜索。查看配置词汇表页面上的更多详细信息。',
+  tagsLink: '配置词汇页',
+  addTag: '请添加标签',
   log: '日志',
   logCategory: '日志类别',
   errorCatalog: '错误类目',
@@ -186,6 +186,14 @@ const m = {
   category: '类别',
   grade: '等级',
   relatedTraceLogs: '相关的日志',
+  setConditions: '更多条件',
+  metricName: '指标名称',
+  keywordsOfContent: '内容关键词',
+  excludingKeywordsOfContent: '内容不包含的关键词',
+  return: '返回',
+  isError: '错误',
+  contentType: '内容类型',
+  content: '内容',
 };
 
 export default m;

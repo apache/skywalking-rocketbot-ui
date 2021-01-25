@@ -59,7 +59,6 @@ limitations under the License. -->
     @Mutation('rocketTopoGroup/INIT_GROUPS') private INIT_GROUPS: any;
     @Mutation('rocketTopoGroup/DELETE_GROUP') private DELETE_GROUP: any;
     @Mutation('rocketTopoGroup/SELECT_GROUP') private SELECT_GROUP: any;
-    @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Action('rocketTopo/GET_TOPO') private GET_TOPO: any;
     private servicesMap = [];
     private currentPage = 1;

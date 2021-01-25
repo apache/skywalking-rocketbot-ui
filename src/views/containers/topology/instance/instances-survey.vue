@@ -35,7 +35,7 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import { State, Mutation } from 'vuex-class';
-  import { State as optionState } from '@/store/modules/dashboard/dashboard-option';
+  import { State as optionState } from '@/store/modules/global/selectors';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
 
   @Component({

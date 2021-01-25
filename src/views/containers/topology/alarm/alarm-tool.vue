@@ -42,7 +42,6 @@ limitations under the License. -->
   @Component
   export default class AlarmTool extends Vue {
     @Getter('durationTime') private durationTime: any;
-    @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Action('rocketAlarm/GET_ALARM') private GET_ALARM: any;
     @Prop() private total!: number;
     @Prop() private keyword!: string;

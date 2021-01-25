@@ -24,24 +24,61 @@ limitations under the License. -->
     </LogTable>
     <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('logDetail')">
       <div class="rk-log-detail">
-        <div class="mb-10 clear rk-flex" v-for="(item, index) in columns">
+        <div class="mb-10 clear rk-flex" v-for="(item, index) in columns" :key="index">
           <template>
             <span class="g-sm-4 grey">{{ $t(item.value) }}:</span>
             <span
               v-if="['message', 'stack'].includes(item.label)"
               class="text"
-              v-html="lineBreak(currentSpan[item.label]) || '-'"
+              v-html="lineBreak(currentLog[item.label]) || '-'"
             ></span>
-            <span v-else-if="item.label === 'time'" class="g-sm-8 wba">{{ currentSpan[item.label] | dateformat }}</span>
-            <span v-else class="g-sm-8 wba">{{ currentSpan[item.label] || '-' }}</span>
+            <span v-else-if="item.label === 'time'" class="g-sm-8 wba">{{ currentLog[item.label] | dateformat }}</span>
+            <span v-else class="g-sm-8 wba">{{ currentLog[item.label] || '-' }}</span>
           </template>
         </div>
       </div>
     </rk-sidebox>
-
-    <v-dialog width="90%" />
   </div>
 </template>
+
+<script lang="ts">
+  import { Component, Prop, Vue } from 'vue-property-decorator';
+  import { Mutation, State } from 'vuex-class';
+  import LogTable from './log-table/log-table.vue';
+  import { BrowserLogConstants } from './log-table/log-constant';
+
+  @Component({
+    components: { LogTable },
+  })
+  export default class LogBrowserDetail extends Vue {
+    @State('rocketLog') private logState: any;
+    @Prop() private data: any;
+    @Prop() private loading!: true;
+    @Prop() private showBtnDetail: any;
+
+    private columns = BrowserLogConstants;
+    private showDetail = false;
+    private list = [];
+    private currentLog = {};
+    private created() {
+      this.$eventBus.$on('HANDLE-SELECT-LOG', this, this.handleSelectLog);
+    }
+    private lineBreak(str = '') {
+      const s = str
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\r\n/g, '<br />')
+        .replace(/\n/g, '<br />');
+      return s;
+    }
+    private handleSelectLog(data: any) {
+      this.currentLog = data;
+      if (!this.showBtnDetail) {
+        this.showDetail = true;
+      }
+    }
+  }
+</script>
 <style lang="scss">
   .rk-tooltip-popper.log-table-tooltip .rk-tooltip-inner {
     max-width: 600px;
@@ -52,54 +89,6 @@ limitations under the License. -->
     border-bottom: none;
   }
 </style>
-
-<script lang="js">
-  import LogTable from './log-table/log-table.vue';
-  import { BrowserLogConstants } from './log-table/log-constant';
-  /* eslint-disable */
-  /* tslint:disable */
-  export default {
-    components: {
-      LogTable,
-    },
-    props: ['data', 'loading', 'showBtnDetail'],
-    data() {
-      return {
-        diaplay: true,
-        columns: BrowserLogConstants,
-        showDetail: false,
-        list: [],
-        currentSpan: {},
-      };
-    },
-    methods: {
-      lineBreak(str = '') {
-        let s = str
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/\r\n/g, '<br />')
-                .replace(/\n/g, '<br />');
-        return s;
-      },
-      handleSelectSpan(data) {
-        this.currentSpan = data;
-        if (!this.showBtnDetail) {
-          this.showDetail = true;
-        }
-        this.$emit('selectSpan', data);
-      },
-      handleViewSpan(data) {
-        this.showDetail = true;
-      }
-    },
-    created() {
-    },
-    mounted() {
-      this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
-      this.$eventBus.$on('HANDLE-VIEW-SPAN', this, this.handleViewSpan);
-    },
-  };
-</script>
 <style lang="scss" scoped>
   .rk-log-t-loading {
     text-align: center;

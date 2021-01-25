@@ -25,22 +25,19 @@ interface Options {
   label: string;
 }
 export interface State {
-  type: any;
-  logCategories: any[];
+  type: Options;
+  logCategories: Options[];
   logs: any[];
   total: number;
-  categories: any[];
-  category: any;
+  categories: Options[];
+  category: Options;
   loading: boolean;
-  logServices: Options[];
-  currentLogService: Options;
-  logEndpoints: Options[];
-  currentLogEndpoint: Options;
-  logInstances: Options[];
-  currentLogInstance: Options;
+  conditions: any;
+  supportQueryLogsByKeywords: boolean;
+  tagsList: string[];
 }
 
-const categories: any = [
+const categories: Options[] = [
   { label: 'All', key: 'ALL' },
   { label: 'Ajax', key: 'AJAX' },
   { label: 'Resource', key: 'RESOURCE' },
@@ -50,23 +47,20 @@ const categories: any = [
   { label: 'Unknown', key: 'UNKNOWN' },
 ];
 
-const initState: State = {
-  type: { label: 'Browser', key: 'browser' },
+const logState: State = {
+  type: { label: 'Service', key: 'service' },
   logCategories: [
+    { label: 'Service', key: 'service' },
     { label: 'Browser', key: 'browser' },
-    { label: 'Service', key: 'service', disabled: true },
   ],
   logs: [],
   total: 0,
   categories,
   category: { label: 'All', key: 'ALL' },
   loading: false,
-  logServices: [],
-  currentLogService: { key: '', label: '' },
-  logEndpoints: [],
-  currentLogEndpoint: { key: '', label: '' },
-  logInstances: [],
-  currentLogInstance: { key: '', label: '' },
+  conditions: {},
+  supportQueryLogsByKeywords: true,
+  tagsList: localStorage.getItem('logTags') ? JSON.parse(localStorage.getItem('logTags') || '') : [],
 };
 
 // mutations
@@ -86,39 +80,39 @@ const mutations: MutationTree<State> = {
   [types.SET_LOADING](state: State, data: boolean) {
     state.loading = data;
   },
-  [types.SET_LOG_SERVICES](state: State, data: Options[]) {
-    state.logServices = [{ label: 'All', key: '' }, ...data];
-    state.currentLogService = state.logServices[0];
+  [types.SET_LOG_CONDITIONS](state: State, item: Options) {
+    state.conditions = {
+      ...state.conditions,
+      [item.label]: item.key,
+    };
   },
-  [types.SET_LOG_ENDPOINTS](state: State, data: Options[]) {
-    state.logEndpoints = [{ label: 'All', key: '' }, ...data];
-    state.currentLogEndpoint = state.logEndpoints[0];
+  [types.SET_SUPPORT_QUERY_LOGS_KEYWORDS](state: State, isSupport: boolean) {
+    state.supportQueryLogsByKeywords = isSupport;
   },
-  [types.SET_LOG_INSTANCES](state: State, data: Options[]) {
-    state.logInstances = [{ label: 'All', key: '' }, ...data];
-    state.currentLogInstance = state.logInstances[0];
+  [types.CLEAR_LOG_CONDITIONS](state: State) {
+    state.conditions = {};
   },
-  [types.SET_CURRENT_LOG_SERVICE](state: State, service: Options) {
-    state.currentLogService = service;
-  },
-  [types.SET_CURRENT_LOG_ENDPOINT](state: State, endpoint: Options) {
-    state.currentLogEndpoint = endpoint;
-  },
-  [types.SET_CURRENT_LOG_INSTANCE](state: State, instance: Options) {
-    state.currentLogInstance = instance;
+  [types.SET_TAG_LIST](state: State, data: string[]) {
+    state.tagsList = data;
   },
 };
 
 // actions
 const actions: ActionTree<State, any> = {
   QUERY_LOGS(context: { commit: Commit; state: State }, params: any) {
+    context.commit('SET_LOADING', true);
     switch (context.state.type.key) {
       case 'browser':
-        context.commit('SET_LOADING', true);
         return graph
           .query('queryBrowserErrorLogs')
           .params(params)
           .then((res: AxiosResponse<any>) => {
+            if (res.data && res.data.errors) {
+              context.commit('SET_LOGS', []);
+              context.commit('SET_LOGS_TOTAL', 0);
+
+              return;
+            }
             context.commit('SET_LOGS', res.data.data.queryBrowserErrorLogs.logs);
             context.commit('SET_LOGS_TOTAL', res.data.data.queryBrowserErrorLogs.total);
           })
@@ -126,68 +120,41 @@ const actions: ActionTree<State, any> = {
             context.commit('SET_LOADING', false);
           });
       case 'service':
-        break;
+        return graph
+          .query('queryServiceLogs')
+          .params(params)
+          .then((res: AxiosResponse<any>) => {
+            if (res.data && res.data.errors) {
+              context.commit('SET_LOGS', []);
+              context.commit('SET_LOGS_TOTAL', 0);
+
+              return;
+            }
+            context.commit('SET_LOGS', res.data.data.queryLogs.logs);
+            context.commit('SET_LOGS_TOTAL', res.data.data.queryLogs.total);
+          })
+          .finally(() => {
+            context.commit('SET_LOADING', false);
+          });
       default:
         break;
     }
   },
-  GET_LOG_SERVICES(context: { commit: Commit }, params: { duration: any }) {
+  QUERY_LOGS_BYKEYWORDS(context: { commit: Commit }) {
     return graph
-      .query('queryBrowserServices')
-      .params(params)
-      .then((res: AxiosResponse) => {
-        context.commit(types.SET_LOG_SERVICES, res.data.data.services);
+      .query('queryLogsByKeywords')
+      .params({})
+      .then((res: AxiosResponse<any>) => {
+        if (res.data && res.data.errors) {
+          return;
+        }
+        context.commit('SET_SUPPORT_QUERY_LOGS_KEYWORDS', res.data.data.support);
       });
-  },
-  LOG_GET_OPTION(context: { dispatch: Dispatch; state: State }, params: any) {
-    context
-      .dispatch('GET_LOG_SERVICES', { duration: params.duration })
-      .then(() => context.dispatch('GET_LOG_ENDPOINTS', {}))
-      .then(() => context.dispatch('GET_LOG_INSTANCES', { duration: params.duration }));
-  },
-  GET_LOG_ENDPOINTS(context: { commit: Commit; state: any }, params: { keyword: string }) {
-    if (!context.state.currentLogEndpoint.key) {
-      context.commit(types.SET_LOG_ENDPOINTS, []);
-      return;
-    }
-    if (!params.keyword) {
-      params.keyword = '';
-    }
-    return graph
-      .query('queryEndpoints')
-      .params({ serviceId: context.state.currentLogEndpoint.key || '', ...params })
-      .then((res: AxiosResponse) => {
-        context.commit(types.SET_LOG_ENDPOINTS, res.data.data.getEndpoints);
-      });
-  },
-  GET_LOG_INSTANCES(context: { commit: Commit; state: any }, params: any) {
-    if (!context.state.currentLogInstance.key) {
-      context.commit(types.SET_LOG_INSTANCES, []);
-      return;
-    }
-    return graph
-      .query('queryInstances')
-      .params({ serviceId: context.state.currentLogInstance.key || '', ...params })
-      .then((res: AxiosResponse) => {
-        context.commit(types.SET_LOG_INSTANCES, res.data.data.getServiceInstances);
-      });
-  },
-  SELECT_LOG_SERVICE(context: { commit: Commit; dispatch: Dispatch }, params: any) {
-    context.commit('SET_CURRENT_LOG_SERVICE', params.service);
-    context.dispatch('GET_LOG_ENDPOINTS', {});
-    context.dispatch('GET_LOG_INSTANCES', { duration: params.duration });
-  },
-  SELECT_LOG_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
-    context.commit('SET_CURRENT_LOG_ENDPOINT', params.endpoint);
-  },
-  SELECT_LOG_INSTANCE(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
-    context.commit('SET_CURRENT_LOG_INSTANCE', params.instance);
   },
 };
 
 export default {
-  // namespaced: true,
-  state: initState,
+  state: logState,
   actions,
   mutations,
 };

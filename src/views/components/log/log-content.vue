@@ -10,30 +10,34 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
+
 <template>
-  <div class="flex-v rk-log">
-    <LogBar />
-    <LogContent />
+  <div class="log-container">
+    <LogServiceDetail :data="logState.logs || []" :loading="logState.loading" v-if="logState.type.key === 'service'" />
+    <LogBrowserDetail :data="logState.logs || []" :loading="logState.loading" v-else />
   </div>
 </template>
 
 <script lang="ts">
+  import { Duration, Option } from '@/types/global';
   import { Component, Vue } from 'vue-property-decorator';
-  import LogBar from '@/views/components/log/log-bar.vue';
-  import LogContent from '@/views/components/log/log-content.vue';
+  import { State } from 'vuex-class';
+  import LogBrowserDetail from './log-browser-detail.vue';
+  import LogServiceDetail from './log-service-detail.vue';
+
   @Component({
-    components: {
-      LogBar,
-      LogContent,
-    },
+    components: { LogBrowserDetail, LogServiceDetail },
   })
-  export default class Log extends Vue {}
+  export default class LogContent extends Vue {
+    @State('rocketLog') private logState: any;
+  }
 </script>
 
 <style scoped lang="scss">
-  .rk-log {
-    flex-grow: 1;
+  .log-container {
+    overflow: auto;
+    padding: 5px 15px 15px;
     height: 100%;
-    overflow: hidden;
+    flex-grow: 1;
   }
 </style>

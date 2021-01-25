@@ -14,9 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { QueryBrowserErrorLogs, QueryServiceLogs, QueryLogsByKeywords } from '../fragments/log';
-
-export const queryBrowserErrorLogs = `query queryBrowserErrorLogs(${QueryBrowserErrorLogs.variable}) {${QueryBrowserErrorLogs.query}}`;
-export const queryServiceLogs = `query queryLogs(${QueryServiceLogs.variable}) {${QueryServiceLogs.query}}`;
-export const queryLogsByKeywords = `query queryLogsByKeywords {${QueryLogsByKeywords.query}}`;
+const censor = (key: any, value: any) => {
+  if (typeof value === 'function') {
+    return Function.prototype.toString.call(value);
+  }
+  return value;
+};
+export const formatJson = (data: JSON) => {
+  return JSON.stringify(data, censor, 2);
+};
