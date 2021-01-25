@@ -19,9 +19,9 @@ limitations under the License. -->
       <span v-if="item.label === 'timestamp'">
         {{ data.time | dateformat }}
       </span>
-      <span v-if="item.label === 'traceId'">
-        <router-link :to="{ name: 'trace', query: { traceid: data[item.label] } }">{{ data[item.label] }}</router-link>
-      </span>
+      <router-link v-if="item.label === 'traceId'" :to="{ name: 'trace', query: { traceid: data[item.label] } }">
+        <span>{{ data[item.label] }}</span>
+      </router-link>
       <span v-else>{{ data[item.label] }}</span>
     </div>
   </div>
@@ -46,6 +46,13 @@ limitations under the License. -->
     cursor: pointer;
     .traceId {
       width: 390px;
+      color: #448dfe;
+      cursor: pointer;
+      span {
+        display: inline-block;
+        width: 100%;
+        line-height: 30px;
+      }
     }
     .content {
       width: 300px;
