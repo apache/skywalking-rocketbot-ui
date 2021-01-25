@@ -74,7 +74,6 @@ limitations under the License. -->
     @Mutation('SET_LOG_CONDITIONS') private SET_LOG_CONDITIONS: any;
     @Mutation('SET_TAG_LIST') private SET_TAG_LIST: any;
 
-    // private tagsList: string[] = [];
     private tags: string = '';
     private LogConditionsOpt = {
       TraceID: 'traceId',
@@ -83,7 +82,6 @@ limitations under the License. -->
       ExcludingKeywordsOfContent: 'excludingKeywordsOfContent',
     };
     private created() {
-      // this.tagsList = this.rocketLog.tagsList;
       this.updateTags();
     }
     private changeConditions(item: any, type: string) {

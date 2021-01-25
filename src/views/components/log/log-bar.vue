@@ -187,16 +187,18 @@ limitations under the License. -->
                 queryDuration: this.durationTime,
               }
             : {
-                serviceId: currentService.key || 0,
-                serviceInstanceId: currentInstance.key || 0,
-                endpointId: currentEndpoint.key || 0,
+                serviceId: currentService.key || undefined,
+                serviceInstanceId: currentInstance.key || undefined,
+                endpointId: currentEndpoint.key || undefined,
                 state: category.key,
-                excludingKeywordsOfContent: this.logState.supportQueryLogsByKeywords
-                  ? (conditions.excludingKeywordsOfContent || '').split(',')
-                  : undefined,
-                keywordsOfContent: this.logState.supportQueryLogsByKeywords
-                  ? (conditions.keywordsOfContent || '').split(',')
-                  : undefined,
+                excludingKeywordsOfContent:
+                  this.logState.supportQueryLogsByKeywords && conditions.excludingKeywordsOfContent
+                    ? conditions.excludingKeywordsOfContent.split(',')
+                    : undefined,
+                keywordsOfContent:
+                  this.logState.supportQueryLogsByKeywords && conditions.keywordsOfContent
+                    ? conditions.keywordsOfContent.split(',')
+                    : undefined,
                 relatedTrace: conditions.traceId ? { traceId: conditions.traceId } : undefined,
                 tags: conditions.tags,
                 paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
