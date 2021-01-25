@@ -45,9 +45,6 @@ limitations under the License. -->
     private service!: Option;
 
     @Prop({ default: false, type: Boolean })
-    private inTopo!: boolean;
-
-    private show: boolean = true;
     private beforeMount() {
       this.SET_EVENTS([]);
     }

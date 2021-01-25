@@ -19,6 +19,9 @@ limitations under the License. -->
       <span v-if="item.label === 'timestamp'">
         {{ data.time | dateformat }}
       </span>
+      <span v-if="item.label === 'traceId'">
+        <router-link :to="{ name: 'trace', query: { traceid: data[item.label] } }">{{ data[item.label] }}</router-link>
+      </span>
       <span v-else>{{ data[item.label] }}</span>
     </div>
   </div>
