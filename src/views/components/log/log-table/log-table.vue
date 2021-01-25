@@ -19,9 +19,7 @@ limitations under the License. -->
       <template v-for="(item, index) in columns">
         <div class="method" :style="`width: ${item.method}px`" v-if="item.drag" :key="index">
           <span class="r cp" ref="dragger" :data-index="index">
-            <svg class="icon">
-              <use xlink:href="#settings_ethernet"></use>
-            </svg>
+            <rk-icon icon="settings_ethernet" />
           </span>
           {{ $t(item.value) }}
         </div>
@@ -30,22 +28,28 @@ limitations under the License. -->
         </div>
       </template>
     </div>
-    <Item :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" :type="type" />
+    <div v-if="type === 'browser'">
+      <BrowserItem :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+    </div>
+    <div v-else>
+      <ServiceItem v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+    </div>
     <slot></slot>
   </div>
 </template>
 <script lang="js">
   import { ServiceLogConstants, BrowserLogConstants } from './log-constant';
-  import Item from './log-item';
+  import BrowserItem from './log-browser-item';
+  import ServiceItem from './log-service-item';
 
   export default {
-    components: { Item },
+    components: { ServiceItem, BrowserItem },
     name: 'LogContainer',
     props: ['type', 'tableData'],
     data() {
       return {
         method: 380,
-        columns: BrowserLogConstants,
+        columns: this.type === 'browser' ? BrowserLogConstants : ServiceLogConstants,
       };
     },
     created() {
@@ -61,7 +65,7 @@ limitations under the License. -->
       }
     },
     mounted() {
-      const drags = this.$refs.dragger;
+      const drags = this.$refs.dragger || [];
       drags.forEach((drag) => {
         drag.onmousedown = (event) => {
           const diffX = event.clientX;
@@ -100,6 +104,16 @@ limitations under the License. -->
     border-right: 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     /*background-color: #f3f4f9;*/
+    .traceId {
+      width: 390px;
+    }
+    .content {
+      width: 300px;
+    }
+    .serviceInstanceName,
+    .serviceName {
+      width: 200px;
+    }
   }
 
   .log-header div {

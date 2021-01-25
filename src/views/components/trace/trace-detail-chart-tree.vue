@@ -84,7 +84,6 @@ limitations under the License. -->
         </div>
       </div>
     </rk-sidebox>
-    <v-dialog width="90%" />
     <div class="trace-tree" style="height:100%">
       <div class="trace-tree-inner" ref="traceTree"></div>
     </div>

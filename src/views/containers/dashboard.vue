@@ -40,7 +40,6 @@ limitations under the License. -->
         + Add An Item
       </div>
     </div>
-    <v-dialog width="300px" />
   </div>
 </template>
 
@@ -53,7 +52,7 @@ limitations under the License. -->
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
   import { ObjectsType } from '../../constants/constant';
   import { State as globalState } from '@/store/modules/global';
-  import { State as optionState } from '@/store/modules/dashboard/dashboard-option';
+  import { State as optionState } from '@/store/modules/global/selectors';
   import { State as dataState } from '@/store/modules/dashboard/dashboard-data';
 
   interface ITemplate {

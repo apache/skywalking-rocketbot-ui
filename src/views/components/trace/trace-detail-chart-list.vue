@@ -85,7 +85,6 @@ limitations under the License. -->
         </div>
       </div>
     </rk-sidebox>
-    <v-dialog width="90%" />
     <div class="trace-list">
       <div ref="traceList"></div>
     </div>

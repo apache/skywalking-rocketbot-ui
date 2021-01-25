@@ -89,21 +89,19 @@ limitations under the License. -->
           </span>
           <input
             type="text"
-            :placeholder="this.$t('traceAddTag')"
+            :placeholder="this.$t('addTag')"
             v-model="tags"
             class="rk-trace-new-tag"
             @keyup="addLabels"
           />
-          <span class="trace-tips" v-tooltip:bottom="{ content: this.$t('traceTagsTip') }">
+          <span class="trace-tips" v-tooltip:bottom="{ content: this.$t('tagsTip') }">
             <a
               target="blank"
               href="https://github.com/apache/skywalking/blob/master/docs/en/setup/backend/configuration-vocabulary.md"
             >
-              {{ this.$t('traceLink') }}
+              {{ this.$t('tagsLink') }}
             </a>
-            <svg class="icon mr-5 vm">
-              <use xlink:href="#help"></use>
-            </svg>
+            <rk-icon icon="help" class="mr-5" />
           </span>
         </div>
       </div>
