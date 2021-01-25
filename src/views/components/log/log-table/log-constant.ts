@@ -37,12 +37,12 @@ export const ServiceLogConstants = [
     value: 'isError',
   },
   {
-    label: 'traceId',
-    value: 'traceID',
-  },
-  {
     label: 'content',
     value: 'content',
+  },
+  {
+    label: 'traceId',
+    value: 'traceID',
   },
 ];
 export const ServiceLogDetail = [
