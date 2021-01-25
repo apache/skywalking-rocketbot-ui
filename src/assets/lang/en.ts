@@ -186,6 +186,7 @@ const m = {
   errorPage: 'Error Page',
   category: 'Category',
   grade: 'Grade',
+  relatedTraceLogs: 'Related Logs',
 };
 
 export default m;

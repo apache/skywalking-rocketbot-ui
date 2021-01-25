@@ -83,9 +83,18 @@ limitations under the License. -->
             <pre class="pl-15 mt-0 mb-0 sm oa">{{ _i.value }}</pre>
           </div>
         </div>
+        <div @click="() => (showRelatedLogs = true)">
+          <a class="rk-popup-btn bg-blue r">
+            <span class="mr-5 vm">
+              {{ $t('relatedTraceLogs') }}
+            </span>
+          </a>
+        </div>
       </div>
     </rk-sidebox>
-    <v-dialog width="90%" />
+    <rk-sidebox :width="'50%'" :show.sync="showRelatedLogs" :title="$t('relatedTraceLogs')">
+      <relatedTraceLogs />
+    </rk-sidebox>
     <div class="trace-list">
       <div ref="traceList"></div>
     </div>
@@ -96,7 +105,9 @@ limitations under the License. -->
   import * as d3 from 'd3';
   import Trace from './d3-trace';
   import _ from 'lodash';
+  import relatedTraceLogs from './related-trace-logs.vue';
   export default {
+    components: {relatedTraceLogs},
     props: ['data', 'traceId'],
     data() {
       return {
@@ -106,6 +117,7 @@ limitations under the License. -->
         currentSpan: [],
         loading: true,
         fixSpansSize: 0,
+        showRelatedLogs: false,
       };
     },
     watch: {
@@ -136,6 +148,9 @@ limitations under the License. -->
     },
     methods: {
       copy,
+      relatedTraceLogs() {
+
+      },
       handleSelectSpan(i) {
         this.currentSpan = i.data;
         this.showDetail = true;
@@ -413,5 +428,13 @@ limitations under the License. -->
     white-space: pre;
     overflow: auto;
     font-family: monospace;
+  }
+  .rk-popup-btn {
+    color: #fff;
+    padding: 10px 9px;
+    border-radius: 4px;
+    margin-top: 40px;
+    width: 100%;
+    text-align: center;
   }
 </style>

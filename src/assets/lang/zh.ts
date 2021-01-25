@@ -185,6 +185,7 @@ const m = {
   errorPage: '错误页面',
   category: '类别',
   grade: '等级',
+  relatedTraceLogs: '相关的日志',
 };
 
 export default m;
