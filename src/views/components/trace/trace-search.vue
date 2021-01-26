@@ -77,6 +77,7 @@ limitations under the License. -->
           <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
           <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
         </div>
+        <div class="rk-trace-log-btn bg-blue r mr-10" @click="searchTraceLogs">view logs</div>
       </div>
       <div class="flex-h">
         <div class="mr-10" style="padding-top: 5px">
@@ -106,6 +107,15 @@ limitations under the License. -->
         </div>
       </div>
     </div>
+    <rk-sidebox :width="'100%'" :show.sync="showTraceLogs" :title="$t('relatedTraceLogs')">
+      <!-- <RkPage
+        :currentSize="pageSize"
+        :currentPage="pageNum"
+        @changePage="turnPage"
+        :total="rocketTrace.traceLogsTotal"
+      /> -->
+      <!-- <LogServiceDetail :data="rocketTrace.traceLogs || []" :loading="false" :noLink="true" /> -->
+    </rk-sidebox>
   </div>
 </template>
 
@@ -114,8 +124,9 @@ limitations under the License. -->
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import TraceSelect from '../common/trace-select.vue';
+  import LogServiceDetail from '../log/log-service-detail.vue';
 
-  @Component({ components: { TraceSelect } })
+  @Component({ components: { TraceSelect, LogServiceDetail } })
   export default class TraceSearch extends Vue {
     @State('rocketbot') private rocketbotGlobal: any;
     @State('rocketTrace') private rocketTrace: any;
@@ -140,6 +151,7 @@ limitations under the License. -->
     private traceState: Option = { label: 'All', key: 'ALL' };
     private tags: string = '';
     private tagsList: string[] = [];
+    private showTraceLogs: boolean = false;
 
     private created() {
       this.endpointName = this.$route.query.endpointname
@@ -287,6 +299,10 @@ limitations under the License. -->
       });
     }
 
+    private searchTraceLogs() {
+      this.showTraceLogs = true;
+    }
+
     private clearSearch() {
       this.RESET_DURATION();
       this.status = true;
@@ -388,15 +404,19 @@ limitations under the License. -->
     }
   }
 
-  .rk-trace-search-btn {
+  .rk-trace-search-btn,
+  .rk-trace-log-btn {
     padding: 3px 9px;
     background-color: #484b55;
     border-radius: 4px;
-    margin-top: 12px;
+    cursor: pointer;
 
     &.bg-blue {
       background-color: #448dfe;
     }
+  }
+  .rk-trace-search-btn {
+    margin-top: 12px;
   }
 
   .rk-trace-clear-btn {

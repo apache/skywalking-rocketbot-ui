@@ -30,8 +30,8 @@ export interface State {
   traceTotal: number;
   traceSpans: Span[];
   currentTrace: Trace;
-  traceLogs: any[];
-  traceLogsTotal: number;
+  traceSpanLogs: any[];
+  traceSpanLogsTotal: number;
 }
 
 const initState: State = {
@@ -52,8 +52,8 @@ const initState: State = {
     start: '',
     traceIds: [],
   },
-  traceLogs: [],
-  traceLogsTotal: 0,
+  traceSpanLogs: [],
+  traceSpanLogsTotal: 0,
 };
 
 // mutations
@@ -108,11 +108,11 @@ const mutations: MutationTree<State> = {
       traceIds: [],
     };
   },
-  [types.SET_TRACE_LOGS](state: State, logs: any[]) {
-    state.traceLogs = logs;
+  [types.SET_TRACE_SPAN_LOGS](state: State, logs: any[]) {
+    state.traceSpanLogs = logs;
   },
-  [types.SET_TRACE_LOGS_TOTAL](state: State, data: number) {
-    state.traceLogsTotal = data;
+  [types.SET_TRACE_SPAN_LOGS_TOTAL](state: State, data: number) {
+    state.traceSpanLogsTotal = data;
   },
 };
 
@@ -159,19 +159,19 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_TRACE_SPANS, res.data.data.trace.spans);
       });
   },
-  GET_TRACE_LOGS(context: { commit: Commit }, params: any) {
+  GET_TRACE_SPAN_LOGS(context: { commit: Commit }, params: any) {
     return graph
       .query('queryServiceLogs')
       .params(params)
       .then((res: AxiosResponse<any>) => {
         if (res.data && res.data.errors) {
-          context.commit('SET_TRACE_LOGS', []);
-          context.commit('SET_TRACE_LOGS_TOTAL', 0);
+          context.commit('SET_TRACE_SPAN_LOGS', []);
+          context.commit('SET_TRACE_SPAN_LOGS_TOTAL', 0);
 
           return;
         }
-        context.commit('SET_TRACE_LOGS', res.data.data.queryLogs.logs);
-        context.commit('SET_TRACE_LOGS_TOTAL', res.data.data.queryLogs.total);
+        context.commit('SET_TRACE_SPAN_LOGS', res.data.data.queryLogs.logs);
+        context.commit('SET_TRACE_SPAN_LOGS_TOTAL', res.data.data.queryLogs.total);
       });
   },
 };

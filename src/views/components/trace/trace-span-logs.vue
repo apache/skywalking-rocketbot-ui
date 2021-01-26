@@ -83,9 +83,9 @@ limitations under the License. -->
           :currentSize="pageSize"
           :currentPage="pageNum"
           @changePage="turnPage"
-          :total="rocketTrace.traceLogsTotal"
+          :total="rocketTrace.traceSpanLogsTotal"
         />
-        <LogServiceDetail :data="rocketTrace.traceLogs || []" :loading="false" :noLink="true" />
+        <LogServiceDetail :data="rocketTrace.traceSpanLogs || []" :loading="false" :noLink="true" />
       </div>
     </rk-sidebox>
   </div>
@@ -101,7 +101,7 @@ limitations under the License. -->
   })
   export default class TraceSpanLogs extends Vue {
     @State('rocketTrace') private rocketTrace: any;
-    @Action('rocketTrace/GET_TRACE_LOGS') private GET_TRACE_LOGS: any;
+    @Action('rocketTrace/GET_TRACE_SPAN_LOGS') private GET_TRACE_SPAN_LOGS: any;
     @Prop() private currentSpan: any;
     private showRelatedLogs = false;
     private copy = copy;
@@ -110,7 +110,7 @@ limitations under the License. -->
 
     private getTaceLogs() {
       this.showRelatedLogs = true;
-      this.GET_TRACE_LOGS({
+      this.GET_TRACE_SPAN_LOGS({
         condition: {
           state: 'ALL',
           relatedTrace: {
