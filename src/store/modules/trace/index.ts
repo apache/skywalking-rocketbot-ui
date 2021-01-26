@@ -31,6 +31,7 @@ export interface State {
   traceSpans: Span[];
   currentTrace: Trace;
   traceLogs: any[];
+  traceLogsTotal: number;
 }
 
 const initState: State = {
@@ -52,6 +53,7 @@ const initState: State = {
     traceIds: [],
   },
   traceLogs: [],
+  traceLogsTotal: 0,
 };
 
 // mutations
@@ -109,6 +111,9 @@ const mutations: MutationTree<State> = {
   [types.SET_TRACE_LOGS](state: State, logs: any[]) {
     state.traceLogs = logs;
   },
+  [types.SET_TRACE_LOGS_TOTAL](state: State, data: number) {
+    state.traceLogsTotal = data;
+  },
 };
 
 // actions
@@ -161,15 +166,12 @@ const actions: ActionTree<State, any> = {
       .then((res: AxiosResponse<any>) => {
         if (res.data && res.data.errors) {
           context.commit('SET_TRACE_LOGS', []);
-          // context.commit('SET_LOGS_TOTAL', 0);
+          context.commit('SET_TRACE_LOGS_TOTAL', 0);
 
           return;
         }
         context.commit('SET_TRACE_LOGS', res.data.data.queryLogs.logs);
-        // context.commit('SET_LOGS_TOTAL', res.data.data.queryLogs.total);
-      })
-      .finally(() => {
-        // context.commit('SET_LOADING', false);
+        context.commit('SET_TRACE_LOGS_TOTAL', res.data.data.queryLogs.total);
       });
   },
 };

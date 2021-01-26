@@ -78,7 +78,15 @@ limitations under the License. -->
       </div>
     </div>
     <rk-sidebox :width="'100%'" :show.sync="showRelatedLogs" :title="$t('relatedTraceLogs')">
-      <LogServiceDetail :data="rocketTrace.traceLogs || []" :loading="false" :noLink="true" />
+      <div>
+        <RkPage
+          :currentSize="pageSize"
+          :currentPage="pageNum"
+          @changePage="turnPage"
+          :total="rocketTrace.traceLogsTotal"
+        />
+        <LogServiceDetail :data="rocketTrace.traceLogs || []" :loading="false" :noLink="true" />
+      </div>
     </rk-sidebox>
   </div>
 </template>
@@ -97,6 +105,8 @@ limitations under the License. -->
     @Prop() private currentSpan: any;
     private showRelatedLogs = false;
     private copy = copy;
+    private pageNum: number = 1;
+    private pageSize = 10;
 
     private getTaceLogs() {
       this.showRelatedLogs = true;
@@ -108,9 +118,13 @@ limitations under the License. -->
             segmentId: this.currentSpan.segmentId,
             spanId: this.currentSpan.spanId,
           },
-          paging: { pageNum: 1, pageSize: 1000, needTotal: true },
+          paging: { pageNum: this.pageNum, pageSize: this.pageSize, needTotal: true },
         },
       });
+    }
+    private turnPage(pageNum: number) {
+      this.pageNum = pageNum;
+      this.getTaceLogs();
     }
     private showCurrentSpanDetail(title: string, text: string) {
       const textLineNumber = text.split('\n').length;
