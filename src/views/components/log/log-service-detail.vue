@@ -57,11 +57,11 @@ limitations under the License. -->
     @Prop() private noLink!: boolean;
 
     private columns = ServiceLogDetail;
-    private showDetail = false;
+    private showDetail: boolean = false;
     private list = [];
     private currentLog: any = {};
-    private logContent: any = '';
-    private logTags: any = '';
+    private logContent: string = '';
+    private logTags: string = '';
     private formatJson = formatJson;
     private created() {
       this.$eventBus.$on('HANDLE-SELECT-LOG', this, this.handleSelectLog);
