@@ -107,14 +107,14 @@ limitations under the License. -->
         </div>
       </div>
     </div>
-    <rk-sidebox :width="'100%'" :show.sync="showTraceLogs" :title="$t('relatedTraceLogs')">
-      <!-- <RkPage
+    <rk-sidebox class="rk-log-box" :width="'100%'" :show.sync="showTraceLogs" :title="$t('relatedTraceLogs')">
+      <RkPage
         :currentSize="pageSize"
         :currentPage="pageNum"
-        @changePage="turnPage"
+        @changePage="turnLogsPage"
         :total="rocketTrace.traceLogsTotal"
-      /> -->
-      <!-- <LogServiceDetail :data="rocketTrace.traceLogs || []" :loading="false" :noLink="true" /> -->
+      />
+      <LogServiceDetail :data="rocketTrace.traceSpanLogs || []" :loading="false" :noLink="true" />
     </rk-sidebox>
   </div>
 </template>
@@ -136,6 +136,7 @@ limitations under the License. -->
     @Action('rocketTrace/GET_SERVICES') private GET_SERVICES: any;
     @Action('rocketTrace/GET_INSTANCES') private GET_INSTANCES: any;
     @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
+    @Action('rocketTrace/GET_TRACE_SPAN_LOGS') private GET_TRACE_SPAN_LOGS: any;
     @Action('rocketTrace/SET_TRACE_FORM') private SET_TRACE_FORM: any;
     @Mutation('rocketTrace/SET_TRACE_FORM_ITEM')
     private SET_TRACE_FORM_ITEM: any;
@@ -152,6 +153,8 @@ limitations under the License. -->
     private tags: string = '';
     private tagsList: string[] = [];
     private showTraceLogs: boolean = false;
+    private pageSize: number = 10;
+    private pageNum: number = 1;
 
     private created() {
       this.endpointName = this.$route.query.endpointname
@@ -170,6 +173,7 @@ limitations under the License. -->
         });
       }
     }
+
     private dateFormat(date: Date, step: string) {
       const year = date.getFullYear();
       const monthTemp = date.getMonth() + 1;
@@ -299,8 +303,22 @@ limitations under the License. -->
       });
     }
 
+    private turnLogsPage(pageNum: number) {
+      this.pageNum = pageNum;
+      this.searchTraceLogs();
+    }
+
     private searchTraceLogs() {
       this.showTraceLogs = true;
+      this.GET_TRACE_SPAN_LOGS({
+        condition: {
+          state: 'ALL',
+          relatedTrace: {
+            traceId: this.traceId,
+          },
+          paging: { pageNum: this.pageNum, pageSize: this.pageSize, needTotal: true },
+        },
+      });
     }
 
     private clearSearch() {
@@ -344,6 +362,9 @@ limitations under the License. -->
 </script>
 
 <style lang="scss">
+  .rk-log-box {
+    color: #3d444f;
+  }
   .rk-trace-search {
     flex-shrink: 0;
     background-color: #333840;
