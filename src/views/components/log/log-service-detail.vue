@@ -62,11 +62,11 @@ limitations under the License. -->
     private currentLog: any = {};
     private logContent: string = '';
     private logTags: string = '';
-    private formatJson = formatJson;
+
     private created() {
       this.$eventBus.$on('HANDLE-SELECT-LOG', this, this.handleSelectLog);
     }
-    private handleSelectLog(data: any) {
+    private handleSelectLog(data: any[]) {
       this.currentLog = data;
       this.logTags = this.currentLog.tags.map((d: any) => {
         return `${d.key} = ${d.value}`;

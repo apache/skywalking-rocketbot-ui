@@ -114,7 +114,9 @@ limitations under the License. -->
         @changePage="turnLogsPage"
         :total="rocketTrace.traceLogsTotal"
       />
-      <LogServiceDetail :data="rocketTrace.traceSpanLogs || []" :loading="false" :noLink="true" />
+      <LogTable :tableData="rocketTrace.traceSpanLogs || []" :type="`service`" :noLink="true">
+        <div class="log-tips" v-if="!rocketTrace.traceSpanLogs.length">{{ $t('noData') }}</div>
+      </LogTable>
     </rk-sidebox>
   </div>
 </template>
@@ -124,9 +126,9 @@ limitations under the License. -->
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import TraceSelect from '../common/trace-select.vue';
-  import LogServiceDetail from '../log/log-service-detail.vue';
+  import LogTable from '../log/log-table/log-table.vue';
 
-  @Component({ components: { TraceSelect, LogServiceDetail } })
+  @Component({ components: { TraceSelect, LogTable } })
   export default class TraceSearch extends Vue {
     @State('rocketbot') private rocketbotGlobal: any;
     @State('rocketTrace') private rocketTrace: any;
