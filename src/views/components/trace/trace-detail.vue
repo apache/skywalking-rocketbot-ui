@@ -14,6 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div class="rk-trace-detail flex-v">
+    <rk-sidebox class="rk-log-box" :width="'100%'" :show.sync="showTraceLogs" :title="$t('relatedTraceLogs')">
+      <RkPage
+        :currentSize="pageSize"
+        :currentPage="pageNum"
+        @changePage="turnLogsPage"
+        :total="rocketTrace.traceLogsTotal"
+      />
+      <LogTable :tableData="rocketTrace.traceSpanLogs || []" :type="`service`" :noLink="true">
+        <div class="log-tips" v-if="!rocketTrace.traceSpanLogs.length">{{ $t('noData') }}</div>
+      </LogTable>
+    </rk-sidebox>
     <div class="rk-trace-detail-wrapper clear" v-if="current.endpointNames">
       <h5 class="mb-5 mt-0">
         <rk-icon icon="clear" v-if="current.isError" class="red mr-5 sm" />
@@ -77,17 +88,6 @@ limitations under the License. -->
         <use xlink:href="#unlink"></use>
       </svg>
     </div>
-    <rk-sidebox class="rk-log-box" :width="'100%'" :show.sync="showTraceLogs" :title="$t('relatedTraceLogs')">
-      <RkPage
-        :currentSize="pageSize"
-        :currentPage="pageNum"
-        @changePage="turnLogsPage"
-        :total="rocketTrace.traceLogsTotal"
-      />
-      <LogTable :tableData="rocketTrace.traceSpanLogs || []" :type="`service`" :noLink="true">
-        <div class="log-tips" v-if="!rocketTrace.traceSpanLogs.length">{{ $t('noData') }}</div>
-      </LogTable>
-    </rk-sidebox>
   </div>
 </template>
 
@@ -137,6 +137,7 @@ limitations under the License. -->
       this.traceId = i;
       this.GET_TRACE_SPANS({ traceId: i });
     }
+
     private turnLogsPage(pageNum: number) {
       this.pageNum = pageNum;
       this.searchTraceLogs();
