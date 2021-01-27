@@ -29,61 +29,7 @@ limitations under the License. -->
     </transition-group>
     <a class="rk-btn r vm  tc" @click="downloadTrace">{{ $t('exportImage') }}</a>
     <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('spanInfo')">
-      <div class="rk-trace-detail">
-        <h5 class="mb-15">{{ $t('tags') }}.</h5>
-        <div class="mb-10 clear">
-          <span class="g-sm-4 grey">{{ $t('service') }}:</span
-          ><span class="g-sm-8 wba">{{ this.currentSpan.serviceCode }}</span>
-        </div>
-        <div class="mb-10 clear">
-          <span class="g-sm-4 grey">{{ $t('endpoint') }}:</span
-          ><span class="g-sm-8 wba">{{ this.currentSpan.label }}</span>
-        </div>
-        <div class="mb-10 clear">
-          <span class="g-sm-4 grey">{{ $t('spanType') }}:</span
-          ><span class="g-sm-8 wba">{{ this.currentSpan.type }}</span>
-        </div>
-        <div class="mb-10 clear">
-          <span class="g-sm-4 grey">{{ $t('component') }}:</span
-          ><span class="g-sm-8 wba">{{ this.currentSpan.component }}</span>
-        </div>
-        <div class="mb-10 clear">
-          <span class="g-sm-4 grey">Peer:</span><span class="g-sm-8 wba">{{ this.currentSpan.peer || 'No Peer' }}</span>
-        </div>
-        <div class="mb-10 clear">
-          <span class="g-sm-4 grey">{{ $t('error') }}:</span
-          ><span class="g-sm-8 wba">{{ this.currentSpan.isError }}</span>
-        </div>
-        <div class="mb-10 clear" v-for="i in this.currentSpan.tags" :key="i.key">
-          <span class="g-sm-4 grey">{{ i.key }}:</span>
-          <span class="g-sm-8 wba">
-            {{ i.value }}
-            <svg v-if="i.key === 'db.statement'" class="icon vm grey link-hover cp ml-5" @click="copy(i.value)">
-              <use xlink:href="#review-list"></use>
-            </svg>
-          </span>
-        </div>
-        <h5 class="mb-10" v-if="this.currentSpan.logs" v-show="this.currentSpan.logs.length">{{ $t('logs') }}.</h5>
-        <div v-for="(i, index) in this.currentSpan.logs" :key="index">
-          <div class="mb-10 sm">
-            <span class="mr-10">{{ $t('time') }}:</span><span class="grey">{{ i.time | dateformat }}</span>
-          </div>
-          <div class="mb-15 clear" v-for="(_i, _index) in i.data" :key="_index">
-            <div class="mb-10">
-              {{ _i.key }}:<span
-                v-if="_i.key === 'stack'"
-                class="r rk-sidebox-magnify"
-                @click="showCurrentSpanDetail(_i.key, _i.value)"
-              >
-                <svg class="icon">
-                  <use xlink:href="#magnify"></use>
-                </svg>
-              </span>
-            </div>
-            <pre class="pl-15 mt-0 mb-0 sm oa">{{ _i.value }}</pre>
-          </div>
-        </div>
-      </div>
+      <TraceSpanLogs :currentSpan="currentSpan" />
     </rk-sidebox>
     <div class="trace-list">
       <div ref="traceList"></div>
@@ -95,7 +41,9 @@ limitations under the License. -->
   import * as d3 from 'd3';
   import Trace from './d3-trace';
   import _ from 'lodash';
+  import TraceSpanLogs from './trace-span-logs.vue';
   export default {
+    components: {TraceSpanLogs},
     props: ['data', 'traceId'],
     data() {
       return {
@@ -105,6 +53,7 @@ limitations under the License. -->
         currentSpan: [],
         loading: true,
         fixSpansSize: 0,
+        showRelatedLogs: false,
       };
     },
     watch: {
@@ -134,7 +83,6 @@ limitations under the License. -->
       // this.computedScale();
     },
     methods: {
-      copy,
       handleSelectSpan(i) {
         this.currentSpan = i.data;
         this.showDetail = true;
@@ -323,27 +271,6 @@ limitations under the License. -->
           d.children.forEach((i) => this.collapse(i));
         }
       },
-      showCurrentSpanDetail(title, text) {
-        const textLineNumber = text.split('\n').length;
-        let textHeight = textLineNumber * 20.2 + 10;
-        const tmpHeight = window.innerHeight * 0.9;
-        textHeight = textHeight >= tmpHeight ? tmpHeight : textHeight;
-        this.$modal.show('dialog', {
-          title,
-          text: `<div style="height:${textHeight}px">${text}</div>`,
-          buttons: [
-            {
-              title: 'Copy',
-              handler: () => {
-                this.copy(text);
-              },
-            },
-            {
-              title: 'Close',
-            },
-          ],
-        });
-      },
       downloadTrace() {
         const serializer = new XMLSerializer();
         const svgNode = d3.select('.trace-list-dowanload').node();
@@ -412,5 +339,13 @@ limitations under the License. -->
     white-space: pre;
     overflow: auto;
     font-family: monospace;
+  }
+  .rk-popup-btn {
+    color: #fff;
+    padding: 10px 9px;
+    border-radius: 4px;
+    margin-top: 40px;
+    width: 100%;
+    text-align: center;
   }
 </style>

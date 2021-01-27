@@ -186,6 +186,7 @@ const m = {
   errorPage: 'Error Page',
   category: 'Category',
   grade: 'Grade',
+  relatedTraceLogs: 'Related Logs',
   setConditions: 'More Conditions',
   metricName: 'Metric Name',
   keywordsOfContent: 'Keys Of Content',
@@ -194,6 +195,7 @@ const m = {
   isError: 'Error',
   contentType: 'Content Type',
   content: 'Content',
+  viewLogs: 'View Logs',
 };
 
 export default m;

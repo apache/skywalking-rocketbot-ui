@@ -185,6 +185,7 @@ const m = {
   errorPage: '错误页面',
   category: '类别',
   grade: '等级',
+  relatedTraceLogs: '相关的日志',
   setConditions: '更多条件',
   metricName: '指标名称',
   keywordsOfContent: '内容关键词',
@@ -193,6 +194,7 @@ const m = {
   isError: '错误',
   contentType: '内容类型',
   content: '内容',
+  viewLogs: '查看日志',
 };
 
 export default m;

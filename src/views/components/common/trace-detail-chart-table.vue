@@ -23,62 +23,7 @@ limitations under the License. -->
       <div class="trace-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
     </TraceContainer>
     <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('spanInfo')">
-      <div class="rk-trace-detail">
-        <h5 class="mb-15">{{ $t('tags') }}.</h5>
-        <div class="mb-10 clear">
-          <span class="g-sm-4 grey">{{ $t('service') }}:</span
-          ><span class="g-sm-8 wba">{{ this.currentSpan.serviceCode }}</span>
-        </div>
-        <div class="mb-10 clear">
-          <span class="g-sm-4 grey">{{ $t('endpoint') }}:</span
-          ><span class="g-sm-8 wba">{{ this.currentSpan.label }}</span>
-        </div>
-        <div class="mb-10 clear">
-          <span class="g-sm-4 grey">{{ $t('spanType') }}:</span
-          ><span class="g-sm-8 wba">{{ this.currentSpan.type }}</span>
-        </div>
-        <div class="mb-10 clear">
-          <span class="g-sm-4 grey">{{ $t('component') }}:</span
-          ><span class="g-sm-8 wba">{{ this.currentSpan.component }}</span>
-        </div>
-        <div class="mb-10 clear">
-          <span class="g-sm-4 grey">Peer:</span><span class="g-sm-8 wba">{{ this.currentSpan.peer || 'No Peer' }}</span>
-        </div>
-        <div class="mb-10 clear">
-          <span class="g-sm-4 grey">{{ $t('error') }}:</span
-          ><span class="g-sm-8 wba">{{ this.currentSpan.isError }}</span>
-        </div>
-        <div class="mb-10 clear" v-for="i in this.currentSpan.tags" :key="i.key">
-          <span class="g-sm-4 grey">{{ i.key }}:</span>
-          <span class="g-sm-8 wba">
-            {{ i.value }}
-            <svg v-if="i.key === 'db.statement'" class="icon vm grey link-hover cp ml-5" @click="copy(i.value)">
-              <use xlink:href="#review-list"></use>
-            </svg>
-          </span>
-        </div>
-        <h5 class="mb-10" v-if="this.currentSpan.logs" v-show="this.currentSpan.logs.length">{{ $t('logs') }}.</h5>
-        <div v-for="(i, index) in this.currentSpan.logs" :key="index">
-          <div class="mb-10 sm">
-            <span class="mr-10">{{ $t('time') }}:</span>
-            <span class="grey">{{ i.time | dateformat }}</span>
-          </div>
-          <div class="mb-15 clear" v-for="(_i, _index) in i.data" :key="_index">
-            <div class="mb-10">
-              {{ _i.key }}:<span
-                v-if="_i.key === 'stack'"
-                class="r rk-sidebox-magnify"
-                @click="showCurrentSpanDetail(_i.key, _i.value)"
-              >
-                <svg class="icon">
-                  <use xlink:href="#magnify"></use>
-                </svg>
-              </span>
-            </div>
-            <pre class="pl-15 mt-0 mb-0 sm oa">{{ _i.value }}</pre>
-          </div>
-        </div>
-      </div>
+      <TraceSpanLogs :currentSpan="currentSpan" />
     </rk-sidebox>
   </div>
 </template>
@@ -97,11 +42,13 @@ limitations under the License. -->
   import copy from '@/utils/copy';
   import TraceContainer from './trace-chart-table/trace-container';
   import _ from 'lodash';
+  import TraceSpanLogs from '../trace/trace-span-logs.vue';
   /* eslint-disable */
   /* tslint:disable */
   export default {
     components: {
       TraceContainer,
+      TraceSpanLogs,
     },
     props: ['data', 'traceId', 'showBtnDetail', 'HeaderType'],
     watch: {

@@ -19,7 +19,10 @@ limitations under the License. -->
       <span v-if="item.label === 'timestamp'">
         {{ data.time | dateformat }}
       </span>
-      <router-link v-if="item.label === 'traceId'" :to="{ name: 'trace', query: { traceid: data[item.label] } }">
+      <router-link
+        v-if="item.label === 'traceId' && !noLink"
+        :to="{ name: 'trace', query: { traceid: data[item.label] } }"
+      >
         <span>{{ data[item.label] }}</span>
       </router-link>
       <span v-else>{{ data[item.label] }}</span>
@@ -33,6 +36,7 @@ limitations under the License. -->
   @Component
   export default class ServiceItem extends Vue {
     @Prop() private data: any;
+    @Prop() private noLink!: any;
     private columns = ServiceLogConstants;
     private showSelectSpan() {
       this.$eventBus.$emit('HANDLE-SELECT-LOG', this.data);

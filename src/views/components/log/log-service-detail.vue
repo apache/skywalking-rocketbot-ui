@@ -19,7 +19,7 @@ limitations under the License. -->
         <use xlink:href="#spinner"></use>
       </svg>
     </div>
-    <LogTable :tableData="data" :type="`service`">
+    <LogTable :tableData="data" :type="`service`" :noLink="noLink">
       <div class="log-tips" v-if="!data.length">{{ $t('noData') }}</div>
     </LogTable>
     <rk-sidebox :width="'800px'" :show.sync="showDetail" :title="$t('logDetail')">
@@ -51,24 +51,24 @@ limitations under the License. -->
     components: { LogTable },
   })
   export default class LogServiceDetail extends Vue {
-    @State('rocketLog') private logState: any;
     @Prop() private data: any;
     @Prop() private loading!: true;
     @Prop() private showBtnDetail: any;
+    @Prop() private noLink!: boolean;
 
     private columns = ServiceLogDetail;
-    private showDetail = false;
+    private showDetail: boolean = false;
     private list = [];
     private currentLog: any = {};
-    private logContent: any = '';
-    private logTags: any = '';
-    private formatJson = formatJson;
+    private logContent: string = '';
+    private logTags: string = '';
+
     private created() {
       this.$eventBus.$on('HANDLE-SELECT-LOG', this, this.handleSelectLog);
     }
-    private handleSelectLog(data: any) {
+    private handleSelectLog(data: any[]) {
       this.currentLog = data;
-      this.logTags = this.currentLog.tags.map((d: any) => {
+      this.logTags = this.currentLog.tags.map((d: { key: string; value: string }) => {
         return `${d.key} = ${d.value}`;
       });
       if (this.currentLog.contentType === 'JSON') {

@@ -32,7 +32,8 @@ limitations under the License. -->
       <BrowserItem :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
     </div>
     <div v-else>
-      <ServiceItem v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+      "
+      <ServiceItem v-for="(item, index) in tableData" :data="item" :key="'key' + index" :noLink="noLink" />
     </div>
     <slot></slot>
   </div>
@@ -45,7 +46,7 @@ limitations under the License. -->
   export default {
     components: { ServiceItem, BrowserItem },
     name: 'LogContainer',
-    props: ['type', 'tableData'],
+    props: ['type', 'tableData', 'noLink'],
     data() {
       return {
         method: 380,
