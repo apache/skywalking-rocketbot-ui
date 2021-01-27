@@ -64,10 +64,11 @@ limitations under the License. -->
 <script lang="ts">
   import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
+  import { State as traceState } from '@/store/modules/trace/index';
+
   @Component
   export default class TraceTable extends Vue {
-    @State('rocketTrace') private rocketTrace: any;
-    @State('rocketbot') private rocketbot: any;
+    @State('rocketTrace') private rocketTrace!: traceState;
     @Mutation('rocketTrace/SET_TRACE_FORM_ITEM')
     private SET_TRACE_FORM_ITEM: any;
     @Mutation('rocketTrace/SET_CURRENT_TRACE') private SET_CURRENT_TRACE: any;

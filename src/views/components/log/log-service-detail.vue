@@ -68,7 +68,7 @@ limitations under the License. -->
     }
     private handleSelectLog(data: any[]) {
       this.currentLog = data;
-      this.logTags = this.currentLog.tags.map((d: any) => {
+      this.logTags = this.currentLog.tags.map((d: { key: string; value: string }) => {
         return `${d.key} = ${d.value}`;
       });
       if (this.currentLog.contentType === 'JSON') {

@@ -95,18 +95,19 @@ limitations under the License. -->
   import LogServiceDetail from '../log/log-service-detail.vue';
   import { Action, State } from 'vuex-class';
   import copy from '@/utils/copy';
+  import { State as traceState } from '@/store/modules/trace/index';
 
   @Component({
     components: { LogServiceDetail },
   })
   export default class TraceSpanLogs extends Vue {
-    @State('rocketTrace') private rocketTrace: any;
+    @State('rocketTrace') private rocketTrace!: traceState;
     @Action('rocketTrace/GET_TRACE_SPAN_LOGS') private GET_TRACE_SPAN_LOGS: any;
     @Prop() private currentSpan: any;
-    private showRelatedLogs = false;
+    private showRelatedLogs: boolean = false;
     private copy = copy;
     private pageNum: number = 1;
-    private pageSize = 10;
+    private pageSize: number = 10;
 
     private getTaceLogs() {
       this.showRelatedLogs = true;

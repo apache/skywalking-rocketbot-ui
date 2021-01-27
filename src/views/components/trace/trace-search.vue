@@ -127,11 +127,13 @@ limitations under the License. -->
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import TraceSelect from '../common/trace-select.vue';
   import LogTable from '../log/log-table/log-table.vue';
+  import { State as traceState } from '@/store/modules/trace/index';
+  import { State as globalState } from '@/store/modules/global/index';
 
   @Component({ components: { TraceSelect, LogTable } })
   export default class TraceSearch extends Vue {
-    @State('rocketbot') private rocketbotGlobal: any;
-    @State('rocketTrace') private rocketTrace: any;
+    @State('rocketbot') private rocketbotGlobal!: globalState;
+    @State('rocketTrace') private rocketTrace!: traceState;
     @Getter('durationTime') private durationTime: any;
     @Getter('duration') private duration: any;
     @Action('RESET_DURATION') private RESET_DURATION: any;
@@ -250,11 +252,11 @@ limitations under the License. -->
         queryDuration: this.globalTimeFormat([
           new Date(
             this.time[0].getTime() +
-              (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000,
+              (parseInt(String(this.rocketbotGlobal.utc), 10) + new Date().getTimezoneOffset() / 60) * 3600000,
           ),
           new Date(
             this.time[1].getTime() +
-              (parseInt(this.rocketbotGlobal.utc, 10) + new Date().getTimezoneOffset() / 60) * 3600000,
+              (parseInt(String(this.rocketbotGlobal.utc), 10) + new Date().getTimezoneOffset() / 60) * 3600000,
           ),
         ]),
         traceState: this.traceState.key,
