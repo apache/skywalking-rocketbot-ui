@@ -16,13 +16,12 @@ limitations under the License. -->
   <div class="rk-trace-detail flex-v">
     <div class="rk-trace-detail-wrapper clear" v-if="current.endpointNames">
       <h5 class="mb-5 mt-0">
-        <svg v-if="current.isError" class="icon red vm mr-5 sm">
-          <use xlink:href="#clear"></use>
-        </svg>
+        <rk-icon icon="clear" v-if="current.isError" class="red mr-5 sm" />
         <span class="vm">{{ current.endpointNames[0] }}</span>
+        <div class="rk-trace-log-btn bg-blue r mr-10" @click="searchTraceLogs">{{ $t('viewLogs') }}</div>
       </h5>
       <div class="mb-5 blue sm">
-        <select class="rk-trace-detail-ids" @change="GET_TRACE_SPANS({ traceId: i })">
+        <select class="rk-trace-detail-ids" @change="changeTraceId(i)">
           <option v-for="i in current.traceIds" :value="i" :key="i">{{ i }}</option>
         </select>
         <svg class="icon vm grey link-hover cp ml-5" @click="handleClick(current.traceIds)">
@@ -78,6 +77,17 @@ limitations under the License. -->
         <use xlink:href="#unlink"></use>
       </svg>
     </div>
+    <rk-sidebox class="rk-log-box" :width="'100%'" :show.sync="showTraceLogs" :title="$t('relatedTraceLogs')">
+      <RkPage
+        :currentSize="pageSize"
+        :currentPage="pageNum"
+        @changePage="turnLogsPage"
+        :total="rocketTrace.traceLogsTotal"
+      />
+      <LogTable :tableData="rocketTrace.traceSpanLogs || []" :type="`service`" :noLink="true">
+        <div class="log-tips" v-if="!rocketTrace.traceSpanLogs.length">{{ $t('noData') }}</div>
+      </LogTable>
+    </rk-sidebox>
   </div>
 </template>
 
@@ -89,22 +99,31 @@ limitations under the License. -->
   import { Trace, Span } from '@/types/trace';
   import { Action, State } from 'vuex-class';
   import copy from '@/utils/copy';
+  import { State as traceState } from '@/store/modules/trace/index';
+  import LogTable from '../log/log-table/log-table.vue';
 
   @Component({
     components: {
       TraceDetailChartList,
       TraceDetailChartTree,
       TraceDetailChartTable,
+      LogTable,
     },
   })
   export default class TraceDetail extends Vue {
-    @State('rocketbot') private rocketbot: any;
+    @State('rocketTrace') private rocketTrace!: traceState;
     @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
+    @Action('rocketTrace/GET_TRACE_SPAN_LOGS') private GET_TRACE_SPAN_LOGS: any;
     @Prop() private spans!: Span[];
     @Prop() private current!: Trace;
     private mode: boolean = true;
     private displayMode: string = 'list';
-    private handleClick(ids: any) {
+    private showTraceLogs: boolean = false;
+    private pageSize: number = 10;
+    private pageNum: number = 1;
+    private traceId: string = '';
+
+    private handleClick(ids: string[]) {
       let copyValue = null;
       if (ids.length === 1) {
         copyValue = ids[0];
@@ -112,6 +131,28 @@ limitations under the License. -->
         copyValue = ids.join(',');
       }
       copy(copyValue);
+    }
+
+    private changeTraceId(i: string) {
+      this.traceId = i;
+      this.GET_TRACE_SPANS({ traceId: i });
+    }
+    private turnLogsPage(pageNum: number) {
+      this.pageNum = pageNum;
+      this.searchTraceLogs();
+    }
+
+    private searchTraceLogs() {
+      this.showTraceLogs = true;
+      this.GET_TRACE_SPAN_LOGS({
+        condition: {
+          state: 'ALL',
+          relatedTrace: {
+            traceId: this.traceId || this.current.traceIds[0],
+          },
+          paging: { pageNum: this.pageNum, pageSize: this.pageSize, needTotal: true },
+        },
+      });
     }
   }
 </script>

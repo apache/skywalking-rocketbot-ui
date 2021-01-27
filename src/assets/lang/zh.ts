@@ -194,6 +194,7 @@ const m = {
   isError: '错误',
   contentType: '内容类型',
   content: '内容',
+  viewLogs: '查看日志',
 };
 
 export default m;

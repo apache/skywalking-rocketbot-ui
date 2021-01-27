@@ -195,6 +195,7 @@ const m = {
   isError: 'Error',
   contentType: 'Content Type',
   content: 'Content',
+  viewLogs: 'View logs',
 };
 
 export default m;

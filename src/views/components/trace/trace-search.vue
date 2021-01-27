@@ -77,7 +77,6 @@ limitations under the License. -->
           <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
           <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
         </div>
-        <div class="rk-trace-log-btn bg-blue r mr-10" @click="searchTraceLogs">view logs</div>
       </div>
       <div class="flex-h">
         <div class="mr-10" style="padding-top: 5px">
@@ -107,17 +106,6 @@ limitations under the License. -->
         </div>
       </div>
     </div>
-    <rk-sidebox class="rk-log-box" :width="'100%'" :show.sync="showTraceLogs" :title="$t('relatedTraceLogs')">
-      <RkPage
-        :currentSize="pageSize"
-        :currentPage="pageNum"
-        @changePage="turnLogsPage"
-        :total="rocketTrace.traceLogsTotal"
-      />
-      <LogTable :tableData="rocketTrace.traceSpanLogs || []" :type="`service`" :noLink="true">
-        <div class="log-tips" v-if="!rocketTrace.traceSpanLogs.length">{{ $t('noData') }}</div>
-      </LogTable>
-    </rk-sidebox>
   </div>
 </template>
 
@@ -140,7 +128,6 @@ limitations under the License. -->
     @Action('rocketTrace/GET_SERVICES') private GET_SERVICES: any;
     @Action('rocketTrace/GET_INSTANCES') private GET_INSTANCES: any;
     @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
-    @Action('rocketTrace/GET_TRACE_SPAN_LOGS') private GET_TRACE_SPAN_LOGS: any;
     @Action('rocketTrace/SET_TRACE_FORM') private SET_TRACE_FORM: any;
     @Mutation('rocketTrace/SET_TRACE_FORM_ITEM')
     private SET_TRACE_FORM_ITEM: any;
@@ -156,9 +143,6 @@ limitations under the License. -->
     private traceState: Option = { label: 'All', key: 'ALL' };
     private tags: string = '';
     private tagsList: string[] = [];
-    private showTraceLogs: boolean = false;
-    private pageSize: number = 10;
-    private pageNum: number = 1;
 
     private created() {
       this.endpointName = this.$route.query.endpointname
@@ -307,24 +291,6 @@ limitations under the License. -->
       });
     }
 
-    private turnLogsPage(pageNum: number) {
-      this.pageNum = pageNum;
-      this.searchTraceLogs();
-    }
-
-    private searchTraceLogs() {
-      this.showTraceLogs = true;
-      this.GET_TRACE_SPAN_LOGS({
-        condition: {
-          state: 'ALL',
-          relatedTrace: {
-            traceId: this.traceId,
-          },
-          paging: { pageNum: this.pageNum, pageSize: this.pageSize, needTotal: true },
-        },
-      });
-    }
-
     private clearSearch() {
       this.RESET_DURATION();
       this.status = true;
@@ -434,6 +400,8 @@ limitations under the License. -->
     padding: 3px 9px;
     background-color: #484b55;
     border-radius: 4px;
+    color: #eee;
+    font-weight: normal;
     cursor: pointer;
 
     &.bg-blue {
