@@ -121,7 +121,7 @@ limitations under the License. -->
         </div>
       </div>
     </div>
-    <div :class="`${pre}-foot`" v-if="m === 'H'">
+    <div :class="`${pre}-foot`">
       <div :class="`${pre}-hour`">
         <a
           :title="local.hourTip"
@@ -136,13 +136,15 @@ limitations under the License. -->
           :class="{ on: showMinutes }"
           >{{ minute | dd }}</a
         >
-        <span>:</span>
-        <a
-          :title="local.secondTip"
-          @click="(showSeconds = !showSeconds), (showHours = showMinutes = false)"
-          :class="{ on: showSeconds }"
-          >{{ second | dd }}</a
-        >
+        <span v-show="m !== 'D'">
+          <span>:</span>
+          <a
+            :title="local.secondTip"
+            @click="(showSeconds = !showSeconds), (showHours = showMinutes = false)"
+            :class="{ on: showSeconds }"
+            >{{ second | dd }}</a
+          >
+        </span>
       </div>
     </div>
   </div>

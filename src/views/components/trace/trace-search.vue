@@ -75,7 +75,7 @@ limitations under the License. -->
         </div>
         <div>
           <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
-          <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
+          <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm" />
         </div>
       </div>
       <div class="flex-h">

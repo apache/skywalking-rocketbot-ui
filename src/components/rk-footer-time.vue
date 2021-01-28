@@ -15,7 +15,7 @@ limitations under the License. -->
 <template>
   <div>
     <span class="rk-time-tips" v-show="timeRange">{{ $t('timeTips') }}</span>
-    <RkDate class="mr-10" v-model="time" position="top" format="YYYY-MM-DD HH:mm:ss" />
+    <RkDate class="mr-10" v-model="time" position="top" format="YYYY-MM-DD HH:mm" />
   </div>
 </template>
 
