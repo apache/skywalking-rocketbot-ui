@@ -33,9 +33,11 @@ export const queryTypeOfMetrics = `query queryTypeOfMetrics(${TypeOfMetrics.vari
 
 export const mutationAddTemplate = `mutation mutationAddTemplate(${addTemplate.variable}) {${addTemplate.query}}`;
 
-export const mutationChangeTemplate = `mutation mutationChangeTemplate(${changeTemplate.variable}) {${changeTemplate.query}}`;
+export const mutationChangeTemplate = `mutation mutationChangeTemplate(${changeTemplate.variable}) {
+  ${changeTemplate.query}}`;
 
-export const mutationDisableTemplate = `mutation mutationDisableTemplate(${disableTemplate.variable}) {${disableTemplate.query}}`;
+export const mutationDisableTemplate = `mutation mutationDisableTemplate(${disableTemplate.variable}) {
+  ${disableTemplate.query}}`;
 
 export const queryGetAllTemplates = `query queryGetAllTemplates {${getAllTemplates.query}}`;
 
@@ -43,7 +45,8 @@ export const readHeatMap = `query queryData(${queryHeatMap.variable}) {${queryHe
 
 export const readSampledRecords = `query queryData(${querySampledRecords.variable}) {${querySampledRecords.query}}`;
 
-export const readLabeledMetricsValues = `query queryData(${queryLabeledMetricsValues.variable}) {${queryLabeledMetricsValues.query}}`;
+export const readLabeledMetricsValues = `query queryData(${queryLabeledMetricsValues.variable}) {
+  ${queryLabeledMetricsValues.query}}`;
 
 export const sortMetrics = `query queryData(${querySortMetrics.variable}) {${querySortMetrics.query}}`;
 

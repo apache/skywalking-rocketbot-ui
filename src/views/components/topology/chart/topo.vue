@@ -169,8 +169,10 @@ limitations under the License. -->
         simulationSkip(d3, this.simulation, this.ticked);
       },
       ticked() {
-        this.link.attr('d', (d) => `M${d.source.x} ${d.source.y} Q ${(d.source.x + d.target.x) / 2} ${(d.target.y + d.source.y) / 2 - 90} ${d.target.x} ${d.target.y}`);
-        this.anchor.attr('transform', (d) => `translate(${(d.source.x + d.target.x) / 2}, ${(d.target.y + d.source.y) / 2 - 45})`);
+        this.link.attr('d', (d) => `M${d.source.x} ${d.source.y} Q ${(d.source.x
+        + d.target.x) / 2} ${(d.target.y + d.source.y) / 2 - 90} ${d.target.x} ${d.target.y}`);
+        this.anchor.attr('transform', (d) => `translate(${(d.source.x +
+        d.target.x) / 2}, ${(d.target.y + d.source.y) / 2 - 45})`);
         this.node.attr('transform', (d) => `translate(${d.x - 22},${d.y - 22})`);
       },
       dragstart(d) {
