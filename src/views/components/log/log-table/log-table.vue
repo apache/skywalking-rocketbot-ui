@@ -108,7 +108,8 @@ limitations under the License. -->
     .traceId {
       width: 390px;
     }
-    .content {
+    .content,
+    .tags {
       width: 300px;
     }
     .serviceInstanceName,
