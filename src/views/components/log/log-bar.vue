@@ -191,7 +191,6 @@ limitations under the License. -->
                 serviceId: currentService.key || undefined,
                 serviceInstanceId: currentInstance.key || undefined,
                 endpointId: currentEndpoint.key || undefined,
-                state: category.key,
                 excludingKeywordsOfContent:
                   this.logState.supportQueryLogsByKeywords && conditions.excludingKeywordsOfContent
                     ? conditions.excludingKeywordsOfContent.split(',')
