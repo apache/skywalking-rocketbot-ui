@@ -171,7 +171,7 @@ const m = {
   defaultOrder: '默认顺序',
   chartType: '图表类型',
   currentDepth: '当前深度',
-  tagsTip: '只有core/default/searchableTagKeys中定义的标记才可搜索。查看配置词汇表页面上的更多详细信息。',
+  traceTagsTip: '只有core/default/searchableTracesTags中定义的标记才可搜索。查看配置词汇表页面上的更多详细信息。',
   tagsLink: '配置词汇页',
   addTag: '请添加标签',
   log: '日志',
@@ -195,6 +195,7 @@ const m = {
   contentType: '内容类型',
   content: '内容',
   viewLogs: '查看日志',
+  logsTagsTip: '只有core/default/searchableLogsTags中定义的标记才可搜索。查看配置词汇表页面上的更多详细信息。',
 };
 
 export default m;

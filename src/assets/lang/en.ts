@@ -171,7 +171,7 @@ const m = {
   defaultOrder: 'Default Order',
   chartType: 'Chart Type',
   currentDepth: 'Current Depth',
-  tagsTip: `'Only tags defined in the core/default/searchableTagKeys are searchable.
+  traceTagsTip: `'Only tags defined in the core/default/searchableTracesTags are searchable.
   Check more details on the Configuration Vocabulary page'`,
   tagsLink: 'Configuration Vocabulary page',
   addTag: 'Please add a tag',
@@ -196,6 +196,8 @@ const m = {
   contentType: 'Content Type',
   content: 'Content',
   viewLogs: 'View Logs',
+  logsTagsTip: `'Only tags defined in the core/default/searchableLogsTags are searchable.
+  Check more details on the Configuration Vocabulary page'`,
 };
 
 export default m;
