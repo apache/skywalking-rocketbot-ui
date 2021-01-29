@@ -47,7 +47,6 @@ export const QueryServiceLogs = {
           endpointId
           traceId
           timestamp
-          statusCode
           contentType
           content
           tags {
