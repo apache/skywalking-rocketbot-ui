@@ -44,6 +44,7 @@ limitations under the License. -->
           icon="code"
         />
         <ToolBarSelect
+          v-if="logState.type.key === cateGoryBrowser"
           @onChoose="SELECT_ERROR_CATALOG"
           :title="this.$t('errorCatalog')"
           :current="logState.category"
