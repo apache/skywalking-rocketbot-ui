@@ -182,7 +182,6 @@ limitations under the License. -->
                 serviceId: currentService.key,
                 serviceVersionId: currentInstance.key,
                 pagePathId: currentEndpoint.key,
-                category: category.key,
                 paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
                 queryDuration: this.durationTime,
               }
@@ -190,7 +189,6 @@ limitations under the License. -->
                 serviceId: currentService.key || undefined,
                 serviceInstanceId: currentInstance.key || undefined,
                 endpointId: currentEndpoint.key || undefined,
-                state: category.key,
                 excludingKeywordsOfContent:
                   this.logState.supportQueryLogsByKeywords && conditions.excludingKeywordsOfContent
                     ? conditions.excludingKeywordsOfContent.split(',')
