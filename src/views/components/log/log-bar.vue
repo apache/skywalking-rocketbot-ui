@@ -183,6 +183,7 @@ limitations under the License. -->
                 serviceId: currentService.key,
                 serviceVersionId: currentInstance.key,
                 pagePathId: currentEndpoint.key,
+                category: category.key,
                 paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
                 queryDuration: this.durationTime,
               }
