@@ -19,8 +19,11 @@ limitations under the License. -->
       <span v-if="item.label === 'timestamp'">
         {{ data.time | dateformat }}
       </span>
+      <span v-else-if="item.label === 'tags'">
+        {{ tags }}
+      </span>
       <router-link
-        v-if="item.label === 'traceId' && !noLink"
+        v-else-if="item.label === 'traceId' && !noLink"
         :to="{ name: 'trace', query: { traceid: data[item.label] } }"
       >
         <span>{{ data[item.label] }}</span>
@@ -38,6 +41,10 @@ limitations under the License. -->
     @Prop() private data: any;
     @Prop() private noLink!: any;
     private columns = ServiceLogConstants;
+    private tags: string = '';
+    private created() {
+      this.tags = String(this.data.tags.map((d: any) => `${d.key}=${d.value}`));
+    }
     private showSelectSpan() {
       this.$eventBus.$emit('HANDLE-SELECT-LOG', this.data);
     }
@@ -58,7 +65,8 @@ limitations under the License. -->
         line-height: 30px;
       }
     }
-    .content {
+    .content,
+    .tags {
       width: 300px;
     }
     .serviceInstanceName,

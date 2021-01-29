@@ -94,7 +94,7 @@ limitations under the License. -->
             class="rk-trace-new-tag"
             @keyup="addLabels"
           />
-          <span class="trace-tips" v-tooltip:bottom="{ content: this.$t('tagsTip') }">
+          <span class="trace-tips" v-tooltip:bottom="{ content: this.$t('traceTagsTip') }">
             <a
               target="blank"
               href="https://github.com/apache/skywalking/blob/master/docs/en/setup/backend/configuration-vocabulary.md"

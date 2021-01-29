@@ -44,6 +44,7 @@ limitations under the License. -->
           icon="code"
         />
         <ToolBarSelect
+          v-if="logState.type.key === cateGoryBrowser"
           @onChoose="SELECT_ERROR_CATALOG"
           :title="this.$t('errorCatalog')"
           :current="logState.category"
@@ -190,7 +191,6 @@ limitations under the License. -->
                 serviceId: currentService.key || undefined,
                 serviceInstanceId: currentInstance.key || undefined,
                 endpointId: currentEndpoint.key || undefined,
-                state: category.key,
                 excludingKeywordsOfContent:
                   this.logState.supportQueryLogsByKeywords && conditions.excludingKeywordsOfContent
                     ? conditions.excludingKeywordsOfContent.split(',')
