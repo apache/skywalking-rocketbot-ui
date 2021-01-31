@@ -198,6 +198,7 @@ const m = {
   viewLogs: 'View Logs',
   logsTagsTip: `Only tags defined in the core/default/searchableLogsTags are searchable.
   Check more details on the Configuration Vocabulary page`,
+  keywordsOfContentLogTips: 'Current storage of SkyWalking OAP server does not support this.',
 };
 
 export default m;

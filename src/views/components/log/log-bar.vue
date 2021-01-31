@@ -188,9 +188,9 @@ limitations under the License. -->
                 serviceId: currentService.key || undefined,
                 serviceInstanceId: currentInstance.key || undefined,
                 endpointId: currentEndpoint.key || undefined,
-                excludingKeywordsOfContent:
-                  supportQueryLogsByKeywords && conditions.keywordsOfContent ? conditions.keywordsOfContent : undefined,
                 keywordsOfContent:
+                  supportQueryLogsByKeywords && conditions.keywordsOfContent ? conditions.keywordsOfContent : undefined,
+                excludingKeywordsOfContent:
                   supportQueryLogsByKeywords && conditions.excludingKeywordsOfContent
                     ? conditions.excludingKeywordsOfContent
                     : undefined,
