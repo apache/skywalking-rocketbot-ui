@@ -98,7 +98,6 @@ limitations under the License. -->
     @Mutation('SELECT_ERROR_CATALOG') private SELECT_ERROR_CATALOG: any;
     @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Mutation('CLEAR_LOG_CONDITIONS') private CLEAR_LOG_CONDITIONS: any;
-    @Mutation('SET_TAG_LIST') private SET_TAG_LIST: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;

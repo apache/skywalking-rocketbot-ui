@@ -91,7 +91,7 @@ limitations under the License. -->
 
 <script lang="ts">
   import { Duration, Option } from '@/types/global';
-  import { Component, Vue, Prop } from 'vue-property-decorator';
+  import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
   import { Mutation, State } from 'vuex-class';
 
   @Component({
@@ -212,6 +212,12 @@ limitations under the License. -->
       }
 
       localStorage.setItem(storageContent, JSON.stringify(list));
+    }
+    @Watch('rocketLog.conditions.tags')
+    private clearTags() {
+      if (!this.rocketLog.conditions.tags) {
+        this.tagsList = [];
+      }
     }
   }
 </script>
