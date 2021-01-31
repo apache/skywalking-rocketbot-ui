@@ -196,6 +196,7 @@ const m = {
   content: '内容',
   viewLogs: '查看日志',
   logsTagsTip: '只有core/default/searchableLogsTags中定义的标记才可搜索。查看配置词汇表页面上的更多详细信息。',
+  keywordsOfContentLogTips: 'SkyWalking OAP服务器的当前存储不支持此操作',
 };
 
 export default m;

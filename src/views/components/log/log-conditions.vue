@@ -24,7 +24,7 @@ limitations under the License. -->
       </div>
       <div class="mr-15">
         <span class="sm b grey mr-10">{{ this.$t('keywordsOfContent') }}:</span>
-        <span class="rk-trace-tags">
+        <span class="rk-trace-tags" v-show="rocketLog.supportQueryLogsByKeywords">
           <span
             class="selected"
             v-for="(item, index) in rocketLog.conditions.keywordsOfContent"
@@ -36,14 +36,22 @@ limitations under the License. -->
         </span>
         <input
           type="text"
-          class="rk-trace-search-input dib"
+          :disabled="!rocketLog.supportQueryLogsByKeywords"
+          class="rk-trace-search-input dib mr-5"
           v-model="keywordsOfContent"
           @keyup="addLabels($event, LogConditionsOpt.KeywordsOfContent)"
         />
+        <span
+          class="log-tips"
+          v-show="!rocketLog.supportQueryLogsByKeywords"
+          v-tooltip:bottom="{ content: this.$t('keywordsOfContentLogTips') }"
+        >
+          <rk-icon icon="help" class="mr-5" />
+        </span>
       </div>
       <div class="mr-15">
         <span class="sm b grey mr-10">{{ this.$t('excludingKeywordsOfContent') }}:</span>
-        <span class="rk-trace-tags">
+        <span class="rk-trace-tags" v-show="rocketLog.supportQueryLogsByKeywords">
           <span
             class="selected"
             v-for="(item, index) in rocketLog.conditions.excludingKeywordsOfContent"
@@ -55,10 +63,18 @@ limitations under the License. -->
         </span>
         <input
           type="text"
-          class="rk-trace-search-input dib"
+          :disabled="!rocketLog.supportQueryLogsByKeywords"
+          class="rk-trace-search-input dib mr-5"
           v-model="excludingKeywordsOfContent"
           @keyup="addLabels($event, LogConditionsOpt.ExcludingKeywordsOfContent)"
         />
+        <span
+          class="log-tips"
+          v-show="!rocketLog.supportQueryLogsByKeywords"
+          v-tooltip:bottom="{ content: this.$t('keywordsOfContentLogTips') }"
+        >
+          <rk-icon icon="help" class="mr-5" />
+        </span>
       </div>
     </div>
     <div class="mr-10" style="padding-top: 10px">
@@ -76,7 +92,7 @@ limitations under the License. -->
         class="rk-trace-new-tag"
         @keyup="addLabels($event, LogConditionsOpt.Tags)"
       />
-      <span class="trace-tips" v-tooltip:bottom="{ content: this.$t('logsTagsTip') }">
+      <span class="log-tips" v-tooltip:bottom="{ content: this.$t('logsTagsTip') }">
         <a
           target="blank"
           href="https://github.com/apache/skywalking/blob/master/docs/en/setup/backend/configuration-vocabulary.md"
@@ -272,7 +288,7 @@ limitations under the License. -->
       font-size: 12px;
       margin: 0 2px;
     }
-    .trace-tips {
+    .log-tips {
       color: #eee;
     }
   }
