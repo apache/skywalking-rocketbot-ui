@@ -114,11 +114,10 @@ limitations under the License. -->
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import TraceSelect from '../common/trace-select.vue';
-  import LogTable from '../log/log-table/log-table.vue';
   import { State as traceState } from '@/store/modules/trace/index';
   import { State as globalState } from '@/store/modules/global/index';
 
-  @Component({ components: { TraceSelect, LogTable } })
+  @Component({ components: { TraceSelect } })
   export default class TraceSearch extends Vue {
     @State('rocketbot') private rocketbotGlobal!: globalState;
     @State('rocketTrace') private rocketTrace!: traceState;

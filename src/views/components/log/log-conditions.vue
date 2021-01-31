@@ -24,30 +24,58 @@ limitations under the License. -->
       </div>
       <div class="mr-15">
         <span class="sm b grey mr-10">{{ this.$t('keywordsOfContent') }}:</span>
+        <span class="rk-trace-tags">
+          <span
+            class="selected"
+            v-for="(item, index) in rocketLog.conditions.keywordsOfContent"
+            :key="`keywordsOfContent${index}`"
+          >
+            <span>{{ item }}</span>
+            <span class="remove-icon" @click="removeContent(index)">×</span>
+          </span>
+        </span>
         <input
           type="text"
           class="rk-trace-search-input dib"
-          @change="changeConditions($event, LogConditionsOpt.KeywordsOfContent)"
+          v-model="keywordsOfContent"
+          @keyup="addLabels($event, LogConditionsOpt.KeywordsOfContent)"
         />
       </div>
       <div class="mr-15">
         <span class="sm b grey mr-10">{{ this.$t('excludingKeywordsOfContent') }}:</span>
+        <span class="rk-trace-tags">
+          <span
+            class="selected"
+            v-for="(item, index) in rocketLog.conditions.excludingKeywordsOfContent"
+            :key="`excludingKeywordsOfContent${index}`"
+          >
+            <span>{{ item }}</span>
+            <span class="remove-icon" @click="removeExcludeContent(index)">×</span>
+          </span>
+        </span>
         <input
           type="text"
           class="rk-trace-search-input dib"
-          @change="changeConditions($event, LogConditionsOpt.ExcludingKeywordsOfContent)"
+          v-model="excludingKeywordsOfContent"
+          @keyup="addLabels($event, LogConditionsOpt.ExcludingKeywordsOfContent)"
         />
       </div>
     </div>
     <div class="mr-10" style="padding-top: 10px">
       <span class="sm grey">{{ this.$t('tags') }}: </span>
       <span class="rk-trace-tags">
-        <span class="selected" v-for="(item, index) in rocketLog.tagsList" :key="index">
+        <span class="selected" v-for="(item, index) in tagsList" :key="index">
           <span>{{ item }}</span>
           <span class="remove-icon" @click="removeTags(index)">×</span>
         </span>
       </span>
-      <input type="text" :placeholder="this.$t('addTag')" v-model="tags" class="rk-trace-new-tag" @keyup="addLabels" />
+      <input
+        type="text"
+        :placeholder="this.$t('addTag')"
+        v-model="tags"
+        class="rk-trace-new-tag"
+        @keyup="addLabels($event, LogConditionsOpt.Tags)"
+      />
       <span class="trace-tips" v-tooltip:bottom="{ content: this.$t('logsTagsTip') }">
         <a
           target="blank"
@@ -63,7 +91,7 @@ limitations under the License. -->
 
 <script lang="ts">
   import { Duration, Option } from '@/types/global';
-  import { Component, Vue } from 'vue-property-decorator';
+  import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
   import { Mutation, State } from 'vuex-class';
 
   @Component({
@@ -73,7 +101,11 @@ limitations under the License. -->
     @State('rocketLog') private rocketLog: any;
     @Mutation('SET_LOG_CONDITIONS') private SET_LOG_CONDITIONS: any;
     @Mutation('SET_TAG_LIST') private SET_TAG_LIST: any;
-
+    @Mutation('SET_KEYWORDS_CONTENT') private SET_KEYWORDS_CONTENT: any;
+    @Mutation('SET_EXCLUDING_KEYWORDS_CONTENT') private SET_EXCLUDING_KEYWORDS_CONTENT: any;
+    private keywordsOfContent: string = '';
+    private excludingKeywordsOfContent: string = '';
+    private tagsList: string[] = [];
     private tags: string = '';
     private LogConditionsOpt = {
       TraceID: 'traceId',
@@ -82,7 +114,8 @@ limitations under the License. -->
       ExcludingKeywordsOfContent: 'excludingKeywordsOfContent',
     };
     private created() {
-      this.updateTags();
+      (this.tagsList = localStorage.getItem('logTags') ? JSON.parse(localStorage.getItem('logTags') || '') : []),
+        this.updateTags();
     }
     private changeConditions(item: any, type: string) {
       item = {
@@ -91,24 +124,69 @@ limitations under the License. -->
       };
       this.SET_LOG_CONDITIONS(item);
     }
-    private addLabels(event: KeyboardEvent) {
-      if (event.keyCode !== 13 || !this.tags) {
+    private addLabels(event: KeyboardEvent, type: string) {
+      if (event.keyCode !== 13) {
         return;
       }
-      const tagsList = this.rocketLog.tagsList;
-      tagsList.push(this.tags);
-      this.SET_TAG_LIST(tagsList);
-      this.tags = '';
-      this.updateTags();
+      if (type === this.LogConditionsOpt.Tags && !this.tags) {
+        return;
+      }
+      if (type === this.LogConditionsOpt.KeywordsOfContent && !this.keywordsOfContent) {
+        return;
+      }
+      if (type === this.LogConditionsOpt.ExcludingKeywordsOfContent && !this.excludingKeywordsOfContent) {
+        return;
+      }
+      if (type === this.LogConditionsOpt.Tags) {
+        this.tagsList.push(this.tags);
+        this.tags = '';
+        this.updateTags();
+      } else if (type === this.LogConditionsOpt.KeywordsOfContent) {
+        const keywordsOfContentList = this.rocketLog.conditions.keywordsOfContent || [];
+        keywordsOfContentList.push(this.keywordsOfContent);
+        this.SET_LOG_CONDITIONS({
+          label: type,
+          key: keywordsOfContentList,
+        });
+        this.keywordsOfContent = '';
+        this.updateContent(type);
+      } else if (type === this.LogConditionsOpt.ExcludingKeywordsOfContent) {
+        const excludingKeywordsOfContentList = this.rocketLog.conditions.excludingKeywordsOfContent || [];
+        excludingKeywordsOfContentList.push(this.excludingKeywordsOfContent);
+        this.SET_LOG_CONDITIONS({
+          label: type,
+          key: excludingKeywordsOfContentList,
+        });
+        this.excludingKeywordsOfContent = '';
+        this.updateContent(type);
+      }
+    }
+    private removeContent(index: number) {
+      const keywordsOfContentList = this.rocketLog.conditions.keywordsOfContent || [];
+      keywordsOfContentList.splice(index, 1);
+      this.SET_LOG_CONDITIONS({
+        label: this.LogConditionsOpt.KeywordsOfContent,
+        key: keywordsOfContentList,
+      });
+      this.keywordsOfContent = '';
+      this.updateContent(this.LogConditionsOpt.KeywordsOfContent);
+    }
+    private removeExcludeContent(index: number) {
+      const excludingKeywordsOfContentList = this.rocketLog.conditions.excludingKeywordsOfContent || [];
+      excludingKeywordsOfContentList.splice(index, 1);
+      this.SET_LOG_CONDITIONS({
+        label: this.LogConditionsOpt.ExcludingKeywordsOfContent,
+        key: excludingKeywordsOfContentList,
+      });
+      this.excludingKeywordsOfContent = '';
+      this.updateContent(this.LogConditionsOpt.ExcludingKeywordsOfContent);
     }
     private removeTags(index: number) {
-      const tagsList = this.rocketLog.tagsList;
-      tagsList.splice(index, 1);
-      this.SET_TAG_LIST(tagsList);
+      this.tagsList.splice(index, 1);
       this.updateTags();
     }
     private updateTags() {
-      const tagsMap = this.rocketLog.tagsList.map((item: string) => {
+      const tagsMap = this.tagsList.map((item: string) => {
         const key = item.substring(0, item.indexOf('='));
 
         return {
@@ -120,7 +198,26 @@ limitations under the License. -->
         label: this.LogConditionsOpt.Tags,
         key: tagsMap,
       });
-      localStorage.setItem('logTags', JSON.stringify(this.rocketLog.tagsList));
+      localStorage.setItem('logTags', JSON.stringify(this.tagsList));
+    }
+    private updateContent(type: string) {
+      let list = [];
+      let storageContent = '';
+      if (type === this.LogConditionsOpt.KeywordsOfContent) {
+        list = this.rocketLog.conditions.keywordsOfContent;
+        storageContent = 'logKeywordsOfContent';
+      } else if (type === this.LogConditionsOpt.ExcludingKeywordsOfContent) {
+        list = this.rocketLog.conditions.excludingKeywordsOfContent;
+        storageContent = 'logExcludingKeywordsOfContent';
+      }
+
+      localStorage.setItem(storageContent, JSON.stringify(list));
+    }
+    @Watch('rocketLog.conditions.tags')
+    private clearTags() {
+      if (!this.rocketLog.conditions.tags) {
+        this.tagsList = [];
+      }
     }
   }
 </script>

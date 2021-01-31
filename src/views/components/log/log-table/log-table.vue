@@ -32,7 +32,6 @@ limitations under the License. -->
       <BrowserItem :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
     </div>
     <div v-else>
-      "
       <ServiceItem v-for="(item, index) in tableData" :data="item" :key="'key' + index" :noLink="noLink" />
     </div>
     <slot></slot>

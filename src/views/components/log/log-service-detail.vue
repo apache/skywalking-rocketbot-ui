@@ -41,7 +41,7 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'vue-property-decorator';
+  import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
   import { Mutation, State } from 'vuex-class';
   import LogTable from './log-table/log-table.vue';
   import { ServiceLogDetail } from './log-table/log-constant';
@@ -53,7 +53,6 @@ limitations under the License. -->
   export default class LogServiceDetail extends Vue {
     @Prop() private data: any;
     @Prop() private loading!: true;
-    @Prop() private showBtnDetail: any;
     @Prop() private noLink!: boolean;
 
     private columns = ServiceLogDetail;
@@ -63,9 +62,6 @@ limitations under the License. -->
     private logContent: string = '';
     private logTags: string = '';
 
-    private created() {
-      this.$eventBus.$on('HANDLE-SELECT-LOG', this, this.handleSelectLog);
-    }
     private handleSelectLog(data: any[]) {
       this.currentLog = data;
       this.logTags = this.currentLog.tags.map((d: { key: string; value: string }) => {
@@ -78,9 +74,11 @@ limitations under the License. -->
       } else {
         this.logContent = this.currentLog.content;
       }
-      if (!this.showBtnDetail) {
-        this.showDetail = true;
-      }
+      this.showDetail = true;
+    }
+    @Watch('data')
+    private bindSelect() {
+      this.$eventBus.$on('HANDLE-SELECT-LOG', this, this.handleSelectLog);
     }
   }
 </script>

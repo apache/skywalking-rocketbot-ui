@@ -42,7 +42,7 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'vue-property-decorator';
+  import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
   import { Mutation, State } from 'vuex-class';
   import LogTable from './log-table/log-table.vue';
   import { BrowserLogConstants } from './log-table/log-constant';
@@ -54,15 +54,11 @@ limitations under the License. -->
     @State('rocketLog') private logState: any;
     @Prop() private data: any;
     @Prop() private loading!: true;
-    @Prop() private showBtnDetail: any;
 
     private columns = BrowserLogConstants;
     private showDetail = false;
     private list = [];
     private currentLog = {};
-    private created() {
-      this.$eventBus.$on('HANDLE-SELECT-LOG', this, this.handleSelectLog);
-    }
     private lineBreak(str = '') {
       const s = str
         .replace(/</g, '&lt;')
@@ -73,9 +69,11 @@ limitations under the License. -->
     }
     private handleSelectLog(data: any) {
       this.currentLog = data;
-      if (!this.showBtnDetail) {
-        this.showDetail = true;
-      }
+      this.showDetail = true;
+    }
+    @Watch('data')
+    private bindSelect() {
+      this.$eventBus.$on('HANDLE-SELECT-LOG', this, this.handleSelectLog);
     }
   }
 </script>
