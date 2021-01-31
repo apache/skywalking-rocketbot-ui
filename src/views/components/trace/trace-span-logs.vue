@@ -113,7 +113,6 @@ limitations under the License. -->
       this.showRelatedLogs = true;
       this.GET_TRACE_SPAN_LOGS({
         condition: {
-          state: 'ALL',
           relatedTrace: {
             traceId: this.currentSpan.traceId,
             segmentId: this.currentSpan.segmentId,
