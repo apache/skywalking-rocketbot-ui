@@ -168,12 +168,10 @@ limitations under the License. -->
       this.SELECT_ERROR_CATALOG({ label: 'All', key: 'ALL' });
       this.CLEAR_LOG_CONDITIONS();
       this.queryLogs();
-      window.localStorage.removeItem('logTags');
-      this.SET_TAG_LIST([]);
     }
 
     private queryLogs() {
-      const { category, conditions, type } = this.logState;
+      const { category, conditions, type, supportQueryLogsByKeywords } = this.logState;
       const { currentService, currentInstance, currentEndpoint } = this.rocketOption;
 
       this.QUERY_LOGS({
@@ -192,12 +190,10 @@ limitations under the License. -->
                 serviceInstanceId: currentInstance.key || undefined,
                 endpointId: currentEndpoint.key || undefined,
                 excludingKeywordsOfContent:
-                  this.logState.supportQueryLogsByKeywords && conditions.excludingKeywordsOfContent
-                    ? conditions.excludingKeywordsOfContent.split(',')
-                    : undefined,
+                  supportQueryLogsByKeywords && conditions.keywordsOfContent ? conditions.keywordsOfContent : undefined,
                 keywordsOfContent:
-                  this.logState.supportQueryLogsByKeywords && conditions.keywordsOfContent
-                    ? conditions.keywordsOfContent.split(',')
+                  supportQueryLogsByKeywords && conditions.excludingKeywordsOfContent
+                    ? conditions.excludingKeywordsOfContent
                     : undefined,
                 relatedTrace: conditions.traceId ? { traceId: conditions.traceId } : undefined,
                 tags: conditions.tags,
