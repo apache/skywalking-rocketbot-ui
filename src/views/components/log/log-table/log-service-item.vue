@@ -43,6 +43,9 @@ limitations under the License. -->
     private columns = ServiceLogConstants;
     private tags: string = '';
     private created() {
+      if (!this.data.tags) {
+        return;
+      }
       this.tags = String(this.data.tags.map((d: any) => `${d.key}=${d.value}`));
     }
     private showSelectSpan() {
