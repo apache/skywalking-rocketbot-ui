@@ -26,7 +26,7 @@ limitations under the License. -->
     <div class="rk-trace-bar-i flex-h" @click="visible = !visible && !readonly">
       <div class="mr-15 rk-trace-bar-i-text">
         <div class="sm grey">{{ title }}</div>
-        <div class="ell" v-tooltip:right.ellipsis="value.label || ''">
+        <div v-tooltip:right.ellipsis="value.label || ''">
           {{ value.label || '' }}
         </div>
       </div>
@@ -92,8 +92,10 @@ limitations under the License. -->
     }
   }
   .rk-trace-bar-i-text {
-    max-width: 150px;
-    min-width: 80px;
+    max-width: 350px;
+    min-width: 100px;
+    word-wrap: break-word;
+    word-break: break-all;
   }
   .rk-trace-bar-i {
     height: 100%;
