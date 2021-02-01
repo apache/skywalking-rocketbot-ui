@@ -17,7 +17,7 @@ limitations under the License. -->
   <div @click="showSelectSpan" class="log-item">
     <div v-for="(item, index) in columns" :key="index" :class="item.label">
       <span v-if="item.label === 'timestamp'">
-        {{ data.time | dateformat }}
+        {{ data.timestamp | dateformat }}
       </span>
       <span v-else-if="item.label === 'tags'">
         {{ tags }}
