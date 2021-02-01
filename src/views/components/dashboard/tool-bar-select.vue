@@ -29,7 +29,7 @@ limitations under the License. -->
       </svg>
       <div class="mr-15 rk-dashboard-bar-i-text">
         <div class="sm grey">{{ title }}</div>
-        <div class="ell" v-tooltip:right.ellipsis="current.label || ''">
+        <div class="selector-ell" v-tooltip:right.ellipsis="current.label || ''">
           {{ current.label }}
         </div>
       </div>
@@ -97,7 +97,11 @@ limitations under the License. -->
     }
   }
   .rk-dashboard-bar-i-text {
-    max-width: 200px;
+    max-width: 350px;
+    .selector-ell {
+      word-wrap: break-word;
+      word-break: break-all;
+    }
   }
   .rk-dashboard-bar-i {
     height: 100%;

@@ -17,7 +17,7 @@ limitations under the License. -->
   <div @click="showSelectSpan" class="log-item">
     <div v-for="(item, index) in columns" :key="index" :class="item.label">
       <span v-if="item.label === 'timestamp'">
-        {{ data.time | dateformat }}
+        {{ data.timestamp | dateformat }}
       </span>
       <span v-else-if="item.label === 'tags'">
         {{ tags }}
@@ -43,6 +43,9 @@ limitations under the License. -->
     private columns = ServiceLogConstants;
     private tags: string = '';
     private created() {
+      if (!this.data.tags) {
+        return;
+      }
       this.tags = String(this.data.tags.map((d: any) => `${d.key}=${d.value}`));
     }
     private showSelectSpan() {
