@@ -73,7 +73,7 @@ limitations under the License. -->
         <RkPage :currentSize="10" :currentPage="pageNum" @changePage="handleRefresh" :total="logState.total" />
       </span>
     </div>
-    <div class="flex-h" v-show="showConditionsBox">
+    <div class="flex-h" v-show="showConditionsBox && logState.type.key !== cateGoryBrowser">
       <LogConditions />
     </div>
   </div>
