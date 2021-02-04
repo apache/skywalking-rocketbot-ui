@@ -44,7 +44,7 @@ limitations under the License. -->
           <use xlink:href="#clear"></use>
         </svg>
       </div>
-      <div class="rk-dashboard-opt-wrapper scroll_hide">
+      <div class="rk-dashboard-opt-wrapper">
         <div
           class="rk-dashboard-opt ell"
           @click="i.disabled ? () => {} : handleSelect(i)"

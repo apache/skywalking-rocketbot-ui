@@ -41,7 +41,7 @@ limitations under the License. -->
           <use xlink:href="#clear"></use>
         </svg>
       </div>
-      <div class="rk-topo-opt-wrapper scroll_hide">
+      <div class="rk-topo-opt-wrapper">
         <div
           class="rk-topo-opt ell"
           @click="handleSelect(i)"

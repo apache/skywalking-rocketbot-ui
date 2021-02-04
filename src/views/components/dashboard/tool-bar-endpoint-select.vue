@@ -44,7 +44,7 @@ limitations under the License. -->
           <use xlink:href="#clear"></use>
         </svg>
       </div>
-      <div class="rk-dashboard-opt-wrapper scroll_hide">
+      <div class="rk-dashboard-opt-wrapper">
         <EndpointOpt
           @handleSelect="handleSelect"
           :class="{ active: i.key === current.key }"
