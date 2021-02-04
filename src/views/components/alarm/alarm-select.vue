@@ -41,7 +41,7 @@ limitations under the License. -->
           <use xlink:href="#clear"></use>
         </svg>
       </div>
-      <div class="rk-alarm-opt-wrapper scroll_content">
+      <div class="rk-alarm-opt-wrapper scroll_bar_style">
         <div
           class="rk-alarm-opt ell"
           @click="handleSelect(i)"

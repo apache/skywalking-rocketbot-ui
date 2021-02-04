@@ -41,7 +41,7 @@ limitations under the License. -->
           <use xlink:href="#clear"></use>
         </svg>
       </div>
-      <div class="rk-trace-opt-wrapper scroll_hide">
+      <div class="rk-trace-opt-wrapper scroll_bar_style">
         <div
           class="rk-trace-opt ell"
           @click="handleSelect(i)"
