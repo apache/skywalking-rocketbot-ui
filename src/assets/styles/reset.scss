@@ -106,7 +106,7 @@ code,
 pre {
   font-family: Consolas, Menlo, Courier, monospace;
 }
-/*webkit内核*/
+/*webkit core*/
 .scroll_hide::-webkit-scrollbar {
   width: 0px;
   height: 0px;
@@ -129,7 +129,7 @@ pre {
 .scroll_hide::-webkit-scrollbar-resizer {
   background-color: rgba(0, 0, 0, 0);
 }
-/*o内核*/
+/*o core*/
 .scroll_hide .-o-scrollbar {
   -moz-appearance: none !important;
   background: rgba(0, 255, 0, 0) !important;
@@ -164,7 +164,6 @@ pre {
   -ms-overflow-style: none;
   overflow: auto;
 }
-/*webkit内核*/
 .scroll_bar_style::-webkit-scrollbar {
   width: 10px;
   height: 6px;
@@ -174,5 +173,5 @@ pre {
 }
 .scroll_bar_style::-webkit-scrollbar-thumb {
   border-radius: 5px;
-  background: #666;
+  background: #777;
 }
