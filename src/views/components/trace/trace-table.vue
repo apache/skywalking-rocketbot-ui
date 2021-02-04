@@ -31,7 +31,7 @@ limitations under the License. -->
         <use xlink:href="#spinner"></use>
       </svg>
     </div>
-    <div class="rk-trace-t-wrapper">
+    <div class="rk-trace-t-wrapper scroll_hide">
       <table class="rk-trace-t">
         <tr class="rk-trace-tr cp" v-for="(i, index) in rocketTrace.traceList" @click="selectTrace(i)" :key="index">
           <td
