@@ -116,6 +116,7 @@ limitations under the License. -->
   import TraceSelect from '../common/trace-select.vue';
   import { State as traceState } from '@/store/modules/trace/index';
   import { State as globalState } from '@/store/modules/global/index';
+  import dateFormatStep from '@/utils/dateFormatStep';
 
   @Component({ components: { TraceSelect } })
   export default class TraceSearch extends Vue {
@@ -161,40 +162,6 @@ limitations under the License. -->
       }
     }
 
-    private dateFormat(date: Date, step: string) {
-      const year = date.getFullYear();
-      const monthTemp = date.getMonth() + 1;
-      let month: string = `${monthTemp}`;
-      if (monthTemp < 10) {
-        month = `0${monthTemp}`;
-      }
-
-      const dayTemp = date.getDate();
-      let day: string = `${dayTemp}`;
-      if (dayTemp < 10) {
-        day = `0${dayTemp}`;
-      }
-      if (step === 'DAY' || step === 'MONTH') {
-        return `${year}-${month}-${day}`;
-      }
-      const hourTemp = date.getHours();
-      let hour: string = `${hourTemp}`;
-      if (hourTemp < 10) {
-        hour = `0${hourTemp}`;
-      }
-      if (step === 'HOUR') {
-        return `${year}-${month}-${day} ${hour}`;
-      }
-      const minuteTemp = date.getMinutes();
-      let minute: string = `${minuteTemp}`;
-      if (minuteTemp < 10) {
-        minute = `0${minuteTemp}`;
-      }
-      if (step === 'MINUTE') {
-        return `${year}-${month}-${day} ${hour}${minute}`;
-      }
-    }
-
     private globalTimeFormat(time: Date[]) {
       let step = 'MINUTE';
       const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
@@ -206,8 +173,8 @@ limitations under the License. -->
         step = 'DAY';
       }
       return {
-        start: this.dateFormat(time[0], step),
-        end: this.dateFormat(time[1], step),
+        start: dateFormatStep(time[0], step, false),
+        end: dateFormatStep(time[1], step, false),
         step,
       };
     }

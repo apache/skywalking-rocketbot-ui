@@ -69,8 +69,6 @@ limitations under the License. -->
       });
       if (this.currentLog.contentType === 'JSON') {
         this.logContent = formatJson(JSON.parse(this.currentLog.content));
-      } else if (this.currentLog.contentType === 'TEXT') {
-        this.logContent = this.currentLog.content;
       } else {
         this.logContent = this.currentLog.content;
       }

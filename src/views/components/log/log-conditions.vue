@@ -22,6 +22,10 @@ limitations under the License. -->
           @change="changeConditions($event, LogConditionsOpt.TraceID)"
         />
       </div>
+      <div class="search-time">
+        <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
+        <RkDate class="sm" v-model="searchTime" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
+      </div>
       <div class="mr-15">
         <span class="sm b grey mr-10">{{ this.$t('keywordsOfContent') }}:</span>
         <span class="rk-trace-tags" v-show="rocketLog.supportQueryLogsByKeywords">
@@ -109,11 +113,13 @@ limitations under the License. -->
   import { Duration, Option } from '@/types/global';
   import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
   import { Mutation, State } from 'vuex-class';
+  import { State as globalState } from '@/store/modules/global/index';
 
   @Component({
     components: {},
   })
   export default class LogConditions extends Vue {
+    @State('rocketbot') private rocketbotGlobal!: globalState;
     @State('rocketLog') private rocketLog: any;
     @Mutation('SET_LOG_CONDITIONS') private SET_LOG_CONDITIONS: any;
     @Mutation('SET_TAG_LIST') private SET_TAG_LIST: any;
@@ -123,6 +129,7 @@ limitations under the License. -->
     private excludingKeywordsOfContent: string = '';
     private tagsList: string[] = [];
     private tags: string = '';
+    private searchTime: Date[] = [];
     private LogConditionsOpt = {
       TraceID: 'traceId',
       Tags: 'tags',
@@ -130,6 +137,7 @@ limitations under the License. -->
       ExcludingKeywordsOfContent: 'excludingKeywordsOfContent',
     };
     private created() {
+      this.searchTime = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
       (this.tagsList = localStorage.getItem('logTags') ? JSON.parse(localStorage.getItem('logTags') || '') : []),
         this.updateTags();
     }
@@ -289,6 +297,9 @@ limitations under the License. -->
       margin: 0 2px;
     }
     .log-tips {
+      color: #eee;
+    }
+    .search-time {
       color: #eee;
     }
   }

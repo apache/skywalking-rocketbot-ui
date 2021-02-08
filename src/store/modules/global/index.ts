@@ -19,46 +19,11 @@ import * as types from '@/store/mutation-types';
 import { Duration, DurationTime } from '@/types/global';
 import getDurationRow from '@/utils/datetime';
 import getLocalTime from '@/utils/localtime';
+import dateFormatStep from '@/utils/dateFormatStep';
 import { ActionTree, Commit, MutationTree } from 'vuex';
 
 let timer: any = null;
 
-const dateFormat = (date: Date, step: string): string => {
-  const year = date.getFullYear();
-  const monthTemp = date.getMonth() + 1;
-  let month: string = `${monthTemp}`;
-  if (monthTemp < 10) {
-    month = `0${monthTemp}`;
-  }
-  if (step === 'MONTH') {
-    return `${year}-${month}`;
-  }
-  const dayTemp = date.getDate();
-  let day: string = `${dayTemp}`;
-  if (dayTemp < 10) {
-    day = `0${dayTemp}`;
-  }
-  if (step === 'DAY') {
-    return `${year}-${month}-${day}`;
-  }
-  const hourTemp = date.getHours();
-  let hour: string = `${hourTemp}`;
-  if (hourTemp < 10) {
-    hour = `0${hourTemp}`;
-  }
-  if (step === 'HOUR') {
-    return `${year}-${month}-${day} ${hour}`;
-  }
-  const minuteTemp = date.getMinutes();
-  let minute: string = `${minuteTemp}`;
-  if (minuteTemp < 10) {
-    minute = `0${minuteTemp}`;
-  }
-  if (step === 'MINUTE') {
-    return `${year}-${month}-${day} ${hour}${minute}`;
-  }
-  return '';
-};
 const dateFormatTime = (date: Date, step: string): string => {
   const year = date.getFullYear();
   const monthTemp = date.getMonth() + 1;
@@ -156,8 +121,8 @@ const getters = {
   },
   durationTime(_: State, getter: any): DurationTime {
     return {
-      start: dateFormat(getter.duration.start, getter.duration.step),
-      end: dateFormat(getter.duration.end, getter.duration.step),
+      start: dateFormatStep(getter.duration.start, getter.duration.step, true),
+      end: dateFormatStep(getter.duration.end, getter.duration.step, true),
       step: getter.duration.step,
     };
   },
