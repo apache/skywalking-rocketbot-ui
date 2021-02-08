@@ -46,10 +46,8 @@ Vue.use(VModal, { dialog: true });
 Vue.directive('clickout', clickout);
 Vue.directive('tooltip', tooltip);
 
-Vue.filter(
-  'dateformat',
-  (dataStr: any, pattern: string = 'YYYY-MM-DD HH:mm:ss') =>
-    moment(dataStr).format(pattern),
+Vue.filter('dateformat', (dataStr: any, pattern: string = 'YYYY-MM-DD HH:mm:ss') =>
+  moment(Number.parseInt(dataStr)).format(pattern),
 );
 
 const savedLanguage = window.localStorage.getItem('lang');
