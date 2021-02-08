@@ -114,6 +114,7 @@ limitations under the License. -->
   import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
   import { Mutation, State } from 'vuex-class';
   import { State as globalState } from '@/store/modules/global/index';
+  import dateFormatStep from '@/utils/dateFormatStep';
 
   @Component({
     components: {},
@@ -135,6 +136,7 @@ limitations under the License. -->
       Tags: 'tags',
       KeywordsOfContent: 'keywordsOfContent',
       ExcludingKeywordsOfContent: 'excludingKeywordsOfContent',
+      Date: 'date',
     };
     private created() {
       this.searchTime = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
@@ -237,11 +239,43 @@ limitations under the License. -->
 
       localStorage.setItem(storageContent, JSON.stringify(list));
     }
+    private globalTimeFormat(time: Date[]) {
+      let step = 'MINUTE';
+      const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
+      if (unix <= 60 * 60 * 1000) {
+        step = 'MINUTE';
+      } else if (unix <= 24 * 60 * 60 * 1000) {
+        step = 'HOUR';
+      } else {
+        step = 'DAY';
+      }
+      return {
+        start: dateFormatStep(time[0], step, true),
+        end: dateFormatStep(time[1], step, true),
+        step,
+      };
+    }
     @Watch('rocketLog.conditions.tags')
     private clearTags() {
       if (!this.rocketLog.conditions.tags) {
         this.tagsList = [];
       }
+    }
+    @Watch('searchTime')
+    private updateDate() {
+      this.SET_LOG_CONDITIONS({
+        label: this.LogConditionsOpt.Date,
+        key: this.globalTimeFormat([
+          new Date(
+            this.searchTime[0].getTime() +
+              (parseInt(String(this.rocketbotGlobal.utc), 10) + new Date().getTimezoneOffset() / 60) * 3600000,
+          ),
+          new Date(
+            this.searchTime[1].getTime() +
+              (parseInt(String(this.rocketbotGlobal.utc), 10) + new Date().getTimezoneOffset() / 60) * 3600000,
+          ),
+        ]),
+      });
     }
   }
 </script>

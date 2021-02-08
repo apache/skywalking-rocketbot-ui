@@ -197,7 +197,7 @@ limitations under the License. -->
                 relatedTrace: conditions.traceId ? { traceId: conditions.traceId } : undefined,
                 tags: conditions.tags,
                 paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
-                queryDuration: conditions.traceId ? undefined : this.durationTime,
+                queryDuration: conditions.traceId ? undefined : conditions.date,
               },
       });
     }
