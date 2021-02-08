@@ -14,7 +14,7 @@ limitations under the License. -->
 <template>
   <div class="rk-search-conditions flex-v">
     <div class="flex-h">
-      <div class="mr-15">
+      <div class="mr-15" v-show="rocketLog.type.key === cateGoryService">
         <span class="sm b grey mr-10">{{ this.$t('traceID') }}:</span>
         <input
           type="text"
@@ -22,7 +22,11 @@ limitations under the License. -->
           @change="changeConditions($event, LogConditionsOpt.TraceID)"
         />
       </div>
-      <div class="mr-15">
+      <div class="search-time">
+        <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
+        <RkDate class="sm" v-model="searchTime" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
+      </div>
+      <div class="mr-15" v-show="rocketLog.type.key === cateGoryService">
         <span class="sm b grey mr-10">{{ this.$t('keywordsOfContent') }}:</span>
         <span class="rk-trace-tags" v-show="rocketLog.supportQueryLogsByKeywords">
           <span
@@ -49,7 +53,7 @@ limitations under the License. -->
           <rk-icon icon="help" class="mr-5" />
         </span>
       </div>
-      <div class="mr-15">
+      <div class="mr-15" v-show="rocketLog.type.key === cateGoryService">
         <span class="sm b grey mr-10">{{ this.$t('excludingKeywordsOfContent') }}:</span>
         <span class="rk-trace-tags" v-show="rocketLog.supportQueryLogsByKeywords">
           <span
@@ -77,7 +81,7 @@ limitations under the License. -->
         </span>
       </div>
     </div>
-    <div class="mr-10" style="padding-top: 10px">
+    <div class="mr-10" style="padding-top: 10px" v-show="rocketLog.type.key === cateGoryService">
       <span class="sm grey">{{ this.$t('tags') }}: </span>
       <span class="rk-trace-tags">
         <span class="selected" v-for="(item, index) in tagsList" :key="index">
@@ -109,12 +113,16 @@ limitations under the License. -->
   import { Duration, Option } from '@/types/global';
   import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
   import { Mutation, State } from 'vuex-class';
+  import { State as globalState } from '@/store/modules/global/index';
+  import { State as logState } from '@/store/modules/log/index';
+  import dateFormatStep from '@/utils/dateFormatStep';
 
   @Component({
     components: {},
   })
   export default class LogConditions extends Vue {
-    @State('rocketLog') private rocketLog: any;
+    @State('rocketbot') private rocketbotGlobal!: globalState;
+    @State('rocketLog') private rocketLog!: logState;
     @Mutation('SET_LOG_CONDITIONS') private SET_LOG_CONDITIONS: any;
     @Mutation('SET_TAG_LIST') private SET_TAG_LIST: any;
     @Mutation('SET_KEYWORDS_CONTENT') private SET_KEYWORDS_CONTENT: any;
@@ -123,13 +131,17 @@ limitations under the License. -->
     private excludingKeywordsOfContent: string = '';
     private tagsList: string[] = [];
     private tags: string = '';
+    private searchTime: Date[] = [];
     private LogConditionsOpt = {
       TraceID: 'traceId',
       Tags: 'tags',
       KeywordsOfContent: 'keywordsOfContent',
       ExcludingKeywordsOfContent: 'excludingKeywordsOfContent',
+      Date: 'date',
     };
+    private cateGoryService = 'service';
     private created() {
+      this.searchTime = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
       (this.tagsList = localStorage.getItem('logTags') ? JSON.parse(localStorage.getItem('logTags') || '') : []),
         this.updateTags();
     }
@@ -229,11 +241,43 @@ limitations under the License. -->
 
       localStorage.setItem(storageContent, JSON.stringify(list));
     }
+    private globalTimeFormat(time: Date[]) {
+      let step = 'MINUTE';
+      const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
+      if (unix <= 60 * 60 * 1000) {
+        step = 'MINUTE';
+      } else if (unix <= 24 * 60 * 60 * 1000) {
+        step = 'HOUR';
+      } else {
+        step = 'DAY';
+      }
+      return {
+        start: dateFormatStep(time[0], step, true),
+        end: dateFormatStep(time[1], step, true),
+        step,
+      };
+    }
     @Watch('rocketLog.conditions.tags')
     private clearTags() {
       if (!this.rocketLog.conditions.tags) {
         this.tagsList = [];
       }
+    }
+    @Watch('searchTime')
+    private updateDate() {
+      this.SET_LOG_CONDITIONS({
+        label: this.LogConditionsOpt.Date,
+        key: this.globalTimeFormat([
+          new Date(
+            this.searchTime[0].getTime() +
+              (parseInt(String(this.rocketbotGlobal.utc), 10) + new Date().getTimezoneOffset() / 60) * 3600000,
+          ),
+          new Date(
+            this.searchTime[1].getTime() +
+              (parseInt(String(this.rocketbotGlobal.utc), 10) + new Date().getTimezoneOffset() / 60) * 3600000,
+          ),
+        ]),
+      });
     }
   }
 </script>
@@ -289,6 +333,9 @@ limitations under the License. -->
       margin: 0 2px;
     }
     .log-tips {
+      color: #eee;
+    }
+    .search-time {
       color: #eee;
     }
   }
