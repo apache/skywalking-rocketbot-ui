@@ -14,7 +14,7 @@ limitations under the License. -->
 <template>
   <div class="rk-search-conditions flex-v">
     <div class="flex-h">
-      <div class="mr-15">
+      <div class="mr-15" v-show="rocketLog.type.key === cateGoryService">
         <span class="sm b grey mr-10">{{ this.$t('traceID') }}:</span>
         <input
           type="text"
@@ -26,7 +26,7 @@ limitations under the License. -->
         <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
         <RkDate class="sm" v-model="searchTime" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
       </div>
-      <div class="mr-15">
+      <div class="mr-15" v-show="rocketLog.type.key === cateGoryService">
         <span class="sm b grey mr-10">{{ this.$t('keywordsOfContent') }}:</span>
         <span class="rk-trace-tags" v-show="rocketLog.supportQueryLogsByKeywords">
           <span
@@ -53,7 +53,7 @@ limitations under the License. -->
           <rk-icon icon="help" class="mr-5" />
         </span>
       </div>
-      <div class="mr-15">
+      <div class="mr-15" v-show="rocketLog.type.key === cateGoryService">
         <span class="sm b grey mr-10">{{ this.$t('excludingKeywordsOfContent') }}:</span>
         <span class="rk-trace-tags" v-show="rocketLog.supportQueryLogsByKeywords">
           <span
@@ -81,7 +81,7 @@ limitations under the License. -->
         </span>
       </div>
     </div>
-    <div class="mr-10" style="padding-top: 10px">
+    <div class="mr-10" style="padding-top: 10px" v-show="rocketLog.type.key === cateGoryService">
       <span class="sm grey">{{ this.$t('tags') }}: </span>
       <span class="rk-trace-tags">
         <span class="selected" v-for="(item, index) in tagsList" :key="index">
@@ -138,6 +138,7 @@ limitations under the License. -->
       ExcludingKeywordsOfContent: 'excludingKeywordsOfContent',
       Date: 'date',
     };
+    private cateGoryService = 'service';
     private created() {
       this.searchTime = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
       (this.tagsList = localStorage.getItem('logTags') ? JSON.parse(localStorage.getItem('logTags') || '') : []),

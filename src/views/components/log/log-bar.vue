@@ -53,11 +53,7 @@ limitations under the License. -->
         />
       </div>
       <span class="flex-h rk-right">
-        <a
-          class="rk-log-search-btn bg-blue mr-10"
-          v-if="logState.type.key !== cateGoryBrowser"
-          @click="openConditionsBox"
-        >
+        <a class="rk-log-search-btn bg-blue mr-10" @click="openConditionsBox">
           <rk-icon icon="settings" class="mr-5" />
           <span class="vm">{{ $t('setConditions') }}</span>
         </a>
@@ -73,7 +69,7 @@ limitations under the License. -->
         <RkPage :currentSize="10" :currentPage="pageNum" @changePage="handleRefresh" :total="logState.total" />
       </span>
     </div>
-    <div class="flex-h" v-show="showConditionsBox && logState.type.key !== cateGoryBrowser">
+    <div class="flex-h" v-show="showConditionsBox">
       <LogConditions />
     </div>
   </div>
@@ -123,15 +119,6 @@ limitations under the License. -->
         .then(() => {
           this.queryLogs();
         });
-      this.SET_EVENTS([
-        () => {
-          this.queryLogs();
-        },
-      ]);
-    }
-
-    private beforeDestroy() {
-      this.SET_EVENTS([]);
     }
 
     private handleRefresh(pageNum: number) {
@@ -182,7 +169,7 @@ limitations under the License. -->
                 pagePathId: currentEndpoint.key,
                 category: category.key,
                 paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
-                queryDuration: this.durationTime,
+                queryDuration: conditions.date,
               }
             : {
                 serviceId: currentService.key || undefined,
