@@ -83,13 +83,15 @@ limitations under the License. -->
   import ToolBarSelect from '../dashboard/tool-bar-select.vue';
   import ToolBarEndpointSelect from '../dashboard/tool-bar-endpoint-select.vue';
   import LogConditions from './log-conditions.vue';
+  import { State as logState } from '@/store/modules/log/index';
+  import { State as optionState } from '@/store/modules/global/selectors';
 
   @Component({
     components: { TraceSelect, ToolBarSelect, ToolBarEndpointSelect, LogConditions },
   })
   export default class Bar extends Vue {
-    @State('rocketLog') private logState: any;
-    @State('rocketOption') private rocketOption: any;
+    @State('rocketLog') private logState!: logState;
+    @State('rocketOption') private rocketOption!: optionState;
     @Mutation('SELECT_LOG_TYPE') private SELECT_LOG_TYPE: any;
     @Mutation('SELECT_ERROR_CATALOG') private SELECT_ERROR_CATALOG: any;
     @Mutation('SET_EVENTS') private SET_EVENTS: any;

@@ -114,6 +114,7 @@ limitations under the License. -->
   import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
   import { Mutation, State } from 'vuex-class';
   import { State as globalState } from '@/store/modules/global/index';
+  import { State as logState } from '@/store/modules/log/index';
   import dateFormatStep from '@/utils/dateFormatStep';
 
   @Component({
@@ -121,7 +122,7 @@ limitations under the License. -->
   })
   export default class LogConditions extends Vue {
     @State('rocketbot') private rocketbotGlobal!: globalState;
-    @State('rocketLog') private rocketLog: any;
+    @State('rocketLog') private rocketLog!: logState;
     @Mutation('SET_LOG_CONDITIONS') private SET_LOG_CONDITIONS: any;
     @Mutation('SET_TAG_LIST') private SET_TAG_LIST: any;
     @Mutation('SET_KEYWORDS_CONTENT') private SET_KEYWORDS_CONTENT: any;
