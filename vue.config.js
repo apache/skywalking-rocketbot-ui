@@ -16,6 +16,7 @@
  */
 
 module.exports = {
+  publicPath: "./",
   devServer: {
     proxy: {
       '/graphql': {
