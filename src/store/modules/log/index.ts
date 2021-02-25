@@ -58,6 +58,7 @@ const logState: State = {
   category: { label: 'All', key: 'ALL' },
   loading: false,
   conditions: {
+    traceId: localStorage.getItem('logTraceId') || '',
     keywordsOfContent: localStorage.getItem('logKeywordsOfContent')
       ? JSON.parse(localStorage.getItem('logKeywordsOfContent') || '')
       : [],
@@ -95,10 +96,13 @@ const mutations: MutationTree<State> = {
     state.supportQueryLogsByKeywords = isSupport;
   },
   [types.CLEAR_LOG_CONDITIONS](state: State) {
-    state.conditions = {};
+    state.conditions = {
+      date: state.conditions.date,
+    };
     localStorage.removeItem('logKeywordsOfContent');
     localStorage.removeItem('logExcludingKeywordsOfContent');
     localStorage.removeItem('logTags');
+    localStorage.removeItem('logTraceId');
   },
 };
 

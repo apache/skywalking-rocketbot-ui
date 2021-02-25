@@ -19,6 +19,7 @@ limitations under the License. -->
         <input
           type="text"
           class="rk-trace-search-input dib"
+          v-model="traceId"
           @change="changeConditions($event, LogConditionsOpt.TraceID)"
         />
       </div>
@@ -132,6 +133,7 @@ limitations under the License. -->
     private tagsList: string[] = [];
     private tags: string = '';
     private searchTime: Date[] = [];
+    private traceId: string = '';
     private LogConditionsOpt = {
       TraceID: 'traceId',
       Tags: 'tags',
@@ -144,6 +146,7 @@ limitations under the License. -->
       this.searchTime = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
       (this.tagsList = localStorage.getItem('logTags') ? JSON.parse(localStorage.getItem('logTags') || '') : []),
         this.updateTags();
+      this.traceId = localStorage.getItem('logTraceId') || '';
     }
     private changeConditions(item: any, type: string) {
       item = {
@@ -151,6 +154,7 @@ limitations under the License. -->
         key: item.target.value,
       };
       this.SET_LOG_CONDITIONS(item);
+      localStorage.setItem('logTraceId', this.traceId);
     }
     private addLabels(event: KeyboardEvent, type: string) {
       if (event.keyCode !== 13) {
@@ -257,10 +261,13 @@ limitations under the License. -->
         step,
       };
     }
-    @Watch('rocketLog.conditions.tags')
+    @Watch('rocketLog.conditions')
     private clearTags() {
       if (!this.rocketLog.conditions.tags) {
         this.tagsList = [];
+      }
+      if (!this.rocketLog.conditions.traceId) {
+        this.traceId = '';
       }
     }
     @Watch('searchTime')
