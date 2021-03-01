@@ -23,7 +23,6 @@ limitations under the License. -->
 <script lang="js">
   import copy from '@/utils/copy';
   import ProfileContainer from './profile-container';
-  import _ from 'lodash';
 
   export default {
     components: {
