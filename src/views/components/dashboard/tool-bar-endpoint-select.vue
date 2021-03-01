@@ -70,21 +70,21 @@ limitations under the License. -->
   @Component({ components: { EndpointOpt } })
   export default class ToolBarEndpointSelect extends Vue {
     @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
-    @Prop() public data!: any;
-    @Prop() public current!: any;
-    @Prop() public title!: string;
-    @Prop() public icon!: string;
+    @Prop() private data!: any;
+    @Prop() private current!: any;
+    @Prop() private title!: string;
+    @Prop() private icon!: string;
     @Prop() private currentService: any;
-    public search: string = '';
-    public visible: boolean = false;
+    private search: string = '';
+    private visible: boolean = false;
 
     get filterData() {
       return this.data.filter((i: any) => i.label.toUpperCase().indexOf(this.search.toUpperCase()) !== -1);
     }
-    public handleOpen() {
+    private handleOpen() {
       this.visible = true;
     }
-    public handleSelect(i: any) {
+    private handleSelect(i: any) {
       this.$emit('onChoose', i);
       this.visible = false;
     }
