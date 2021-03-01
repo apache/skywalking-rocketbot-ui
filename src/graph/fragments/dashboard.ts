@@ -42,6 +42,24 @@ export const addTemplate = {
   `,
 };
 
+export const fetchEvent = {
+  variable: ['$condition: EventQueryCondition'],
+  query: `
+  fetchEvent: queryEvents(condition: $condition) {
+    events {
+      uuid
+      source
+      name
+      type
+      message
+      parameters
+      startTime
+      endTime
+    }
+    total
+  }`,
+};
+
 export const changeTemplate = {
   variable: '$setting: DashboardSetting!',
   query: `

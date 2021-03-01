@@ -21,6 +21,7 @@ import { AxiosResponse } from 'axios';
 import graph from '@/graph';
 import dashboardLayout from './dashboard-data-layout';
 import dashboardQuery from './dashboard-data-query';
+import { QueryEventCondition } from '../../../types/dashboard';
 
 export interface State {
   current: number;
@@ -117,6 +118,17 @@ const actions: ActionTree<State, any> = {
           return;
         }
         return res.data.data.addTemplate || [];
+      });
+  },
+  GET_EVENT(context, params: QueryEventCondition) {
+    return graph
+      .query('queryEvent')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        if (!res.data.data) {
+          return;
+        }
+        return res.data.data.fetchEvent || [];
       });
   },
 };
