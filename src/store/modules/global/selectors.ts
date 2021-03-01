@@ -122,7 +122,10 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_SERVICES, res.data.data.services);
       });
   },
-  GET_SERVICE_ENDPOINTS(context: { commit: Commit; state: any }, params: { keyword: string }) {
+  GET_SERVICE_ENDPOINTS(
+    context: { commit: Commit; state: any },
+    params: { keyword: string; currentService?: { key: string; label: string } },
+  ) {
     if (!context.state.currentService.key) {
       context.commit(types.SET_ENDPOINTS, []);
       return;
@@ -132,7 +135,10 @@ const actions: ActionTree<State, any> = {
     }
     return graph
       .query('queryEndpoints')
-      .params({ serviceId: context.state.currentService.key || '', ...params })
+      .params({
+        serviceId: (params.currentService ? params.currentService.key : context.state.currentService.key) || '',
+        keyword: params.keyword,
+      })
       .then((res: AxiosResponse) => {
         context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
       });

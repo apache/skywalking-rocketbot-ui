@@ -45,6 +45,7 @@ limitations under the License. -->
         :title="this.$t('currentEndpoint')"
         :current="stateDashboard.currentEndpoint"
         :data="stateDashboard.endpoints"
+        :currentService="stateDashboard.currentService"
         icon="code"
       />
       <ToolBarSelect
@@ -76,6 +77,7 @@ limitations under the License. -->
           :title="this.$t('currentPage')"
           :current="stateDashboard.currentEndpoint"
           :data="stateDashboard.endpoints"
+          :currentService="stateDashboard.currentService"
           icon="code"
         />
       </template>
@@ -100,7 +102,7 @@ limitations under the License. -->
   import { State, Action, Mutation } from 'vuex-class';
   import { DASHBOARDTYPE } from './constant';
 
-  @Component({ components: { ToolBarSelect, ToolBarEndpointSelect, ToolBarBtns } })
+  @Component({ components: { ToolBarSelect, ToolBarBtns, ToolBarEndpointSelect } })
   export default class ToolBar extends Vue {
     @Prop() private compType!: any;
     @Prop() private stateDashboard!: any;
