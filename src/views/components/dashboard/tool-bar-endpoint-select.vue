@@ -17,7 +17,6 @@ limitations under the License. -->
     class="rk-dashboard-bar-select cp flex-h"
     v-clickout="
       () => {
-        search = '';
         visible = false;
       }
     "
@@ -39,8 +38,15 @@ limitations under the License. -->
     </div>
     <div class="rk-dashboard-sel" v-if="visible">
       <div>
-        <input type="text" class="rk-dashboard-sel-search" v-model="search" />
-        <svg class="icon sm close" style="margin-top: 3px;" @click="search = ''" v-if="search">
+        <input type="text" class="rk-dashboard-sel-search" v-model="search" @change="fliterEndpoints" />
+        <svg
+          class="icon sm close"
+          style="margin-top: 3px;"
+          @click="
+            search = '';
+            fliterEndpoints();
+          "
+        >
           <use xlink:href="#clear"></use>
         </svg>
       </div>
@@ -63,10 +69,12 @@ limitations under the License. -->
   import EndpointOpt from './tool-bar-endpoint-select-opt.vue';
   @Component({ components: { EndpointOpt } })
   export default class ToolBarEndpointSelect extends Vue {
+    @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
     @Prop() public data!: any;
     @Prop() public current!: any;
     @Prop() public title!: string;
     @Prop() public icon!: string;
+    @Prop() private currentService: any;
     public search: string = '';
     public visible: boolean = false;
 
@@ -79,6 +87,9 @@ limitations under the License. -->
     public handleSelect(i: any) {
       this.$emit('onChoose', i);
       this.visible = false;
+    }
+    private fliterEndpoints() {
+      this.GET_SERVICE_ENDPOINTS({ service: this.currentService, keyword: this.search });
     }
   }
 </script>
