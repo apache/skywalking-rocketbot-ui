@@ -21,10 +21,16 @@ limitations under the License. -->
       <span>{{ title }}</span>
       <span v-show="unit"> ( {{ unit }} ) </span>
       <span v-show="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
+      <span v-show="!rocketGlobal.edit && !pageTypes.includes(type)" @click="setEventList(index)">
+        <rk-icon
+          size="lg"
+          class="r edit"
+          icon="format_indent_increase"
+          v-tooltip:bottom="{ content: $t('setEvent') }"
+        />
+      </span>
       <span v-show="!rocketGlobal.edit && !pageTypes.includes(type)" @click="editComponentConfig">
-        <svg class="icon cp r">
-          <use xlink:href="#lock"></use>
-        </svg>
+        <rk-icon size="lg" class="r edit" icon="settings_ethernet" v-tooltip:bottom="{ content: $t('editConfig') }" />
       </span>
     </div>
     <div class="rk-dashboard-item-body">
@@ -57,6 +63,11 @@ limitations under the License. -->
           :intervalTime="intervalTime"
           :data="chartSource"
         ></component>
+      </div>
+    </rk-sidebox>
+    <rk-sidebox width="70%" :fixed="true" :title="$t('setEvent')" :show.sync="dialogEventVisible">
+      <div class="config-box">
+        set event
       </div>
     </rk-sidebox>
   </div>
@@ -101,6 +112,7 @@ limitations under the License. -->
     private height = 300;
     private chartSource: any = {};
     private itemConfig: any = {};
+    private dialogEventVisible = false;
 
     private created() {
       this.status = this.item.metricType;
@@ -321,6 +333,11 @@ limitations under the License. -->
       }
     }
 
+    private setEventList(index: number) {
+      console.log(index);
+      this.dialogEventVisible = true;
+    }
+
     @Watch('rocketOption.updateDashboard')
     private watchCurrentSelectors() {
       setTimeout(() => {
@@ -344,6 +361,9 @@ limitations under the License. -->
     flex-direction: column;
     padding-left: 5px;
     padding-right: 5px;
+    .edit {
+      cursor: pointer;
+    }
   }
   .dashboard-item-shadow {
     background-color: #448dfe15;

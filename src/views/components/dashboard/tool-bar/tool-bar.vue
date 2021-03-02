@@ -98,7 +98,7 @@ limitations under the License. -->
   import ToolBarEndpointSelect from './tool-bar-endpoint-select.vue';
   import ToolBarBtns from './tool-bar-btns.vue';
   import { State, Action, Mutation } from 'vuex-class';
-  import { DASHBOARDTYPE } from './constant';
+  import { DASHBOARDTYPE } from '../constant';
 
   @Component({ components: { ToolBarSelect, ToolBarEndpointSelect, ToolBarBtns } })
   export default class ToolBar extends Vue {

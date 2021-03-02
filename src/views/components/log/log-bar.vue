@@ -80,8 +80,8 @@ limitations under the License. -->
   import { Component, Vue } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import TraceSelect from '../common/trace-select.vue';
-  import ToolBarSelect from '../dashboard/tool-bar-select.vue';
-  import ToolBarEndpointSelect from '../dashboard/tool-bar-endpoint-select.vue';
+  import ToolBarSelect from '../dashboard/tool-bar/tool-bar-select.vue';
+  import ToolBarEndpointSelect from '../dashboard/tool-bar/tool-bar-endpoint-select.vue';
   import LogConditions from './log-conditions.vue';
   import { State as logState } from '@/store/modules/log/index';
   import { State as optionState } from '@/store/modules/global/selectors';
