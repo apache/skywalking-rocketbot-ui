@@ -66,7 +66,7 @@ limitations under the License. -->
           <span class="vm">{{ this.$t('clear') }}</span>
         </a>
 
-        <RkPage :currentSize="10" :currentPage="pageNum" @changePage="handleRefresh" :total="logState.total" />
+        <RkPage :currentSize="pageSize" :currentPage="pageNum" @changePage="handleRefresh" :total="logState.total" />
       </span>
     </div>
     <div class="flex-h" v-show="showConditionsBox">
@@ -108,6 +108,7 @@ limitations under the License. -->
     private cateGoryBrowser = 'browser';
     private showConditionsBox = true;
     private logPage = 'Log';
+    private pageSize = 20;
 
     private beforeMount() {
       this.MIXHANDLE_GET_OPTION({
@@ -170,7 +171,7 @@ limitations under the License. -->
                 serviceVersionId: currentInstance.key,
                 pagePathId: currentEndpoint.key,
                 category: category.key,
-                paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
+                paging: { pageNum: this.pageNum, pageSize: this.pageSize, needTotal: true },
                 queryDuration: conditions.date,
               }
             : {
@@ -185,7 +186,7 @@ limitations under the License. -->
                     : undefined,
                 relatedTrace: conditions.traceId ? { traceId: conditions.traceId } : undefined,
                 tags: conditions.tags,
-                paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
+                paging: { pageNum: this.pageNum, pageSize: this.pageSize, needTotal: true },
                 queryDuration: conditions.traceId ? undefined : conditions.date,
               },
       });
