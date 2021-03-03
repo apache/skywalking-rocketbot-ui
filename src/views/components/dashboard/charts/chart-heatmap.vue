@@ -106,8 +106,8 @@ limitations under the License. -->
           {
             type: 'heatmap',
             data: this.data.nodes || [],
-            itemStyle: {
-              emphasis: {
+            emphasis: {
+              itemStyle: {
                 shadowBlur: 10,
                 shadowColor: 'rgba(0, 0, 0, 0.5)',
               },
@@ -117,9 +117,12 @@ limitations under the License. -->
       };
     }
     private generatePieces(maxValue: number, colorBox: string[], minItem: number) {
+      if (maxValue < minItem) {
+        return [];
+      }
       const pieces = [];
       let quotient = 1;
-      let temp = {} as any;
+      let temp = {} as { min: number; max: number; color: string };
       temp.max = minItem;
       temp.min = minItem;
       temp.color = colorBox[0];

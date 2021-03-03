@@ -63,7 +63,6 @@ limitations under the License. -->
   import InstancesSurvey from './instances-survey.vue';
   import ToolBarSelect from '@/views/components/dashboard/tool-bar/tool-bar-select.vue';
   import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar/tool-bar-endpoint-select.vue';
-  import _ from 'lodash';
   import Vue from 'vue';
   import { Component, PropSync, Watch, Prop } from 'vue-property-decorator';
   import { Action, Getter, State, Mutation } from 'vuex-class';
