@@ -21,7 +21,7 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import { State, Action, Getter, Mutation } from 'vuex-class';
-  import echarts from 'echarts/lib/echarts';
+  import * as echarts from 'echarts/lib/echarts';
 
   @Component
   export default class DependencySankey extends Vue {

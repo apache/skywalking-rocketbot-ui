@@ -106,8 +106,8 @@ limitations under the License. -->
           {
             type: 'heatmap',
             data: this.data.nodes || [],
-            itemStyle: {
-              emphasis: {
+            emphasis: {
+              itemStyle: {
                 shadowBlur: 10,
                 shadowColor: 'rgba(0, 0, 0, 0.5)',
               },
