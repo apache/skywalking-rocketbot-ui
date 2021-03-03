@@ -16,6 +16,7 @@
  */
 
 module.exports = {
+  productionSourceMap: process.env.NODE_ENV !== 'production',
   devServer: {
     proxy: {
       '/graphql': {
@@ -34,5 +35,19 @@ module.exports = {
       .options({
         symbolId: '[name]',
       });
+  },
+  configureWebpack: (config) => {
+    config.optimization = {
+      splitChunks: {
+        chunks: 'all',
+        cacheGroups: {
+          echarts: {
+            name: 'echarts',
+            test: /[\\/]node_modules[\\/]echarts[\\/]/,
+            priority: 2,
+          },
+        },
+      },
+    };
   },
 };
