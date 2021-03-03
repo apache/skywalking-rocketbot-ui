@@ -15,22 +15,17 @@ limitations under the License. -->
 <template>
   <div class="rk-dashboard-item" :class="`g-sm-${width}`" :style="`height:${height}px;`">
     <div class="rk-dashboard-item-title ell">
-      <svg class="icon cp red r" v-show="rocketGlobal.edit" @click="deleteItem(index)">
-        <use xlink:href="#file-deletion"></use>
-      </svg>
+      <span v-show="rocketGlobal.edit" @click="deleteItem(index)">
+        <rk-icon class="r edit red" icon="file-deletion" />
+      </span>
       <span>{{ title }}</span>
       <span v-show="unit"> ( {{ unit }} ) </span>
       <span v-show="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
       <span v-show="!rocketGlobal.edit && !pageTypes.includes(type)" @click="setEventList(index)">
-        <rk-icon
-          size="lg"
-          class="r edit"
-          icon="format_indent_increase"
-          v-tooltip:bottom="{ content: $t('setEvent') }"
-        />
+        <rk-icon class="r edit" icon="format_indent_increase" v-tooltip:bottom="{ content: $t('setEvent') }" />
       </span>
       <span v-show="!rocketGlobal.edit && !pageTypes.includes(type)" @click="editComponentConfig">
-        <rk-icon size="lg" class="r edit" icon="settings_ethernet" v-tooltip:bottom="{ content: $t('editConfig') }" />
+        <rk-icon class="r edit" icon="settings_ethernet" v-tooltip:bottom="{ content: $t('editConfig') }" />
       </span>
     </div>
     <div class="rk-dashboard-item-body">
