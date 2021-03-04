@@ -643,9 +643,14 @@ const actions: ActionTree<State, any> = {
         for (const call of topoCalls) {
           if (call.detectPoints.includes('CLIENT')) {
             clientIdsC.push(call.id);
-          } else {
+          }
+          if (call.detectPoints.includes('SERVER')) {
             serverIdsC.push(call.id);
           }
+        }
+        if (!serverIdsC.length || !clientIdsC.length) {
+          context.commit(types.SET_INSTANCE_DEPENDENCY, { nodes: [], calls: [] });
+          return;
         }
         graph
           .query('queryDependencyInstanceClientMetric')
