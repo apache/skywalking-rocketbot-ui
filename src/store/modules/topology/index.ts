@@ -324,7 +324,7 @@ const actions: ActionTree<State, any> = {
   },
   GET_SERVICE_ENDPOINTS(context: { commit: Commit }, params: { serviceId: string; keyword: string }) {
     if (!params.serviceId) {
-      return new Promise((resolve) => resolve());
+      return new Promise((resolve) => resolve([]));
     }
     if (!params.keyword) {
       params.keyword = '';
@@ -622,7 +622,7 @@ const actions: ActionTree<State, any> = {
           });
       });
   },
-  async GET_TOPO_INSTANCE_DEPENDENCY(
+  GET_TOPO_INSTANCE_DEPENDENCY(
     context: { commit: Commit; state: State },
     params: {
       clientServiceId: string;
@@ -637,22 +637,17 @@ const actions: ActionTree<State, any> = {
         if (!(res.data && res.data.data)) {
           return;
         }
-        const serverIdsC = [] as string[];
         const clientIdsC = [] as string[];
         const topoCalls = res.data.data.topo.calls;
         for (const call of topoCalls) {
           if (call.detectPoints.includes('CLIENT')) {
             clientIdsC.push(call.id);
           }
-          if (call.detectPoints.includes('SERVER')) {
-            serverIdsC.push(call.id);
-          }
         }
-        if (!serverIdsC.length || !clientIdsC.length) {
-          context.commit(types.SET_INSTANCE_DEPENDENCY, { nodes: [], calls: [] });
-          return;
+        if (!clientIdsC.length) {
+          return { topo: res.data.data.topo, clientCalls: new Promise((resolve) => resolve([])) };
         }
-        graph
+        const callback = graph
           .query('queryDependencyInstanceClientMetric')
           .params({
             idsC: clientIdsC,
@@ -670,30 +665,54 @@ const actions: ActionTree<State, any> = {
                 }
               }
             }
-            graph
-              .query('queryDependencyInstanceServerMetric')
-              .params({
-                idsC: serverIdsC,
-                duration: params.duration,
-              })
-              .then((jsonResp: AxiosResponse) => {
-                const serverCalls = [] as string[];
-                for (const call of topoCalls) {
-                  for (const cpm of jsonResp.data.data.cpmC.values) {
-                    if (cpm.id === call.id) {
-                      serverCalls.push({
-                        ...call,
-                        ...cpm,
-                      });
-                    }
-                  }
+            return clientCalls;
+          });
+
+        return { topo: res.data.data.topo, callback };
+      })
+      .then((json: any) => {
+        const serverIdsC = [] as string[];
+        const topoCalls = json.topo.calls;
+        for (const call of topoCalls) {
+          if (call.detectPoints.includes('SERVER')) {
+            serverIdsC.push(call.id);
+          }
+        }
+        if (!serverIdsC.length) {
+          json.callback.then((clientCalls: any) => {
+            const instanceDependency = {
+              nodes: json.topo.nodes,
+              calls: [...clientCalls],
+            };
+            context.commit(types.SET_INSTANCE_DEPENDENCY, instanceDependency);
+          });
+          return;
+        }
+        graph
+          .query('queryDependencyInstanceServerMetric')
+          .params({
+            idsC: serverIdsC,
+            duration: params.duration,
+          })
+          .then((jsonResp: AxiosResponse) => {
+            const serverCalls = [] as string[];
+            for (const call of topoCalls) {
+              for (const cpm of jsonResp.data.data.cpmC.values) {
+                if (cpm.id === call.id) {
+                  serverCalls.push({
+                    ...call,
+                    ...cpm,
+                  });
                 }
-                const data = {
-                  nodes: res.data.data.topo.nodes,
-                  calls: [...serverCalls, ...clientCalls],
-                };
-                context.commit(types.SET_INSTANCE_DEPENDENCY, data);
-              });
+              }
+            }
+            json.callback.then((clientCalls: any) => {
+              const instanceDependency = {
+                nodes: json.topo.nodes,
+                calls: [...clientCalls, ...serverCalls],
+              };
+              context.commit(types.SET_INSTANCE_DEPENDENCY, instanceDependency);
+            });
           });
       });
   },
