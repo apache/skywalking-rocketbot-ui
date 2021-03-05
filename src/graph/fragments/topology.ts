@@ -339,28 +339,6 @@ export const DependencyInstanceServerMetric = {
     }
   }`,
 };
-export const DependencyInstanceMetric = {
-  variable: '$duration: Duration!, $idsC: [ID!]!， $idsS: [ID!]!',
-  query: `
-  cpmS: getValues(metric: {
-    name: "service_instance_relation_server_cpm"
-    ids: $idsS
-  }, duration: $duration) {
-    values {
-      id
-      value
-    }
-  }
-  cpmC: getValues(metric: {
-    name: "service_instance_relation_client_cpm"
-    ids: $idsC
-  }, duration: $duration) {
-    values {
-      id
-      value
-    }
-  }`,
-};
 export const DependencyInstanceClientMetric = {
   variable: '$duration: Duration!, $idsC: [ID!]!',
   query: `

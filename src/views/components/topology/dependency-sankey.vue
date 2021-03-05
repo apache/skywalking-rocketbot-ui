@@ -38,7 +38,7 @@ limitations under the License. -->
           top: 20,
           right: 300,
           bottom: 40,
-          focusNodeAdjacency: 'allEdges',
+          emphasis: { focus: 'adjacency' },
           data: this.data.nodes,
           links: this.data.calls,
           label: {
@@ -47,15 +47,11 @@ limitations under the License. -->
           },
           color: ['#3fe1da', '#6be6c1', '#3fcfdc', '#626c91', '#3fbcde', '#a0a7e6', '#3fa9e1', '#96dee8', '#bf99f8'],
           itemStyle: {
-            normal: {
-              borderWidth: 0,
-            },
+            borderWidth: 0,
           },
           lineStyle: {
-            normal: {
-              color: 'source',
-              opacity: 0.12,
-            },
+            color: 'source',
+            opacity: 0.12,
           },
         },
       };

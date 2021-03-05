@@ -101,10 +101,8 @@ limitations under the License. -->
                 },
               },
               lineStyle: {
-                normal: {
-                  color: 'source',
-                  curveness: 0.3,
-                },
+                color: 'source',
+                curveness: 0.3,
               },
             },
           ],

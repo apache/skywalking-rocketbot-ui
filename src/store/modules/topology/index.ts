@@ -648,7 +648,8 @@ const actions: ActionTree<State, any> = {
             serverIdsC.push(call.id);
           }
         }
-        let callback, callbackServer;
+        let callback;
+        let callbackServer;
         if (clientIdsC.length) {
           callback = graph
             .query('queryDependencyInstanceClientMetric')

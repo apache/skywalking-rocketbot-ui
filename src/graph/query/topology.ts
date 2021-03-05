@@ -32,7 +32,6 @@ import {
   TopoServiceDetail,
   endpointTopology,
   TopoEndpointDependencyMetrics,
-  DependencyInstanceMetric,
 } from '../fragments/topology';
 
 export const queryTopo = `query queryTopo(${Topo.variable}) {${Topo.query}}`;
@@ -69,9 +68,6 @@ export const queryTopoInstanceClientInfo = `query queryTopoInstanceClientInfo(
 
 export const queryDependencyInstanceServerMetric = `query queryDependencyInstanceServerMetric(
   ${DependencyInstanceServerMetric.variable}) {${DependencyInstanceServerMetric.query}}`;
-
-export const queryDependencyInstanceMetric = `query queryDependencyInstanceMetric(
-  ${DependencyInstanceMetric.variable}) {${DependencyInstanceMetric.query}}`;
 
 export const queryDependencyInstanceClientMetric = `query queryDependencyInstanceClientMetric(
   ${DependencyInstanceClientMetric.variable}) {${DependencyInstanceClientMetric.query}}`;
