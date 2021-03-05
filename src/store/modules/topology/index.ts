@@ -638,82 +638,72 @@ const actions: ActionTree<State, any> = {
           return;
         }
         const clientIdsC = [] as string[];
+        const serverIdsC = [] as string[];
         const topoCalls = res.data.data.topo.calls;
         for (const call of topoCalls) {
           if (call.detectPoints.includes('CLIENT')) {
             clientIdsC.push(call.id);
           }
-        }
-        if (!clientIdsC.length) {
-          return { topo: res.data.data.topo, clientCalls: new Promise((resolve) => resolve([])) };
-        }
-        const callback = graph
-          .query('queryDependencyInstanceClientMetric')
-          .params({
-            idsC: clientIdsC,
-            duration: params.duration,
-          })
-          .then((json: AxiosResponse) => {
-            const clientCalls = [] as string[];
-            for (const call of topoCalls) {
-              for (const cpm of json.data.data.cpmC.values) {
-                if (cpm.id === call.id) {
-                  clientCalls.push({
-                    ...call,
-                    ...cpm,
-                  });
-                }
-              }
-            }
-            return clientCalls;
-          });
-
-        return { topo: res.data.data.topo, callback };
-      })
-      .then((json: any) => {
-        const serverIdsC = [] as string[];
-        const topoCalls = json.topo.calls;
-        for (const call of topoCalls) {
           if (call.detectPoints.includes('SERVER')) {
             serverIdsC.push(call.id);
           }
         }
-        if (!serverIdsC.length) {
-          json.callback.then((clientCalls: any) => {
-            const instanceDependency = {
-              nodes: json.topo.nodes,
-              calls: [...clientCalls],
-            };
-            context.commit(types.SET_INSTANCE_DEPENDENCY, instanceDependency);
-          });
-          return;
-        }
-        graph
-          .query('queryDependencyInstanceServerMetric')
-          .params({
-            idsC: serverIdsC,
-            duration: params.duration,
-          })
-          .then((jsonResp: AxiosResponse) => {
-            const serverCalls = [] as string[];
-            for (const call of topoCalls) {
-              for (const cpm of jsonResp.data.data.cpmC.values) {
-                if (cpm.id === call.id) {
-                  serverCalls.push({
-                    ...call,
-                    ...cpm,
-                  });
+        let callback, callbackServer;
+        if (clientIdsC.length) {
+          callback = graph
+            .query('queryDependencyInstanceClientMetric')
+            .params({
+              idsC: clientIdsC,
+              duration: params.duration,
+            })
+            .then((json: AxiosResponse) => {
+              const clientCalls = [] as string[];
+              for (const call of topoCalls) {
+                for (const cpm of json.data.data.cpmC.values) {
+                  if (cpm.id === call.id) {
+                    clientCalls.push({
+                      ...call,
+                      ...cpm,
+                    });
+                  }
                 }
               }
-            }
-            json.callback.then((clientCalls: any) => {
-              const instanceDependency = {
-                nodes: json.topo.nodes,
-                calls: [...clientCalls, ...serverCalls],
-              };
-              context.commit(types.SET_INSTANCE_DEPENDENCY, instanceDependency);
+              return clientCalls;
             });
-          });
+        } else {
+          callback = new Promise((resolve) => resolve([]));
+        }
+        if (serverIdsC.length) {
+          callbackServer = graph
+            .query('queryDependencyInstanceServerMetric')
+            .params({
+              idsC: serverIdsC,
+              duration: params.duration,
+            })
+            .then((jsonResp: AxiosResponse) => {
+              const serverCalls = [] as string[];
+              for (const call of topoCalls) {
+                for (const cpm of jsonResp.data.data.cpmC.values) {
+                  if (cpm.id === call.id) {
+                    serverCalls.push({
+                      ...call,
+                      ...cpm,
+                    });
+                  }
+                }
+              }
+              return serverCalls;
+            });
+        } else {
+          callbackServer = new Promise((resolve) => resolve([]));
+        }
+        Promise.all([callback, callbackServer]).then((values: any) => {
+          const instanceDependency = {
+            nodes: res.data.data.topo.nodes,
+            calls: [...values[0], ...values[1]],
+          };
+          context.commit(types.SET_INSTANCE_DEPENDENCY, instanceDependency);
+        });
       });
   },
   INSTANCE_RELATION_INFO(
