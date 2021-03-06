@@ -643,8 +643,7 @@ const actions: ActionTree<State, any> = {
         for (const call of topoCalls) {
           if (call.detectPoints.includes('CLIENT')) {
             clientIdsC.push(call.id);
-          }
-          if (call.detectPoints.includes('SERVER')) {
+          } else {
             serverIdsC.push(call.id);
           }
         }
