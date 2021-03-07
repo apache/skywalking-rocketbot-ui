@@ -22,8 +22,8 @@ limitations under the License. -->
       :durationTime="durationTime"
       :rocketOption="rocketOption"
     ></ToolBarBtns>
-    <div class="rk-dashboard-bar flex-h" v-if="compType !== dashboardType.DATABASE">
-      <div class="sm grey service-search" v-if="compType === dashboardType.SERVICE">
+    <div class="rk-dashboard-bar flex-h" v-if="compType === dashboardType.SERVICE">
+      <div class="sm grey service-search">
         <div>{{ this.$t('serviceGroup') }}</div>
         <input
           type="text"
@@ -32,7 +32,6 @@ limitations under the License. -->
         />
       </div>
       <ToolBarSelect
-        v-if="compType === dashboardType.SERVICE"
         @onChoose="selectService"
         :title="this.$t('currentService')"
         :current="stateDashboard.currentService"
@@ -40,7 +39,6 @@ limitations under the License. -->
         icon="package"
       />
       <ToolBarEndpointSelect
-        v-if="compType === dashboardType.SERVICE"
         @onChoose="selectEndpoint"
         :title="this.$t('currentEndpoint')"
         :current="stateDashboard.currentEndpoint"
@@ -49,40 +47,38 @@ limitations under the License. -->
         icon="code"
       />
       <ToolBarSelect
-        v-if="compType === dashboardType.SERVICE"
         @onChoose="selectInstance"
         :title="this.$t('currentInstance')"
         :current="stateDashboard.currentInstance"
         :data="stateDashboard.instances"
         icon="disk"
       />
-
-      <template v-if="compType === dashboardType.BROWSER">
-        <ToolBarSelect
-          @onChoose="selectService"
-          :title="this.$t('currentService')"
-          :current="stateDashboard.currentService"
-          :data="stateDashboard.services"
-          icon="package"
-        />
-        <ToolBarSelect
-          @onChoose="selectInstance"
-          :title="this.$t('currentVersion')"
-          :current="stateDashboard.currentInstance"
-          :data="stateDashboard.instances"
-          icon="disk"
-        />
-        <ToolBarEndpointSelect
-          @onChoose="selectEndpoint"
-          :title="this.$t('currentPage')"
-          :current="stateDashboard.currentEndpoint"
-          :data="stateDashboard.endpoints"
-          :currentService="stateDashboard.currentService"
-          icon="code"
-        />
-      </template>
     </div>
-    <div class="rk-dashboard-bar flex-h" v-else>
+    <div class="rk-dashboard-bar flex-h" v-if="compType === dashboardType.BROWSER">
+      <ToolBarSelect
+        @onChoose="selectService"
+        :title="this.$t('currentService')"
+        :current="stateDashboard.currentService"
+        :data="stateDashboard.services"
+        icon="package"
+      />
+      <ToolBarSelect
+        @onChoose="selectInstance"
+        :title="this.$t('currentVersion')"
+        :current="stateDashboard.currentInstance"
+        :data="stateDashboard.instances"
+        icon="disk"
+      />
+      <ToolBarEndpointSelect
+        @onChoose="selectEndpoint"
+        :title="this.$t('currentPage')"
+        :current="stateDashboard.currentEndpoint"
+        :data="stateDashboard.endpoints"
+        :currentService="stateDashboard.currentService"
+        icon="code"
+      />
+    </div>
+    <div class="rk-dashboard-bar flex-h" v-if="compType === dashboardType.DATABASE">
       <ToolBarSelect
         @onChoose="SELECT_DATABASE"
         :title="this.$t('currentDatabase')"
