@@ -16,7 +16,7 @@ limitations under the License. -->
   <div>
     <div class="rk-sidebox-backdrop" v-show="show" @click="handleHide"></div>
     <aside
-      class="rk-sidebox"
+      class="rk-sidebox flex-v"
       :style="
         show ? `width:${width};${right ? 'right:0' : 'left:0'}` : `width:${width};${right ? 'right' : 'left'}:-${width}`
       "
@@ -84,7 +84,7 @@ limitations under the License. -->
     background-color: #fff;
   }
   .rk-sidebox-inner {
-    padding: 35px 20px 20px;
+    padding: 20px;
   }
   .rk-sidebox-inner-fixed {
     height: 100%;
@@ -93,7 +93,6 @@ limitations under the License. -->
   }
   .rk-sidebox-title {
     font-size: 16px;
-    position: absolute;
     width: 100%;
     padding-left: 20px;
     line-height: 35px;
