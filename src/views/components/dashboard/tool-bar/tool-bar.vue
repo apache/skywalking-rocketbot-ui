@@ -54,7 +54,6 @@ limitations under the License. -->
         icon="disk"
       />
       <a class="rk-view-instance-attributes r" @click="() => (dialogAttributesVisible = true)">
-        <rk-icon class="mr-5" icon="description" />
         <span class="vm">{{ this.$t('instanceAttributes') }}</span>
       </a>
       <rk-sidebox
@@ -115,7 +114,7 @@ limitations under the License. -->
   import ToolBarEndpointSelect from './tool-bar-endpoint-select.vue';
   import ToolBarBtns from './tool-bar-btns.vue';
   import { State, Action, Mutation } from 'vuex-class';
-  import { DASHBOARDTYPE } from './constant';
+  import { DASHBOARDTYPE } from '../constant';
 
   @Component({ components: { ToolBarSelect, ToolBarBtns, ToolBarEndpointSelect } })
   export default class ToolBar extends Vue {
