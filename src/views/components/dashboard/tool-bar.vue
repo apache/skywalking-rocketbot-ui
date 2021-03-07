@@ -21,8 +21,8 @@ limitations under the License. -->
       :dashboardType="dashboardType"
       :durationTime="durationTime"
       :rocketOption="rocketOption"
-    ></ToolBarBtns>
-    <div class="rk-dashboard-bar flex-h" v-if="compType === dashboardType.SERVICE">
+    />
+    <div class="flex-h" v-if="compType === dashboardType.SERVICE">
       <div class="sm grey service-search">
         <div>{{ this.$t('serviceGroup') }}</div>
         <input
@@ -53,8 +53,27 @@ limitations under the License. -->
         :data="stateDashboard.instances"
         icon="disk"
       />
+      <a class="rk-view-instance-attributes r" @click="() => (dialogAttributesVisible = true)">
+        <rk-icon class="mr-5" icon="description" />
+        <span class="vm">{{ this.$t('instanceAttributes') }}</span>
+      </a>
+      <rk-sidebox
+        width="50%"
+        :fixed="true"
+        :title="`${$t('instanceAttributes')} of ${stateDashboard.currentInstance.label}`"
+        :show.sync="dialogAttributesVisible"
+        class="instance-attributes-box"
+      >
+        <div
+          class="instance-attr"
+          v-for="(attr, index) in stateDashboard.currentInstance.attributes"
+          :key="attr.name + index"
+        >
+          {{ attr.name + ' : ' + attr.value }}
+        </div>
+      </rk-sidebox>
     </div>
-    <div class="rk-dashboard-bar flex-h" v-if="compType === dashboardType.BROWSER">
+    <div class="flex-h" v-else-if="compType === dashboardType.BROWSER">
       <ToolBarSelect
         @onChoose="selectService"
         :title="this.$t('currentService')"
@@ -78,7 +97,7 @@ limitations under the License. -->
         icon="code"
       />
     </div>
-    <div class="rk-dashboard-bar flex-h" v-if="compType === dashboardType.DATABASE">
+    <div class="flex-h" v-else-if="compType === dashboardType.DATABASE">
       <ToolBarSelect
         @onChoose="SELECT_DATABASE"
         :title="this.$t('currentDatabase')"
@@ -115,6 +134,7 @@ limitations under the License. -->
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     private dashboardType = DASHBOARDTYPE;
+    private dialogAttributesVisible = false;
     get lastKey() {
       const current = this.rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children;
       if (!current.length) {
@@ -149,6 +169,13 @@ limitations under the License. -->
     flex-shrink: 0;
     color: #efefef;
     background-color: #333840;
+    .instance-attributes-box {
+      color: #252a2f;
+    }
+    .instance-attr {
+      padding: 20px 0 0 20px;
+      font-size: 13px;
+    }
     .service-search {
       padding: 0 5px;
       border-right: 2px solid #252a2f;
@@ -162,6 +189,12 @@ limitations under the License. -->
       div {
         padding: 0 2px;
       }
+    }
+    .rk-view-instance-attributes {
+      background-color: #484b55;
+      border-radius: 4px;
+      margin-left: 5px;
+      padding: 5px 10px;
     }
   }
 </style>
