@@ -190,7 +190,7 @@ limitations under the License. -->
       }
     }
     .rk-view-instance-attributes {
-      background-color: #484b55;
+      background-color: rgba(255, 255, 255, 0.07);
       border-radius: 4px;
       margin-left: 5px;
       padding: 5px 10px;
