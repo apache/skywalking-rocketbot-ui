@@ -42,17 +42,24 @@ export const addTemplate = {
   `,
 };
 
-export const fetchEvent = {
+export const fetchEvents = {
   variable: ['$condition: EventQueryCondition'],
   query: `
-  fetchEvent: queryEvents(condition: $condition) {
+  fetchEvents: queryEvents(condition: $condition) {
     events {
       uuid
-      source
+      source {
+        service
+        serviceInstance
+        endpoint
+      }
       name
       type
       message
-      parameters
+      parameters {
+        key
+        value
+      }
       startTime
       endTime
     }

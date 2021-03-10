@@ -64,6 +64,7 @@ limitations under the License. -->
   export default class ToolNav extends Vue {
     @Prop() private rocketGlobal: any;
     @Prop() private rocketComps: any;
+    @Prop() private stateDashboard: any;
     @Mutation('IMPORT_COMPS_TREE') private IMPORT_COMPS_TREE: any;
     @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
     @Mutation('DELETE_COMPS_TREE') private DELETE_COMPS_TREE: any;
@@ -76,6 +77,17 @@ limitations under the License. -->
     private show: boolean = false;
     get type() {
       return this.rocketComps.tree[this.rocketComps.group].type;
+    }
+    private created() {
+      this.GET_EVENT({
+        time: this.durationTime,
+        size: 20,
+        source: {
+          service: this.stateDashboard.currentService.key,
+          endpoint: this.stateDashboard.currentEndpoint.key,
+          serviceInstance: this.stateDashboard.currentInstance.key,
+        },
+      });
     }
     private handleHide() {
       this.name = '';
@@ -90,13 +102,19 @@ limitations under the License. -->
       // this.template = 'nouse';
     }
     private changeComps(index: number) {
-      console.log(this.GET_EVENT);
-      this.GET_EVENT({
-        time: this.durationTime,
-        size: 20,
-      });
       this.SET_CURRENT_COMPS(index);
       this.RUN_EVENTS({});
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: this.stateDashboard.currentService.key,
+            endpoint: this.stateDashboard.currentEndpoint.key,
+            serviceInstance: this.stateDashboard.currentInstance.key,
+          },
+        },
+      });
     }
     private async importData(event: any) {
       try {

@@ -22,20 +22,25 @@ import graph from '@/graph';
 import dashboardLayout from './dashboard-data-layout';
 import dashboardQuery from './dashboard-data-query';
 import { QueryEventCondition } from '../../../types/dashboard';
-
+import * as types from './mutation-types';
 export interface State {
   current: number;
   group: number;
   tree: CompsTree[];
+  events: any[];
 }
 
 const initState: State = {
+  events: [],
   ...dashboardLayout.state,
 };
 
 // mutations
 const mutations: MutationTree<any> = {
   ...dashboardLayout.mutations,
+  [types.SET_DASHBOARD_EVENTS](state: State, params: any) {
+    state.events = params;
+  },
 };
 
 // actions
@@ -120,15 +125,17 @@ const actions: ActionTree<State, any> = {
         return res.data.data.addTemplate || [];
       });
   },
-  GET_EVENT(context, params: QueryEventCondition) {
+  GET_EVENT(context: { commit: Commit }, params: QueryEventCondition) {
     return graph
-      .query('queryEvent')
+      .query('queryEvents')
       .params(params)
       .then((res: AxiosResponse) => {
+        console.log(res);
         if (!res.data.data) {
           return;
         }
-        return res.data.data.fetchEvent || [];
+        context.commit('SET_DASHBOARD_EVENTS', res.data.data.fetchEvents.events);
+        return res.data.data.fetchEvents.events || [];
       });
   },
 };
