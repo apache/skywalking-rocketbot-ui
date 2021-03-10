@@ -41,12 +41,11 @@ limitations under the License. -->
     @Prop() private data: any;
     @Prop() private noLink!: any;
     private columns = ServiceLogConstants;
-    private tags: string = '';
-    private created() {
+    private get tags() {
       if (!this.data.tags) {
-        return;
+        return '';
       }
-      this.tags = String(this.data.tags.map((d: any) => `${d.key}=${d.value}`));
+      return String(this.data.tags.map((d: any) => `${d.key}=${d.value}`));
     }
     private showSelectSpan() {
       this.$eventBus.$emit('HANDLE-SELECT-LOG', this.data);
