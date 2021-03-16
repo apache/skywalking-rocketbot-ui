@@ -78,6 +78,7 @@ limitations under the License. -->
     padding-left: 15px;
     padding-bottom: 1px;
     box-shadow: 0 -1px 0px rgba(0, 0, 0, 0.08);
+    z-index: 2;
   }
   .rk-footer-dark {
     color: #ddd;
