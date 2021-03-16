@@ -130,6 +130,7 @@ limitations under the License. -->
     position: absolute;
     bottom: 10px;
     left: 10px;
+    z-index: 2;
     .rk-page {
       color: #eee;
     }
