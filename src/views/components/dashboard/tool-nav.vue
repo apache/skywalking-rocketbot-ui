@@ -47,20 +47,29 @@ limitations under the License. -->
         <rk-icon class="open vm" icon="folder_open" />
       </label>
     </a>
-    <a @click="exportData">
+    <a class="mr-10" @click="exportData">
       <rk-icon icon="save_alt" />
     </a>
+    <a @click="setEventList">
+      <rk-icon icon="format_indent_increase" v-tooltip:bottom="{ content: $t('setEvent') }" />
+    </a>
+    <rk-sidebox width="70%" :fixed="true" :title="$t('setEvent')" :show.sync="dialogEventVisible">
+      <DashboardEvent :closeBox="() => (dialogEventVisible = false)" />
+    </rk-sidebox>
   </nav>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
-  import { Component, Prop, Model } from 'vue-property-decorator';
+  import { Component, Prop } from 'vue-property-decorator';
   import { Getter, Mutation, Action } from 'vuex-class';
+  import DashboardEvent from './dashboard-events.vue';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
 
-  @Component
+  @Component({
+    components: { DashboardEvent },
+  })
   export default class ToolNav extends Vue {
     @Prop() private rocketGlobal: any;
     @Prop() private rocketComps: any;
@@ -73,21 +82,10 @@ limitations under the License. -->
     @Action('GET_EVENT') private GET_EVENT: any;
     @Getter('durationTime') private durationTime: any;
     private name: string = '';
-    // private template: string = 'nouse';
     private show: boolean = false;
+    private dialogEventVisible = false;
     get type() {
       return this.rocketComps.tree[this.rocketComps.group].type;
-    }
-    private created() {
-      this.GET_EVENT({
-        time: this.durationTime,
-        size: 20,
-        source: {
-          service: this.stateDashboard.currentService.key,
-          endpoint: this.stateDashboard.currentEndpoint.key,
-          serviceInstance: this.stateDashboard.currentInstance.key,
-        },
-      });
     }
     private handleHide() {
       this.name = '';
@@ -99,22 +97,10 @@ limitations under the License. -->
       }
       this.ADD_COMPS_TREE({ name: this.name });
       this.handleHide();
-      // this.template = 'nouse';
     }
     private changeComps(index: number) {
       this.SET_CURRENT_COMPS(index);
       this.RUN_EVENTS({});
-      this.GET_EVENT({
-        condition: {
-          time: this.durationTime,
-          size: 20,
-          source: {
-            service: this.stateDashboard.currentService.key,
-            endpoint: this.stateDashboard.currentEndpoint.key,
-            serviceInstance: this.stateDashboard.currentInstance.key,
-          },
-        },
-      });
     }
     private async importData(event: any) {
       try {
@@ -136,6 +122,20 @@ limitations under the License. -->
       const currentData = tree[group].children[current];
       const name = `${currentData.name}.comps.json`;
       saveFile(currentData, name);
+    }
+    private setEventList(index: number) {
+      this.dialogEventVisible = true;
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 100,
+          // source: {
+          //   service: this.stateDashboard.currentService.label,
+          //   endpoint: this.stateDashboard.currentEndpoint.label,
+          //   serviceInstance: this.stateDashboard.currentInstance.label,
+          // },
+        },
+      });
     }
   }
 </script>

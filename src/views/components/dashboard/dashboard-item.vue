@@ -21,9 +21,6 @@ limitations under the License. -->
       <span>{{ title }}</span>
       <span v-show="unit"> ( {{ unit }} ) </span>
       <span v-show="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
-      <span v-show="!rocketGlobal.edit && !pageTypes.includes(type)" @click="setEventList(index)">
-        <rk-icon class="r edit" icon="format_indent_increase" v-tooltip:bottom="{ content: $t('setEvent') }" />
-      </span>
       <span v-show="!rocketGlobal.edit && !pageTypes.includes(type)" @click="editComponentConfig">
         <rk-icon class="r edit" icon="settings_ethernet" v-tooltip:bottom="{ content: $t('editConfig') }" />
       </span>
@@ -60,11 +57,6 @@ limitations under the License. -->
         ></component>
       </div>
     </rk-sidebox>
-    <rk-sidebox width="70%" :fixed="true" :title="$t('setEvent')" :show.sync="dialogEventVisible">
-      <div class="config-box">
-        set event
-      </div>
-    </rk-sidebox>
   </div>
 </template>
 <script lang="ts">
@@ -75,16 +67,17 @@ limitations under the License. -->
 
   import { QueryTypes } from './constant';
   import { TopologyType, ObjectsType } from '../../../constants/constant';
-  import { MetricsType, CalculationType } from './charts/constant';
-  import { uuid } from '@/utils/uuid.ts';
+  import { CalculationType } from './charts/constant';
   import { State as globalState } from '@/store/modules/global';
   import { State as optionState } from '@/store/modules/global/selectors';
+  import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
 
   @Component({
-    components: { ...charts },
+    components: charts,
   })
   export default class DashboardItem extends Vue {
     @State('rocketbot') private rocketGlobal!: globalState;
+    @State('rocketData') private rocketData!: rocketData;
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('rocketTopo/DELETE_TOPO_ENDPOINT') private DELETE_TOPO_ENDPOINT: any;
@@ -107,7 +100,6 @@ limitations under the License. -->
     private height = 300;
     private chartSource: any = {};
     private itemConfig: any = {};
-    private dialogEventVisible = false;
 
     private created() {
       this.status = this.item.metricType;
@@ -326,11 +318,6 @@ limitations under the License. -->
       } else {
         this.DELETE_COMP(index);
       }
-    }
-
-    private setEventList(index: number) {
-      console.log(index);
-      this.dialogEventVisible = true;
     }
 
     @Watch('rocketOption.updateDashboard')

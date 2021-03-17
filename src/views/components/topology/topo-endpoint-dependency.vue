@@ -100,7 +100,7 @@ limitations under the License. -->
     height: 100%;
     display: flex;
     flex-direction: column;
-    overflow: scroll;
+    overflow: auto;
     .endpoint-dependency-chart {
       height: 80%;
       min-height: 500px;

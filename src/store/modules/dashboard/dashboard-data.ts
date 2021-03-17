@@ -16,7 +16,7 @@
  */
 
 import { ActionTree, MutationTree, Commit, Dispatch } from 'vuex';
-import { CompsTree } from '@/types/dashboard';
+import { CompsTree, Event } from '@/types/dashboard';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
 import dashboardLayout from './dashboard-data-layout';
@@ -27,19 +27,25 @@ export interface State {
   current: number;
   group: number;
   tree: CompsTree[];
-  events: any[];
+  events: Event[];
+  currentEvents: Event[];
 }
 
 const initState: State = {
   events: [],
+  currentEvents: [],
   ...dashboardLayout.state,
 };
 
 // mutations
 const mutations: MutationTree<any> = {
   ...dashboardLayout.mutations,
-  [types.SET_DASHBOARD_EVENTS](state: State, params: any) {
+  [types.SET_DASHBOARD_EVENTS](state: State, params: Event[]) {
     state.events = params;
+  },
+  [types.SET_CURRENT_EVENTS](state: State, event: Event) {
+    state.currentEvents.push(event);
+    console.log(state.currentEvents);
   },
 };
 
@@ -130,11 +136,12 @@ const actions: ActionTree<State, any> = {
       .query('queryEvents')
       .params(params)
       .then((res: AxiosResponse) => {
-        console.log(res);
         if (!res.data.data) {
+          context.commit('SET_DASHBOARD_EVENTS', []);
           return;
         }
         context.commit('SET_DASHBOARD_EVENTS', res.data.data.fetchEvents.events);
+
         return res.data.data.fetchEvents.events || [];
       });
   },

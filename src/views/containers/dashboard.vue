@@ -44,7 +44,7 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Component, Vue, Watch } from 'vue-property-decorator';
+  import { Component, Vue } from 'vue-property-decorator';
   import { Action, Getter, State, Mutation } from 'vuex-class';
   import ToolBar from '@/views/components/dashboard/tool-bar/tool-bar.vue';
   import ToolGroup from '@/views/components/dashboard/tool-group.vue';

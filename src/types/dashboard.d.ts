@@ -78,12 +78,23 @@ export interface QueryEventCondition {
   size: number;
 }
 
-interface SourceInput {
+type SourceInput = {
   service: String;
   serviceInstance: String;
   endpoint: String;
-}
+};
 export enum EventType {
   Normal,
   Error,
 }
+
+export type Event = {
+  uuid: string;
+  source: SourceInput;
+  name: string;
+  type: string;
+  message: string;
+  parameters: { key: string; value: string }[];
+  startTime: number;
+  endTime: number;
+};
