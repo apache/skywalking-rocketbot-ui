@@ -16,7 +16,7 @@ limitations under the License. -->
 <template>
   <aside class="link-topo-aside">
     <Radial v-if="radioStatus" :datas="{ nodes: stateTopo.nodes, calls: stateTopo.calls }" />
-    <svg class="link-topo-aside-btn icon cp lg" @click="showRadial()" :style="`position:absolute;left:580px;`">
+    <svg class="link-topo-aside-btn icon cp lg" @click="showRadial()" :style="`position:absolute;left:580px;${radioStatus ? 'background-color: #357de9;' : ''}`">
       <use xlink:href="#issues" />
     </svg>
     <svg
