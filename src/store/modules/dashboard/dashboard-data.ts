@@ -43,9 +43,8 @@ const mutations: MutationTree<any> = {
   [types.SET_DASHBOARD_EVENTS](state: State, params: Event[]) {
     state.events = params;
   },
-  [types.SET_CURRENT_EVENTS](state: State, event: Event) {
-    state.currentEvents.push(event);
-    console.log(state.currentEvents);
+  [types.SET_CURRENT_EVENTS](state: State, events: Event[]) {
+    state.currentEvents = events;
   },
 };
 

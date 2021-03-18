@@ -35,6 +35,7 @@ limitations under the License. -->
           :intervalTime="intervalTime"
           :data="chartSource"
           :type="type"
+          :itemEvents="itemEvents"
           @updateStatus="(type, value) => setStatus(type, value)"
         ></component>
       </div>
@@ -67,10 +68,11 @@ limitations under the License. -->
 
   import { QueryTypes } from './constant';
   import { TopologyType, ObjectsType } from '../../../constants/constant';
-  import { CalculationType } from './charts/constant';
+  import { CalculationType, EntityType } from './charts/constant';
   import { State as globalState } from '@/store/modules/global';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
+  import { Event } from '@/types/dashboard';
 
   @Component({
     components: charts,
@@ -100,6 +102,7 @@ limitations under the License. -->
     private height = 300;
     private chartSource: any = {};
     private itemConfig: any = {};
+    private itemEvents: Event[] = [];
 
     private created() {
       this.status = this.item.metricType;
@@ -320,6 +323,7 @@ limitations under the License. -->
       }
     }
 
+    // watch selectors
     @Watch('rocketOption.updateDashboard')
     private watchCurrentSelectors() {
       setTimeout(() => {
@@ -332,6 +336,24 @@ limitations under the License. -->
     }
     @Watch('rocketGlobal.edit')
     private watchRerender() {
+      this.chartRender();
+    }
+    @Watch('rocketData.currentEvents')
+    private watchEventsRerender() {
+      this.itemEvents = this.rocketData.currentEvents.filter(
+        (event) =>
+          (this.itemConfig.entityType === event.entityType &&
+            ((event.source.service === this.rocketOption.currentService.label &&
+              event.source.serviceInstance === this.rocketOption.currentInstance.label) ||
+              (event.source.service === this.rocketOption.currentService.label &&
+                event.source.endpoint === this.rocketOption.currentEndpoint.label))) ||
+          (event.entityType === EntityType[0].key &&
+            this.itemConfig.entityType === event.entityType &&
+            event.source.service === this.rocketOption.currentService.label),
+      );
+      if (!this.itemEvents.length) {
+        return;
+      }
       this.chartRender();
     }
   }

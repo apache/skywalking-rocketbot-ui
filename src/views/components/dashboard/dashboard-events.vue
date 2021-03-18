@@ -14,20 +14,71 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div class="config-box">
+    <div class="title">service events</div>
     <ul>
-      <li>
-        <span>id</span>
+      <li class="header">
+        <span class="check">select</span>
+        <span class="id">id</span>
         <span>name</span>
-        <span>start time</span>
-        <span>end time</span>
+        <span>service name</span>
+        <span class="time">start time</span>
+        <span class="time">end time</span>
       </li>
-      <li v-for="event in rocketData.events" :key="event.uuid" @click="updateEvent(event)">
-        <span>{{ event.uuid }}</span>
+      <li v-show="!getServiceEvents.length">no data</li>
+      <li v-for="event in getServiceEvents" :key="event.uuid">
+        <span class="check"><input type="checkbox" @click="selectEvents(event)"/></span>
+        <span class="id">{{ event.uuid }}</span>
         <span>{{ event.name }}</span>
-        <span>{{ event.startTime }}</span>
-        <span>{{ event.endTime }}</span>
+        <span>{{ event.source.service }}</span>
+        <span class="time">{{ event.startTime | dateformat }}</span>
+        <span class="time">{{ event.endTime | dateformat }}</span>
       </li>
     </ul>
+    <div class="title">instance events</div>
+    <ul>
+      <li class="header">
+        <span class="check">select</span>
+        <span class="id">id</span>
+        <span>name</span>
+        <span>service name</span>
+        <span>instance name</span>
+        <span class="time">start time</span>
+        <span class="time">end time</span>
+      </li>
+      <li v-show="!getInstanceEvents.length">no data</li>
+      <li v-for="event in getInstanceEvents" :key="event.uuid">
+        <span class="check"><input type="checkbox" @click="selectEvents(event)"/></span>
+        <span class="id">{{ event.uuid }}</span>
+        <span>{{ event.name }}</span>
+        <span>{{ event.source.service }}</span>
+        <span>{{ event.source.serviceInstance }}</span>
+        <span class="time">{{ event.startTime | dateformat }}</span>
+        <span class="time">{{ event.endTime | dateformat }}</span>
+      </li>
+    </ul>
+    <div class="title">endpoint events</div>
+    <ul>
+      <li class="header">
+        <span class="check">select</span>
+        <span class="id">id</span>
+        <span>name</span>
+        <span>service name</span>
+        <span>endpoint name</span>
+        <span class="time">start time</span>
+        <span class="time">end time</span>
+      </li>
+      <li v-show="!getEndpointEvents.length">no data</li>
+      <li v-for="event in getEndpointEvents" :key="event.uuid">
+        <span class="check"><input type="checkbox" @click="selectEvents(event)"/></span>
+        <span class="id">{{ event.uuid }}</span>
+        <span>{{ event.name }}</span>
+        <span>{{ event.source.service }}</span>
+        <span>{{ event.source.endpoint }}</span>
+        <span class="time">{{ event.startTime | dateformat }}</span>
+        <span class="time">{{ event.endTime | dateformat }}</span>
+      </li>
+    </ul>
+    <div class="save-btn bg-blue" @click="updateEvent()">{{ $t('setEvent') }}</div>
   </div>
 </template>
 <script lang="ts">
@@ -35,34 +86,100 @@ limitations under the License. -->
   import { Vue, Component, Prop } from 'vue-property-decorator';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { Event } from '@/types/dashboard';
+  import { EntityType } from './charts/constant';
 
   @Component
   export default class DashboardEvent extends Vue {
     @State('rocketData') private rocketData!: rocketData;
     @Mutation('SET_CURRENT_EVENTS') private SET_CURRENT_EVENTS: any;
-    @Prop() private itemIndex!: number;
     @Prop() private closeBox: any;
+    private selectedEvents: Event[] = [];
 
-    private updateEvent(event: Event) {
-      this.SET_CURRENT_EVENTS({ ...event, itemIndex: this.itemIndex });
+    get getEndpointEvents() {
+      return this.rocketData.events.filter((item: Event) => item.source.endpoint);
+    }
+
+    get getInstanceEvents() {
+      return this.rocketData.events.filter((item: Event) => item.source.serviceInstance);
+    }
+
+    get getServiceEvents() {
+      return this.rocketData.events.filter((item: Event) => !item.source.endpoint && !item.source.serviceInstance);
+    }
+
+    private selectEvents(data: Event) {
+      const index = this.selectedEvents.findIndex((item: Event) => item.uuid === data.uuid);
+      if (data.source.endpoint) {
+        data.entityType = EntityType[2].key;
+      } else if (data.source.serviceInstance) {
+        data.entityType = EntityType[3].key;
+      } else {
+        data.entityType = EntityType[0].key;
+      }
+      if (index < 0) {
+        this.selectedEvents.push(data);
+      } else {
+        this.selectedEvents.splice(index, 1);
+      }
+    }
+
+    private updateEvent() {
+      this.SET_CURRENT_EVENTS(this.selectedEvents);
       this.closeBox();
+    }
+
+    private beforeDestroy() {
+      this.SET_CURRENT_EVENTS([]);
     }
   }
 </script>
 <style scope lang="scss">
-  ul {
-    // border: 1px solid #ccc;
-  }
-  li {
-    cursor: pointer;
-    span {
-      width: 200px;
-      height: 20px;
-      line-height: 20px;
+  .config-box {
+    .title {
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .save-btn {
+      width: 120px;
+      height: 30px;
+      line-height: 30px;
       text-align: center;
-      display: inline-block;
-      border-bottom: 1px solid #ccc;
-      overflow: hidden;
+      border-radius: 4px;
+      color: #fff;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    ul {
+      // width: 850px;
+      max-height: 240px;
+      min-height: 100px;
+      overflow: auto;
+      .header {
+        font-weight: bold;
+      }
+      .check {
+        width: 60px;
+        input {
+          cursor: pointer;
+        }
+      }
+      .time {
+        width: 150px;
+      }
+      .id {
+        width: 300px;
+      }
+    }
+    li {
+      span {
+        width: 150px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        display: inline-block;
+        border-bottom: 1px solid #ccc;
+        overflow: hidden;
+      }
     }
   }
 </style>
