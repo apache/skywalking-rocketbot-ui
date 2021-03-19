@@ -129,11 +129,11 @@ limitations under the License. -->
         condition: {
           time: this.durationTime,
           size: 100,
-          // source: {
-          //   service: this.stateDashboard.currentService.label,
-          //   endpoint: this.stateDashboard.currentEndpoint.label,
-          //   serviceInstance: this.stateDashboard.currentInstance.label,
-          // },
+          source: {
+            service: this.stateDashboard.currentService.label,
+            // endpoint: this.stateDashboard.currentEndpoint.label,
+            serviceInstance: this.stateDashboard.currentInstance.label,
+          },
         },
       });
     }

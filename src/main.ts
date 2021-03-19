@@ -35,6 +35,7 @@ import 'echarts/lib/chart/heatmap';
 import 'echarts/lib/chart/sankey';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/markArea';
 import VModal from 'vue-js-modal';
 import { queryOAPTimeInfo } from './utils/localtime';
 import './assets';
@@ -46,11 +47,7 @@ Vue.use(VModal, { dialog: true });
 Vue.directive('clickout', clickout);
 Vue.directive('tooltip', tooltip);
 
-Vue.filter(
-  'dateformat',
-  (dataStr: any, pattern: string = 'YYYY-MM-DD HH:mm:ss') =>
-    moment(dataStr).format(pattern),
-);
+Vue.filter('dateformat', (dataStr: any, pattern: string = 'YYYY-MM-DD HH:mm:ss') => moment(dataStr).format(pattern));
 
 const savedLanguage = window.localStorage.getItem('lang');
 let language = navigator.language.split('-')[0];

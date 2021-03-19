@@ -342,14 +342,12 @@ limitations under the License. -->
     private watchEventsRerender() {
       this.itemEvents = this.rocketData.currentEvents.filter(
         (event) =>
-          (this.itemConfig.entityType === event.entityType &&
-            ((event.source.service === this.rocketOption.currentService.label &&
-              event.source.serviceInstance === this.rocketOption.currentInstance.label) ||
-              (event.source.service === this.rocketOption.currentService.label &&
-                event.source.endpoint === this.rocketOption.currentEndpoint.label))) ||
-          (event.entityType === EntityType[0].key &&
-            this.itemConfig.entityType === event.entityType &&
-            event.source.service === this.rocketOption.currentService.label),
+          this.itemConfig.entityType === event.entityType &&
+          ((event.source.service === this.rocketOption.currentService.label &&
+            (event.source.serviceInstance === this.rocketOption.currentInstance.label ||
+              event.source.endpoint === this.rocketOption.currentEndpoint.label)) ||
+            (event.entityType === EntityType[0].key &&
+              event.source.service === this.rocketOption.currentService.label)),
       );
       if (!this.itemEvents.length) {
         return;

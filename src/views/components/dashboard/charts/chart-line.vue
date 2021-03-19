@@ -18,17 +18,45 @@ limitations under the License. -->
 </template>
 <script lang="ts">
   import { Vue, Component, Prop } from 'vue-property-decorator';
+  import dayjs from 'dayjs';
+  import { Event } from '@/types/dashboard';
 
   @Component
   export default class ChartLine extends Vue {
     @Prop() private data!: any;
     @Prop() private type!: string;
     @Prop() private intervalTime!: any;
+    @Prop() private itemEvents!: Event[];
     public resize() {
       const chart: any = this.$refs.chart;
       chart.myChart.resize();
     }
     get option() {
+      // const markAreas = this.itemEvents.map((event: Event) => {
+      //   return [{
+      //     xAxis: dayjs(event.startTime).format('YYYY-MM-DD HH:mm:ss'),
+      //   }, {
+      //     xAxis: dayjs(event.endTime).format('YYYY-MM-DD HH:mm:ss'),
+      //   }];
+      // });
+      const markAreas = [
+        [
+          {
+            xAxis: '03-17 17',
+          },
+          {
+            xAxis: '03-18 01',
+          },
+        ],
+        [
+          {
+            xAxis: '03-18 09',
+          },
+          {
+            xAxis: '03-18 13',
+          },
+        ],
+      ];
       const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
       const temp = keys.map((i: any, index: number) => {
         const serie: any = {
@@ -41,6 +69,17 @@ limitations under the License. -->
             width: 1.5,
             type: 'solid',
           },
+          markArea:
+            index === 0
+              ? {
+                  silent: false,
+                  data: markAreas,
+                  itemStyle: {
+                    borderWidth: 1,
+                    borderType: 'dashed',
+                  },
+                }
+              : undefined,
         };
         if (this.type === 'areaChart') {
           serie.areaStyle = {
