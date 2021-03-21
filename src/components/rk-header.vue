@@ -172,4 +172,16 @@ limitations under the License. -->
       background-color: #dededf;
     }
   }
+  .rk-auto-select {
+    border-radius: 3px;
+    background-color: #fff;
+    padding: 1px;
+    border-radius: 3px;
+
+    input {
+      width: 38px;
+      border-style: unset;
+      outline: 0;
+    }
+  }
 </style>

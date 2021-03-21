@@ -292,9 +292,6 @@ limitations under the License. -->
 </script>
 
 <style lang="scss">
-  .rk-log-box {
-    color: #3d444f;
-  }
   .rk-trace-search {
     flex-shrink: 0;
     background-color: #333840;
@@ -341,8 +338,7 @@ limitations under the License. -->
     vertical-align: top;
   }
 
-  .rk-trace-search-range,
-  .rk-auto-select {
+  .rk-trace-search-range {
     border-radius: 3px;
     background-color: #fff;
     padding: 1px;

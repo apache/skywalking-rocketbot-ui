@@ -345,5 +345,29 @@ limitations under the License. -->
     .search-time {
       color: #eee;
     }
+
+    .rk-trace-search-input {
+      border-style: unset;
+      outline: 0;
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+
+    .rk-trace-tags {
+      padding: 1px 5px 0 0;
+      border-radius: 3px;
+      height: 24px;
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    .rk-trace-new-tag {
+      border-style: unset;
+      outline: 0;
+      padding: 2px 5px;
+      border-radius: 3px;
+      width: 175px;
+      margin-right: 3px;
+    }
   }
 </style>

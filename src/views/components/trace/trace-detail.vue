@@ -158,6 +158,9 @@ limitations under the License. -->
 </script>
 
 <style lang="scss" scoped>
+  .rk-log-box {
+    color: #3d444f;
+  }
   .rk-trace-detail {
     flex-shrink: 0;
     height: 100%;

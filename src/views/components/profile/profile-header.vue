@@ -102,20 +102,6 @@ limitations under the License. -->
     border-radius: 3px;
   }
 
-  .rk-profile-header-range,
-  .rk-auto-select {
-    border-radius: 3px;
-    background-color: #fff;
-    padding: 1px;
-    border-radius: 3px;
-
-    input {
-      width: 38px;
-      border-style: unset;
-      outline: 0;
-    }
-  }
-
   .rk-profile-header-btn {
     padding: 3px 9px;
     background-color: #484b55;
