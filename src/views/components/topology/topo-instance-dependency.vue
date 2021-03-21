@@ -29,14 +29,14 @@ limitations under the License. -->
             class="link-topo-aside-box-btn tc r sm cp b"
             :class="{ active: stateTopo.queryInstanceMetricsType === 'CLIENT' }"
             @click="setMode('CLIENT')"
-            >{{ this.$t('client') }}</span
+            >{{ $t('client') }}</span
           >
           <span
             v-if="stateTopo.selectedInstanceCall.detectPoints.includes('SERVER')"
             class="link-topo-aside-box-btn tc r sm cp b"
             :class="{ active: stateTopo.queryInstanceMetricsType === 'SERVER' }"
             @click="setMode('SERVER')"
-            >{{ this.$t('server') }}</span
+            >{{ $t('server') }}</span
           >
         </div>
         <div v-if="stateTopo.selectedInstanceCall">

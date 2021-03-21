@@ -59,11 +59,11 @@ limitations under the License. -->
         {{ $t('list') }}</a
       >
 
-      <div class="rk-tag mr-5">{{ this.$t('start') }}</div>
+      <div class="rk-tag mr-5">{{ $t('start') }}</div>
       <span class="mr-15 sm">{{ parseInt(current.start) | dateformat }}</span>
-      <div class="rk-tag mr-5">{{ this.$t('duration') }}</div>
+      <div class="rk-tag mr-5">{{ $t('duration') }}</div>
       <span class="mr-15 sm">{{ current.duration }} ms</span>
-      <div class="rk-tag mr-5">{{ this.$t('spans') }}</div>
+      <div class="rk-tag mr-5">{{ $t('spans') }}</div>
       <span class="sm">{{ spans.length }}</span>
     </div>
     <TraceDetailChartList
