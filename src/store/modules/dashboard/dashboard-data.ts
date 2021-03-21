@@ -23,16 +23,22 @@ import dashboardLayout from './dashboard-data-layout';
 import dashboardQuery from './dashboard-data-query';
 import { QueryEventCondition } from '../../../types/dashboard';
 import * as types from './mutation-types';
+
+const EntityType = ['Service', 'ServiceInstance', 'Endpoint'];
 export interface State {
   current: number;
   group: number;
   tree: CompsTree[];
-  events: Event[];
+  serviceEvents: Event[];
+  serviceInstanceEvents: Event[];
+  endpointEvents: Event[];
   currentEvents: Event[];
 }
 
 const initState: State = {
-  events: [],
+  serviceEvents: [],
+  endpointEvents: [],
+  serviceInstanceEvents: [],
   currentEvents: [],
   ...dashboardLayout.state,
 };
@@ -40,8 +46,14 @@ const initState: State = {
 // mutations
 const mutations: MutationTree<any> = {
   ...dashboardLayout.mutations,
-  [types.SET_DASHBOARD_EVENTS](state: State, params: Event[]) {
-    state.events = params;
+  [types.SET_DASHBOARD_EVENTS](state: State, param: { events: Event[]; type: string }) {
+    if (param.type === EntityType[0]) {
+      state.serviceEvents = param.events;
+    } else if (param.type === EntityType[1]) {
+      state.serviceInstanceEvents = param.events;
+    } else {
+      state.endpointEvents = param.events;
+    }
   },
   [types.SET_CURRENT_EVENTS](state: State, events: Event[]) {
     state.currentEvents = events;
@@ -130,16 +142,35 @@ const actions: ActionTree<State, any> = {
         return res.data.data.addTemplate || [];
       });
   },
-  GET_EVENT(context: { commit: Commit }, params: QueryEventCondition) {
+  GET_EVENT(context: { commit: Commit }, params: { condition: QueryEventCondition; type: string }) {
     return graph
       .query('queryEvents')
-      .params(params)
+      .params(params.condition)
       .then((res: AxiosResponse) => {
-        if (!res.data.data) {
-          context.commit('SET_DASHBOARD_EVENTS', []);
-          return;
+        console.log(res.data.data.fetchEvents);
+        if (!(res.data.data && res.data.data.fetchEvents)) {
+          if (params.type === EntityType[0]) {
+            context.commit('SET_DASHBOARD_EVENTS', { events: [], type: params.type });
+            return;
+          }
+          if (params.type === EntityType[1]) {
+            context.commit('SET_DASHBOARD_EVENTS', { events: [], type: params.type });
+            return;
+          }
+          if (params.type === EntityType[2]) {
+            context.commit('SET_DASHBOARD_EVENTS', { events: [], type: params.type });
+            return;
+          }
         }
-        context.commit('SET_DASHBOARD_EVENTS', res.data.data.fetchEvents.events);
+        if (params.type === EntityType[0]) {
+          context.commit('SET_DASHBOARD_EVENTS', { events: res.data.data.fetchEvents.events, type: params.type });
+        }
+        if (params.type === EntityType[1]) {
+          context.commit('SET_DASHBOARD_EVENTS', { events: res.data.data.fetchEvents.events, type: params.type });
+        }
+        if (params.type === EntityType[2]) {
+          context.commit('SET_DASHBOARD_EVENTS', { events: res.data.data.fetchEvents.events, type: params.type });
+        }
 
         return res.data.data.fetchEvents.events || [];
       });

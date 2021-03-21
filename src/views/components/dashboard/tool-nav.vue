@@ -66,6 +66,7 @@ limitations under the License. -->
   import DashboardEvent from './dashboard-events.vue';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
+  import { EntityType } from './charts/constant';
 
   @Component({
     components: { DashboardEvent },
@@ -131,10 +132,31 @@ limitations under the License. -->
           size: 100,
           source: {
             service: this.stateDashboard.currentService.label,
-            // endpoint: this.stateDashboard.currentEndpoint.label,
+          },
+        },
+        type: EntityType[0].key,
+      });
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 100,
+          source: {
+            service: this.stateDashboard.currentService.label,
             serviceInstance: this.stateDashboard.currentInstance.label,
           },
         },
+        type: EntityType[3].key,
+      });
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 100,
+          source: {
+            service: this.stateDashboard.currentService.label,
+            endpoint: this.stateDashboard.currentEndpoint.label,
+          },
+        },
+        type: EntityType[2].key,
       });
     }
   }

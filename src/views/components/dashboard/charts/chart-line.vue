@@ -32,6 +32,7 @@ limitations under the License. -->
       chart.myChart.resize();
     }
     get option() {
+      console.log(this.itemEvents);
       // const markAreas = this.itemEvents.map((event: Event) => {
       //   return [{
       //     xAxis: dayjs(event.startTime).format('YYYY-MM-DD HH:mm:ss'),
@@ -42,18 +43,32 @@ limitations under the License. -->
       const markAreas = [
         [
           {
-            xAxis: '03-17 17',
+            xAxis: '03-18 17',
+            y: '95%',
           },
           {
-            xAxis: '03-18 01',
+            xAxis: '03-19 01',
+            y: '60%',
           },
         ],
         [
           {
-            xAxis: '03-18 09',
+            xAxis: '03-19 09',
+            y: '60%',
           },
           {
-            xAxis: '03-18 13',
+            xAxis: '03-19 11',
+            y: '30%',
+          },
+        ],
+        [
+          {
+            xAxis: '03-19 12',
+            y: '30%',
+          },
+          {
+            xAxis: '03-19 13',
+            y: '0%',
           },
         ],
       ];

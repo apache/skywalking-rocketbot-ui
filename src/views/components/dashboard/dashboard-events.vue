@@ -24,8 +24,8 @@ limitations under the License. -->
         <span class="time">start time</span>
         <span class="time">end time</span>
       </li>
-      <li v-show="!getServiceEvents.length">no data</li>
-      <li v-for="event in getServiceEvents" :key="event.uuid">
+      <li v-show="!rocketData.serviceEvents.length">no data</li>
+      <li v-for="event in rocketData.serviceEvents" :key="event.uuid">
         <span class="check"><input type="checkbox" @click="selectEvents(event)"/></span>
         <span class="id">{{ event.uuid }}</span>
         <span>{{ event.name }}</span>
@@ -45,8 +45,8 @@ limitations under the License. -->
         <span class="time">start time</span>
         <span class="time">end time</span>
       </li>
-      <li v-show="!getInstanceEvents.length">no data</li>
-      <li v-for="event in getInstanceEvents" :key="event.uuid">
+      <li v-show="!rocketData.serviceInstanceEvents.length">no data</li>
+      <li v-for="event in rocketData.serviceInstanceEvents" :key="event.uuid">
         <span class="check"><input type="checkbox" @click="selectEvents(event)"/></span>
         <span class="id">{{ event.uuid }}</span>
         <span>{{ event.name }}</span>
@@ -67,8 +67,8 @@ limitations under the License. -->
         <span class="time">start time</span>
         <span class="time">end time</span>
       </li>
-      <li v-show="!getEndpointEvents.length">no data</li>
-      <li v-for="event in getEndpointEvents" :key="event.uuid">
+      <li v-show="!rocketData.endpointEvents.length">no data</li>
+      <li v-for="event in rocketData.endpointEvents" :key="event.uuid">
         <span class="check"><input type="checkbox" @click="selectEvents(event)"/></span>
         <span class="id">{{ event.uuid }}</span>
         <span>{{ event.name }}</span>
@@ -94,18 +94,6 @@ limitations under the License. -->
     @Mutation('SET_CURRENT_EVENTS') private SET_CURRENT_EVENTS: any;
     @Prop() private closeBox: any;
     private selectedEvents: Event[] = [];
-
-    get getEndpointEvents() {
-      return this.rocketData.events.filter((item: Event) => item.source.endpoint);
-    }
-
-    get getInstanceEvents() {
-      return this.rocketData.events.filter((item: Event) => item.source.serviceInstance);
-    }
-
-    get getServiceEvents() {
-      return this.rocketData.events.filter((item: Event) => !item.source.endpoint && !item.source.serviceInstance);
-    }
 
     private selectEvents(data: Event) {
       const index = this.selectedEvents.findIndex((item: Event) => item.uuid === data.uuid);
