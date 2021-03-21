@@ -16,62 +16,64 @@
  */
 
 import Vue from 'vue';
-import Router from 'vue-router';
+import Router, { RouteConfig } from 'vue-router';
 // import Login from './views/containers/login.vue';
 import Index from './views/containers/index.vue';
-import Dashboard from './views/containers/dashboard.vue';
-import Trace from './views/containers/trace.vue';
-import Topology from './views/containers/topology/topology.vue';
-import Alarm from './views/containers/alarm.vue';
-import Profile from './views/containers/profile.vue';
-import Log from './views/containers/log.vue';
 
 Vue.use(Router);
 window.axiosCancel = [];
+
+export const routes: RouteConfig[] = [
+  // {
+  //   path: '/login',
+  //   component: Login,
+  //   meta: { login: true },
+  // },
+  {
+    path: '',
+    component: Index,
+    children: [
+      {
+        path: '/',
+        component: () => import('./views/containers/dashboard.vue'),
+        meta: { icon: 'chart', title: 'dashboard' },
+      },
+      {
+        path: 'topology',
+        component: () => import('./views/containers/topology/topology.vue'),
+        meta: { icon: 'issues', title: 'topology' },
+      },
+      {
+        name: 'trace',
+        path: 'trace',
+        component: () => import('./views/containers/trace.vue'),
+        props: true,
+        meta: { icon: 'merge', title: 'trace' },
+      },
+      {
+        path: 'profile',
+        component: () => import('./views/containers/profile.vue'),
+        meta: { icon: 'timeline', title: 'profile' },
+      },
+      {
+        path: 'log',
+        component: () => import('./views/containers/log.vue'),
+        meta: { icon: 'assignment', title: 'log' },
+      },
+      {
+        path: 'alarm',
+        component: () => import('./views/containers/alarm.vue'),
+        meta: { icon: 'spam', title: 'alarm' },
+      },
+    ],
+  },
+];
 
 const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   linkActiveClass: 'active',
-  routes: [
-    // {
-    //   path: '/login',
-    //   component: Login,
-    //   meta: { login: true },
-    // },
-    {
-      path: '/',
-      component: Index,
-      children: [
-        {
-          path: '',
-          component: Dashboard,
-        },
-        {
-          name: 'trace',
-          path: 'trace',
-          component: Trace,
-          props: true,
-        },
-        {
-          path: 'topology',
-          component: Topology,
-        },
-        {
-          path: 'alarm',
-          component: Alarm,
-        },
-        {
-          path: 'profile',
-          component: Profile,
-        },
-        {
-          path: 'log',
-          component: Log,
-        },
-      ],
-    },
-  ],
+  routes,
 });
 
 router.beforeEach((to, from, next) => {

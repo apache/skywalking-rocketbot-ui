@@ -19,29 +19,9 @@ limitations under the License. -->
         <use xlink:href="#logo-sw"></use>
       </svg>
       <span class="grey rocketbot">Rocketbot</span>
-      <router-link class="nav-link mr-20" to="/" exact>
-        <rk-icon size="sm" icon="chart" />
-        <span class="vm hide-xs ml-5">{{ $t('dashboard') }}</span>
-      </router-link>
-      <router-link class="nav-link mr-20" to="/topology">
-        <rk-icon size="sm" icon="issues" />
-        <span class="vm hide-xs ml-5">{{ $t('topology') }}</span>
-      </router-link>
-      <router-link class="nav-link mr-20" to="/trace">
-        <rk-icon size="sm" icon="merge" />
-        <span class="vm hide-xs ml-5">{{ $t('trace') }}</span>
-      </router-link>
-      <router-link class="nav-link mr-20" to="/profile">
-        <rk-icon size="sm" icon="timeline" />
-        <span class="vm hide-xs ml-5">{{ $t('profile') }}</span>
-      </router-link>
-      <router-link class="nav-link mr-20" to="/log">
-        <rk-icon size="sm" icon="assignment" />
-        <span class="vm hide-xs ml-5">{{ $t('log') }}</span>
-      </router-link>
-      <router-link class="nav-link mr-20" to="/alarm">
-        <rk-icon size="sm" icon="spam" />
-        <span class="vm hide-xs ml-5">{{ $t('alarm') }}</span>
+      <router-link v-for="(menu, index) in menus" :key="index" :to="menu.path" exact class="nav-link mr-20">
+        <rk-icon size="sm" :icon="menu.meta.icon" />
+        <span class="vm hide-xs ml-5">{{ $t(menu.meta.title) }}</span>
       </router-link>
     </div>
     <div class="flex-h">
@@ -70,6 +50,7 @@ limitations under the License. -->
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator';
   import { Action, State, Getter } from 'vuex-class';
+  import { routes } from '@/router';
   import timeFormat from '@/utils/timeFormat';
 
   @Component
@@ -80,6 +61,11 @@ limitations under the License. -->
     private auto: boolean = false;
     private autoTime: number = 6;
     private timer: any = null;
+
+    private get menus() {
+      return routes[0].children;
+    }
+
     private handleReload() {
       const gap = this.duration.end.getTime() - this.duration.start.getTime();
       const utcCopy: any = -(new Date().getTimezoneOffset() / 60);
