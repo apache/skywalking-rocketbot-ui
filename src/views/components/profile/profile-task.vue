@@ -15,17 +15,17 @@ limitations under the License. -->
 
 <template>
   <div class="rk-profile-task">
-    <label>{{ this.$t('service') }}</label>
+    <label>{{ $t('service') }}</label>
     <RkSelect
       class="mb-5"
       :current="newTaskFields.service"
       :data="taskFieldSource.serviceSource"
       @onChoose="(item) => changeOption(item, updateTaskOpt.Service)"
     />
-    <label>{{ this.$t('endpointName') }}</label>
+    <label>{{ $t('endpointName') }}</label>
     <input type="text" class="rk-profile-input" @change="changeOption($event, updateTaskOpt.EndpointName)" />
     <div>
-      <label>{{ this.$t('monitorTime') }}</label>
+      <label>{{ $t('monitorTime') }}</label>
       <div>
         <RkRadio
           class="mb-5 monitor-time-radio"
@@ -38,28 +38,28 @@ limitations under the License. -->
         </span>
       </div>
     </div>
-    <label>{{ this.$t('monitorDuration') }}</label>
+    <label>{{ $t('monitorDuration') }}</label>
     <RkRadio
       class="mb-5"
       :current="newTaskFields.monitorDuration"
       :data="taskFieldSource.monitorDuration"
       @onChoose="(item) => changeOption(item, updateTaskOpt.MonitorDuration)"
     />
-    <label>{{ this.$t('minThreshold') }} (ms)</label>
+    <label>{{ $t('minThreshold') }} (ms)</label>
     <input
       type="text"
       class="rk-profile-input"
       :value="newTaskFields.minThreshold"
       @change="changeOption($event, updateTaskOpt.MinThreshold)"
     />
-    <label>{{ this.$t('dumpPeriod') }}</label>
+    <label>{{ $t('dumpPeriod') }}</label>
     <RkRadio
       class="mb-5"
       :current="newTaskFields.dumpPeriod"
       :data="taskFieldSource.dumpPeriod"
       @onChoose="(item) => changeOption(item, updateTaskOpt.DumpPeriod)"
     />
-    <label>{{ this.$t('maxSamplingCount') }}</label>
+    <label>{{ $t('maxSamplingCount') }}</label>
     <RkSelect
       class="mb-5"
       :current="newTaskFields.maxSamplingCount"
@@ -69,7 +69,7 @@ limitations under the License. -->
     <div v-if="this.message" class="message-tip">{{ this.message }}</div>
     <div @click="createTask">
       <a class="rk-create-task-btn bg-blue r">
-        <span class="mr-5 vm">{{ this.$t('createTask') }}</span>
+        <span class="mr-5 vm">{{ $t('createTask') }}</span>
       </a>
     </div>
   </div>

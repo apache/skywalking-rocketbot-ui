@@ -21,27 +21,27 @@ limitations under the License. -->
       <span class="grey rocketbot">Rocketbot</span>
       <router-link class="nav-link mr-20" to="/" exact>
         <rk-icon size="sm" icon="chart" />
-        <span class="vm hide-xs ml-5">{{ this.$t('dashboard') }}</span>
+        <span class="vm hide-xs ml-5">{{ $t('dashboard') }}</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/topology">
         <rk-icon size="sm" icon="issues" />
-        <span class="vm hide-xs ml-5">{{ this.$t('topology') }}</span>
+        <span class="vm hide-xs ml-5">{{ $t('topology') }}</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/trace">
         <rk-icon size="sm" icon="merge" />
-        <span class="vm hide-xs ml-5">{{ this.$t('trace') }}</span>
+        <span class="vm hide-xs ml-5">{{ $t('trace') }}</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/profile">
         <rk-icon size="sm" icon="timeline" />
-        <span class="vm hide-xs ml-5">{{ this.$t('profile') }}</span>
+        <span class="vm hide-xs ml-5">{{ $t('profile') }}</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/log">
         <rk-icon size="sm" icon="assignment" />
-        <span class="vm hide-xs ml-5">{{ this.$t('log') }}</span>
+        <span class="vm hide-xs ml-5">{{ $t('log') }}</span>
       </router-link>
       <router-link class="nav-link mr-20" to="/alarm">
         <rk-icon size="sm" icon="spam" />
-        <span class="vm hide-xs ml-5">{{ this.$t('alarm') }}</span>
+        <span class="vm hide-xs ml-5">{{ $t('alarm') }}</span>
       </router-link>
     </div>
     <div class="flex-h">
@@ -49,19 +49,19 @@ limitations under the License. -->
         class="rk-btn mr-5 sm"
         :class="auto ? 'blue' : 'ghost'"
         @click="handleAuto"
-        v-tooltip:bottom="{ content: this.$t('timeReload') }"
+        v-tooltip:bottom="{ content: $t('timeReload') }"
       >
-        <span class="vm">{{ this.$t('auto') }}</span>
+        <span class="vm">{{ $t('auto') }}</span>
       </a>
       <div class="auto-time">
         <span class="rk-auto-select">
           <input v-model="autoTime" type="number" @change="changeAutoTime" min="1" />
         </span>
-        {{ this.$t('second') }}
+        {{ $t('second') }}
       </div>
       <a class="rk-btn sm ghost" @click="handleReload">
         <rk-icon icon="retry" :loading="auto" />
-        <span class="vm">{{ this.$t('reload') }}</span>
+        <span class="vm">{{ $t('reload') }}</span>
       </a>
     </div>
   </header>

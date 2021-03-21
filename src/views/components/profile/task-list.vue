@@ -48,34 +48,34 @@ limitations under the License. -->
           <h5 class="mb-10">{{ $t('task') }}.</h5>
           <div class="mb-10 clear">
             <span class="g-sm-4 grey">{{ $t('service') }}:</span>
-            <span class="g-sm-8 wba">{{ this.selectedTaskService.label }}</span>
+            <span class="g-sm-8 wba">{{ selectedTaskService.label }}</span>
           </div>
           <div class="mb-10 clear">
             <span class="g-sm-4 grey">{{ $t('endpoint') }}:</span>
-            <span class="g-sm-8 wba">{{ this.selectedTask.endpointName }}</span>
+            <span class="g-sm-8 wba">{{ selectedTask.endpointName }}</span>
           </div>
           <div class="mb-10 clear">
-            <span class="g-sm-4 grey">{{ this.$t('monitorTime') }}:</span
-            ><span class="g-sm-8 wba">{{ this.selectedTask.startTime | dateformat }}</span>
+            <span class="g-sm-4 grey">{{ $t('monitorTime') }}:</span
+            ><span class="g-sm-8 wba">{{ selectedTask.startTime | dateformat }}</span>
           </div>
           <div class="mb-10 clear">
-            <span class="g-sm-4 grey">{{ this.$t('monitorDuration') }}:</span
-            ><span class="g-sm-8 wba">{{ this.selectedTask.duration }} min</span>
+            <span class="g-sm-4 grey">{{ $t('monitorDuration') }}:</span
+            ><span class="g-sm-8 wba">{{ selectedTask.duration }} min</span>
           </div>
           <div class="mb-10 clear">
-            <span class="g-sm-4 grey">{{ this.$t('minThreshold') }}:</span>
-            <span class="g-sm-8 wba">{{ this.selectedTask.minDurationThreshold }} ms</span>
+            <span class="g-sm-4 grey">{{ $t('minThreshold') }}:</span>
+            <span class="g-sm-8 wba">{{ selectedTask.minDurationThreshold }} ms</span>
           </div>
           <div class="mb-10 clear">
-            <span class="g-sm-4 grey">{{ this.$t('dumpPeriod') }}:</span>
-            <span class="g-sm-8 wba">{{ this.selectedTask.dumpPeriod }}</span>
+            <span class="g-sm-4 grey">{{ $t('dumpPeriod') }}:</span>
+            <span class="g-sm-8 wba">{{ selectedTask.dumpPeriod }}</span>
           </div>
           <div class="mb-10 clear">
-            <span class="g-sm-4 grey">{{ this.$t('maxSamplingCount') }}:</span>
-            <span class="g-sm-8 wba">{{ this.selectedTask.maxSamplingCount }}</span>
+            <span class="g-sm-4 grey">{{ $t('maxSamplingCount') }}:</span>
+            <span class="g-sm-8 wba">{{ selectedTask.maxSamplingCount }}</span>
           </div>
-          <h5 class="mb-10" v-if="this.selectedTask.logs" v-show="this.selectedTask.logs.length">{{ $t('logs') }}.</h5>
-          <div class="log-item" v-for="(i, index) in this.selectedTask.logs" :key="index">
+          <h5 class="mb-10" v-if="selectedTask.logs" v-show="selectedTask.logs.length">{{ $t('logs') }}.</h5>
+          <div class="log-item" v-for="(i, index) in selectedTask.logs" :key="index">
             <div class="mb-10 sm">
               <span class="mr-10 grey">{{ $t('instance') }}:</span>
               <span>{{ i.instanceName }}</span>

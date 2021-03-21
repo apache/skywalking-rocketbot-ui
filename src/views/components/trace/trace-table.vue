@@ -22,8 +22,8 @@ limitations under the License. -->
         :total="rocketTrace.traceTotal"
       />
       <select class="grey" @change="changeSort" :value="rocketTrace.traceForm.queryOrder">
-        <option value="BY_START_TIME">{{ this.$t('startTime') }}</option>
-        <option value="BY_DURATION">{{ this.$t('duration') }}</option>
+        <option value="BY_START_TIME">{{ $t('startTime') }}</option>
+        <option value="BY_DURATION">{{ $t('duration') }}</option>
       </select>
     </div>
     <div class="rk-trace-t-loading" v-show="loading">

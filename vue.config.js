@@ -20,7 +20,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/graphql': {
-        target: `${process.env.SW_PROXY_TARGET || 'http://127.0.0.1:12800'}`,
+        target: `${process.env.SW_PROXY_TARGET || 'http://demo.skywalking.apache.org'}`,
 
         changeOrigin: true,
       },

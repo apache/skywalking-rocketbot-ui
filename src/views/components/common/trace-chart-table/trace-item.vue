@@ -57,7 +57,7 @@ limitations under the License. -->
         <span v-tooltip:bottom="data.serviceCode || '-'">{{ data.serviceCode }}</span>
       </div>
       <div class="application" v-show="type === 'profile'">
-        <span @click="viewSpanDetail">{{ this.$t('view') }}</span>
+        <span @click="viewSpanDetail">{{ $t('view') }}</span>
       </div>
     </div>
     <div v-show="data.children && data.children.length > 0 && displayChildren" class="children-trace">
