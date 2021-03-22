@@ -181,6 +181,7 @@ limitations under the License. -->
     color: inherit;
     border: 1px solid;
     border-radius: 4px;
+    margin: 0 10px;
   }
   .rk-trace-log-btn {
     padding: 3px 9px;
@@ -206,9 +207,5 @@ limitations under the License. -->
     height: 100px;
     margin: 0 auto;
     fill: rgba(46, 47, 51, 0.15);
-  }
-  .rk-trace-table_svg-icon {
-    width: 11px;
-    height: 11px;
   }
 </style>

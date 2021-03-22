@@ -170,6 +170,9 @@ limitations under the License. -->
     border-radius: 4px;
     margin-right: 10px;
   }
+  select {
+    margin: 0 10px;
+  }
   .profile-analyze-btn {
     color: #fff;
     padding: 3px 9px;
