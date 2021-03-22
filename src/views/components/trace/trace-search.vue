@@ -351,8 +351,7 @@ limitations under the License. -->
     }
   }
 
-  .rk-trace-search-btn,
-  .rk-trace-log-btn {
+  .rk-trace-search-btn {
     padding: 3px 9px;
     background-color: #484b55;
     border-radius: 4px;

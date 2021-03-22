@@ -182,6 +182,18 @@ limitations under the License. -->
     border: 1px solid;
     border-radius: 4px;
   }
+  .rk-trace-log-btn {
+    padding: 3px 9px;
+    background-color: #484b55;
+    border-radius: 4px;
+    color: #eee;
+    font-weight: normal;
+    cursor: pointer;
+
+    &.bg-blue {
+      background-color: #448dfe;
+    }
+  }
   .rk-tag {
     display: inline-block;
     border-radius: 4px;

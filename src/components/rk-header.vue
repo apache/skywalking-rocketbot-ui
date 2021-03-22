@@ -19,7 +19,13 @@ limitations under the License. -->
         <use xlink:href="#logo-sw"></use>
       </svg>
       <span class="grey rocketbot">Rocketbot</span>
-      <router-link v-for="(menu, index) in menus" :key="index" :to="menu.path" exact class="nav-link mr-20">
+      <router-link
+        v-for="(menu, index) in menus"
+        :key="index"
+        :to="menu.path"
+        :exact="menu.meta.exact"
+        class="nav-link mr-20"
+      >
         <rk-icon size="sm" :icon="menu.meta.icon" />
         <span class="vm hide-xs ml-5">{{ $t(menu.meta.title) }}</span>
       </router-link>

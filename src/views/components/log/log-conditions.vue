@@ -18,7 +18,7 @@ limitations under the License. -->
         <span class="sm b grey mr-10">{{ $t('traceID') }}:</span>
         <input
           type="text"
-          class="rk-trace-search-input dib"
+          class="rk-log-search-input dib"
           v-model="traceId"
           @change="changeConditions($event, LogConditionsOpt.TraceID)"
         />
@@ -29,7 +29,7 @@ limitations under the License. -->
       </div>
       <div class="mr-15" v-show="rocketLog.type.key === cateGoryService">
         <span class="sm b grey mr-10">{{ $t('keywordsOfContent') }}:</span>
-        <span class="rk-trace-tags" v-show="rocketLog.supportQueryLogsByKeywords">
+        <span class="rk-log-tags" v-show="rocketLog.supportQueryLogsByKeywords">
           <span
             class="selected"
             v-for="(item, index) in rocketLog.conditions.keywordsOfContent"
@@ -42,7 +42,7 @@ limitations under the License. -->
         <input
           type="text"
           :disabled="!rocketLog.supportQueryLogsByKeywords"
-          class="rk-trace-search-input dib mr-5"
+          class="rk-log-search-input dib mr-5"
           v-model="keywordsOfContent"
           @keyup="addLabels($event, LogConditionsOpt.KeywordsOfContent)"
         />
@@ -56,7 +56,7 @@ limitations under the License. -->
       </div>
       <div class="mr-15" v-show="rocketLog.type.key === cateGoryService">
         <span class="sm b grey mr-10">{{ $t('excludingKeywordsOfContent') }}:</span>
-        <span class="rk-trace-tags" v-show="rocketLog.supportQueryLogsByKeywords">
+        <span class="rk-log-tags" v-show="rocketLog.supportQueryLogsByKeywords">
           <span
             class="selected"
             v-for="(item, index) in rocketLog.conditions.excludingKeywordsOfContent"
@@ -69,7 +69,7 @@ limitations under the License. -->
         <input
           type="text"
           :disabled="!rocketLog.supportQueryLogsByKeywords"
-          class="rk-trace-search-input dib mr-5"
+          class="rk-log-search-input dib mr-5"
           v-model="excludingKeywordsOfContent"
           @keyup="addLabels($event, LogConditionsOpt.ExcludingKeywordsOfContent)"
         />
@@ -84,7 +84,7 @@ limitations under the License. -->
     </div>
     <div class="mr-10" style="padding-top: 10px" v-show="rocketLog.type.key === cateGoryService">
       <span class="sm grey">{{ $t('tags') }}: </span>
-      <span class="rk-trace-tags">
+      <span class="rk-log-tags">
         <span class="selected" v-for="(item, index) in tagsList" :key="index">
           <span>{{ item }}</span>
           <span class="remove-icon" @click="removeTags(index)">×</span>
@@ -94,7 +94,7 @@ limitations under the License. -->
         type="text"
         :placeholder="$t('addTag')"
         v-model="tags"
-        class="rk-trace-new-tag"
+        class="rk-log-new-tag"
         @keyup="addLabels($event, LogConditionsOpt.Tags)"
       />
       <span class="log-tips" v-tooltip:bottom="{ content: $t('logsTagsTip') }">
@@ -289,7 +289,7 @@ limitations under the License. -->
   }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .rk-search-conditions {
     width: 100%;
     background-color: #484b55;
@@ -346,14 +346,14 @@ limitations under the License. -->
       color: #eee;
     }
 
-    .rk-trace-search-input {
+    .rk-log-search-input {
       border-style: unset;
       outline: 0;
       padding: 2px 5px;
       border-radius: 3px;
     }
 
-    .rk-trace-tags {
+    .rk-log-tags {
       padding: 1px 5px 0 0;
       border-radius: 3px;
       height: 24px;
@@ -361,7 +361,7 @@ limitations under the License. -->
       vertical-align: top;
     }
 
-    .rk-trace-new-tag {
+    .rk-log-new-tag {
       border-style: unset;
       outline: 0;
       padding: 2px 5px;
