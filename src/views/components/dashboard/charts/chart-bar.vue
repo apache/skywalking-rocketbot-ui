@@ -79,6 +79,7 @@ limitations under the License. -->
           backgroundColor: 'rgb(50,50,50)',
           textStyle: {
             fontSize: 13,
+            color: '#ccc',
           },
           enterable: true,
           extraCssText: 'max-height: 300px; overflow: auto;',

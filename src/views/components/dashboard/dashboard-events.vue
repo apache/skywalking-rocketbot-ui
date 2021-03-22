@@ -26,12 +26,12 @@ limitations under the License. -->
       </li>
       <li v-show="!rocketData.serviceEvents.length">no data</li>
       <li v-for="event in rocketData.serviceEvents" :key="event.uuid">
-        <span class="check"><input type="checkbox" @click="selectEvents(event)"/></span>
+        <span class="check"><input type="checkbox" @click="selectEvents(event, entityType[0].key)"/></span>
         <span class="id">{{ event.uuid }}</span>
         <span>{{ event.name }}</span>
         <span>{{ event.source.service }}</span>
-        <span class="time">{{ event.startTime | dateformat }}</span>
-        <span class="time">{{ event.endTime | dateformat }}</span>
+        <span class="time">{{ event.startTime }}</span>
+        <span class="time">{{ event.endTime }}</span>
       </li>
     </ul>
     <div class="title">instance events</div>
@@ -47,13 +47,13 @@ limitations under the License. -->
       </li>
       <li v-show="!rocketData.serviceInstanceEvents.length">no data</li>
       <li v-for="event in rocketData.serviceInstanceEvents" :key="event.uuid">
-        <span class="check"><input type="checkbox" @click="selectEvents(event)"/></span>
+        <span class="check"><input type="checkbox" @click="selectEvents(event, entityType[3].key)"/></span>
         <span class="id">{{ event.uuid }}</span>
         <span>{{ event.name }}</span>
         <span>{{ event.source.service }}</span>
         <span>{{ event.source.serviceInstance }}</span>
-        <span class="time">{{ event.startTime | dateformat }}</span>
-        <span class="time">{{ event.endTime | dateformat }}</span>
+        <span class="time">{{ event.startTime }}</span>
+        <span class="time">{{ event.endTime }}</span>
       </li>
     </ul>
     <div class="title">endpoint events</div>
@@ -69,13 +69,13 @@ limitations under the License. -->
       </li>
       <li v-show="!rocketData.endpointEvents.length">no data</li>
       <li v-for="event in rocketData.endpointEvents" :key="event.uuid">
-        <span class="check"><input type="checkbox" @click="selectEvents(event)"/></span>
+        <span class="check"><input type="checkbox" @click="selectEvents(event, entityType[2].key)"/></span>
         <span class="id">{{ event.uuid }}</span>
         <span>{{ event.name }}</span>
         <span>{{ event.source.service }}</span>
         <span>{{ event.source.endpoint }}</span>
-        <span class="time">{{ event.startTime | dateformat }}</span>
-        <span class="time">{{ event.endTime | dateformat }}</span>
+        <span class="time">{{ event.startTime }}</span>
+        <span class="time">{{ event.endTime }}</span>
       </li>
     </ul>
     <div class="save-btn bg-blue" @click="updateEvent()">{{ $t('setEvent') }}</div>
@@ -93,16 +93,19 @@ limitations under the License. -->
     @State('rocketData') private rocketData!: rocketData;
     @Mutation('SET_CURRENT_EVENTS') private SET_CURRENT_EVENTS: any;
     @Prop() private closeBox: any;
+    private entityType = EntityType;
     private selectedEvents: Event[] = [];
 
-    private selectEvents(data: Event) {
+    private selectEvents(data: Event, type: string) {
       const index = this.selectedEvents.findIndex((item: Event) => item.uuid === data.uuid);
-      if (data.source.endpoint) {
-        data.entityType = EntityType[2].key;
-      } else if (data.source.serviceInstance) {
-        data.entityType = EntityType[3].key;
-      } else {
-        data.entityType = EntityType[0].key;
+      if (EntityType[2].key === type) {
+        data.entityType = type;
+      }
+      if (type === EntityType[3].key) {
+        data.entityType = type;
+      }
+      if (type === EntityType[0].key) {
+        data.entityType = type;
       }
       if (index < 0) {
         this.selectedEvents.push(data);

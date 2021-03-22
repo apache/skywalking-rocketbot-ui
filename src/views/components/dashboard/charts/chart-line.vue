@@ -18,7 +18,6 @@ limitations under the License. -->
 </template>
 <script lang="ts">
   import { Vue, Component, Prop } from 'vue-property-decorator';
-  import dayjs from 'dayjs';
   import { Event } from '@/types/dashboard';
 
   @Component
@@ -32,47 +31,24 @@ limitations under the License. -->
       chart.myChart.resize();
     }
     get option() {
-      console.log(this.itemEvents);
-      // const markAreas = this.itemEvents.map((event: Event) => {
-      //   return [{
-      //     xAxis: dayjs(event.startTime).format('YYYY-MM-DD HH:mm:ss'),
-      //   }, {
-      //     xAxis: dayjs(event.endTime).format('YYYY-MM-DD HH:mm:ss'),
-      //   }];
-      // });
-      const markAreas = [
-        [
-          {
-            xAxis: '03-18 17',
-            y: '95%',
-          },
-          {
-            xAxis: '03-19 01',
-            y: '60%',
-          },
-        ],
-        [
-          {
-            xAxis: '03-19 09',
-            y: '60%',
-          },
-          {
-            xAxis: '03-19 11',
-            y: '30%',
-          },
-        ],
-        [
-          {
-            xAxis: '03-19 12',
-            y: '30%',
-          },
-          {
-            xAxis: '03-19 13',
-            y: '0%',
-          },
-        ],
-      ];
       const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
+      const startP = keys.length > 1 ? 50 : 15;
+      const diff = 15;
+      console.log(this.itemEvents);
+      const markAreas = this.itemEvents.map((event: Event, index: number) => {
+        return [
+          {
+            name: event.message,
+            xAxis: event.startTime,
+            y: startP + diff * index,
+          },
+          {
+            name: event.message,
+            xAxis: event.endTime,
+            y: startP + diff * (index + 1),
+          },
+        ];
+      });
       const temp = keys.map((i: any, index: number) => {
         const serie: any = {
           data: this.data[i].map((item: any, itemIndex: number) => [this.intervalTime[itemIndex], item]),
@@ -89,9 +65,14 @@ limitations under the License. -->
               ? {
                   silent: false,
                   data: markAreas,
-                  itemStyle: {
-                    borderWidth: 1,
-                    borderType: 'dashed',
+                  label: {
+                    show: false,
+                  },
+                  emphasis: {
+                    label: {
+                      position: 'top',
+                      show: true,
+                    },
                   },
                 }
               : undefined,
@@ -139,6 +120,7 @@ limitations under the License. -->
           backgroundColor: 'rgb(50,50,50)',
           textStyle: {
             fontSize: 13,
+            color: '#ccc',
           },
           enterable: true,
           extraCssText: 'max-height: 300px; overflow: auto;',

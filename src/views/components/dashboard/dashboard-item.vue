@@ -352,6 +352,7 @@ limitations under the License. -->
       if (!this.itemEvents.length) {
         return;
       }
+
       this.chartRender();
     }
   }

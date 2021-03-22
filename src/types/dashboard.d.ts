@@ -95,7 +95,7 @@ export type Event = {
   type: string;
   message: string;
   parameters: { key: string; value: string }[];
-  startTime: number;
-  endTime: number;
+  startTime: string;
+  endTime: string;
   entityType?: string;
 };
