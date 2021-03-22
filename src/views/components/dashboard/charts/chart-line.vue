@@ -37,9 +37,14 @@ limitations under the License. -->
       const markAreas = this.itemEvents.map((event: Event, index: number) => {
         return [
           {
-            name: event.message,
+            name: `name:${event.name}; type:${event.type}`,
             xAxis: event.startTime,
             y: startP + diff * index,
+            itemStyle: {
+              borderWidth: 2,
+              borderColor: event.type === 'Normal' ? '#004E52' : '#FF0087',
+              color: event.type === 'Normal' ? '#80FFA5' : '#FF0087',
+            },
           },
           {
             name: event.message,
@@ -66,9 +71,7 @@ limitations under the License. -->
                   data: markAreas,
                   label: {
                     show: false,
-                  },
-                  itemStyle: {
-                    borderWidth: 1,
+                    width: 60,
                   },
                   emphasis: {
                     label: {
