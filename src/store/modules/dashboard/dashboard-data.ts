@@ -49,8 +49,8 @@ const mutations: MutationTree<any> = {
   ...dashboardLayout.mutations,
   [types.SET_DASHBOARD_EVENTS](state: State, param: { events: Event[]; type: string; duration: any }) {
     const events = param.events.map((d: Event) => {
-      d.startTime = dateFormatTime(new Date(d.startTime), param.duration.step);
-      d.endTime = dateFormatTime(new Date(d.endTime), param.duration.step);
+      d.startTime = dateFormatTime(new Date(Number(d.startTime)), param.duration.step);
+      d.endTime = dateFormatTime(new Date(Number(d.endTime)), param.duration.step);
       return d;
     });
     if (param.type === EntityType[0]) {

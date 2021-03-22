@@ -84,6 +84,7 @@ limitations under the License. -->
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('rocketTopo/DELETE_TOPO_ENDPOINT') private DELETE_TOPO_ENDPOINT: any;
     @Mutation('rocketTopo/DELETE_TOPO_INSTANCE') private DELETE_TOPO_INSTANCE: any;
+    @Mutation('SET_CURRENT_EVENTS') private SET_CURRENT_EVENTS: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
@@ -326,6 +327,7 @@ limitations under the License. -->
     // watch selectors
     @Watch('rocketOption.updateDashboard')
     private watchCurrentSelectors() {
+      this.SET_CURRENT_EVENTS([]);
       setTimeout(() => {
         this.chartRender();
       }, 1000);
