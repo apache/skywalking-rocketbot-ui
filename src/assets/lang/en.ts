@@ -99,7 +99,7 @@ const m = {
   range: 'Range',
   timeRange: 'Time Range',
   duration: 'Duration',
-  startTime: 'startTime',
+  startTime: 'Start Time',
   start: 'Start',
   spans: 'Spans',
   spanInfo: 'Span Info',

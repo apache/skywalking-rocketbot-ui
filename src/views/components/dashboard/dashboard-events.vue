@@ -127,14 +127,13 @@ limitations under the License. -->
       text-align: center;
       border-radius: 4px;
       color: #fff;
-      margin-top: 10px;
       cursor: pointer;
     }
     ul {
-      // width: 850px;
       max-height: 240px;
       min-height: 100px;
       overflow: auto;
+      margin-bottom: 20px;
       .header {
         font-weight: bold;
       }

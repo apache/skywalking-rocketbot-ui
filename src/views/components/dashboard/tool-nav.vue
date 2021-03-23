@@ -53,7 +53,7 @@ limitations under the License. -->
     <a @click="setEventList" v-show="type === dashboardType.SERVICE">
       <rk-icon icon="format_indent_increase" v-tooltip:bottom="{ content: $t('setEvent') }" />
     </a>
-    <rk-sidebox width="100%" :fixed="true" :show.sync="dialogEventVisible">
+    <rk-sidebox width="950px" :fixed="true" :show.sync="dialogEventVisible">
       <DashboardEvent :closeBox="() => (dialogEventVisible = false)" />
     </rk-sidebox>
   </nav>
