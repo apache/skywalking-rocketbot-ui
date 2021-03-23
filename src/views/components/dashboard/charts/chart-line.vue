@@ -34,10 +34,10 @@ limitations under the License. -->
       const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
       const startP = keys.length > 1 ? 50 : 15;
       const diff = 15;
-      const markAreas = this.itemEvents.map((event: Event, index: number) => {
+      const markAreas = (this.itemEvents || []).map((event: Event, index: number) => {
         return [
           {
-            name: `name:${event.name}; type:${event.type}`,
+            name: `${event.name}:${event.type}`,
             xAxis: event.startTime,
             y: startP + diff * index,
             itemStyle: {
@@ -75,7 +75,7 @@ limitations under the License. -->
                   },
                   emphasis: {
                     label: {
-                      position: 'top',
+                      position: 'bottom',
                       show: true,
                     },
                   },
