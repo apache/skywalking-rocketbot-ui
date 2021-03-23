@@ -147,7 +147,7 @@ limitations under the License. -->
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .profile-trace-dashboard {
     padding: 20px;
     width: 68%;
@@ -168,6 +168,7 @@ limitations under the License. -->
     color: inherit;
     border: 1px solid;
     border-radius: 4px;
+    margin-right: 10px;
   }
   select {
     margin: 0 10px;

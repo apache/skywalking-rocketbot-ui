@@ -180,6 +180,36 @@ limitations under the License. -->
       text-align: center;
       margin-top: 10px;
     }
+    .rk-trace-t-wrapper {
+      overflow: auto;
+      flex-grow: 1;
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .rk-trace-t-loading {
+      text-align: center;
+      position: absolute;
+      width: 100%;
+      height: 70px;
+      margin-top: 40px;
+      line-height: 88px;
+      overflow: hidden;
+      .icon {
+        width: 30px;
+        height: 30px;
+      }
+    }
+    .rk-trace-t {
+      width: 100%;
+      border-spacing: 0;
+      table-layout: fixed;
+      flex-grow: 1;
+      position: relative;
+    }
+    .rk-trace-tr {
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+      }
+    }
     .rk-trace-td {
       padding: 8px 10px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.07);

@@ -158,6 +158,9 @@ limitations under the License. -->
 </script>
 
 <style lang="scss" scoped>
+  .rk-log-box {
+    color: #3d444f;
+  }
   .rk-trace-detail {
     flex-shrink: 0;
     height: 100%;
@@ -178,6 +181,19 @@ limitations under the License. -->
     color: inherit;
     border: 1px solid;
     border-radius: 4px;
+    margin: 0 10px;
+  }
+  .rk-trace-log-btn {
+    padding: 3px 9px;
+    background-color: #484b55;
+    border-radius: 4px;
+    color: #eee;
+    font-weight: normal;
+    cursor: pointer;
+
+    &.bg-blue {
+      background-color: #448dfe;
+    }
   }
   .rk-tag {
     display: inline-block;
@@ -191,9 +207,5 @@ limitations under the License. -->
     height: 100px;
     margin: 0 auto;
     fill: rgba(46, 47, 51, 0.15);
-  }
-  .rk-trace-table_svg-icon {
-    width: 11px;
-    height: 11px;
   }
 </style>
