@@ -199,6 +199,13 @@ const m = {
   keywordsOfContentLogTips: 'SkyWalking OAP服务器的当前存储不支持此操作',
   setEvent: '设置事件',
   instanceAttributes: '实例属性',
+  serviceEvents: '服务事件',
+  select: '选择',
+  eventID: '事件ID',
+  eventName: '事件名称',
+  endTime: '结束事件',
+  instanceEvents: '实例事件',
+  endpointEvents: '端点事件',
 };
 
 export default m;

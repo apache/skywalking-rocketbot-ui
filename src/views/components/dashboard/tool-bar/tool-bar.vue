@@ -197,7 +197,7 @@ limitations under the License. -->
       background-color: rgba(255, 255, 255, 0.07);
       border-radius: 4px;
       margin-left: 5px;
-      padding: 5px 10px;
+      padding: 3px;
       color: #a7aebb;
     }
   }

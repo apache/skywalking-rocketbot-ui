@@ -14,66 +14,56 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div class="config-box">
-    <div class="title">service events</div>
+    <div class="title">{{ $t('serviceEvents') }}</div>
     <ul>
       <li class="header">
-        <span class="check">select</span>
-        <span class="id">id</span>
-        <span>name</span>
-        <span>service name</span>
-        <span class="time">start time</span>
-        <span class="time">end time</span>
+        <span class="check">{{ $t('select') }}</span>
+        <span class="id">{{ $t('eventID') }}</span>
+        <span>{{ $t('eventName') }}</span>
+        <span class="time">{{ $t('startTime') }}</span>
+        <span class="time">{{ $t('endTime') }}</span>
       </li>
-      <li v-show="!rocketData.serviceEvents.length">no data</li>
+      <li v-show="!rocketData.serviceEvents.length">{{ $t('noData') }}</li>
       <li v-for="event in rocketData.serviceEvents" :key="event.uuid">
         <span class="check"><input type="checkbox" @click="selectEvents(event, entityType[0].key)"/></span>
         <span class="id">{{ event.uuid }}</span>
         <span>{{ event.name }}</span>
-        <span>{{ event.source.service }}</span>
         <span class="time">{{ event.startTime }}</span>
         <span class="time">{{ event.endTime }}</span>
       </li>
     </ul>
-    <div class="title">instance events</div>
+    <div class="title">{{ $t('instanceEvents') }}</div>
     <ul>
       <li class="header">
-        <span class="check">select</span>
-        <span class="id">id</span>
-        <span>name</span>
-        <span>service name</span>
-        <span>instance name</span>
-        <span class="time">start time</span>
-        <span class="time">end time</span>
+        <span class="check">{{ $t('select') }}</span>
+        <span class="id">{{ $t('eventID') }}</span>
+        <span>{{ $t('eventName') }}</span>
+        <span class="time">{{ $t('startTime') }}</span>
+        <span class="time">{{ $t('endTime') }}</span>
       </li>
-      <li v-show="!rocketData.serviceInstanceEvents.length">no data</li>
+      <li v-show="!rocketData.serviceInstanceEvents.length">{{ $t('noData') }}</li>
       <li v-for="event in rocketData.serviceInstanceEvents" :key="event.uuid">
         <span class="check"><input type="checkbox" @click="selectEvents(event, entityType[3].key)"/></span>
         <span class="id">{{ event.uuid }}</span>
         <span>{{ event.name }}</span>
-        <span>{{ event.source.service }}</span>
-        <span>{{ event.source.serviceInstance }}</span>
         <span class="time">{{ event.startTime }}</span>
         <span class="time">{{ event.endTime }}</span>
       </li>
     </ul>
-    <div class="title">endpoint events</div>
+    <div class="title">{{ $t('endpointEvents') }}</div>
     <ul>
       <li class="header">
-        <span class="check">select</span>
-        <span class="id">id</span>
-        <span>name</span>
-        <span>service name</span>
-        <span>endpoint name</span>
-        <span class="time">start time</span>
-        <span class="time">end time</span>
+        <span class="check">{{ $t('select') }}</span>
+        <span class="id">{{ $t('eventID') }}</span>
+        <span>{{ $t('eventName') }}</span>
+        <span class="time">{{ $t('startTime') }}</span>
+        <span class="time">{{ $t('endTime') }}</span>
       </li>
-      <li v-show="!rocketData.endpointEvents.length">no data</li>
+      <li v-show="!rocketData.endpointEvents.length">{{ $t('noData') }}</li>
       <li v-for="event in rocketData.endpointEvents" :key="event.uuid">
         <span class="check"><input type="checkbox" @click="selectEvents(event, entityType[2].key)"/></span>
         <span class="id">{{ event.uuid }}</span>
         <span>{{ event.name }}</span>
-        <span>{{ event.source.service }}</span>
-        <span>{{ event.source.endpoint }}</span>
         <span class="time">{{ event.startTime }}</span>
         <span class="time">{{ event.endTime }}</span>
       </li>
@@ -124,7 +114,7 @@ limitations under the License. -->
     }
   }
 </script>
-<style scope lang="scss">
+<style lang="scss" scope>
   .config-box {
     .title {
       font-size: 14px;

@@ -201,6 +201,13 @@ const m = {
   keywordsOfContentLogTips: 'Current storage of SkyWalking OAP server does not support this.',
   setEvent: 'Set Event',
   instanceAttributes: 'Instance Attributes',
+  serviceEvents: 'Service Events',
+  select: 'Select',
+  eventID: 'Event ID',
+  eventName: 'Event Name',
+  endTime: 'End Time',
+  instanceEvents: 'Instance Events',
+  endpointEvents: 'Endpoint Events',
 };
 
 export default m;
