@@ -75,7 +75,7 @@ limitations under the License. -->
   import { Event } from '@/types/dashboard';
 
   @Component({
-    components: charts,
+    components: { ...charts },
   })
   export default class DashboardItem extends Vue {
     @State('rocketbot') private rocketGlobal!: globalState;

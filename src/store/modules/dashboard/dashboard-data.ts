@@ -156,15 +156,15 @@ const actions: ActionTree<State, any> = {
         if (!(res.data.data && res.data.data.fetchEvents)) {
           if (params.type === EntityType[0]) {
             context.commit('SET_DASHBOARD_EVENTS', { events: [], type: params.type, duration: params.condition.time });
-            return;
+            return [];
           }
           if (params.type === EntityType[1]) {
             context.commit('SET_DASHBOARD_EVENTS', { events: [], type: params.type, duration: params.condition.time });
-            return;
+            return [];
           }
           if (params.type === EntityType[2]) {
             context.commit('SET_DASHBOARD_EVENTS', { events: [], type: params.type, duration: params.condition.time });
-            return;
+            return [];
           }
         }
         if (params.type === EntityType[0]) {
