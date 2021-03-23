@@ -112,6 +112,7 @@ limitations under the License. -->
       this.height = this.item.height;
       this.unit = this.item.unit;
       this.itemConfig = this.item;
+      this.eventsFilter();
       const types = [
         ObjectsType.UPDATE_INSTANCES,
         ObjectsType.UPDATE_ENDPOINTS,
@@ -324,6 +325,18 @@ limitations under the License. -->
       }
     }
 
+    private eventsFilter() {
+      this.itemEvents = this.rocketData.currentEvents.filter(
+        (event) =>
+          this.itemConfig.entityType === event.entityType &&
+          ((event.source.service === this.rocketOption.currentService.label &&
+            (event.source.serviceInstance === this.rocketOption.currentInstance.label ||
+              event.source.endpoint === this.rocketOption.currentEndpoint.label)) ||
+            (event.entityType === EntityType[0].key &&
+              event.source.service === this.rocketOption.currentService.label)),
+      );
+    }
+
     // watch selectors
     @Watch('rocketOption.updateDashboard')
     private watchCurrentSelectors() {
@@ -342,15 +355,7 @@ limitations under the License. -->
     }
     @Watch('rocketData.currentEvents')
     private watchEventsRerender() {
-      this.itemEvents = this.rocketData.currentEvents.filter(
-        (event) =>
-          this.itemConfig.entityType === event.entityType &&
-          ((event.source.service === this.rocketOption.currentService.label &&
-            (event.source.serviceInstance === this.rocketOption.currentInstance.label ||
-              event.source.endpoint === this.rocketOption.currentEndpoint.label)) ||
-            (event.entityType === EntityType[0].key &&
-              event.source.service === this.rocketOption.currentService.label)),
-      );
+      this.eventsFilter();
       if (!this.itemEvents.length) {
         return;
       }
