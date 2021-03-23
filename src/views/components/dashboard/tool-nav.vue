@@ -50,7 +50,7 @@ limitations under the License. -->
     <a class="mr-10" @click="exportData">
       <rk-icon icon="save_alt" />
     </a>
-    <a @click="setEventList">
+    <a @click="setEventList" v-show="type === dashboardType.SERVICE">
       <rk-icon icon="format_indent_increase" v-tooltip:bottom="{ content: $t('setEvent') }" />
     </a>
     <rk-sidebox width="100%" :fixed="true" :show.sync="dialogEventVisible">
@@ -67,6 +67,7 @@ limitations under the License. -->
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
   import { EntityType } from './charts/constant';
+  import { DASHBOARDTYPE } from './constant';
 
   @Component({
     components: { DashboardEvent },
@@ -85,6 +86,8 @@ limitations under the License. -->
     private name: string = '';
     private show: boolean = false;
     private dialogEventVisible = false;
+    private dashboardType = DASHBOARDTYPE;
+
     get type() {
       return this.rocketComps.tree[this.rocketComps.group].type;
     }
