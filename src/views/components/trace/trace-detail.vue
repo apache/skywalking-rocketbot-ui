@@ -59,11 +59,11 @@ limitations under the License. -->
         {{ $t('list') }}</a
       >
 
-      <div class="rk-tag mr-5">{{ this.$t('start') }}</div>
+      <div class="rk-tag mr-5">{{ $t('start') }}</div>
       <span class="mr-15 sm">{{ parseInt(current.start) | dateformat }}</span>
-      <div class="rk-tag mr-5">{{ this.$t('duration') }}</div>
+      <div class="rk-tag mr-5">{{ $t('duration') }}</div>
       <span class="mr-15 sm">{{ current.duration }} ms</span>
-      <div class="rk-tag mr-5">{{ this.$t('spans') }}</div>
+      <div class="rk-tag mr-5">{{ $t('spans') }}</div>
       <span class="sm">{{ spans.length }}</span>
     </div>
     <TraceDetailChartList
@@ -158,6 +158,9 @@ limitations under the License. -->
 </script>
 
 <style lang="scss" scoped>
+  .rk-log-box {
+    color: #3d444f;
+  }
   .rk-trace-detail {
     flex-shrink: 0;
     height: 100%;
@@ -178,6 +181,19 @@ limitations under the License. -->
     color: inherit;
     border: 1px solid;
     border-radius: 4px;
+    margin: 0 10px;
+  }
+  .rk-trace-log-btn {
+    padding: 3px 9px;
+    background-color: #484b55;
+    border-radius: 4px;
+    color: #eee;
+    font-weight: normal;
+    cursor: pointer;
+
+    &.bg-blue {
+      background-color: #448dfe;
+    }
   }
   .rk-tag {
     display: inline-block;
@@ -191,9 +207,5 @@ limitations under the License. -->
     height: 100px;
     margin: 0 auto;
     fill: rgba(46, 47, 51, 0.15);
-  }
-  .rk-trace-table_svg-icon {
-    width: 11px;
-    height: 11px;
   }
 </style>

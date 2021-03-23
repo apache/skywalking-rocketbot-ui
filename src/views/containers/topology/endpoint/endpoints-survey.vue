@@ -51,5 +51,3 @@ limitations under the License. -->
     @Prop() private updateObjects!: string;
   }
 </script>
-
-<style lang="less" scoped></style>

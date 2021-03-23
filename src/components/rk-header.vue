@@ -19,29 +19,15 @@ limitations under the License. -->
         <use xlink:href="#logo-sw"></use>
       </svg>
       <span class="grey rocketbot">Rocketbot</span>
-      <router-link class="nav-link mr-20" to="/" exact>
-        <rk-icon size="sm" icon="chart" />
-        <span class="vm hide-xs ml-5">{{ this.$t('dashboard') }}</span>
-      </router-link>
-      <router-link class="nav-link mr-20" to="/topology">
-        <rk-icon size="sm" icon="issues" />
-        <span class="vm hide-xs ml-5">{{ this.$t('topology') }}</span>
-      </router-link>
-      <router-link class="nav-link mr-20" to="/trace">
-        <rk-icon size="sm" icon="merge" />
-        <span class="vm hide-xs ml-5">{{ this.$t('trace') }}</span>
-      </router-link>
-      <router-link class="nav-link mr-20" to="/profile">
-        <rk-icon size="sm" icon="timeline" />
-        <span class="vm hide-xs ml-5">{{ this.$t('profile') }}</span>
-      </router-link>
-      <router-link class="nav-link mr-20" to="/log">
-        <rk-icon size="sm" icon="assignment" />
-        <span class="vm hide-xs ml-5">{{ this.$t('log') }}</span>
-      </router-link>
-      <router-link class="nav-link mr-20" to="/alarm">
-        <rk-icon size="sm" icon="spam" />
-        <span class="vm hide-xs ml-5">{{ this.$t('alarm') }}</span>
+      <router-link
+        v-for="(menu, index) in menus"
+        :key="index"
+        :to="menu.path"
+        :exact="menu.meta.exact"
+        class="nav-link mr-20"
+      >
+        <rk-icon size="sm" :icon="menu.meta.icon" />
+        <span class="vm hide-xs ml-5">{{ $t(menu.meta.title) }}</span>
       </router-link>
     </div>
     <div class="flex-h">
@@ -49,19 +35,19 @@ limitations under the License. -->
         class="rk-btn mr-5 sm"
         :class="auto ? 'blue' : 'ghost'"
         @click="handleAuto"
-        v-tooltip:bottom="{ content: this.$t('timeReload') }"
+        v-tooltip:bottom="{ content: $t('timeReload') }"
       >
-        <span class="vm">{{ this.$t('auto') }}</span>
+        <span class="vm">{{ $t('auto') }}</span>
       </a>
       <div class="auto-time">
         <span class="rk-auto-select">
           <input v-model="autoTime" type="number" @change="changeAutoTime" min="1" />
         </span>
-        {{ this.$t('second') }}
+        {{ $t('second') }}
       </div>
       <a class="rk-btn sm ghost" @click="handleReload">
         <rk-icon icon="retry" :loading="auto" />
-        <span class="vm">{{ this.$t('reload') }}</span>
+        <span class="vm">{{ $t('reload') }}</span>
       </a>
     </div>
   </header>
@@ -70,6 +56,7 @@ limitations under the License. -->
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator';
   import { Action, State, Getter } from 'vuex-class';
+  import { routes } from '@/router';
   import timeFormat from '@/utils/timeFormat';
 
   @Component
@@ -80,6 +67,11 @@ limitations under the License. -->
     private auto: boolean = false;
     private autoTime: number = 6;
     private timer: any = null;
+
+    private get menus() {
+      return routes[0].children;
+    }
+
     private handleReload() {
       const gap = this.duration.end.getTime() - this.duration.start.getTime();
       const utcCopy: any = -(new Date().getTimezoneOffset() / 60);
@@ -184,6 +176,18 @@ limitations under the License. -->
     transition: background-color 0.3s;
     &:hover {
       background-color: #dededf;
+    }
+  }
+  .rk-auto-select {
+    border-radius: 3px;
+    background-color: #fff;
+    padding: 1px;
+    border-radius: 3px;
+
+    input {
+      width: 38px;
+      border-style: unset;
+      outline: 0;
     }
   }
 </style>

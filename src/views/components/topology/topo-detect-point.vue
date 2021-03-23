@@ -33,14 +33,14 @@ limitations under the License. -->
           :class="{ active: !stateTopo.mode }"
           class="link-topo-aside-box-btn tc r sm cp b"
           @click="setMode(false)"
-          >{{ this.$t('client') }}</span
+          >{{ $t('client') }}</span
         >
         <span
           v-if="stateTopo.detectPoints.indexOf('SERVER') !== -1"
           :class="{ active: stateTopo.mode }"
           class="link-topo-aside-box-btn tc r sm cp b"
           @click="setMode(true)"
-          >{{ this.$t('server') }}</span
+          >{{ $t('server') }}</span
         >
       </div>
       <span v-else-if="showServerInfo" class="b dib mr-20 vm">{{ $t('serviceDetail') }}</span>

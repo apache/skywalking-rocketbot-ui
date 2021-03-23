@@ -20,11 +20,11 @@ limitations under the License. -->
         <option v-for="i in currentSegment.traceIds" :value="i" :key="i">{{ i }}</option>
       </select>
       <select class="profile-trace-detail-ids" @change="spanModeChange($event)">
-        <option value="include" key="include">{{ this.$t('includeChildren') }}</option>
-        <option value="exclude" key="exclude">{{ this.$t('excludeChildren') }}</option>
+        <option value="include" key="include">{{ $t('includeChildren') }}</option>
+        <option value="exclude" key="exclude">{{ $t('excludeChildren') }}</option>
       </select>
       <a class="profile-analyze-btn bg-blue profile-trace-detail-ids" @click="analyzeProfile()">
-        <span class="vm">{{ this.$t('analyze') }}</span>
+        <span class="vm">{{ $t('analyze') }}</span>
       </a>
     </div>
     <TraceDetailChartTable
@@ -147,7 +147,7 @@ limitations under the License. -->
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .profile-trace-dashboard {
     padding: 20px;
     width: 68%;
@@ -168,6 +168,7 @@ limitations under the License. -->
     color: inherit;
     border: 1px solid;
     border-radius: 4px;
+    margin-right: 10px;
   }
   select {
     margin: 0 10px;

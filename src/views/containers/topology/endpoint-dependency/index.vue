@@ -15,7 +15,7 @@ limitations under the License. -->
 <template>
   <div class="endpoint-dependency-page">
     <div class="rk-dashboard-bar flex-h">
-      <ToolBarSelect :selectable="false" :title="this.$t('currentService')" :current="current" icon="package" />
+      <ToolBarSelect :selectable="false" :title="$t('currentService')" :current="current" icon="package" />
       <ToolBarEndpointSelect
         @onChoose="selectEndpoint"
         :title="$t('currentEndpoint')"

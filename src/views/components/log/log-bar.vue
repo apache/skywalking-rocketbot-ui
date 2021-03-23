@@ -17,28 +17,28 @@ limitations under the License. -->
       <div class="flex-h">
         <ToolBarSelect
           @onChoose="selectCategroy"
-          :title="this.$t('logCategory')"
+          :title="$t('logCategory')"
           :current="logState.type"
           :data="logState.logCategories"
           icon="chart"
         />
         <ToolBarSelect
           @onChoose="selectService"
-          :title="this.$t('service')"
+          :title="$t('service')"
           :current="rocketOption.currentService"
           :data="rocketOption.services"
           icon="package"
         />
         <ToolBarSelect
           @onChoose="selectInstance"
-          :title="logState.type.key === cateGoryBrowser ? this.$t('version') : this.$t('currentInstance')"
+          :title="logState.type.key === cateGoryBrowser ? $t('version') : $t('currentInstance')"
           :current="rocketOption.currentInstance"
           :data="rocketOption.instances"
           icon="disk"
         />
         <ToolBarSelect
           @onChoose="selectEndpoint"
-          :title="logState.type.key === cateGoryBrowser ? this.$t('page') : this.$t('currentEndpoint')"
+          :title="logState.type.key === cateGoryBrowser ? $t('page') : $t('currentEndpoint')"
           :current="rocketOption.currentEndpoint"
           :data="rocketOption.endpoints"
           icon="code"
@@ -46,7 +46,7 @@ limitations under the License. -->
         <ToolBarSelect
           v-if="logState.type.key === cateGoryBrowser"
           @onChoose="SELECT_ERROR_CATALOG"
-          :title="this.$t('errorCatalog')"
+          :title="$t('errorCatalog')"
           :current="logState.category"
           :data="logState.categories"
           icon="epic"
@@ -59,11 +59,11 @@ limitations under the License. -->
         </a>
         <a class="rk-log-search-btn bg-blue mr-10" @click="queryLogs">
           <rk-icon icon="search" class="mr-5" />
-          <span class="vm">{{ this.$t('search') }}</span>
+          <span class="vm">{{ $t('search') }}</span>
         </a>
         <a class="rk-log-clear-btn r mr-10" @click="clearSearch">
           <rk-icon icon="clear" class="mr-5" />
-          <span class="vm">{{ this.$t('clear') }}</span>
+          <span class="vm">{{ $t('clear') }}</span>
         </a>
 
         <RkPage :currentSize="pageSize" :currentPage="pageNum" @changePage="handleRefresh" :total="logState.total" />
