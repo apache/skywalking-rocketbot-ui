@@ -53,8 +53,12 @@ limitations under the License. -->
         :data="stateDashboard.instances"
         icon="disk"
       />
-      <a class="rk-view-instance-attributes r" @click="() => (dialogAttributesVisible = true)">
-        <span class="vm">{{ this.$t('instanceAttributes') }}</span>
+      <a
+        class="rk-view-instance-attributes r"
+        @click="() => (dialogAttributesVisible = true)"
+        v-tooltip:bottom="{ content: $t('instanceAttributes') }"
+      >
+        <rk-icon icon="info_outline" />
       </a>
       <rk-sidebox
         width="50%"
