@@ -198,7 +198,7 @@ limitations under the License. -->
       border-radius: 4px;
       margin-left: 5px;
       padding: 3px;
-      color: #a7aebb;
+      color: #efefef;
     }
   }
 </style>
