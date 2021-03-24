@@ -50,12 +50,6 @@ limitations under the License. -->
     <a class="mr-10" @click="exportData">
       <rk-icon icon="save_alt" />
     </a>
-    <a @click="setEventList" v-show="type === dashboardType.SERVICE">
-      <rk-icon icon="format_indent_increase" v-tooltip:bottom="{ content: $t('setEvent') }" />
-    </a>
-    <rk-sidebox width="950px" :fixed="true" :show.sync="dialogEventVisible">
-      <DashboardEvent :closeBox="() => (dialogEventVisible = false)" />
-    </rk-sidebox>
   </nav>
 </template>
 
@@ -63,29 +57,22 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import { Getter, Mutation, Action } from 'vuex-class';
-  import DashboardEvent from './dashboard-events.vue';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
-  import { EntityType } from './charts/constant';
   import { DASHBOARDTYPE } from './constant';
 
-  @Component({
-    components: { DashboardEvent },
-  })
+  @Component
   export default class ToolNav extends Vue {
     @Prop() private rocketGlobal: any;
     @Prop() private rocketComps: any;
-    @Prop() private stateDashboard: any;
     @Mutation('IMPORT_COMPS_TREE') private IMPORT_COMPS_TREE: any;
     @Mutation('SET_CURRENT_COMPS') private SET_CURRENT_COMPS: any;
     @Mutation('DELETE_COMPS_TREE') private DELETE_COMPS_TREE: any;
     @Mutation('ADD_COMPS_TREE') private ADD_COMPS_TREE: any;
     @Action('RUN_EVENTS') private RUN_EVENTS: any;
-    @Action('GET_EVENT') private GET_EVENT: any;
     @Getter('durationTime') private durationTime: any;
     private name: string = '';
     private show: boolean = false;
-    private dialogEventVisible = false;
     private dashboardType = DASHBOARDTYPE;
 
     get type() {
@@ -126,41 +113,6 @@ limitations under the License. -->
       const currentData = tree[group].children[current];
       const name = `${currentData.name}.comps.json`;
       saveFile(currentData, name);
-    }
-    private setEventList(index: number) {
-      this.dialogEventVisible = true;
-      this.GET_EVENT({
-        condition: {
-          time: this.durationTime,
-          size: 100,
-          source: {
-            service: this.stateDashboard.currentService.label,
-          },
-        },
-        type: EntityType[0].key,
-      });
-      this.GET_EVENT({
-        condition: {
-          time: this.durationTime,
-          size: 100,
-          source: {
-            service: this.stateDashboard.currentService.label,
-            serviceInstance: this.stateDashboard.currentInstance.label,
-          },
-        },
-        type: EntityType[3].key,
-      });
-      this.GET_EVENT({
-        condition: {
-          time: this.durationTime,
-          size: 100,
-          source: {
-            service: this.stateDashboard.currentService.label,
-            endpoint: this.stateDashboard.currentEndpoint.label,
-          },
-        },
-        type: EntityType[2].key,
-      });
     }
   }
 </script>

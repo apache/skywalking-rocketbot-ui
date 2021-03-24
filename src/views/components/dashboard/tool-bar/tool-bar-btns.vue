@@ -15,40 +15,43 @@ limitations under the License. -->
 
 <template>
   <div class="flex-h btn-box">
-    <div class="rk-dashboard-bar-btn">
-      <span v-tooltip:bottom="{ content: rocketGlobal.edit ? 'view' : 'edit' }">
-        <svg
-          class="icon lg vm cp rk-btn ghost"
-          :style="`color:${!rocketGlobal.edit ? '' : '#ffc107'}`"
-          @click="handleSetEdit"
-        >
-          <use :xlink:href="!rocketGlobal.edit ? '#lock' : '#lock-open'"></use>
-        </svg>
-      </span>
+    <div class="rk-dashboard-bar-btn" @click="handleSetEdit">
+      <rk-icon
+        class="lg"
+        :style="`color:${!rocketGlobal.edit ? '' : '#ffc107'}`"
+        :icon="!rocketGlobal.edit ? 'lock' : 'lock-open'"
+        v-tooltip:bottom="{ content: rocketGlobal.edit ? 'view' : 'edit' }"
+      />
     </div>
-    <div class="rk-dashboard-bar-btn">
-      <span v-tooltip:bottom="{ content: 'import' }">
-        <input id="tool-bar-file" type="file" name="file" title="" accept=".json" @change="importData" />
-        <label class="rk-btn ghost input-label" for="tool-bar-file">
-          <svg class="icon lg vm cp " :style="`marginTop: 0px`">
-            <use :xlink:href="'#folder_open'"></use>
-          </svg>
-        </label>
-      </span>
+    <div class="rk-dashboard-bar-btn" v-tooltip:bottom="{ content: 'import' }">
+      <input id="tool-bar-file" type="file" name="file" title="" accept=".json" @change="importData" />
+      <label for="tool-bar-file">
+        <rk-icon class="lg import" icon="folder_open" />
+      </label>
     </div>
-    <div class="rk-dashboard-bar-btn">
-      <span v-tooltip:bottom="{ content: 'export' }">
-        <svg class="icon lg vm cp rk-btn ghost" @click="exportData">
-          <use :xlink:href="'#save_alt'"></use>
-        </svg>
-      </span>
+    <div class="rk-dashboard-bar-btn" @click="exportData">
+      <rk-icon class="lg" icon="save_alt" v-tooltip:bottom="{ content: 'export' }" />
     </div>
-
-    <div class="rk-dashboard-bar-btn">
-      <svg class="icon lg vm cp rk-btn ghost" @click="handleOption">
-        <use xlink:href="#retry"></use>
-      </svg>
+    <div class="rk-dashboard-bar-btn" @click="handleOption">
+      <rk-icon class="lg" icon="retry" v-tooltip:bottom="{ content: 'auto' }" />
     </div>
+    <div
+      class="rk-dashboard-bar-btn"
+      @click="() => (enableEvents = !enableEvents)"
+      v-show="compType === dashboardType.SERVICE"
+    >
+      <rk-icon
+        :class="enableEvents ? 'blue' : 'ghost'"
+        icon="format_indent_increase"
+        v-tooltip:bottom="{ content: enableEvents ? $t('disableEvents') : $t('enableEvents') }"
+      />
+    </div>
+    <div class="rk-dashboard-bar-btn" @click="setEventList" v-show="enableEvents">
+      <rk-icon icon="settings" v-tooltip:bottom="{ content: $t('setEvent') }" />
+    </div>
+    <rk-sidebox width="950px" :fixed="true" :show.sync="dialogEventVisible">
+      <DashboardEvent :closeBox="() => (dialogEventVisible = false)" />
+    </rk-sidebox>
   </div>
 </template>
 
@@ -57,7 +60,10 @@ limitations under the License. -->
   import { Action, Mutation } from 'vuex-class';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
-  @Component({})
+  import { EntityType } from '../charts/constant';
+  import DashboardEvent from './dashboard-events.vue';
+
+  @Component({ components: { DashboardEvent } })
   export default class ToolBarBtns extends Vue {
     @Prop() private compType!: any;
     @Prop() private dashboardType!: any;
@@ -65,10 +71,26 @@ limitations under the License. -->
     @Prop() private rocketComps!: any;
     @Prop() private durationTime!: any;
     @Prop() private rocketOption: any;
+    @Prop() private stateDashboard: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('IMPORT_TREE') private IMPORT_TREE: any;
     @Action('SET_EDIT') private SET_EDIT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+    @Action('GET_EVENT') private GET_EVENT: any;
+    private dialogEventVisible = false;
+    private enableEvents: boolean = false;
+
+    private created() {
+      // this.GET_EVENT({
+      //   condition: {
+      //     time: this.durationTime,
+      //     size: 20,
+      //     source: {
+      //       service: this.stateDashboard.currentService.label,
+      //     },
+      //   }
+      // });
+    }
 
     private handleOption() {
       return this.MIXHANDLE_GET_OPTION({
@@ -105,14 +127,50 @@ limitations under the License. -->
       const name = 'dashboard.json';
       saveFile([group], name);
     }
+    private setEventList(index: number) {
+      this.dialogEventVisible = true;
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 100,
+          source: {
+            service: this.stateDashboard.currentService.label,
+          },
+        },
+        type: EntityType[0].key,
+      });
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 100,
+          source: {
+            service: this.stateDashboard.currentService.label,
+            serviceInstance: this.stateDashboard.currentInstance.label,
+          },
+        },
+        type: EntityType[3].key,
+      });
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 100,
+          source: {
+            service: this.stateDashboard.currentService.label,
+            endpoint: this.stateDashboard.currentEndpoint.label,
+          },
+        },
+        type: EntityType[2].key,
+      });
+    }
   }
 </script>
 
 <style lang="scss" scoped>
   .rk-dashboard-bar-btn {
-    padding: 0 5px;
+    padding: 0 8px;
     border-right: 2px solid #252a2f;
     height: 19px;
+    cursor: pointer;
   }
   #tool-bar-file {
     display: none;
@@ -120,8 +178,13 @@ limitations under the License. -->
   .input-label {
     display: inline;
     line-height: inherit;
+    cursor: pointer;
   }
   .btn-box {
     height: 58px;
+  }
+  .import {
+    margin-top: 0;
+    cursor: pointer;
   }
 </style>

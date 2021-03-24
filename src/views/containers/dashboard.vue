@@ -22,7 +22,7 @@ limitations under the License. -->
       :durationTime="durationTime"
       :stateDashboard="stateDashboardOption"
     />
-    <ToolNav :rocketGlobal="rocketGlobal" :rocketComps="rocketComps" :stateDashboard="stateDashboardOption" />
+    <ToolNav :rocketGlobal="rocketGlobal" :rocketComps="rocketComps" />
     <div class="dashboard-container clear">
       <DashboardItem
         v-for="(i, index) in rocketComps.tree[rocketComps.group] &&

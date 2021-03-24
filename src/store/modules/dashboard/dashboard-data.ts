@@ -23,6 +23,7 @@ import dashboardLayout from './dashboard-data-layout';
 import dashboardQuery from './dashboard-data-query';
 import { QueryEventCondition } from '../../../types/dashboard';
 import { dateFormatTime } from '@/utils/dateFormat';
+import { DurationTime } from '@/types/global';
 import * as types from './mutation-types';
 
 const EntityType = ['Service', 'ServiceInstance', 'Endpoint'];
@@ -34,6 +35,7 @@ export interface State {
   serviceInstanceEvents: Event[];
   endpointEvents: Event[];
   currentEvents: Event[];
+  enableEvents: boolean;
 }
 
 const initState: State = {
@@ -41,13 +43,14 @@ const initState: State = {
   endpointEvents: [],
   serviceInstanceEvents: [],
   currentEvents: [],
+  enableEvents: false,
   ...dashboardLayout.state,
 };
 
 // mutations
 const mutations: MutationTree<any> = {
   ...dashboardLayout.mutations,
-  [types.SET_DASHBOARD_EVENTS](state: State, param: { events: Event[]; type: string; duration: any }) {
+  [types.SET_DASHBOARD_EVENTS](state: State, param: { events: Event[]; type: string; duration: DurationTime }) {
     const events = param.events.map((d: Event) => {
       d.startTime = dateFormatTime(new Date(Number(d.startTime)), param.duration.step);
       d.endTime = dateFormatTime(new Date(Number(d.endTime)), param.duration.step);
@@ -63,6 +66,9 @@ const mutations: MutationTree<any> = {
   },
   [types.SET_CURRENT_EVENTS](state: State, events: Event[]) {
     state.currentEvents = [...events];
+  },
+  [types.SET_ENABLE_EVENTS](state: State, data) {
+    state.enableEvents = data;
   },
 };
 

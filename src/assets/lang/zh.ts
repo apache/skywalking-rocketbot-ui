@@ -206,6 +206,8 @@ const m = {
   endTime: '结束事件',
   instanceEvents: '实例事件',
   endpointEvents: '端点事件',
+  enableEvents: '启动事件',
+  disableEvents: '禁用事件',
 };
 
 export default m;

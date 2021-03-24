@@ -21,6 +21,7 @@ limitations under the License. -->
       :dashboardType="dashboardType"
       :durationTime="durationTime"
       :rocketOption="rocketOption"
+      :stateDashboard="stateDashboard"
     />
     <div class="flex-h" v-if="compType === dashboardType.SERVICE">
       <div class="sm grey service-search">
@@ -61,7 +62,7 @@ limitations under the License. -->
         <rk-icon icon="info_outline" />
       </a>
       <rk-sidebox
-        width="50%"
+        width="600px"
         :fixed="true"
         :title="`${$t('instanceAttributes')} of ${stateDashboard.currentInstance.label}`"
         :show.sync="dialogAttributesVisible"
@@ -136,8 +137,8 @@ limitations under the License. -->
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+    private dialogAttributesVisible: boolean = false;
     private dashboardType = DASHBOARDTYPE;
-    private dialogAttributesVisible = false;
     get lastKey() {
       const current = this.rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children;
       if (!current.length) {

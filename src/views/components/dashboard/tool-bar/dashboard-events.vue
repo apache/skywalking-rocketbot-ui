@@ -76,7 +76,7 @@ limitations under the License. -->
   import { Vue, Component, Prop } from 'vue-property-decorator';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { Event } from '@/types/dashboard';
-  import { EntityType } from './charts/constant';
+  import { EntityType } from '../charts/constant';
 
   @Component
   export default class DashboardEvent extends Vue {
@@ -114,8 +114,9 @@ limitations under the License. -->
     }
   }
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
   .config-box {
+    color: #444;
     .title {
       font-size: 14px;
       font-weight: bold;

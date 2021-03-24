@@ -208,6 +208,8 @@ const m = {
   endTime: 'End Time',
   instanceEvents: 'Instance Events',
   endpointEvents: 'Endpoint Events',
+  enableEvents: 'Enable Events',
+  disableEvents: 'Disable Events',
 };
 
 export default m;
