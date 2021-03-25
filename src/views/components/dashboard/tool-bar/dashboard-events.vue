@@ -86,7 +86,7 @@ limitations under the License. -->
   @Component
   export default class DashboardEvent extends Vue {
     @Prop() private rocketComps!: rocketData;
-    @Prop() private closeBox!: Function;
+    @Prop() private closeBox!: () => void;
     @Mutation('SET_CHECKED_EVENTS') private SET_CHECKED_EVENTS: any;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
 
