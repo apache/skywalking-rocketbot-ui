@@ -76,7 +76,7 @@ limitations under the License. -->
     @State('rocketData') private rocketComps!: dataState;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('GET_ALL_TEMPLATES') private GET_ALL_TEMPLATES: any;
-    // @Action('ADD_TEMPLATE') private ADD_TEMPLATE: any;
+    @Action('GET_EVENT') private GET_EVENT: any;
     @Getter('durationTime') private durationTime: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
@@ -107,14 +107,6 @@ limitations under the License. -->
       });
     }
     private beforeMount() {
-      // this.ADD_TEMPLATE({
-      //   name: 'Topology Instance',
-      //   type: 'TOPOLOGY_INSTANCE',
-      //   active: true,
-      //   configuration: JSON.stringify(TopologyInstanceTemp),
-      // }).then((data: any) => {
-      //   console.log(data);
-      // });
       this.GET_ALL_TEMPLATES().then((allTemplate: ITemplate[]) => {
         const dashboardTemplate = allTemplate.filter((item: ITemplate) => item.type === 'DASHBOARD');
         const templatesConfig = dashboardTemplate.map((item: ITemplate) => JSON.parse(item.configuration)).flat(1);

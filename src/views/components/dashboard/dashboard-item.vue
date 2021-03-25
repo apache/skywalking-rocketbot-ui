@@ -66,7 +66,7 @@ limitations under the License. -->
   import charts from './charts';
   import dayjs from 'dayjs';
 
-  import { QueryTypes } from './constant';
+  import { QueryTypes, UpdateDashboardEvents } from './constant';
   import { TopologyType, ObjectsType } from '../../../constants/constant';
   import { CalculationType, EntityType } from './charts/constant';
   import { State as globalState } from '@/store/modules/global';
@@ -84,7 +84,6 @@ limitations under the License. -->
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('rocketTopo/DELETE_TOPO_ENDPOINT') private DELETE_TOPO_ENDPOINT: any;
     @Mutation('rocketTopo/DELETE_TOPO_INSTANCE') private DELETE_TOPO_INSTANCE: any;
-    @Mutation('SET_CURRENT_EVENTS') private SET_CURRENT_EVENTS: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
@@ -105,6 +104,23 @@ limitations under the License. -->
     private itemConfig: any = {};
     private itemEvents: Event[] = [];
 
+    private get eventsFilter() {
+      return [
+        ...this.rocketData.serviceEvents,
+        ...this.rocketData.serviceInstanceEvents,
+        ...this.rocketData.endpointEvents,
+      ].filter(
+        (event) =>
+          this.itemConfig.entityType === event.entityType &&
+          event.checked &&
+          ((event.source.service === this.rocketOption.currentService.label &&
+            (event.source.serviceInstance === this.rocketOption.currentInstance.label ||
+              event.source.endpoint === this.rocketOption.currentEndpoint.label)) ||
+            (event.entityType === EntityType[0].key &&
+              event.source.service === this.rocketOption.currentService.label)),
+      );
+    }
+
     private created() {
       this.status = this.item.metricType;
       this.title = this.item.title;
@@ -112,7 +128,7 @@ limitations under the License. -->
       this.height = this.item.height;
       this.unit = this.item.unit;
       this.itemConfig = this.item;
-      this.eventsFilter();
+      this.itemEvents = this.eventsFilter;
       const types = [
         ObjectsType.UPDATE_INSTANCES,
         ObjectsType.UPDATE_ENDPOINTS,
@@ -325,22 +341,13 @@ limitations under the License. -->
       }
     }
 
-    private eventsFilter() {
-      this.itemEvents = this.rocketData.currentEvents.filter(
-        (event) =>
-          this.itemConfig.entityType === event.entityType &&
-          ((event.source.service === this.rocketOption.currentService.label &&
-            (event.source.serviceInstance === this.rocketOption.currentInstance.label ||
-              event.source.endpoint === this.rocketOption.currentEndpoint.label)) ||
-            (event.entityType === EntityType[0].key &&
-              event.source.service === this.rocketOption.currentService.label)),
-      );
-    }
-
-    // watch selectors
+    // watch selectors and evnets
     @Watch('rocketOption.updateDashboard')
     private watchCurrentSelectors() {
-      this.SET_CURRENT_EVENTS([]);
+      this.itemEvents = this.eventsFilter;
+      if (this.rocketOption.updateDashboard.key.includes(UpdateDashboardEvents)) {
+        return;
+      }
       setTimeout(() => {
         this.chartRender();
       }, 1000);
@@ -351,15 +358,6 @@ limitations under the License. -->
     }
     @Watch('rocketGlobal.edit')
     private watchRerender() {
-      this.chartRender();
-    }
-    @Watch('rocketData.currentEvents')
-    private watchEventsRerender() {
-      this.eventsFilter();
-      if (!this.itemEvents.length) {
-        return;
-      }
-
       this.chartRender();
     }
   }

@@ -29,3 +29,4 @@ export enum QueryTypes {
   READHEATMAP = 'readHeatMap',
   ReadSampledRecords = 'readSampledRecords',
 }
+export const UpdateDashboardEvents = 'UpdateDashboardEvents';

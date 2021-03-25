@@ -34,7 +34,7 @@ export interface State {
   currentEndpoint: Options;
   instances: Options[];
   currentInstance: Options;
-  updateDashboard: object;
+  updateDashboard: { key: string; label?: string | undefined };
   pageType: string;
 }
 
@@ -49,7 +49,7 @@ const initState: State = {
   currentInstance: { key: '', label: '' },
   databases: [],
   currentDatabase: { key: '', label: '' },
-  updateDashboard: {},
+  updateDashboard: { key: '' },
   pageType: '',
 };
 
@@ -64,8 +64,8 @@ const mutations: MutationTree<State> = {
     state.updateDashboard = service;
   },
 
-  [types.UPDATE_DASHBOARD](state: State) {
-    state.updateDashboard = { key: new Date().getTime() };
+  [types.UPDATE_DASHBOARD](state: State, param?: { key: string }) {
+    state.updateDashboard = param || { key: String(new Date().getTime()) };
   },
 
   [types.SET_ENDPOINTS](state: State, data: Options[]) {

@@ -120,6 +120,7 @@ limitations under the License. -->
   import ToolBarBtns from './tool-bar-btns.vue';
   import { State, Action, Mutation } from 'vuex-class';
   import { DASHBOARDTYPE } from '../constant';
+  import { EntityType } from '../charts/constant';
 
   @Component({ components: { ToolBarSelect, ToolBarBtns, ToolBarEndpointSelect } })
   export default class ToolBar extends Vue {
@@ -137,6 +138,7 @@ limitations under the License. -->
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+    @Action('GET_EVENT') private GET_EVENT: any;
     private dialogAttributesVisible: boolean = false;
     private dashboardType = DASHBOARDTYPE;
     get lastKey() {
@@ -148,6 +150,19 @@ limitations under the License. -->
     }
     private selectService(i: any) {
       this.SELECT_SERVICE({ service: i, duration: this.durationTime });
+      if (!this.rocketComps.enableEvents) {
+        return;
+      }
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: i.label,
+          },
+        },
+        type: EntityType[0].key,
+      });
     }
     private selectEndpoint(i: any) {
       this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });

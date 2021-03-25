@@ -35,22 +35,23 @@ limitations under the License. -->
     <div class="rk-dashboard-bar-btn" @click="handleOption">
       <rk-icon class="lg" icon="retry" v-tooltip:bottom="{ content: 'auto' }" />
     </div>
-    <div
-      class="rk-dashboard-bar-btn"
-      @click="() => (enableEvents = !enableEvents)"
-      v-show="compType === dashboardType.SERVICE"
-    >
+    <div class="rk-dashboard-bar-btn" @click="setEnbleEvents" v-show="compType === dashboardType.SERVICE">
       <rk-icon
-        :class="enableEvents ? 'blue' : 'ghost'"
+        class="lg"
+        :class="enableEvents ? 'blue' : ''"
         icon="format_indent_increase"
         v-tooltip:bottom="{ content: enableEvents ? $t('disableEvents') : $t('enableEvents') }"
       />
     </div>
     <div class="rk-dashboard-bar-btn" @click="setEventList" v-show="enableEvents">
-      <rk-icon icon="settings" v-tooltip:bottom="{ content: $t('setEvent') }" />
+      <rk-icon class="lg" icon="settings" v-tooltip:bottom="{ content: $t('setEvent') }" />
     </div>
     <rk-sidebox width="950px" :fixed="true" :show.sync="dialogEventVisible">
-      <DashboardEvent :closeBox="() => (dialogEventVisible = false)" />
+      <DashboardEvent
+        :rocketComps="rocketComps"
+        :stateDashboard="stateDashboard"
+        :closeBox="() => (dialogEventVisible = false)"
+      />
     </rk-sidebox>
   </div>
 </template>
@@ -73,23 +74,27 @@ limitations under the License. -->
     @Prop() private rocketOption: any;
     @Prop() private stateDashboard: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
+    @Mutation('SET_ENABLE_EVENTS') private SET_ENABLE_EVENTS: any;
     @Mutation('IMPORT_TREE') private IMPORT_TREE: any;
     @Action('SET_EDIT') private SET_EDIT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('GET_EVENT') private GET_EVENT: any;
-    private dialogEventVisible = false;
+    private dialogEventVisible: boolean = false;
     private enableEvents: boolean = false;
 
-    private created() {
-      // this.GET_EVENT({
-      //   condition: {
-      //     time: this.durationTime,
-      //     size: 20,
-      //     source: {
-      //       service: this.stateDashboard.currentService.label,
-      //     },
-      //   }
-      // });
+    private setEnbleEvents() {
+      this.enableEvents = !this.enableEvents;
+      this.SET_ENABLE_EVENTS(this.enableEvents);
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: this.stateDashboard.currentService.label,
+          },
+        },
+        type: EntityType[0].key,
+      });
     }
 
     private handleOption() {
@@ -100,9 +105,11 @@ limitations under the License. -->
           this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].serviceGroup,
       });
     }
+
     private handleSetEdit() {
       this.SET_EDIT(!this.rocketGlobal.edit);
     }
+
     private async importData(event: any) {
       try {
         const data: any = await readFile(event);
@@ -129,20 +136,20 @@ limitations under the License. -->
     }
     private setEventList(index: number) {
       this.dialogEventVisible = true;
+      // this.GET_EVENT({
+      //   condition: {
+      //     time: this.durationTime,
+      //     size: 20,
+      //     source: {
+      //       service: this.stateDashboard.currentService.label,
+      //     },
+      //   },
+      //   type: EntityType[0].key,
+      // });
       this.GET_EVENT({
         condition: {
           time: this.durationTime,
-          size: 100,
-          source: {
-            service: this.stateDashboard.currentService.label,
-          },
-        },
-        type: EntityType[0].key,
-      });
-      this.GET_EVENT({
-        condition: {
-          time: this.durationTime,
-          size: 100,
+          size: 20,
           source: {
             service: this.stateDashboard.currentService.label,
             serviceInstance: this.stateDashboard.currentInstance.label,
@@ -153,7 +160,7 @@ limitations under the License. -->
       this.GET_EVENT({
         condition: {
           time: this.durationTime,
-          size: 100,
+          size: 20,
           source: {
             service: this.stateDashboard.currentService.label,
             endpoint: this.stateDashboard.currentEndpoint.label,

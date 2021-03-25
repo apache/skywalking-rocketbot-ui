@@ -23,9 +23,9 @@ limitations under the License. -->
         <span class="time">{{ $t('startTime') }}</span>
         <span class="time">{{ $t('endTime') }}</span>
       </li>
-      <li v-show="!rocketData.serviceEvents.length">{{ $t('noData') }}</li>
-      <li v-for="event in rocketData.serviceEvents" :key="event.uuid">
-        <span class="check"><input type="checkbox" @click="selectEvents(event, entityType[0].key)"/></span>
+      <li v-show="!rocketComps.serviceEvents.length">{{ $t('noData') }}</li>
+      <li v-for="event in rocketComps.serviceEvents" :key="event.uuid">
+        <span class="check"><input type="checkbox" :checked="!!event.checked" @click="selectEvents(event)"/></span>
         <span class="id">{{ event.uuid }}</span>
         <span>{{ event.name }}</span>
         <span class="time">{{ event.startTime }}</span>
@@ -41,9 +41,9 @@ limitations under the License. -->
         <span class="time">{{ $t('startTime') }}</span>
         <span class="time">{{ $t('endTime') }}</span>
       </li>
-      <li v-show="!rocketData.serviceInstanceEvents.length">{{ $t('noData') }}</li>
-      <li v-for="event in rocketData.serviceInstanceEvents" :key="event.uuid">
-        <span class="check"><input type="checkbox" @click="selectEvents(event, entityType[3].key)"/></span>
+      <li v-show="!rocketComps.serviceInstanceEvents.length">{{ $t('noData') }}</li>
+      <li v-for="event in rocketComps.serviceInstanceEvents" :key="event.uuid">
+        <span class="check"><input type="checkbox" :checked="!!event.checked" @click="selectEvents(event)"/></span>
         <span class="id">{{ event.uuid }}</span>
         <span>{{ event.name }}</span>
         <span class="time">{{ event.startTime }}</span>
@@ -59,9 +59,9 @@ limitations under the License. -->
         <span class="time">{{ $t('startTime') }}</span>
         <span class="time">{{ $t('endTime') }}</span>
       </li>
-      <li v-show="!rocketData.endpointEvents.length">{{ $t('noData') }}</li>
-      <li v-for="event in rocketData.endpointEvents" :key="event.uuid">
-        <span class="check"><input type="checkbox" @click="selectEvents(event, entityType[2].key)"/></span>
+      <li v-show="!rocketComps.endpointEvents.length">{{ $t('noData') }}</li>
+      <li v-for="event in rocketComps.endpointEvents" :key="event.uuid">
+        <span class="check"><input type="checkbox" :checked="!!event.checked" @click="selectEvents(event)"/></span>
         <span class="id">{{ event.uuid }}</span>
         <span>{{ event.name }}</span>
         <span class="time">{{ event.startTime }}</span>
@@ -72,45 +72,39 @@ limitations under the License. -->
   </div>
 </template>
 <script lang="ts">
-  import { State, Mutation } from 'vuex-class';
+  import { Mutation } from 'vuex-class';
   import { Vue, Component, Prop } from 'vue-property-decorator';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { Event } from '@/types/dashboard';
-  import { EntityType } from '../charts/constant';
+  import { UpdateDashboardEvents } from '../constant';
 
   @Component
   export default class DashboardEvent extends Vue {
-    @State('rocketData') private rocketData!: rocketData;
-    @Mutation('SET_CURRENT_EVENTS') private SET_CURRENT_EVENTS: any;
+    @Prop() private rocketComps!: rocketData;
     @Prop() private closeBox: any;
-    private entityType = EntityType;
+    @Prop() private stateDashboard: any;
+    @Mutation('SET_CHECKED_EVENTS') private SET_CHECKED_EVENTS: any;
+    @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
+
     private selectedEvents: Event[] = [];
 
-    private selectEvents(data: Event, type: string) {
-      const index = this.selectedEvents.findIndex((item: Event) => item.uuid === data.uuid);
-      if (EntityType[2].key === type) {
-        data.entityType = type;
-      }
-      if (type === EntityType[3].key) {
-        data.entityType = type;
-      }
-      if (type === EntityType[0].key) {
-        data.entityType = type;
-      }
-      if (index < 0) {
-        this.selectedEvents.push(data);
-      } else {
+    private selectEvents(data: Event) {
+      const index = this.selectedEvents.findIndex(
+        (item: Event) => item.uuid === data.uuid && item.entityType === data.entityType,
+      );
+
+      data.checked = !data.checked;
+      if (index > -1) {
         this.selectedEvents.splice(index, 1);
       }
+      this.selectedEvents.push(data);
     }
 
     private updateEvent() {
-      this.SET_CURRENT_EVENTS(this.selectedEvents);
+      this.SET_CHECKED_EVENTS(this.selectedEvents);
+      this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
+      this.selectedEvents = [];
       this.closeBox();
-    }
-
-    private beforeDestroy() {
-      this.SET_CURRENT_EVENTS([]);
     }
   }
 </script>

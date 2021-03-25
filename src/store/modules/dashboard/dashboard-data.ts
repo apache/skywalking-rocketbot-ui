@@ -34,7 +34,6 @@ export interface State {
   serviceEvents: Event[];
   serviceInstanceEvents: Event[];
   endpointEvents: Event[];
-  currentEvents: Event[];
   enableEvents: boolean;
 }
 
@@ -42,7 +41,6 @@ const initState: State = {
   serviceEvents: [],
   endpointEvents: [],
   serviceInstanceEvents: [],
-  currentEvents: [],
   enableEvents: false,
   ...dashboardLayout.state,
 };
@@ -52,6 +50,10 @@ const mutations: MutationTree<any> = {
   ...dashboardLayout.mutations,
   [types.SET_DASHBOARD_EVENTS](state: State, param: { events: Event[]; type: string; duration: DurationTime }) {
     const events = param.events.map((d: Event) => {
+      d.entityType = param.type;
+      if (param.type === EntityType[0]) {
+        d.checked = true;
+      }
       d.startTime = dateFormatTime(new Date(Number(d.startTime)), param.duration.step);
       d.endTime = dateFormatTime(new Date(Number(d.endTime)), param.duration.step);
       return d;
@@ -64,11 +66,36 @@ const mutations: MutationTree<any> = {
       state.endpointEvents = events;
     }
   },
-  [types.SET_CURRENT_EVENTS](state: State, events: Event[]) {
-    state.currentEvents = [...events];
+  [types.SET_CHECKED_EVENTS](state: State, selectedEvents: Event[]) {
+    for (const event of selectedEvents) {
+      for (const item of state.serviceEvents) {
+        if (event.uuid === item.uuid && event.entityType === item.entityType) {
+          item.checked = event.checked;
+          break;
+        }
+      }
+      for (const item of state.serviceInstanceEvents) {
+        if (event.uuid === item.uuid && event.entityType === item.entityType) {
+          item.checked = event.checked;
+          break;
+        }
+      }
+      for (const item of state.endpointEvents) {
+        if (event.uuid === item.uuid && event.entityType === item.entityType) {
+          item.checked = event.checked;
+          break;
+        }
+      }
+    }
   },
-  [types.SET_ENABLE_EVENTS](state: State, data) {
-    state.enableEvents = data;
+  // [types.SET_INSTANCE_EVENTS](state: State, selectedEvents: Event[]) {
+  //   state.serviceInstanceEvents = [...selectedEvents];
+  // },
+  // [types.SET_ENDPOINT_EVENTS](state: State, selectedEvents: Event[]) {
+  //   state.endpointEvents = [...selectedEvents];
+  // },
+  [types.SET_ENABLE_EVENTS](state: State, enable: boolean) {
+    state.enableEvents = enable;
   },
 };
 
@@ -160,40 +187,14 @@ const actions: ActionTree<State, any> = {
       .params({ condition: params.condition })
       .then((res: AxiosResponse) => {
         if (!(res.data.data && res.data.data.fetchEvents)) {
-          if (params.type === EntityType[0]) {
-            context.commit('SET_DASHBOARD_EVENTS', { events: [], type: params.type, duration: params.condition.time });
-            return [];
-          }
-          if (params.type === EntityType[1]) {
-            context.commit('SET_DASHBOARD_EVENTS', { events: [], type: params.type, duration: params.condition.time });
-            return [];
-          }
-          if (params.type === EntityType[2]) {
-            context.commit('SET_DASHBOARD_EVENTS', { events: [], type: params.type, duration: params.condition.time });
-            return [];
-          }
+          context.commit('SET_DASHBOARD_EVENTS', { events: [], type: params.type, duration: params.condition.time });
+          return [];
         }
-        if (params.type === EntityType[0]) {
-          context.commit('SET_DASHBOARD_EVENTS', {
-            events: res.data.data.fetchEvents.events,
-            type: params.type,
-            duration: params.condition.time,
-          });
-        }
-        if (params.type === EntityType[1]) {
-          context.commit('SET_DASHBOARD_EVENTS', {
-            events: res.data.data.fetchEvents.events,
-            type: params.type,
-            duration: params.condition.time,
-          });
-        }
-        if (params.type === EntityType[2]) {
-          context.commit('SET_DASHBOARD_EVENTS', {
-            events: res.data.data.fetchEvents.events,
-            type: params.type,
-            duration: params.condition.time,
-          });
-        }
+        context.commit('SET_DASHBOARD_EVENTS', {
+          events: res.data.data.fetchEvents.events,
+          type: params.type,
+          duration: params.condition.time,
+        });
 
         return res.data.data.fetchEvents.events || [];
       });
