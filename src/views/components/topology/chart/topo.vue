@@ -167,12 +167,28 @@ limitations under the License. -->
         this.simulation.nodes(this.nodes);
         this.simulation.force('link').links(this.links).id((d) => d.id);
         simulationSkip(d3, this.simulation, this.ticked);
+        const loopMap = {};
+        for (let i = 0; i < this.links.length; i++) {
+          const link = this.links[i];
+          link.loopFactor = 1;
+          for (let j = 0; j < this.links.length; j++) {
+            if (i === j || loopMap[i]) {
+              continue;
+            }
+            const otherLink = this.links[j];
+            if (link.source.id === otherLink.target.id && link.target.id === otherLink.source.id) {
+              link.loopFactor = -1;
+              loopMap[j] = 1;
+              break;
+            }
+          }
+        }
       },
       ticked() {
         this.link.attr('d', (d) => `M${d.source.x} ${d.source.y} Q ${(d.source.x
-        + d.target.x) / 2} ${(d.target.y + d.source.y) / 2 - 90} ${d.target.x} ${d.target.y}`);
+        + d.target.x) / 2} ${(d.target.y + d.source.y) / 2 - d.loopFactor * 90} ${d.target.x} ${d.target.y}`);
         this.anchor.attr('transform', (d) => `translate(${(d.source.x +
-        d.target.x) / 2}, ${(d.target.y + d.source.y) / 2 - 45})`);
+        d.target.x) / 2}, ${(d.target.y + d.source.y) / 2 - d.loopFactor * 45})`);
         this.node.attr('transform', (d) => `translate(${d.x - 22},${d.y - 22})`);
       },
       dragstart(d) {
