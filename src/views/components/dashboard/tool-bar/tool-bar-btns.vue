@@ -43,7 +43,7 @@ limitations under the License. -->
         v-tooltip:bottom="{ content: enableEvents ? $t('disableEvents') : $t('enableEvents') }"
       />
     </div>
-    <div class="rk-dashboard-bar-btn" @click="setEventList" v-show="enableEvents">
+    <div class="rk-dashboard-bar-btn" @click="() => (dialogEventVisible = true)" v-show="enableEvents">
       <rk-icon class="lg" icon="settings" v-tooltip:bottom="{ content: $t('setEvent') }" />
     </div>
     <rk-sidebox width="950px" :fixed="true" :show.sync="dialogEventVisible">
@@ -77,21 +77,6 @@ limitations under the License. -->
     @Action('GET_EVENT') private GET_EVENT: any;
     private dialogEventVisible: boolean = false;
     private enableEvents: boolean = false;
-
-    private setEnbleEvents() {
-      this.enableEvents = !this.enableEvents;
-      this.SET_ENABLE_EVENTS(this.enableEvents);
-      this.GET_EVENT({
-        condition: {
-          time: this.durationTime,
-          size: 20,
-          source: {
-            service: this.stateDashboard.currentService.label,
-          },
-        },
-        type: EntityType[0].key,
-      });
-    }
 
     private handleOption() {
       return this.MIXHANDLE_GET_OPTION({
@@ -130,18 +115,19 @@ limitations under the License. -->
       const name = 'dashboard.json';
       saveFile([group], name);
     }
-    private setEventList(index: number) {
-      this.dialogEventVisible = true;
-      // this.GET_EVENT({
-      //   condition: {
-      //     time: this.durationTime,
-      //     size: 20,
-      //     source: {
-      //       service: this.stateDashboard.currentService.label,
-      //     },
-      //   },
-      //   type: EntityType[0].key,
-      // });
+    private setEnbleEvents() {
+      this.enableEvents = !this.enableEvents;
+      this.SET_ENABLE_EVENTS(this.enableEvents);
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: this.stateDashboard.currentService.label,
+          },
+        },
+        type: EntityType[0].key,
+      });
       this.GET_EVENT({
         condition: {
           time: this.durationTime,

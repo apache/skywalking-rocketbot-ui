@@ -68,22 +68,28 @@ const mutations: MutationTree<any> = {
   },
   [types.SET_CHECKED_EVENTS](state: State, selectedEvents: Event[]) {
     for (const event of selectedEvents) {
-      for (const item of state.serviceEvents) {
-        if (event.uuid === item.uuid && event.entityType === item.entityType) {
-          item.checked = event.checked;
-          break;
+      if (event.entityType === EntityType[0]) {
+        for (const item of state.serviceEvents) {
+          if (event.uuid === item.uuid && event.entityType === item.entityType) {
+            item.checked = event.checked;
+            break;
+          }
         }
       }
-      for (const item of state.serviceInstanceEvents) {
-        if (event.uuid === item.uuid && event.entityType === item.entityType) {
-          item.checked = event.checked;
-          break;
+      if (event.entityType === EntityType[1]) {
+        for (const item of state.serviceInstanceEvents) {
+          if (event.uuid === item.uuid && event.entityType === item.entityType) {
+            item.checked = event.checked;
+            break;
+          }
         }
       }
-      for (const item of state.endpointEvents) {
-        if (event.uuid === item.uuid && event.entityType === item.entityType) {
-          item.checked = event.checked;
-          break;
+      if (event.entityType === EntityType[2]) {
+        for (const item of state.endpointEvents) {
+          if (event.uuid === item.uuid && event.entityType === item.entityType) {
+            item.checked = event.checked;
+            break;
+          }
         }
       }
     }
