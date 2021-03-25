@@ -36,7 +36,7 @@ limitations under the License. -->
     </div>
     <div class="rk-trace-sel" v-if="visible">
       <div v-if="hasSearch">
-        <input type="text" class="rk-trace-sel-search" v-model="search" :placeholder="`${this.$t('search')}...`" />
+        <input type="text" class="rk-trace-sel-search" v-model="search" :placeholder="`${$t('search')}...`" />
         <svg class="icon sm close" @click="search = ''" v-if="search">
           <use xlink:href="#clear"></use>
         </svg>
