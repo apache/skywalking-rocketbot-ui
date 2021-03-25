@@ -47,11 +47,7 @@ limitations under the License. -->
       <rk-icon class="lg" icon="settings" v-tooltip:bottom="{ content: $t('setEvent') }" />
     </div>
     <rk-sidebox width="950px" :fixed="true" :show.sync="dialogEventVisible">
-      <DashboardEvent
-        :rocketComps="rocketComps"
-        :stateDashboard="stateDashboard"
-        :closeBox="() => (dialogEventVisible = false)"
-      />
+      <DashboardEvent :rocketComps="rocketComps" :closeBox="() => (dialogEventVisible = false)" />
     </rk-sidebox>
   </div>
 </template>

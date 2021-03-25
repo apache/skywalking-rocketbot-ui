@@ -17,7 +17,7 @@ limitations under the License. -->
     <div class="title">{{ $t('serviceEvents') }}</div>
     <ul>
       <li class="header">
-        <span class="check">{{ $t('select') }}</span>
+        <span class="check"><input type="checkbox" v-model="checkAllServiceEvents" @click="checkServiceEvents"/></span>
         <span class="id">{{ $t('eventID') }}</span>
         <span>{{ $t('eventName') }}</span>
         <span class="time">{{ $t('startTime') }}</span>
@@ -35,7 +35,9 @@ limitations under the License. -->
     <div class="title">{{ $t('instanceEvents') }}</div>
     <ul>
       <li class="header">
-        <span class="check">{{ $t('select') }}</span>
+        <span class="check"
+          ><input type="checkbox" v-model="checkAllInstanceEvents" @click="checkInstanceEvents"
+        /></span>
         <span class="id">{{ $t('eventID') }}</span>
         <span>{{ $t('eventName') }}</span>
         <span class="time">{{ $t('startTime') }}</span>
@@ -53,7 +55,9 @@ limitations under the License. -->
     <div class="title">{{ $t('endpointEvents') }}</div>
     <ul>
       <li class="header">
-        <span class="check">{{ $t('select') }}</span>
+        <span class="check"
+          ><input type="checkbox" v-model="checkAllEndpointEvents" @click="checkEndpointEvents"
+        /></span>
         <span class="id">{{ $t('eventID') }}</span>
         <span>{{ $t('eventName') }}</span>
         <span class="time">{{ $t('startTime') }}</span>
@@ -77,16 +81,19 @@ limitations under the License. -->
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { Event } from '@/types/dashboard';
   import { UpdateDashboardEvents } from '../constant';
+  import { EntityType } from '../charts/constant';
 
   @Component
   export default class DashboardEvent extends Vue {
     @Prop() private rocketComps!: rocketData;
-    @Prop() private closeBox: any;
-    @Prop() private stateDashboard: any;
+    @Prop() private closeBox!: Function;
     @Mutation('SET_CHECKED_EVENTS') private SET_CHECKED_EVENTS: any;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
 
     private selectedEvents: Event[] = [];
+    private checkAllServiceEvents: boolean = true;
+    private checkAllInstanceEvents: boolean = false;
+    private checkAllEndpointEvents: boolean = false;
 
     private selectEvents(data: Event) {
       const index = this.selectedEvents.findIndex(
@@ -105,6 +112,54 @@ limitations under the License. -->
       this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
       this.selectedEvents = [];
       this.closeBox();
+    }
+
+    private checkServiceEvents() {
+      for (const event of this.rocketComps.serviceEvents) {
+        if (this.checkAllServiceEvents) {
+          event.checked = false;
+        } else {
+          event.checked = true;
+        }
+        this.selectedEvents = this.selectedEvents.filter(
+          (item: Event) => !(item.entityType === EntityType[0].label && item.uuid === event.uuid),
+        );
+      }
+      if (!this.checkAllServiceEvents) {
+        this.selectedEvents.push(...this.rocketComps.serviceEvents);
+      }
+    }
+
+    private checkInstanceEvents() {
+      for (const event of this.rocketComps.serviceInstanceEvents) {
+        if (this.checkAllInstanceEvents) {
+          event.checked = false;
+        } else {
+          event.checked = true;
+        }
+        this.selectedEvents = this.selectedEvents.filter(
+          (item: Event) => !(item.entityType === EntityType[3].label && item.uuid === event.uuid),
+        );
+      }
+      if (!this.checkAllInstanceEvents) {
+        this.selectedEvents.push(...this.rocketComps.serviceInstanceEvents);
+      }
+    }
+
+    private checkEndpointEvents() {
+      for (const event of this.rocketComps.endpointEvents) {
+        if (this.checkAllEndpointEvents) {
+          event.checked = false;
+        } else {
+          event.checked = true;
+        }
+        this.selectedEvents = this.selectedEvents.filter(
+          (item: Event) => !(item.entityType === EntityType[2].label && item.uuid === event.uuid),
+        );
+      }
+      if (!this.checkAllEndpointEvents) {
+        this.selectedEvents.push(...this.rocketComps.endpointEvents);
+      }
     }
   }
 </script>

@@ -88,12 +88,6 @@ const mutations: MutationTree<any> = {
       }
     }
   },
-  // [types.SET_INSTANCE_EVENTS](state: State, selectedEvents: Event[]) {
-  //   state.serviceInstanceEvents = [...selectedEvents];
-  // },
-  // [types.SET_ENDPOINT_EVENTS](state: State, selectedEvents: Event[]) {
-  //   state.endpointEvents = [...selectedEvents];
-  // },
   [types.SET_ENABLE_EVENTS](state: State, enable: boolean) {
     state.enableEvents = enable;
   },
