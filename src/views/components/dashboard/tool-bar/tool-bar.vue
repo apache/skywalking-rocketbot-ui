@@ -166,9 +166,37 @@ limitations under the License. -->
     }
     private selectEndpoint(i: any) {
       this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
+      if (!this.rocketComps.enableEvents) {
+        return;
+      }
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: this.stateDashboard.currentService.label,
+            endpoint: i.label,
+          },
+        },
+        type: EntityType[2].key,
+      });
     }
     private selectInstance(i: any) {
       this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
+      if (!this.rocketComps.enableEvents) {
+        return;
+      }
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: this.stateDashboard.currentService.label,
+            serviceInstance: i.label,
+          },
+        },
+        type: EntityType[3].key,
+      });
     }
     private searchServices(value: string) {
       this.SET_CURRENT_SERVICE_GROUP(value);

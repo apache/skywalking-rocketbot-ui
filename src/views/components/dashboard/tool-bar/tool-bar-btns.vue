@@ -59,6 +59,7 @@ limitations under the License. -->
   import { saveFile } from '@/utils/saveFile';
   import { EntityType } from '../charts/constant';
   import DashboardEvent from './dashboard-events.vue';
+  import { UpdateDashboardEvents } from '../constant';
 
   @Component({ components: { DashboardEvent } })
   export default class ToolBarBtns extends Vue {
@@ -72,6 +73,8 @@ limitations under the License. -->
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('SET_ENABLE_EVENTS') private SET_ENABLE_EVENTS: any;
     @Mutation('IMPORT_TREE') private IMPORT_TREE: any;
+    @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
+    @Mutation('SET_DASHBOARD_EVENTS') private SET_DASHBOARD_EVENTS: any;
     @Action('SET_EDIT') private SET_EDIT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('GET_EVENT') private GET_EVENT: any;
@@ -118,37 +121,48 @@ limitations under the License. -->
     private setEnbleEvents() {
       this.enableEvents = !this.enableEvents;
       this.SET_ENABLE_EVENTS(this.enableEvents);
-      this.GET_EVENT({
-        condition: {
-          time: this.durationTime,
-          size: 20,
-          source: {
-            service: this.stateDashboard.currentService.label,
+      if (!this.enableEvents) {
+        this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[0].key });
+        this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[2].key });
+        this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[3].key });
+        this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
+        return;
+      }
+      Promise.all([
+        this.GET_EVENT({
+          condition: {
+            time: this.durationTime,
+            size: 20,
+            source: {
+              service: this.stateDashboard.currentService.label,
+            },
           },
-        },
-        type: EntityType[0].key,
-      });
-      this.GET_EVENT({
-        condition: {
-          time: this.durationTime,
-          size: 20,
-          source: {
-            service: this.stateDashboard.currentService.label,
-            serviceInstance: this.stateDashboard.currentInstance.label,
+          type: EntityType[0].key,
+        }),
+        this.GET_EVENT({
+          condition: {
+            time: this.durationTime,
+            size: 20,
+            source: {
+              service: this.stateDashboard.currentService.label,
+              serviceInstance: this.stateDashboard.currentInstance.label,
+            },
           },
-        },
-        type: EntityType[3].key,
-      });
-      this.GET_EVENT({
-        condition: {
-          time: this.durationTime,
-          size: 20,
-          source: {
-            service: this.stateDashboard.currentService.label,
-            endpoint: this.stateDashboard.currentEndpoint.label,
+          type: EntityType[3].key,
+        }),
+        this.GET_EVENT({
+          condition: {
+            time: this.durationTime,
+            size: 20,
+            source: {
+              service: this.stateDashboard.currentService.label,
+              endpoint: this.stateDashboard.currentEndpoint.label,
+            },
           },
-        },
-        type: EntityType[2].key,
+          type: EntityType[2].key,
+        }),
+      ]).then(() => {
+        this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
       });
     }
   }
