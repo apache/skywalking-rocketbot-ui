@@ -35,20 +35,13 @@ limitations under the License. -->
     <div class="rk-dashboard-bar-btn" @click="handleOption">
       <rk-icon class="lg" icon="retry" v-tooltip:bottom="{ content: 'auto' }" />
     </div>
-    <div class="rk-dashboard-bar-btn" @click="setEnbleEvents" v-show="compType === dashboardType.SERVICE">
-      <rk-icon
-        class="lg"
-        :class="enableEvents ? 'blue' : ''"
-        icon="format_indent_increase"
-        v-tooltip:bottom="{ content: enableEvents ? $t('disableEvents') : $t('enableEvents') }"
-      />
-    </div>
-    <div class="rk-dashboard-bar-btn" @click="() => (dialogEventVisible = true)" v-show="enableEvents">
-      <rk-icon class="lg" icon="settings" v-tooltip:bottom="{ content: $t('setEvent') }" />
-    </div>
-    <rk-sidebox width="950px" :fixed="true" :show.sync="dialogEventVisible">
-      <DashboardEvent ref="eventsRef" :rocketComps="rocketComps" :closeBox="() => (dialogEventVisible = false)" />
-    </rk-sidebox>
+    <DashboardEvent
+      ref="eventsRef"
+      :rocketComps="rocketComps"
+      :stateDashboard="stateDashboard"
+      :compType="compType"
+      :durationTime="durationTime"
+    />
   </div>
 </template>
 
@@ -57,29 +50,22 @@ limitations under the License. -->
   import { Action, Mutation } from 'vuex-class';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
-  import { EntityType } from '../charts/constant';
   import DashboardEvent from './dashboard-events.vue';
-  import { UpdateDashboardEvents } from '../constant';
+  import { State as optionState } from '@/store/modules/global/selectors';
+  import { DurationTime } from '@/types/global';
 
   @Component({ components: { DashboardEvent } })
   export default class ToolBarBtns extends Vue {
     @Prop() private compType!: any;
-    @Prop() private dashboardType!: any;
     @Prop() private rocketGlobal!: any;
     @Prop() private rocketComps!: any;
-    @Prop() private durationTime!: any;
-    @Prop() private rocketOption: any;
-    @Prop() private stateDashboard: any;
+    @Prop() private durationTime!: DurationTime;
+    @Prop() private stateDashboard!: optionState;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
-    @Mutation('SET_ENABLE_EVENTS') private SET_ENABLE_EVENTS: any;
     @Mutation('IMPORT_TREE') private IMPORT_TREE: any;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
-    @Mutation('SET_DASHBOARD_EVENTS') private SET_DASHBOARD_EVENTS: any;
     @Action('SET_EDIT') private SET_EDIT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
-    @Action('GET_EVENT') private GET_EVENT: any;
-    private dialogEventVisible: boolean = false;
-    private enableEvents: boolean = false;
 
     private handleOption() {
       return this.MIXHANDLE_GET_OPTION({
@@ -117,57 +103,6 @@ limitations under the License. -->
       delete group.query;
       const name = 'dashboard.json';
       saveFile([group], name);
-    }
-    private setEnbleEvents() {
-      this.enableEvents = !this.enableEvents;
-      this.SET_ENABLE_EVENTS(this.enableEvents);
-      if (!this.enableEvents) {
-        this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[0].key });
-        this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[2].key });
-        this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[3].key });
-        const refEvent = this.$refs.eventsRef as any;
-        refEvent.checkAllServiceEvents = true;
-        refEvent.checkAllInstanceEvents = false;
-        refEvent.checkAllEndpointEvents = false;
-        this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
-        return;
-      }
-      Promise.all([
-        this.GET_EVENT({
-          condition: {
-            time: this.durationTime,
-            size: 20,
-            source: {
-              service: this.stateDashboard.currentService.label,
-            },
-          },
-          type: EntityType[0].key,
-        }),
-        this.GET_EVENT({
-          condition: {
-            time: this.durationTime,
-            size: 20,
-            source: {
-              service: this.stateDashboard.currentService.label,
-              serviceInstance: this.stateDashboard.currentInstance.label,
-            },
-          },
-          type: EntityType[3].key,
-        }),
-        this.GET_EVENT({
-          condition: {
-            time: this.durationTime,
-            size: 20,
-            source: {
-              service: this.stateDashboard.currentService.label,
-              endpoint: this.stateDashboard.currentEndpoint.label,
-            },
-          },
-          type: EntityType[2].key,
-        }),
-      ]).then(() => {
-        this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
-      });
     }
   }
 </script>
