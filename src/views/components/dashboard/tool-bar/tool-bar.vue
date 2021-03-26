@@ -18,9 +18,7 @@ limitations under the License. -->
       :rocketGlobal="rocketGlobal"
       :rocketComps="rocketComps"
       :compType="compType"
-      :dashboardType="dashboardType"
       :durationTime="durationTime"
-      :rocketOption="rocketOption"
       :stateDashboard="stateDashboard"
     />
     <div class="flex-h" v-if="compType === dashboardType.SERVICE">
@@ -121,15 +119,18 @@ limitations under the License. -->
   import { State, Action, Mutation } from 'vuex-class';
   import { DASHBOARDTYPE } from '../constant';
   import { EntityType } from '../charts/constant';
+  import { DurationTime } from '@/types/global';
+  import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
+  import { State as rocketGlobal } from '@/store/modules/global';
+  import { State as optionState } from '@/store/modules/global/selectors';
 
   @Component({ components: { ToolBarSelect, ToolBarBtns, ToolBarEndpointSelect } })
   export default class ToolBar extends Vue {
-    @Prop() private compType!: any;
-    @Prop() private stateDashboard!: any;
-    @Prop() private rocketGlobal!: any;
-    @Prop() private rocketComps!: any;
-    @Prop() private durationTime!: any;
-    @State('rocketOption') private rocketOption: any;
+    @Prop() private compType!: string;
+    @Prop() private stateDashboard!: optionState;
+    @Prop() private rocketGlobal!: rocketGlobal;
+    @Prop() private rocketComps!: rocketData;
+    @Prop() private durationTime!: DurationTime;
     @Mutation('ADD_COMP') private ADD_COMP: any;
     @Mutation('SET_CURRENT_SERVICE_GROUP') private SET_CURRENT_SERVICE_GROUP: any;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;

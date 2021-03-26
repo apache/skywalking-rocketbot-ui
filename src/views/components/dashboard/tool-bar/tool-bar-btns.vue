@@ -53,12 +53,14 @@ limitations under the License. -->
   import DashboardEvent from './dashboard-events.vue';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { DurationTime } from '@/types/global';
+  import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
+  import { State as rocketGlobal } from '@/store/modules/global';
 
   @Component({ components: { DashboardEvent } })
   export default class ToolBarBtns extends Vue {
-    @Prop() private compType!: any;
-    @Prop() private rocketGlobal!: any;
-    @Prop() private rocketComps!: any;
+    @Prop() private compType!: string;
+    @Prop() private rocketGlobal!: rocketGlobal;
+    @Prop() private rocketComps!: rocketData;
     @Prop() private durationTime!: DurationTime;
     @Prop() private stateDashboard!: optionState;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
