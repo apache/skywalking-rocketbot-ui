@@ -153,6 +153,10 @@ limitations under the License. -->
       if (!this.rocketComps.enableEvents) {
         return;
       }
+      const refEvent = this.$refs.eventsRef as any;
+      refEvent.checkAllServiceEvents = true;
+      refEvent.checkAllInstanceEvents = false;
+      refEvent.checkAllEndpointEvents = false;
       this.GET_EVENT({
         condition: {
           time: this.durationTime,
@@ -169,6 +173,8 @@ limitations under the License. -->
       if (!this.rocketComps.enableEvents) {
         return;
       }
+      const refEvent = this.$refs.eventsRef as any;
+      refEvent.checkAllEndpointEvents = false;
       this.GET_EVENT({
         condition: {
           time: this.durationTime,
@@ -186,6 +192,8 @@ limitations under the License. -->
       if (!this.rocketComps.enableEvents) {
         return;
       }
+      const refEvent = this.$refs.eventsRef as any;
+      refEvent.checkAllInstanceEvents = false;
       this.GET_EVENT({
         condition: {
           time: this.durationTime,

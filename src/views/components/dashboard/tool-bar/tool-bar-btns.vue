@@ -47,7 +47,7 @@ limitations under the License. -->
       <rk-icon class="lg" icon="settings" v-tooltip:bottom="{ content: $t('setEvent') }" />
     </div>
     <rk-sidebox width="950px" :fixed="true" :show.sync="dialogEventVisible">
-      <DashboardEvent :rocketComps="rocketComps" :closeBox="() => (dialogEventVisible = false)" />
+      <DashboardEvent ref="eventsRef" :rocketComps="rocketComps" :closeBox="() => (dialogEventVisible = false)" />
     </rk-sidebox>
   </div>
 </template>
@@ -125,6 +125,10 @@ limitations under the License. -->
         this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[0].key });
         this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[2].key });
         this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[3].key });
+        const refEvent = this.$refs.eventsRef as any;
+        refEvent.checkAllServiceEvents = true;
+        refEvent.checkAllInstanceEvents = false;
+        refEvent.checkAllEndpointEvents = false;
         this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
         return;
       }
