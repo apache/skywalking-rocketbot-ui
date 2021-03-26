@@ -78,7 +78,8 @@ limitations under the License. -->
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { State as rocketGlobal } from '@/store/modules/global';
-  import { DurationTime } from '@/types/global';
+  import { DurationTime, Option } from '@/types/global';
+  import { EntityType } from '@/views/components/dashboard/charts/constant';
 
   @Component({
     components: {
@@ -89,6 +90,9 @@ limitations under the License. -->
     },
   })
   export default class WindowEndpoint extends Vue {
+    @Prop() private current!: { key: number | string; label: number | string };
+    @Prop() private endpointComps: any;
+    @Prop() private updateObjects!: string;
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketData') private rocketComps!: rocketData;
     @State('rocketbot') private rocketGlobal!: rocketGlobal;
@@ -98,12 +102,24 @@ limitations under the License. -->
     @Mutation('SET_EDIT') private SET_EDIT: any;
     @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
-    @Prop() private current!: { key: number | string; label: number | string };
-    @Prop() private endpointComps: any;
-    @Prop() private updateObjects!: string;
+    @Action('GET_EVENT') private GET_EVENT: any;
 
-    private selectEndpoint(i: any) {
+    private selectEndpoint(i: Option) {
       this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
+      if (!this.rocketComps.enableEvents) {
+        return;
+      }
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: this.stateDashboardOption.currentService.label,
+            endpoint: i.label,
+          },
+        },
+        type: EntityType[2].key,
+      });
     }
 
     private beforeMount() {

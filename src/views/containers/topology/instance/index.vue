@@ -45,6 +45,12 @@ limitations under the License. -->
             </svg>
           </span>
         </div>
+        <DashboardEvent
+          ref="eventsRef"
+          :rocketComps="rocketComps"
+          :stateDashboard="stateDashboardOption"
+          :durationTime="durationTime"
+        />
       </span>
       <ToolBarSelect :selectable="false" :title="$t('currentService')" :current="current" icon="package" />
       <ToolBarSelect
@@ -64,17 +70,16 @@ limitations under the License. -->
   import ToolBarSelect from '@/views/components/dashboard/tool-bar/tool-bar-select.vue';
   import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar/tool-bar-endpoint-select.vue';
   import Vue from 'vue';
-  import { Component, PropSync, Watch, Prop } from 'vue-property-decorator';
+  import { Component, Prop } from 'vue-property-decorator';
   import { Action, Getter, State, Mutation } from 'vuex-class';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
-  import { ObjectsType } from '../../../../constants/constant';
-
-  interface Instance {
-    label: string;
-    key: string;
-    name?: string;
-  }
+  import { ObjectsType } from '@/constants/constant';
+  import { EntityType } from '@/views/components/dashboard/charts/constant';
+  import { DurationTime, Option } from '@/types/global';
+  import { State as optionState } from '@/store/modules/global/selectors';
+  import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
+  import { State as rocketGlobal } from '@/store/modules/global';
 
   @Component({
     components: {
@@ -84,21 +89,36 @@ limitations under the License. -->
     },
   })
   export default class WindowInstance extends Vue {
-    @State('rocketOption') private stateDashboardOption!: any;
-    @State('rocketData') private rocketComps!: any;
-    @State('rocketbot') private rocketGlobal: any;
-    @Getter('durationTime') private durationTime: any;
-    @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
-    @Action('GET_SERVICE_INSTANCES') private GET_SERVICE_INSTANCES: any;
-    @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
-    @Mutation('SET_EDIT') private SET_EDIT: any;
-    @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Prop() private current!: { key: number | string; label: number | string };
     @Prop() private instanceComps: any;
     @Prop() private updateObjects!: string;
+    @State('rocketOption') private stateDashboardOption!: optionState;
+    @State('rocketData') private rocketComps!: rocketData;
+    @State('rocketbot') private rocketGloba!: rocketGlobal;
+    @Getter('durationTime') private durationTime!: DurationTime;
+    @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
+    @Action('GET_SERVICE_INSTANCES') private GET_SERVICE_INSTANCES: any;
+    @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
+    @Action('GET_EVENT') private GET_EVENT: any;
+    @Mutation('SET_EDIT') private SET_EDIT: any;
+    @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
 
-    private selectInstance(i: any) {
+    private selectInstance(i: Option) {
       this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
+      if (!this.rocketComps.enableEvents) {
+        return;
+      }
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: this.stateDashboardOption.currentService.label,
+            serviceInstance: i.label,
+          },
+        },
+        type: EntityType[2].key,
+      });
     }
 
     private beforeMount() {
