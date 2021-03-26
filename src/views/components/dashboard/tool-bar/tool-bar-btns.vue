@@ -39,8 +39,8 @@ limitations under the License. -->
       ref="eventsRef"
       :rocketComps="rocketComps"
       :stateDashboard="stateDashboard"
-      :compType="compType"
       :durationTime="durationTime"
+      v-show="compType === dashboardType.SERVICE"
     />
   </div>
 </template>

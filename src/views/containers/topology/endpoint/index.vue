@@ -44,6 +44,12 @@ limitations under the License. -->
             </svg>
           </span>
         </div>
+        <DashboardEvent
+          ref="eventsRef"
+          :rocketComps="rocketComps"
+          :stateDashboard="stateDashboardOption"
+          :durationTime="durationTime"
+        />
       </span>
       <ToolBarSelect :selectable="false" :title="$t('currentService')" :current="current" icon="package" />
       <ToolBarEndpointSelect
@@ -60,7 +66,7 @@ limitations under the License. -->
 
 <script lang="ts">
   import Vue from 'vue';
-  import { Component, Watch, Prop } from 'vue-property-decorator';
+  import { Component, Prop } from 'vue-property-decorator';
   import { Action, Getter, State, Mutation } from 'vuex-class';
   import EndpointsSurvey from './endpoints-survey.vue';
   import ToolBarSelect from '@/views/components/dashboard/tool-bar/tool-bar-select.vue';
@@ -68,25 +74,25 @@ limitations under the License. -->
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
   import { ObjectsType } from '../../../../constants/constant';
-
-  interface Endpoint {
-    label: string;
-    key: string;
-    name?: string;
-  }
+  import DashboardEvent from '@/views/components/dashboard/tool-bar/dashboard-events.vue';
+  import { State as optionState } from '@/store/modules/global/selectors';
+  import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
+  import { State as rocketGlobal } from '@/store/modules/global';
+  import { DurationTime } from '@/types/global';
 
   @Component({
     components: {
       EndpointsSurvey,
       ToolBarSelect,
       ToolBarEndpointSelect,
+      DashboardEvent,
     },
   })
   export default class WindowEndpoint extends Vue {
-    @State('rocketOption') private stateDashboardOption!: any;
-    @State('rocketData') private rocketComps!: any;
-    @State('rocketbot') private rocketGlobal: any;
-    @Getter('durationTime') private durationTime: any;
+    @State('rocketOption') private stateDashboardOption!: optionState;
+    @State('rocketData') private rocketComps!: rocketData;
+    @State('rocketbot') private rocketGlobal!: rocketGlobal;
+    @Getter('durationTime') private durationTime!: DurationTime;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;

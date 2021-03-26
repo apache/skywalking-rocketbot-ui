@@ -116,10 +116,10 @@ limitations under the License. -->
   import ToolBarSelect from './tool-bar-select.vue';
   import ToolBarEndpointSelect from './tool-bar-endpoint-select.vue';
   import ToolBarBtns from './tool-bar-btns.vue';
-  import { State, Action, Mutation } from 'vuex-class';
+  import { Action, Mutation } from 'vuex-class';
   import { DASHBOARDTYPE } from '../constant';
   import { EntityType } from '../charts/constant';
-  import { DurationTime } from '@/types/global';
+  import { DurationTime, Option } from '@/types/global';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { State as rocketGlobal } from '@/store/modules/global';
   import { State as optionState } from '@/store/modules/global/selectors';
@@ -131,7 +131,7 @@ limitations under the License. -->
     @Prop() private rocketGlobal!: rocketGlobal;
     @Prop() private rocketComps!: rocketData;
     @Prop() private durationTime!: DurationTime;
-    @Mutation('ADD_COMP') private ADD_COMP: any;
+    @Mutation('ADD_COMP') private ADD_COMP!: () => void;
     @Mutation('SET_CURRENT_SERVICE_GROUP') private SET_CURRENT_SERVICE_GROUP: any;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
@@ -149,15 +149,15 @@ limitations under the License. -->
       }
       return current[current.length - 1].k;
     }
-    private selectService(i: any) {
+    private selectService(i: Option) {
       this.SELECT_SERVICE({ service: i, duration: this.durationTime });
       if (!this.rocketComps.enableEvents) {
         return;
       }
-      const refEvent = this.$refs.eventsRef as any;
-      refEvent.checkAllServiceEvents = true;
-      refEvent.checkAllInstanceEvents = false;
-      refEvent.checkAllEndpointEvents = false;
+      // const refEvent = this.$refs.eventsRef as any;
+      // refEvent.checkAllServiceEvents = true;
+      // refEvent.checkAllInstanceEvents = false;
+      // refEvent.checkAllEndpointEvents = false;
       this.GET_EVENT({
         condition: {
           time: this.durationTime,
@@ -169,13 +169,13 @@ limitations under the License. -->
         type: EntityType[0].key,
       });
     }
-    private selectEndpoint(i: any) {
+    private selectEndpoint(i: Option) {
       this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
       if (!this.rocketComps.enableEvents) {
         return;
       }
-      const refEvent = this.$refs.eventsRef as any;
-      refEvent.checkAllEndpointEvents = false;
+      // const refEvent = this.$refs.eventsRef as any;
+      // refEvent.checkAllEndpointEvents = false;
       this.GET_EVENT({
         condition: {
           time: this.durationTime,
@@ -188,13 +188,13 @@ limitations under the License. -->
         type: EntityType[2].key,
       });
     }
-    private selectInstance(i: any) {
+    private selectInstance(i: Option) {
       this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
       if (!this.rocketComps.enableEvents) {
         return;
       }
-      const refEvent = this.$refs.eventsRef as any;
-      refEvent.checkAllInstanceEvents = false;
+      // const refEvent = this.$refs.eventsRef as any;
+      // refEvent.checkAllInstanceEvents = false;
       this.GET_EVENT({
         condition: {
           time: this.durationTime,

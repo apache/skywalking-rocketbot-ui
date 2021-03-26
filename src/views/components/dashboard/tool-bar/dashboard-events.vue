@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div class="flex-h">
-    <div class="rk-dashboard-bar-btn" @click="setEnbleEvents" v-show="compType === dashboardType.SERVICE">
+    <div class="rk-dashboard-bar-btn" @click="setEnbleEvents">
       <rk-icon
         class="lg"
         :class="enableEvents ? 'blue' : ''"
@@ -107,7 +107,6 @@ limitations under the License. -->
   export default class DashboardEvent extends Vue {
     @Prop() private rocketComps!: rocketData;
     @Prop() private stateDashboard!: optionState;
-    @Prop() private compType!: string;
     @Prop() private durationTime!: DurationTime;
     @Mutation('SET_CHECKED_EVENTS') private SET_CHECKED_EVENTS: any;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
