@@ -31,9 +31,9 @@ limitations under the License. -->
           <div class="title">{{ $t('serviceEvents') }}</div>
           <ul>
             <li class="header">
-              <span class="check"
-                ><input type="checkbox" v-model="checkAllServiceEvents" @click="checkServiceEvents"
-              /></span>
+              <span class="check">
+                <input type="checkbox" v-model="checkAllServiceEvents" @click="checkServiceEvents" />
+              </span>
               <span class="id">{{ $t('eventID') }}</span>
               <span>{{ $t('eventName') }}</span>
               <span class="time">{{ $t('startTime') }}</span>
@@ -41,9 +41,9 @@ limitations under the License. -->
             </li>
             <li v-show="!rocketComps.serviceEvents.length">{{ $t('noData') }}</li>
             <li v-for="event in rocketComps.serviceEvents" :key="event.uuid">
-              <span class="check"
-                ><input type="checkbox" :checked="!!event.checked" @click="selectEvents(event)"
-              /></span>
+              <span class="check">
+                <input type="checkbox" :checked="!!event.checked" @click="selectEvents(event)" />
+              </span>
               <span class="id">{{ event.uuid }}</span>
               <span>{{ event.name }}</span>
               <span class="time">{{ event.startTime }}</span>
@@ -65,9 +65,9 @@ limitations under the License. -->
             </li>
             <li v-show="!rocketComps.serviceInstanceEvents.length">{{ $t('noData') }}</li>
             <li v-for="event in rocketComps.serviceInstanceEvents" :key="event.uuid">
-              <span class="check"
-                ><input type="checkbox" :checked="!!event.checked" @click="selectEvents(event)"
-              /></span>
+              <span class="check">
+                <input type="checkbox" :checked="!!event.checked" @click="selectEvents(event)" />
+              </span>
               <span class="id">{{ event.uuid }}</span>
               <span>{{ event.name }}</span>
               <span class="time">{{ event.startTime }}</span>
@@ -89,9 +89,9 @@ limitations under the License. -->
             </li>
             <li v-show="!rocketComps.endpointEvents.length">{{ $t('noData') }}</li>
             <li v-for="event in rocketComps.endpointEvents" :key="event.uuid">
-              <span class="check"
-                ><input type="checkbox" :checked="!!event.checked" @click="selectEvents(event)"
-              /></span>
+              <span class="check">
+                <input type="checkbox" :checked="!!event.checked" @click="selectEvents(event)" />
+              </span>
               <span class="id">{{ event.uuid }}</span>
               <span>{{ event.name }}</span>
               <span class="time">{{ event.startTime }}</span>
@@ -205,9 +205,10 @@ limitations under the License. -->
 
       data.checked = !data.checked;
       if (index > -1) {
-        this.selectedEvents.splice(index, 1);
+        this.selectedEvents[index].checked = data.checked;
+      } else {
+        this.selectedEvents.push(data);
       }
-      this.selectedEvents.push(data);
     }
 
     private updateEvent() {

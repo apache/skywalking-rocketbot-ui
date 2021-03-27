@@ -93,7 +93,7 @@ limitations under the License. -->
     @Prop() private updateObjects!: string;
     @Prop() private rocketOption!: optionState;
 
-    private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as any[];
+    private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as string[];
     private dialogConfigVisible = false;
     private status = 'UNKNOWN';
     private title = 'Title';

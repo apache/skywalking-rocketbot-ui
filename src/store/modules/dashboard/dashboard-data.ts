@@ -52,8 +52,13 @@ const initState: State = {
 const mutations: MutationTree<any> = {
   ...dashboardLayout.mutations,
   [types.SET_DASHBOARD_EVENTS](state: State, param: { events: Event[]; type: string; duration: DurationTime }) {
-    const events = param.events.map((d: Event) => {
+    const events = param.events.map((d: Event, index: number) => {
       d.entityType = param.type;
+      d.startTime = dateFormatTime(new Date(Number(d.startTime)), param.duration.step);
+      d.endTime = dateFormatTime(new Date(Number(d.endTime)), param.duration.step);
+      if (index > 9) {
+        return d;
+      }
       if (state.eventsPageType === PageEventsType.DASHBOARD_EVENTS && param.type === EntityType[0]) {
         d.checked = true;
       }
@@ -63,8 +68,6 @@ const mutations: MutationTree<any> = {
       if (state.eventsPageType === PageEventsType.TOPO_INSTANCE_EVENTS && param.type === EntityType[1]) {
         d.checked = true;
       }
-      d.startTime = dateFormatTime(new Date(Number(d.startTime)), param.duration.step);
-      d.endTime = dateFormatTime(new Date(Number(d.endTime)), param.duration.step);
       return d;
     });
     if (param.type === EntityType[0]) {
