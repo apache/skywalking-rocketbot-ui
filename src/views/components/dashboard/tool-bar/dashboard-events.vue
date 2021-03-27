@@ -131,7 +131,7 @@ limitations under the License. -->
     private dialogEventVisible: boolean = false;
     private enableEvents: boolean = false;
     private selectedEvents: Event[] = [];
-    private checkAllServiceEvents: boolean = true;
+    private checkAllServiceEvents: boolean = false;
     private checkAllInstanceEvents: boolean = false;
     private checkAllEndpointEvents: boolean = false;
     private pageEventsType = PageEventsType;
@@ -147,7 +147,7 @@ limitations under the License. -->
         this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[0].key });
         this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[2].key });
         this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[3].key });
-        this.checkAllServiceEvents = true;
+        this.checkAllServiceEvents = false;
         this.checkAllInstanceEvents = false;
         this.checkAllEndpointEvents = false;
         this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
