@@ -56,7 +56,7 @@ const mutations: MutationTree<any> = {
       d.entityType = param.type;
       d.startTime = dateFormatTime(new Date(Number(d.startTime)), param.duration.step);
       d.endTime = dateFormatTime(new Date(Number(d.endTime)), param.duration.step);
-      if (index > 9) {
+      if (index > 2) {
         return d;
       }
       if (state.eventsPageType === PageEventsType.DASHBOARD_EVENTS && param.type === EntityType[0]) {
