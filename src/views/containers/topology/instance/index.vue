@@ -49,7 +49,7 @@ limitations under the License. -->
           :rocketComps="rocketComps"
           :stateDashboard="stateDashboardOption"
           :durationTime="durationTime"
-          :type="pageEventsType.TOPO_ENDPOINT_EVENTS"
+          :type="pageEventsType.TOPO_INSTANCE_EVENTS"
         />
       </span>
       <ToolBarSelect :selectable="false" :title="$t('currentService')" :current="current" icon="package" />
