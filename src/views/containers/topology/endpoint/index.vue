@@ -49,6 +49,7 @@ limitations under the License. -->
           :rocketComps="rocketComps"
           :stateDashboard="stateDashboardOption"
           :durationTime="durationTime"
+          :type="pageEventsType.TOPO_ENDPOINT_EVENTS"
         />
       </span>
       <ToolBarSelect :selectable="false" :title="$t('currentService')" :current="current" icon="package" />
@@ -77,9 +78,10 @@ limitations under the License. -->
   import DashboardEvent from '@/views/components/dashboard/tool-bar/dashboard-events.vue';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
-  import { State as rocketGlobal } from '@/store/modules/global';
+  import { State as rocketbotGlobal } from '@/store/modules/global';
   import { DurationTime, Option } from '@/types/global';
   import { EntityType } from '@/views/components/dashboard/charts/constant';
+  import { PageEventsType } from '@/constants/constant';
 
   @Component({
     components: {
@@ -95,7 +97,7 @@ limitations under the License. -->
     @Prop() private updateObjects!: string;
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketData') private rocketComps!: rocketData;
-    @State('rocketbot') private rocketGlobal!: rocketGlobal;
+    @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @Getter('durationTime') private durationTime!: DurationTime;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
@@ -103,6 +105,8 @@ limitations under the License. -->
     @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
     @Action('GET_EVENT') private GET_EVENT: any;
+
+    private pageEventsType = PageEventsType;
 
     private selectEndpoint(i: Option) {
       this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });

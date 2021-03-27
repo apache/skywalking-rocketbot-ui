@@ -27,66 +27,78 @@ limitations under the License. -->
     </div>
     <rk-sidebox width="950px" :fixed="true" :show.sync="dialogEventVisible">
       <div class="config-box">
-        <div class="title">{{ $t('serviceEvents') }}</div>
-        <ul>
-          <li class="header">
-            <span class="check"
-              ><input type="checkbox" v-model="checkAllServiceEvents" @click="checkServiceEvents"
-            /></span>
-            <span class="id">{{ $t('eventID') }}</span>
-            <span>{{ $t('eventName') }}</span>
-            <span class="time">{{ $t('startTime') }}</span>
-            <span class="time">{{ $t('endTime') }}</span>
-          </li>
-          <li v-show="!rocketComps.serviceEvents.length">{{ $t('noData') }}</li>
-          <li v-for="event in rocketComps.serviceEvents" :key="event.uuid">
-            <span class="check"><input type="checkbox" :checked="!!event.checked" @click="selectEvents(event)"/></span>
-            <span class="id">{{ event.uuid }}</span>
-            <span>{{ event.name }}</span>
-            <span class="time">{{ event.startTime }}</span>
-            <span class="time">{{ event.endTime }}</span>
-          </li>
-        </ul>
-        <div class="title">{{ $t('instanceEvents') }}</div>
-        <ul>
-          <li class="header">
-            <span class="check"
-              ><input type="checkbox" v-model="checkAllInstanceEvents" @click="checkInstanceEvents"
-            /></span>
-            <span class="id">{{ $t('eventID') }}</span>
-            <span>{{ $t('eventName') }}</span>
-            <span class="time">{{ $t('startTime') }}</span>
-            <span class="time">{{ $t('endTime') }}</span>
-          </li>
-          <li v-show="!rocketComps.serviceInstanceEvents.length">{{ $t('noData') }}</li>
-          <li v-for="event in rocketComps.serviceInstanceEvents" :key="event.uuid">
-            <span class="check"><input type="checkbox" :checked="!!event.checked" @click="selectEvents(event)"/></span>
-            <span class="id">{{ event.uuid }}</span>
-            <span>{{ event.name }}</span>
-            <span class="time">{{ event.startTime }}</span>
-            <span class="time">{{ event.endTime }}</span>
-          </li>
-        </ul>
-        <div class="title">{{ $t('endpointEvents') }}</div>
-        <ul>
-          <li class="header">
-            <span class="check"
-              ><input type="checkbox" v-model="checkAllEndpointEvents" @click="checkEndpointEvents"
-            /></span>
-            <span class="id">{{ $t('eventID') }}</span>
-            <span>{{ $t('eventName') }}</span>
-            <span class="time">{{ $t('startTime') }}</span>
-            <span class="time">{{ $t('endTime') }}</span>
-          </li>
-          <li v-show="!rocketComps.endpointEvents.length">{{ $t('noData') }}</li>
-          <li v-for="event in rocketComps.endpointEvents" :key="event.uuid">
-            <span class="check"><input type="checkbox" :checked="!!event.checked" @click="selectEvents(event)"/></span>
-            <span class="id">{{ event.uuid }}</span>
-            <span>{{ event.name }}</span>
-            <span class="time">{{ event.startTime }}</span>
-            <span class="time">{{ event.endTime }}</span>
-          </li>
-        </ul>
+        <div v-show="type === pageEventsType.DASHBOARD_EVENTS">
+          <div class="title">{{ $t('serviceEvents') }}</div>
+          <ul>
+            <li class="header">
+              <span class="check"
+                ><input type="checkbox" v-model="checkAllServiceEvents" @click="checkServiceEvents"
+              /></span>
+              <span class="id">{{ $t('eventID') }}</span>
+              <span>{{ $t('eventName') }}</span>
+              <span class="time">{{ $t('startTime') }}</span>
+              <span class="time">{{ $t('endTime') }}</span>
+            </li>
+            <li v-show="!rocketComps.serviceEvents.length">{{ $t('noData') }}</li>
+            <li v-for="event in rocketComps.serviceEvents" :key="event.uuid">
+              <span class="check"
+                ><input type="checkbox" :checked="!!event.checked" @click="selectEvents(event)"
+              /></span>
+              <span class="id">{{ event.uuid }}</span>
+              <span>{{ event.name }}</span>
+              <span class="time">{{ event.startTime }}</span>
+              <span class="time">{{ event.endTime }}</span>
+            </li>
+          </ul>
+        </div>
+        <div v-show="type !== pageEventsType.TOPO_ENDPOINT_EVENTS">
+          <div class="title">{{ $t('instanceEvents') }}</div>
+          <ul>
+            <li class="header">
+              <span class="check"
+                ><input type="checkbox" v-model="checkAllInstanceEvents" @click="checkInstanceEvents"
+              /></span>
+              <span class="id">{{ $t('eventID') }}</span>
+              <span>{{ $t('eventName') }}</span>
+              <span class="time">{{ $t('startTime') }}</span>
+              <span class="time">{{ $t('endTime') }}</span>
+            </li>
+            <li v-show="!rocketComps.serviceInstanceEvents.length">{{ $t('noData') }}</li>
+            <li v-for="event in rocketComps.serviceInstanceEvents" :key="event.uuid">
+              <span class="check"
+                ><input type="checkbox" :checked="!!event.checked" @click="selectEvents(event)"
+              /></span>
+              <span class="id">{{ event.uuid }}</span>
+              <span>{{ event.name }}</span>
+              <span class="time">{{ event.startTime }}</span>
+              <span class="time">{{ event.endTime }}</span>
+            </li>
+          </ul>
+        </div>
+        <div v-show="type !== pageEventsType.TOPO_INSTANCE_EVENTS">
+          <div class="title">{{ $t('endpointEvents') }}</div>
+          <ul>
+            <li class="header">
+              <span class="check"
+                ><input type="checkbox" v-model="checkAllEndpointEvents" @click="checkEndpointEvents"
+              /></span>
+              <span class="id">{{ $t('eventID') }}</span>
+              <span>{{ $t('eventName') }}</span>
+              <span class="time">{{ $t('startTime') }}</span>
+              <span class="time">{{ $t('endTime') }}</span>
+            </li>
+            <li v-show="!rocketComps.endpointEvents.length">{{ $t('noData') }}</li>
+            <li v-for="event in rocketComps.endpointEvents" :key="event.uuid">
+              <span class="check"
+                ><input type="checkbox" :checked="!!event.checked" @click="selectEvents(event)"
+              /></span>
+              <span class="id">{{ event.uuid }}</span>
+              <span>{{ event.name }}</span>
+              <span class="time">{{ event.startTime }}</span>
+              <span class="time">{{ event.endTime }}</span>
+            </li>
+          </ul>
+        </div>
         <div class="save-btn bg-blue" @click="updateEvent()">{{ $t('setEvent') }}</div>
       </div>
     </rk-sidebox>
@@ -101,13 +113,14 @@ limitations under the License. -->
   import { UpdateDashboardEvents } from '../constant';
   import { EntityType } from '../charts/constant';
   import { State as optionState } from '@/store/modules/global/selectors';
-  import { DASHBOARDTYPE } from '../constant';
+  import { PageEventsType } from '@/constants/constant';
 
   @Component
   export default class DashboardEvent extends Vue {
     @Prop() private rocketComps!: rocketData;
     @Prop() private stateDashboard!: optionState;
     @Prop() private durationTime!: DurationTime;
+    @Prop() private type!: string;
     @Mutation('SET_CHECKED_EVENTS') private SET_CHECKED_EVENTS: any;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     @Mutation('SET_ENABLE_EVENTS') private SET_ENABLE_EVENTS: any;
@@ -115,12 +128,12 @@ limitations under the License. -->
     @Action('GET_EVENT') private GET_EVENT: any;
 
     private dialogEventVisible: boolean = false;
-    private dashboardType = DASHBOARDTYPE;
     private enableEvents: boolean = false;
     private selectedEvents: Event[] = [];
     private checkAllServiceEvents: boolean = true;
     private checkAllInstanceEvents: boolean = false;
     private checkAllEndpointEvents: boolean = false;
+    private pageEventsType = PageEventsType;
 
     private setEnbleEvents() {
       this.enableEvents = !this.enableEvents;
@@ -135,7 +148,7 @@ limitations under the License. -->
         this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
         return;
       }
-      Promise.all([
+      const queryLists = [
         this.GET_EVENT({
           condition: {
             time: this.durationTime,
@@ -168,7 +181,14 @@ limitations under the License. -->
           },
           type: EntityType[2].key,
         }),
-      ]).then(() => {
+      ];
+      const promiseLists =
+        this.type === PageEventsType.TOPO_ENDPOINT_EVENTS
+          ? [queryLists[2]]
+          : this.type === PageEventsType.TOPO_INSTANCE_EVENTS
+          ? [queryLists[1]]
+          : queryLists;
+      Promise.all(promiseLists).then(() => {
         this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
       });
     }

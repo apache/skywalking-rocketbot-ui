@@ -50,6 +50,7 @@ limitations under the License. -->
           :rocketComps="rocketComps"
           :stateDashboard="stateDashboardOption"
           :durationTime="durationTime"
+          :type="pageEventsType.TOPO_ENDPOINT_EVENTS"
         />
       </span>
       <ToolBarSelect :selectable="false" :title="$t('currentService')" :current="current" icon="package" />
@@ -66,12 +67,12 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import InstancesSurvey from './instances-survey.vue';
-  import ToolBarSelect from '@/views/components/dashboard/tool-bar/tool-bar-select.vue';
-  import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar/tool-bar-endpoint-select.vue';
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import { Action, Getter, State, Mutation } from 'vuex-class';
+  import InstancesSurvey from './instances-survey.vue';
+  import ToolBarSelect from '@/views/components/dashboard/tool-bar/tool-bar-select.vue';
+  import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar/tool-bar-endpoint-select.vue';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
   import { ObjectsType } from '@/constants/constant';
@@ -79,13 +80,16 @@ limitations under the License. -->
   import { DurationTime, Option } from '@/types/global';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
-  import { State as rocketGlobal } from '@/store/modules/global';
+  import { State as rocketbotGlobal } from '@/store/modules/global';
+  import DashboardEvent from '@/views/components/dashboard/tool-bar/dashboard-events.vue';
+  import { PageEventsType } from '@/constants/constant';
 
   @Component({
     components: {
       InstancesSurvey,
       ToolBarSelect,
       ToolBarEndpointSelect,
+      DashboardEvent,
     },
   })
   export default class WindowInstance extends Vue {
@@ -94,7 +98,7 @@ limitations under the License. -->
     @Prop() private updateObjects!: string;
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketData') private rocketComps!: rocketData;
-    @State('rocketbot') private rocketGloba!: rocketGlobal;
+    @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @Getter('durationTime') private durationTime!: DurationTime;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('GET_SERVICE_INSTANCES') private GET_SERVICE_INSTANCES: any;
@@ -102,6 +106,8 @@ limitations under the License. -->
     @Action('GET_EVENT') private GET_EVENT: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
+
+    private pageEventsType = PageEventsType;
 
     private selectInstance(i: Option) {
       this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });

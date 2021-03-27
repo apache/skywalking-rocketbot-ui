@@ -341,7 +341,7 @@ limitations under the License. -->
       }
     }
 
-    // watch selectors and evnets
+    // watch selectors and events
     @Watch('rocketOption.updateDashboard')
     private watchCurrentSelectors() {
       this.itemEvents = this.eventsFilter;

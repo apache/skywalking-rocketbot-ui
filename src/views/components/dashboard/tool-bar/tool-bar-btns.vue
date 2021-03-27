@@ -40,6 +40,7 @@ limitations under the License. -->
       :rocketComps="rocketComps"
       :stateDashboard="stateDashboard"
       :durationTime="durationTime"
+      :type="'dashboardEvents'"
       v-show="compType === dashboardType.SERVICE"
     />
   </div>
@@ -55,6 +56,7 @@ limitations under the License. -->
   import { DurationTime } from '@/types/global';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { State as rocketGlobal } from '@/store/modules/global';
+  import { DASHBOARDTYPE } from '../constant';
 
   @Component({ components: { DashboardEvent } })
   export default class ToolBarBtns extends Vue {
@@ -68,6 +70,7 @@ limitations under the License. -->
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     @Action('SET_EDIT') private SET_EDIT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+    private dashboardType = DASHBOARDTYPE;
 
     private handleOption() {
       return this.MIXHANDLE_GET_OPTION({

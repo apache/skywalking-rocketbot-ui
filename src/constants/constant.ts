@@ -31,3 +31,9 @@ export enum TimeType {
   HOUR_TIME = 'HOUR',
   DAY_TIME = 'DAY',
 }
+
+export enum PageEventsType {
+  DASHBOARD_EVENTS = 'dashboardEvents',
+  TOPO_ENDPOINT_EVENTS = 'topoEndpointEvents',
+  TOPO_INSTANCE_EVENTS = 'topoInstanceEvents',
+}
