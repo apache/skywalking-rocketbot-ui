@@ -36,12 +36,11 @@ limitations under the License. -->
       <rk-icon class="lg" icon="retry" v-tooltip:bottom="{ content: 'auto' }" />
     </div>
     <DashboardEvent
-      ref="eventsRef"
       :rocketComps="rocketComps"
       :stateDashboard="stateDashboard"
       :durationTime="durationTime"
-      :type="'dashboardEvents'"
-      v-show="compType === dashboardType.SERVICE"
+      :type="pageEventsType.DASHBOARD_EVENTS"
+      v-if="compType === dashboardType.SERVICE"
     />
   </div>
 </template>
@@ -57,6 +56,7 @@ limitations under the License. -->
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { State as rocketGlobal } from '@/store/modules/global';
   import { DASHBOARDTYPE } from '../constant';
+  import { PageEventsType } from '@/constants/constant';
 
   @Component({ components: { DashboardEvent } })
   export default class ToolBarBtns extends Vue {
@@ -71,6 +71,7 @@ limitations under the License. -->
     @Action('SET_EDIT') private SET_EDIT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     private dashboardType = DASHBOARDTYPE;
+    private pageEventsType = PageEventsType;
 
     private handleOption() {
       return this.MIXHANDLE_GET_OPTION({

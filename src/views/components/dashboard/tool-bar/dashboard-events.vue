@@ -125,6 +125,7 @@ limitations under the License. -->
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     @Mutation('SET_ENABLE_EVENTS') private SET_ENABLE_EVENTS: any;
     @Mutation('SET_DASHBOARD_EVENTS') private SET_DASHBOARD_EVENTS: any;
+    @Mutation('SET_EVENTS_PAGE_TYPE') private SET_EVENTS_PAGE_TYPE!: (type: string) => void;
     @Action('GET_EVENT') private GET_EVENT: any;
 
     private dialogEventVisible: boolean = false;
@@ -134,6 +135,10 @@ limitations under the License. -->
     private checkAllInstanceEvents: boolean = false;
     private checkAllEndpointEvents: boolean = false;
     private pageEventsType = PageEventsType;
+
+    private created() {
+      this.SET_EVENTS_PAGE_TYPE(this.type);
+    }
 
     private setEnbleEvents() {
       this.enableEvents = !this.enableEvents;

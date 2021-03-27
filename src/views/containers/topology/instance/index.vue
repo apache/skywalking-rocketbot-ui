@@ -46,7 +46,6 @@ limitations under the License. -->
           </span>
         </div>
         <DashboardEvent
-          ref="eventsRef"
           :rocketComps="rocketComps"
           :stateDashboard="stateDashboardOption"
           :durationTime="durationTime"

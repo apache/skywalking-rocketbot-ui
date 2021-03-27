@@ -25,6 +25,7 @@ import { QueryEventCondition } from '../../../types/dashboard';
 import { dateFormatTime } from '@/utils/dateFormat';
 import { DurationTime } from '@/types/global';
 import * as types from './mutation-types';
+import { PageEventsType } from '@/constants/constant';
 
 const EntityType = ['Service', 'ServiceInstance', 'Endpoint'];
 export interface State {
@@ -35,6 +36,7 @@ export interface State {
   serviceInstanceEvents: Event[];
   endpointEvents: Event[];
   enableEvents: boolean;
+  eventsPageType: string;
 }
 
 const initState: State = {
@@ -42,6 +44,7 @@ const initState: State = {
   endpointEvents: [],
   serviceInstanceEvents: [],
   enableEvents: false,
+  eventsPageType: PageEventsType.DASHBOARD_EVENTS,
   ...dashboardLayout.state,
 };
 
@@ -51,7 +54,13 @@ const mutations: MutationTree<any> = {
   [types.SET_DASHBOARD_EVENTS](state: State, param: { events: Event[]; type: string; duration: DurationTime }) {
     const events = param.events.map((d: Event) => {
       d.entityType = param.type;
-      if (param.type === EntityType[0]) {
+      if (state.eventsPageType === PageEventsType.DASHBOARD_EVENTS && param.type === EntityType[0]) {
+        d.checked = true;
+      }
+      if (state.eventsPageType === PageEventsType.TOPO_ENDPOINT_EVENTS && param.type === EntityType[2]) {
+        d.checked = true;
+      }
+      if (state.eventsPageType === PageEventsType.TOPO_INSTANCE_EVENTS && param.type === EntityType[1]) {
         d.checked = true;
       }
       d.startTime = dateFormatTime(new Date(Number(d.startTime)), param.duration.step);
@@ -96,6 +105,9 @@ const mutations: MutationTree<any> = {
   },
   [types.SET_ENABLE_EVENTS](state: State, enable: boolean) {
     state.enableEvents = enable;
+  },
+  [types.SET_EVENTS_PAGE_TYPE](state: State, type: string) {
+    state.eventsPageType = type;
   },
 };
 
@@ -168,17 +180,6 @@ const actions: ActionTree<State, any> = {
           return;
         }
         return res.data.data.getAllTemplates || [];
-      });
-  },
-  ADD_TEMPLATE(context, params) {
-    return graph
-      .query('mutationAddTemplate')
-      .params({ setting: params })
-      .then((res: AxiosResponse) => {
-        if (!res.data.data) {
-          return;
-        }
-        return res.data.data.addTemplate || [];
       });
   },
   GET_EVENT(context: { commit: Commit }, params: { condition: QueryEventCondition; type: string }) {
