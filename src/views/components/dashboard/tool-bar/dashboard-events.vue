@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div class="flex-h">
+  <div class="event-list flex-h">
     <div class="rk-dashboard-tool-btn" @click="() => (dialogEventVisible = true)" v-show="enableEvents">
       <rk-icon class="lg" icon="settings" v-tooltip:left="{ content: $t('setEvent') }" />
     </div>
@@ -106,7 +106,7 @@ limitations under the License. -->
     </rk-sidebox>
     <rk-sidebox :width="'1000px'" :show.sync="showEventDetail" :title="$t('eventDetail')">
       <div class="event-detail">
-        <div class="mb-10 clear rk-flex" v-for="(item, index) in eventsDetailHeaders" :key="index">
+        <div class="mb-10 rk-flex" v-for="(item, index) in eventsDetailHeaders" :key="index">
           <span>{{ $t(item.text) }}: </span>
           <span v-if="item.class === 'parameters'">
             <span v-for="(item, index) of currentEvent[item.class]" :key="index"
@@ -322,6 +322,9 @@ limitations under the License. -->
   }
 </script>
 <style lang="scss" scoped>
+  .event-list {
+    color: #444;
+  }
   .rk-dashboard-tool-btn {
     background-color: rgba(255, 255, 255, 0.07);
     border-radius: 4px;
