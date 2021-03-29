@@ -212,6 +212,7 @@ const m = {
   eventsType: '事件类型',
   eventsMessage: '事件消息',
   eventsParameters: '事件参数',
+  eventDetail: '事件详情',
 };
 
 export default m;

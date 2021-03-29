@@ -211,9 +211,10 @@ const m = {
   enableEvents: 'Enable Events',
   disableEvents: 'Disable Events',
   eventSeries: 'Events Series',
-  eventsType: 'Events Type',
-  eventsMessage: 'Events Message',
-  eventsParameters: 'Events Parameters',
+  eventsType: 'Event Type',
+  eventsMessage: 'Event Message',
+  eventsParameters: 'Event Parameters',
+  eventDetail: 'Event Detail',
 };
 
 export default m;
