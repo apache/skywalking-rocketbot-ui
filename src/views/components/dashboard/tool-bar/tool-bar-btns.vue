@@ -35,13 +35,6 @@ limitations under the License. -->
     <div class="rk-dashboard-bar-btn" @click="handleOption">
       <rk-icon class="lg" icon="retry" v-tooltip:bottom="{ content: 'auto' }" />
     </div>
-    <DashboardEvent
-      :rocketComps="rocketComps"
-      :stateDashboard="stateDashboard"
-      :durationTime="durationTime"
-      :type="pageEventsType.DASHBOARD_EVENTS"
-      v-if="compType === dashboardType.SERVICE"
-    />
   </div>
 </template>
 
@@ -50,28 +43,19 @@ limitations under the License. -->
   import { Action, Mutation } from 'vuex-class';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
-  import DashboardEvent from './dashboard-events.vue';
-  import { State as optionState } from '@/store/modules/global/selectors';
   import { DurationTime } from '@/types/global';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { State as rocketGlobal } from '@/store/modules/global';
-  import { DASHBOARDTYPE } from '../constant';
-  import { PageEventsType } from '@/constants/constant';
 
-  @Component({ components: { DashboardEvent } })
+  @Component
   export default class ToolBarBtns extends Vue {
     @Prop() private compType!: string;
     @Prop() private rocketGlobal!: rocketGlobal;
     @Prop() private rocketComps!: rocketData;
     @Prop() private durationTime!: DurationTime;
-    @Prop() private stateDashboard!: optionState;
-    @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('IMPORT_TREE') private IMPORT_TREE: any;
-    @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     @Action('SET_EDIT') private SET_EDIT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
-    private dashboardType = DASHBOARDTYPE;
-    private pageEventsType = PageEventsType;
 
     private handleOption() {
       return this.MIXHANDLE_GET_OPTION({

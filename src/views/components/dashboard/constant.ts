@@ -30,3 +30,8 @@ export enum QueryTypes {
   ReadSampledRecords = 'readSampledRecords',
 }
 export const UpdateDashboardEvents = 'UpdateDashboardEvents';
+export const SeriesTypes = [
+  { key: 'Service', label: 'Service Events' },
+  { key: 'Endpoint', label: 'Service Endpoint Events' },
+  { key: 'ServiceInstance', label: 'Service Instance Events' },
+];

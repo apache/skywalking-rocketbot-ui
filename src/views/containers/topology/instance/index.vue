@@ -16,7 +16,7 @@ limitations under the License. -->
 <template>
   <div style="height: 100%">
     <div class="rk-dashboard-bar flex-h">
-      <span class="flex-h">
+      <div class="flex-h">
         <div class="rk-dashboard-bar-btn">
           <span v-tooltip:bottom="{ content: rocketGlobal.edit ? 'view' : 'edit' }">
             <svg
@@ -45,21 +45,25 @@ limitations under the License. -->
             </svg>
           </span>
         </div>
+      </div>
+      <div class="rk-dashboard-bar-tool flex-h">
+        <div class="flex-h">
+          <ToolBarSelect :selectable="false" :title="$t('currentService')" :current="current" icon="package" />
+          <ToolBarSelect
+            @onChoose="selectInstance"
+            :title="$t('currentInstance')"
+            :current="stateDashboardOption.currentInstance"
+            :data="stateDashboardOption.instances"
+            icon="disk"
+          />
+        </div>
         <DashboardEvent
           :rocketComps="rocketComps"
           :stateDashboard="stateDashboardOption"
           :durationTime="durationTime"
           :type="pageEventsType.TOPO_INSTANCE_EVENTS"
         />
-      </span>
-      <ToolBarSelect :selectable="false" :title="$t('currentService')" :current="current" icon="package" />
-      <ToolBarSelect
-        @onChoose="selectInstance"
-        :title="$t('currentInstance')"
-        :current="stateDashboardOption.currentInstance"
-        :data="stateDashboardOption.instances"
-        icon="disk"
-      />
+      </div>
     </div>
     <instances-survey :instanceComps="instanceComps" :updateObjects="updateObjects" />
   </div>
@@ -161,6 +165,15 @@ limitations under the License. -->
 </script>
 
 <style lang="scss" scoped>
+  .rk-dashboard-bar-tool {
+    width: calc(100% - 160px);
+    justify-content: space-between;
+  }
+  .rk-dashboard-bar {
+    flex-shrink: 0;
+    color: #efefef;
+    background-color: #333840;
+  }
   .rk-dashboard-bar-btn {
     padding: 0 5px;
     border-right: 2px solid #252a2f;

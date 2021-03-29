@@ -104,7 +104,6 @@ limitations under the License. -->
 <style lang="scss" scoped>
   .rk-bar-select {
     position: relative;
-    height: 30px;
     justify-content: space-between;
     border: 1px solid #ddd;
     background: #fff;

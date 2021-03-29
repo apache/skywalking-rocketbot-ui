@@ -210,6 +210,10 @@ const m = {
   endpointEvents: 'Endpoint Events',
   enableEvents: 'Enable Events',
   disableEvents: 'Disable Events',
+  eventSeries: 'Events Series',
+  eventsType: 'Events Type',
+  eventsMessage: 'Events Message',
+  eventsParameters: 'Events Parameters',
 };
 
 export default m;

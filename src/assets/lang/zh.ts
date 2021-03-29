@@ -208,6 +208,10 @@ const m = {
   endpointEvents: '端点事件',
   enableEvents: '启动事件',
   disableEvents: '禁用事件',
+  eventSeries: '事件系列',
+  eventsType: '事件类型',
+  eventsMessage: '事件消息',
+  eventsParameters: '事件参数',
 };
 
 export default m;

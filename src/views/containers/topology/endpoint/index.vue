@@ -44,21 +44,25 @@ limitations under the License. -->
             </svg>
           </span>
         </div>
+      </span>
+      <div class="rk-dashboard-bar-tool flex-h">
+        <div class="flex-h">
+          <ToolBarSelect :selectable="false" :title="$t('currentService')" :current="current" icon="package" />
+          <ToolBarEndpointSelect
+            @onChoose="selectEndpoint"
+            :title="$t('currentEndpoint')"
+            :current="stateDashboardOption.currentEndpoint"
+            :data="stateDashboardOption.endpoints"
+            icon="code"
+          />
+        </div>
         <DashboardEvent
           :rocketComps="rocketComps"
           :stateDashboard="stateDashboardOption"
           :durationTime="durationTime"
           :type="pageEventsType.TOPO_ENDPOINT_EVENTS"
         />
-      </span>
-      <ToolBarSelect :selectable="false" :title="$t('currentService')" :current="current" icon="package" />
-      <ToolBarEndpointSelect
-        @onChoose="selectEndpoint"
-        :title="$t('currentEndpoint')"
-        :current="stateDashboardOption.currentEndpoint"
-        :data="stateDashboardOption.endpoints"
-        icon="code"
-      />
+      </div>
     </div>
     <endpoints-survey :endpointComps="endpointComps" :updateObjects="updateObjects" />
   </div>
@@ -160,7 +164,11 @@ limitations under the License. -->
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+  .rk-dashboard-bar-tool {
+    width: calc(100% - 160px);
+    justify-content: space-between;
+  }
   .rk-dashboard-bar {
     flex-shrink: 0;
     color: #efefef;

@@ -14,19 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div class="flex-h">
-    <div class="rk-dashboard-bar-btn" @click="setEnbleEvents">
+    <div class="rk-dashboard-tool-btn" @click="() => (dialogEventVisible = true)" v-show="enableEvents">
+      <rk-icon class="lg" icon="settings" v-tooltip:left="{ content: $t('setEvent') }" />
+    </div>
+    <div class="rk-dashboard-tool-btn" @click="setEnbleEvents">
       <rk-icon
         class="lg"
         :class="enableEvents ? 'blue' : ''"
         icon="format_indent_increase"
-        v-tooltip:bottom="{ content: enableEvents ? $t('disableEvents') : $t('enableEvents') }"
+        v-tooltip:left="{ content: enableEvents ? $t('disableEvents') : $t('enableEvents') }"
       />
     </div>
-    <div class="rk-dashboard-bar-btn" @click="() => (dialogEventVisible = true)" v-show="enableEvents">
-      <rk-icon class="lg" icon="settings" v-tooltip:bottom="{ content: $t('setEvent') }" />
-    </div>
-    <rk-sidebox width="950px" :fixed="true" :show.sync="dialogEventVisible">
+    <rk-sidebox width="100%" :fixed="true" :show.sync="dialogEventVisible">
       <div class="config-box">
+        <div class="series-type" v-show="type === pageEventsType.DASHBOARD_EVENTS">
+          <label class="title">{{ $t('eventSeries') }}</label>
+          <RkSelect
+            :current="rocketComps.currentSeriesType"
+            :data="seriesTypes"
+            @onChoose="(item) => changeSeriesType(item)"
+          />
+        </div>
         <div v-show="type === pageEventsType.DASHBOARD_EVENTS">
           <div class="title">{{ $t('serviceEvents') }}</div>
           <ul>
@@ -38,6 +46,9 @@ limitations under the License. -->
               <span>{{ $t('eventName') }}</span>
               <span class="time">{{ $t('startTime') }}</span>
               <span class="time">{{ $t('endTime') }}</span>
+              <span>{{ $t('eventsType') }}</span>
+              <span class="time">{{ $t('eventsMessage') }}</span>
+              <span class="time">{{ $t('eventsParameters') }}</span>
             </li>
             <li v-show="!rocketComps.serviceEvents.length">{{ $t('noData') }}</li>
             <li v-for="event in rocketComps.serviceEvents" :key="event.uuid">
@@ -48,6 +59,9 @@ limitations under the License. -->
               <span>{{ event.name }}</span>
               <span class="time">{{ event.startTime }}</span>
               <span class="time">{{ event.endTime }}</span>
+              <span>{{ event.type }}</span>
+              <span class="time">{{ event.meassage }}</span>
+              <span class="time">{{ event.parameters }}</span>
             </li>
           </ul>
         </div>
@@ -55,13 +69,16 @@ limitations under the License. -->
           <div class="title">{{ $t('instanceEvents') }}</div>
           <ul>
             <li class="header">
-              <span class="check"
-                ><input type="checkbox" v-model="checkAllInstanceEvents" @click="checkInstanceEvents"
-              /></span>
+              <span class="check">
+                <input type="checkbox" v-model="checkAllInstanceEvents" @click="checkInstanceEvents" />
+              </span>
               <span class="id">{{ $t('eventID') }}</span>
               <span>{{ $t('eventName') }}</span>
               <span class="time">{{ $t('startTime') }}</span>
               <span class="time">{{ $t('endTime') }}</span>
+              <span>{{ $t('eventsType') }}</span>
+              <span class="time">{{ $t('eventsMessage') }}</span>
+              <span class="time">{{ $t('eventsParameters') }}</span>
             </li>
             <li v-show="!rocketComps.serviceInstanceEvents.length">{{ $t('noData') }}</li>
             <li v-for="event in rocketComps.serviceInstanceEvents" :key="event.uuid">
@@ -72,6 +89,9 @@ limitations under the License. -->
               <span>{{ event.name }}</span>
               <span class="time">{{ event.startTime }}</span>
               <span class="time">{{ event.endTime }}</span>
+              <span>{{ event.type }}</span>
+              <span class="time">{{ event.meassage }}</span>
+              <span class="time">{{ event.parameters }}</span>
             </li>
           </ul>
         </div>
@@ -79,13 +99,16 @@ limitations under the License. -->
           <div class="title">{{ $t('endpointEvents') }}</div>
           <ul>
             <li class="header">
-              <span class="check"
-                ><input type="checkbox" v-model="checkAllEndpointEvents" @click="checkEndpointEvents"
-              /></span>
+              <span class="check">
+                <input type="checkbox" v-model="checkAllEndpointEvents" @click="checkEndpointEvents" />
+              </span>
               <span class="id">{{ $t('eventID') }}</span>
               <span>{{ $t('eventName') }}</span>
               <span class="time">{{ $t('startTime') }}</span>
               <span class="time">{{ $t('endTime') }}</span>
+              <span>{{ $t('eventsType') }}</span>
+              <span class="time">{{ $t('eventsMessage') }}</span>
+              <span class="time">{{ $t('eventsParameters') }}</span>
             </li>
             <li v-show="!rocketComps.endpointEvents.length">{{ $t('noData') }}</li>
             <li v-for="event in rocketComps.endpointEvents" :key="event.uuid">
@@ -96,6 +119,9 @@ limitations under the License. -->
               <span>{{ event.name }}</span>
               <span class="time">{{ event.startTime }}</span>
               <span class="time">{{ event.endTime }}</span>
+              <span>{{ event.type }}</span>
+              <span class="time">{{ event.meassage }}</span>
+              <span class="time">{{ event.parameters }}</span>
             </li>
           </ul>
         </div>
@@ -109,8 +135,8 @@ limitations under the License. -->
   import { Vue, Component, Prop } from 'vue-property-decorator';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { Event } from '@/types/dashboard';
-  import { DurationTime } from '@/types/global';
-  import { UpdateDashboardEvents } from '../constant';
+  import { DurationTime, Option } from '@/types/global';
+  import { UpdateDashboardEvents, SeriesTypes } from '../constant';
   import { EntityType } from '../charts/constant';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { PageEventsType } from '@/constants/constant';
@@ -126,6 +152,8 @@ limitations under the License. -->
     @Mutation('SET_ENABLE_EVENTS') private SET_ENABLE_EVENTS: any;
     @Mutation('SET_DASHBOARD_EVENTS') private SET_DASHBOARD_EVENTS: any;
     @Mutation('SET_EVENTS_PAGE_TYPE') private SET_EVENTS_PAGE_TYPE!: (type: string) => void;
+    @Mutation('SET_CURRENT_SERIES_TYPE') private SET_CURRENT_SERIES_TYPE!: (data: Option) => void;
+    @Mutation('SET_CLEAR_SELECTED_EVENTS') private SET_CLEAR_SELECTED_EVENTS: any;
     @Action('GET_EVENT') private GET_EVENT: any;
 
     private dialogEventVisible: boolean = false;
@@ -135,9 +163,37 @@ limitations under the License. -->
     private checkAllInstanceEvents: boolean = false;
     private checkAllEndpointEvents: boolean = false;
     private pageEventsType = PageEventsType;
+    private seriesTypes = SeriesTypes;
 
     private created() {
       this.SET_EVENTS_PAGE_TYPE(this.type);
+      if (this.type === this.pageEventsType.DASHBOARD_EVENTS) {
+        this.SET_CURRENT_SERIES_TYPE(this.seriesTypes[0]);
+      } else if (this.type === this.pageEventsType.TOPO_ENDPOINT_EVENTS) {
+        this.SET_CURRENT_SERIES_TYPE(this.seriesTypes[1]);
+      } else {
+        this.SET_CURRENT_SERIES_TYPE(this.seriesTypes[2]);
+      }
+    }
+
+    private changeSeriesType(item: Option) {
+      this.SET_CURRENT_SERIES_TYPE(item);
+      this.SET_CLEAR_SELECTED_EVENTS();
+      let selectedEvents: Event[] = [];
+      if (this.rocketComps.currentSeriesType.key === this.seriesTypes[0].key) {
+        selectedEvents = this.rocketComps.serviceEvents.slice(0, 3);
+      } else if (this.rocketComps.currentSeriesType.key === this.seriesTypes[1].key) {
+        selectedEvents = this.rocketComps.endpointEvents.slice(0, 3);
+      } else {
+        selectedEvents = this.rocketComps.serviceInstanceEvents.slice(0, 3);
+      }
+      this.selectedEvents = selectedEvents.map((d: Event) => {
+        d.checked = true;
+        return d;
+      });
+      this.SET_CHECKED_EVENTS(this.selectedEvents);
+      this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
+      this.selectedEvents = [];
     }
 
     private setEnbleEvents() {
@@ -268,14 +324,19 @@ limitations under the License. -->
   }
 </script>
 <style lang="scss" scoped>
-  .rk-dashboard-bar-btn {
-    padding: 0 8px;
-    border-right: 2px solid #252a2f;
-    height: 19px;
+  .rk-dashboard-tool-btn {
+    background-color: rgba(255, 255, 255, 0.07);
+    border-radius: 4px;
+    margin-left: 5px;
+    padding: 3px;
+    color: #efefef;
     cursor: pointer;
   }
   .config-box {
     color: #444;
+    .series-type {
+      margin-bottom: 20px;
+    }
     .title {
       font-size: 14px;
       font-weight: bold;
@@ -298,7 +359,7 @@ limitations under the License. -->
         font-weight: bold;
       }
       .check {
-        width: 60px;
+        width: 30px;
         input {
           cursor: pointer;
         }
@@ -307,7 +368,7 @@ limitations under the License. -->
         width: 150px;
       }
       .id {
-        width: 300px;
+        width: 280px;
       }
     }
     li {

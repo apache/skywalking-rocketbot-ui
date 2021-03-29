@@ -349,6 +349,7 @@ limitations under the License. -->
         return;
       }
       setTimeout(() => {
+        console.log(this.itemEvents);
         this.chartRender();
       }, 1000);
     }

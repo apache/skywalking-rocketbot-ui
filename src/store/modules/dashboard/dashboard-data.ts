@@ -23,7 +23,7 @@ import dashboardLayout from './dashboard-data-layout';
 import dashboardQuery from './dashboard-data-query';
 import { QueryEventCondition } from '../../../types/dashboard';
 import { dateFormatTime } from '@/utils/dateFormat';
-import { DurationTime } from '@/types/global';
+import { DurationTime, Option } from '@/types/global';
 import * as types from './mutation-types';
 import { PageEventsType } from '@/constants/constant';
 
@@ -37,6 +37,7 @@ export interface State {
   endpointEvents: Event[];
   enableEvents: boolean;
   eventsPageType: string;
+  currentSeriesType: Option;
 }
 
 const initState: State = {
@@ -45,6 +46,7 @@ const initState: State = {
   serviceInstanceEvents: [],
   enableEvents: false,
   eventsPageType: PageEventsType.DASHBOARD_EVENTS,
+  currentSeriesType: { key: '', label: '' },
   ...dashboardLayout.state,
 };
 
@@ -59,13 +61,13 @@ const mutations: MutationTree<any> = {
       if (index > 2) {
         return d;
       }
-      if (state.eventsPageType === PageEventsType.DASHBOARD_EVENTS && param.type === EntityType[0]) {
+      if (state.currentSeriesType.key === EntityType[0] && param.type === EntityType[0]) {
         d.checked = true;
       }
-      if (state.eventsPageType === PageEventsType.TOPO_ENDPOINT_EVENTS && param.type === EntityType[2]) {
+      if (state.currentSeriesType.key === EntityType[2] && param.type === EntityType[2]) {
         d.checked = true;
       }
-      if (state.eventsPageType === PageEventsType.TOPO_INSTANCE_EVENTS && param.type === EntityType[1]) {
+      if (state.currentSeriesType.key === EntityType[1] && param.type === EntityType[1]) {
         d.checked = true;
       }
       return d;
@@ -111,6 +113,14 @@ const mutations: MutationTree<any> = {
   },
   [types.SET_EVENTS_PAGE_TYPE](state: State, type: string) {
     state.eventsPageType = type;
+  },
+  [types.SET_CURRENT_SERIES_TYPE](state: State, data: Option) {
+    state.currentSeriesType = data;
+  },
+  [types.SET_CLEAR_SELECTED_EVENTS](state: State) {
+    for (const item of [...state.serviceEvents, ...state.serviceInstanceEvents, ...state.endpointEvents]) {
+      item.checked = false;
+    }
   },
 };
 

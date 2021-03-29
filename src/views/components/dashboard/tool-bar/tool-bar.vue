@@ -19,61 +19,68 @@ limitations under the License. -->
       :rocketComps="rocketComps"
       :compType="compType"
       :durationTime="durationTime"
-      :stateDashboard="stateDashboard"
     />
-    <div class="flex-h" v-if="compType === dashboardType.SERVICE">
-      <div class="sm grey service-search">
-        <div>{{ $t('serviceGroup') }}</div>
-        <input
-          type="text"
-          :value="rocketComps.tree[rocketComps.group].serviceGroup"
-          @change="searchServices($event.target.value)"
-        />
-      </div>
-      <ToolBarSelect
-        @onChoose="selectService"
-        :title="$t('currentService')"
-        :current="stateDashboard.currentService"
-        :data="stateDashboard.services"
-        icon="package"
-      />
-      <ToolBarEndpointSelect
-        @onChoose="selectEndpoint"
-        :title="$t('currentEndpoint')"
-        :current="stateDashboard.currentEndpoint"
-        :data="stateDashboard.endpoints"
-        :currentService="stateDashboard.currentService"
-        icon="code"
-      />
-      <ToolBarSelect
-        @onChoose="selectInstance"
-        :title="$t('currentInstance')"
-        :current="stateDashboard.currentInstance"
-        :data="stateDashboard.instances"
-        icon="disk"
-      />
-      <a
-        class="rk-view-instance-attributes r"
-        @click="() => (dialogAttributesVisible = true)"
-        v-tooltip:bottom="{ content: $t('instanceAttributes') }"
-      >
-        <rk-icon icon="info_outline" />
-      </a>
-      <rk-sidebox
-        width="600px"
-        :fixed="true"
-        :title="`${$t('instanceAttributes')} of ${stateDashboard.currentInstance.label}`"
-        :show.sync="dialogAttributesVisible"
-        class="instance-attributes-box"
-      >
-        <div
-          class="instance-attr"
-          v-for="(attr, index) in stateDashboard.currentInstance.attributes"
-          :key="attr.name + index"
-        >
-          {{ attr.name + ' : ' + attr.value }}
+    <div class="dashboard-selectors flex-h" v-if="compType === dashboardType.SERVICE">
+      <div class="flex-h">
+        <div class="sm grey service-search">
+          <div>{{ $t('serviceGroup') }}</div>
+          <input
+            type="text"
+            :value="rocketComps.tree[rocketComps.group].serviceGroup"
+            @change="searchServices($event.target.value)"
+          />
         </div>
-      </rk-sidebox>
+        <ToolBarSelect
+          @onChoose="selectService"
+          :title="$t('currentService')"
+          :current="stateDashboard.currentService"
+          :data="stateDashboard.services"
+          icon="package"
+        />
+        <ToolBarEndpointSelect
+          @onChoose="selectEndpoint"
+          :title="$t('currentEndpoint')"
+          :current="stateDashboard.currentEndpoint"
+          :data="stateDashboard.endpoints"
+          :currentService="stateDashboard.currentService"
+          icon="code"
+        />
+        <ToolBarSelect
+          @onChoose="selectInstance"
+          :title="$t('currentInstance')"
+          :current="stateDashboard.currentInstance"
+          :data="stateDashboard.instances"
+          icon="disk"
+        />
+        <a
+          class="rk-view-instance-attributes r"
+          @click="() => (dialogAttributesVisible = true)"
+          v-tooltip:bottom="{ content: $t('instanceAttributes') }"
+        >
+          <rk-icon icon="info_outline" />
+        </a>
+        <rk-sidebox
+          width="600px"
+          :fixed="true"
+          :title="`${$t('instanceAttributes')} of ${stateDashboard.currentInstance.label}`"
+          :show.sync="dialogAttributesVisible"
+          class="instance-attributes-box"
+        >
+          <div
+            class="instance-attr"
+            v-for="(attr, index) in stateDashboard.currentInstance.attributes"
+            :key="attr.name + index"
+          >
+            {{ attr.name + ' : ' + attr.value }}
+          </div>
+        </rk-sidebox>
+      </div>
+      <DashboardEvent
+        :rocketComps="rocketComps"
+        :stateDashboard="stateDashboard"
+        :durationTime="durationTime"
+        :type="pageEventsType.DASHBOARD_EVENTS"
+      />
     </div>
     <div class="flex-h" v-else-if="compType === dashboardType.BROWSER">
       <ToolBarSelect
@@ -117,14 +124,16 @@ limitations under the License. -->
   import ToolBarEndpointSelect from './tool-bar-endpoint-select.vue';
   import ToolBarBtns from './tool-bar-btns.vue';
   import { Action, Mutation } from 'vuex-class';
-  import { DASHBOARDTYPE } from '../constant';
   import { EntityType } from '../charts/constant';
   import { DurationTime, Option } from '@/types/global';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { State as rocketGlobal } from '@/store/modules/global';
   import { State as optionState } from '@/store/modules/global/selectors';
+  import DashboardEvent from './dashboard-events.vue';
+  import { DASHBOARDTYPE } from '../constant';
+  import { PageEventsType } from '@/constants/constant';
 
-  @Component({ components: { ToolBarSelect, ToolBarBtns, ToolBarEndpointSelect } })
+  @Component({ components: { ToolBarSelect, ToolBarBtns, ToolBarEndpointSelect, DashboardEvent } })
   export default class ToolBar extends Vue {
     @Prop() private compType!: string;
     @Prop() private stateDashboard!: optionState;
@@ -142,6 +151,7 @@ limitations under the License. -->
     @Action('GET_EVENT') private GET_EVENT: any;
     private dialogAttributesVisible: boolean = false;
     private dashboardType = DASHBOARDTYPE;
+    private pageEventsType = PageEventsType;
     get lastKey() {
       const current = this.rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children;
       if (!current.length) {
@@ -225,6 +235,10 @@ limitations under the License. -->
     flex-shrink: 0;
     color: #efefef;
     background-color: #333840;
+    .dashboard-selectors {
+      width: calc(100% - 150px);
+      justify-content: space-between;
+    }
     .instance-attributes-box {
       color: #252a2f;
     }
