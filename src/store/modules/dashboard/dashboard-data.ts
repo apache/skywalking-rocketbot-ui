@@ -26,6 +26,7 @@ import { dateFormatTime } from '@/utils/dateFormat';
 import { DurationTime, Option } from '@/types/global';
 import * as types from './mutation-types';
 import { PageEventsType } from '@/constants/constant';
+import { constant } from 'lodash';
 
 const EntityType = ['Service', 'ServiceInstance', 'Endpoint'];
 export interface State {
@@ -79,6 +80,7 @@ const mutations: MutationTree<any> = {
     } else {
       state.endpointEvents = events;
     }
+    console.log(state.serviceInstanceEvents);
   },
   [types.SET_CHECKED_EVENTS](state: State, selectedEvents: Event[]) {
     for (const event of selectedEvents) {

@@ -207,7 +207,7 @@ limitations under the License. -->
         this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
         return;
       }
-      const queryLists = [
+      if (this.type === PageEventsType.DASHBOARD_EVENTS) {
         this.GET_EVENT({
           condition: {
             time: this.durationTime,
@@ -217,18 +217,9 @@ limitations under the License. -->
             },
           },
           type: EntityType[0].key,
-        }),
-        this.GET_EVENT({
-          condition: {
-            time: this.durationTime,
-            size: 20,
-            source: {
-              service: this.stateDashboard.currentService.label,
-              serviceInstance: this.stateDashboard.currentInstance.label,
-            },
-          },
-          type: EntityType[3].key,
-        }),
+        });
+      }
+      if (this.type !== PageEventsType.TOPO_INSTANCE_EVENTS) {
         this.GET_EVENT({
           condition: {
             time: this.durationTime,
@@ -239,17 +230,28 @@ limitations under the License. -->
             },
           },
           type: EntityType[2].key,
-        }),
-      ];
-      const promiseLists =
-        this.type === PageEventsType.TOPO_ENDPOINT_EVENTS
-          ? [queryLists[2]]
-          : this.type === PageEventsType.TOPO_INSTANCE_EVENTS
-          ? [queryLists[1]]
-          : queryLists;
-      Promise.all(promiseLists).then(() => {
-        this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
-      });
+        }).then(() => {
+          if (this.type === PageEventsType.DASHBOARD_EVENTS) {
+            return;
+          }
+          this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
+        });
+      }
+      if (this.type !== PageEventsType.TOPO_ENDPOINT_EVENTS) {
+        this.GET_EVENT({
+          condition: {
+            time: this.durationTime,
+            size: 20,
+            source: {
+              service: this.stateDashboard.currentService.label,
+              serviceInstance: this.stateDashboard.currentInstance.label,
+            },
+          },
+          type: EntityType[3].key,
+        }).then(() => {
+          this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
+        });
+      }
     }
 
     private selectEvents(data: Event) {
