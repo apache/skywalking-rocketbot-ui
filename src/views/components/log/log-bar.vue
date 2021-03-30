@@ -84,6 +84,7 @@ limitations under the License. -->
   import LogConditions from './log-conditions.vue';
   import { State as logState } from '@/store/modules/log/index';
   import { State as optionState } from '@/store/modules/global/selectors';
+  import { PageTypes } from '@/constants/constant';
 
   @Component({
     components: { TraceSelect, ToolBarSelect, ToolBarEndpointSelect, LogConditions },
@@ -106,14 +107,13 @@ limitations under the License. -->
     private pageNum: number = 1;
     private cateGoryBrowser = 'browser';
     private showConditionsBox = true;
-    private logPage = 'Log';
     private pageSize = 20;
 
     private beforeMount() {
       this.MIXHANDLE_GET_OPTION({
         compType: this.logState.type.key,
         duration: this.durationTime,
-        pageType: this.logPage,
+        pageType: PageTypes.LOG,
       })
         .then(() => {
           this.QUERY_LOGS_BYKEYWORDS();
@@ -145,7 +145,7 @@ limitations under the License. -->
       this.MIXHANDLE_GET_OPTION({
         compType: i.key,
         duration: this.durationTime,
-        pageType: this.logPage,
+        pageType: PageTypes.LOG,
       }).then(() => {
         this.queryLogs();
       });

@@ -131,7 +131,7 @@ limitations under the License. -->
   import { State as optionState } from '@/store/modules/global/selectors';
   import DashboardEvent from './dashboard-events.vue';
   import { DASHBOARDTYPE } from '../constant';
-  import { PageEventsType } from '@/constants/constant';
+  import { PageEventsType, PageTypes } from '@/constants/constant';
 
   @Component({ components: { ToolBarSelect, ToolBarBtns, ToolBarEndpointSelect, DashboardEvent } })
   export default class ToolBar extends Vue {
@@ -167,6 +167,7 @@ limitations under the License. -->
       // refEvent.checkAllServiceEvents = true;
       // refEvent.checkAllInstanceEvents = false;
       // refEvent.checkAllEndpointEvents = false;
+      this.SELECT_SERVICE({ service: i, duration: this.durationTime, callback: this.GET_EVENT });
       this.GET_EVENT({
         condition: {
           time: this.durationTime,
@@ -176,8 +177,6 @@ limitations under the License. -->
           },
         },
         type: EntityType[0].key,
-      }).then(() => {
-        this.SELECT_SERVICE({ service: i, duration: this.durationTime });
       });
     }
     private selectEndpoint(i: Option) {
@@ -228,6 +227,7 @@ limitations under the License. -->
         compType: this.dashboardType.SERVICE,
         duration: this.durationTime,
         keywordServiceName: value,
+        pageType: PageTypes.DASHBOARD,
       }).then(() => {
         this.UPDATE_DASHBOARD();
       });

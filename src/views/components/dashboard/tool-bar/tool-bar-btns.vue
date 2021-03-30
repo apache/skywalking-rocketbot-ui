@@ -46,6 +46,7 @@ limitations under the License. -->
   import { DurationTime } from '@/types/global';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { State as rocketGlobal } from '@/store/modules/global';
+  import { PageTypes } from '@/constants/constant';
 
   @Component
   export default class ToolBarBtns extends Vue {
@@ -61,6 +62,7 @@ limitations under the License. -->
       return this.MIXHANDLE_GET_OPTION({
         compType: this.compType,
         duration: this.durationTime,
+        pageType: PageTypes.DASHBOARD,
         keywordServiceName:
           this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].serviceGroup,
       });

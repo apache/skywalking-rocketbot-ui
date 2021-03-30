@@ -26,7 +26,6 @@ import { dateFormatTime } from '@/utils/dateFormat';
 import { DurationTime, Option } from '@/types/global';
 import * as types from './mutation-types';
 import { PageEventsType } from '@/constants/constant';
-import { constant } from 'lodash';
 
 const EntityType = ['Service', 'ServiceInstance', 'Endpoint'];
 export interface State {

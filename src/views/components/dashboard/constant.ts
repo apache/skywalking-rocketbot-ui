@@ -41,8 +41,6 @@ export const EventsHeaders = [
   { text: 'eventsType', class: 'type' },
   { text: 'startTime', class: 'startTime' },
   { text: 'endTime', class: 'endTime' },
-  // {text: 'eventsMessage', class: 'message'},
-  // {text: 'eventsParameters', class: 'parameters'},
 ];
 export const EventsDetailHeaders = [
   { text: 'eventID', class: 'uuid' },

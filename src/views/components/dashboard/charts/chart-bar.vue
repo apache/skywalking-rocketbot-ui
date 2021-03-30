@@ -41,8 +41,8 @@ limitations under the License. -->
             y: startP + diff * index,
             itemStyle: {
               borderWidth: 2,
-              borderColor: '#FF0087',
-              color: '#FF0087',
+              borderColor: event.type === 'Normal' ? '#5dc859' : '#FF0087',
+              color: event.type === 'Normal' ? '#5dc859' : '#FF0087',
             },
           },
           {

@@ -54,6 +54,7 @@ limitations under the License. -->
   import { State as globalState } from '@/store/modules/global';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as dataState } from '@/store/modules/dashboard/dashboard-data';
+  import { PageTypes } from '@/constants/constant';
 
   interface ITemplate {
     name: string;
@@ -104,6 +105,7 @@ limitations under the License. -->
         duration: this.durationTime,
         keywordServiceName:
           this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].serviceGroup,
+        pageType: PageTypes.DASHBOARD,
       });
     }
     private beforeMount() {

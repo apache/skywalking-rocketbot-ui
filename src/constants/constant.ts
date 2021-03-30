@@ -37,3 +37,7 @@ export enum PageEventsType {
   TOPO_ENDPOINT_EVENTS = 'topoEndpointEvents',
   TOPO_INSTANCE_EVENTS = 'topoInstanceEvents',
 }
+export enum PageTypes {
+  DASHBOARD = 'Dashboard',
+  LOG = 'Log',
+}
