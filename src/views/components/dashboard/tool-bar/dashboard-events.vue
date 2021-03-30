@@ -121,7 +121,7 @@ limitations under the License. -->
 </template>
 <script lang="ts">
   import { Mutation, Action } from 'vuex-class';
-  import { Vue, Component, Prop } from 'vue-property-decorator';
+  import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { Event } from '@/types/dashboard';
   import { DurationTime, Option } from '@/types/global';
@@ -207,6 +207,10 @@ limitations under the License. -->
         this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
         return;
       }
+      this.fetchEvents();
+    }
+
+    private fetchEvents() {
       if (this.type === PageEventsType.DASHBOARD_EVENTS) {
         this.GET_EVENT({
           condition: {
@@ -320,6 +324,14 @@ limitations under the License. -->
       if (!this.checkAllEndpointEvents) {
         this.selectedEvents.push(...this.rocketComps.endpointEvents);
       }
+    }
+
+    @Watch('durationTime')
+    private watchDurationTime() {
+      if (!this.enableEvents) {
+        return;
+      }
+      this.fetchEvents();
     }
   }
 </script>

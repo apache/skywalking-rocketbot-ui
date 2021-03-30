@@ -80,7 +80,6 @@ const mutations: MutationTree<any> = {
     } else {
       state.endpointEvents = events;
     }
-    console.log(state.serviceInstanceEvents);
   },
   [types.SET_CHECKED_EVENTS](state: State, selectedEvents: Event[]) {
     for (const event of selectedEvents) {

@@ -113,8 +113,8 @@ limitations under the License. -->
     private pageEventsType = PageEventsType;
 
     private selectInstance(i: Option) {
-      this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
       if (!this.rocketComps.enableEvents) {
+        this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
         return;
       }
       this.GET_EVENT({
@@ -126,7 +126,9 @@ limitations under the License. -->
             serviceInstance: i.label,
           },
         },
-        type: EntityType[2].key,
+        type: EntityType[3].key,
+      }).then(() => {
+        this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
       });
     }
 

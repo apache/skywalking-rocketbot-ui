@@ -140,7 +140,6 @@ limitations under the License. -->
     @Prop() private rocketGlobal!: rocketGlobal;
     @Prop() private rocketComps!: rocketData;
     @Prop() private durationTime!: DurationTime;
-    @Mutation('ADD_COMP') private ADD_COMP!: () => void;
     @Mutation('SET_CURRENT_SERVICE_GROUP') private SET_CURRENT_SERVICE_GROUP: any;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
@@ -160,8 +159,8 @@ limitations under the License. -->
       return current[current.length - 1].k;
     }
     private selectService(i: Option) {
-      this.SELECT_SERVICE({ service: i, duration: this.durationTime });
       if (!this.rocketComps.enableEvents) {
+        this.SELECT_SERVICE({ service: i, duration: this.durationTime });
         return;
       }
       // const refEvent = this.$refs.eventsRef as any;
@@ -177,11 +176,13 @@ limitations under the License. -->
           },
         },
         type: EntityType[0].key,
+      }).then(() => {
+        this.SELECT_SERVICE({ service: i, duration: this.durationTime });
       });
     }
     private selectEndpoint(i: Option) {
-      this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
       if (!this.rocketComps.enableEvents) {
+        this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
         return;
       }
       // const refEvent = this.$refs.eventsRef as any;
@@ -196,11 +197,13 @@ limitations under the License. -->
           },
         },
         type: EntityType[2].key,
+      }).then(() => {
+        this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
       });
     }
     private selectInstance(i: Option) {
-      this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
       if (!this.rocketComps.enableEvents) {
+        this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
         return;
       }
       // const refEvent = this.$refs.eventsRef as any;
@@ -215,6 +218,8 @@ limitations under the License. -->
           },
         },
         type: EntityType[3].key,
+      }).then(() => {
+        this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
       });
     }
     private searchServices(value: string) {

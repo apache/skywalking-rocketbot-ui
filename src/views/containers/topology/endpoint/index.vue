@@ -112,8 +112,8 @@ limitations under the License. -->
     private pageEventsType = PageEventsType;
 
     private selectEndpoint(i: Option) {
-      this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
       if (!this.rocketComps.enableEvents) {
+        this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
         return;
       }
       this.GET_EVENT({
@@ -126,6 +126,8 @@ limitations under the License. -->
           },
         },
         type: EntityType[2].key,
+      }).then(() => {
+        this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
       });
     }
 
