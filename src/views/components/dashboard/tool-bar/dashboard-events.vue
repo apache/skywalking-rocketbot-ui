@@ -258,7 +258,8 @@ limitations under the License. -->
       }
     }
 
-    private selectEvents(data: Event) {
+    private selectEvents(data: Event, e: any) {
+      window.event ? (window.event.cancelBubble = true) : e.stopPropagation();
       const index = this.selectedEvents.findIndex(
         (item: Event) => item.uuid === data.uuid && item.entityType === data.entityType,
       );
