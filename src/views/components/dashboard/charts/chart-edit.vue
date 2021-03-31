@@ -546,7 +546,7 @@ limitations under the License. -->
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .rk-chart-edit {
     margin: 0 -10px;
     height: 100%;
