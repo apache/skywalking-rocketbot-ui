@@ -15,30 +15,22 @@
  * limitations under the License.
  */
 
-import ChartBrief from './chart-brief.vue';
 import ChartNum from './chart-num.vue';
 import ChartLine from './chart-line.vue';
 import ChartArea from './chart-area.vue';
 import ChartBar from './chart-bar.vue';
 import ChartHeatmap from './chart-heatmap.vue';
 import ChartSlow from './chart-slow.vue';
-import ChartTrace from './chart-trace.vue';
-import ChartSankey from './chart-sankey.vue';
-import ChartInstance from './chart-instance.vue';
-import ChartCount from './chart-count.vue';
+import ChartTable from './chart-table.vue';
 import ChartEdit from './chart-edit.vue';
 
 export default {
-  ChartCount,
   ChartNum,
-  ChartBrief,
   ChartLine,
   ChartBar,
-  ChartInstance,
   ChartHeatmap,
   ChartSlow,
-  ChartTrace,
-  ChartSankey,
   ChartArea,
+  ChartTable,
   ChartEdit,
 };

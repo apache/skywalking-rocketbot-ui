@@ -200,6 +200,7 @@ const m = {
   Check more details on the Configuration Vocabulary page`,
   keywordsOfContentLogTips: 'Current storage of SkyWalking OAP server does not support this.',
   instanceAttributes: 'Instance Attributes',
+  value: 'Value',
 };
 
 export default m;
