@@ -215,6 +215,7 @@ const m = {
   eventsMessage: 'Event Message',
   eventsParameters: 'Event Parameters',
   eventDetail: 'Event Detail',
+  value: 'Value',
 };
 
 export default m;

@@ -74,4 +74,5 @@ export const ChartTypeOptions = [
   { value: 'ChartLine', label: 'Line Chart' },
   { value: 'ChartArea', label: 'Area Chart' },
   { value: 'ChartBar', label: 'Bar Chart' },
+  { value: 'ChartTable', label: 'Table Of Latest Values' },
 ];

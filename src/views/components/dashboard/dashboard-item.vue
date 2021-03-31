@@ -68,11 +68,12 @@ limitations under the License. -->
 
   import { QueryTypes, UpdateDashboardEvents } from './constant';
   import { TopologyType, ObjectsType } from '../../../constants/constant';
-  import { CalculationType, EntityType } from './charts/constant';
+  import { CalculationType } from './charts/constant';
   import { State as globalState } from '@/store/modules/global';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { Event } from '@/types/dashboard';
+  import { EntityType } from './charts/constant';
 
   @Component({
     components: { ...charts },
@@ -212,9 +213,12 @@ limitations under the License. -->
           this.chartSource[params.metricName] = values.map((item: { value: number }) =>
             this.aggregationValue({ data: item.value, type: aggregation, aggregationNum: Number(aggregationNum) }),
           );
+          return;
         }
         if (queryMetricType === QueryTypes.SortMetrics || queryMetricType === QueryTypes.ReadSampledRecords) {
           this.handleChartSlowData(resVal, aggregation, aggregationNum);
+
+          return;
         }
         if (queryMetricType === QueryTypes.READHEATMAP) {
           const nodes = [] as any;

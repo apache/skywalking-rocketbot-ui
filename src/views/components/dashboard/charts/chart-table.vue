@@ -14,27 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 
 <template>
-  <div class="rk-chart-count">
-    <div class="mb-10 pt-10 b">
-      <span class="mr-10">YoungGC Count</span>
-      <span class="count r">
-        {{
-          (data.instance_jvm_young_gc_count || []).reduce(function(preValue, curValue, index, array) {
-            return preValue + curValue;
-          }, 0)
-        }}
-      </span>
-    </div>
-    <div class="mb-10 pt-10 b">
-      <span class="mr-10">OldGC Count</span>
-      <span class="count r">
-        {{
-          (data.instance_jvm_old_gc_count || []).reduce(function(preValue, curValue, index, array) {
-            return preValue + curValue;
-          }, 0)
-        }}
-      </span>
-    </div>
+  <div class="rk-chart-table">
+    <table>
+      <tr>
+        <th>{{ $t('name') }}</th>
+        <th>{{ $t('value') }}</th>
+      </tr>
+      <tr v-for="key in dataKeys" :key="key">
+        <td>{{ key }}</td>
+        <td>{{ data[key][dataLength(data[key])] }}</td>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -43,19 +33,36 @@ limitations under the License. -->
   import { Component, Prop } from 'vue-property-decorator';
 
   @Component
-  export default class ChartCount extends Vue {
+  export default class ChartTable extends Vue {
     @Prop() private data!: any;
+
+    private get dataKeys() {
+      const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
+      return keys;
+    }
+
+    private dataLength(param: any[]) {
+      return param.length - 1 || 0;
+    }
   }
 </script>
-<style lang="scss">
-  .rk-chart-count {
-    padding-top: 15px;
-    .count {
-      padding: 0 5px;
-      display: inline-block;
-      background-color: #40454e;
-      color: #eee;
-      border-radius: 4px;
+<style lang="scss" scoped>
+  .rk-chart-table {
+    table {
+      width: 100%;
+      border-top: 1px solid #ccc;
+      border-right: 1px solid #ccc;
+    }
+    tr {
+      width: 100%;
+      border: 1px solid #ccc;
+    }
+    th,
+    td {
+      border-left: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+      width: 50%;
+      text-align: center;
     }
   }
 </style>

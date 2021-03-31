@@ -213,6 +213,7 @@ const m = {
   eventsMessage: '事件消息',
   eventsParameters: '事件参数',
   eventDetail: '事件详情',
+  value: '数值',
 };
 
 export default m;
