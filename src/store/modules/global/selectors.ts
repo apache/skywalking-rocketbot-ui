@@ -59,7 +59,9 @@ const mutations: MutationTree<State> = {
   },
   [types.SET_CURRENT_SERVICE](state: State, service: Option) {
     state.currentService = service;
-    state.updateDashboard = service;
+    if (state.pageType !== PageTypes.DASHBOARD) {
+      state.updateDashboard = service;
+    }
   },
 
   [types.UPDATE_DASHBOARD](state: State, param?: { key: string }) {
@@ -183,20 +185,27 @@ const actions: ActionTree<State, any> = {
       });
     });
     context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration }).then(() => {
+      if (context.state.pageType === PageTypes.DASHBOARD && !params.callback) {
+        context.commit('UPDATE_DASHBOARD', params.service);
+      }
       if (context.state.pageType !== PageTypes.DASHBOARD || !params.callback) {
         return;
       }
-      params.callback({
-        condition: {
-          time: params.duration,
-          size: 20,
-          source: {
-            service: params.service.label,
-            serviceInstance: context.state.currentInstance.label,
+      params
+        .callback({
+          condition: {
+            time: params.duration,
+            size: 20,
+            source: {
+              service: params.service.label,
+              serviceInstance: context.state.currentInstance.label,
+            },
           },
-        },
-        type: EntityType[1],
-      });
+          type: EntityType[1],
+        })
+        .then(() => {
+          context.commit('UPDATE_DASHBOARD', params.service);
+        });
     });
   },
   SELECT_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: State; rootState: any }, params: any) {

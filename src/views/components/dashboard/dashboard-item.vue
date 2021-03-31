@@ -104,24 +104,6 @@ limitations under the License. -->
     private itemConfig: any = {};
     private itemEvents: Event[] = [];
 
-    private eventsFilter() {
-      const allEvents = [
-        ...this.rocketData.serviceEvents,
-        ...this.rocketData.serviceInstanceEvents,
-        ...this.rocketData.endpointEvents,
-      ];
-
-      return allEvents.filter(
-        (item) =>
-          this.itemConfig.entityType === item.entityType &&
-          item.checked &&
-          ((item.source.service === this.rocketOption.currentService.label &&
-            (item.source.serviceInstance === this.rocketOption.currentInstance.label ||
-              item.source.endpoint === this.rocketOption.currentEndpoint.label)) ||
-            (item.entityType === EntityType[0].key && item.source.service === this.rocketOption.currentService.label)),
-      );
-    }
-
     private created() {
       this.status = this.item.metricType;
       this.title = this.item.title;
@@ -340,6 +322,24 @@ limitations under the License. -->
       } else {
         this.DELETE_COMP(index);
       }
+    }
+
+    private eventsFilter() {
+      const allEvents = [
+        ...this.rocketData.serviceEvents,
+        ...this.rocketData.serviceInstanceEvents,
+        ...this.rocketData.endpointEvents,
+      ];
+
+      return allEvents.filter(
+        (item) =>
+          this.itemConfig.entityType === item.entityType &&
+          item.checked &&
+          ((item.source.service === this.rocketOption.currentService.label &&
+            (item.source.serviceInstance === this.rocketOption.currentInstance.label ||
+              item.source.endpoint === this.rocketOption.currentEndpoint.label)) ||
+            (item.entityType === EntityType[0].key && item.source.service === this.rocketOption.currentService.label)),
+      );
     }
 
     // watch selectors and events

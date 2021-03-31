@@ -237,50 +237,68 @@ limitations under the License. -->
 
     private fetchEvents() {
       if (this.type === PageEventsType.DASHBOARD_EVENTS) {
-        this.GET_EVENT({
-          condition: {
-            time: this.durationTime,
-            size: 20,
-            source: {
-              service: this.stateDashboard.currentService.label,
-            },
-          },
-          type: EntityType[0].key,
+        Promise.all([this.fetchServiceEvents(), this.fetchInstanceEvents(), this.fetchEndpointEvents()]).then(() => {
+          this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
         });
+        return;
       }
-      if (this.type !== PageEventsType.TOPO_INSTANCE_EVENTS) {
-        this.GET_EVENT({
-          condition: {
-            time: this.durationTime,
-            size: 20,
-            source: {
-              service: this.stateDashboard.currentService.label,
-              endpoint: this.stateDashboard.currentEndpoint.label,
-            },
-          },
-          type: EntityType[2].key,
-        }).then(() => {
-          if (this.type === PageEventsType.DASHBOARD_EVENTS) {
-            return;
-          }
+      if (this.type === PageEventsType.TOPO_INSTANCE_EVENTS) {
+        this.fetchInstanceEvents().then(() => {
+          this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
+        });
+        return;
+      }
+      if (this.type === PageEventsType.TOPO_ENDPOINT_EVENTS) {
+        this.fetchEndpointEvents().then(() => {
           this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
         });
       }
-      if (this.type !== PageEventsType.TOPO_ENDPOINT_EVENTS) {
-        this.GET_EVENT({
-          condition: {
-            time: this.durationTime,
-            size: 20,
-            source: {
-              service: this.stateDashboard.currentService.label,
-              serviceInstance: this.stateDashboard.currentInstance.label,
-            },
+    }
+
+    private fetchServiceEvents() {
+      return this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: this.stateDashboard.currentService.label,
           },
-          type: EntityType[3].key,
-        }).then(() => {
-          this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
-        });
-      }
+        },
+        type: EntityType[0].key,
+      });
+    }
+
+    private fetchInstanceEvents() {
+      return this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: this.stateDashboard.currentService.label,
+            serviceInstance: this.stateDashboard.currentInstance.label,
+          },
+        },
+        type: EntityType[3].key,
+      });
+    }
+
+    private fetchEndpointEvents() {
+      return this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: this.stateDashboard.currentService.label,
+            endpoint: this.stateDashboard.currentEndpoint.label,
+          },
+        },
+        type: EntityType[2].key,
+      }).then(() => {
+        if (this.type === PageEventsType.DASHBOARD_EVENTS) {
+          return;
+        }
+        this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
+      });
     }
 
     private selectEvents(data: Event, e: any) {
@@ -350,14 +368,6 @@ limitations under the License. -->
       if (!this.checkAllEndpointEvents) {
         this.selectedEvents.push(...this.rocketComps.endpointEvents);
       }
-    }
-
-    @Watch('durationTime')
-    private watchDurationTime() {
-      if (!this.enableEvents) {
-        return;
-      }
-      this.fetchEvents();
     }
   }
 </script>
