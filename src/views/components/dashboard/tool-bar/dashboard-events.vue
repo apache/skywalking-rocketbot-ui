@@ -30,6 +30,7 @@ limitations under the License. -->
         <div class="series-type" v-show="type === pageEventsType.DASHBOARD_EVENTS">
           <label class="title">{{ $t('eventSeries') }}</label>
           <RkSelect
+            :mode="'multiple'"
             :current="rocketComps.currentSeriesType"
             :data="seriesTypes"
             @onChoose="(item) => changeSeriesType(item)"
@@ -141,7 +142,10 @@ limitations under the License. -->
     @Mutation('SET_ENABLE_EVENTS') private SET_ENABLE_EVENTS: any;
     @Mutation('SET_DASHBOARD_EVENTS') private SET_DASHBOARD_EVENTS: any;
     @Mutation('SET_EVENTS_PAGE_TYPE') private SET_EVENTS_PAGE_TYPE!: (type: string) => void;
-    @Mutation('SET_CURRENT_SERIES_TYPE') private SET_CURRENT_SERIES_TYPE!: (data: Option) => void;
+    @Mutation('SET_CURRENT_SERIES_TYPE') private SET_CURRENT_SERIES_TYPE!: (data: {
+      item: Option;
+      index: number;
+    }) => void;
     @Mutation('SET_CLEAR_SELECTED_EVENTS') private SET_CLEAR_SELECTED_EVENTS!: () => void;
     @Action('GET_EVENT') private GET_EVENT: any;
 
@@ -161,11 +165,11 @@ limitations under the License. -->
     private created() {
       this.SET_EVENTS_PAGE_TYPE(this.type);
       if (this.type === this.pageEventsType.DASHBOARD_EVENTS) {
-        this.SET_CURRENT_SERIES_TYPE(this.seriesTypes[0]);
+        this.SET_CURRENT_SERIES_TYPE({ item: this.seriesTypes[0], index: -1 });
       } else if (this.type === this.pageEventsType.TOPO_ENDPOINT_EVENTS) {
-        this.SET_CURRENT_SERIES_TYPE(this.seriesTypes[1]);
+        this.SET_CURRENT_SERIES_TYPE({ item: this.seriesTypes[1], index: -1 });
       } else {
-        this.SET_CURRENT_SERIES_TYPE(this.seriesTypes[2]);
+        this.SET_CURRENT_SERIES_TYPE({ item: this.seriesTypes[2], index: -1 });
       }
       this.updateAllChecked();
     }
@@ -199,15 +203,19 @@ limitations under the License. -->
     }
 
     private changeSeriesType(item: Option) {
-      this.SET_CURRENT_SERIES_TYPE(item);
+      const index = this.rocketComps.currentSeriesType.findIndex((d: Option) => item.key === d.key);
+
+      this.SET_CURRENT_SERIES_TYPE({ item, index });
       this.SET_CLEAR_SELECTED_EVENTS();
-      let selectedEvents: Event[] = [];
-      if (this.rocketComps.currentSeriesType.key === this.seriesTypes[0].key) {
-        selectedEvents = this.rocketComps.serviceEvents.slice(0, 3);
-      } else if (this.rocketComps.currentSeriesType.key === this.seriesTypes[1].key) {
-        selectedEvents = this.rocketComps.endpointEvents.slice(0, 3);
-      } else {
-        selectedEvents = this.rocketComps.serviceInstanceEvents.slice(0, 3);
+      const selectedEvents: Event[] = [];
+      for (const type of this.rocketComps.currentSeriesType) {
+        if (type.key === this.seriesTypes[0].key) {
+          selectedEvents.push(...this.rocketComps.serviceEvents.slice(0, 3));
+        } else if (type.key === this.seriesTypes[1].key) {
+          selectedEvents.push(...this.rocketComps.endpointEvents.slice(0, 3));
+        } else {
+          selectedEvents.push(...this.rocketComps.serviceInstanceEvents.slice(0, 3));
+        }
       }
       this.selectedEvents = selectedEvents.map((d: Event) => {
         d.checked = true;

@@ -37,7 +37,7 @@ export interface State {
   endpointEvents: Event[];
   enableEvents: boolean;
   eventsPageType: string;
-  currentSeriesType: Option;
+  currentSeriesType: Option[];
 }
 
 const initState: State = {
@@ -46,7 +46,7 @@ const initState: State = {
   serviceInstanceEvents: [],
   enableEvents: false,
   eventsPageType: PageEventsType.DASHBOARD_EVENTS,
-  currentSeriesType: { key: '', label: '' },
+  currentSeriesType: [],
   ...dashboardLayout.state,
 };
 
@@ -61,14 +61,10 @@ const mutations: MutationTree<any> = {
       if (index > 2) {
         return d;
       }
-      if (state.currentSeriesType.key === EntityType[0] && param.type === EntityType[0]) {
-        d.checked = true;
-      }
-      if (state.currentSeriesType.key === EntityType[2] && param.type === EntityType[2]) {
-        d.checked = true;
-      }
-      if (state.currentSeriesType.key === EntityType[1] && param.type === EntityType[1]) {
-        d.checked = true;
+      for (const item of state.currentSeriesType) {
+        if (item.key === param.type) {
+          d.checked = true;
+        }
       }
       return d;
     });
@@ -114,8 +110,12 @@ const mutations: MutationTree<any> = {
   [types.SET_EVENTS_PAGE_TYPE](state: State, type: string) {
     state.eventsPageType = type;
   },
-  [types.SET_CURRENT_SERIES_TYPE](state: State, data: Option) {
-    state.currentSeriesType = data;
+  [types.SET_CURRENT_SERIES_TYPE](state: State, data: { item: Option; index: number }) {
+    if (data.index > -1) {
+      state.currentSeriesType.splice(data.index, 1);
+    } else {
+      state.currentSeriesType.push(data.item);
+    }
   },
   [types.SET_CLEAR_SELECTED_EVENTS](state: State) {
     for (const item of [...state.serviceEvents, ...state.serviceInstanceEvents, ...state.endpointEvents]) {
