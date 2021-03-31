@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div class="event-list flex-h">
-    <div class="rk-dashboard-tool-btn" @click="() => (dialogEventVisible = true)" v-show="enableEvents">
+    <div class="rk-dashboard-tool-btn" @click="viewEventsList" v-show="enableEvents">
       <rk-icon class="lg" icon="settings" v-tooltip:left="{ content: $t('setEvent') }" />
     </div>
     <div class="rk-dashboard-tool-btn" @click="setEnbleEvents">
@@ -25,7 +25,7 @@ limitations under the License. -->
         v-tooltip:left="{ content: enableEvents ? $t('disableEvents') : $t('enableEvents') }"
       />
     </div>
-    <rk-sidebox width="1000px" :fixed="true" :show.sync="dialogEventVisible">
+    <rk-sidebox width="1000px" :fixed="true" :show.sync="dialogEventVisible" @closeSideboxCallback="updateEvents">
       <div class="config-box">
         <div class="series-type" v-show="type === pageEventsType.DASHBOARD_EVENTS">
           <label class="title">{{ $t('eventSeries') }}</label>
@@ -101,7 +101,7 @@ limitations under the License. -->
             </li>
           </ul>
         </div>
-        <div class="save-btn bg-blue" @click="updateEvent()">{{ $t('setEvent') }}</div>
+        <div class="save-btn bg-blue" @click="updateEvents">{{ $t('setEvent') }}</div>
       </div>
     </rk-sidebox>
     <rk-sidebox :width="'1000px'" :show.sync="showEventDetail" :title="$t('eventDetail')">
@@ -167,6 +167,30 @@ limitations under the License. -->
       } else {
         this.SET_CURRENT_SERIES_TYPE(this.seriesTypes[2]);
       }
+      this.updateAllChecked();
+    }
+
+    private viewEventsList() {
+      this.dialogEventVisible = true;
+      this.updateAllChecked();
+    }
+
+    private updateAllChecked() {
+      this.checkAllServiceEvents = this.checkAllEvents(this.rocketComps.serviceEvents);
+      this.checkAllEndpointEvents = this.checkAllEvents(this.rocketComps.endpointEvents);
+      this.checkAllInstanceEvents = this.checkAllEvents(this.rocketComps.serviceInstanceEvents);
+    }
+
+    private checkAllEvents(events: Event[]) {
+      if (!events.length) {
+        return false;
+      }
+      const selectedServiceEvents = events.filter((item: Event) => item.checked);
+      if (selectedServiceEvents.length === events.length) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     private viewEventDetail(event: Event) {
@@ -192,6 +216,7 @@ limitations under the License. -->
       this.SET_CHECKED_EVENTS(this.selectedEvents);
       this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
       this.selectedEvents = [];
+      this.updateAllChecked();
     }
 
     private setEnbleEvents() {
@@ -272,7 +297,7 @@ limitations under the License. -->
       }
     }
 
-    private updateEvent() {
+    private updateEvents() {
       this.SET_CHECKED_EVENTS(this.selectedEvents);
       this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
       this.selectedEvents = [];

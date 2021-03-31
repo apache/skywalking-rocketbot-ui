@@ -163,10 +163,6 @@ limitations under the License. -->
         this.SELECT_SERVICE({ service: i, duration: this.durationTime });
         return;
       }
-      // const refEvent = this.$refs.eventsRef as any;
-      // refEvent.checkAllServiceEvents = true;
-      // refEvent.checkAllInstanceEvents = false;
-      // refEvent.checkAllEndpointEvents = false;
       this.SELECT_SERVICE({ service: i, duration: this.durationTime, callback: this.GET_EVENT });
       this.GET_EVENT({
         condition: {
@@ -184,8 +180,6 @@ limitations under the License. -->
         this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
         return;
       }
-      // const refEvent = this.$refs.eventsRef as any;
-      // refEvent.checkAllEndpointEvents = false;
       this.GET_EVENT({
         condition: {
           time: this.durationTime,
@@ -205,8 +199,6 @@ limitations under the License. -->
         this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
         return;
       }
-      // const refEvent = this.$refs.eventsRef as any;
-      // refEvent.checkAllInstanceEvents = false;
       this.GET_EVENT({
         condition: {
           time: this.durationTime,

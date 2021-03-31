@@ -163,11 +163,11 @@ const actions: ActionTree<State, any> = {
   },
   SELECT_SERVICE(
     context: { commit: Commit; dispatch: Dispatch; state: State },
-    params: { service: Option; duration: DurationTime; callback: Function },
+    params: { service: Option; duration: DurationTime; callback?: any },
   ) {
     context.commit('SET_CURRENT_SERVICE', params.service);
     context.dispatch('GET_SERVICE_ENDPOINTS', {}).then(() => {
-      if (context.state.pageType !== PageTypes.DASHBOARD) {
+      if (context.state.pageType !== PageTypes.DASHBOARD || !params.callback) {
         return;
       }
       params.callback({
@@ -183,7 +183,7 @@ const actions: ActionTree<State, any> = {
       });
     });
     context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration }).then(() => {
-      if (context.state.pageType !== PageTypes.DASHBOARD) {
+      if (context.state.pageType !== PageTypes.DASHBOARD || !params.callback) {
         return;
       }
       params.callback({

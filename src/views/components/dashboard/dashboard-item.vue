@@ -104,20 +104,21 @@ limitations under the License. -->
     private itemConfig: any = {};
     private itemEvents: Event[] = [];
 
-    private get eventsFilter() {
-      return [
+    private eventsFilter() {
+      const allEvents = [
         ...this.rocketData.serviceEvents,
         ...this.rocketData.serviceInstanceEvents,
         ...this.rocketData.endpointEvents,
-      ].filter(
-        (event) =>
-          this.itemConfig.entityType === event.entityType &&
-          event.checked &&
-          ((event.source.service === this.rocketOption.currentService.label &&
-            (event.source.serviceInstance === this.rocketOption.currentInstance.label ||
-              event.source.endpoint === this.rocketOption.currentEndpoint.label)) ||
-            (event.entityType === EntityType[0].key &&
-              event.source.service === this.rocketOption.currentService.label)),
+      ];
+
+      return allEvents.filter(
+        (item) =>
+          this.itemConfig.entityType === item.entityType &&
+          item.checked &&
+          ((item.source.service === this.rocketOption.currentService.label &&
+            (item.source.serviceInstance === this.rocketOption.currentInstance.label ||
+              item.source.endpoint === this.rocketOption.currentEndpoint.label)) ||
+            (item.entityType === EntityType[0].key && item.source.service === this.rocketOption.currentService.label)),
       );
     }
 
@@ -128,7 +129,7 @@ limitations under the License. -->
       this.height = this.item.height;
       this.unit = this.item.unit;
       this.itemConfig = this.item;
-      this.itemEvents = this.eventsFilter;
+      this.itemEvents = this.eventsFilter();
       const types = [
         ObjectsType.UPDATE_INSTANCES,
         ObjectsType.UPDATE_ENDPOINTS,
@@ -344,7 +345,7 @@ limitations under the License. -->
     // watch selectors and events
     @Watch('rocketOption.updateDashboard')
     private watchCurrentSelectors() {
-      this.itemEvents = this.eventsFilter;
+      this.itemEvents = this.eventsFilter();
       if (this.rocketOption.updateDashboard.key.includes(UpdateDashboardEvents)) {
         return;
       }
