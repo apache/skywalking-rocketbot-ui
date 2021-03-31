@@ -223,9 +223,7 @@ limitations under the License. -->
       this.enableEvents = !this.enableEvents;
       this.SET_ENABLE_EVENTS(this.enableEvents);
       if (!this.enableEvents) {
-        this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[0].key });
-        this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[2].key });
-        this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[3].key });
+        this.clearAllEvents();
         this.checkAllServiceEvents = false;
         this.checkAllInstanceEvents = false;
         this.checkAllEndpointEvents = false;
@@ -233,6 +231,12 @@ limitations under the License. -->
         return;
       }
       this.fetchEvents();
+    }
+
+    private clearAllEvents() {
+      this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[0].key });
+      this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[2].key });
+      this.SET_DASHBOARD_EVENTS({ events: [], type: EntityType[3].key });
     }
 
     private fetchEvents() {
@@ -368,6 +372,11 @@ limitations under the License. -->
       if (!this.checkAllEndpointEvents) {
         this.selectedEvents.push(...this.rocketComps.endpointEvents);
       }
+    }
+
+    private beforeDestroy() {
+      this.clearAllEvents();
+      this.SET_ENABLE_EVENTS(false);
     }
   }
 </script>
