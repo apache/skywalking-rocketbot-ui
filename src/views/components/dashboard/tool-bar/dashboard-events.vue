@@ -166,6 +166,7 @@ limitations under the License. -->
       this.SET_EVENTS_PAGE_TYPE(this.type);
       if (this.type === this.pageEventsType.DASHBOARD_EVENTS) {
         this.SET_CURRENT_SERIES_TYPE({ item: this.seriesTypes[0], index: -1 });
+        this.SET_CURRENT_SERIES_TYPE({ item: this.seriesTypes[2], index: -1 });
       } else if (this.type === this.pageEventsType.TOPO_ENDPOINT_EVENTS) {
         this.SET_CURRENT_SERIES_TYPE({ item: this.seriesTypes[1], index: -1 });
       } else {
