@@ -205,7 +205,6 @@ limitations under the License. -->
         >
           <option :value="'DES'">{{ $t('descendOrder') }}</option>
           <option :value="'ASC'">{{ $t('increaseOrder') }}</option>
-          <!--                    <option :value="''" v-if="isBrowser">{{ $t('defaultOrder') }}</option>-->
         </select>
       </div>
       <div class="flex-h mb-5">
@@ -215,6 +214,27 @@ limitations under the License. -->
           class="rk-chart-edit-input long"
           :value="itemConfig.unit"
           @change="setItemConfig({ type: 'unit', value: $event.target.value })"
+        />
+      </div>
+      <div class="flex-h mb-5">
+        <div class="title grey sm">{{ $t('width') }}:</div>
+        <input
+          type="number"
+          min="1"
+          max="12"
+          class="rk-chart-edit-input long"
+          :value="itemConfig.width"
+          @change="setItemConfig({ type: 'width', value: $event.target.value })"
+        />
+      </div>
+      <div class="flex-h mb-5">
+        <div class="title grey sm">{{ $t('height') }}:</div>
+        <input
+          type="number"
+          min="1"
+          class="rk-chart-edit-input long"
+          :value="itemConfig.height"
+          @change="setItemConfig({ type: 'height', value: $event.target.value })"
         />
       </div>
       <div class="flex-h mb-5">
@@ -233,26 +253,33 @@ limitations under the License. -->
           @change="setItemConfig({ type: 'aggregationNum', value: $event.target.value })"
         />
       </div>
-      <div class="flex-h mb-5">
-        <div class="title grey sm">{{ $t('width') }}:</div>
+      <div class="flex-h mb-5" v-show="itemConfig.chartType === ChartTypeOptions[3].value">
+        <div class="title grey sm">{{ $t('tableHeader') }}:</div>
         <input
-          type="number"
-          min="1"
-          max="12"
+          type="text"
           class="rk-chart-edit-input long"
-          :value="itemConfig.width"
-          @change="setItemConfig({ type: 'width', value: $event.target.value })"
+          placeholder="col-1"
+          :value="itemConfig.tableHeaderCol1"
+          @change="setItemConfig({ type: 'tableHeaderCol1', value: $event.target.value })"
+        />
+        <input
+          type="text"
+          class="rk-chart-edit-input long"
+          placeholder="col-2"
+          :value="itemConfig.tableHeaderCol2"
+          @change="setItemConfig({ type: 'tableHeaderCol2', value: $event.target.value })"
         />
       </div>
-      <div class="flex-h">
-        <div class="title grey sm">{{ $t('height') }}:</div>
-        <input
-          type="number"
-          min="1"
-          class="rk-chart-edit-input long"
-          :value="itemConfig.height"
-          @change="setItemConfig({ type: 'height', value: $event.target.value })"
-        />
+      <div class="flex-h mb-5" v-show="itemConfig.chartType === ChartTypeOptions[3].value">
+        <div class="title grey sm">{{ $t('tableValues') }}:</div>
+        <select
+          class="long"
+          v-model="itemConfig.showTableValues"
+          @change="setItemConfig({ type: 'showTableValues', value: $event.target.value })"
+        >
+          <option :value="true">{{ $t('show') }}</option>
+          <option :value="false">{{ $t('hide') }}</option>
+        </select>
       </div>
     </div>
   </div>
@@ -262,8 +289,7 @@ limitations under the License. -->
   import Vue from 'vue';
   import { State, Getter, Mutation, Action } from 'vuex-class';
   import { Component, Prop, Watch } from 'vue-property-decorator';
-
-  import { TopologyType, ObjectsType } from '../../../../constants/constant';
+  import { TopologyType } from '@/constants/constant';
   import {
     EntityType,
     BrowserEntityType,
@@ -306,12 +332,21 @@ limitations under the License. -->
     private isLabel = false;
     private isIndependentSelector = false;
     private nameMetrics = ['sortMetrics', 'readSampledRecords'];
-    private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as any[];
+    private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as string[];
     private isChartType = false;
     private isReadSingleValue = false;
 
     private created() {
       this.itemConfig = this.item;
+      console.log(this.itemConfig);
+      this.initConfig();
+      if (!this.itemConfig.independentSelector || this.pageTypes.includes(this.type)) {
+        return;
+      }
+      this.setItemServices();
+    }
+
+    private initConfig() {
       this.isDatabase = this.pageTypes.includes(this.type)
         ? false
         : this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.DATABASE
@@ -328,10 +363,6 @@ limitations under the License. -->
       this.isIndependentSelector =
         this.rocketComps.tree[this.rocketComps.group].type === 'metric' || this.pageTypes.includes(this.type);
       this.isChartType = ['readMetricsValues', 'readLabeledMetricsValues'].includes(this.itemConfig.queryMetricType);
-      if (!this.itemConfig.independentSelector || this.pageTypes.includes(this.type)) {
-        return;
-      }
-      this.setItemServices();
     }
 
     private setItemConfig(params: { type: string; value: string }) {
@@ -353,59 +384,72 @@ limitations under the License. -->
         }
       }
       if (params.type === 'metricName') {
-        this.TYPE_METRICS({ name: params.value }).then((data: Array<{ typeOfMetrics: string }>) => {
-          if (!data.length) {
-            return;
-          }
-          if (data.length > 1) {
-            const length = data.filter((d: { typeOfMetrics: string }) => d.typeOfMetrics !== MetricsType.REGULAR_VALUE)
-              .length;
-            if (length) {
-              this.$emit('updateStatus', 'metricType', MetricsType.UNKNOWN);
-              return;
-            }
-          }
-          const { typeOfMetrics } = data[0];
-          this.$emit('updateStatus', 'metricType', typeOfMetrics);
-          this.queryMetricTypesList = QueryMetricTypes[typeOfMetrics] || [];
-          this.itemConfig.queryMetricType = this.queryMetricTypesList[0] && this.queryMetricTypesList[0].value;
-          this.isChartType = ['readMetricsValues', 'readLabeledMetricsValues'].includes(
-            this.itemConfig.queryMetricType,
-          );
-          this.isLabel = typeOfMetrics === MetricsType.LABELED_VALUE ? true : false;
-          const values = {
-            metricType: typeOfMetrics,
-            queryMetricType: this.itemConfig.queryMetricType,
-            chartType: MetricChartType[this.itemConfig.queryMetricType],
-            metricName: params.value,
-          };
-          if (this.type === this.pageTypes[0]) {
-            this.EDIT_TOPO_ENDPOINT_CONFIG({
-              index: this.index,
-              values,
-            });
-          } else if (this.type === this.pageTypes[1]) {
-            this.EDIT_TOPO_INSTANCE_CONFIG({
-              index: this.index,
-              values,
-            });
-          } else {
-            this.EDIT_COMP_CONFIG({
-              index: this.index,
-              values,
-            });
-          }
-          this.itemConfig = {
-            ...this.itemConfig,
-            ...values,
-          };
-        });
+        this.updateMetricName(params);
         return;
       }
       if (params.type === 'queryMetricType') {
+        this.updateQueryMetricType(params);
+        return;
+      }
+      if (params.type === 'independentSelector' || params.type === 'parentService') {
+        this.itemConfig[params.type] = params.value === 'true' ? true : false;
+        if (this.type === this.pageTypes[0]) {
+          this.EDIT_TOPO_ENDPOINT_CONFIG({
+            index: this.index,
+            values: { [params.type]: this.itemConfig[params.type] },
+          });
+        } else if (this.type === this.pageTypes[1]) {
+          this.EDIT_TOPO_INSTANCE_CONFIG({
+            index: this.index,
+            values: { [params.type]: this.itemConfig[params.type] },
+          });
+        } else {
+          this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: this.itemConfig[params.type] } });
+        }
+      }
+      if (params.type === 'aggregation' && ['milliseconds', 'seconds'].includes(this.itemConfig.aggregation)) {
+        this.updateAggregation(params);
+        return;
+      }
+      if (this.type === this.pageTypes[0]) {
+        this.EDIT_TOPO_ENDPOINT_CONFIG({
+          index: this.index,
+          values: { [params.type]: params.value },
+        });
+      } else if (this.type === this.pageTypes[1]) {
+        this.EDIT_TOPO_INSTANCE_CONFIG({
+          index: this.index,
+          values: { [params.type]: params.value },
+        });
+      } else {
+        this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: params.value } });
+      }
+    }
+
+    private updateMetricName(params: { type: string; value: string }) {
+      this.TYPE_METRICS({ name: params.value }).then((data: Array<{ typeOfMetrics: string }>) => {
+        if (!data.length) {
+          return;
+        }
+        if (data.length > 1) {
+          const length = data.filter((d: { typeOfMetrics: string }) => d.typeOfMetrics !== MetricsType.REGULAR_VALUE)
+            .length;
+          if (length) {
+            this.$emit('updateStatus', 'metricType', MetricsType.UNKNOWN);
+            return;
+          }
+        }
+        const { typeOfMetrics } = data[0];
+        this.$emit('updateStatus', 'metricType', typeOfMetrics);
+        this.queryMetricTypesList = QueryMetricTypes[typeOfMetrics] || [];
+        this.itemConfig.queryMetricType = this.queryMetricTypesList[0] && this.queryMetricTypesList[0].value;
+        this.isChartType = ['readMetricsValues', 'readLabeledMetricsValues'].includes(this.itemConfig.queryMetricType);
+        this.isLabel = typeOfMetrics === MetricsType.LABELED_VALUE ? true : false;
         const values = {
-          chartType: MetricChartType[params.value],
-          [params.type]: params.value,
+          metricType: typeOfMetrics,
+          queryMetricType: this.itemConfig.queryMetricType,
+          chartType: MetricChartType[this.itemConfig.queryMetricType],
+          metricName: params.value,
         };
         if (this.type === this.pageTypes[0]) {
           this.EDIT_TOPO_ENDPOINT_CONFIG({
@@ -427,55 +471,50 @@ limitations under the License. -->
           ...this.itemConfig,
           ...values,
         };
-        this.isChartType = ['readMetricsValues', 'readLabeledMetricsValues'].includes(this.itemConfig.queryMetricType);
-        return;
-      }
-      if (params.type === 'independentSelector' || params.type === 'parentService') {
-        this.itemConfig[params.type] = params.value === 'true' ? true : false;
-        if (this.type === this.pageTypes[0]) {
-          this.EDIT_TOPO_ENDPOINT_CONFIG({
-            index: this.index,
-            values: { [params.type]: this.itemConfig[params.type] },
-          });
-        } else if (this.type === this.pageTypes[1]) {
-          this.EDIT_TOPO_INSTANCE_CONFIG({
-            index: this.index,
-            values: { [params.type]: this.itemConfig[params.type] },
-          });
-        } else {
-          this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: this.itemConfig[params.type] } });
-        }
+      });
+    }
 
-        return;
-      }
-      if (params.type === 'aggregation' && ['milliseconds', 'seconds'].includes(this.itemConfig.aggregation)) {
-        const values = {
-          aggregationNum: 'YYYY-MM-DD HH:mm:ss',
-          [params.type]: params.value,
-        };
-        this.itemConfig = {
-          ...this.itemConfig,
-          ...values,
-        };
-        this.EDIT_COMP_CONFIG({
-          index: this.index,
-          values,
-        });
-        return;
-      }
+    private updateAggregation(params: { type: string; value: string }) {
+      const values = {
+        aggregationNum: 'YYYY-MM-DD HH:mm:ss',
+        [params.type]: params.value,
+      };
+      this.itemConfig = {
+        ...this.itemConfig,
+        ...values,
+      };
+      this.EDIT_COMP_CONFIG({
+        index: this.index,
+        values,
+      });
+    }
+
+    private updateQueryMetricType(params: { type: string; value: string }) {
+      const values = {
+        chartType: MetricChartType[params.value],
+        [params.type]: params.value,
+      };
       if (this.type === this.pageTypes[0]) {
         this.EDIT_TOPO_ENDPOINT_CONFIG({
           index: this.index,
-          values: { [params.type]: params.value },
+          values,
         });
       } else if (this.type === this.pageTypes[1]) {
         this.EDIT_TOPO_INSTANCE_CONFIG({
           index: this.index,
-          values: { [params.type]: params.value },
+          values,
         });
       } else {
-        this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: params.value } });
+        this.EDIT_COMP_CONFIG({
+          index: this.index,
+          values,
+        });
       }
+      this.itemConfig = {
+        ...this.itemConfig,
+        ...values,
+      };
+      this.isChartType = ['readMetricsValues', 'readLabeledMetricsValues'].includes(this.itemConfig.queryMetricType);
     }
 
     private setItemServices(update: boolean = false) {

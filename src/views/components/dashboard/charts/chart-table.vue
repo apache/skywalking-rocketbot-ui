@@ -48,6 +48,8 @@ limitations under the License. -->
 </script>
 <style lang="scss" scoped>
   .rk-chart-table {
+    height: 100%;
+    overflow: auto;
     table {
       width: 100%;
       border-top: 1px solid #ccc;
@@ -63,6 +65,8 @@ limitations under the License. -->
       border-bottom: 1px solid #ccc;
       width: 50%;
       text-align: center;
+      height: 20px;
+      line-height: 20px;
     }
   }
 </style>

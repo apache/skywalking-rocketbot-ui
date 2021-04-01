@@ -199,6 +199,10 @@ const m = {
   keywordsOfContentLogTips: 'SkyWalking OAP服务器的当前存储不支持此操作',
   instanceAttributes: '查看实例属性',
   value: '数值',
+  tableHeader: '表头名称',
+  tableValues: '表值',
+  show: '展示',
+  hide: '隐藏',
 };
 
 export default m;

@@ -201,6 +201,10 @@ const m = {
   keywordsOfContentLogTips: 'Current storage of SkyWalking OAP server does not support this.',
   instanceAttributes: 'Instance Attributes',
   value: 'Value',
+  tableHeader: 'Header Names',
+  tableValues: 'Table Values',
+  show: 'Show',
+  hide: 'Hide',
 };
 
 export default m;
