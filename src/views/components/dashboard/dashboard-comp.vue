@@ -51,8 +51,8 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
-  import { State, Mutation } from 'vuex-class';
+  import { Vue, Component, Prop } from 'vue-property-decorator';
+  import { Mutation } from 'vuex-class';
   import copy from '@/utils/copy';
 
   @Component

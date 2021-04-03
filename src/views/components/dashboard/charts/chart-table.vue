@@ -17,12 +17,12 @@ limitations under the License. -->
   <div class="rk-chart-table">
     <table>
       <tr>
-        <th>{{ $t('name') }}</th>
-        <th>{{ $t('value') }}</th>
+        <th>{{ item.tableHeaderCol1 || $t('name') }}</th>
+        <th>{{ item.tableHeaderCol2 || $t('value') }}</th>
       </tr>
       <tr v-for="key in dataKeys" :key="key">
         <td>{{ key }}</td>
-        <td>{{ data[key][dataLength(data[key])] }}</td>
+        <td v-show="item.showTableValues">{{ data[key][dataLength(data[key])] }}</td>
       </tr>
     </table>
   </div>
@@ -35,6 +35,7 @@ limitations under the License. -->
   @Component
   export default class ChartTable extends Vue {
     @Prop() private data!: any;
+    @Prop() private item: any;
 
     private get dataKeys() {
       const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
