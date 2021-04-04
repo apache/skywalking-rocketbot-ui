@@ -28,7 +28,7 @@ limitations under the License. -->
       </span>
     </div>
     <div class="rk-dashboard-item-body">
-      <div style="height:100%;">
+      <div style="height:100%; width:100%">
         <component
           :is="rocketGlobal.edit ? 'ChartEdit' : itemConfig.chartType"
           ref="chart"
