@@ -26,6 +26,9 @@ limitations under the License. -->
           <use xlink:href="#lock"></use>
         </svg>
       </span>
+      <span v-show="!rocketGlobal.edit && itemConfig.chartType === 'ChartTable'" @click="copyTable">
+        <rk-icon class="r cp" icon="review-list" />
+      </span>
     </div>
     <div class="rk-dashboard-item-body">
       <div style="height:100%; width:100%">
@@ -72,6 +75,7 @@ limitations under the License. -->
   import { CalculationType } from './charts/constant';
   import { State as globalState } from '@/store/modules/global';
   import { State as optionState } from '@/store/modules/global/selectors';
+  import copy from '@/utils/copy';
 
   @Component({
     components: { ...charts },
@@ -311,6 +315,18 @@ limitations under the License. -->
       if (type === 'unit') {
         this.unit = value;
       }
+    }
+
+    private copyTable() {
+      const data: any = {};
+      const keys = Object.keys(this.chartSource || {}).filter(
+        (i: any) => Array.isArray(this.chartSource[i]) && this.chartSource[i].length,
+      );
+      for (const key of keys) {
+        const index = this.chartSource[key].length - 1 || 0;
+        data[key] = this.chartSource[key][index];
+      }
+      copy(JSON.stringify(data));
     }
 
     private deleteItem(index: number) {

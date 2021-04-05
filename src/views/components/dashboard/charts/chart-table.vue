@@ -15,21 +15,21 @@ limitations under the License. -->
 
 <template>
   <div class="rk-chart-table">
-    <table ref="chartTable">
-      <tr>
-        <th :style="`width: ${nameWidth}px`">
+    <div ref="chartTable">
+      <div class="row flex-h" :style="`width: ${nameWidth + initWidth}px`">
+        <div class="name" :style="`width: ${nameWidth}px`">
           {{ item.tableHeaderCol1 || $t('name') }}
-          <span class="r cp" ref="draggerName"><rk-icon icon="settings_ethernet"/></span>
-        </th>
-        <th class="value-col">
+          <i class="r cp" ref="draggerName"><rk-icon icon="settings_ethernet"/></i>
+        </div>
+        <div class="value-col" v-if="showTableValues">
           {{ item.tableHeaderCol2 || $t('value') }}
-        </th>
-      </tr>
-      <tr v-for="key in dataKeys" :key="key">
-        <td :style="`width: ${nameWidth}px`">{{ key }}</td>
-        <td class="value-col" v-show="item.showTableValues">{{ data[key][dataLength(data[key])] }}</td>
-      </tr>
-    </table>
+        </div>
+      </div>
+      <div class="row flex-h" v-for="key in dataKeys" :key="key" :style="`width: ${nameWidth + initWidth}px`">
+        <div :style="`width: ${nameWidth}px`">{{ key }}</div>
+        <div class="value-col" v-if="showTableValues">{{ data[key][dataLength(data[key])] }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -43,19 +43,24 @@ limitations under the License. -->
     @Prop() private item: any;
 
     private nameWidth: number = 0;
-    // private initWidth: number = 0;
+    private initWidth: number = 0;
 
     private get dataKeys() {
       const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
       return keys;
     }
 
+    private get showTableValues() {
+      return this.item.showTableValues === 'true' || this.item.showTableValues === true ? true : false;
+    }
+
     private mounted() {
       const chartTable: any = this.$refs.chartTable;
-      this.nameWidth = chartTable.offsetWidth / 2;
-      // this.initWidth = chartTable.offsetWidth / 2;
+      const width = this.showTableValues ? chartTable.offsetWidth / 2 : chartTable.offsetWidth;
+      this.initWidth = this.showTableValues ? chartTable.offsetWidth / 2 : 0;
+      this.nameWidth = width - 5;
       const drag: any = this.$refs.draggerName;
-      drag.onmousedown = (event: any) => {
+      drag.onmousedown = (event: MouseEvent) => {
         const diffX = event.clientX;
         const copy = this.nameWidth;
         document.onmousemove = (documentEvent) => {
@@ -79,21 +84,30 @@ limitations under the License. -->
     height: 100%;
     width: 100%;
     overflow: auto;
-    table {
-      border-top: 1px solid #ccc;
-      border-right: 1px solid #ccc;
-      overflow: auto;
+    .name {
+      padding-left: 15px;
     }
-    tr {
-      border: 1px solid #ccc;
-    }
-    th,
-    td {
+    .row {
       border-left: 1px solid #ccc;
-      border-bottom: 1px solid #ccc;
-      text-align: center;
       height: 20px;
-      line-height: 20px;
+      div {
+        border-right: 1px solid #ccc;
+        text-align: center;
+        height: 20px;
+        line-height: 20px;
+        display: inline-block;
+      }
+      div:last-child {
+        border-bottom: 1px solid #ccc;
+      }
+      div:nth-last-child(2) {
+        border-bottom: 1px solid #ccc;
+      }
+    }
+    .row:first-child {
+      div {
+        border-top: 1px solid #ccc;
+      }
     }
     .value-col {
       width: 50%;

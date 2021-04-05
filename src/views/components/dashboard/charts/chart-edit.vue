@@ -338,7 +338,6 @@ limitations under the License. -->
 
     private created() {
       this.itemConfig = this.item;
-      console.log(this.itemConfig);
       this.initConfig();
       if (!this.itemConfig.independentSelector || this.pageTypes.includes(this.type)) {
         return;
