@@ -351,7 +351,7 @@ limitations under the License. -->
         ...this.rocketData.endpointEvents,
       ];
 
-      let events = allEvents.filter(
+      return allEvents.filter(
         (item) =>
           this.itemConfig.entityType === item.entityType &&
           item.checked &&
@@ -360,24 +360,6 @@ limitations under the License. -->
               item.source.endpoint === this.rocketOption.currentEndpoint.label)) ||
             (item.entityType === EntityType[0].key && item.source.service === this.rocketOption.currentService.label)),
       );
-      events = events.filter((d: Event, index: number) => index < this.setEventsLength());
-
-      return events;
-    }
-
-    private setEventsLength() {
-      const body: any = this.$refs.chartBody;
-      if (!body) {
-        return 0;
-      }
-      const keys = Object.keys(this.chartSource || {}).filter(
-        (i: any) => Array.isArray(this.chartSource[i]) && this.chartSource[i].length,
-      );
-      const startP = keys.length > 1 ? 50 : 15;
-      const endP = keys.length > 1 ? 0 : 40;
-      const eventNum = parseInt(String((body.offsetHeight - startP - endP) / 10), 10);
-
-      return eventNum;
     }
 
     // watch selectors and events
