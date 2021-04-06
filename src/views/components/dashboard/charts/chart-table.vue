@@ -15,16 +15,21 @@ limitations under the License. -->
 
 <template>
   <div class="rk-chart-table">
-    <table>
-      <tr>
-        <th>{{ $t('name') }}</th>
-        <th>{{ $t('value') }}</th>
-      </tr>
-      <tr v-for="key in dataKeys" :key="key">
-        <td>{{ key }}</td>
-        <td>{{ data[key][dataLength(data[key])] }}</td>
-      </tr>
-    </table>
+    <div ref="chartTable">
+      <div class="row flex-h" :style="`width: ${nameWidth + initWidth}px`">
+        <div class="name" :style="`width: ${nameWidth}px`">
+          {{ item.tableHeaderCol1 || $t('name') }}
+          <i class="r cp" ref="draggerName"><rk-icon icon="settings_ethernet"/></i>
+        </div>
+        <div class="value-col" v-if="showTableValues">
+          {{ item.tableHeaderCol2 || $t('value') }}
+        </div>
+      </div>
+      <div class="row flex-h" v-for="key in dataKeys" :key="key" :style="`width: ${nameWidth + initWidth}px`">
+        <div :style="`width: ${nameWidth}px`">{{ key }}</div>
+        <div class="value-col" v-if="showTableValues">{{ data[key][dataLength(data[key])] }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -35,34 +40,77 @@ limitations under the License. -->
   @Component
   export default class ChartTable extends Vue {
     @Prop() private data!: any;
+    @Prop() private item: any;
+
+    private nameWidth: number = 0;
+    private initWidth: number = 0;
 
     private get dataKeys() {
       const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
       return keys;
     }
 
-    private dataLength(param: any[]) {
+    private get showTableValues() {
+      return this.item.showTableValues === 'true' || this.item.showTableValues === true ? true : false;
+    }
+
+    private mounted() {
+      const chartTable: any = this.$refs.chartTable;
+      const width = this.showTableValues ? chartTable.offsetWidth / 2 : chartTable.offsetWidth;
+      this.initWidth = this.showTableValues ? chartTable.offsetWidth / 2 : 0;
+      this.nameWidth = width - 5;
+      const drag: any = this.$refs.draggerName;
+      drag.onmousedown = (event: MouseEvent) => {
+        const diffX = event.clientX;
+        const copy = this.nameWidth;
+        document.onmousemove = (documentEvent) => {
+          const moveX = documentEvent.clientX - diffX;
+          this.nameWidth = copy + moveX;
+        };
+        document.onmouseup = () => {
+          document.onmousemove = null;
+          document.onmouseup = null;
+        };
+      };
+    }
+
+    private dataLength(param: number[]) {
       return param.length - 1 || 0;
     }
   }
 </script>
 <style lang="scss" scoped>
   .rk-chart-table {
-    table {
-      width: 100%;
-      border-top: 1px solid #ccc;
-      border-right: 1px solid #ccc;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    .name {
+      padding-left: 15px;
     }
-    tr {
-      width: 100%;
-      border: 1px solid #ccc;
-    }
-    th,
-    td {
+    .row {
       border-left: 1px solid #ccc;
-      border-bottom: 1px solid #ccc;
+      height: 20px;
+      div {
+        border-right: 1px solid #ccc;
+        text-align: center;
+        height: 20px;
+        line-height: 20px;
+        display: inline-block;
+      }
+      div:last-child {
+        border-bottom: 1px solid #ccc;
+      }
+      div:nth-last-child(2) {
+        border-bottom: 1px solid #ccc;
+      }
+    }
+    .row:first-child {
+      div {
+        border-top: 1px solid #ccc;
+      }
+    }
+    .value-col {
       width: 50%;
-      text-align: center;
     }
   }
 </style>
