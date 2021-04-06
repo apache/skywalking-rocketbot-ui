@@ -110,7 +110,7 @@ limitations under the License. -->
   import TraceSelect from '../common/trace-select.vue';
   import { State as traceState } from '@/store/modules/trace/index';
   import { State as globalState } from '@/store/modules/global/index';
-  import dateFormatStep from '@/utils/dateFormatStep';
+  import dateFormatStep from '@/utils/dateFormat';
 
   @Component({ components: { TraceSelect } })
   export default class TraceSearch extends Vue {

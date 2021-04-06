@@ -16,7 +16,7 @@ limitations under the License. -->
 <template>
   <div style="height: 100%">
     <div class="rk-dashboard-bar flex-h">
-      <span class="flex-h">
+      <div class="flex-h">
         <div class="rk-dashboard-bar-btn">
           <span v-tooltip:bottom="{ content: rocketGlobal.edit ? 'view' : 'edit' }">
             <svg
@@ -45,60 +45,91 @@ limitations under the License. -->
             </svg>
           </span>
         </div>
-      </span>
-      <ToolBarSelect :selectable="false" :title="$t('currentService')" :current="current" icon="package" />
-      <ToolBarSelect
-        @onChoose="selectInstance"
-        :title="$t('currentInstance')"
-        :current="stateDashboardOption.currentInstance"
-        :data="stateDashboardOption.instances"
-        icon="disk"
-      />
+      </div>
+      <div class="rk-dashboard-bar-tool flex-h">
+        <div class="flex-h">
+          <ToolBarSelect :selectable="false" :title="$t('currentService')" :current="current" icon="package" />
+          <ToolBarSelect
+            @onChoose="selectInstance"
+            :title="$t('currentInstance')"
+            :current="stateDashboardOption.currentInstance"
+            :data="stateDashboardOption.instances"
+            icon="disk"
+          />
+        </div>
+        <DashboardEvent
+          :rocketComps="rocketComps"
+          :stateDashboard="stateDashboardOption"
+          :durationTime="durationTime"
+          :type="pageEventsType.TOPO_INSTANCE_EVENTS"
+        />
+      </div>
     </div>
     <instances-survey :instanceComps="instanceComps" :updateObjects="updateObjects" />
   </div>
 </template>
 
 <script lang="ts">
+  import Vue from 'vue';
+  import { Component, Prop } from 'vue-property-decorator';
+  import { Action, Getter, State, Mutation } from 'vuex-class';
   import InstancesSurvey from './instances-survey.vue';
   import ToolBarSelect from '@/views/components/dashboard/tool-bar/tool-bar-select.vue';
   import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar/tool-bar-endpoint-select.vue';
-  import Vue from 'vue';
-  import { Component, PropSync, Watch, Prop } from 'vue-property-decorator';
-  import { Action, Getter, State, Mutation } from 'vuex-class';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
-  import { ObjectsType } from '../../../../constants/constant';
-
-  interface Instance {
-    label: string;
-    key: string;
-    name?: string;
-  }
+  import { ObjectsType } from '@/constants/constant';
+  import { EntityType } from '@/views/components/dashboard/charts/constant';
+  import { DurationTime, Option } from '@/types/global';
+  import { State as optionState } from '@/store/modules/global/selectors';
+  import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
+  import { State as rocketbotGlobal } from '@/store/modules/global';
+  import DashboardEvent from '@/views/components/dashboard/tool-bar/dashboard-events.vue';
+  import { PageEventsType } from '@/constants/constant';
 
   @Component({
     components: {
       InstancesSurvey,
       ToolBarSelect,
       ToolBarEndpointSelect,
+      DashboardEvent,
     },
   })
   export default class WindowInstance extends Vue {
-    @State('rocketOption') private stateDashboardOption!: any;
-    @State('rocketData') private rocketComps!: any;
-    @State('rocketbot') private rocketGlobal: any;
-    @Getter('durationTime') private durationTime: any;
-    @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
-    @Action('GET_SERVICE_INSTANCES') private GET_SERVICE_INSTANCES: any;
-    @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
-    @Mutation('SET_EDIT') private SET_EDIT: any;
-    @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Prop() private current!: { key: number | string; label: number | string };
     @Prop() private instanceComps: any;
     @Prop() private updateObjects!: string;
+    @State('rocketOption') private stateDashboardOption!: optionState;
+    @State('rocketData') private rocketComps!: rocketData;
+    @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
+    @Getter('durationTime') private durationTime!: DurationTime;
+    @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
+    @Action('GET_SERVICE_INSTANCES') private GET_SERVICE_INSTANCES: any;
+    @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
+    @Action('GET_EVENT') private GET_EVENT: any;
+    @Mutation('SET_EDIT') private SET_EDIT: any;
+    @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
 
-    private selectInstance(i: any) {
-      this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
+    private pageEventsType = PageEventsType;
+
+    private selectInstance(i: Option) {
+      if (!this.rocketComps.enableEvents) {
+        this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
+        return;
+      }
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: this.stateDashboardOption.currentService.label,
+            serviceInstance: i.label,
+          },
+        },
+        type: EntityType[3].key,
+      }).then(() => {
+        this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
+      });
     }
 
     private beforeMount() {
@@ -136,6 +167,15 @@ limitations under the License. -->
 </script>
 
 <style lang="scss" scoped>
+  .rk-dashboard-bar-tool {
+    width: calc(100% - 160px);
+    justify-content: space-between;
+  }
+  .rk-dashboard-bar {
+    flex-shrink: 0;
+    color: #efefef;
+    background-color: #333840;
+  }
   .rk-dashboard-bar-btn {
     padding: 0 5px;
     border-right: 2px solid #252a2f;

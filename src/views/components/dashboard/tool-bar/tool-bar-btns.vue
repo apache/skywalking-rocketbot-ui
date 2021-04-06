@@ -15,39 +15,25 @@ limitations under the License. -->
 
 <template>
   <div class="flex-h btn-box">
-    <div class="rk-dashboard-bar-btn">
-      <span v-tooltip:bottom="{ content: rocketGlobal.edit ? 'view' : 'edit' }">
-        <svg
-          class="icon lg vm cp rk-btn ghost"
-          :style="`color:${!rocketGlobal.edit ? '' : '#ffc107'}`"
-          @click="handleSetEdit"
-        >
-          <use :xlink:href="!rocketGlobal.edit ? '#lock' : '#lock-open'"></use>
-        </svg>
-      </span>
+    <div class="rk-dashboard-bar-btn" @click="handleSetEdit">
+      <rk-icon
+        class="lg"
+        :style="`color:${!rocketGlobal.edit ? '' : '#ffc107'}`"
+        :icon="!rocketGlobal.edit ? 'lock' : 'lock-open'"
+        v-tooltip:bottom="{ content: rocketGlobal.edit ? 'view' : 'edit' }"
+      />
     </div>
-    <div class="rk-dashboard-bar-btn">
-      <span v-tooltip:bottom="{ content: 'import' }">
-        <input id="tool-bar-file" type="file" name="file" title="" accept=".json" @change="importData" />
-        <label class="rk-btn ghost input-label" for="tool-bar-file">
-          <svg class="icon lg vm cp " :style="`marginTop: 0px`">
-            <use :xlink:href="'#folder_open'"></use>
-          </svg>
-        </label>
-      </span>
+    <div class="rk-dashboard-bar-btn" v-tooltip:bottom="{ content: 'import' }">
+      <input id="tool-bar-file" type="file" name="file" title="" accept=".json" @change="importData" />
+      <label for="tool-bar-file">
+        <rk-icon class="lg import" icon="folder_open" />
+      </label>
     </div>
-    <div class="rk-dashboard-bar-btn">
-      <span v-tooltip:bottom="{ content: 'export' }">
-        <svg class="icon lg vm cp rk-btn ghost" @click="exportData">
-          <use :xlink:href="'#save_alt'"></use>
-        </svg>
-      </span>
+    <div class="rk-dashboard-bar-btn" @click="exportData">
+      <rk-icon class="lg" icon="save_alt" v-tooltip:bottom="{ content: 'export' }" />
     </div>
-
-    <div class="rk-dashboard-bar-btn">
-      <svg class="icon lg vm cp rk-btn ghost" @click="handleOption">
-        <use xlink:href="#retry"></use>
-      </svg>
+    <div class="rk-dashboard-bar-btn" @click="handleOption">
+      <rk-icon class="lg" icon="retry" v-tooltip:bottom="{ content: 'auto' }" />
     </div>
   </div>
 </template>
@@ -57,15 +43,17 @@ limitations under the License. -->
   import { Action, Mutation } from 'vuex-class';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
-  @Component({})
+  import { DurationTime } from '@/types/global';
+  import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
+  import { State as rocketGlobal } from '@/store/modules/global';
+  import { PageTypes } from '@/constants/constant';
+
+  @Component
   export default class ToolBarBtns extends Vue {
-    @Prop() private compType!: any;
-    @Prop() private dashboardType!: any;
-    @Prop() private rocketGlobal!: any;
-    @Prop() private rocketComps!: any;
-    @Prop() private durationTime!: any;
-    @Prop() private rocketOption: any;
-    @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
+    @Prop() private compType!: string;
+    @Prop() private rocketGlobal!: rocketGlobal;
+    @Prop() private rocketComps!: rocketData;
+    @Prop() private durationTime!: DurationTime;
     @Mutation('IMPORT_TREE') private IMPORT_TREE: any;
     @Action('SET_EDIT') private SET_EDIT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
@@ -74,13 +62,16 @@ limitations under the License. -->
       return this.MIXHANDLE_GET_OPTION({
         compType: this.compType,
         duration: this.durationTime,
+        pageType: PageTypes.DASHBOARD,
         keywordServiceName:
           this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].serviceGroup,
       });
     }
+
     private handleSetEdit() {
       this.SET_EDIT(!this.rocketGlobal.edit);
     }
+
     private async importData(event: any) {
       try {
         const data: any = await readFile(event);
@@ -110,9 +101,10 @@ limitations under the License. -->
 
 <style lang="scss" scoped>
   .rk-dashboard-bar-btn {
-    padding: 0 5px;
+    padding: 0 8px;
     border-right: 2px solid #252a2f;
     height: 19px;
+    cursor: pointer;
   }
   #tool-bar-file {
     display: none;
@@ -120,8 +112,13 @@ limitations under the License. -->
   .input-label {
     display: inline;
     line-height: inherit;
+    cursor: pointer;
   }
   .btn-box {
     height: 58px;
+  }
+  .import {
+    margin-top: 0;
+    cursor: pointer;
   }
 </style>

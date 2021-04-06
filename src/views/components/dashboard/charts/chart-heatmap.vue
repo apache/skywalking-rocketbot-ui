@@ -64,6 +64,7 @@ limitations under the License. -->
           formatter: (a: any) => `${a.data[1] * 100}${this.item.unit}  [ ${a.data[2]} ]`,
           textStyle: {
             fontSize: 13,
+            color: '#ccc',
           },
         },
         grid: {

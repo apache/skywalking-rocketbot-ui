@@ -63,8 +63,7 @@ limitations under the License. -->
   import { Component, Prop } from 'vue-property-decorator';
   import { Mutation, Action, Getter } from 'vuex-class';
   import { DASHBOARDTYPE } from './constant';
-  import { readFile } from '@/utils/readFile';
-  import { saveFile } from '@/utils/saveFile';
+  import { PageTypes } from '@/constants/constant';
 
   @Component({})
   export default class ToolGroup extends Vue {
@@ -118,6 +117,7 @@ limitations under the License. -->
         compType: this.compType,
         duration: this.durationTime,
         keywordServiceName: serviceGroup,
+        pageType: PageTypes.DASHBOARD,
       });
     }
     private handleHide() {

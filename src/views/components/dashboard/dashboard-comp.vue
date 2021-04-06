@@ -17,7 +17,7 @@ limitations under the License. -->
     <nav class="rk-dashboard-comp-nav mb-15">
       <a
         class="rk-dashboard-comp-nav-i b mr-20"
-        v-if="value.length"
+        v-show="value.length"
         @click="
           current = key;
           configMode = false;

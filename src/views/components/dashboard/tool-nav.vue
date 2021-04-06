@@ -19,15 +19,9 @@ limitations under the License. -->
       :key="index"
       class="mr-20"
     >
-      <a
-        class="rk-dashboard-nav-i b"
-        @click="
-          SET_CURRENT_COMPS(index);
-          RUN_EVENTS({});
-        "
-        :class="{ active: rocketComps.current == index }"
-        >{{ i.name }}</a
-      >
+      <a class="rk-dashboard-nav-i b" @click="changeComps(index)" :class="{ active: rocketComps.current == index }">{{
+        i.name
+      }}</a>
       <svg
         v-if="rocketGlobal.edit && rocketComps.current !== index"
         class="ml-5 icon cp red vm"
@@ -44,50 +38,28 @@ limitations under the License. -->
         <div class="mb-10 vm">{{ $t('createTab') }}</div>
         <div class="sm grey mb-5 mr-10">{{ $t('tabName') }}</div>
         <input class="mb-5 rk-dashboard-nav-input" type="text" v-model="name" />
-        <!-- <div class="sm grey mb-5 mr-10">{{ $t('template') }}</div>
-        <label class="dib mb-5 mr-10 sm"
-          ><input type="radio" v-model="template" value="nouse" />{{ $t('nouse') }}</label
-        >
-        <label class="dib mb-5 mr-10 sm"
-          ><input type="radio" v-model="template" value="global" />{{ $t('global') }}</label
-        >
-        <label class="dib mb-5 mr-10 sm" v-if="type === 'service'"
-          ><input type="radio" v-model="template" value="service" />{{ $t('service') }}</label
-        >
-        <label class="dib mb-5 mr-10 sm" v-if="type === 'service'"
-          ><input type="radio" v-model="template" value="endpoint" />{{ $t('endpoint') }}</label
-        >
-        <label class="dib mb-5 mr-10 sm" v-if="type === 'service'"
-          ><input type="radio" v-model="template" value="instance" />{{ $t('instance') }}</label
-        >
-        <label class="dib mb-5 mr-10 sm" v-if="type === 'database'"
-          ><input type="radio" v-model="template" value="database" />{{ $t('database') }}</label
-        > -->
         <a class="rk-btn r vm long tc confirm" @click="handleCreate">{{ $t('confirm') }}</a>
       </div>
     </a>
     <a class="rk-dashboard-import mr-10">
       <input id="tool-nav-file" class="ipt" type="file" name="file" title="" accept=".json" @change="importData" />
       <label for="tool-nav-file" class="input-label">
-        <svg class="icon open vm">
-          <use xlink:href="#folder_open"></use>
-        </svg>
+        <rk-icon class="open vm" icon="folder_open" />
       </label>
     </a>
-    <a>
-      <svg class="icon vm" @click="exportData">
-        <use xlink:href="#save_alt"></use>
-      </svg>
+    <a class="mr-10" @click="exportData">
+      <rk-icon icon="save_alt" />
     </a>
   </nav>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
-  import { Component, Prop, Model } from 'vue-property-decorator';
-  import { State, Mutation, Action } from 'vuex-class';
+  import { Component, Prop } from 'vue-property-decorator';
+  import { Getter, Mutation, Action } from 'vuex-class';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
+  import { DASHBOARDTYPE } from './constant';
 
   @Component
   export default class ToolNav extends Vue {
@@ -98,9 +70,11 @@ limitations under the License. -->
     @Mutation('DELETE_COMPS_TREE') private DELETE_COMPS_TREE: any;
     @Mutation('ADD_COMPS_TREE') private ADD_COMPS_TREE: any;
     @Action('RUN_EVENTS') private RUN_EVENTS: any;
+    @Getter('durationTime') private durationTime: any;
     private name: string = '';
-    // private template: string = 'nouse';
     private show: boolean = false;
+    private dashboardType = DASHBOARDTYPE;
+
     get type() {
       return this.rocketComps.tree[this.rocketComps.group].type;
     }
@@ -114,7 +88,10 @@ limitations under the License. -->
       }
       this.ADD_COMPS_TREE({ name: this.name });
       this.handleHide();
-      // this.template = 'nouse';
+    }
+    private changeComps(index: number) {
+      this.SET_CURRENT_COMPS(index);
+      this.RUN_EVENTS({});
     }
     private async importData(event: any) {
       try {
