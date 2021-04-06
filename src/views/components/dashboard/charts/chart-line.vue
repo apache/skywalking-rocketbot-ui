@@ -33,7 +33,7 @@ limitations under the License. -->
     get option() {
       const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
       const startP = keys.length > 1 ? 50 : 15;
-      const diff = 15;
+      const diff = 10;
       const markAreas = (this.itemEvents || []).map((event: Event, index: number) => {
         return [
           {

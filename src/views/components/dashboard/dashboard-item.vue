@@ -22,10 +22,10 @@ limitations under the License. -->
       <span v-show="unit"> ( {{ unit }} ) </span>
       <span v-show="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
       <span v-show="!rocketGlobal.edit && !pageTypes.includes(type)" @click="editComponentConfig">
-        <rk-icon class="r edit" icon="settings_ethernet" v-tooltip:bottom="{ content: $t('editConfig') }" />
+        <rk-icon class="r edit" icon="keyboard_control" v-tooltip:bottom="{ content: $t('editConfig') }" />
       </span>
     </div>
-    <div class="rk-dashboard-item-body">
+    <div class="rk-dashboard-item-body" ref="chartBody">
       <div style="height:100%;">
         <component
           :is="rocketGlobal.edit ? 'ChartEdit' : itemConfig.chartType"
@@ -335,7 +335,7 @@ limitations under the License. -->
         ...this.rocketData.endpointEvents,
       ];
 
-      return allEvents.filter(
+      let events = allEvents.filter(
         (item) =>
           this.itemConfig.entityType === item.entityType &&
           item.checked &&
@@ -344,6 +344,24 @@ limitations under the License. -->
               item.source.endpoint === this.rocketOption.currentEndpoint.label)) ||
             (item.entityType === EntityType[0].key && item.source.service === this.rocketOption.currentService.label)),
       );
+      events = events.filter((d: Event, index: number) => index < this.setEventsLength());
+
+      return events;
+    }
+
+    private setEventsLength() {
+      const body: any = this.$refs.chartBody;
+      if (!body) {
+        return 0;
+      }
+      const keys = Object.keys(this.chartSource || {}).filter(
+        (i: any) => Array.isArray(this.chartSource[i]) && this.chartSource[i].length,
+      );
+      const startP = keys.length > 1 ? 50 : 15;
+      const endP = keys.length > 1 ? 0 : 40;
+      const eventNum = parseInt(String((body.offsetHeight - startP - endP) / 10), 10);
+
+      return eventNum;
     }
 
     // watch selectors and events
