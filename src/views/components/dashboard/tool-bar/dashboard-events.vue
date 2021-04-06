@@ -404,6 +404,9 @@ limitations under the License. -->
 
     @Watch('durationTime')
     private watchDurationTime() {
+      if (!this.enableEvents) {
+        return;
+      }
       this.fetchEvents();
     }
   }
