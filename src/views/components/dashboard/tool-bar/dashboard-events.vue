@@ -147,6 +147,7 @@ limitations under the License. -->
       index: number;
     }) => void;
     @Mutation('SET_CLEAR_SELECTED_EVENTS') private SET_CLEAR_SELECTED_EVENTS!: () => void;
+    @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Action('GET_EVENT') private GET_EVENT: any;
 
     private dialogEventVisible: boolean = false;
@@ -163,6 +164,18 @@ limitations under the License. -->
     private eventsDetailHeaders = EventsDetailHeaders;
 
     private created() {
+      this.initEvents();
+      this.SET_EVENTS([
+        () => {
+          if (!this.enableEvents) {
+            return;
+          }
+          this.fetchEvents();
+        },
+      ]);
+    }
+
+    private initEvents() {
       this.SET_EVENTS_PAGE_TYPE(this.type);
       if (this.type === this.pageEventsType.DASHBOARD_EVENTS) {
         this.SET_CURRENT_SERIES_TYPE({ item: this.seriesTypes[0], index: -1 });
@@ -386,6 +399,12 @@ limitations under the License. -->
     private beforeDestroy() {
       this.clearAllEvents();
       this.SET_ENABLE_EVENTS(false);
+      this.SET_EVENTS([]);
+    }
+
+    @Watch('durationTime')
+    private watchDurationTime() {
+      this.fetchEvents();
     }
   }
 </script>
