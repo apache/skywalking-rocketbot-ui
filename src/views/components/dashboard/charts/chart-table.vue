@@ -16,7 +16,7 @@ limitations under the License. -->
 <template>
   <div class="rk-chart-table">
     <div ref="chartTable">
-      <div class="row flex-h" :style="`width: ${nameWidth + initWidth}px`">
+      <div class="row header flex-h" :style="`width: ${nameWidth + initWidth}px`">
         <div class="name" :style="`width: ${nameWidth}px`">
           {{ item.tableHeaderCol1 || $t('name') }}
           <i class="r cp" ref="draggerName"><rk-icon icon="settings_ethernet"/></i>
@@ -91,6 +91,8 @@ limitations under the License. -->
       border-left: 1px solid #ccc;
       height: 20px;
       div {
+        overflow: hidden;
+        text-overflow: ellipsis;
         border-right: 1px solid #ccc;
         text-align: center;
         height: 20px;
@@ -107,7 +109,12 @@ limitations under the License. -->
     .row:first-child {
       div {
         border-top: 1px solid #ccc;
+        background: #eee;
       }
+    }
+    .header {
+      color: #000;
+      font-weight: bold;
     }
     .value-col {
       width: 50%;
