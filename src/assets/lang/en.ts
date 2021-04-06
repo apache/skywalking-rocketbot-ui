@@ -216,6 +216,10 @@ const m = {
   eventsParameters: 'Event Parameters',
   eventDetail: 'Event Detail',
   value: 'Value',
+  tableHeader: 'Header Names',
+  tableValues: 'Table Values',
+  show: 'Show',
+  hide: 'Hide',
 };
 
 export default m;

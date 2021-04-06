@@ -24,9 +24,12 @@ limitations under the License. -->
       <span v-show="!rocketGlobal.edit && !pageTypes.includes(type)" @click="editComponentConfig">
         <rk-icon class="r edit" icon="keyboard_control" v-tooltip:bottom="{ content: $t('editConfig') }" />
       </span>
+      <span v-show="!rocketGlobal.edit && itemConfig.chartType === 'ChartTable'" @click="copyTable">
+        <rk-icon class="r cp" icon="review-list" />
+      </span>
     </div>
     <div class="rk-dashboard-item-body" ref="chartBody">
-      <div style="height:100%;">
+      <div style="height:100%;width:100%">
         <component
           :is="rocketGlobal.edit ? 'ChartEdit' : itemConfig.chartType"
           ref="chart"
@@ -74,6 +77,7 @@ limitations under the License. -->
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { Event } from '@/types/dashboard';
   import { EntityType } from './charts/constant';
+  import copy from '@/utils/copy';
 
   @Component({
     components: { ...charts },
@@ -316,6 +320,18 @@ limitations under the License. -->
       if (type === 'unit') {
         this.unit = value;
       }
+    }
+
+    private copyTable() {
+      const data: any = {};
+      const keys = Object.keys(this.chartSource || {}).filter(
+        (i: any) => Array.isArray(this.chartSource[i]) && this.chartSource[i].length,
+      );
+      for (const key of keys) {
+        const index = this.chartSource[key].length - 1 || 0;
+        data[key] = this.chartSource[key][index];
+      }
+      copy(JSON.stringify(data));
     }
 
     private deleteItem(index: number) {

@@ -214,6 +214,10 @@ const m = {
   eventsParameters: '事件参数',
   eventDetail: '事件详情',
   value: '数值',
+  tableHeader: '表头名称',
+  tableValues: '表值',
+  show: '展示',
+  hide: '隐藏',
 };
 
 export default m;
