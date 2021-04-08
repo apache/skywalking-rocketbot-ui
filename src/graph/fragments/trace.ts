@@ -59,6 +59,7 @@ export const Trace = {
         type
       }
       serviceCode
+      serviceInstanceName
       startTime
       endTime
       endpointName
