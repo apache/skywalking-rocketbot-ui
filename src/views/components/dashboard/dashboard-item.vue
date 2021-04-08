@@ -217,12 +217,9 @@ limitations under the License. -->
           this.chartSource[params.metricName] = values.map((item: { value: number }) =>
             this.aggregationValue({ data: item.value, type: aggregation, aggregationNum: Number(aggregationNum) }),
           );
-          return;
         }
         if (queryMetricType === QueryTypes.SortMetrics || queryMetricType === QueryTypes.ReadSampledRecords) {
           this.handleChartSlowData(resVal, aggregation, aggregationNum);
-
-          return;
         }
         if (queryMetricType === QueryTypes.READHEATMAP) {
           const nodes = [] as any;
