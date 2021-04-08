@@ -374,7 +374,7 @@ limitations under the License. -->
       const endP = keys.length > 1 ? 0 : 40;
       const eventNum = parseInt(String((body.offsetHeight - startP - endP) / 10), 10);
 
-      return eventNum;
+      return eventNum || 0;
     }
 
     // watch selectors and events

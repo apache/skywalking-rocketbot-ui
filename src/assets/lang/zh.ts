@@ -203,7 +203,7 @@ const m = {
   select: '选择',
   eventID: '事件ID',
   eventName: '事件名称',
-  endTime: '结束事件',
+  endTime: '结束时间',
   instanceEvents: '实例事件',
   endpointEvents: '端点事件',
   enableEvents: '启动事件',

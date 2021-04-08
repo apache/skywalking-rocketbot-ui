@@ -21,6 +21,10 @@ limitations under the License. -->
         <span class="g-sm-8 wba">{{ this.currentSpan.serviceCode }}</span>
       </div>
       <div class="mb-10 clear">
+        <span class="g-sm-4 grey">{{ $t('serviceinstance') }}:</span>
+        <span class="g-sm-8 wba">{{ this.currentSpan.serviceInstanceName }}</span>
+      </div>
+      <div class="mb-10 clear">
         <span class="g-sm-4 grey">{{ $t('endpoint') }}:</span>
         <span class="g-sm-8 wba">{{ this.currentSpan.label }}</span>
       </div>
