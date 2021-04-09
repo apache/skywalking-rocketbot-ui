@@ -52,7 +52,7 @@ limitations under the License. -->
         (json: Array<{ key: string; label: string; group: string }>) => {
           const groups = [] as string[];
           for (const g of json) {
-            if (!groups.includes(g.group)) {
+            if (g.group && !groups.includes(g.group)) {
               groups.push(g.group);
             }
           }
