@@ -20,6 +20,7 @@ import graph from '@/graph';
 import * as types from '../../mutation-types';
 import axios, { AxiosPromise, AxiosResponse } from 'axios';
 import { cancelToken } from '@/utils/cancelToken';
+import { computeVelocity } from '@/utils/forceCompute';
 
 interface Option {
   key: string;
@@ -421,6 +422,7 @@ const actions: ActionTree<State, any> = {
         }
         const calls = res.data.data.topo.calls;
         const nodes = res.data.data.topo.nodes;
+        computeVelocity(params.serviceId, params.serviceIds, nodes, calls);
         const ids = nodes.map((i: any) => i.id);
         const idsC = calls.filter((i: any) => i.detectPoints.indexOf('CLIENT') !== -1).map((b: any) => b.id);
         const idsS = calls.filter((i: any) => i.detectPoints.indexOf('CLIENT') === -1).map((b: any) => b.id);
