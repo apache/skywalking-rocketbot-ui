@@ -45,14 +45,24 @@ limitations under the License. -->
           </span>
         </div>
       </span>
-      <ToolBarSelect :selectable="false" :title="$t('currentService')" :current="current" icon="package" />
-      <ToolBarEndpointSelect
-        @onChoose="selectEndpoint"
-        :title="$t('currentEndpoint')"
-        :current="stateDashboardOption.currentEndpoint"
-        :data="stateDashboardOption.endpoints"
-        icon="code"
-      />
+      <div class="rk-dashboard-bar-tool flex-h">
+        <div class="flex-h">
+          <ToolBarSelect :selectable="false" :title="$t('currentService')" :current="current" icon="package" />
+          <ToolBarEndpointSelect
+            @onChoose="selectEndpoint"
+            :title="$t('currentEndpoint')"
+            :current="stateDashboardOption.currentEndpoint"
+            :data="stateDashboardOption.endpoints"
+            icon="code"
+          />
+        </div>
+        <DashboardEvent
+          :rocketComps="rocketComps"
+          :stateDashboard="stateDashboardOption"
+          :durationTime="durationTime"
+          :type="pageEventsType.TOPO_ENDPOINT_EVENTS"
+        />
+      </div>
     </div>
     <endpoints-survey :endpointComps="endpointComps" :updateObjects="updateObjects" />
   </div>
@@ -60,7 +70,7 @@ limitations under the License. -->
 
 <script lang="ts">
   import Vue from 'vue';
-  import { Component, Watch, Prop } from 'vue-property-decorator';
+  import { Component, Prop } from 'vue-property-decorator';
   import { Action, Getter, State, Mutation } from 'vuex-class';
   import EndpointsSurvey from './endpoints-survey.vue';
   import ToolBarSelect from '@/views/components/dashboard/tool-bar/tool-bar-select.vue';
@@ -68,36 +78,57 @@ limitations under the License. -->
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
   import { ObjectsType } from '../../../../constants/constant';
-
-  interface Endpoint {
-    label: string;
-    key: string;
-    name?: string;
-  }
+  import DashboardEvent from '@/views/components/dashboard/tool-bar/dashboard-events.vue';
+  import { State as optionState } from '@/store/modules/global/selectors';
+  import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
+  import { State as rocketbotGlobal } from '@/store/modules/global';
+  import { DurationTime, Option } from '@/types/global';
+  import { EntityType } from '@/views/components/dashboard/charts/constant';
+  import { PageEventsType } from '@/constants/constant';
 
   @Component({
     components: {
       EndpointsSurvey,
       ToolBarSelect,
       ToolBarEndpointSelect,
+      DashboardEvent,
     },
   })
   export default class WindowEndpoint extends Vue {
-    @State('rocketOption') private stateDashboardOption!: any;
-    @State('rocketData') private rocketComps!: any;
-    @State('rocketbot') private rocketGlobal: any;
-    @Getter('durationTime') private durationTime: any;
+    @Prop() private current!: { key: number | string; label: number | string };
+    @Prop() private endpointComps: any;
+    @Prop() private updateObjects!: string;
+    @State('rocketOption') private stateDashboardOption!: optionState;
+    @State('rocketData') private rocketComps!: rocketData;
+    @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
+    @Getter('durationTime') private durationTime!: DurationTime;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
     @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
-    @Prop() private current!: { key: number | string; label: number | string };
-    @Prop() private endpointComps: any;
-    @Prop() private updateObjects!: string;
+    @Action('GET_EVENT') private GET_EVENT: any;
 
-    private selectEndpoint(i: any) {
-      this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
+    private pageEventsType = PageEventsType;
+
+    private selectEndpoint(i: Option) {
+      if (!this.rocketComps.enableEvents) {
+        this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
+        return;
+      }
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: this.stateDashboardOption.currentService.label,
+            endpoint: i.label,
+          },
+        },
+        type: EntityType[2].key,
+      }).then(() => {
+        this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
+      });
     }
 
     private beforeMount() {
@@ -135,7 +166,11 @@ limitations under the License. -->
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+  .rk-dashboard-bar-tool {
+    width: calc(100% - 160px);
+    justify-content: space-between;
+  }
   .rk-dashboard-bar {
     flex-shrink: 0;
     color: #efefef;

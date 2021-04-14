@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Option } from './global';
+import { Duration } from './global';
 export interface Value {
   value: number;
 }
@@ -67,3 +67,36 @@ export interface DashboardTemplate {
   activated: boolean;
   disabled: boolean;
 }
+
+export interface QueryEventCondition {
+  uuid: string;
+  source: SourceInput;
+  name: string;
+  type: EventType;
+  time: Duration;
+  order: string;
+  size: number;
+}
+
+type SourceInput = {
+  service: String;
+  serviceInstance: String;
+  endpoint: String;
+};
+export enum EventType {
+  Normal,
+  Error,
+}
+
+export type Event = {
+  uuid: string;
+  source: SourceInput;
+  name: string;
+  type: string;
+  message: string;
+  parameters: { key: string; value: string }[];
+  startTime: number | string;
+  endTime: number | string;
+  entityType?: string;
+  checked?: boolean;
+};

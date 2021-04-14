@@ -18,59 +18,69 @@ limitations under the License. -->
       :rocketGlobal="rocketGlobal"
       :rocketComps="rocketComps"
       :compType="compType"
-      :dashboardType="dashboardType"
       :durationTime="durationTime"
-      :rocketOption="rocketOption"
     />
-    <div class="flex-h" v-if="compType === dashboardType.SERVICE">
-      <div class="sm grey service-search">
-        <div>{{ $t('serviceGroup') }}</div>
-        <input
-          type="text"
-          :value="rocketComps.tree[rocketComps.group].serviceGroup"
-          @change="searchServices($event.target.value)"
-        />
-      </div>
-      <ToolBarSelect
-        @onChoose="selectService"
-        :title="$t('currentService')"
-        :current="stateDashboard.currentService"
-        :data="stateDashboard.services"
-        icon="package"
-      />
-      <ToolBarEndpointSelect
-        @onChoose="selectEndpoint"
-        :title="$t('currentEndpoint')"
-        :current="stateDashboard.currentEndpoint"
-        :data="stateDashboard.endpoints"
-        :currentService="stateDashboard.currentService"
-        icon="code"
-      />
-      <ToolBarSelect
-        @onChoose="selectInstance"
-        :title="$t('currentInstance')"
-        :current="stateDashboard.currentInstance"
-        :data="stateDashboard.instances"
-        icon="disk"
-      />
-      <a class="rk-view-instance-attributes r" @click="() => (dialogAttributesVisible = true)">
-        <span class="vm">{{ $t('instanceAttributes') }}</span>
-      </a>
-      <rk-sidebox
-        width="50%"
-        :fixed="true"
-        :title="`${$t('instanceAttributes')} of ${stateDashboard.currentInstance.label}`"
-        :show.sync="dialogAttributesVisible"
-        class="instance-attributes-box"
-      >
-        <div
-          class="instance-attr"
-          v-for="(attr, index) in stateDashboard.currentInstance.attributes"
-          :key="attr.name + index"
-        >
-          {{ attr.name + ' : ' + attr.value }}
+    <div class="dashboard-selectors flex-h" v-if="compType === dashboardType.SERVICE">
+      <div class="flex-h">
+        <div class="sm grey service-search">
+          <div>{{ $t('serviceGroup') }}</div>
+          <input
+            type="text"
+            :value="rocketComps.tree[rocketComps.group].serviceGroup"
+            @change="searchServices($event.target.value)"
+          />
         </div>
-      </rk-sidebox>
+        <ToolBarSelect
+          @onChoose="selectService"
+          :title="$t('currentService')"
+          :current="stateDashboard.currentService"
+          :data="stateDashboard.services"
+          icon="package"
+        />
+        <ToolBarEndpointSelect
+          @onChoose="selectEndpoint"
+          :title="$t('currentEndpoint')"
+          :current="stateDashboard.currentEndpoint"
+          :data="stateDashboard.endpoints"
+          :currentService="stateDashboard.currentService"
+          icon="code"
+        />
+        <ToolBarSelect
+          @onChoose="selectInstance"
+          :title="$t('currentInstance')"
+          :current="stateDashboard.currentInstance"
+          :data="stateDashboard.instances"
+          icon="disk"
+        />
+        <a
+          class="rk-view-instance-attributes r"
+          @click="() => (dialogAttributesVisible = true)"
+          v-tooltip:bottom="{ content: $t('instanceAttributes') }"
+        >
+          <rk-icon icon="info_outline" />
+        </a>
+        <rk-sidebox
+          width="600px"
+          :fixed="true"
+          :title="`${$t('instanceAttributes')} of ${stateDashboard.currentInstance.label}`"
+          :show.sync="dialogAttributesVisible"
+          class="instance-attributes-box"
+        >
+          <div
+            class="instance-attr"
+            v-for="(attr, index) in stateDashboard.currentInstance.attributes"
+            :key="attr.name + index"
+          >
+            {{ attr.name + ' : ' + attr.value }}
+          </div>
+        </rk-sidebox>
+      </div>
+      <DashboardEvent
+        :rocketComps="rocketComps"
+        :stateDashboard="stateDashboard"
+        :durationTime="durationTime"
+        :type="pageEventsType.DASHBOARD_EVENTS"
+      />
     </div>
     <div class="flex-h" v-else-if="compType === dashboardType.BROWSER">
       <ToolBarSelect
@@ -113,18 +123,23 @@ limitations under the License. -->
   import ToolBarSelect from './tool-bar-select.vue';
   import ToolBarEndpointSelect from './tool-bar-endpoint-select.vue';
   import ToolBarBtns from './tool-bar-btns.vue';
-  import { State, Action, Mutation } from 'vuex-class';
+  import { Action, Mutation } from 'vuex-class';
+  import { EntityType } from '../charts/constant';
+  import { DurationTime, Option } from '@/types/global';
+  import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
+  import { State as rocketGlobal } from '@/store/modules/global';
+  import { State as optionState } from '@/store/modules/global/selectors';
+  import DashboardEvent from './dashboard-events.vue';
   import { DASHBOARDTYPE } from '../constant';
+  import { PageEventsType, PageTypes } from '@/constants/constant';
 
-  @Component({ components: { ToolBarSelect, ToolBarBtns, ToolBarEndpointSelect } })
+  @Component({ components: { ToolBarSelect, ToolBarBtns, ToolBarEndpointSelect, DashboardEvent } })
   export default class ToolBar extends Vue {
-    @Prop() private compType!: any;
-    @Prop() private stateDashboard!: any;
-    @Prop() private rocketGlobal!: any;
-    @Prop() private rocketComps!: any;
-    @Prop() private durationTime!: any;
-    @State('rocketOption') private rocketOption: any;
-    @Mutation('ADD_COMP') private ADD_COMP: any;
+    @Prop() private compType!: string;
+    @Prop() private stateDashboard!: optionState;
+    @Prop() private rocketGlobal!: rocketGlobal;
+    @Prop() private rocketComps!: rocketData;
+    @Prop() private durationTime!: DurationTime;
     @Mutation('SET_CURRENT_SERVICE_GROUP') private SET_CURRENT_SERVICE_GROUP: any;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
@@ -132,8 +147,10 @@ limitations under the License. -->
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+    @Action('GET_EVENT') private GET_EVENT: any;
+    private dialogAttributesVisible: boolean = false;
     private dashboardType = DASHBOARDTYPE;
-    private dialogAttributesVisible = false;
+    private pageEventsType = PageEventsType;
     get lastKey() {
       const current = this.rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children;
       if (!current.length) {
@@ -141,14 +158,60 @@ limitations under the License. -->
       }
       return current[current.length - 1].k;
     }
-    private selectService(i: any) {
-      this.SELECT_SERVICE({ service: i, duration: this.durationTime });
+    private selectService(i: Option) {
+      if (!this.rocketComps.enableEvents) {
+        this.SELECT_SERVICE({ service: i, duration: this.durationTime });
+        return;
+      }
+      this.SELECT_SERVICE({ service: i, duration: this.durationTime, callback: this.GET_EVENT });
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: i.label,
+          },
+        },
+        type: EntityType[0].key,
+      });
     }
-    private selectEndpoint(i: any) {
-      this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
+    private selectEndpoint(i: Option) {
+      if (!this.rocketComps.enableEvents) {
+        this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
+        return;
+      }
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: this.stateDashboard.currentService.label,
+            endpoint: i.label,
+          },
+        },
+        type: EntityType[2].key,
+      }).then(() => {
+        this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
+      });
     }
-    private selectInstance(i: any) {
-      this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
+    private selectInstance(i: Option) {
+      if (!this.rocketComps.enableEvents) {
+        this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
+        return;
+      }
+      this.GET_EVENT({
+        condition: {
+          time: this.durationTime,
+          size: 20,
+          source: {
+            service: this.stateDashboard.currentService.label,
+            serviceInstance: i.label,
+          },
+        },
+        type: EntityType[3].key,
+      }).then(() => {
+        this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
+      });
     }
     private searchServices(value: string) {
       this.SET_CURRENT_SERVICE_GROUP(value);
@@ -156,6 +219,7 @@ limitations under the License. -->
         compType: this.dashboardType.SERVICE,
         duration: this.durationTime,
         keywordServiceName: value,
+        pageType: PageTypes.DASHBOARD,
       }).then(() => {
         this.UPDATE_DASHBOARD();
       });
@@ -168,6 +232,10 @@ limitations under the License. -->
     flex-shrink: 0;
     color: #efefef;
     background-color: #333840;
+    .dashboard-selectors {
+      width: calc(100% - 150px);
+      justify-content: space-between;
+    }
     .instance-attributes-box {
       color: #252a2f;
     }
@@ -190,10 +258,11 @@ limitations under the License. -->
       }
     }
     .rk-view-instance-attributes {
-      background-color: #484b55;
+      background-color: rgba(255, 255, 255, 0.07);
       border-radius: 4px;
       margin-left: 5px;
-      padding: 5px 10px;
+      padding: 3px;
+      color: #efefef;
     }
   }
 </style>

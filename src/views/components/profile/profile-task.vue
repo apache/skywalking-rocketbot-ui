@@ -125,10 +125,7 @@ limitations under the License. -->
   }
 </script>
 
-<style lang="scss">
-  .rk-profile-task {
-    margin: 20px;
-  }
+<style lang="scss" scoped>
   label {
     display: inline-block;
     margin: 10px 0;

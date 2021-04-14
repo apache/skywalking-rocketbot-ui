@@ -31,7 +31,7 @@ limitations under the License. -->
     @Prop() private item!: any;
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .rk-chart-num {
     font-size: 14px;
     color: #333;

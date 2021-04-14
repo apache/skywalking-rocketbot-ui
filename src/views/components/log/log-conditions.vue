@@ -116,7 +116,7 @@ limitations under the License. -->
   import { Mutation, State } from 'vuex-class';
   import { State as globalState } from '@/store/modules/global/index';
   import { State as logState } from '@/store/modules/log/index';
-  import dateFormatStep from '@/utils/dateFormatStep';
+  import dateFormatStep from '@/utils/dateFormat';
 
   @Component({
     components: {},

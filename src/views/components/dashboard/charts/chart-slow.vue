@@ -74,7 +74,7 @@ limitations under the License. -->
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .rk-chart-slow {
     height: 100%;
     .calls {

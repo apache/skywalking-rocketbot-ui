@@ -15,20 +15,21 @@ limitations under the License. -->
 <template>
   <div class="rk-dashboard-item" :class="`g-sm-${width}`" :style="`height:${height}px;`">
     <div class="rk-dashboard-item-title ell">
-      <svg class="icon cp red r" v-show="rocketGlobal.edit" @click="deleteItem(index)">
-        <use xlink:href="#file-deletion"></use>
-      </svg>
+      <span v-show="rocketGlobal.edit" @click="deleteItem(index)">
+        <rk-icon class="r edit red" icon="file-deletion" />
+      </span>
       <span>{{ title }}</span>
       <span v-show="unit"> ( {{ unit }} ) </span>
       <span v-show="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
       <span v-show="!rocketGlobal.edit && !pageTypes.includes(type)" @click="editComponentConfig">
-        <svg class="icon cp r">
-          <use xlink:href="#lock"></use>
-        </svg>
+        <rk-icon class="r edit" icon="keyboard_control" v-tooltip:bottom="{ content: $t('editConfig') }" />
+      </span>
+      <span v-show="!rocketGlobal.edit && itemConfig.chartType === 'ChartTable'" @click="copyTable">
+        <rk-icon class="r cp" icon="review-list" />
       </span>
     </div>
-    <div class="rk-dashboard-item-body">
-      <div style="height:100%;">
+    <div class="rk-dashboard-item-body" ref="chartBody">
+      <div style="height:100%;width:100%">
         <component
           :is="rocketGlobal.edit ? 'ChartEdit' : itemConfig.chartType"
           ref="chart"
@@ -37,6 +38,7 @@ limitations under the License. -->
           :intervalTime="intervalTime"
           :data="chartSource"
           :type="type"
+          :itemEvents="itemEvents"
           @updateStatus="(type, value) => setStatus(type, value)"
         ></component>
       </div>
@@ -67,18 +69,22 @@ limitations under the License. -->
   import charts from './charts';
   import dayjs from 'dayjs';
 
-  import { QueryTypes } from './constant';
+  import { QueryTypes, UpdateDashboardEvents } from './constant';
   import { TopologyType, ObjectsType } from '../../../constants/constant';
-  import { MetricsType, CalculationType } from './charts/constant';
-  import { uuid } from '@/utils/uuid.ts';
+  import { CalculationType } from './charts/constant';
   import { State as globalState } from '@/store/modules/global';
   import { State as optionState } from '@/store/modules/global/selectors';
+  import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
+  import { Event } from '@/types/dashboard';
+  import { EntityType } from './charts/constant';
+  import copy from '@/utils/copy';
 
   @Component({
     components: { ...charts },
   })
   export default class DashboardItem extends Vue {
     @State('rocketbot') private rocketGlobal!: globalState;
+    @State('rocketData') private rocketData!: rocketData;
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('rocketTopo/DELETE_TOPO_ENDPOINT') private DELETE_TOPO_ENDPOINT: any;
@@ -92,7 +98,7 @@ limitations under the License. -->
     @Prop() private updateObjects!: string;
     @Prop() private rocketOption!: optionState;
 
-    private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as any[];
+    private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as string[];
     private dialogConfigVisible = false;
     private status = 'UNKNOWN';
     private title = 'Title';
@@ -101,6 +107,7 @@ limitations under the License. -->
     private height = 300;
     private chartSource: any = {};
     private itemConfig: any = {};
+    private itemEvents: Event[] = [];
 
     private created() {
       this.status = this.item.metricType;
@@ -109,6 +116,7 @@ limitations under the License. -->
       this.height = this.item.height;
       this.unit = this.item.unit;
       this.itemConfig = this.item;
+      this.itemEvents = this.eventsFilter();
       const types = [
         ObjectsType.UPDATE_INSTANCES,
         ObjectsType.UPDATE_ENDPOINTS,
@@ -311,6 +319,18 @@ limitations under the License. -->
       }
     }
 
+    private copyTable() {
+      const data: any = {};
+      const keys = Object.keys(this.chartSource || {}).filter(
+        (i: any) => Array.isArray(this.chartSource[i]) && this.chartSource[i].length,
+      );
+      for (const key of keys) {
+        const index = this.chartSource[key].length - 1 || 0;
+        data[key] = this.chartSource[key][index];
+      }
+      copy(JSON.stringify(data));
+    }
+
     private deleteItem(index: number) {
       if (this.type === this.pageTypes[0]) {
         this.DELETE_TOPO_ENDPOINT(index);
@@ -321,8 +341,49 @@ limitations under the License. -->
       }
     }
 
+    private eventsFilter() {
+      const allEvents = [
+        ...this.rocketData.serviceEvents,
+        ...this.rocketData.serviceInstanceEvents,
+        ...this.rocketData.endpointEvents,
+      ];
+
+      let events = allEvents.filter(
+        (item) =>
+          this.itemConfig.entityType === item.entityType &&
+          item.checked &&
+          ((item.source.service === this.rocketOption.currentService.label &&
+            (item.source.serviceInstance === this.rocketOption.currentInstance.label ||
+              item.source.endpoint === this.rocketOption.currentEndpoint.label)) ||
+            (item.entityType === EntityType[0].key && item.source.service === this.rocketOption.currentService.label)),
+      );
+      events = events.filter((d: Event, index: number) => index < this.setEventsLength());
+
+      return events;
+    }
+
+    private setEventsLength() {
+      const body: any = this.$refs.chartBody;
+      if (!body) {
+        return 0;
+      }
+      const keys = Object.keys(this.chartSource || {}).filter(
+        (i: any) => Array.isArray(this.chartSource[i]) && this.chartSource[i].length,
+      );
+      const startP = keys.length > 1 ? 50 : 15;
+      const endP = keys.length > 1 ? 0 : 40;
+      const eventNum = parseInt(String((body.offsetHeight - startP - endP) / 10), 10);
+
+      return eventNum || 0;
+    }
+
+    // watch selectors and events
     @Watch('rocketOption.updateDashboard')
     private watchCurrentSelectors() {
+      this.itemEvents = this.eventsFilter();
+      if (this.rocketOption.updateDashboard.key.includes(UpdateDashboardEvents)) {
+        return;
+      }
       setTimeout(() => {
         this.chartRender();
       }, 1000);
@@ -344,6 +405,9 @@ limitations under the License. -->
     flex-direction: column;
     padding-left: 5px;
     padding-right: 5px;
+    .edit {
+      cursor: pointer;
+    }
   }
   .dashboard-item-shadow {
     background-color: #448dfe15;

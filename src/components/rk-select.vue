@@ -46,7 +46,7 @@ limitations under the License. -->
           <use xlink:href="#clear"></use>
         </svg>
       </div>
-      <div class="rk-opt-wrapper scroll_bar_style">
+      <div class="rk-opt-wrapper">
         <div
           class="rk-opt ell"
           @click="handleSelect(i)"
@@ -104,7 +104,6 @@ limitations under the License. -->
 <style lang="scss" scoped>
   .rk-bar-select {
     position: relative;
-    height: 30px;
     justify-content: space-between;
     border: 1px solid #ddd;
     background: #fff;

@@ -33,6 +33,7 @@ import 'echarts/lib/chart/heatmap';
 import 'echarts/lib/chart/sankey';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/markArea';
 import VModal from 'vue-js-modal';
 import { queryOAPTimeInfo } from './utils/localtime';
 import './assets';

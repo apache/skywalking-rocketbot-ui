@@ -19,22 +19,20 @@ import { Commit, ActionTree, MutationTree, Dispatch } from 'vuex';
 import * as types from '../dashboard/mutation-types';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
-import { Duration } from '@/types/global';
+import { Duration, DurationTime, Option } from '@/types/global';
+import { PageTypes } from '@/constants/constant';
 
-interface Options {
-  key: string;
-  label: string;
-}
+const EntityType = ['Service', 'ServiceInstance', 'Endpoint'];
 export interface State {
-  services: Options[];
-  currentService: Options;
-  databases: Options[];
-  currentDatabase: Options;
-  endpoints: Options[];
-  currentEndpoint: Options;
-  instances: Options[];
-  currentInstance: Options;
-  updateDashboard: object;
+  services: Option[];
+  currentService: Option;
+  databases: Option[];
+  currentDatabase: Option;
+  endpoints: Option[];
+  currentEndpoint: Option;
+  instances: Option[];
+  currentInstance: Option;
+  updateDashboard: { key: string; label?: string | undefined };
   pageType: string;
 }
 
@@ -49,26 +47,28 @@ const initState: State = {
   currentInstance: { key: '', label: '' },
   databases: [],
   currentDatabase: { key: '', label: '' },
-  updateDashboard: {},
+  updateDashboard: { key: '' },
   pageType: '',
 };
 
 // mutations
 const mutations: MutationTree<State> = {
-  [types.SET_SERVICES](state: State, data: Options[]) {
+  [types.SET_SERVICES](state: State, data: Option[]) {
     state.services = state.pageType === LOG ? [{ label: 'All', key: '' }, ...data] : data;
     state.currentService = state.services[0] || {};
   },
-  [types.SET_CURRENT_SERVICE](state: State, service: Options) {
+  [types.SET_CURRENT_SERVICE](state: State, service: Option) {
     state.currentService = service;
-    state.updateDashboard = service;
+    if (state.pageType !== PageTypes.DASHBOARD) {
+      state.updateDashboard = service;
+    }
   },
 
-  [types.UPDATE_DASHBOARD](state: State) {
-    state.updateDashboard = { key: new Date().getTime() };
+  [types.UPDATE_DASHBOARD](state: State, param?: { key: string }) {
+    state.updateDashboard = param || { key: String(new Date().getTime()) };
   },
 
-  [types.SET_ENDPOINTS](state: State, data: Options[]) {
+  [types.SET_ENDPOINTS](state: State, data: Option[]) {
     state.endpoints = state.pageType === LOG ? [{ label: 'All', key: '' }, ...data] : data;
     if (!state.endpoints.length) {
       state.currentEndpoint = { key: '', label: '' };
@@ -76,11 +76,11 @@ const mutations: MutationTree<State> = {
     }
     state.currentEndpoint = state.endpoints[0];
   },
-  [types.SET_CURRENT_ENDPOINT](state: State, endpoint: Options) {
+  [types.SET_CURRENT_ENDPOINT](state: State, endpoint: Option) {
     state.currentEndpoint = endpoint;
     state.updateDashboard = endpoint;
   },
-  [types.SET_INSTANCES](state: State, data: Options[]) {
+  [types.SET_INSTANCES](state: State, data: Option[]) {
     state.instances = state.pageType === LOG ? [{ label: 'All', key: '' }, ...data] : data;
     if (!state.instances.length) {
       state.currentInstance = { key: '', label: '' };
@@ -88,11 +88,11 @@ const mutations: MutationTree<State> = {
     }
     state.currentInstance = state.instances[0];
   },
-  [types.SET_CURRENT_INSTANCE](state: State, instance: Options) {
+  [types.SET_CURRENT_INSTANCE](state: State, instance: Option) {
     state.currentInstance = instance;
     state.updateDashboard = instance;
   },
-  [types.SET_DATABASES](state: State, data: Options[]) {
+  [types.SET_DATABASES](state: State, data: Option[]) {
     state.databases = data;
     if (!data.length) {
       state.currentDatabase = { key: '', label: '' };
@@ -100,7 +100,7 @@ const mutations: MutationTree<State> = {
     }
     state.currentDatabase = data[0];
   },
-  [types.SET_CURRENT_DATABASE](state: State, service: Options) {
+  [types.SET_CURRENT_DATABASE](state: State, service: Option) {
     state.currentDatabase = service;
     state.updateDashboard = service;
   },
@@ -111,7 +111,7 @@ const mutations: MutationTree<State> = {
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_SERVICES(context: { commit: Commit }, params: { duration: any; keyword: string }) {
+  GET_SERVICES(context: { commit: Commit }, params: { duration: DurationTime; keyword: string }) {
     if (!params.keyword) {
       params.keyword = '';
     }
@@ -123,7 +123,7 @@ const actions: ActionTree<State, any> = {
       });
   },
   GET_SERVICE_ENDPOINTS(
-    context: { commit: Commit; state: any },
+    context: { commit: Commit; state: State },
     params: { keyword: string; currentService?: { key: string; label: string } },
   ) {
     if (!context.state.currentService.key) {
@@ -143,7 +143,7 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
       });
   },
-  GET_SERVICE_INSTANCES(context: { commit: Commit; state: any }, params: any) {
+  GET_SERVICE_INSTANCES(context: { commit: Commit; state: State }, params: any) {
     if (!context.state.currentService.key) {
       context.commit(types.SET_INSTANCES, []);
       return;
@@ -163,15 +163,55 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_DATABASES, res.data.data.services);
       });
   },
-  SELECT_SERVICE(context: { commit: Commit; dispatch: Dispatch }, params: any) {
+  SELECT_SERVICE(
+    context: { commit: Commit; dispatch: Dispatch; state: State },
+    params: { service: Option; duration: DurationTime; callback?: any },
+  ) {
     context.commit('SET_CURRENT_SERVICE', params.service);
-    context.dispatch('GET_SERVICE_ENDPOINTS', {});
-    context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration });
+    context.dispatch('GET_SERVICE_ENDPOINTS', {}).then(() => {
+      if (context.state.pageType !== PageTypes.DASHBOARD || !params.callback) {
+        return;
+      }
+      params.callback({
+        condition: {
+          time: params.duration,
+          size: 20,
+          source: {
+            service: params.service.label,
+            endpoint: context.state.currentEndpoint.label,
+          },
+        },
+        type: EntityType[2],
+      });
+    });
+    context.dispatch('GET_SERVICE_INSTANCES', { duration: params.duration }).then(() => {
+      if (context.state.pageType === PageTypes.DASHBOARD && !params.callback) {
+        context.commit('UPDATE_DASHBOARD', params.service);
+      }
+      if (context.state.pageType !== PageTypes.DASHBOARD || !params.callback) {
+        return;
+      }
+      params
+        .callback({
+          condition: {
+            time: params.duration,
+            size: 20,
+            source: {
+              service: params.service.label,
+              serviceInstance: context.state.currentInstance.label,
+            },
+          },
+          type: EntityType[1],
+        })
+        .then(() => {
+          context.commit('UPDATE_DASHBOARD', params.service);
+        });
+    });
   },
-  SELECT_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
+  SELECT_ENDPOINT(context: { commit: Commit; dispatch: Dispatch; state: State; rootState: any }, params: any) {
     context.commit('SET_CURRENT_ENDPOINT', params.endpoint);
   },
-  SELECT_INSTANCE(context: { commit: Commit; dispatch: Dispatch; state: any; rootState: any }, params: any) {
+  SELECT_INSTANCE(context: { commit: Commit; dispatch: Dispatch; state: State; rootState: any }, params: any) {
     context.commit('SET_CURRENT_INSTANCE', params.instance);
   },
   SELECT_DATABASE(context: { commit: Commit; dispatch: Dispatch }, params: any) {
@@ -229,7 +269,7 @@ const actions: ActionTree<State, any> = {
         return res.data.data.getServiceInstances;
       });
   },
-  GET_ITEM_SERVICES(context, params: { duration: any; keyword: string }) {
+  GET_ITEM_SERVICES(context, params: { duration: DurationTime; keyword: string }) {
     if (!params.keyword) {
       params.keyword = '';
     }
