@@ -219,6 +219,10 @@ limitations under the License. -->
       this.getTraceList();
     }
 
+    private chooseEndpoint(i: any) {
+      this.endpoint = i;
+    }
+
     private getTraceList() {
       this.GET_SERVICES({ duration: this.durationTime });
       const temp: any = {
