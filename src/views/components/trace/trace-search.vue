@@ -73,10 +73,6 @@ limitations under the License. -->
             <input class="vm tc" v-model="maxTraceDuration" />
           </div>
         </div>
-        <div>
-          <span class="sm b grey mr-5">{{ $t('timeRange') }}:</span>
-          <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm" />
-        </div>
       </div>
       <div class="flex-h">
         <div class="mr-10" style="padding-top: 5px">
