@@ -228,8 +228,8 @@ limitations under the License. -->
       }
       if (this.traceId) {
         temp.traceId = this.traceId;
-        localStorage.setItem('traceId', this.traceId);
       }
+      localStorage.setItem('traceId', this.traceId);
       if (this.tagsList.length) {
         const tagsMap = this.tagsList.map((item: string) => {
           const key = item.substring(0, item.indexOf('='));
