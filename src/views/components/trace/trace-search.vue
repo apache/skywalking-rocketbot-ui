@@ -42,7 +42,13 @@ limitations under the License. -->
           @input="chooseService"
           :data="rocketTrace.services"
         />
-        <TraceSelect :hasSearch="true" :title="$t('instance')" v-model="instance" :data="rocketTrace.instances" />
+        <TraceSelect
+          :hasSearch="true"
+          :title="$t('instance')"
+          :value="instance"
+          @input="chooseInstance"
+          :data="rocketTrace.instances"
+        />
         <TraceSelect
           :title="$t('status')"
           :value="traceState"
@@ -53,10 +59,13 @@ limitations under the License. -->
             { label: 'Error', key: 'ERROR' },
           ]"
         />
-        <div class="mr-10" style="padding: 3px 15px 0">
-          <div class="sm grey">{{ $t('endpointName') }}</div>
-          <input type="text" v-model="endpointName" class="rk-trace-search-input" />
-        </div>
+        <TraceSelect
+          :hasSearch="true"
+          :title="$t('endpointName')"
+          :value="endpoint"
+          @input="chooseEndpoint"
+          :data="rocketTrace.endpoints"
+        />
       </div>
     </div>
     <div class="rk-trace-search-more" v-show="status">
@@ -121,6 +130,7 @@ limitations under the License. -->
     @Action('RESET_DURATION') private RESET_DURATION: any;
     @Action('rocketTrace/GET_SERVICES') private GET_SERVICES: any;
     @Action('rocketTrace/GET_INSTANCES') private GET_INSTANCES: any;
+    @Action('GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
     @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
     @Action('rocketTrace/SET_TRACE_FORM') private SET_TRACE_FORM: any;
     @Mutation('rocketTrace/SET_TRACE_FORM_ITEM')
@@ -132,16 +142,13 @@ limitations under the License. -->
     private maxTraceDuration: string = localStorage.getItem('maxTraceDuration') || '';
     private minTraceDuration: string = localStorage.getItem('minTraceDuration') || '';
     private instance: Option = { label: 'All', key: '' };
-    private endpointName: string = localStorage.getItem('endpointName') || '';
+    private endpoint: Option = { label: '', key: '' };
     private traceId: string = localStorage.getItem('traceId') || '';
     private traceState: Option = { label: 'All', key: 'ALL' };
     private tags: string = '';
     private tagsList: string[] = [];
 
     private created() {
-      this.endpointName = this.$route.query.endpointname
-        ? this.$route.query.endpointname.toString()
-        : this.endpointName;
       this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
       this.tagsList = localStorage.getItem('traceTags') ? JSON.parse(localStorage.getItem('traceTags') || '') : [];
@@ -178,16 +185,38 @@ limitations under the License. -->
         return;
       }
       this.instance = { label: 'All', key: '' };
+      this.endpoint = { label: '', key: '' };
       this.service = i;
       if (i.key === '') {
         this.SET_INSTANCES([]);
         return;
       }
       this.GET_INSTANCES({ duration: this.durationTime, serviceId: i.key });
+      (this.rocketTrace as any).endpoints = [];
+      this.GET_ITEM_ENDPOINTS({
+        serviceId: i.key,
+        keyword: '',
+        duration: this.durationTime,
+      }).then((data: Array<{ key: string; label: string }>) => {
+        (this.rocketTrace as any).endpoints = data;
+        this.$forceUpdate();
+      });
+      this.getTraceList();
+    }
+
+    private chooseInstance(i: any) {
+      this.instance = i;
+      this.getTraceList();
     }
 
     private chooseStatus(i: any) {
       this.traceState = i;
+      this.getTraceList();
+    }
+
+    private chooseEndpoint(i: any) {
+      this.endpoint = i;
+      this.getTraceList();
     }
 
     private getTraceList() {
@@ -222,9 +251,8 @@ limitations under the License. -->
         temp.minTraceDuration = this.minTraceDuration;
         localStorage.setItem('minTraceDuration', this.minTraceDuration);
       }
-      if (this.endpointName) {
-        temp.endpointName = this.endpointName;
-        localStorage.setItem('endpointName', this.endpointName);
+      if (this.endpoint) {
+        temp.endpointName = this.endpoint.label;
       }
       if (this.traceId) {
         temp.traceId = this.traceId;
@@ -260,8 +288,7 @@ limitations under the License. -->
       localStorage.removeItem('minTraceDuration');
       this.service = { label: 'All', key: '' };
       this.instance = { label: 'All', key: '' };
-      this.endpointName = '';
-      localStorage.removeItem('endpointName');
+      this.endpoint = { label: '', key: '' };
       this.tagsList = [];
       localStorage.removeItem('traceTags');
       this.traceId = '';
