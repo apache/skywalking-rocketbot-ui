@@ -42,7 +42,13 @@ limitations under the License. -->
           @input="chooseService"
           :data="rocketTrace.services"
         />
-        <TraceSelect :hasSearch="true" :title="$t('instance')" v-model="instance" :data="rocketTrace.instances" />
+        <TraceSelect
+          :hasSearch="true"
+          :title="$t('instance')"
+          :value="instance"
+          @input="chooseInstance"
+          :data="rocketTrace.instances"
+        />
         <TraceSelect
           :title="$t('status')"
           :value="traceState"
@@ -191,12 +197,19 @@ limitations under the License. -->
         (this.rocketTrace as any).endpoints = data;
         this.$forceUpdate();
       });
+      this.getTraceList();
+    }
+    private chooseInstance(i: any) {
+      this.instance = i;
+      this.getTraceList();
     }
     private chooseStatus(i: any) {
       this.traceState = i;
+      this.getTraceList();
     }
     private chooseEndpoint(i: any) {
       this.endpoint = i;
+      this.getTraceList();
     }
     private getTraceList() {
       this.GET_SERVICES({ duration: this.durationTime });
