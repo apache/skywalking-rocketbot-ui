@@ -82,7 +82,6 @@ limitations under the License. -->
   }
 
   .log-item > div {
-    line-height: 1.3;
     width: 140px;
     padding: 0 5px;
     display: inline-block;
