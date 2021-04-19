@@ -44,6 +44,7 @@ limitations under the License. -->
   import CreateGroup from './create-group.vue';
   import GroupItem from './group-item.vue';
   import Axios, { AxiosResponse } from 'axios';
+  import { Option } from '@/types/global';
 
   @Component({
     components: {
@@ -99,7 +100,7 @@ limitations under the License. -->
         },
       }).then((res: AxiosResponse) => {
         const map = res.data.data.services ? res.data.data.services : [];
-        this.servicesMap = map.sort((a: any, b: any) => {
+        this.servicesMap = map.sort((a: Option, b: Option) => {
           return a.label.localeCompare(b.label);
         });
       });
