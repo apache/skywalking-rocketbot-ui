@@ -98,7 +98,10 @@ limitations under the License. -->
           duration: this.durationTime,
         },
       }).then((res: AxiosResponse) => {
-        this.servicesMap = res.data.data.services ? res.data.data.services : [];
+        const map = res.data.data.services ? res.data.data.services : [];
+        this.servicesMap = map.sort((a: any, b: any) => {
+          return a.label.localeCompare(b.label);
+        });
       });
     }
     private initGroupTopo() {
