@@ -27,12 +27,8 @@ limitations under the License. -->
         <div class="mb-10 clear rk-flex" v-for="(item, index) in columns" :key="index">
           <template>
             <span class="g-sm-4 grey">{{ $t(item.value) }}:</span>
-            <span
-              v-if="['message', 'stack'].includes(item.label)"
-              class="text"
-              v-html="lineBreak(currentLog[item.label]) || '-'"
-            ></span>
-            <span v-else-if="item.label === 'time'" class="g-sm-8 wba">{{ currentLog[item.label] | dateformat }}</span>
+            <span v-if="item.label === 'time'" class="g-sm-8 wba">{{ currentLog[item.label] | dateformat }}</span>
+            <span v-else-if="item.label === 'errorUrl'">{{ currentLog.pagePath }}</span>
             <span v-else class="g-sm-8 wba">{{ currentLog[item.label] || '-' }}</span>
           </template>
         </div>
@@ -43,7 +39,6 @@ limitations under the License. -->
 
 <script lang="ts">
   import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-  import { Mutation, State } from 'vuex-class';
   import LogTable from './log-table/log-table.vue';
   import { BrowserLogConstants } from './log-table/log-constant';
 
@@ -51,22 +46,13 @@ limitations under the License. -->
     components: { LogTable },
   })
   export default class LogBrowserDetail extends Vue {
-    @State('rocketLog') private logState: any;
     @Prop() private data: any;
     @Prop() private loading!: true;
 
     private columns = BrowserLogConstants;
     private showDetail = false;
-    private list = [];
     private currentLog = {};
-    private lineBreak(str = '') {
-      const s = str
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/\r\n/g, '<br />')
-        .replace(/\n/g, '<br />');
-      return s;
-    }
+
     private handleSelectLog(data: any) {
       this.currentLog = data;
       this.showDetail = true;

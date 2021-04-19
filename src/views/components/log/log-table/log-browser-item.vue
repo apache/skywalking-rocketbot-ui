@@ -24,78 +24,39 @@ limitations under the License. -->
         width: `${item.drag ? item.method : ''}px`,
       }"
     >
-      <span v-if="['message', 'stack'].includes(item.label)" class="text" v-html="lineBreak(data[item.label])"></span>
-      <template v-else-if="item.label === 'time'">
-        {{ data.time | dateformat }}
-      </template>
-      <span v-else class="" v-tooltip:bottom="data[item.label] || '-'">{{ data[item.label] || '-' }}</span>
+      <span v-if="item.label === 'time'">{{ data.time | dateformat }}</span>
+      <span v-else-if="item.label === 'errorUrl'">{{ data.pagePath }}</span>
+      <span v-else v-tooltip:bottom="data[item.label] || '-'">{{ data[item.label] || '-' }}</span>
     </div>
   </div>
 </template>
-<script lang="js">
+<script lang="ts">
+  import { Component, Prop, Vue } from 'vue-property-decorator';
   import { BrowserLogConstants } from './log-constant';
 
-  export default {
-    name: 'item',
-    props: ['data', 'method'],
-    watch: {
-      data: {
-        handler() {
-          this.setLogItemHeight();
-        },
-        deep: true,
-        immediate: true,
-      },
-    },
-    data() {
-      return {
-        columns: BrowserLogConstants,
-        displayChildren: true,
-        selectedSpan: 0,
-      };
-    },
-    computed: {},
-    methods: {
-      lineBreak(str = '') {
-        const param = str
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/\r\n/g, '<br />')
-          .replace(/\n/g, '<br />');
-        return param;
-      },
-      setLogItemHeight() {
-        this.$nextTick(() => {
-          const heights = [];
-          this.$refs.logItem.childNodes.forEach((item) => {
-            if (item.getAttribute('class').indexOf('autoHeight') > -1) {
-              const autoHeightChild = item.childNodes[0];
-              const height = autoHeightChild.getBoundingClientRect().height;
-              heights.push(height + 11);
-            }
-          });
-          const max = Math.max(...heights);
-          this.$refs.logItem.style.height = max + 'px';
-        });
+  @Component
+  export default class ServiceItem extends Vue {
+    @Prop() private data: any;
 
-      },
-      showSelectSpan() {
-        const items = document.querySelectorAll('.log-item');
-        for (const item of items) {
-          item.style.background = '#fff';
-        }
-        this.$refs.logItem.style.background = 'rgba(0, 0, 0, 0.1)';
-        this.$eventBus.$emit('HANDLE-SELECT-LOG', this.data);
-      },
-    },
-  };
+    private columns = BrowserLogConstants;
+    private showSelectSpan() {
+      const items: NodeListOf<any> = document.querySelectorAll('.log-item');
+
+      for (const item of items) {
+        item.style.background = '#fff';
+      }
+      const logItem: any = this.$refs.logItem;
+
+      logItem.style.background = 'rgba(0, 0, 0, 0.1)';
+      this.$eventBus.$emit('HANDLE-SELECT-LOG', this.data);
+    }
+  }
 </script>
 <style lang="scss" scoped>
   .log-item {
     white-space: nowrap;
     position: relative;
     cursor: pointer;
-    /*height: 100px;*/
   }
 
   .log-item.selected {
@@ -124,7 +85,6 @@ limitations under the License. -->
 
   .log-item .text {
     width: 100% !important;
-    /*padding: 0 5px;*/
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -132,7 +92,7 @@ limitations under the License. -->
   }
 
   .log-item > div.method {
-    height: 100%;
-    padding: 3px 8px;
+    padding: 7px 5px;
+    line-height: 30px;
   }
 </style>
