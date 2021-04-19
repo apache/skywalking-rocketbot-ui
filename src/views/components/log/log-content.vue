@@ -19,7 +19,6 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Duration, Option } from '@/types/global';
   import { Component, Vue } from 'vue-property-decorator';
   import { State } from 'vuex-class';
   import LogBrowserDetail from './log-browser-detail.vue';
