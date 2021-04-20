@@ -37,8 +37,8 @@ limitations under the License. -->
   </div>
 </template>
 <script lang="ts">
-  import topo, { State as topoState } from '@/store/modules/topology';
-  import { Component, Vue, Watch } from 'vue-property-decorator';
+  import { State as topoState } from '@/store/modules/topology';
+  import { Component, Vue } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import { State as TopoGroupState } from '@/store/modules/topology/group';
   import CreateGroup from './create-group.vue';

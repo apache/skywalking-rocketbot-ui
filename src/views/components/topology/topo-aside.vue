@@ -68,7 +68,7 @@ limitations under the License. -->
 </template>
 <script lang="ts">
   import { initState } from '@/store/modules/dashboard/dashboard-data-layout';
-  import topo, { State as topoState } from '@/store/modules/topology';
+  import { State as topoState } from '@/store/modules/topology';
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import Radial from './radial.vue';
@@ -154,7 +154,7 @@ limitations under the License. -->
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .link-topo-aside {
     width: 280px;
     position: absolute;
