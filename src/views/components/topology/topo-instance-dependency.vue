@@ -74,7 +74,7 @@ limitations under the License. -->
   </div>
 </template>
 <script lang="ts">
-  import { Vue, Component, Prop } from 'vue-property-decorator';
+  import { Vue, Component } from 'vue-property-decorator';
   import { State, Action, Getter, Mutation } from 'vuex-class';
   import { State as topoState } from '@/store/modules/topology';
   import Topo from './chart/topo.vue';
@@ -117,11 +117,12 @@ limitations under the License. -->
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .rk-topo-instance-dependency {
     height: 100%;
     display: flex;
     flex-direction: row;
+    background: #2b3037;
     & > :first-child {
       line-height: 400px;
       text-align: center;
