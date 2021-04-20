@@ -141,7 +141,7 @@ limitations under the License. -->
     private maxTraceDuration: string = localStorage.getItem('maxTraceDuration') || '';
     private minTraceDuration: string = localStorage.getItem('minTraceDuration') || '';
     private instance: Option = { label: 'All', key: '' };
-    private endpoint: Option = { label: '', key: '' };
+    private endpoint: Option = { label: 'All', key: '' };
     private traceId: string = localStorage.getItem('traceId') || '';
     private traceState: Option = { label: 'All', key: 'ALL' };
     private tags: string = '';
@@ -181,7 +181,7 @@ limitations under the License. -->
         return;
       }
       this.instance = { label: 'All', key: '' };
-      this.endpoint = { label: '', key: '' };
+      this.endpoint = { label: 'All', key: '' };
       this.service = i;
       if (i.key === '') {
         this.SET_INSTANCES([]);
@@ -276,7 +276,7 @@ limitations under the License. -->
       localStorage.removeItem('minTraceDuration');
       this.service = { label: 'All', key: '' };
       this.instance = { label: 'All', key: '' };
-      this.endpoint = { label: '', key: '' };
+      this.endpoint = { label: 'All', key: '' };
       this.tagsList = [];
       localStorage.removeItem('traceTags');
       this.traceId = '';
