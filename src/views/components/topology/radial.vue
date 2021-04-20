@@ -52,9 +52,7 @@ limitations under the License. -->
             id: node.id,
             name: node.name,
             label: {
-              normal: {
-                show: true,
-              },
+              show: true,
             },
             category: node.type,
           });
@@ -95,10 +93,8 @@ limitations under the License. -->
               categories,
               roam: true,
               label: {
-                normal: {
-                  position: 'right',
-                  formatter: '{b}',
-                },
+                position: 'right',
+                formatter: '{b}',
               },
               lineStyle: {
                 color: 'source',
