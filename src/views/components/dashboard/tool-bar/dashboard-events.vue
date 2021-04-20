@@ -25,7 +25,12 @@ limitations under the License. -->
         v-tooltip:left="{ content: enableEvents ? $t('disableEvents') : $t('enableEvents') }"
       />
     </div>
-    <rk-sidebox width="1000px" :fixed="true" :show.sync="dialogEventVisible" @closeSideboxCallback="updateEvents">
+    <rk-sidebox
+      width="1000px"
+      :destroyOnClose="true"
+      :show.sync="dialogEventVisible"
+      @closeSideboxCallback="updateEvents"
+    >
       <div class="config-box">
         <div class="series-type" v-show="type === pageEventsType.DASHBOARD_EVENTS">
           <label class="title">{{ $t('eventSeries') }}</label>
