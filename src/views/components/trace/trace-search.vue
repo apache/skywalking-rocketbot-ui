@@ -197,7 +197,6 @@ limitations under the License. -->
         (this.rocketTrace as any).endpoints = data;
         this.$forceUpdate();
       });
-      this.getTraceList();
     }
     private chooseInstance(i: any) {
       this.instance = i;
