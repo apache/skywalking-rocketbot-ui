@@ -118,7 +118,7 @@ limitations under the License. -->
     },
   };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .micro-radil-chart {
     height: 100%;
     position: fixed;

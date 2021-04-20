@@ -253,20 +253,19 @@ limitations under the License. -->
       text-align: center;
     }
 
-    .instance-dependency {
-      .rk-sidebox {
-        background: #2b3037;
-        outline: none;
-      }
-      .rk-sidebox-inner {
-        height: 100%;
-      }
-    }
-
     .title-name {
       width: 100%;
       padding-left: 40px;
       font-size: 16px;
+    }
+  }
+  .instance-dependency {
+    .rk-sidebox {
+      background: #2b3037;
+      outline: none;
+    }
+    .rk-sidebox-inner {
+      height: 100%;
     }
   }
 
