@@ -229,7 +229,7 @@ limitations under the License. -->
         temp.minTraceDuration = this.minTraceDuration;
         localStorage.setItem('minTraceDuration', this.minTraceDuration);
       }
-      if (this.endpoint) {
+      if (this.endpoint.key) {
         temp.endpointName = this.endpoint.label;
       }
       if (this.traceId) {

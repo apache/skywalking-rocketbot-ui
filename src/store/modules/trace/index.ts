@@ -25,6 +25,7 @@ import { ActionTree, Commit, Dispatch, MutationTree } from 'vuex';
 export interface State {
   services: Option[];
   instances: Option[];
+  endpoints: Option[];
   traceForm: any;
   traceList: Trace[];
   traceTotal: number;
@@ -37,6 +38,7 @@ export interface State {
 const initState: State = {
   services: [],
   instances: [],
+  endpoints: [],
   traceForm: {
     paging: { pageNum: 1, pageSize: 15, needTotal: true },
     queryOrder: localStorage.getItem('traceQueryOrder') || 'BY_DURATION',
