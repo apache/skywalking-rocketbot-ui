@@ -15,7 +15,7 @@ limitations under the License. -->
 
 <template>
   <div class="rk-trace-search">
-    <div>
+    <div class="pb-15 pt-5">
       <a class="rk-trace-clear-btn r" @click="status = !status">
         <span class="mr-5 vm">{{ $t('more') }}</span>
         <svg class="icon trans vm" :style="`transform: rotate(${status ? 180 : 0}deg);`">
