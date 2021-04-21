@@ -15,7 +15,7 @@ limitations under the License. -->
 
 <template>
   <div class="rk-trace-search">
-    <div class="pb-15 pt-5">
+    <div class="pb-5 pt-5">
       <a class="rk-trace-clear-btn r" @click="status = !status">
         <span class="mr-5 vm">{{ $t('more') }}</span>
         <svg class="icon trans vm" :style="`transform: rotate(${status ? 180 : 0}deg);`">
@@ -123,12 +123,13 @@ limitations under the License. -->
     @Action('RESET_DURATION') private RESET_DURATION: any;
     @Action('rocketTrace/GET_SERVICES') private GET_SERVICES: any;
     @Action('rocketTrace/GET_INSTANCES') private GET_INSTANCES: any;
-    @Action('GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
+    @Action('rocketTrace/GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
     @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
     @Action('rocketTrace/SET_TRACE_FORM') private SET_TRACE_FORM: any;
     @Mutation('rocketTrace/SET_TRACE_FORM_ITEM')
     private SET_TRACE_FORM_ITEM: any;
     @Mutation('rocketTrace/SET_INSTANCES') private SET_INSTANCES: any;
+    @Mutation('rocketTrace/SET_ENDPOINTS') private SET_ENDPOINTS: any;
     private service: Option = { label: 'All', key: '' };
     private time!: Date[];
     private status: boolean = true;
@@ -170,7 +171,7 @@ limitations under the License. -->
         step,
       };
     }
-    private chooseService(i: any) {
+    private chooseService(i: Option) {
       if (this.service.key === i.key) {
         return;
       }
@@ -179,23 +180,21 @@ limitations under the License. -->
       this.service = i;
       if (i.key === '') {
         this.SET_INSTANCES([]);
+        this.SET_ENDPOINTS([]);
         return;
       }
       this.GET_INSTANCES({ duration: this.durationTime, serviceId: i.key });
-      (this.rocketTrace as any).endpoints = [];
+      this.SET_ENDPOINTS([]);
       this.GET_ITEM_ENDPOINTS({
         serviceId: i.key,
         keyword: '',
         duration: this.durationTime,
-      }).then((data: Array<{ key: string; label: string }>) => {
-        (this.rocketTrace as any).endpoints = data;
-        this.$forceUpdate();
       });
     }
-    private chooseStatus(i: any) {
+    private chooseStatus(i: Option) {
       this.traceState = i;
     }
-    private chooseEndpoint(i: any) {
+    private chooseEndpoint(i: Option) {
       this.endpoint = i;
     }
     private getTraceList() {
