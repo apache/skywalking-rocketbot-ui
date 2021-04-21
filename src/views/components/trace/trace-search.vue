@@ -15,7 +15,7 @@ limitations under the License. -->
 
 <template>
   <div class="rk-trace-search">
-    <div>
+    <div class="pb-5 pt-5">
       <a class="rk-trace-clear-btn r" @click="status = !status">
         <span class="mr-5 vm">{{ $t('more') }}</span>
         <svg class="icon trans vm" :style="`transform: rotate(${status ? 180 : 0}deg);`">
@@ -53,10 +53,13 @@ limitations under the License. -->
             { label: 'Error', key: 'ERROR' },
           ]"
         />
-        <div class="mr-10" style="padding: 3px 15px 0">
-          <div class="sm grey">{{ $t('endpointName') }}</div>
-          <input type="text" v-model="endpointName" class="rk-trace-search-input" />
-        </div>
+        <TraceSelect
+          :hasSearch="true"
+          :title="$t('endpointName')"
+          :value="endpoint"
+          @input="chooseEndpoint"
+          :data="rocketTrace.endpoints"
+        />
       </div>
     </div>
     <div class="rk-trace-search-more" v-show="status">
@@ -111,7 +114,6 @@ limitations under the License. -->
   import { State as traceState } from '@/store/modules/trace/index';
   import { State as globalState } from '@/store/modules/global/index';
   import dateFormatStep from '@/utils/dateFormat';
-
   @Component({ components: { TraceSelect } })
   export default class TraceSearch extends Vue {
     @State('rocketbot') private rocketbotGlobal!: globalState;
@@ -121,27 +123,25 @@ limitations under the License. -->
     @Action('RESET_DURATION') private RESET_DURATION: any;
     @Action('rocketTrace/GET_SERVICES') private GET_SERVICES: any;
     @Action('rocketTrace/GET_INSTANCES') private GET_INSTANCES: any;
+    @Action('rocketTrace/GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
     @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
     @Action('rocketTrace/SET_TRACE_FORM') private SET_TRACE_FORM: any;
     @Mutation('rocketTrace/SET_TRACE_FORM_ITEM')
     private SET_TRACE_FORM_ITEM: any;
     @Mutation('rocketTrace/SET_INSTANCES') private SET_INSTANCES: any;
+    @Mutation('rocketTrace/SET_ENDPOINTS') private SET_ENDPOINTS: any;
     private service: Option = { label: 'All', key: '' };
     private time!: Date[];
     private status: boolean = true;
     private maxTraceDuration: string = localStorage.getItem('maxTraceDuration') || '';
     private minTraceDuration: string = localStorage.getItem('minTraceDuration') || '';
     private instance: Option = { label: 'All', key: '' };
-    private endpointName: string = localStorage.getItem('endpointName') || '';
+    private endpoint: Option = { label: 'All', key: '' };
     private traceId: string = localStorage.getItem('traceId') || '';
     private traceState: Option = { label: 'All', key: 'ALL' };
     private tags: string = '';
     private tagsList: string[] = [];
-
     private created() {
-      this.endpointName = this.$route.query.endpointname
-        ? this.$route.query.endpointname.toString()
-        : this.endpointName;
       this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
       this.tagsList = localStorage.getItem('traceTags') ? JSON.parse(localStorage.getItem('traceTags') || '') : [];
@@ -155,7 +155,6 @@ limitations under the License. -->
         });
       }
     }
-
     private globalTimeFormat(time: Date[]) {
       let step = 'MINUTE';
       const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
@@ -172,24 +171,32 @@ limitations under the License. -->
         step,
       };
     }
-
-    private chooseService(i: any) {
+    private chooseService(i: Option) {
       if (this.service.key === i.key) {
         return;
       }
       this.instance = { label: 'All', key: '' };
+      this.endpoint = { label: 'All', key: '' };
       this.service = i;
       if (i.key === '') {
         this.SET_INSTANCES([]);
+        this.SET_ENDPOINTS([]);
         return;
       }
       this.GET_INSTANCES({ duration: this.durationTime, serviceId: i.key });
+      this.SET_ENDPOINTS([]);
+      this.GET_ITEM_ENDPOINTS({
+        serviceId: i.key,
+        keyword: '',
+        duration: this.durationTime,
+      });
     }
-
-    private chooseStatus(i: any) {
+    private chooseStatus(i: Option) {
       this.traceState = i;
     }
-
+    private chooseEndpoint(i: Option) {
+      this.endpoint = i;
+    }
     private getTraceList() {
       this.GET_SERVICES({ duration: this.durationTime });
       const temp: any = {
@@ -207,7 +214,6 @@ limitations under the License. -->
         paging: { pageNum: 1, pageSize: 15, needTotal: true },
         queryOrder: this.rocketTrace.traceForm.queryOrder,
       };
-
       if (this.service.key) {
         temp.serviceId = this.service.key;
       }
@@ -222,9 +228,8 @@ limitations under the License. -->
         temp.minTraceDuration = this.minTraceDuration;
         localStorage.setItem('minTraceDuration', this.minTraceDuration);
       }
-      if (this.endpointName) {
-        temp.endpointName = this.endpointName;
-        localStorage.setItem('endpointName', this.endpointName);
+      if (this.endpoint.key) {
+        temp.endpointName = this.endpoint.label;
       }
       if (this.traceId) {
         temp.traceId = this.traceId;
@@ -234,7 +239,6 @@ limitations under the License. -->
       if (this.tagsList.length) {
         const tagsMap = this.tagsList.map((item: string) => {
           const key = item.substring(0, item.indexOf('='));
-
           return {
             key,
             value: item.substring(item.indexOf('=') + 1, item.length),
@@ -244,14 +248,12 @@ limitations under the License. -->
         localStorage.setItem('traceTags', JSON.stringify(this.tagsList));
       }
       this.SET_TRACE_FORM(temp);
-
       this.$eventBus.$emit('SET_LOADING_TRUE', () => {
         this.GET_TRACELIST().then(() => {
           this.$eventBus.$emit('SET_LOADING_FALSE');
         });
       });
     }
-
     private clearSearch() {
       this.RESET_DURATION();
       this.status = true;
@@ -261,8 +263,7 @@ limitations under the License. -->
       localStorage.removeItem('minTraceDuration');
       this.service = { label: 'All', key: '' };
       this.instance = { label: 'All', key: '' };
-      this.endpointName = '';
-      localStorage.removeItem('endpointName');
+      this.endpoint = { label: 'All', key: '' };
       this.tagsList = [];
       localStorage.removeItem('traceTags');
       this.traceId = '';
@@ -271,7 +272,6 @@ limitations under the License. -->
       this.SET_TRACE_FORM_ITEM({ type: 'queryOrder', data: '' });
       this.getTraceList();
     }
-
     private addLabels(event: KeyboardEvent) {
       if (event.keyCode !== 13 || !this.tags) {
         return;
@@ -279,12 +279,10 @@ limitations under the License. -->
       this.tagsList.push(this.tags);
       this.tags = '';
     }
-
     private removeTags(index: number) {
       this.tagsList.splice(index, 1);
       localStorage.setItem('traceTags', JSON.stringify(this.tagsList));
     }
-
     @Watch('rocketbotGlobal.durationRow')
     private durationRowWatch(value: Duration) {
       this.time = [value.start, value.end];
@@ -316,7 +314,6 @@ limitations under the License. -->
       cursor: pointer;
     }
   }
-
   .rk-trace-search-input {
     border-style: unset;
     outline: 0;
@@ -338,20 +335,17 @@ limitations under the License. -->
     display: inline-block;
     vertical-align: top;
   }
-
   .rk-trace-search-range {
     border-radius: 3px;
     background-color: #fff;
     padding: 1px;
     border-radius: 3px;
-
     input {
       width: 38px;
       border-style: unset;
       outline: 0;
     }
   }
-
   .rk-trace-search-btn {
     padding: 3px 9px;
     background-color: #484b55;
@@ -359,7 +353,6 @@ limitations under the License. -->
     color: #eee;
     font-weight: normal;
     cursor: pointer;
-
     &.bg-blue {
       background-color: #448dfe;
     }
@@ -367,18 +360,15 @@ limitations under the License. -->
   .rk-trace-search-btn {
     margin-top: 12px;
   }
-
   .rk-trace-clear-btn {
     padding: 3px 9px;
     background-color: #484b55;
     border-radius: 4px;
     margin-top: 12px;
-
     &.bg-warning {
       background-color: #fbb03b;
     }
   }
-
   .rk-trace-search-more {
     background-color: #484b55;
     padding: 4px 10px;
@@ -386,7 +376,6 @@ limitations under the License. -->
     margin-top: 8px;
     position: relative;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-
     &:after {
       bottom: 100%;
       right: 30px;

@@ -99,11 +99,14 @@ limitations under the License. -->
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .endpoint-dependency-page {
     height: calc(100% - 48px);
-    .rk-dashboard-bar {
-      border-bottom: 1px solid #252a2f;
-    }
+  }
+  .rk-dashboard-bar {
+    flex-shrink: 0;
+    color: #efefef;
+    background-color: #333840;
+    border-bottom: 1px solid #252a2f;
   }
 </style>
