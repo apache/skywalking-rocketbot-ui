@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div class="rk-trace-detail flex-v">
-    <rk-sidebox class="rk-log-box" :width="'100%'" :show.sync="showTraceLogs" :title="$t('relatedTraceLogs')">
+    <rk-sidebox class="rk-log-box" :width="'90%'" :show.sync="showTraceLogs" :title="$t('relatedTraceLogs')">
       <RkPage
         :currentSize="pageSize"
         :currentPage="pageNum"

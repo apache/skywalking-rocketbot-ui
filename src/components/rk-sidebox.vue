@@ -17,7 +17,6 @@ limitations under the License. -->
     <div class="rk-sidebox-backdrop" v-show="show" @click="handleHide"></div>
     <aside
       class="rk-sidebox flex-v"
-      @dblclick="handleHide"
       :style="
         show ? `width:${width};${right ? 'right:0' : 'left:0'}` : `width:${width};${right ? 'right' : 'left'}:-${width}`
       "
