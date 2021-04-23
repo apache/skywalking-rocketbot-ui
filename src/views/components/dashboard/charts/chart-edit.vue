@@ -237,6 +237,16 @@ limitations under the License. -->
           @change="setItemConfig({ type: 'height', value: $event.target.value })"
         />
       </div>
+      <div class="flex-h mb-5" v-show="!isChartType">
+        <div class="title grey sm">{{ $t('maxItemNum') }}:</div>
+        <input
+          type="number"
+          min="1"
+          class="rk-chart-edit-input long"
+          :value="itemConfig.maxItemNum"
+          @change="setItemConfig({ type: 'maxItemNum', value: $event.target.value })"
+        />
+      </div>
       <div class="flex-h mb-5">
         <div class="title grey sm">{{ $t('aggregation') }}:</div>
         <select
