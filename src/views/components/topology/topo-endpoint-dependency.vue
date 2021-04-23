@@ -41,8 +41,8 @@ limitations under the License. -->
   </div>
 </template>
 <script lang="ts">
-  import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-  import { State, Action, Getter, Mutation } from 'vuex-class';
+  import { Vue, Component, Watch } from 'vue-property-decorator';
+  import { State, Action, Getter } from 'vuex-class';
   import { State as topoState, EndpointDependencyConidition, Call, Duration } from '@/store/modules/topology';
   import TopoChart from './topo-chart.vue';
   import DependencySankey from './dependency-sankey.vue';
@@ -94,7 +94,7 @@ limitations under the License. -->
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .rk-endpoint-dependency {
     background: #333840;
     height: 100%;
@@ -105,22 +105,22 @@ limitations under the License. -->
       height: 80%;
       min-height: 500px;
     }
-    .endpoint-dependency-metrics {
-      height: 20%;
-      min-height: 100px;
-      display: flex;
-      flex-direction: row;
-      padding-left: 10px;
-      > div {
-        width: 25%;
-        height: 100%;
-      }
-    }
     .endpoint-dependency-empty {
       color: #fff;
       text-align: center;
       height: 500px;
       line-height: 500px;
+    }
+  }
+  .endpoint-dependency-metrics {
+    height: 20%;
+    min-height: 100px;
+    display: flex;
+    flex-direction: row;
+    padding-left: 10px;
+    > div {
+      width: 25%;
+      height: 100%;
     }
   }
 </style>

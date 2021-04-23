@@ -25,6 +25,7 @@ import { ActionTree, Commit, Dispatch, MutationTree } from 'vuex';
 export interface State {
   services: Option[];
   instances: Option[];
+  endpoints: Option[];
   traceForm: any;
   traceList: Trace[];
   traceTotal: number;
@@ -37,6 +38,7 @@ export interface State {
 const initState: State = {
   services: [],
   instances: [],
+  endpoints: [],
   traceForm: {
     paging: { pageNum: 1, pageSize: 15, needTotal: true },
     queryOrder: localStorage.getItem('traceQueryOrder') || 'BY_DURATION',
@@ -63,6 +65,9 @@ const mutations: MutationTree<State> = {
   },
   [types.SET_INSTANCES](state: State, data: Option[]): void {
     state.instances = [{ label: 'All', key: '' }].concat(data);
+  },
+  [types.SET_ENDPOINTS](state: State, data: Option[]): void {
+    state.endpoints = [{ label: 'All', key: '' }, ...data];
   },
   [types.SET_TRACE_FORM](state: State, data: any): void {
     if (data.queryOrder) {
@@ -135,6 +140,14 @@ const actions: ActionTree<State, any> = {
       .params(params)
       .then((res: AxiosResponse) => {
         context.commit(types.SET_INSTANCES, res.data.data.instanceId);
+      });
+  },
+  GET_ITEM_ENDPOINTS(context, params) {
+    return graph
+      .query('queryEndpoints')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
       });
   },
   SET_TRACE_FORM(context: { commit: Commit; dispatch: Dispatch }, params: any): void {

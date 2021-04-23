@@ -219,6 +219,7 @@ const m = {
   tableValues: '表值',
   show: '展示',
   hide: '隐藏',
+  message: '信息',
 };
 
 export default m;

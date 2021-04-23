@@ -221,6 +221,7 @@ const m = {
   tableValues: 'Table Values',
   show: 'Show',
   hide: 'Hide',
+  message: 'Message',
 };
 
 export default m;

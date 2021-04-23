@@ -128,7 +128,7 @@ limitations under the License. -->
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .topo-server.dao-select .dao-select-main .dao-select-switch {
     border: 0;
   }
