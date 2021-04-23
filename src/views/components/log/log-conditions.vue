@@ -111,8 +111,7 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Duration, Option } from '@/types/global';
-  import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+  import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Mutation, State } from 'vuex-class';
   import { State as globalState } from '@/store/modules/global/index';
   import { State as logState } from '@/store/modules/log/index';

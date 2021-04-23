@@ -107,7 +107,7 @@ limitations under the License. -->
     private pageNum: number = 1;
     private cateGoryBrowser = 'browser';
     private showConditionsBox = true;
-    private pageSize = 20;
+    private pageSize = 22;
 
     private beforeMount() {
       this.MIXHANDLE_GET_OPTION({

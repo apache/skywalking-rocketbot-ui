@@ -27,6 +27,7 @@ limitations under the License. -->
       <span v-show="!rocketGlobal.edit && itemConfig.chartType === 'ChartTable'" @click="copyTable">
         <rk-icon class="r cp" icon="review-list" />
       </span>
+      <rk-icon v-if="tips" class="r edit" icon="info_outline" v-tooltip:bottom="{ content: tips }" />
     </div>
     <div class="rk-dashboard-item-body" ref="chartBody">
       <div style="height:100%;width:100%">
@@ -102,6 +103,7 @@ limitations under the License. -->
     private dialogConfigVisible = false;
     private status = 'UNKNOWN';
     private title = 'Title';
+    private tips = '';
     private unit = '';
     private width = 3;
     private height = 300;
@@ -112,6 +114,7 @@ limitations under the License. -->
     private created() {
       this.status = this.item.metricType;
       this.title = this.item.title;
+      this.tips = this.item.tips;
       this.width = this.item.width;
       this.height = this.item.height;
       this.unit = this.item.unit;
@@ -381,7 +384,10 @@ limitations under the License. -->
     @Watch('rocketOption.updateDashboard')
     private watchCurrentSelectors() {
       this.itemEvents = this.eventsFilter();
-      if (this.rocketOption.updateDashboard.key.includes(UpdateDashboardEvents)) {
+      if (
+        this.rocketOption.updateDashboard.key &&
+        this.rocketOption.updateDashboard.key.includes(UpdateDashboardEvents)
+      ) {
         return;
       }
       setTimeout(() => {
