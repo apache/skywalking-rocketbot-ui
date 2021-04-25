@@ -219,6 +219,7 @@ const m = {
   show: '展示',
   hide: '隐藏',
   message: '信息',
+  tooltipsContent: '提示内容',
 };
 
 export default m;
