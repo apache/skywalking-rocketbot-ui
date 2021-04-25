@@ -221,6 +221,7 @@ const m = {
   show: 'Show',
   hide: 'Hide',
   message: 'Message',
+  tooltipsContent: 'Tooltip Content',
 };
 
 export default m;

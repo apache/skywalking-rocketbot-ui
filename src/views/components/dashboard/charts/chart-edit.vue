@@ -281,6 +281,15 @@ limitations under the License. -->
           <option :value="false">{{ $t('hide') }}</option>
         </select>
       </div>
+      <div class="flex-h mb-5">
+        <div class="title grey sm">{{ $t('tooltipsContent') }}:</div>
+        <input
+          type="text"
+          class="rk-chart-edit-input long"
+          :value="itemConfig.tips"
+          @change="setItemConfig({ type: 'tips', value: $event.target.value })"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -367,7 +376,7 @@ limitations under the License. -->
     private setItemConfig(params: { type: string; value: string }) {
       this.itemConfig[params.type] = params.value;
       const types = ['endpointsKey', 'instancesKey', 'currentService'];
-      const typesUpdate = ['title', 'width', 'height', 'unit'];
+      const typesUpdate = ['title', 'width', 'height', 'unit', 'tips'];
       if (params.type === 'servicesKey') {
         this.setItemServices(true);
       }
