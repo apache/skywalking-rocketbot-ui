@@ -597,7 +597,7 @@ limitations under the License. -->
   .rk-chart-edit {
     margin: 0 -10px;
     height: 100%;
-    overflow: auto;
+    border: 1px dashed rgba(196, 200, 225, 0.5);
 
     select {
       margin: 0;
@@ -610,10 +610,9 @@ limitations under the License. -->
 
   .rk-chart-edit-container {
     padding: 7px 5px;
-    border: 1px dashed rgba(196, 200, 225, 0.5);
     border-radius: 4px;
     height: 100%;
-
+    overflow: auto;
     .title {
       width: 120px;
       flex-shrink: 0;
