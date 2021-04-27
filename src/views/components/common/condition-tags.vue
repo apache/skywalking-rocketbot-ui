@@ -127,6 +127,6 @@ limitations under the License. -->
     cursor: pointer;
   }
   .tags-tip {
-    color: #eee;
+    color: #a7aebb;
   }
 </style>
