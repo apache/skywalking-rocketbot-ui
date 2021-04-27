@@ -81,27 +81,7 @@ limitations under the License. -->
           <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm" />
         </div>
       </div>
-      <div class="flex-h">
-        <div class="mr-10" style="padding-top: 5px">
-          <span class="sm grey">{{ $t('tags') }}: </span>
-          <span class="rk-trace-tags">
-            <span class="selected" v-for="(item, index) in tagsList" :key="index">
-              <span>{{ item }}</span>
-              <span class="remove-icon" @click="removeTags(index)">×</span>
-            </span>
-          </span>
-          <input type="text" :placeholder="$t('addTag')" v-model="tags" class="rk-trace-new-tag" @keyup="addLabels" />
-          <span class="trace-tips" v-tooltip:bottom="{ content: $t('traceTagsTip') }">
-            <a
-              target="blank"
-              href="https://github.com/apache/skywalking/blob/master/docs/en/setup/backend/configuration-vocabulary.md"
-            >
-              {{ $t('tagsLink') }}
-            </a>
-            <rk-icon icon="help" class="mr-5" />
-          </span>
-        </div>
-      </div>
+      <ConditionTags :clearTags="clearTags" @updateTags="updateTags" />
     </div>
   </div>
 </template>
@@ -111,10 +91,11 @@ limitations under the License. -->
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import TraceSelect from '../common/trace-select.vue';
+  import { ConditionTags } from '../common/index';
   import { State as traceState } from '@/store/modules/trace/index';
   import { State as globalState } from '@/store/modules/global/index';
   import dateFormatStep from '@/utils/dateFormat';
-  @Component({ components: { TraceSelect } })
+  @Component({ components: { TraceSelect, ConditionTags } })
   export default class TraceSearch extends Vue {
     @State('rocketbot') private rocketbotGlobal!: globalState;
     @State('rocketTrace') private rocketTrace!: traceState;
@@ -139,12 +120,13 @@ limitations under the License. -->
     private endpoint: Option = { label: 'All', key: '' };
     private traceId: string = localStorage.getItem('traceId') || '';
     private traceState: Option = { label: 'All', key: 'ALL' };
-    private tags: string = '';
+    private tagsMap: Array<{ key: string; value: string }> = [];
     private tagsList: string[] = [];
+    private clearTags: boolean = false;
+
     private created() {
       this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
-      this.tagsList = localStorage.getItem('traceTags') ? JSON.parse(localStorage.getItem('traceTags') || '') : [];
     }
     private mounted() {
       this.getTraceList();
@@ -197,6 +179,10 @@ limitations under the License. -->
     private chooseEndpoint(i: Option) {
       this.endpoint = i;
     }
+    private updateTags(data: { tagsMap: Array<{ key: string; value: string }>; tagsList: string[] }) {
+      this.tagsList = data.tagsList;
+      this.tagsMap = data.tagsMap;
+    }
     private getTraceList() {
       this.GET_SERVICES({ duration: this.durationTime });
       const temp: any = {
@@ -235,17 +221,8 @@ limitations under the License. -->
         temp.traceId = this.traceId;
       }
       localStorage.setItem('traceId', this.traceId);
-      if (this.tagsList.length) {
-        const tagsMap = this.tagsList.map((item: string) => {
-          const key = item.substring(0, item.indexOf('='));
-          return {
-            key,
-            value: item.substring(item.indexOf('=') + 1, item.length),
-          };
-        });
-        temp.tags = tagsMap;
-        localStorage.setItem('traceTags', JSON.stringify(this.tagsList));
-      }
+      temp.tags = this.tagsMap;
+      localStorage.setItem('traceTags', JSON.stringify(this.tagsList));
       this.SET_TRACE_FORM(temp);
       this.$eventBus.$emit('SET_LOADING_TRUE', () => {
         this.GET_TRACELIST().then(() => {
@@ -263,25 +240,17 @@ limitations under the License. -->
       this.service = { label: 'All', key: '' };
       this.instance = { label: 'All', key: '' };
       this.endpoint = { label: 'All', key: '' };
-      this.tagsList = [];
       localStorage.removeItem('traceTags');
+      this.clearTags = true;
+      this.tagsMap = [];
+      this.tagsList = [];
       this.traceId = '';
       localStorage.removeItem('traceId');
       this.traceState = { label: 'All', key: 'ALL' };
       this.SET_TRACE_FORM_ITEM({ type: 'queryOrder', data: '' });
       this.getTraceList();
     }
-    private addLabels(event: KeyboardEvent) {
-      if (event.keyCode !== 13 || !this.tags) {
-        return;
-      }
-      this.tagsList.push(this.tags);
-      this.tags = '';
-    }
-    private removeTags(index: number) {
-      this.tagsList.splice(index, 1);
-      localStorage.setItem('traceTags', JSON.stringify(this.tagsList));
-    }
+
     @Watch('rocketbotGlobal.durationRow')
     private durationRowWatch(value: Duration) {
       this.time = [value.start, value.end];

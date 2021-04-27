@@ -16,5 +16,6 @@
  */
 
 import TraceDetailChartTable from './trace-detail-chart-table.vue';
+import ConditionTags from './condition-tags.vue';
 
-export { TraceDetailChartTable };
+export { TraceDetailChartTable, ConditionTags };
