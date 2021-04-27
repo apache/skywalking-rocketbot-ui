@@ -44,7 +44,7 @@ limitations under the License. -->
   import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
   import LogTable from './log-table/log-table.vue';
   import { ServiceLogDetail } from './log-table/log-constant';
-  import { formatJson } from '../../../utils/formatJson';
+  import { formatJson } from '@/utils/formatJson';
 
   @Component({
     components: { LogTable },

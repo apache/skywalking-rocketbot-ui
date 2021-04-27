@@ -220,6 +220,7 @@ const m = {
   hide: '隐藏',
   message: '信息',
   tooltipsContent: '提示内容',
+  alarmDetail: '警告详情',
 };
 
 export default m;
