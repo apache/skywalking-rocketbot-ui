@@ -58,6 +58,12 @@ limitations under the License. -->
         </svg>
         {{ $t('list') }}</a
       >
+      <a class="rk-btn mr-5 sm r" :class="{ ghost: displayMode !== 'statistics' }" @click="displayMode = 'statistics'">
+        <svg class="icon vm sm">
+          <use xlink:href="#statistics-bulleted"></use>
+        </svg>
+        {{ $t('statistics') }}</a
+      >
 
       <div class="rk-tag mr-5">{{ $t('start') }}</div>
       <span class="mr-15 sm">{{ parseInt(current.start) | dateformat }}</span>
@@ -82,6 +88,12 @@ limitations under the License. -->
       :traceId="current.traceIds[0]"
       :showBtnDetail="false"
     />
+    <TraceDetailStatisticsTable
+      v-if="displayMode == 'statistics' && current.endpointNames"
+      :data="spans"
+      :traceId="current.traceIds[0]"
+      :showBtnDetail="false"
+    />
 
     <div v-if="!current.endpointNames" class="flex-h container">
       <svg class="icon rk-icon-trace">
@@ -95,7 +107,7 @@ limitations under the License. -->
   import { Vue, Component, Prop } from 'vue-property-decorator';
   import TraceDetailChartList from './trace-detail-chart-list.vue';
   import TraceDetailChartTree from './trace-detail-chart-tree.vue';
-  import { TraceDetailChartTable } from '../common';
+  import { TraceDetailChartTable, TraceDetailStatisticsTable } from '../common';
   import { Trace, Span } from '@/types/trace';
   import { Action, State } from 'vuex-class';
   import copy from '@/utils/copy';
@@ -107,6 +119,7 @@ limitations under the License. -->
       TraceDetailChartList,
       TraceDetailChartTree,
       TraceDetailChartTable,
+      TraceDetailStatisticsTable,
       LogTable,
     },
   })
