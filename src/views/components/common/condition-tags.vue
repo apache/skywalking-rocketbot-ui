@@ -23,7 +23,7 @@ limitations under the License. -->
         </span>
       </span>
       <input type="text" :placeholder="$t('addTag')" v-model="tags" class="rk-trace-new-tag" @keyup="addLabels" />
-      <span v-tooltip:bottom="{ content: $t('traceTagsTip') }">
+      <span class="tags-tip" v-tooltip:bottom="{ content: $t('traceTagsTip') }">
         <a
           target="blank"
           href="https://github.com/apache/skywalking/blob/master/docs/en/setup/backend/configuration-vocabulary.md"
@@ -39,16 +39,26 @@ limitations under the License. -->
   import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
   @Component
   export default class ConditionTags extends Vue {
+    @Prop() private type!: string;
     @Prop() private clearTags!: boolean;
     private tagsList: string[] = [];
     private tags: string = '';
 
     private created() {
-      this.tagsList = localStorage.getItem('traceTags') ? JSON.parse(localStorage.getItem('traceTags') || '') : [];
+      if (this.type === 'LOG') {
+        this.tagsList = localStorage.getItem('logTags') ? JSON.parse(localStorage.getItem('logTags') || '') : [];
+      } else if (this.type === 'TRACE') {
+        this.tagsList = localStorage.getItem('traceTags') ? JSON.parse(localStorage.getItem('traceTags') || '') : [];
+      }
+      // else { // ALARM
+      //   this.tagsList = localStorage.getItem('alarmTags') ? JSON.parse(localStorage.getItem('alarmTags') || '') : [];
+      // }
+
       this.updateTags();
     }
     private removeTags(index: number) {
       this.tagsList.splice(index, 1);
+      this.updateTags();
       localStorage.setItem('traceTags', JSON.stringify(this.tagsList));
     }
     private addLabels(event: KeyboardEvent) {
@@ -115,5 +125,8 @@ limitations under the License. -->
     display: inline-block;
     margin-left: 3px;
     cursor: pointer;
+  }
+  .tags-tip {
+    color: #eee;
   }
 </style>

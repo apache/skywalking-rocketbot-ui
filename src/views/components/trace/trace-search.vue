@@ -81,7 +81,7 @@ limitations under the License. -->
           <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm" />
         </div>
       </div>
-      <ConditionTags :clearTags="clearTags" @updateTags="updateTags" />
+      <ConditionTags :type="'TRACE'" :clearTags="clearTags" @updateTags="updateTags" />
     </div>
   </div>
 </template>

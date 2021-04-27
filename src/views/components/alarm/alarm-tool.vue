@@ -27,13 +27,12 @@ limitations under the License. -->
         :data="alarmOptions"
       />
       <div class="mr-10 ml-10">
-        <div class="sm grey">{{ $t('searchKeyword') }}</div>
+        <span class="sm grey">{{ $t('searchKeyword') }}: </span>
         <input type="text" v-model="keyword" class="rk-alarm-tool-input" @input="handleRefresh({ pageNum: 1 })" />
       </div>
-      <ConditionTags @updateTags="(data) => handleRefresh({ pageNum: 1, tagsMap: data.tagsMap })" />
+      <ConditionTags :type="'ALARM'" @updateTags="(data) => handleRefresh({ pageNum: 1, tagsMap: data.tagsMap })" />
     </div>
     <RkPage
-      class="mt-15"
       :currentSize="20"
       :currentPage="pageNum"
       @changePage="(pageNum) => handleRefresh({ pageNum })"
