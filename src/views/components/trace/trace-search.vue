@@ -15,7 +15,7 @@ limitations under the License. -->
 
 <template>
   <div class="rk-trace-search">
-    <div class="pb-5 pt-5">
+    <div>
       <a class="rk-trace-clear-btn r" @click="status = !status">
         <span class="mr-5 vm">{{ $t('more') }}</span>
         <svg class="icon trans vm" :style="`transform: rotate(${status ? 180 : 0}deg);`">
@@ -34,7 +34,7 @@ limitations under the License. -->
         </svg>
         <span class="vm">{{ $t('clear') }}</span>
       </a>
-      <div class="flex-h">
+      <div class="flex-h trace-select">
         <TraceSelect
           :hasSearch="true"
           :title="$t('service')"
@@ -290,6 +290,9 @@ limitations under the License. -->
 </script>
 
 <style lang="scss">
+  .trace-select {
+    height: 52px;
+  }
   .rk-trace-search {
     flex-shrink: 0;
     background-color: #333840;
@@ -372,7 +375,6 @@ limitations under the License. -->
     background-color: #484b55;
     padding: 4px 10px;
     border-radius: 3px;
-    margin-top: 8px;
     position: relative;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
     &:after {
