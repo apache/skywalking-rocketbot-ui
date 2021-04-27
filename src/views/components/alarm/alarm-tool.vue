@@ -14,26 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <nav class="rk-alarm-tool flex-h">
-    <AlarmSelect
-      :title="$t('filterScope')"
-      :value="alarmOption"
-      @input="
-        (option) => {
-          alarmOption = option;
-          handleRefresh(1);
-        }
-      "
-      :data="alarmOptions"
-    />
-    <div class="mr-10" style="padding: 3px 15px 0">
-      <div class="sm grey">{{ $t('searchKeyword') }}</div>
-      <input type="text" v-model="keyword" class="rk-alarm-tool-input" @input="handleRefresh(1)" />
+    <div class="flex-h alarm-conditions">
+      <AlarmSelect
+        :title="$t('filterScope')"
+        :value="alarmOption"
+        @input="
+          (option) => {
+            alarmOption = option;
+            handleRefresh({ pageNum: 1 });
+          }
+        "
+        :data="alarmOptions"
+      />
+      <div class="mr-10 ml-10">
+        <span class="sm grey">{{ $t('searchKeyword') }}: </span>
+        <input type="text" v-model="keyword" class="rk-alarm-tool-input" @input="handleRefresh({ pageNum: 1 })" />
+      </div>
+      <ConditionTags :type="'ALARM'" @updateTags="(data) => handleRefresh({ pageNum: 1, tagsMap: data.tagsMap })" />
     </div>
     <RkPage
-      class="mt-15"
       :currentSize="20"
       :currentPage="pageNum"
-      @changePage="(pageNum) => handleRefresh(pageNum)"
+      @changePage="(pageNum) => handleRefresh({ pageNum })"
       :total="total"
     />
   </nav>
@@ -44,15 +46,12 @@ limitations under the License. -->
   import { Component, Prop } from 'vue-property-decorator';
   import { Action, Mutation, Getter } from 'vuex-class';
   import AlarmSelect from './alarm-select.vue';
+  import { Option, DurationTime } from '@/types/global';
+  import { ConditionTags } from '../common/index';
 
-  interface Option {
-    key: string | number;
-    label: string | number;
-  }
-
-  @Component({ components: { AlarmSelect } })
+  @Component({ components: { AlarmSelect, ConditionTags } })
   export default class AlarmTool extends Vue {
-    @Getter('durationTime') private durationTime: any;
+    @Getter('durationTime') private durationTime!: DurationTime;
     @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Action('rocketAlarm/GET_ALARM') private GET_ALARM: any;
     @Prop() private total!: number;
@@ -69,15 +68,24 @@ limitations under the License. -->
     ];
     private keyword: string = '';
 
-    private handleRefresh(pageNum: number) {
-      this.pageNum = pageNum;
+    private beforeMount() {
+      this.SET_EVENTS([
+        () => {
+          this.handleRefresh({ pageNum: 1 });
+        },
+      ]);
+      this.handleRefresh({ pageNum: 1 });
+    }
+    private handleRefresh(param: { pageNum: number; tagsMap?: Array<{ key: string; value: string }> }) {
+      this.pageNum = param.pageNum;
       const params: any = {
         duration: this.durationTime,
         paging: {
-          pageNum,
+          pageNum: param.pageNum,
           pageSize: 20,
           needTotal: true,
         },
+        tags: param.tagsMap,
       };
       if (this.alarmOption.key) {
         params.scope = this.alarmOption.key;
@@ -87,22 +95,13 @@ limitations under the License. -->
       }
       this.GET_ALARM(params);
     }
-
-    private beforeMount() {
-      this.SET_EVENTS([
-        () => {
-          this.handleRefresh(1);
-        },
-      ]);
-      this.handleRefresh(1);
-    }
     private beforeDestroy() {
       this.SET_EVENTS([]);
     }
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .rk-alarm-tool {
     border-bottom: 1px solid #c1c5ca41;
     height: 52px;
@@ -110,6 +109,7 @@ limitations under the License. -->
     padding: 0 15px;
     color: #efefef;
     flex-shrink: 0;
+    justify-content: space-between;
   }
 
   .rk-alarm-tool-input {
@@ -117,5 +117,8 @@ limitations under the License. -->
     outline: 0;
     padding: 2px 5px;
     border-radius: 3px;
+  }
+  .alarm-conditions {
+    height: 100%;
   }
 </style>
