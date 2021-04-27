@@ -14,20 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <nav class="rk-alarm-tool flex-h">
-    <AlarmSelect
-      :title="$t('filterScope')"
-      :value="alarmOption"
-      @input="
-        (option) => {
-          alarmOption = option;
-          handleRefresh(1);
-        }
-      "
-      :data="alarmOptions"
-    />
-    <div class="mr-10" style="padding: 3px 15px 0">
-      <div class="sm grey">{{ $t('searchKeyword') }}</div>
-      <input type="text" v-model="keyword" class="rk-alarm-tool-input" @input="handleRefresh(1)" />
+    <div class="flex-h alarm-conditions">
+      <AlarmSelect
+        :title="$t('filterScope')"
+        :value="alarmOption"
+        @input="
+          (option) => {
+            alarmOption = option;
+            handleRefresh(1);
+          }
+        "
+        :data="alarmOptions"
+      />
+      <div class="mr-10 ml-10">
+        <div class="sm grey">{{ $t('searchKeyword') }}</div>
+        <input type="text" v-model="keyword" class="rk-alarm-tool-input" @input="handleRefresh(1)" />
+      </div>
+      <div class="mr-10">
+        <div class="sm grey">{{ $t('tags') }}</div>
+        <input type="text" v-model="tags" class="rk-alarm-tool-input" @input="handleRefresh(1)" />
+      </div>
     </div>
     <RkPage
       class="mt-15"
@@ -68,6 +74,7 @@ limitations under the License. -->
       { label: 'EndpointRelation', key: 'EndpointRelation' },
     ];
     private keyword: string = '';
+    private tags: string = '';
 
     private handleRefresh(pageNum: number) {
       this.pageNum = pageNum;
@@ -102,7 +109,7 @@ limitations under the License. -->
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .rk-alarm-tool {
     border-bottom: 1px solid #c1c5ca41;
     height: 52px;
@@ -110,6 +117,7 @@ limitations under the License. -->
     padding: 0 15px;
     color: #efefef;
     flex-shrink: 0;
+    justify-content: space-between;
   }
 
   .rk-alarm-tool-input {
@@ -117,5 +125,8 @@ limitations under the License. -->
     outline: 0;
     padding: 2px 5px;
     border-radius: 3px;
+  }
+  .alarm-conditions {
+    height: 100%;
   }
 </style>
