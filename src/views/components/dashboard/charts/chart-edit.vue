@@ -362,8 +362,6 @@ limitations under the License. -->
         : false;
       this.isBrowser = this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.BROWSER;
       if (this.isBrowser) {
-        this.setItemConfig({ type: 'independentSelector', value: 'false' });
-        this.setItemConfig({ type: 'sortOrder', value: 'DES' });
         this.EntityType = BrowserEntityType;
       }
       this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
