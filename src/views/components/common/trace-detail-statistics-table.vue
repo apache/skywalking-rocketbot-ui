@@ -97,27 +97,47 @@ limitations under the License. -->
 
        for(let value of map.values()){
           let maxTime = 0;
-          let minTime = 0;
+          let minTime;
           let sumTime = 0;
-          let arr = value[0].children;
-          let count = arr.length;
+          let val = value[0].children;
+          let count = val.length;
           let endpointName;
-          for (let i = 0; i < arr.length;i++) {
-            let element = arr[i];
-            let a = element.endTime;
-            let b = element.startTime;
+          //如果只出现一次,取value[0]
+          if(count == 0){
+            val = value[0];
+            count = 1;
+            let a = val.endTime;
+            let b = val.startTime;
             let ms = a - b;
-            if (ms > maxTime){
-              maxTime = ms;
-            }
-            if (ms < minTime) {
-              minTime = ms;
-            }
-            sumTime = sumTime + ms;
-            if(i == 0){
-              endpointName = element.endpointName;
-            }
-          };
+            maxTime = ms;
+            minTime = ms;
+            sumTime = ms;
+            endpointName = val.endpointName;
+
+          } else {
+            //循环计算
+            for (let i = 0; i < val.length;i++) {
+              let element = val[i];
+              let a = element.endTime;
+              let b = element.startTime;
+              let ms = a - b;
+              //默认赋值
+              if(i == 0){
+                endpointName = element.endpointName;
+                maxTime = ms;
+                minTime = ms;
+              }else{
+                if (ms > maxTime){
+                  maxTime = ms;
+                }
+                if (ms < minTime) {
+                  minTime = ms;
+                }
+              }
+              sumTime = sumTime + ms;
+
+            };
+          }
           let avgTime = count == 0 ? 0 :(sumTime / count);
           let jsonStr = {
               'maxTime': maxTime,

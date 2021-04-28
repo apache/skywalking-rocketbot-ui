@@ -34,7 +34,7 @@ limitations under the License. -->
         {{ data.maxTime }}
       </div>
       <div class="avg-time">
-        {{ data.avgTime.toFixed(2) }}
+        {{ parseInt(data.avgTime) }}
       </div>
       <div class="min-time">
         {{ data.minTime }}
