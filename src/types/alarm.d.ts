@@ -24,4 +24,6 @@ export interface Alarm {
   message: string;
   key: string;
   startTime: string;
+  scope: string;
+  tags: Array<{ key: string; value: string }>;
 }
