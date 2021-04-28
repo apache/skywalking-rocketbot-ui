@@ -40,7 +40,7 @@ limitations under the License. -->
 
 <script lang="js">
   import copy from '@/utils/copy';
-  import TraceContainer from './trace-chart-table/trace-container';
+  import TraceContainer from './trace-statistics-table/trace-container';
   import _ from 'lodash';
   import TraceSpanLogs from '../trace/trace-span-logs.vue';
   /* eslint-disable */
@@ -74,6 +74,67 @@ limitations under the License. -->
     },
     methods: {
       copy,
+      // TODO 统计计算
+      compute(data){
+        const traceData = data[0].children;
+        const map = new Map();
+        //数据转化
+        for (var i=0; i<traceData.length;i++) {
+          const element = traceData[i];
+          // console.log(element);
+          if (map.has(element.endpointName)) {
+            var arr =  map.get(element.endpointName);
+            arr[0].children.push(element);
+            map.set(element.endpointName,arr);
+          }else{
+            var arr = [];
+            arr.push(element);
+            map.set(element.endpointName,arr);
+          }
+        };
+        console.log(map);
+        const result = [];
+       for(let value of map.values()){
+
+
+          console.log(value);
+          console.log("------");
+
+          var maxTime = 0;
+          var minTime = 0;
+          var sumTime = 0;
+          const arr = value[0].children;
+          var count = arr.length;
+          var endpointName;
+          for (var i = 0; i < arr.length;i++) {
+            const element = arr[i];
+            const a = element.endTime;
+            const b = element.startTime;
+            const ms = a - b;
+            if (ms > maxTime){
+              maxTime = ms;
+            }
+            if (ms < minTime) {
+              minTime = ms;
+            }
+            sumTime = sumTime + ms;
+            endpointName = element.endpointName;
+          };
+          const avgTime = (sumTime / count);
+          var jsonStr = {
+              'maxTime': maxTime,
+              'minTime': minTime,
+              'avgTime': avgTime,
+              'count': count,
+              'endpointName': endpointName
+              };
+          result.push(jsonStr);
+        };
+        console.log("--- this is result---");
+        console.log(result);
+        console.log("------");
+        return result;
+      },
       // 给增加层级关系
       formatData(arr, level = 1, totalExec = null) {
         for (const item of arr) {
@@ -271,7 +332,8 @@ limitations under the License. -->
       this.loading = true;
     },
     mounted() {
-      this.tableData = this.formatData(this.changeTree());
+      const data = this.formatData(this.changeTree());
+      this.tableData = this.compute(data);
       this.loading = false;
       this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
       this.$eventBus.$on('HANDLE-VIEW-SPAN', this, this.handleViewSpan);
