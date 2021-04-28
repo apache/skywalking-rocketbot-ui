@@ -16,15 +16,15 @@ limitations under the License. -->
 <template>
   <div class="trace">
     <div class="trace-header">
-      <div class="method" :style="`width: ${method}px`">
+      <!-- <div class="method" :style="`width: ${method}px`">
         <span class="r cp" ref="dragger">
           <svg class="icon">
             <use xlink:href="#settings_ethernet"></use>
           </svg>
         </span>
-        {{ data[0].value }}
-      </div>
-      <div :class="item.label" v-for="(item, index) in data.slice(1)" :key="index">
+        {{ data[0].value }} 
+      </div> -->
+      <div :class="item.label" v-for="(item, index) in data" :key="index">
         {{ item.value }}
       </div>
     </div>

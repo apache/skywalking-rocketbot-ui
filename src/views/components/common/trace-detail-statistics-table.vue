@@ -79,38 +79,34 @@ limitations under the License. -->
         const traceData = data[0].children;
         const map = new Map();
         //数据转化
-        for (var i=0; i<traceData.length;i++) {
+        for (let i=0; i<traceData.length;i++) {
           const element = traceData[i];
           // console.log(element);
           if (map.has(element.endpointName)) {
-            var arr =  map.get(element.endpointName);
+            let arr =  map.get(element.endpointName);
             arr[0].children.push(element);
             map.set(element.endpointName,arr);
           }else{
-            var arr = [];
+            let arr = [];
             arr.push(element);
             map.set(element.endpointName,arr);
           }
         };
         console.log(map);
         const result = [];
+
        for(let value of map.values()){
-
-
-          console.log(value);
-          console.log("------");
-
-          var maxTime = 0;
-          var minTime = 0;
-          var sumTime = 0;
-          const arr = value[0].children;
-          var count = arr.length;
-          var endpointName;
-          for (var i = 0; i < arr.length;i++) {
-            const element = arr[i];
-            const a = element.endTime;
-            const b = element.startTime;
-            const ms = a - b;
+          let maxTime = 0;
+          let minTime = 0;
+          let sumTime = 0;
+          let arr = value[0].children;
+          let count = arr.length;
+          let endpointName;
+          for (let i = 0; i < arr.length;i++) {
+            let element = arr[i];
+            let a = element.endTime;
+            let b = element.startTime;
+            let ms = a - b;
             if (ms > maxTime){
               maxTime = ms;
             }
@@ -118,10 +114,12 @@ limitations under the License. -->
               minTime = ms;
             }
             sumTime = sumTime + ms;
-            endpointName = element.endpointName;
+            if(i == 0){
+              endpointName = element.endpointName;
+            }
           };
-          const avgTime = (sumTime / count);
-          var jsonStr = {
+          let avgTime = count == 0 ? 0 :(sumTime / count);
+          let jsonStr = {
               'maxTime': maxTime,
               'minTime': minTime,
               'avgTime': avgTime,

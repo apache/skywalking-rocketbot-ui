@@ -18,42 +18,11 @@
 export const ProfileConstant = [
   {
     label: 'method',
-    value: 'Span',
-  },
-  {
-    label: 'start-time',
-    value: 'Start Time',
-  },
-  {
-    label: 'exec-ms',
-    value: 'Exec(ms)',
-  },
-  {
-    label: 'exec-percent',
-    value: 'Exec(%)',
-  },
-  {
-    label: 'self',
-    value: 'Self(ms)',
-  },
-  {
-    label: 'api',
-    value: 'API',
-  },
-  {
-    label: 'application',
-    value: 'Service',
-  },
-  {
-    label: 'application',
-    value: 'Operation',
-  },
-];
-
-export const TraceConstant = [
-  {
-    label: 'method',
     value: 'Method',
+  },
+  {
+    label: 'max-time',
+    value: 'Max Time',
   },
   {
     label: 'avg-time',
@@ -64,8 +33,27 @@ export const TraceConstant = [
     value: 'Min Time',
   },
   {
+    label: 'count',
+    value: 'Count',
+  },
+];
+
+export const TraceConstant = [
+  {
+    label: 'method',
+    value: 'Method',
+  },
+  {
     label: 'max-time',
     value: 'Max Time',
+  },
+  {
+    label: 'avg-time',
+    value: 'Avg Time',
+  },
+  {
+    label: 'min-time',
+    value: 'Min Time',
   },
   {
     label: 'count',
