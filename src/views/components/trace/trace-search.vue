@@ -235,7 +235,7 @@ limitations under the License. -->
         temp.traceId = this.traceId;
       }
       localStorage.setItem('traceId', this.traceId);
-      
+
       if (this.tagsList.length) {
         const tagsMap = this.tagsList.map((item: string) => {
           const key = item.substring(0, item.indexOf('='));

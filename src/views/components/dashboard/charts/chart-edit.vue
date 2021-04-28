@@ -329,6 +329,9 @@ limitations under the License. -->
     @Prop() private intervalTime!: any;
     @Prop() private type!: string;
     private itemConfig: any = {};
+    private itemConfigDefault: any = {
+      maxItemNum: '10',
+    };
     private EntityType = EntityType;
     private IndependentType = IndependentType;
     private CalculationType = CalculationType;
@@ -347,12 +350,22 @@ limitations under the License. -->
     private isReadSingleValue = false;
 
     private created() {
-      this.itemConfig = this.item;
+      this.setDefaultValue((this.itemConfig = this.item));
       this.initConfig();
       if (!this.itemConfig.independentSelector || this.pageTypes.includes(this.type)) {
         return;
       }
       this.setItemServices();
+    }
+
+    private setDefaultValue(itemConfig: any) {
+      const keys: string[] = Object.keys(itemConfig);
+      let key: string = '';
+      for (key in this.itemConfigDefault) {
+        if (!keys.includes(key)) {
+          itemConfig[key] = this.itemConfigDefault[key];
+        }
+      }
     }
 
     private initConfig() {
