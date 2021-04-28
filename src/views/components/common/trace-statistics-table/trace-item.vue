@@ -34,7 +34,7 @@ limitations under the License. -->
         {{ data.maxTime }}
       </div>
       <div class="avg-time">
-        {{ data.avgTime }}
+        {{ data.avgTime.toFixed(2) }}
       </div>
       <div class="min-time">
         {{ data.minTime }}
@@ -43,9 +43,9 @@ limitations under the License. -->
         {{ data.count }}
       </div>
     </div>
-    <div v-show="data && data.length > 0 && displayChildren" class="children-trace">
+    <!-- <div v-show="data && data.length > 0 && displayChildren" class="children-trace">
       <item :method="method" v-for="(item, index) in data" :key="index" :data="item" :type="type"> </item>
-    </div>
+    </div> -->
   </div>
 </template>
 <script lang="js">
