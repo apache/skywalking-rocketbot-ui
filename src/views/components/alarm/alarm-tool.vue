@@ -28,7 +28,13 @@ limitations under the License. -->
       />
       <div class="mr-10 ml-10">
         <span class="sm grey">{{ $t('searchKeyword') }}: </span>
-        <input type="text" v-model="keyword" class="rk-alarm-tool-input" @input="handleRefresh({ pageNum: 1 })" />
+        <input
+          type="text"
+          v-model="keyword"
+          class="rk-alarm-tool-input"
+          @input="enterUpdateAlarm"
+          @change="handleRefresh({ pageNum: 1 })"
+        />
       </div>
       <ConditionTags :type="'ALARM'" @updateTags="(data) => handleRefresh({ pageNum: 1, tagsMap: data.tagsMap })" />
     </div>
@@ -94,6 +100,12 @@ limitations under the License. -->
         params.keyword = this.keyword;
       }
       this.GET_ALARM(params);
+    }
+    private enterUpdateAlarm(event: KeyboardEvent) {
+      if (event.keyCode !== 13) {
+        return;
+      }
+      this.handleRefresh({ pageNum: 1 });
     }
     private beforeDestroy() {
       this.SET_EVENTS([]);

@@ -76,3 +76,8 @@ export const ChartTypeOptions = [
   { value: 'ChartBar', label: 'Bar Chart' },
   { value: 'ChartTable', label: 'Table Of Latest Values' },
 ];
+
+export const ReadValueChartType = [
+  { value: 'ChartNum', label: 'Digital Card' },
+  { value: 'ChartSlow', label: 'Slow Chart' },
+];
