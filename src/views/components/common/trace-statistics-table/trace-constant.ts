@@ -22,15 +22,15 @@ export const ProfileConstant = [
   },
   {
     label: 'max-time',
-    value: 'Max Time',
+    value: 'Max Time (ms)',
   },
   {
     label: 'avg-time',
-    value: 'Avg Time',
+    value: 'Avg Time (ms)',
   },
   {
     label: 'min-time',
-    value: 'Min Time',
+    value: 'Min Time (ms)',
   },
   {
     label: 'count',
@@ -45,15 +45,15 @@ export const TraceConstant = [
   },
   {
     label: 'max-time',
-    value: 'Max Time',
+    value: 'Max Time (ms)',
   },
   {
     label: 'avg-time',
-    value: 'Avg Time',
+    value: 'Avg Time (ms)',
   },
   {
     label: 'min-time',
-    value: 'Min Time',
+    value: 'Min Time (ms)',
   },
   {
     label: 'count',
