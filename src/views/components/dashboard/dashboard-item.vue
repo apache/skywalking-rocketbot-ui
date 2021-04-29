@@ -320,6 +320,9 @@ limitations under the License. -->
       if (type === 'unit') {
         this.unit = value;
       }
+      if (type === 'tips') {
+        this.tips = value;
+      }
     }
 
     private copyTable() {

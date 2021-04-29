@@ -50,20 +50,9 @@ limitations under the License. -->
           v-model="itemConfig.chartType"
           @change="setItemConfig({ type: 'chartType', value: $event.target.value })"
         >
-          <option v-for="chart in ChartTypeOptions" :value="chart.value" :key="chart.value">
+          <option v-for="chart in chartTypeOptions" :value="chart.value" :key="chart.value">
             {{ chart.label }}
           </option>
-        </select>
-      </div>
-      <div class="flex-h mb-5" v-if="isReadSingleValue">
-        <div class="title grey sm">{{ $t('chartType') }}:</div>
-        <select
-          class="long"
-          v-model="itemConfig.chartType"
-          @change="setItemConfig({ type: 'chartType', value: $event.target.value })"
-        >
-          <option value="ChartNum" :key="`ChartNum`">no chart</option>
-          <option value="ChartSlow" :key="`ChartSlow`">Bar Chart</option>
         </select>
       </div>
       <div class="flex-h mb-5" v-show="isLabel">
@@ -263,7 +252,7 @@ limitations under the License. -->
           @change="setItemConfig({ type: 'aggregationNum', value: $event.target.value })"
         />
       </div>
-      <div class="flex-h mb-5" v-show="itemConfig.chartType === ChartTypeOptions[3].value">
+      <div class="flex-h mb-5" v-show="itemConfig.chartType === ChartTable">
         <div class="title grey sm">{{ $t('tableHeader') }}:</div>
         <input
           type="text"
@@ -280,7 +269,7 @@ limitations under the License. -->
           @change="setItemConfig({ type: 'tableHeaderCol2', value: $event.target.value })"
         />
       </div>
-      <div class="flex-h mb-5" v-show="itemConfig.chartType === ChartTypeOptions[3].value">
+      <div class="flex-h mb-5" v-show="itemConfig.chartType === ChartTable">
         <div class="title grey sm">{{ $t('tableValues') }}:</div>
         <select
           class="long"
@@ -291,6 +280,15 @@ limitations under the License. -->
           <option :value="false">{{ $t('hide') }}</option>
         </select>
       </div>
+      <div class="flex-h mb-5">
+        <div class="title grey sm">{{ $t('tooltipsContent') }}:</div>
+        <input
+          type="text"
+          class="rk-chart-edit-input long"
+          :value="itemConfig.tips"
+          @change="setItemConfig({ type: 'tips', value: $event.target.value })"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -298,7 +296,7 @@ limitations under the License. -->
 <script lang="ts">
   import Vue from 'vue';
   import { State, Getter, Mutation, Action } from 'vuex-class';
-  import { Component, Prop, Watch } from 'vue-property-decorator';
+  import { Component, Prop } from 'vue-property-decorator';
   import { TopologyType } from '@/constants/constant';
   import {
     EntityType,
@@ -309,6 +307,7 @@ limitations under the License. -->
     MetricChartType,
     CalculationType,
     ChartTypeOptions,
+    ReadValueChartType,
   } from './constant';
   import { DASHBOARDTYPE } from '../constant';
 
@@ -335,7 +334,7 @@ limitations under the License. -->
     private EntityType = EntityType;
     private IndependentType = IndependentType;
     private CalculationType = CalculationType;
-    private ChartTypeOptions = ChartTypeOptions;
+    private chartTypeOptions = ChartTypeOptions;
     private services: any = [];
     private endpoints: any = [];
     private instances: any = [];
@@ -347,7 +346,7 @@ limitations under the License. -->
     private nameMetrics = ['sortMetrics', 'readSampledRecords'];
     private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as string[];
     private isChartType = false;
-    private isReadSingleValue = false;
+    private ChartTable = 'ChartTable';
 
     private created() {
       this.setDefaultValue((this.itemConfig = this.item));
@@ -381,21 +380,20 @@ limitations under the License. -->
         : false;
       this.isBrowser = this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.BROWSER;
       if (this.isBrowser) {
-        this.setItemConfig({ type: 'independentSelector', value: 'false' });
-        this.setItemConfig({ type: 'sortOrder', value: 'DES' });
         this.EntityType = BrowserEntityType;
       }
       this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
       this.isLabel = this.itemConfig.metricType === MetricsType.LABELED_VALUE ? true : false;
       this.isIndependentSelector =
         this.rocketComps.tree[this.rocketComps.group].type === 'metric' || this.pageTypes.includes(this.type);
-      this.isChartType = ['readMetricsValues', 'readLabeledMetricsValues'].includes(this.itemConfig.queryMetricType);
+      this.chartTypeOptions =
+        this.itemConfig.queryMetricType === 'readMetricsValue' ? ReadValueChartType : ChartTypeOptions;
     }
 
     private setItemConfig(params: { type: string; value: string }) {
       this.itemConfig[params.type] = params.value;
       const types = ['endpointsKey', 'instancesKey', 'currentService'];
-      const typesUpdate = ['title', 'width', 'height', 'unit'];
+      const typesUpdate = ['title', 'width', 'height', 'unit', 'tips'];
       if (params.type === 'servicesKey') {
         this.setItemServices(true);
       }
@@ -415,6 +413,8 @@ limitations under the License. -->
         return;
       }
       if (params.type === 'queryMetricType') {
+        this.chartTypeOptions =
+          this.itemConfig.queryMetricType === 'readMetricsValue' ? ReadValueChartType : ChartTypeOptions;
         this.updateQueryMetricType(params);
         return;
       }
@@ -470,7 +470,7 @@ limitations under the License. -->
         this.$emit('updateStatus', 'metricType', typeOfMetrics);
         this.queryMetricTypesList = QueryMetricTypes[typeOfMetrics] || [];
         this.itemConfig.queryMetricType = this.queryMetricTypesList[0] && this.queryMetricTypesList[0].value;
-        this.isChartType = ['readMetricsValues', 'readLabeledMetricsValues'].includes(this.itemConfig.queryMetricType);
+        this.hasChartType();
         this.isLabel = typeOfMetrics === MetricsType.LABELED_VALUE ? true : false;
         const values = {
           metricType: typeOfMetrics,
@@ -541,7 +541,7 @@ limitations under the License. -->
         ...this.itemConfig,
         ...values,
       };
-      this.isChartType = ['readMetricsValues', 'readLabeledMetricsValues'].includes(this.itemConfig.queryMetricType);
+      this.hasChartType();
     }
 
     private setItemServices(update: boolean = false) {
@@ -606,9 +606,10 @@ limitations under the License. -->
       }
     }
 
-    @Watch('itemConfig.queryMetricType')
-    private watchQueryMetricType(val: string) {
-      this.isReadSingleValue = ['readMetricsValue'].includes(val);
+    private hasChartType() {
+      this.isChartType = ['readMetricsValue', 'readMetricsValues', 'readLabeledMetricsValues'].includes(
+        this.itemConfig.queryMetricType,
+      );
     }
   }
 </script>
@@ -616,7 +617,7 @@ limitations under the License. -->
   .rk-chart-edit {
     margin: 0 -10px;
     height: 100%;
-    overflow: auto;
+    border: 1px dashed rgba(196, 200, 225, 0.5);
 
     select {
       margin: 0;
@@ -629,10 +630,9 @@ limitations under the License. -->
 
   .rk-chart-edit-container {
     padding: 7px 5px;
-    border: 1px dashed rgba(196, 200, 225, 0.5);
     border-radius: 4px;
     height: 100%;
-
+    overflow: auto;
     .title {
       width: 120px;
       flex-shrink: 0;

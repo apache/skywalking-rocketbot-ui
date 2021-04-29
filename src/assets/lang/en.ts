@@ -222,6 +222,9 @@ const m = {
   show: 'Show',
   hide: 'Hide',
   message: 'Message',
+  tooltipsContent: 'Tooltip Content',
+  alarmDetail: 'Alarm Detail',
+  scope: 'Scope',
 };
 
 export default m;
