@@ -218,6 +218,7 @@ const m = {
   tableValues: '表值',
   show: '展示',
   hide: '隐藏',
+  statistics: '统计',
 };
 
 export default m;

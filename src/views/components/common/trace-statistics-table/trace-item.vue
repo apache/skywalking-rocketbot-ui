@@ -1,0 +1,160 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. -->
+
+<template>
+  <div>
+    <div @click="showSelectSpan" :class="['trace-item']" ref="traceItem">
+      <div :class="['method']" :style="{ 'text-indent': 10 + 'px', width: `${method}px` }">
+        <svg
+          class="icon vm cp trans"
+          :style="!displayChildren ? 'transform: rotate(-90deg);' : ''"
+          @click.stop="toggle"
+          v-if="data && data.length"
+        >
+          <use xlink:href="#arrow-down"></use>
+        </svg>
+        <span v-tooltip:bottom="{ content: data.endpointName, popperCls: ['trace-table-tooltip'] }">
+          {{ data.endpointName }}
+        </span>
+      </div>
+
+      <div class="max-time">
+        {{ data.maxTime }}
+      </div>
+      <div class="avg-time">
+        {{ parseInt(data.avgTime) }}
+      </div>
+      <div class="min-time">
+        {{ data.minTime }}
+      </div>
+      <div class="count">
+        {{ data.count }}
+      </div>
+    </div>
+    <!-- <div v-show="data && data.length > 0 && displayChildren" class="children-trace">
+      <item :method="method" v-for="(item, index) in data" :key="index" :data="item" :type="type"> </item>
+    </div> -->
+  </div>
+</template>
+<script lang="js">
+  export default {
+    name: 'item',
+    props: ['data', 'type', 'method'],
+    watch: {
+      data() {
+        const items = document.querySelectorAll('.trace-item');
+        for (const item of items) {
+          item.style.background = '#fff';
+        }
+      },
+    },
+    data() {
+      return {
+        displayChildren: true,
+        selectedSpan: 0,
+      };
+    },
+
+    methods: {
+      toggle() {
+        this.displayChildren = !this.displayChildren;
+      },
+      showSelectSpan() {
+        const items = document.querySelectorAll('.trace-item');
+        for (const item of items) {
+          item.style.background = '#fff';
+        }
+        this.$refs.traceItem.style.background = 'rgba(0, 0, 0, 0.1)';
+        this.$eventBus.$emit('HANDLE-SELECT-SPAN', this.data);
+      },
+      viewSpanDetail() {
+        this.showSelectSpan();
+        this.$eventBus.$emit('HANDLE-VIEW-SPAN', this.data);
+      },
+    },
+  };
+</script>
+<style lang="scss" scoped>
+  @import './trace.scss';
+  .trace-item.level0 {
+    color: #448dfe;
+    &:hover {
+      background: rgba(0, 0, 0, 0.04);
+      color: #448dfe;
+    }
+    &::before {
+      position: absolute;
+      content: '';
+      width: 5px;
+      height: 100%;
+      background: #448dfe;
+      left: 0;
+    }
+  }
+  .trace-item-error {
+    color: #e54c17;
+  }
+  .trace-item {
+    // display: flex;
+    white-space: nowrap;
+    position: relative;
+    cursor: pointer;
+  }
+  .trace-item.selected {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .trace-item:not(.level0):hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .trace-item > div {
+    padding: 0 5px;
+    display: inline-block;
+    border: 1px solid transparent;
+    border-right: 1px dotted silver;
+    overflow: hidden;
+    line-height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .trace-item > div.method {
+    padding-left: 10px;
+  }
+  .trace-item div.exec-percent {
+    width: 100px;
+    height: 30px;
+    padding: 0 8px;
+    .outer-progress_bar {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgb(63, 177, 227);
+      position: relative;
+      margin-top: 11px;
+      border: none;
+    }
+    .inner-progress_bar {
+      position: absolute;
+      background: rgb(110, 64, 170);
+      height: 4px;
+      border-radius: 2px;
+      left: 0;
+      border: none;
+      top: 1px;
+    }
+  }
+</style>

@@ -15,7 +15,48 @@
  * limitations under the License.
  */
 
-import TraceDetailChartTable from './trace-detail-chart-table.vue';
-import TraceDetailStatisticsTable from './trace-detail-statistics-table.vue';
+export const ProfileConstant = [
+  {
+    label: 'method',
+    value: 'Method',
+  },
+  {
+    label: 'max-time',
+    value: 'Max Time',
+  },
+  {
+    label: 'avg-time',
+    value: 'Avg Time',
+  },
+  {
+    label: 'min-time',
+    value: 'Min Time',
+  },
+  {
+    label: 'count',
+    value: 'Count',
+  },
+];
 
-export { TraceDetailChartTable, TraceDetailStatisticsTable };
+export const TraceConstant = [
+  {
+    label: 'method',
+    value: 'Method',
+  },
+  {
+    label: 'max-time',
+    value: 'Max Time',
+  },
+  {
+    label: 'avg-time',
+    value: 'Avg Time',
+  },
+  {
+    label: 'min-time',
+    value: 'Min Time',
+  },
+  {
+    label: 'count',
+    value: 'Count',
+  },
+];

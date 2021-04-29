@@ -1,3 +1,4 @@
+
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -14,8 +15,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+.argument {
+  width: 150px;
+}
+.max-time {
+  width: 150px;
+}
+.method {
+  width: 300px;
+}
+.avg-time {
+  width: 150px;
+}
+.min-time {
+  width: 150px;
+}
+.exec-percent {
+  width: 100px;
+}
+.count {
+  width: 120px;
+}
+.agent {
+  width: 150px;
+}
 
-import TraceDetailChartTable from './trace-detail-chart-table.vue';
-import TraceDetailStatisticsTable from './trace-detail-statistics-table.vue';
-
-export { TraceDetailChartTable, TraceDetailStatisticsTable };

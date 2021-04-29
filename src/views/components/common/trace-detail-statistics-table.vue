@@ -40,7 +40,7 @@ limitations under the License. -->
 
 <script lang="js">
   import copy from '@/utils/copy';
-  import TraceContainer from './trace-chart-table/trace-container';
+  import TraceContainer from './trace-statistics-table/trace-container';
   import _ from 'lodash';
   import TraceSpanLogs from '../trace/trace-span-logs.vue';
   /* eslint-disable */
@@ -74,6 +74,85 @@ limitations under the License. -->
     },
     methods: {
       copy,
+      // TODO 统计计算
+      compute(data){
+        const traceData = data[0].children;
+        const map = new Map();
+        //数据转化
+        for (let i=0; i<traceData.length;i++) {
+          const element = traceData[i];
+          // console.log(element);
+          if (map.has(element.endpointName)) {
+            let arr =  map.get(element.endpointName);
+            arr[0].children.push(element);
+            map.set(element.endpointName,arr);
+          }else{
+            let arr = [];
+            arr.push(element);
+            map.set(element.endpointName,arr);
+          }
+        };
+        console.log(map);
+        const result = [];
+
+       for(let value of map.values()){
+          let maxTime = 0;
+          let minTime;
+          let sumTime = 0;
+          let val = value[0].children;
+          let count = val.length;
+          let endpointName;
+          //如果只出现一次,取value[0]
+          if(count == 0){
+            val = value[0];
+            count = 1;
+            let a = val.endTime;
+            let b = val.startTime;
+            let ms = a - b;
+            maxTime = ms;
+            minTime = ms;
+            sumTime = ms;
+            endpointName = val.endpointName;
+
+          } else {
+            //循环计算
+            for (let i = 0; i < val.length;i++) {
+              let element = val[i];
+              let a = element.endTime;
+              let b = element.startTime;
+              let ms = a - b;
+              //默认赋值
+              if(i == 0){
+                endpointName = element.endpointName;
+                maxTime = ms;
+                minTime = ms;
+              }else{
+                if (ms > maxTime){
+                  maxTime = ms;
+                }
+                if (ms < minTime) {
+                  minTime = ms;
+                }
+              }
+              sumTime = sumTime + ms;
+
+            };
+          }
+          let avgTime = count == 0 ? 0 :(sumTime / count);
+          let jsonStr = {
+              'maxTime': maxTime,
+              'minTime': minTime,
+              'avgTime': avgTime,
+              'count': count,
+              'endpointName': endpointName
+              };
+          result.push(jsonStr);
+        };
+        console.log("--- this is result---");
+        console.log(result);
+        console.log("------");
+        return result;
+      },
       // 给增加层级关系
       formatData(arr, level = 1, totalExec = null) {
         for (const item of arr) {
@@ -271,7 +350,8 @@ limitations under the License. -->
       this.loading = true;
     },
     mounted() {
-      this.tableData = this.formatData(this.changeTree());
+      const data = this.formatData(this.changeTree());
+      this.tableData = this.compute(data);
       this.loading = false;
       this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
       this.$eventBus.$on('HANDLE-VIEW-SPAN', this, this.handleViewSpan);
