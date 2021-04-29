@@ -359,13 +359,18 @@ limitations under the License. -->
     }
 
     private setDefaultValue(itemConfig: any) {
-      const keys: string[] = Object.keys(itemConfig);
-      let key: string = '';
-      for (key in this.itemConfigDefault) {
-        if (!keys.includes(key)) {
+      const currentKeys: string[] = Object.keys(itemConfig);
+      const defaultKeys: string[] = Object.keys(this.itemConfigDefault);
+
+      if (!currentKeys.length || !defaultKeys.length) {
+        return;
+      }
+
+      defaultKeys.forEach((key: string) => {
+        if (!currentKeys.includes(key)) {
           itemConfig[key] = this.itemConfigDefault[key];
         }
-      }
+      });
     }
 
     private initConfig() {
