@@ -15,7 +15,7 @@ limitations under the License. -->
 
 <template>
   <div>
-    <div @click="showSelectSpan" :class="['trace-item']" ref="traceItem">
+    <div :class="['trace-item']" ref="traceItem">
       <div :class="['method']" :style="{ 'text-indent': 10 + 'px', width: `${method}px` }">
         <svg
           class="icon vm cp trans"
