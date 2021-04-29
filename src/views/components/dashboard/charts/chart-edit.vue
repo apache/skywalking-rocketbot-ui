@@ -226,6 +226,16 @@ limitations under the License. -->
           @change="setItemConfig({ type: 'height', value: $event.target.value })"
         />
       </div>
+      <div class="flex-h mb-5" v-show="!isChartType">
+        <div class="title grey sm">{{ $t('maxItemNum') }}:</div>
+        <input
+          type="number"
+          min="1"
+          class="rk-chart-edit-input long"
+          :value="itemConfig.maxItemNum"
+          @change="setItemConfig({ type: 'maxItemNum', value: $event.target.value })"
+        />
+      </div>
       <div class="flex-h mb-5">
         <div class="title grey sm">{{ $t('aggregation') }}:</div>
         <select
@@ -318,6 +328,9 @@ limitations under the License. -->
     @Prop() private intervalTime!: any;
     @Prop() private type!: string;
     private itemConfig: any = {};
+    private itemConfigDefault: any = {
+      maxItemNum: '10',
+    };
     private EntityType = EntityType;
     private IndependentType = IndependentType;
     private CalculationType = CalculationType;
@@ -336,12 +349,27 @@ limitations under the License. -->
     private ChartTable = 'ChartTable';
 
     private created() {
-      this.itemConfig = this.item;
+      this.setDefaultValue((this.itemConfig = this.item));
       this.initConfig();
       if (!this.itemConfig.independentSelector || this.pageTypes.includes(this.type)) {
         return;
       }
       this.setItemServices();
+    }
+
+    private setDefaultValue(itemConfig: any) {
+      const currentKeys: string[] = Object.keys(itemConfig);
+      const defaultKeys: string[] = Object.keys(this.itemConfigDefault);
+
+      if (!currentKeys.length || !defaultKeys.length) {
+        return;
+      }
+
+      defaultKeys.forEach((key: string) => {
+        if (!currentKeys.includes(key)) {
+          itemConfig[key] = this.itemConfigDefault[key];
+        }
+      });
     }
 
     private initConfig() {

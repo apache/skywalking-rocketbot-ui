@@ -150,6 +150,7 @@ const m = {
   timeTips: 'Time interval cannot exceed 60 days',
   standardAPM: 'Standard',
   entityType: 'Entity type',
+  maxItemNum: 'Max number of Item',
   independentSelector: 'Selectors',
   unknownMetrics: 'Unknown Metrics',
   labels: 'Labels',

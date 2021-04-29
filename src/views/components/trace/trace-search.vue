@@ -221,8 +221,10 @@ limitations under the License. -->
         temp.traceId = this.traceId;
       }
       localStorage.setItem('traceId', this.traceId);
+      
       temp.tags = this.tagsMap;
       localStorage.setItem('traceTags', JSON.stringify(this.tagsList));
+      
       this.SET_TRACE_FORM(temp);
       this.$eventBus.$emit('SET_LOADING_TRUE', () => {
         this.GET_TRACELIST().then(() => {
