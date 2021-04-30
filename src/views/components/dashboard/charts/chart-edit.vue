@@ -433,6 +433,7 @@ limitations under the License. -->
         } else {
           this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: this.itemConfig[params.type] } });
         }
+        return;
       }
       if (params.type === 'aggregation' && ['milliseconds', 'seconds'].includes(this.itemConfig.aggregation)) {
         this.updateAggregation(params);
