@@ -150,6 +150,7 @@ const m = {
   timeTips: 'Time interval cannot exceed 60 days',
   standardAPM: 'Standard',
   entityType: 'Entity type',
+  maxItemNum: 'Max number of Item',
   independentSelector: 'Selectors',
   unknownMetrics: 'Unknown Metrics',
   labels: 'Labels',
@@ -221,6 +222,9 @@ const m = {
   show: 'Show',
   hide: 'Hide',
   message: 'Message',
+  tooltipsContent: 'Tooltip Content',
+  alarmDetail: 'Alarm Detail',
+  scope: 'Scope',
 };
 
 export default m;

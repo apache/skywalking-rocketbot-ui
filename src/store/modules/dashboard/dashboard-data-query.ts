@@ -80,7 +80,7 @@ const actions: ActionTree<State, any> = {
                 parentService: null,
                 normal: true,
                 scope: config.entityType,
-                topN: 10,
+                topN: Number(config.maxItemNum) || 10,
                 order: config.sortOrder || 'DES',
               },
             }
@@ -109,7 +109,7 @@ const actions: ActionTree<State, any> = {
               parentService: config.parentService ? parentService : null,
               normal,
               scope: normal ? config.entityType : config.parentService ? 'Service' : config.entityType,
-              topN: 10,
+              topN: Number(config.maxItemNum) || 10,
               order: config.sortOrder || 'DES',
             },
           };
