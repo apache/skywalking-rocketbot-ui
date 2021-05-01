@@ -321,27 +321,6 @@ limitations under the License. -->
         }
         this.$emit('selectSpan', data);
       },
-      showCurrentSpanDetail(title, text) {
-        const textLineNumber = text.split('\n').length;
-        let textHeight = textLineNumber * 20.2 + 10;
-        const tmpHeight = window.innerHeight * 0.9
-        textHeight = textHeight >= tmpHeight ? tmpHeight : textHeight;
-        this.$modal.show('dialog', {
-          title,
-          text: `<div style="height:${textHeight}px">${text}</div>`,
-          buttons: [
-            {
-              title: 'Copy',
-              handler: () => {
-                this.copy(text);
-              },
-            },
-            {
-              title: 'Close',
-            },
-          ],
-        })
-      },
       handleViewSpan(data) {
         this.showDetail = true;
       }
@@ -353,7 +332,6 @@ limitations under the License. -->
       const data = this.formatData(this.changeTree());
       this.tableData = this.compute(data);
       this.loading = false;
-      this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
       this.$eventBus.$on('HANDLE-VIEW-SPAN', this, this.handleViewSpan);
       this.$eventBus.$on('TRACE-TABLE-LOADING', this, ()=>{ this.loading = true });
     },
