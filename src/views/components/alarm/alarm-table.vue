@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div class="rk-alarm-table clear">
-    <div v-for="(i, index) in data" :key="index" class="mb-10 clear">
+    <div v-for="(i, index) in data" :key="index" class="mb-10 clear alarm-item" @click="showDetails(i)">
       <div class="g-sm-3 grey sm hide-xs rk-alarm-time-line tr">
         {{ parseInt(i.startTime) | dateformat }}
       </div>
@@ -37,16 +37,64 @@ limitations under the License. -->
         </div>
       </div>
     </div>
+    <rk-sidebox :width="'50%'" :show.sync="isShowDetails" :title="$t('alarmDetail')">
+      <div class="mb-10 clear rk-flex" v-for="(item, index) in AlarmDetailCol" :key="index">
+        <template>
+          <span class="g-sm-4 grey">{{ $t(item.value) }}:</span>
+          <span v-if="item.label === 'startTime'" class="g-sm-8">{{ currentDetail[item.label] | dateformat }}</span>
+          <span v-else-if="item.label === 'tags'" class="g-sm-8">
+            <div v-for="(d, index) in alarmTags" :key="index">{{ d }}</div>
+          </span>
+          <span v-else class="g-sm-8">{{ currentDetail[item.label] }}</span>
+        </template>
+      </div>
+    </rk-sidebox>
   </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
+  import { Alarm } from '@/types/alarm';
 
   @Component
   export default class AlarmTable extends Vue {
-    @Prop({ default: () => [] }) private data: any;
+    @Prop({ default: () => [] }) private data!: Alarm[];
+    private isShowDetails: boolean = false;
+    private currentDetail: Alarm = {
+      tags: [],
+      scope: 'All',
+      message: '',
+      key: '',
+      startTime: '',
+    };
+    private alarmTags: string[] = [];
+    private AlarmDetailCol = [
+      {
+        label: 'scope',
+        value: 'scope',
+      },
+      {
+        label: 'startTime',
+        value: 'startTime',
+      },
+      {
+        label: 'tags',
+        value: 'tags',
+      },
+      {
+        label: 'message',
+        value: 'message',
+      },
+    ];
+
+    private showDetails(item: Alarm) {
+      this.currentDetail = item;
+      this.alarmTags = this.currentDetail.tags.map((d: { key: string; value: string }) => {
+        return `${d.key} = ${d.value}`;
+      });
+      this.isShowDetails = true;
+    }
   }
 </script>
 
@@ -95,5 +143,8 @@ limitations under the License. -->
     border: 1px solid;
     margin-top: -1px;
     border-radius: 4px;
+  }
+  .alarm-item {
+    cursor: pointer;
   }
 </style>

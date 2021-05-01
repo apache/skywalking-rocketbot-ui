@@ -29,10 +29,10 @@ limitations under the License. -->
       </template>
     </div>
     <div v-if="type === 'browser'">
-      <BrowserItem :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
+      <BrowserItem v-for="(item, index) in tableData" :data="item" :key="'browser' + index" />
     </div>
     <div v-else>
-      <ServiceItem v-for="(item, index) in tableData" :data="item" :key="'key' + index" :noLink="noLink" />
+      <ServiceItem v-for="(item, index) in tableData" :data="item" :key="'service' + index" :noLink="noLink" />
     </div>
     <slot></slot>
   </div>

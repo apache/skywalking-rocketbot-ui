@@ -150,6 +150,7 @@ const m = {
   timeTips: '时间区间不能超过60天',
   standardAPM: '标准APM',
   entityType: '实体类型',
+  maxItemNum: '最多条目数',
   independentSelector: '独立选择器',
   unknownMetrics: '未知指标',
   labels: '标签',
@@ -219,6 +220,10 @@ const m = {
   show: '展示',
   hide: '隐藏',
   statistics: '统计',
+  message: '信息',
+  tooltipsContent: '提示内容',
+  alarmDetail: '警告详情',
+  scope: '范围',
 };
 
 export default m;
