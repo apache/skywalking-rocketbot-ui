@@ -40,6 +40,13 @@ limitations under the License. -->
         </svg>
       </div>
 
+
+      <a class="rk-btn mr-5 sm r" :class="{ ghost: displayMode !== 'statistics' }" @click="displayMode = 'statistics'">
+        <svg class="icon vm sm">
+          <use xlink:href="#statistics-bulleted"></use>
+        </svg>
+        {{ $t('statistics') }}</a
+      >
       <a class="rk-btn mr-5 sm r" :class="{ ghost: displayMode !== 'table' }" @click="displayMode = 'table'">
         <svg class="icon vm sm rk-trace-table_svg-icon">
           <use xlink:href="#table"></use>
@@ -57,12 +64,6 @@ limitations under the License. -->
           <use xlink:href="#list-bulleted"></use>
         </svg>
         {{ $t('list') }}</a
-      >
-      <a class="rk-btn mr-5 sm r" :class="{ ghost: displayMode !== 'statistics' }" @click="displayMode = 'statistics'">
-        <svg class="icon vm sm">
-          <use xlink:href="#statistics-bulleted"></use>
-        </svg>
-        {{ $t('statistics') }}</a
       >
 
       <div class="rk-tag mr-5">{{ $t('start') }}</div>
