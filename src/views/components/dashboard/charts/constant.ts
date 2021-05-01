@@ -29,8 +29,8 @@ export const BrowserEntityType = [
 ];
 
 export const IndependentType = [
-  { key: 'true', label: 'Self selectors' },
-  { key: 'false', label: 'Common selectors' },
+  { key: true, label: 'Self selectors' },
+  { key: false, label: 'Common selectors' },
 ];
 
 export enum MetricsType {
@@ -75,4 +75,9 @@ export const ChartTypeOptions = [
   { value: 'ChartArea', label: 'Area Chart' },
   { value: 'ChartBar', label: 'Bar Chart' },
   { value: 'ChartTable', label: 'Table Of Latest Values' },
+];
+
+export const ReadValueChartType = [
+  { value: 'ChartNum', label: 'Digital Card' },
+  { value: 'ChartSlow', label: 'Slow Chart' },
 ];

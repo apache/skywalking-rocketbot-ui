@@ -78,24 +78,8 @@ export const ServiceLogDetail = [
 // The order of columns should be time, service, error, stack, version, url, catalog, and grade.
 export const BrowserLogConstants = [
   {
-    label: 'time',
-    value: 'time',
-  },
-  {
     label: 'service',
     value: 'service',
-  },
-  {
-    label: 'message',
-    value: 'errorInfo',
-    drag: true,
-    method: 350,
-  },
-  {
-    label: 'stack',
-    value: 'stack',
-    drag: true,
-    method: 350,
   },
   {
     label: 'serviceVersion',
@@ -104,6 +88,22 @@ export const BrowserLogConstants = [
   {
     label: 'errorUrl',
     value: 'errorPage',
+  },
+  {
+    label: 'time',
+    value: 'time',
+  },
+  {
+    label: 'message',
+    value: 'message',
+    drag: true,
+    method: 350,
+  },
+  {
+    label: 'stack',
+    value: 'stack',
+    drag: true,
+    method: 350,
   },
   // {
   //   label: 'pagePath',
