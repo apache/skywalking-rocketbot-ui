@@ -29,8 +29,8 @@ export const BrowserEntityType = [
 ];
 
 export const IndependentType = [
-  { key: 'true', label: 'Self selectors' },
-  { key: 'false', label: 'Common selectors' },
+  { key: true, label: 'Self selectors' },
+  { key: false, label: 'Common selectors' },
 ];
 
 export enum MetricsType {
