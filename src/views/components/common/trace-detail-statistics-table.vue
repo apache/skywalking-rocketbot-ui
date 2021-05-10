@@ -54,7 +54,7 @@ limitations under the License. -->
           this.tableData = [];
           return;
         }
-        this.tableData = this.formatData(this.changeTree());
+        this.tableData = this.compute(this.changeTree());
         this.loading = false;
       },
     },
@@ -70,14 +70,14 @@ limitations under the License. -->
       copy,
       compute(data){
         const traceData = data[0].children;
-        const map = new Map();
+        let map = new Map();
 
         for (let i=0; i<traceData.length;i++) {
           const element = traceData[i];
 
           if (map.has(element.endpointName)) {
             let arr =  map.get(element.endpointName);
-            arr[0].children.push(element);
+            arr.push(element);
             map.set(element.endpointName,arr);
           }else{
             let arr = [];
@@ -85,32 +85,29 @@ limitations under the License. -->
             map.set(element.endpointName,arr);
           }
         };
-        console.log(map);
-        const result = [];
-
+       const result = [];
        for(let value of map.values()){
           let maxTime = 0;
           let minTime;
           let sumTime = 0;
-          let val = value[0].children;
-          let count = val.length;
+          let count = value.length;
           let endpointName;
           //If it only happens once,get it as value[0]
           if(count == 0){
-            val = value[0];
+            let element = value[0];
             count = 1;
-            let a = val.endTime;
-            let b = val.startTime;
+            let a = element.endTime;
+            let b = element.startTime;
             let ms = a - b;
             maxTime = ms;
             minTime = ms;
             sumTime = ms;
-            endpointName = val.endpointName;
+            endpointName = element.endpointName;
 
           } else {
             //get each endpointName group maxTime,minTime,sumTime
-            for (let i = 0; i < val.length;i++) {
-              let element = val[i];
+            for (let i = 0; i < value.length;i++) {
+              let element = value[i];
               let a = element.endTime;
               let b = element.startTime;
               let ms = a - b;

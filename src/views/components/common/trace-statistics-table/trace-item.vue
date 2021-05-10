@@ -15,16 +15,8 @@ limitations under the License. -->
 
 <template>
   <div>
-    <div @click="showSelectSpan" :class="['trace-item']" ref="traceItem">
+    <div :class="['trace-item']" ref="traceItem">
       <div :class="['method']" :style="{ 'text-indent': 10 + 'px', width: `${method}px` }">
-        <svg
-          class="icon vm cp trans"
-          :style="!displayChildren ? 'transform: rotate(-90deg);' : ''"
-          @click.stop="toggle"
-          v-if="data && data.length"
-        >
-          <use xlink:href="#arrow-down"></use>
-        </svg>
         <span v-tooltip:bottom="{ content: data.endpointName, popperCls: ['trace-table-tooltip'] }">
           {{ data.endpointName }}
         </span>
@@ -43,15 +35,11 @@ limitations under the License. -->
         {{ data.count }}
       </div>
     </div>
-    <!-- <div v-show="data && data.length > 0 && displayChildren" class="children-trace">
-      <item :method="method" v-for="(item, index) in data" :key="index" :data="item" :type="type"> </item>
-    </div> -->
   </div>
 </template>
 <script lang="js">
   export default {
-    name: 'item',
-    props: ['data', 'type', 'method'],
+    props: ['data', 'method'],
     watch: {
       data() {
         const items = document.querySelectorAll('.trace-item');
@@ -60,63 +48,19 @@ limitations under the License. -->
         }
       },
     },
-    data() {
-      return {
-        displayChildren: true,
-        selectedSpan: 0,
-      };
-    },
 
-    methods: {
-      toggle() {
-        this.displayChildren = !this.displayChildren;
-      },
-      showSelectSpan() {
-        const items = document.querySelectorAll('.trace-item');
-        for (const item of items) {
-          item.style.background = '#fff';
-        }
-        this.$refs.traceItem.style.background = 'rgba(0, 0, 0, 0.1)';
-        this.$eventBus.$emit('HANDLE-SELECT-SPAN', this.data);
-      },
-      viewSpanDetail() {
-        this.showSelectSpan();
-        this.$eventBus.$emit('HANDLE-VIEW-SPAN', this.data);
-      },
-    },
   };
 </script>
 <style lang="scss" scoped>
   @import './trace.scss';
-  .trace-item.level0 {
-    color: #448dfe;
-    &:hover {
-      background: rgba(0, 0, 0, 0.04);
-      color: #448dfe;
-    }
-    &::before {
-      position: absolute;
-      content: '';
-      width: 5px;
-      height: 100%;
-      background: #448dfe;
-      left: 0;
-    }
-  }
-  .trace-item-error {
-    color: #e54c17;
-  }
   .trace-item {
     // display: flex;
     white-space: nowrap;
     position: relative;
     cursor: pointer;
   }
-  .trace-item.selected {
-    background: rgba(0, 0, 0, 0.04);
-  }
 
-  .trace-item:not(.level0):hover {
+  .trace-item:hover {
     background: rgba(0, 0, 0, 0.04);
   }
 
@@ -133,28 +77,5 @@ limitations under the License. -->
   }
   .trace-item > div.method {
     padding-left: 10px;
-  }
-  .trace-item div.exec-percent {
-    width: 100px;
-    height: 30px;
-    padding: 0 8px;
-    .outer-progress_bar {
-      width: 100%;
-      height: 6px;
-      border-radius: 3px;
-      background: rgb(63, 177, 227);
-      position: relative;
-      margin-top: 11px;
-      border: none;
-    }
-    .inner-progress_bar {
-      position: absolute;
-      background: rgb(110, 64, 170);
-      height: 4px;
-      border-radius: 2px;
-      left: 0;
-      border: none;
-      top: 1px;
-    }
   }
 </style>

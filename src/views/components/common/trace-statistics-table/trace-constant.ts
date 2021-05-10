@@ -37,26 +37,3 @@ export const ProfileConstant = [
     value: 'Count',
   },
 ];
-
-export const TraceConstant = [
-  {
-    label: 'method',
-    value: 'Method',
-  },
-  {
-    label: 'max-time',
-    value: 'Max Time',
-  },
-  {
-    label: 'avg-time',
-    value: 'Avg Time',
-  },
-  {
-    label: 'min-time',
-    value: 'Min Time',
-  },
-  {
-    label: 'count',
-    value: 'Count',
-  },
-];
