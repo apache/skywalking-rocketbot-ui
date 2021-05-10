@@ -16,52 +16,29 @@ limitations under the License. -->
 <template>
   <div class="trace">
     <div class="trace-header">
-      <!-- <div class="method" :style="`width: ${method}px`">
-        <span class="r cp" ref="dragger">
-          <svg class="icon">
-            <use xlink:href="#settings_ethernet"></use>
-          </svg>
-        </span>
-        {{ data[0].value }} 
-      </div> -->
       <div :class="item.label" v-for="(item, index) in data" :key="index">
         {{ item.value }}
       </div>
     </div>
-    <Item :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" :type="type" />
+    <Item :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" />
     <slot></slot>
   </div>
 </template>
 <script lang="js">
-  import { ProfileConstant, TraceConstant } from './trace-constant';
+  import { ProfileConstant } from './trace-constant';
   import Item from './trace-item';
 
   export default {
     components: {Item},
     name: 'TraceContainer',
-    props: ['type', 'tableData'],
+    props: [ 'tableData'],
     data() {
       return {
         method: 300,
       };
     },
     created() {
-      this.data = this.type === 'profile' ? ProfileConstant : TraceConstant;
-    },
-    mounted() {
-      const drag = this.$refs.dragger;
-      drag.onmousedown = (event) => {
-        const diffX = event.clientX;
-        const copy = this.method;
-        document.onmousemove = (documentEvent) => {
-          const moveX = documentEvent.clientX - diffX;
-          this.method = copy + moveX;
-        };
-        document.onmouseup = () => {
-          document.onmousemove = null;
-          document.onmouseup = null;
-        };
-      };
+      this.data = ProfileConstant;
     },
   };
 </script>

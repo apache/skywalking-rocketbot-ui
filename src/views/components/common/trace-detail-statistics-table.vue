@@ -22,9 +22,6 @@ limitations under the License. -->
     <TraceContainer :tableData="tableData" :type="HeaderType">
       <div class="trace-tips" v-if="!tableData.length">{{ $t('noData') }}</div>
     </TraceContainer>
-    <rk-sidebox :width="'50%'" :show.sync="showDetail" :title="$t('spanInfo')">
-      <TraceSpanLogs :currentSpan="currentSpan" />
-    </rk-sidebox>
   </div>
 </template>
 <style lang="scss">
@@ -57,7 +54,7 @@ limitations under the License. -->
           this.tableData = [];
           return;
         }
-        this.tableData = this.formatData(this.changeTree());
+        this.tableData = this.compute(this.changeTree());
         this.loading = false;
       },
     },
@@ -65,26 +62,22 @@ limitations under the License. -->
       return {
         tableData: [],
         diaplay: true,
-        // segmentId: [],
-        showDetail: false,
         list: [],
-        currentSpan: [],
         loading: true,
       };
     },
     methods: {
       copy,
-      // TODO 统计计算
       compute(data){
         const traceData = data[0].children;
-        const map = new Map();
-        //数据转化
+        let map = new Map();
+
         for (let i=0; i<traceData.length;i++) {
           const element = traceData[i];
-          // console.log(element);
+
           if (map.has(element.endpointName)) {
             let arr =  map.get(element.endpointName);
-            arr[0].children.push(element);
+            arr.push(element);
             map.set(element.endpointName,arr);
           }else{
             let arr = [];
@@ -92,36 +85,33 @@ limitations under the License. -->
             map.set(element.endpointName,arr);
           }
         };
-        console.log(map);
-        const result = [];
-
+       const result = [];
        for(let value of map.values()){
           let maxTime = 0;
           let minTime;
           let sumTime = 0;
-          let val = value[0].children;
-          let count = val.length;
+          let count = value.length;
           let endpointName;
-          //如果只出现一次,取value[0]
+          //If it only happens once,get it as value[0]
           if(count == 0){
-            val = value[0];
+            let element = value[0];
             count = 1;
-            let a = val.endTime;
-            let b = val.startTime;
+            let a = element.endTime;
+            let b = element.startTime;
             let ms = a - b;
             maxTime = ms;
             minTime = ms;
             sumTime = ms;
-            endpointName = val.endpointName;
+            endpointName = element.endpointName;
 
           } else {
-            //循环计算
-            for (let i = 0; i < val.length;i++) {
-              let element = val[i];
+            //get each endpointName group maxTime,minTime,sumTime
+            for (let i = 0; i < value.length;i++) {
+              let element = value[i];
               let a = element.endTime;
               let b = element.startTime;
               let ms = a - b;
-              //默认赋值
+              //set default value
               if(i == 0){
                 endpointName = element.endpointName;
                 maxTime = ms;
@@ -135,7 +125,6 @@ limitations under the License. -->
                 }
               }
               sumTime = sumTime + ms;
-
             };
           }
           let avgTime = count == 0 ? 0 :(sumTime / count);
@@ -144,16 +133,14 @@ limitations under the License. -->
               'minTime': minTime,
               'avgTime': avgTime,
               'count': count,
-              'endpointName': endpointName
+              'endpointName': endpointName,
+              'sumTime': sumTime
               };
           result.push(jsonStr);
         };
-        console.log("--- this is result---");
-        console.log(result);
-        console.log("------");
+
         return result;
       },
-      // 给增加层级关系
       formatData(arr, level = 1, totalExec = null) {
         for (const item of arr) {
           item.level = level;
@@ -314,25 +301,13 @@ limitations under the License. -->
           d.children.forEach((i) => this.collapse(i));
         }
       },
-      handleSelectSpan(data) {
-        this.currentSpan = data;
-        if (!this.showBtnDetail) {
-          this.showDetail = true;
-        }
-        this.$emit('selectSpan', data);
-      },
-      handleViewSpan(data) {
-        this.showDetail = true;
-      }
     },
     created() {
       this.loading = true;
     },
     mounted() {
-      const data = this.formatData(this.changeTree());
-      this.tableData = this.compute(data);
+      this.tableData = this.compute(this.data);
       this.loading = false;
-      this.$eventBus.$on('HANDLE-VIEW-SPAN', this, this.handleViewSpan);
       this.$eventBus.$on('TRACE-TABLE-LOADING', this, ()=>{ this.loading = true });
     },
   };

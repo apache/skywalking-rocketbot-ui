@@ -22,41 +22,22 @@ export const ProfileConstant = [
   },
   {
     label: 'max-time',
-    value: 'Max Time',
+    value: 'Max Time(ms)',
   },
   {
     label: 'avg-time',
-    value: 'Avg Time',
+    value: 'Avg Time(ms)',
   },
   {
     label: 'min-time',
-    value: 'Min Time',
+    value: 'Min Time(ms)',
   },
   {
     label: 'count',
-    value: 'Count',
-  },
-];
-
-export const TraceConstant = [
-  {
-    label: 'method',
-    value: 'Method',
+    value: 'Hits',
   },
   {
-    label: 'max-time',
-    value: 'Max Time',
-  },
-  {
-    label: 'avg-time',
-    value: 'Avg Time',
-  },
-  {
-    label: 'min-time',
-    value: 'Min Time',
-  },
-  {
-    label: 'count',
-    value: 'Count',
+    label: 'sum-time',
+    value: 'Sum Time(ms)',
   },
 ];
