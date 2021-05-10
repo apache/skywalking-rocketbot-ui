@@ -34,6 +34,9 @@ limitations under the License. -->
       <div class="count">
         {{ data.count }}
       </div>
+      <div class="sum-time">
+        {{ data.sumTime }}
+      </div>
     </div>
   </div>
 </template>

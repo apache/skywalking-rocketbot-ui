@@ -133,7 +133,8 @@ limitations under the License. -->
               'minTime': minTime,
               'avgTime': avgTime,
               'count': count,
-              'endpointName': endpointName
+              'endpointName': endpointName,
+              'sumTime': sumTime
               };
           result.push(jsonStr);
         };
