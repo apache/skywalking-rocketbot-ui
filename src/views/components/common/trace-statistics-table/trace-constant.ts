@@ -18,7 +18,7 @@
 export const ProfileConstant = [
   {
     label: 'method',
-    value: 'Method',
+    value: 'Endpoint Name',
   },
   {
     label: 'max-time',
@@ -33,11 +33,11 @@ export const ProfileConstant = [
     value: 'Min Time(ms)',
   },
   {
-    label: 'count',
-    value: 'Hits',
-  },
-  {
     label: 'sum-time',
     value: 'Sum Time(ms)',
+  },
+  {
+    label: 'count',
+    value: 'Hits',
   },
 ];
