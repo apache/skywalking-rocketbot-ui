@@ -25,8 +25,8 @@ limitations under the License. -->
   </div>
 </template>
 <script lang="js">
-  import { ProfileConstant } from './trace-constant';
-  import Item from './trace-item';
+  import { StatisticsConstant } from './trace-constant';
+  import Item from './trace-statistics-item';
 
   export default {
     components: {Item},
@@ -38,7 +38,7 @@ limitations under the License. -->
       };
     },
     created() {
-      this.data = ProfileConstant;
+      this.data = StatisticsConstant;
     },
   };
 </script>
