@@ -85,25 +85,31 @@ export const StatisticsConstant = [
   {
     label: 'method',
     value: 'Endpoint Name',
+    key: 'endpointName',
   },
   {
     label: 'max-time',
     value: 'Max Time(ms)',
+    key: 'maxTime',
   },
   {
     label: 'avg-time',
     value: 'Avg Time(ms)',
+    key: 'avgTime',
   },
   {
     label: 'min-time',
     value: 'Min Time(ms)',
+    key: 'minTime',
   },
   {
     label: 'sum-time',
     value: 'Sum Time(ms)',
+    key: 'sumTime',
   },
   {
     label: 'count',
     value: 'Hits',
+    key: 'count',
   },
 ];

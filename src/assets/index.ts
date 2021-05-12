@@ -62,3 +62,4 @@ import './svg/token.svg';
 import './svg/unlink.svg';
 import './svg/user.svg';
 import './svg/warning.svg';
+import './svg/sort.svg';
