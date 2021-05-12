@@ -401,6 +401,10 @@ limitations under the License. -->
       if (params.type === 'queryMetricType') {
         this.chartTypeOptions =
           this.itemConfig.queryMetricType === 'readMetricsValue' ? ReadValueChartType : ChartTypeOptions;
+        this.isChartSlow = ['sortMetrics', 'readSampledRecords'].includes(this.itemConfig.queryMetricType);
+        if (this.isChartSlow) {
+          this.itemConfig.maxItemNum = 10;
+        }
         this.updateQueryMetricType(params);
         return;
       }
