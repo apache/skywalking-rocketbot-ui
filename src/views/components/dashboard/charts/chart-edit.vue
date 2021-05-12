@@ -308,6 +308,7 @@ limitations under the License. -->
     CalculationType,
     ChartTypeOptions,
     ReadValueChartType,
+    MaxItemNum,
   } from './constant';
   import { DASHBOARDTYPE } from '../constant';
 
@@ -372,7 +373,7 @@ limitations under the License. -->
         this.itemConfig.queryMetricType === 'readMetricsValue' ? ReadValueChartType : ChartTypeOptions;
       this.isChartSlow = ['sortMetrics', 'readSampledRecords'].includes(this.itemConfig.queryMetricType);
       if (this.isChartSlow && !this.itemConfig.maxItemNum) {
-        this.itemConfig.maxItemNum = 10;
+        this.itemConfig.maxItemNum = MaxItemNum;
       }
     }
 
@@ -403,7 +404,7 @@ limitations under the License. -->
           this.itemConfig.queryMetricType === 'readMetricsValue' ? ReadValueChartType : ChartTypeOptions;
         this.isChartSlow = ['sortMetrics', 'readSampledRecords'].includes(this.itemConfig.queryMetricType);
         if (this.isChartSlow) {
-          this.itemConfig.maxItemNum = 10;
+          this.itemConfig.maxItemNum = MaxItemNum;
         }
         this.updateQueryMetricType(params);
         return;
