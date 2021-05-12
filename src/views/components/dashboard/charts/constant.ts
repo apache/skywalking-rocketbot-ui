@@ -81,3 +81,5 @@ export const ReadValueChartType = [
   { value: 'ChartNum', label: 'Digital Card' },
   { value: 'ChartSlow', label: 'Slow Chart' },
 ];
+
+export const MaxItemNum = 10;
