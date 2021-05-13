@@ -15,7 +15,7 @@ limitations under the License. -->
 
 <template>
   <div class="trace">
-    <div class="trace-header">
+    <div class="trace-header" v-if="displayMode == 'table'">
       <div class="method" :style="`width: ${method}px`">
         <span class="r cp" ref="dragger">
           <svg
@@ -30,12 +30,22 @@ limitations under the License. -->
         {{ item.value }}
       </div>
     </div>
-    <Item :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" :type="type" />
+    <div class="trace-header" v-if="displayMode == 'statistics'">
+      <div :class="item.label" v-for="(item, index) in data" :key="index">
+        {{ item.value }}
+        <span class="r cp" @click="sortFunc(item.key)" :key="componentKey" v-if="item.key != 'endpointName'">
+          <svg class="icon">
+            <use xlink:href="#sort"></use>
+          </svg>
+        </span>
+      </div>
+    </div>
+    <Item :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" :type="itemType" />
     <slot></slot>
   </div>
 </template>
 <script lang="js">
-  import { ProfileConstant, TraceConstant } from './trace-constant';
+  import { ProfileConstant, TraceConstant ,StatisticsConstant } from './trace-constant';
   import Item from './trace-item';
 
   export default {
@@ -45,10 +55,17 @@ limitations under the License. -->
     data() {
       return {
         method: 300,
+        itemType: this.type || "default"
       };
     },
     created() {
-      this.data = this.type === 'profile' ? ProfileConstant : TraceConstant;
+      if ( this.type === 'profile' ) {
+         this.data = ProfileConstant;
+      } else if ( this.type === 'statistics' ){
+         this.data = StatisticsConstant;
+      } else{
+         this.data = TraceConstant;
+      }
     },
     mounted() {
       const drag = this.$refs.dragger;
@@ -64,6 +81,53 @@ limitations under the License. -->
           document.onmouseup = null;
         };
       };
+    },
+    methods: {
+      sortFunc(key) {
+        const element = this.tableData;
+        for (let i = 0; i < element.length; i++) {
+           for (let j = 0; j < element.length - i - 1; j++) {
+            let val1;
+            let val2;
+            if (key === 'maxTime') {
+              val1 = element[j].maxTime;
+              val2 = element[j + 1].maxTime;
+            }
+            if (key === 'minTime') {
+              val1 = element[j].minTime;
+              val2 = element[j + 1].minTime;
+            }
+            if (key === 'avgTime') {
+              val1 = element[j].avgTime;
+              val2 = element[j + 1].avgTime;
+            }
+            if (key === 'sumTime') {
+              val1 = element[j].sumTime;
+              val2 = element[j + 1].sumTime;
+            }
+            if (key === 'count') {
+              val1 = element[j].count;
+              val2 = element[j + 1].count;
+            }
+            if (this.flag) {
+              if (val1 < val2) {
+                const tmp = element[j];
+                element[j] = element[j + 1];
+                element[j + 1] = tmp;
+              }
+            } else {
+              if (val1 > val2) {
+                const tmp = element[j];
+                element[j] = element[j + 1];
+                element[j + 1] = tmp;
+              }
+            }
+          }
+        }
+        this.tableData = element;
+        this.componentKey += 1;
+        this.flag = !this.flag;
+      },
     },
   };
 </script>

@@ -37,7 +37,7 @@ limitations under the License. -->
 
 <script lang="js">
   import copy from '@/utils/copy';
-  import TraceContainer from './trace-chart-table/trace-statistics-container';
+  import TraceContainer from './trace-chart-table/trace-container';
   import _ from 'lodash';
   /* eslint-disable */
   /* tslint:disable */

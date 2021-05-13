@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 
 <template>
-  <div>
+  <div v-if="type == 'default'">
     <div
       @click="showSelectSpan"
       :class="['trace-item', 'level' + (data.level - 1), ...{ 'trace-item-error': data.isError }]"
@@ -62,6 +62,30 @@ limitations under the License. -->
     </div>
     <div v-show="data.children && data.children.length > 0 && displayChildren" class="children-trace">
       <item :method="method" v-for="(item, index) in data.children" :key="index" :data="item" :type="type"> </item>
+    </div>
+  </div>
+  <div v-if="type == 'statistics'">
+    <div :class="['trace-item']" ref="traceItem">
+      <div :class="['method']" :style="{ 'text-indent': 10 + 'px', width: `${method}px` }">
+        <span v-tooltip:bottom="{ content: data.endpointName, popperCls: ['trace-table-tooltip'] }">
+          {{ data.endpointName }}
+        </span>
+      </div>
+      <div class="max-time">
+        {{ data.maxTime }}
+      </div>
+      <div class="avg-time">
+        {{ parseInt(data.avgTime) }}
+      </div>
+      <div class="min-time">
+        {{ data.minTime }}
+      </div>
+      <div class="sum-time">
+        {{ data.sumTime }}
+      </div>
+      <div class="count">
+        {{ data.count }}
+      </div>
     </div>
   </div>
 </template>

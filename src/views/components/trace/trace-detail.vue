@@ -39,8 +39,6 @@ limitations under the License. -->
           <use xlink:href="#review-list"></use>
         </svg>
       </div>
-
-
       <a class="rk-btn mr-5 sm r" :class="{ ghost: displayMode !== 'statistics' }" @click="displayMode = 'statistics'">
         <svg class="icon vm sm">
           <use xlink:href="#statistics-bulleted"></use>
@@ -94,6 +92,7 @@ limitations under the License. -->
       :data="spans"
       :traceId="current.traceIds[0]"
       :showBtnDetail="false"
+      :HeaderType="statistics"
     />
 
     <div v-if="!current.endpointNames" class="flex-h container">
