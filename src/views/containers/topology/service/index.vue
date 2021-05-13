@@ -57,7 +57,7 @@ limitations under the License. -->
         />
       </div>
     </div>
-    <services-survey :serviceComps="serviceComps" :updateObjects="updateObjects" />
+    <services-survey :serviceComps="serviceMetrics" :updateObjects="updateObjects" />
   </div>
 </template>
 
@@ -76,6 +76,7 @@ limitations under the License. -->
   import { State as rocketbotGlobal } from '@/store/modules/global';
   import { DurationTime } from '@/types/global';
   import { PageEventsType } from '@/constants/constant';
+  import { State as topoState } from '@/store/modules/topology';
 
   @Component({
     components: {
@@ -91,14 +92,19 @@ limitations under the License. -->
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketData') private rocketComps!: rocketData;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
+    @State('rocketTopo') private stateTopo!: topoState;
     @Getter('durationTime') private durationTime!: DurationTime;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
 
     private pageEventsType = PageEventsType;
+    private serviceMetrics: any = [];
 
     private beforeMount() {
+      const { type } = this.stateTopo.currentNode;
+
       this.SET_CURRENT_SERVICE(this.current);
+      this.serviceMetrics = this.serviceComps[type];
     }
 
     private async importData(event: any) {

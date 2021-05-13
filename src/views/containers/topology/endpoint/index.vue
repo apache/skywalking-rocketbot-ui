@@ -64,7 +64,7 @@ limitations under the License. -->
         />
       </div>
     </div>
-    <endpoints-survey :endpointComps="endpointComps" :updateObjects="updateObjects" />
+    <endpoints-survey :endpointComps="endpointMetrics" :updateObjects="updateObjects" />
   </div>
 </template>
 
@@ -85,6 +85,7 @@ limitations under the License. -->
   import { DurationTime, Option } from '@/types/global';
   import { EntityType } from '@/views/components/dashboard/charts/constant';
   import { PageEventsType } from '@/constants/constant';
+  import { State as topoState } from '@/store/modules/topology';
 
   @Component({
     components: {
@@ -101,6 +102,7 @@ limitations under the License. -->
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketData') private rocketComps!: rocketData;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
+    @State('rocketTopo') private stateTopo!: topoState;
     @Getter('durationTime') private durationTime!: DurationTime;
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
@@ -110,6 +112,7 @@ limitations under the License. -->
     @Action('GET_EVENT') private GET_EVENT: any;
 
     private pageEventsType = PageEventsType;
+    private endpointMetrics: any[] = [];
 
     private selectEndpoint(i: Option) {
       if (!this.rocketComps.enableEvents) {
@@ -132,7 +135,10 @@ limitations under the License. -->
     }
 
     private beforeMount() {
+      const { type } = this.stateTopo.currentNode;
+
       this.SET_CURRENT_SERVICE(this.current);
+      this.endpointMetrics = this.endpointComps[type];
       this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 2 });
       this.GET_SERVICE_ENDPOINTS({ duration: this.durationTime, serviceId: this.current.key, keyword: '' }).then(() => {
         this.selectEndpoint(this.stateDashboardOption.endpoints[0]);

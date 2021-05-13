@@ -65,7 +65,7 @@ limitations under the License. -->
         />
       </div>
     </div>
-    <instances-survey :instanceComps="instanceComps" :updateObjects="updateObjects" />
+    <instances-survey :instanceComps="instanceMetrics" :updateObjects="updateObjects" />
   </div>
 </template>
 
@@ -86,6 +86,7 @@ limitations under the License. -->
   import { State as rocketbotGlobal } from '@/store/modules/global';
   import DashboardEvent from '@/views/components/dashboard/tool-bar/dashboard-events.vue';
   import { PageEventsType } from '@/constants/constant';
+  import { State as topoState } from '@/store/modules/topology';
 
   @Component({
     components: {
@@ -102,6 +103,7 @@ limitations under the License. -->
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketData') private rocketComps!: rocketData;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
+    @State('rocketTopo') private stateTopo!: topoState;
     @Getter('durationTime') private durationTime!: DurationTime;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Action('GET_SERVICE_INSTANCES') private GET_SERVICE_INSTANCES: any;
@@ -111,6 +113,7 @@ limitations under the License. -->
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
 
     private pageEventsType = PageEventsType;
+    private instanceMetrics = [];
 
     private selectInstance(i: Option) {
       if (!this.rocketComps.enableEvents) {
@@ -133,6 +136,9 @@ limitations under the License. -->
     }
 
     private beforeMount() {
+      const { type } = this.stateTopo.currentNode;
+
+      this.instanceMetrics = this.instanceComps[type];
       this.SET_CURRENT_SERVICE(this.current);
       this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 3 });
       this.GET_SERVICE_INSTANCES({ duration: this.durationTime, serviceId: this.current.key }).then(() => {
