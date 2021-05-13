@@ -62,6 +62,7 @@ const mutations: MutationTree<State> = {
     if (state.pageType !== PageTypes.DASHBOARD) {
       state.updateDashboard = service;
     }
+    console.log(state.updateDashboard);
   },
 
   [types.UPDATE_DASHBOARD](state: State, param?: { key: string }) {

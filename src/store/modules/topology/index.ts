@@ -307,6 +307,10 @@ const mutations = {
   [types.SET_ENDPOINT_DEPTH](state: State, data: { key: number; label: string }) {
     state.currentEndpointDepth = data;
   },
+  [types.SET_TOPO_SERVICE](state: State, data: any[]) {
+    // state.topoEndpoints = data;
+    // window.localStorage.setItem('topologyEndpoints', JSON.stringify(data));
+  },
 };
 
 // actions

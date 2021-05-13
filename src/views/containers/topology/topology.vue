@@ -39,6 +39,13 @@ limitations under the License. -->
         @changeInstanceComps="changeInstanceComps"
         :updateObjects="updateObjects"
       />
+      <window-service
+        v-if="dialog === 'service'"
+        :current="this.current"
+        :serviceComps="serviceComps"
+        @changeServiceComps="changeServiceComps"
+        :updateObjects="updateObjects"
+      />
       <window-trace v-if="dialog === 'trace'" :current="this.current" />
       <window-alarm v-if="dialog === 'alarm'" :current="this.current" />
       <window-endpoint-dependency
@@ -51,18 +58,19 @@ limitations under the License. -->
 </template>
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator';
-  import { State, Action, Getter, Mutation } from 'vuex-class';
-  import { AxiosResponse } from 'axios';
+  import { State, Action, Mutation } from 'vuex-class';
   import { State as topoState } from '@/store/modules/topology';
   import { TopologyType } from '../../../constants/constant';
   import WindowEndpoint from '@/views/containers/topology/endpoint/index.vue';
   import WindowInstance from '@/views/containers/topology/instance/index.vue';
+  import WindowService from '@/views/containers/topology/service/index.vue';
   import WindowTrace from '@/views/containers/topology/trace/index.vue';
   import WindowAlarm from '@/views/containers/topology/alarm/index.vue';
   import Topo from '../../components/topology/chart/topo.vue';
   import TopoAside from '../../components/topology/topo-aside.vue';
   import TopoGroup from '../../components/topology/topo-group/index.vue';
   import WindowEndpointDependency from '@/views/containers/topology/endpoint-dependency/index.vue';
+  import { TopoServiceMetrics } from './service/topo-config';
 
   @Component({
     components: {
@@ -74,6 +82,7 @@ limitations under the License. -->
       WindowTrace,
       WindowAlarm,
       WindowEndpointDependency,
+      WindowService,
     },
   })
   export default class Topology extends Vue {
@@ -83,12 +92,13 @@ limitations under the License. -->
     @Action('GET_ALL_TEMPLATES') private GET_ALL_TEMPLATES: any;
     @Mutation('rocketTopo/SET_TOPO_ENDPOINT') private SET_TOPO_ENDPOINT: any;
     @Mutation('rocketTopo/SET_TOPO_INSTANCE') private SET_TOPO_INSTANCE: any;
+    @Mutation('rocketTopo/SET_TOPO_SERVICE') private SET_TOPO_SERVICE: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
-    @Getter('durationTime') private durationTime: any;
 
     private current: any = {};
     private dialog: string = '';
     private updateObjects: string = '';
+    private serviceComps = TopoServiceMetrics.configuration;
 
     private created() {
       if (window.localStorage.getItem('topologyInstances') || window.localStorage.getItem('topologyEndpoints')) {
@@ -143,6 +153,13 @@ limitations under the License. -->
         return;
       }
       this.SET_TOPO_ENDPOINT(data.json);
+    }
+    private changeServiceComps(data: { type: string; json: any }) {
+      this.updateObjects = data.type;
+      if (!data.json) {
+        return;
+      }
+      this.SET_TOPO_SERVICE(data.json);
     }
     private beforeDestroy() {
       this.CLEAR_TOPO_INFO();

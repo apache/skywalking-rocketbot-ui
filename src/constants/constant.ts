@@ -24,6 +24,7 @@ export enum ObjectsType {
   UPDATE_INSTANCES = 'UPDATE_INSTANCES',
   UPDATE_ENDPOINTS = 'UPDATE_ENDPOINTS',
   UPDATE_DASHBOARD = 'UPDATE_DASHBOARD',
+  UPDATE_SERVICES = 'UPDATE_SERVICES',
 }
 
 export enum TimeType {
@@ -36,6 +37,7 @@ export enum PageEventsType {
   DASHBOARD_EVENTS = 'dashboardEvents',
   TOPO_ENDPOINT_EVENTS = 'topoEndpointEvents',
   TOPO_INSTANCE_EVENTS = 'topoInstanceEvents',
+  TOPO_SERVICE_EVENTS = 'topoInstanceEvents',
 }
 export enum PageTypes {
   DASHBOARD = 'Dashboard',

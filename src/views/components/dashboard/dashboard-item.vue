@@ -121,11 +121,11 @@ limitations under the License. -->
       this.itemConfig = this.item;
       this.itemEvents = this.eventsFilter();
       const types = [
+        ObjectsType.UPDATE_SERVICES,
         ObjectsType.UPDATE_INSTANCES,
         ObjectsType.UPDATE_ENDPOINTS,
         ObjectsType.UPDATE_DASHBOARD,
       ] as string[];
-
       if (!types.includes(this.updateObjects)) {
         return;
       }
@@ -384,8 +384,9 @@ limitations under the License. -->
     }
 
     // watch selectors and events
-    @Watch('rocketOption.updateDashboard')
+    @Watch('rocketOption.updateDashboard.key')
     private watchCurrentSelectors() {
+      console.log(this.itemConfig);
       this.itemEvents = this.eventsFilter();
       if (
         this.rocketOption.updateDashboard.key &&

@@ -71,7 +71,7 @@ limitations under the License. -->
         {icon: 'TRACE', click: this.handleGoTrace},
         {icon: 'ALARM', click: this.handleGoAlarm},
         {icon: 'ENDPOINT', click: this.handleGoEndpointDependency},
-        {icon: ''},
+        {icon: 'SERVICE', click: this.handleGoService},
       ]);
       // legend
       this.legend = this.graph.append('g').attr('class', 'topo-legend');
@@ -113,6 +113,9 @@ limitations under the License. -->
       // endpoint dependency hexagon
       handleGoEndpointDependency() {
         this.$emit('setDialog', 'endpoint_dependency');
+      },
+      handleGoService() {
+        this.$emit('setDialog', 'service');
       },
       handleNodeClick(d) {
         this.$emit('setCurrent', { key: d.id, label: d.name });
