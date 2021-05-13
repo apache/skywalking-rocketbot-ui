@@ -92,7 +92,7 @@ limitations under the License. -->
       :data="spans"
       :traceId="current.traceIds[0]"
       :showBtnDetail="false"
-      :HeaderType="statistics"
+      HeaderType="statistics"
     />
 
     <div v-if="!current.endpointNames" class="flex-h container">

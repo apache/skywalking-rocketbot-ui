@@ -15,22 +15,7 @@ limitations under the License. -->
 
 <template>
   <div class="trace">
-    <div class="trace-header" v-if="displayMode == 'table'">
-      <div class="method" :style="`width: ${method}px`">
-        <span class="r cp" ref="dragger">
-          <svg
-            class="icon"
-          >
-            <use xlink:href="#settings_ethernet"></use>
-          </svg>
-        </span>
-        {{ data[0].value }}
-      </div>
-      <div :class="item.label" v-for="(item, index) in data.slice(1)" :key="index">
-        {{ item.value }}
-      </div>
-    </div>
-    <div class="trace-header" v-if="displayMode == 'statistics'">
+    <div class="trace-header" v-if="type === 'statistics'">
       <div :class="item.label" v-for="(item, index) in data" :key="index">
         {{ item.value }}
         <span class="r cp" @click="sortFunc(item.key)" :key="componentKey" v-if="item.key != 'endpointName'">
@@ -40,12 +25,26 @@ limitations under the License. -->
         </span>
       </div>
     </div>
-    <Item :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" :type="itemType" />
+    <div class="trace-header" v-else>
+      <div class="method" :style="`width: ${method}px`">
+        <span class="r cp" ref="dragger">
+          <svg class="icon">
+            <use xlink:href="#settings_ethernet"></use>
+          </svg>
+        </span>
+        {{ data[0].value }}
+      </div>
+      <div :class="item.label" v-for="(item, index) in data.slice(1)" :key="index">
+        {{ item.value }}
+      </div>
+    </div>
+
+    <Item :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" :type="type" />
     <slot></slot>
   </div>
 </template>
 <script lang="js">
-  import { ProfileConstant, TraceConstant ,StatisticsConstant } from './trace-constant';
+  import { ProfileConstant, TraceConstant, StatisticsConstant } from './trace-constant';
   import Item from './trace-item';
 
   export default {
@@ -55,15 +54,16 @@ limitations under the License. -->
     data() {
       return {
         method: 300,
-        itemType: this.type || "default"
+        componentKey: 0,
+        flag: true,
       };
     },
     created() {
       if ( this.type === 'profile' ) {
          this.data = ProfileConstant;
-      } else if ( this.type === 'statistics' ){
+      } else if ( this.type === 'statistics' ) {
          this.data = StatisticsConstant;
-      } else{
+      } else {
          this.data = TraceConstant;
       }
     },
