@@ -67,8 +67,11 @@ limitations under the License. -->
     methods: {
       copy,
       compute(data){
-        const traceData = data[0].children;
+        let traceData = [];
         let map = new Map();
+        for (let i=0; i<data.length;i++) {
+          traceData = traceData.concat(data[i].children);
+        }
 
         for (let i=0; i<traceData.length;i++) {
           const element = traceData[i];
@@ -294,7 +297,7 @@ limitations under the License. -->
       this.loading = true;
     },
     mounted() {
-      this.tableData = this.compute(this.data);
+      this.tableData = this.compute(this.changeTree());
       this.loading = false;
       this.$eventBus.$on('TRACE-TABLE-LOADING', this, ()=>{ this.loading = true });
     },

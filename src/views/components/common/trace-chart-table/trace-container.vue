@@ -69,9 +69,9 @@ limitations under the License. -->
     },
     mounted() {
       const drag = this.$refs.dragger;
-      if( this.type === 'statistics'){
+      if (this.type === 'statistics') {
         /* Do nothing, consider the possibility of other types in the future, so use else to manual default process */
-      }else{
+      } else {
         drag.onmousedown = (event) => {
           const diffX = event.clientX;
           const copy = this.method;
