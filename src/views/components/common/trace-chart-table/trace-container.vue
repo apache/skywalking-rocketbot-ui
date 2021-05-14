@@ -69,18 +69,22 @@ limitations under the License. -->
     },
     mounted() {
       const drag = this.$refs.dragger;
-      drag.onmousedown = (event) => {
-        const diffX = event.clientX;
-        const copy = this.method;
-        document.onmousemove = (documentEvent) => {
-          const moveX = documentEvent.clientX - diffX;
-          this.method = copy + moveX;
+      if( this.type === 'statistics'){
+        /* Do nothing, consider the possibility of other types in the future, so use else to manual default process */
+      }else{
+        drag.onmousedown = (event) => {
+          const diffX = event.clientX;
+          const copy = this.method;
+          document.onmousemove = (documentEvent) => {
+            const moveX = documentEvent.clientX - diffX;
+            this.method = copy + moveX;
+          };
+          document.onmouseup = () => {
+            document.onmousemove = null;
+            document.onmouseup = null;
+          };
         };
-        document.onmouseup = () => {
-          document.onmousemove = null;
-          document.onmouseup = null;
-        };
-      };
+      }
     },
     methods: {
       sortFunc(key) {
