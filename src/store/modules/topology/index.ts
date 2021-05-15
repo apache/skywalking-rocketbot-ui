@@ -95,6 +95,7 @@ export interface State {
   serviceApdexScore: { ApdexScore: number[] };
   topoEndpoints: any[];
   topoInstances: any[];
+  topoServices: { [key: string]: any[] };
 }
 
 const PercentileItem: string[] = ['p50', 'p75', 'p90', 'p95', 'p99'];
@@ -142,6 +143,7 @@ const initState: State = {
   serviceApdexScore: { ApdexScore: [] },
   topoEndpoints: [],
   topoInstances: [],
+  topoServices: {},
 };
 
 // getters
@@ -307,9 +309,9 @@ const mutations = {
   [types.SET_ENDPOINT_DEPTH](state: State, data: { key: number; label: string }) {
     state.currentEndpointDepth = data;
   },
-  [types.SET_TOPO_SERVICE](state: State, data: any[]) {
-    // state.topoEndpoints = data;
-    // window.localStorage.setItem('topologyEndpoints', JSON.stringify(data));
+  [types.SET_TOPO_SERVICE](state: State, data: any) {
+    state.topoServices = data;
+    window.localStorage.setItem('topologyServices', JSON.stringify(data));
   },
 };
 
@@ -390,23 +392,23 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_SELECTED_CALL, params);
       });
   },
-  GET_TOPO_SERVICE_DETAIL(
-    context: { commit: Commit; state: State },
-    params: { serviceId: string; duration: Duration },
-  ) {
-    return graph
-      .query('queryTopoServiceDetail')
-      .params({
-        serviceId: params.serviceId,
-        duration: params.duration,
-      })
-      .then((res: AxiosResponse) => {
-        if (!res.data.data) {
-          return;
-        }
-        context.commit('SET_SERVICE_DETAIL', res.data.data);
-      });
-  },
+  // GET_TOPO_SERVICE_DETAIL(
+  //   context: { commit: Commit; state: State },
+  //   params: { serviceId: string; duration: Duration },
+  // ) {
+  //   return graph
+  //     .query('queryTopoServiceDetail')
+  //     .params({
+  //       serviceId: params.serviceId,
+  //       duration: params.duration,
+  //     })
+  //     .then((res: AxiosResponse) => {
+  //       if (!res.data.data) {
+  //         return;
+  //       }
+  //       context.commit('SET_SERVICE_DETAIL', res.data.data);
+  //     });
+  // },
   GET_TOPO(context: { commit: Commit; state: State }, params: any) {
     let query = 'queryTopo';
     if (params.serviceId) {

@@ -71,7 +71,7 @@ limitations under the License. -->
         {icon: 'TRACE', click: this.handleGoTrace},
         {icon: 'ALARM', click: this.handleGoAlarm},
         {icon: 'ENDPOINT', click: this.handleGoEndpointDependency},
-        {icon: 'SERVICE', click: this.handleGoService},
+        {icon: ''},
       ]);
       // legend
       this.legend = this.graph.append('g').attr('class', 'topo-legend');
@@ -114,11 +114,8 @@ limitations under the License. -->
       handleGoEndpointDependency() {
         this.$emit('setDialog', 'endpoint_dependency');
       },
-      handleGoService() {
-        this.$emit('setDialog', 'service');
-      },
       handleNodeClick(d) {
-        this.$emit('setCurrent', { key: d.id, label: d.name });
+        this.$emit('setCurrent', { key: d.id, label: d.name, isReal: d.isReal });
         const {x, y, vx, vy, fx, fy, index, ...rest} = d;
         this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
         this.$store.commit('rocketTopo/SET_NODE', rest);

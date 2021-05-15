@@ -23,47 +23,8 @@ limitations under the License. -->
     >
       <use xlink:href="#issues" />
     </svg>
-    <svg
-      v-if="showServerInfo"
-      class="link-topo-aside-btn icon cp lg"
-      @click="show = !show"
-      :style="`position:absolute;left:290px;transform: rotate(${show ? 0 : 180}deg);top:45px;`"
-    >
-      <use xlink:href="#chevron-left" />
-    </svg>
     <TopoService />
-    <div v-if="show">
-      <div class="link-topo-aside-box" style="top:45px" v-if="!stateTopo.selectedServiceCall && showServerInfo">
-        <div class="mb-20">
-          <span class="b dib mr-20">{{ $t('serviceDetail') }}</span>
-        </div>
-        <div class="mb-10">
-          <span class="label grey">{{ $t('name') }}</span>
-          <span class="content">{{ stateTopo.currentNode.name }}</span>
-        </div>
-        <div class="mb-10">
-          <span class="label grey">{{ $t('type') }}</span>
-          <span class="content">{{ stateTopo.currentNode.type }}</span>
-        </div>
-        <div>
-          <TopoChart
-            v-if="stateTopo.serviceApdexScore.length"
-            :data="stateTopo.serviceApdexScore"
-            :intervalTime="intervalTime"
-            title="Service ApdexScore"
-            unit=""
-          />
-          <TopoChart
-            v-if="stateTopo.serviceSLA.length"
-            :data="stateTopo.serviceSLA"
-            :intervalTime="intervalTime"
-            :title="$t('avgSLA')"
-            unit=""
-          />
-        </div>
-      </div>
-      <TopoDetectPoint />
-    </div>
+    <TopoDetectPoint v-if="show" />
   </aside>
 </template>
 <script lang="ts">
@@ -77,6 +38,7 @@ limitations under the License. -->
   import TopoDetectPoint from './topo-detect-point.vue';
   import { DurationTime } from '@/types/global';
   import compareObj from '@/utils/comparison';
+  // import { TopoServiceMetrics } from './topo-config';
 
   @Component({
     components: {
@@ -99,6 +61,7 @@ limitations under the License. -->
     private initState = initState;
     private radioStatus: boolean = false;
     private show: boolean = true;
+    // private TopoServiceMetrics = TopoServiceMetrics;
 
     private get showServerInfo() {
       return this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal;
@@ -167,6 +130,9 @@ limitations under the License. -->
       border-top: 1px solid #d8d8d866;
     }
   }
+  .title {
+    padding: 10px;
+  }
 
   .link-topo-aside-btn {
     display: block;
@@ -185,7 +151,7 @@ limitations under the License. -->
     z-index: 101;
     color: #ddd;
     background-color: #2b3037;
-    padding: 15px 20px 10px;
+    // padding: 15px 20px 10px;
 
     .label {
       display: inline-block;
@@ -215,7 +181,7 @@ limitations under the License. -->
   }
 
   .link-topo-aside-box-min {
-    width: 280px;
+    width: 320px;
     animation: 0.5s linkTopoAsideBoxMin 1 running;
   }
 

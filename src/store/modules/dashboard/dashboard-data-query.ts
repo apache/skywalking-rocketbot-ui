@@ -23,6 +23,7 @@ import graph from '@/graph';
 export enum TopologyType {
   TOPOLOGY_ENDPOINT = 'TOPOLOGY_ENDPOINT',
   TOPOLOGY_INSTANCE = 'TOPOLOGY_INSTANCE',
+  TOPOLOGY_SERVICE = 'TOPOLOGY_SERVICE',
 }
 
 // actions
@@ -34,6 +35,7 @@ const actions: ActionTree<State, any> = {
       duration: any;
       type: string;
       rocketOption: any;
+      templateType: string;
     },
   ) {
     const { currentDatabase, currentEndpoint, currentInstance, currentService } = params.rocketOption;
@@ -51,6 +53,11 @@ const actions: ActionTree<State, any> = {
       const instanceComps: string = `${window.localStorage.getItem('topologyInstances')}`;
       const topoInstance = instanceComps ? JSON.parse(instanceComps) : [];
       config = topoInstance[params.index];
+    } else if (params.type === TopologyType.TOPOLOGY_SERVICE) {
+      const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
+      const topoService = serviceComps ? JSON.parse(serviceComps) : {};
+
+      config = topoService[params.templateType][params.index];
     } else {
       config = tree[context.state.group].children[context.state.current].children[params.index];
     }

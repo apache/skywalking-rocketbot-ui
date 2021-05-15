@@ -43,7 +43,7 @@ limitations under the License. -->
           >{{ $t('server') }}</span
         >
       </div>
-      <span v-else-if="showServerInfo" class="b dib mr-20 vm">{{ $t('serviceDetail') }}</span>
+      <span v-else-if="showServerInfo" class="b dib vm title">{{ $t('serviceDetail') }}</span>
     </div>
     <div v-if="showInfo">
       <div v-if="stateTopo.selectedServiceCall">
@@ -77,26 +77,15 @@ limitations under the License. -->
         />
       </div>
       <div v-else-if="showServerInfo">
-        <TopoChart
-          v-if="stateTopo.serviceResponseTime.length"
-          :data="stateTopo.serviceResponseTime"
-          :intervalTime="intervalTime"
-          title="Service ResponseTime"
-          unit="ms"
-        />
-        <TopoChart
-          v-if="stateTopo.serviceThroughput.length"
-          :data="stateTopo.serviceThroughput"
-          :intervalTime="intervalTime"
-          title="Service Throughput"
-          unit="cpm"
-        />
-        <ChartLine
-          v-if="stateTopo.servicePercentile.p50.length"
-          :data="stateTopo.servicePercentile"
-          :intervalTime="intervalTime"
-          :title="$t('percentResponse')"
-        />
+        <div class="pl-10 pb-5">
+          <span class="label grey">{{ $t('name') }}</span>
+          <span class="content">{{ stateTopo.currentNode.name }}</span>
+        </div>
+        <div class="pl-10 pb-5">
+          <span class="label grey">{{ $t('type') }}</span>
+          <span class="content">{{ stateTopo.currentNode.type }}</span>
+        </div>
+        <TopoServiceMetrics />
       </div>
     </div>
     <div class="show-dependency" v-if="stateTopo.selectedServiceCall">
@@ -124,9 +113,11 @@ limitations under the License. -->
   import ChartLine from './chart-line.vue';
   import { DurationTime } from '@/types/global';
   import compareObj from '@/utils/comparison';
+  import TopoServiceMetrics from './topo-service-metrics.vue';
 
   @Component({
     components: {
+      TopoServiceMetrics,
       TopoInstanceDependency,
       TopoChart,
       ChartLine,
@@ -146,7 +137,7 @@ limitations under the License. -->
     @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
     @Action('rocketTopo/GET_TOPO_INSTANCE_DEPENDENCY')
     private GET_INSTANCE_DEPENDENCY: any;
-    @Action('rocketTopo/GET_TOPO_SERVICE_DETAIL') private GET_TOPO_SERVICE_DETAIL: any;
+    // @Action('rocketTopo/GET_TOPO_SERVICE_DETAIL') private GET_TOPO_SERVICE_DETAIL: any;
 
     private isMini: boolean = true;
     private showInfoCount: number = 0;
@@ -191,14 +182,13 @@ limitations under the License. -->
 
     @Watch('durationTime')
     private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
-      if (compareObj(newValue, oldValue)) {
-        const service = this.stateTopo.currentNode;
-
-        this.GET_TOPO_SERVICE_DETAIL({
-          serviceId: service.id || '',
-          duration: this.durationTime,
-        });
-      }
+      // if (compareObj(newValue, oldValue)) {
+      //   const service = this.stateTopo.currentNode;
+      //   this.GET_TOPO_SERVICE_DETAIL({
+      //     serviceId: service.id || '',
+      //     duration: this.durationTime,
+      //   });
+      // }
     }
 
     @Watch('stateTopo.selectedServiceCall')
@@ -217,10 +207,10 @@ limitations under the License. -->
       const service = this.stateTopo.currentNode;
       if (this.stateTopo.currentNode.isReal) {
         this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 1 });
-        this.GET_TOPO_SERVICE_DETAIL({
-          serviceId: service.id || '',
-          duration: this.durationTime,
-        });
+        // this.GET_TOPO_SERVICE_DETAIL({
+        //   serviceId: service.id || '',
+        //   duration: this.durationTime,
+        // });
       }
       if (newValue || this.stateTopo.selectedServiceCall) {
         this.showInfo = true;
@@ -232,7 +222,10 @@ limitations under the License. -->
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+  .title {
+    padding: 10px;
+  }
   .link-topo-aside-box-btn {
     color: #626977;
     border: 1px solid;
@@ -276,7 +269,6 @@ limitations under the License. -->
     z-index: 101;
     color: #ddd;
     background-color: #2b3037;
-    padding: 15px 20px 10px;
 
     .label {
       display: inline-block;

@@ -98,6 +98,7 @@ limitations under the License. -->
     @Prop() private type!: string;
     @Prop() private updateObjects!: string;
     @Prop() private rocketOption!: optionState;
+    @Prop() private templateType!: string;
 
     private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as string[];
     private dialogConfigVisible = false;
@@ -144,6 +145,7 @@ limitations under the License. -->
         index: this.index,
         type: this.type,
         rocketOption: this.rocketOption,
+        templateType: this.templateType,
       }).then((params: Array<{ metricName: string; [key: string]: any; config: any }>) => {
         if (!params) {
           return;

@@ -18,6 +18,7 @@
 export enum TopologyType {
   TOPOLOGY_ENDPOINT = 'TOPOLOGY_ENDPOINT',
   TOPOLOGY_INSTANCE = 'TOPOLOGY_INSTANCE',
+  TOPOLOGY_SERVICE = 'TOPOLOGY_SERVICE',
 }
 
 export enum ObjectsType {

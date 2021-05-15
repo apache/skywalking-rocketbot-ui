@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const TopoServiceMetrics = {
+export const TopoServiceMetricsConfig: any = {
   name: 'Topology Service',
   type: 'TOPOLOGY_SERVICE',
   configuration: {
     SpringMVC: [
       {
-        width: 3,
+        width: 12,
         title: 'Service Apdex',
         height: '200',
         entityType: 'Service',
@@ -33,7 +33,7 @@ export const TopoServiceMetrics = {
         aggregationNum: '10000',
       },
       {
-        width: 3,
+        width: 12,
         title: 'Service Avg Response Time',
         height: '200',
         entityType: 'Service',
@@ -45,7 +45,7 @@ export const TopoServiceMetrics = {
         unit: 'ms',
       },
       {
-        width: 3,
+        width: 12,
         title: 'Successful Rate',
         height: '200',
         entityType: 'Service',
@@ -59,7 +59,7 @@ export const TopoServiceMetrics = {
         aggregationNum: '100',
       },
       {
-        width: 3,
+        width: 12,
         title: 'Service Load',
         height: '200',
         entityType: 'Service',
@@ -71,7 +71,7 @@ export const TopoServiceMetrics = {
         unit: 'CPM - calls per minute',
       },
       {
-        width: 3,
+        width: 12,
         title: 'Service Apdex',
         height: '200',
         entityType: 'Service',
@@ -84,7 +84,7 @@ export const TopoServiceMetrics = {
         aggregationNum: '10000',
       },
       {
-        width: 3,
+        width: 12,
         title: 'Service Response Time Percentile',
         height: '200',
         entityType: 'Service',
@@ -98,7 +98,7 @@ export const TopoServiceMetrics = {
         labelsIndex: '0, 1, 2, 3, 4',
       },
       {
-        width: 3,
+        width: 12,
         title: 'Successful Rate',
         height: '200',
         entityType: 'Service',
@@ -112,7 +112,7 @@ export const TopoServiceMetrics = {
         aggregationNum: '100',
       },
       {
-        width: 3,
+        width: 12,
         title: 'Service Load',
         height: '200',
         entityType: 'Service',
@@ -126,7 +126,7 @@ export const TopoServiceMetrics = {
     ],
     Nginx: [
       {
-        width: 3,
+        width: 12,
         title: 'Service Load',
         height: '200',
         entityType: 'Service',
@@ -138,7 +138,7 @@ export const TopoServiceMetrics = {
         unit: 'CPM - calls per minute',
       },
       {
-        width: 3,
+        width: 12,
         title: 'Service Apdex',
         height: '200',
         entityType: 'Service',
@@ -151,7 +151,7 @@ export const TopoServiceMetrics = {
         aggregationNum: '10000',
       },
       {
-        width: 3,
+        width: 12,
         title: 'Service Response Time Percentile',
         height: '200',
         entityType: 'Service',
@@ -165,7 +165,7 @@ export const TopoServiceMetrics = {
         labelsIndex: '0, 1, 2, 3, 4',
       },
       {
-        width: 3,
+        width: 12,
         title: 'Successful Rate',
         height: '200',
         entityType: 'Service',
@@ -179,7 +179,7 @@ export const TopoServiceMetrics = {
         aggregationNum: '100',
       },
       {
-        width: 3,
+        width: 12,
         title: 'Service Load',
         height: '200',
         entityType: 'Service',
