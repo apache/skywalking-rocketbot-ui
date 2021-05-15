@@ -40,6 +40,7 @@ limitations under the License. -->
           :data="chartSource"
           :type="type"
           :itemEvents="itemEvents"
+          :theme="theme"
           @updateStatus="(type, value) => setStatus(type, value)"
         ></component>
       </div>
@@ -111,6 +112,7 @@ limitations under the License. -->
     private chartSource: any = {};
     private itemConfig: any = {};
     private itemEvents: Event[] = [];
+    private theme: string = 'light'; // dark
 
     private created() {
       this.status = this.item.metricType;
@@ -129,6 +131,9 @@ limitations under the License. -->
       ] as string[];
       if (!types.includes(this.updateObjects)) {
         return;
+      }
+      if (this.updateObjects === ObjectsType.UPDATE_SERVICES) {
+        this.theme = 'dark';
       }
       setTimeout(() => {
         this.chartRender();

@@ -16,7 +16,7 @@ limitations under the License. -->
 <template>
   <div class="rk-chart-num">
     <div v-for="(item, index) in data" :key="index" class="rk-num-detail">
-      <span class="b">{{
+      <span class="b" :style="`color: ${colors}`">{{
         typeof item.avgNum === 'string' ? item.avgNum : isNaN(item.avgNum) ? null : item.avgNum.toFixed(2)
       }}</span>
     </div>
@@ -29,6 +29,11 @@ limitations under the License. -->
   export default class ChartNum extends Vue {
     @Prop() private data!: any;
     @Prop() private item!: any;
+    @Prop() private theme!: string;
+
+    private get colors() {
+      return this.theme === 'dark' ? '#eee' : '#333';
+    }
   }
 </script>
 <style lang="scss" scoped>

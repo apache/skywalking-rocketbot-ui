@@ -25,12 +25,14 @@ limitations under the License. -->
     @Prop() private data!: any;
     @Prop() private type!: string;
     @Prop() private intervalTime!: any;
+    @Prop() private theme!: string;
     @Prop() private itemEvents!: Event[];
     public resize() {
       const chart: any = this.$refs.chart;
       chart.myChart.resize();
     }
     get option() {
+      console.log(this.theme);
       const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
       const startP = keys.length > 1 ? 50 : 15;
       const diff = 10;
@@ -137,6 +139,9 @@ limitations under the License. -->
           top: 0,
           left: 0,
           itemWidth: 12,
+          textStyle: {
+            color: this.theme === 'dark' ? '#fff' : '#333',
+          },
         },
         grid: {
           top: keys.length === 1 ? 15 : 55,

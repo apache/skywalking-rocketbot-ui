@@ -63,6 +63,7 @@ limitations under the License. -->
   import TopoGroup from '../../components/topology/topo-group/index.vue';
   import WindowEndpointDependency from '@/views/containers/topology/endpoint-dependency/index.vue';
   import { TopoServiceMetricsConfig } from './topo-config';
+  import { Option } from '@/types/global';
 
   @Component({
     components: {
@@ -154,10 +155,10 @@ limitations under the License. -->
         },
       );
     }
-    private setCurrent(d: any): void {
+    private setCurrent(d: Option & { isReal: boolean }): void {
       this.current = d;
       if (d.isReal) {
-        this.SET_CURRENT_SERVICE(d);
+        this.SET_CURRENT_SERVICE({ key: d.key, label: d.label });
       }
     }
     private changeInstanceComps(data: { type: string; json: any }) {
