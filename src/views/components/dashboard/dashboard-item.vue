@@ -72,7 +72,7 @@ limitations under the License. -->
   import dayjs from 'dayjs';
 
   import { QueryTypes, UpdateDashboardEvents } from './constant';
-  import { TopologyType, ObjectsType } from '../../../constants/constant';
+  import { TopologyType, ObjectsType } from '@/constants/constant';
   import { CalculationType } from './charts/constant';
   import { State as globalState } from '@/store/modules/global';
   import { State as optionState } from '@/store/modules/global/selectors';
@@ -87,7 +87,6 @@ limitations under the License. -->
   export default class DashboardItem extends Vue {
     @State('rocketbot') private rocketGlobal!: globalState;
     @State('rocketData') private rocketData!: rocketData;
-    @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('rocketTopo/DELETE_TOPO_ENDPOINT') private DELETE_TOPO_ENDPOINT: any;
     @Mutation('rocketTopo/DELETE_TOPO_INSTANCE') private DELETE_TOPO_INSTANCE: any;

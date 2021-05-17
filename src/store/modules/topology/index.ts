@@ -303,6 +303,19 @@ const mutations = {
     state.topoEndpoints.push(comp);
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
   },
+  [types.ADD_TOPO_SERVICE_COMP](state: State) {
+    const comp = {
+      width: 12,
+      title: 'Title',
+      height: 350,
+      entityType: 'Service',
+      independentSelector: false,
+      metricType: 'UNKNOWN',
+    };
+    state.topoServices[state.currentNode.type].push(comp);
+    console.log(state.topoServices[state.currentNode.type]);
+    window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
+  },
   [types.SET_ENDPOINT_DEPENDENCY](state: State, data: { calls: Call[]; nodes: Node[] }) {
     state.endpointDependency = data;
   },

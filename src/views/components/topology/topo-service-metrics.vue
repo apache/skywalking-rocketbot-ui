@@ -15,7 +15,7 @@ limitations under the License. -->
 <template>
   <div class="service-metrics scroll_bar_style" :style="`height: ${height}px`">
     <DashboardItem
-      v-for="(i, index) in serviceComps || []"
+      v-for="(i, index) in this.stateTopo.topoServices[stateTopo.currentNode.type] || []"
       :key="index + i.title + i.width"
       :rocketGlobal="rocketGlobal"
       :item="i"
@@ -25,12 +25,15 @@ limitations under the License. -->
       :rocketOption="stateDashboardOption"
       :templateType="stateTopo.currentNode.type"
     />
+    <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="ADD_TOPO_SERVICE_COMP">
+      + Add An Item
+    </div>
   </div>
 </template>
 <script lang="ts">
   import { State as topoState } from '@/store/modules/topology';
   import { Component, Vue } from 'vue-property-decorator';
-  import { State } from 'vuex-class';
+  import { State, Mutation } from 'vuex-class';
   import TopoChart from './topo-chart.vue';
   import TopoInstanceDependency from './topo-instance-dependency.vue';
   import ChartLine from './chart-line.vue';
@@ -50,6 +53,7 @@ limitations under the License. -->
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @State('rocketTopo') private stateTopo!: topoState;
+    @Mutation('rocketTopo/ADD_TOPO_SERVICE_COMP') private ADD_TOPO_SERVICE_COMP: any;
 
     private serviceComps: unknown[] = [];
     private height = 800;
@@ -65,5 +69,16 @@ limitations under the License. -->
 <style lang="scss">
   .service-metrics {
     overflow: auto;
+  }
+  .rk-add-metric-item {
+    height: 250px;
+    text-align: center;
+    line-height: 250px;
+    border: 1px dashed rgba(196, 200, 225, 0.5);
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    width: 399px;
+    margin-left: 5px;
   }
 </style>

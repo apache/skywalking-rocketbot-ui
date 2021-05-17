@@ -19,12 +19,7 @@ import { Commit, ActionTree, Dispatch } from 'vuex';
 import { AxiosResponse } from 'axios';
 import { State } from './dashboard-data';
 import graph from '@/graph';
-
-export enum TopologyType {
-  TOPOLOGY_ENDPOINT = 'TOPOLOGY_ENDPOINT',
-  TOPOLOGY_INSTANCE = 'TOPOLOGY_INSTANCE',
-  TOPOLOGY_SERVICE = 'TOPOLOGY_SERVICE',
-}
+import { TopologyType } from '@/constants/constant';
 
 // actions
 const actions: ActionTree<State, any> = {
