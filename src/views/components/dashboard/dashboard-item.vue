@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div class="rk-dashboard-item" :class="`g-sm-${width}`" :style="`height:${height}px;`">
+  <div class="rk-dashboard-item" :class="`g-sm-${width}`" :style="`height:${height}px;`" v-if="itemConfig.metricName">
     <div class="rk-dashboard-item-title ell">
       <span v-show="rocketGlobal.edit" @click="deleteItem(index)">
         <rk-icon class="r edit red" icon="file-deletion" />
@@ -153,9 +153,11 @@ limitations under the License. -->
         templateType: this.templateType,
       }).then((params: Array<{ metricName: string; [key: string]: any; config: any }>) => {
         if (!params) {
+          this.itemConfig = {};
           return;
         }
         if (!params.length) {
+          this.itemConfig = {};
           return;
         }
         this.itemConfig = params[0].config;
@@ -393,7 +395,6 @@ limitations under the License. -->
     // watch selectors and events
     @Watch('rocketOption.updateDashboard.key')
     private watchCurrentSelectors() {
-      console.log(this.itemConfig);
       this.itemEvents = this.eventsFilter();
       if (
         this.rocketOption.updateDashboard.key &&

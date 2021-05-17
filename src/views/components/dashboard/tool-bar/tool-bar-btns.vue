@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 
 <template>
-  <div class="flex-h btn-box">
+  <div class="flex-h">
     <div class="rk-dashboard-bar-btn" @click="handleSetEdit">
       <rk-icon
         class="lg"

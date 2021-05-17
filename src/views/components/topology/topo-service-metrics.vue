@@ -30,12 +30,11 @@ limitations under the License. -->
 <script lang="ts">
   import { State as topoState } from '@/store/modules/topology';
   import { Component, Vue } from 'vue-property-decorator';
-  import { Getter, State } from 'vuex-class';
+  import { State } from 'vuex-class';
   import TopoChart from './topo-chart.vue';
   import TopoInstanceDependency from './topo-instance-dependency.vue';
   import ChartLine from './chart-line.vue';
   import { State as optionState } from '@/store/modules/global/selectors';
-  import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { State as rocketbotGlobal } from '@/store/modules/global';
   import DashboardItem from '../dashboard/dashboard-item.vue';
 
@@ -49,16 +48,13 @@ limitations under the License. -->
   })
   export default class TopoServiceMetrics extends Vue {
     @State('rocketOption') private stateDashboardOption!: optionState;
-    @State('rocketData') private rocketComps!: rocketData;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @State('rocketTopo') private stateTopo!: topoState;
-    @Getter('intervalTime') private intervalTime: any;
-    @Getter('durationTime') private durationTime: any;
 
-    private serviceComps: any = [];
+    private serviceComps: unknown[] = [];
     private height = 800;
 
-    beforeMount() {
+    private beforeMount() {
       const { type } = this.stateTopo.currentNode;
 
       this.serviceComps = this.stateTopo.topoServices[type];

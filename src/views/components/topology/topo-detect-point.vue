@@ -25,25 +25,46 @@ limitations under the License. -->
     >
       <use xlink:href="#chevron-left" />
     </svg>
-    <div class="mb-5 clear">
-      <div v-if="stateTopo.selectedServiceCall">
+    <div class="mb-5 clear flex-h">
+      <span v-if="stateTopo.selectedServiceCall">
         <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
         <span
           v-if="stateTopo.detectPoints.indexOf('CLIENT') !== -1"
           :class="{ active: !stateTopo.mode }"
           class="link-topo-aside-box-btn tc r sm cp b"
           @click="setMode(false)"
-          >{{ $t('client') }}</span
         >
+          {{ $t('client') }}
+        </span>
         <span
           v-if="stateTopo.detectPoints.indexOf('SERVER') !== -1"
           :class="{ active: stateTopo.mode }"
           class="link-topo-aside-box-btn tc r sm cp b"
           @click="setMode(true)"
-          >{{ $t('server') }}</span
         >
-      </div>
+          {{ $t('server') }}
+        </span>
+      </span>
       <span v-else-if="showServerInfo" class="b dib vm title">{{ $t('serviceDetail') }}</span>
+      <div class="flex-h">
+        <div class="topo-tool-btn" @click="handleSetEdit">
+          <rk-icon
+            class="lg rk-icon"
+            :style="`color:${!rocketGlobal.edit ? '' : '#ffc107'}`"
+            :icon="!rocketGlobal.edit ? 'lock' : 'lock-open'"
+            v-tooltip:bottom="{ content: rocketGlobal.edit ? 'view' : 'edit' }"
+          />
+        </div>
+        <!-- <div class="rk-dashboard-bar-btn" v-tooltip:bottom="{ content: 'import' }">
+          <input id="tool-bar-file" type="file" name="file" title="" accept=".json" @change="importData" />
+          <label for="tool-bar-file">
+            <rk-icon class="lg import" icon="folder_open" />
+          </label>
+        </div>
+        <div class="rk-dashboard-bar-btn" @click="exportData">
+          <rk-icon class="lg" icon="save_alt" v-tooltip:bottom="{ content: 'export' }" />
+        </div> -->
+      </div>
     </div>
     <div v-if="showInfo">
       <div v-if="stateTopo.selectedServiceCall">
@@ -112,23 +133,32 @@ limitations under the License. -->
   import TopoInstanceDependency from './topo-instance-dependency.vue';
   import ChartLine from './chart-line.vue';
   import { DurationTime } from '@/types/global';
-  import compareObj from '@/utils/comparison';
   import TopoServiceMetrics from './topo-service-metrics.vue';
+  import ToolBarBtns from '../dashboard/tool-bar/tool-bar-btns.vue';
+  import { State as rocketbotGlobal } from '@/store/modules/global';
+  import { State as dataState } from '@/store/modules/dashboard/dashboard-data';
+  import compareObj from '@/utils/comparison';
+  import { readFile } from '@/utils/readFile';
+  import { saveFile } from '@/utils/saveFile';
 
   @Component({
     components: {
       TopoServiceMetrics,
       TopoInstanceDependency,
+      ToolBarBtns,
       TopoChart,
       ChartLine,
     },
   })
   export default class TopoDetectPoint extends Vue {
+    @State('rocketData') private rocketComps!: dataState;
+    @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @State('rocketTopo') private stateTopo!: topoState;
     @Getter('intervalTime') private intervalTime: any;
-    @Getter('durationTime') private durationTime: any;
+    @Getter('durationTime') private durationTime!: DurationTime;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT')
     private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
+    @Action('SET_EDIT') private SET_EDIT: any;
     @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
     @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL')
     private SET_SELECTED_INSTANCE_CALL: any;
@@ -137,6 +167,8 @@ limitations under the License. -->
     @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
     @Action('rocketTopo/GET_TOPO_INSTANCE_DEPENDENCY')
     private GET_INSTANCE_DEPENDENCY: any;
+    @Mutation('IMPORT_TREE') private IMPORT_TREE: any;
+    @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     // @Action('rocketTopo/GET_TOPO_SERVICE_DETAIL') private GET_TOPO_SERVICE_DETAIL: any;
 
     private isMini: boolean = true;
@@ -155,6 +187,10 @@ limitations under the License. -->
       setTimeout(() => {
         this.showInfo = true;
       }, 550);
+    }
+
+    private handleSetEdit() {
+      this.SET_EDIT(!this.rocketGlobal.edit);
     }
 
     private setMode(mode: boolean) {
@@ -180,15 +216,37 @@ limitations under the License. -->
       });
     }
 
+    // private async importData(event: any) {
+    //   try {
+    //     const data: any = await readFile(event);
+    //     if (!Array.isArray(data)) {
+    //       throw new Error();
+    //     }
+    //     const [{ children, name, type }] = data;
+    //     if (children && name && type) {
+    //       this.IMPORT_TREE(data);
+    //     } else {
+    //       throw new Error('error');
+    //     }
+    //     const el: any = document.getElementById('tool-bar-file');
+    //     el!.value = '';
+    //   } catch (e) {
+    //     this.$modal.show('dialog', { text: 'ERROR' });
+    //   }
+    // }
+    // private exportData() {
+    //   const group = this.rocketComps.tree[this.rocketComps.group];
+    //   delete group.query;
+    //   const name = 'dashboard.json';
+    //   saveFile([group], name);
+    // }
+
     @Watch('durationTime')
     private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
-      // if (compareObj(newValue, oldValue)) {
-      //   const service = this.stateTopo.currentNode;
-      //   this.GET_TOPO_SERVICE_DETAIL({
-      //     serviceId: service.id || '',
-      //     duration: this.durationTime,
-      //   });
-      // }
+      if (compareObj(newValue, oldValue)) {
+        const service = this.stateTopo.currentNode;
+        this.UPDATE_DASHBOARD();
+      }
     }
 
     @Watch('stateTopo.selectedServiceCall')
@@ -207,10 +265,7 @@ limitations under the License. -->
       const service = this.stateTopo.currentNode;
       if (this.stateTopo.currentNode.isReal) {
         this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 1 });
-        // this.GET_TOPO_SERVICE_DETAIL({
-        //   serviceId: service.id || '',
-        //   duration: this.durationTime,
-        // });
+        this.UPDATE_DASHBOARD();
       }
       if (newValue || this.stateTopo.selectedServiceCall) {
         this.showInfo = true;
@@ -225,6 +280,12 @@ limitations under the License. -->
 <style lang="scss" scoped>
   .title {
     padding: 10px;
+  }
+  .tool-btns {
+    height: 30px;
+  }
+  .rk-icon {
+    cursor: pointer;
   }
   .link-topo-aside-box-btn {
     color: #626977;

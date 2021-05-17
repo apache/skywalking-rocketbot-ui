@@ -32,7 +32,6 @@ limitations under the License. -->
       chart.myChart.resize();
     }
     get option() {
-      console.log(this.theme);
       const keys = Object.keys(this.data || {}).filter((i: any) => Array.isArray(this.data[i]) && this.data[i].length);
       const startP = keys.length > 1 ? 50 : 15;
       const diff = 10;

@@ -57,15 +57,18 @@ const actions: ActionTree<State, any> = {
       const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
       const topoService = serviceComps ? JSON.parse(serviceComps) : {};
 
+      if (!topoService[params.templateType]) {
+        return new Promise((resolve) => resolve({}));
+      }
       config = topoService[params.templateType][params.index];
     } else {
       config = tree[context.state.group].children[context.state.current].children[params.index];
     }
     if (!config) {
-      return;
+      return new Promise((resolve) => resolve({}));
     }
     if (!config.metricName) {
-      return;
+      return new Promise((resolve) => resolve({}));
     }
     // remove the space at the beginning and end of the string
     const metricNames = config.metricName.split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
