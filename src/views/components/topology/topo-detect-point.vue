@@ -228,13 +228,8 @@ limitations under the License. -->
         if (!Array.isArray(data)) {
           throw new Error();
         }
-        const [{ children, name, type }] = data;
-        if (children && name && type) {
-          this.IMPORT_TREE_SERVICE(data);
-        } else {
-          throw new Error('error');
-        }
-        const el: any = document.getElementById('tool-bar-file');
+        this.IMPORT_TREE_SERVICE(data[0]);
+        const el: any = document.getElementById('endpoint-file');
         el!.value = '';
       } catch (e) {
         this.$modal.show('dialog', { text: 'ERROR' });
@@ -262,6 +257,7 @@ limitations under the License. -->
         this.showInfo = false;
         this.showInfoCount = 0;
         this.isMini = true;
+        this.SET_EDIT(false);
       }
     }
 
@@ -278,6 +274,7 @@ limitations under the License. -->
         this.showInfo = false;
         this.showInfoCount = 0;
         this.isMini = true;
+        this.SET_EDIT(false);
       }
     }
   }

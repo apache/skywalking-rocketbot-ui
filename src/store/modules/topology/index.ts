@@ -304,8 +304,15 @@ const mutations = {
     state.topoServices = data;
     window.localStorage.setItem('topologyServices', JSON.stringify(data));
   },
-  [types.IMPORT_TREE_SERVICE](state: State, data: any[]) {
-    state.topoServices[state.currentNode.type].push(...data);
+  [types.IMPORT_TREE_SERVICE](state: State, data: any) {
+    const keys = Object.keys(data);
+    for (const key of keys) {
+      if (state.topoServices[key]) {
+        state.topoServices[key].push(...data[key]);
+      } else {
+        state.topoServices[key] = data[key];
+      }
+    }
     window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
   },
 };
