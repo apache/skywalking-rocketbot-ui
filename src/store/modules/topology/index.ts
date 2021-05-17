@@ -88,11 +88,6 @@ export interface State {
   endpointDependencyMetrics: { [key: string]: any };
   currentEndpointDepth: { key: number; label: string };
   queryInstanceMetricsType: string;
-  serviceThroughput: { Throughput: number[] };
-  serviceSLA: { SLA: number[] };
-  serviceResponseTime: { ResponseTime: number[] };
-  servicePercentile: { [key: string]: number[] };
-  serviceApdexScore: { ApdexScore: number[] };
   topoEndpoints: any[];
   topoInstances: any[];
   topoServices: { [key: string]: any[] };
@@ -130,17 +125,6 @@ const initState: State = {
   endpointDependencyMetrics: {},
   currentEndpointDepth: { key: 2, label: '2' },
   queryInstanceMetricsType: '',
-  serviceThroughput: { Throughput: [] },
-  serviceSLA: { SLA: [] },
-  serviceResponseTime: { ResponseTime: [] },
-  servicePercentile: {
-    p50: [],
-    p75: [],
-    p90: [],
-    p95: [],
-    p99: [],
-  },
-  serviceApdexScore: { ApdexScore: [] },
   topoEndpoints: [],
   topoInstances: [],
   topoServices: {},
@@ -239,22 +223,6 @@ const mutations = {
   [types.SET_INSTANCE_DEPEDENCE_TYPE](state: State, data: string) {
     state.queryInstanceMetricsType = data;
   },
-  [types.SET_SERVICE_DETAIL](state: State, data: any) {
-    state.serviceApdexScore = data.serviceApdexScore
-      ? data.serviceApdexScore.values.map((i: any) => Number((i.value / 10000).toFixed(2)))
-      : [];
-    state.serviceResponseTime = data.serviceResponseTime
-      ? data.serviceResponseTime.values.map((i: any) => i.value)
-      : [];
-    state.serviceThroughput = data.serviceThroughput ? data.serviceThroughput.values.map((i: any) => i.value) : [];
-    state.serviceSLA = data.serviceSLA ? data.serviceSLA.values.map((i: any) => i.value / 100) : [];
-    if (!data.servicePercentile) {
-      return;
-    }
-    data.servicePercentile.forEach((item: any, index: number) => {
-      state.servicePercentile[PercentileItem[index]] = item.values.map((i: any) => i.value);
-    });
-  },
   [types.SET_TOPO_ENDPOINT](state: State, data: any[]) {
     state.topoEndpoints = data;
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(data));
@@ -278,6 +246,17 @@ const mutations = {
   [types.DELETE_TOPO_INSTANCE](state: State, index: number) {
     state.topoInstances.splice(index, 1);
     window.localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
+  },
+  [types.DELETE_TOPO_SERVICE](state: State, index: number) {
+    state.topoServices[state.currentNode.type].splice(index, 1);
+    window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
+  },
+  [types.EDIT_TOPO_SERVICE_CONFIG](state: State, params: { values: any; index: number }) {
+    state.topoServices[state.currentNode.type][params.index] = {
+      ...state.topoServices[state.currentNode.type][params.index],
+      ...params.values,
+    };
+    window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
   },
   [types.ADD_TOPO_INSTANCE_COMP](state: State) {
     const comp = {
@@ -313,7 +292,6 @@ const mutations = {
       metricType: 'UNKNOWN',
     };
     state.topoServices[state.currentNode.type].push(comp);
-    console.log(state.topoServices[state.currentNode.type]);
     window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
   },
   [types.SET_ENDPOINT_DEPENDENCY](state: State, data: { calls: Call[]; nodes: Node[] }) {
@@ -405,23 +383,6 @@ const actions: ActionTree<State, any> = {
         context.commit(types.SET_SELECTED_CALL, params);
       });
   },
-  // GET_TOPO_SERVICE_DETAIL(
-  //   context: { commit: Commit; state: State },
-  //   params: { serviceId: string; duration: Duration },
-  // ) {
-  //   return graph
-  //     .query('queryTopoServiceDetail')
-  //     .params({
-  //       serviceId: params.serviceId,
-  //       duration: params.duration,
-  //     })
-  //     .then((res: AxiosResponse) => {
-  //       if (!res.data.data) {
-  //         return;
-  //       }
-  //       context.commit('SET_SERVICE_DETAIL', res.data.data);
-  //     });
-  // },
   GET_TOPO(context: { commit: Commit; state: State }, params: any) {
     let query = 'queryTopo';
     if (params.serviceId) {

@@ -54,3 +54,20 @@ limitations under the License. -->
     @Prop() private updateObjects!: string;
   }
 </script>
+<style lang="scss" scoped>
+  .rk-add-dashboard-item {
+    height: 342px;
+    text-align: center;
+    line-height: 250px;
+    border: 1px dashed rgba(196, 200, 225, 0.5);
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+  }
+  .dashboard-container {
+    overflow: auto;
+    padding: 20px 15px;
+    height: 100%;
+    flex-grow: 1;
+  }
+</style>

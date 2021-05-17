@@ -71,7 +71,7 @@ limitations under the License. -->
     overflow: auto;
   }
   .rk-add-metric-item {
-    height: 250px;
+    height: 200px;
     text-align: center;
     line-height: 250px;
     border: 1px dashed rgba(196, 200, 225, 0.5);

@@ -318,6 +318,7 @@ limitations under the License. -->
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
     @Mutation('rocketTopo/EDIT_TOPO_INSTANCE_CONFIG') private EDIT_TOPO_INSTANCE_CONFIG: any;
     @Mutation('rocketTopo/EDIT_TOPO_ENDPOINT_CONFIG') private EDIT_TOPO_ENDPOINT_CONFIG: any;
+    @Mutation('rocketTopo/EDIT_TOPO_SERVICE_CONFIG') private EDIT_TOPO_SERVICE_CONFIG: any;
     @Action('GET_ITEM_SERVICES') private GET_ITEM_SERVICES: any;
     @Action('GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
     @Action('GET_ITEM_INSTANCES') private GET_ITEM_INSTANCES: any;
@@ -390,6 +391,18 @@ limitations under the License. -->
         this.itemConfig.queryMetricType === 'readMetricsValue' ? ReadValueChartType : ChartTypeOptions;
     }
 
+    private editComponentConfig(params: { index: number; values: any }) {
+      if (this.type === TopologyType.TOPOLOGY_SERVICE) {
+        this.EDIT_TOPO_SERVICE_CONFIG(params);
+      } else if (this.type === TopologyType.TOPOLOGY_ENDPOINT) {
+        this.EDIT_TOPO_ENDPOINT_CONFIG(params);
+      } else if (this.type === TopologyType.TOPOLOGY_INSTANCE) {
+        this.EDIT_TOPO_INSTANCE_CONFIG(params);
+      } else {
+        this.EDIT_COMP_CONFIG(params);
+      }
+    }
+
     private setItemConfig(params: { type: string; value: string }) {
       this.itemConfig[params.type] = params.value;
       const types = ['endpointsKey', 'instancesKey', 'currentService'];
@@ -421,17 +434,17 @@ limitations under the License. -->
       if (params.type === 'independentSelector' || params.type === 'parentService') {
         this.itemConfig[params.type] = params.value === 'true' ? true : false;
         if (this.type === this.pageTypes[0]) {
-          this.EDIT_TOPO_ENDPOINT_CONFIG({
+          this.editComponentConfig({
             index: this.index,
             values: { [params.type]: this.itemConfig[params.type] },
           });
         } else if (this.type === this.pageTypes[1]) {
-          this.EDIT_TOPO_INSTANCE_CONFIG({
+          this.editComponentConfig({
             index: this.index,
             values: { [params.type]: this.itemConfig[params.type] },
           });
         } else {
-          this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: this.itemConfig[params.type] } });
+          this.editComponentConfig({ index: this.index, values: { [params.type]: this.itemConfig[params.type] } });
         }
         return;
       }
@@ -440,17 +453,17 @@ limitations under the License. -->
         return;
       }
       if (this.type === this.pageTypes[0]) {
-        this.EDIT_TOPO_ENDPOINT_CONFIG({
+        this.editComponentConfig({
           index: this.index,
           values: { [params.type]: params.value },
         });
       } else if (this.type === this.pageTypes[1]) {
-        this.EDIT_TOPO_INSTANCE_CONFIG({
+        this.editComponentConfig({
           index: this.index,
           values: { [params.type]: params.value },
         });
       } else {
-        this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: params.value } });
+        this.editComponentConfig({ index: this.index, values: { [params.type]: params.value } });
       }
     }
 
@@ -480,17 +493,17 @@ limitations under the License. -->
           metricName: params.value,
         };
         if (this.type === this.pageTypes[0]) {
-          this.EDIT_TOPO_ENDPOINT_CONFIG({
+          this.editComponentConfig({
             index: this.index,
             values,
           });
         } else if (this.type === this.pageTypes[1]) {
-          this.EDIT_TOPO_INSTANCE_CONFIG({
+          this.editComponentConfig({
             index: this.index,
             values,
           });
         } else {
-          this.EDIT_COMP_CONFIG({
+          this.editComponentConfig({
             index: this.index,
             values,
           });
@@ -511,7 +524,7 @@ limitations under the License. -->
         ...this.itemConfig,
         ...values,
       };
-      this.EDIT_COMP_CONFIG({
+      this.editComponentConfig({
         index: this.index,
         values,
       });
@@ -523,17 +536,17 @@ limitations under the License. -->
         [params.type]: params.value,
       };
       if (this.type === this.pageTypes[0]) {
-        this.EDIT_TOPO_ENDPOINT_CONFIG({
+        this.editComponentConfig({
           index: this.index,
           values,
         });
       } else if (this.type === this.pageTypes[1]) {
-        this.EDIT_TOPO_INSTANCE_CONFIG({
+        this.editComponentConfig({
           index: this.index,
           values,
         });
       } else {
-        this.EDIT_COMP_CONFIG({
+        this.editComponentConfig({
           index: this.index,
           values,
         });
@@ -585,7 +598,10 @@ limitations under the License. -->
             } else {
               this.itemConfig.currentEndpoint = '';
             }
-            this.EDIT_COMP_CONFIG({ index: this.index, values: { currentEndpoint: this.itemConfig.currentEndpoint } });
+            this.editComponentConfig({
+              index: this.index,
+              values: { currentEndpoint: this.itemConfig.currentEndpoint },
+            });
           }
         });
       } else if (this.itemConfig.entityType === EntityType[3].key) {
@@ -601,7 +617,10 @@ limitations under the License. -->
             } else {
               this.itemConfig.currentInstance = '';
             }
-            this.EDIT_COMP_CONFIG({ index: this.index, values: { currentInstance: this.itemConfig.currentInstance } });
+            this.editComponentConfig({
+              index: this.index,
+              values: { currentInstance: this.itemConfig.currentInstance },
+            });
           }
         });
       }

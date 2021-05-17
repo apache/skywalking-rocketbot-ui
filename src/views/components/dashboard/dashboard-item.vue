@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div class="rk-dashboard-item" :class="`g-sm-${width}`" :style="`height:${height}px;`" v-if="itemConfig.metricName">
+  <div class="rk-dashboard-item" :class="`g-sm-${width}`" :style="`height:${height}px;`" v-if="itemConfig.entityType">
     <div class="rk-dashboard-item-title ell">
       <span v-show="rocketGlobal.edit" @click="deleteItem(index)">
         <rk-icon class="r edit red" icon="file-deletion" />
@@ -90,6 +90,7 @@ limitations under the License. -->
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('rocketTopo/DELETE_TOPO_ENDPOINT') private DELETE_TOPO_ENDPOINT: any;
     @Mutation('rocketTopo/DELETE_TOPO_INSTANCE') private DELETE_TOPO_INSTANCE: any;
+    @Mutation('rocketTopo/DELETE_TOPO_SERVICE') private DELETE_TOPO_SERVICE: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
@@ -100,7 +101,11 @@ limitations under the License. -->
     @Prop() private rocketOption!: optionState;
     @Prop() private templateType!: string;
 
-    private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as string[];
+    private pageTypes = [
+      TopologyType.TOPOLOGY_ENDPOINT,
+      TopologyType.TOPOLOGY_INSTANCE,
+      TopologyType.TOPOLOGY_SERVICE,
+    ] as string[];
     private dialogConfigVisible = false;
     private status = 'UNKNOWN';
     private title = 'Title';
@@ -111,7 +116,7 @@ limitations under the License. -->
     private chartSource: any = {};
     private itemConfig: any = {};
     private itemEvents: Event[] = [];
-    private theme: string = 'light'; // dark
+    private theme: 'light' | 'dark' = 'light'; // dark
 
     private created() {
       this.status = this.item.metricType;
@@ -346,10 +351,12 @@ limitations under the License. -->
     }
 
     private deleteItem(index: number) {
-      if (this.type === this.pageTypes[0]) {
+      if (this.type === TopologyType.TOPOLOGY_ENDPOINT) {
         this.DELETE_TOPO_ENDPOINT(index);
-      } else if (this.type === this.pageTypes[1]) {
+      } else if (this.type === TopologyType.TOPOLOGY_INSTANCE) {
         this.DELETE_TOPO_INSTANCE(index);
+      } else if (this.type === TopologyType.TOPOLOGY_SERVICE) {
+        this.DELETE_TOPO_SERVICE(index);
       } else {
         this.DELETE_COMP(index);
       }

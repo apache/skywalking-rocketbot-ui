@@ -86,6 +86,7 @@ limitations under the License. -->
     @Mutation('rocketTopo/SET_TOPO_INSTANCE') private SET_TOPO_INSTANCE: any;
     @Mutation('rocketTopo/SET_TOPO_SERVICE') private SET_TOPO_SERVICE: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
+    @Mutation('SET_EDIT') private SET_EDIT: any;
 
     private current: any = {};
     private dialog: string = '';
@@ -185,6 +186,7 @@ limitations under the License. -->
     private beforeDestroy() {
       this.CLEAR_TOPO_INFO();
       this.CLEAR_TOPO();
+      this.SET_EDIT(false);
     }
   }
 </script>
