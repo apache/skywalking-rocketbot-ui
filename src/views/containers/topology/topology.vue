@@ -97,7 +97,7 @@ limitations under the License. -->
         const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
         const topoService = serviceComps ? JSON.parse(serviceComps) : [];
 
-        this.SET_TOPO_SERVICE(TopoServiceMetricsConfig.configuration);
+        this.SET_TOPO_SERVICE(topoService);
       }
       if (window.localStorage.getItem('topologyInstances')) {
         const instanceComps: string = `${window.localStorage.getItem('topologyInstances')}`;

@@ -55,15 +55,22 @@ limitations under the License. -->
             v-tooltip:bottom="{ content: rocketGlobal.edit ? 'view' : 'edit' }"
           />
         </div>
-        <!-- <div class="rk-dashboard-bar-btn" v-tooltip:bottom="{ content: 'import' }">
-          <input id="tool-bar-file" type="file" name="file" title="" accept=".json" @change="importData" />
+        <div class="topo-tool-btn" v-tooltip:bottom="{ content: 'import' }">
+          <input
+            id="tool-bar-file"
+            type="file"
+            name="file"
+            title=""
+            accept=".json"
+            @change="importServiceMetricsTemplate"
+          />
           <label for="tool-bar-file">
             <rk-icon class="lg import" icon="folder_open" />
           </label>
         </div>
-        <div class="rk-dashboard-bar-btn" @click="exportData">
+        <div class="topo-tool-btn" @click="exportTopoServiceMetrics">
           <rk-icon class="lg" icon="save_alt" v-tooltip:bottom="{ content: 'export' }" />
-        </div> -->
+        </div>
       </div>
     </div>
     <div v-if="showInfo">
@@ -167,9 +174,8 @@ limitations under the License. -->
     @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
     @Action('rocketTopo/GET_TOPO_INSTANCE_DEPENDENCY')
     private GET_INSTANCE_DEPENDENCY: any;
-    @Mutation('IMPORT_TREE') private IMPORT_TREE: any;
+    @Mutation('rocketTopo/IMPORT_TREE_SERVICE') private IMPORT_TREE_SERVICE: any;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
-    // @Action('rocketTopo/GET_TOPO_SERVICE_DETAIL') private GET_TOPO_SERVICE_DETAIL: any;
 
     private isMini: boolean = true;
     private showInfoCount: number = 0;
@@ -216,30 +222,29 @@ limitations under the License. -->
       });
     }
 
-    // private async importData(event: any) {
-    //   try {
-    //     const data: any = await readFile(event);
-    //     if (!Array.isArray(data)) {
-    //       throw new Error();
-    //     }
-    //     const [{ children, name, type }] = data;
-    //     if (children && name && type) {
-    //       this.IMPORT_TREE(data);
-    //     } else {
-    //       throw new Error('error');
-    //     }
-    //     const el: any = document.getElementById('tool-bar-file');
-    //     el!.value = '';
-    //   } catch (e) {
-    //     this.$modal.show('dialog', { text: 'ERROR' });
-    //   }
-    // }
-    // private exportData() {
-    //   const group = this.rocketComps.tree[this.rocketComps.group];
-    //   delete group.query;
-    //   const name = 'dashboard.json';
-    //   saveFile([group], name);
-    // }
+    private async importServiceMetricsTemplate(event: Event) {
+      try {
+        const data: any = await readFile(event);
+        if (!Array.isArray(data)) {
+          throw new Error();
+        }
+        const [{ children, name, type }] = data;
+        if (children && name && type) {
+          this.IMPORT_TREE_SERVICE(data);
+        } else {
+          throw new Error('error');
+        }
+        const el: any = document.getElementById('tool-bar-file');
+        el!.value = '';
+      } catch (e) {
+        this.$modal.show('dialog', { text: 'ERROR' });
+      }
+    }
+    private exportTopoServiceMetrics() {
+      const group = this.stateTopo.topoServices;
+      const name = 'topo_service_metrics.json';
+      saveFile([group], name);
+    }
 
     @Watch('durationTime')
     private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
@@ -284,7 +289,11 @@ limitations under the License. -->
   .tool-btns {
     height: 30px;
   }
-  .rk-icon {
+  #tool-bar-file {
+    display: none;
+  }
+  .topo-tool-btn {
+    margin: 0 3px;
     cursor: pointer;
   }
   .link-topo-aside-box-btn {

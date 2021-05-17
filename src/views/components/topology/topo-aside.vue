@@ -181,7 +181,7 @@ limitations under the License. -->
   }
 
   .link-topo-aside-box-min {
-    width: 420px;
+    width: 360px;
     animation: 0.5s linkTopoAsideBoxMin 1 running;
   }
 

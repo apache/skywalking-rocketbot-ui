@@ -304,6 +304,10 @@ const mutations = {
     state.topoServices = data;
     window.localStorage.setItem('topologyServices', JSON.stringify(data));
   },
+  [types.IMPORT_TREE_SERVICE](state: State, data: any[]) {
+    state.topoServices[state.currentNode.type].push(...data);
+    window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
+  },
 };
 
 // actions
