@@ -25,39 +25,28 @@ limitations under the License. -->
       :rocketOption="stateDashboardOption"
       :templateType="stateTopo.currentNode.type"
     />
-    <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="ADD_TOPO_SERVICE_COMP">
+    <!-- <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="ADD_TOPO_SERVICE_COMP">
       + Add An Item
-    </div>
+    </div> -->
   </div>
 </template>
 <script lang="ts">
-  import { State as topoState } from '@/store/modules/topology';
+  import { Action, Getter, Mutation, State } from 'vuex-class';
   import { Component, Vue } from 'vue-property-decorator';
-  import { State, Mutation } from 'vuex-class';
+  import { State as topoState } from '@/store/modules/topology';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketbotGlobal } from '@/store/modules/global';
-  import DashboardItem from '../dashboard/dashboard-item.vue';
+  import DashboardItem from '../../dashboard/dashboard-item.vue';
 
   @Component({
     components: {
       DashboardItem,
     },
   })
-  export default class TopoServiceMetrics extends Vue {
+  export default class TopoServiceDependency extends Vue {
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @State('rocketTopo') private stateTopo!: topoState;
-    @Mutation('rocketTopo/ADD_TOPO_SERVICE_COMP') private ADD_TOPO_SERVICE_COMP: any;
-
-    private serviceComps: unknown[] = [];
-    private height = 800;
-
-    private beforeMount() {
-      const { type } = this.stateTopo.currentNode;
-
-      this.serviceComps = this.stateTopo.topoServices[type];
-      this.height = document.body.clientHeight - 230;
-    }
   }
 </script>
 <style lang="scss">

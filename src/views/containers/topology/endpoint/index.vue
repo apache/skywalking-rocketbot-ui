@@ -77,7 +77,6 @@ limitations under the License. -->
   import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar/tool-bar-endpoint-select.vue';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
-  import { ObjectsType } from '../../../../constants/constant';
   import DashboardEvent from '@/views/components/dashboard/tool-bar/dashboard-events.vue';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
@@ -98,7 +97,7 @@ limitations under the License. -->
   export default class WindowEndpoint extends Vue {
     @Prop() private current!: { key: number | string; label: number | string };
     @Prop() private endpointComps: any;
-    @Prop() private updateObjects!: string;
+    @Prop() private updateObjects!: boolean;
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketData') private rocketComps!: rocketData;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
@@ -151,7 +150,7 @@ limitations under the License. -->
         if (!Array.isArray(data)) {
           throw new Error();
         }
-        this.$emit('changeEndpointComps', { json: data, type: ObjectsType.UPDATE_ENDPOINTS });
+        this.$emit('changeEndpointComps', { json: data, type: false });
         const el: any = document.getElementById('endpoint-file');
         el!.value = '';
       } catch (e) {
@@ -167,7 +166,7 @@ limitations under the License. -->
 
     private beforeDestroy() {
       this.SET_EDIT(false);
-      this.$emit('changeEndpointComps', { type: '' });
+      this.$emit('changeEndpointComps', { type: true });
     }
   }
 </script>

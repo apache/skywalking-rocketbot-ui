@@ -62,7 +62,7 @@ limitations under the License. -->
   import TopoAside from '../../components/topology/topo-aside.vue';
   import TopoGroup from '../../components/topology/topo-group/index.vue';
   import WindowEndpointDependency from '@/views/containers/topology/endpoint-dependency/index.vue';
-  import { TopoServiceMetricsConfig } from './topo-config';
+  import { TopoServiceMetricsConfig, TopoServiceDependencyMetricsConfig } from './topo-config';
   import { Option } from '@/types/global';
 
   @Component({
@@ -85,12 +85,13 @@ limitations under the License. -->
     @Mutation('rocketTopo/SET_TOPO_ENDPOINT') private SET_TOPO_ENDPOINT: any;
     @Mutation('rocketTopo/SET_TOPO_INSTANCE') private SET_TOPO_INSTANCE: any;
     @Mutation('rocketTopo/SET_TOPO_SERVICE') private SET_TOPO_SERVICE: any;
+    @Mutation('rocketTopo/SET_TOPO_SERVICE_DEPENDENCY') private SET_TOPO_SERVICE_DEPENDENCY: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
 
     private current: any = {};
     private dialog: string = '';
-    private updateObjects: string = '';
+    private updateObjects: boolean = true;
 
     private created() {
       if (window.localStorage.getItem('topologyServices')) {
@@ -111,10 +112,17 @@ limitations under the License. -->
 
         this.SET_TOPO_ENDPOINT(topoEndpoint);
       }
+      if (window.localStorage.getItem('topologyServicesDependency')) {
+        const serviceDependencyComps: string = `${window.localStorage.getItem('topologyServicesDependency')}`;
+        const topoServiceDependency = serviceDependencyComps ? JSON.parse(serviceDependencyComps) : [];
+
+        this.SET_TOPO_SERVICE_DEPENDENCY(topoServiceDependency);
+      }
       if (
         window.localStorage.getItem('topologyServices') &&
         window.localStorage.getItem('topologyInstances') &&
-        window.localStorage.getItem('topologyEndpoints')
+        window.localStorage.getItem('topologyEndpoints') &&
+        window.localStorage.getItem('topologyServicesDependency')
       ) {
         return;
       }
@@ -146,12 +154,15 @@ limitations under the License. -->
             this.SET_TOPO_ENDPOINT(endpointComps);
           }
           if (!window.localStorage.getItem('topologyServices')) {
-            // const serviceTemplate = allTemplates.filter(
-            // (item: any) => item.type === TopologyType.TOPOLOGY_SERVICE && item.activated)[0] || {};
-            // const topoService = JSON.parse(serviceTemplate.configuration) || [];
-            // this.SET_TOPO_SERVICE(topoService);
-
-            this.SET_TOPO_SERVICE(TopoServiceMetricsConfig.configuration);
+            const serviceTemplate =
+              allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_SERVICE && item.activated)[0] ||
+              {};
+            const topoService = JSON.parse(serviceTemplate.configuration) || [];
+            this.SET_TOPO_SERVICE(topoService);
+            // this.SET_TOPO_SERVICE(TopoServiceMetricsConfig.configuration);
+          }
+          if (!window.localStorage.getItem('topologyServicesDependency')) {
+            this.SET_TOPO_SERVICE_DEPENDENCY(TopoServiceDependencyMetricsConfig.configuration);
           }
         },
       );
@@ -162,26 +173,19 @@ limitations under the License. -->
         this.SET_CURRENT_SERVICE({ key: d.key, label: d.label });
       }
     }
-    private changeInstanceComps(data: { type: string; json: any }) {
+    private changeInstanceComps(data: { type: boolean; json: any }) {
       this.updateObjects = data.type;
       if (!data.json) {
         return;
       }
       this.SET_TOPO_INSTANCE(data.json);
     }
-    private changeEndpointComps(data: { type: string; json: any }) {
+    private changeEndpointComps(data: { type: boolean; json: any }) {
       this.updateObjects = data.type;
       if (!data.json) {
         return;
       }
       this.SET_TOPO_ENDPOINT(data.json);
-    }
-    private changeServiceComps(data: { type: string; json: any }) {
-      this.updateObjects = data.type;
-      if (!data.json) {
-        return;
-      }
-      this.SET_TOPO_SERVICE(data.json);
     }
     private beforeDestroy() {
       this.CLEAR_TOPO_INFO();

@@ -32,7 +32,7 @@ limitations under the License. -->
         :index="index"
         :rocketGlobal="rocketGlobal"
         :item="i"
-        :updateObjects="ObjectsType.UPDATE_DASHBOARD"
+        :updateObjects="true"
         :rocketOption="stateDashboardOption"
       >
       </DashboardItem>
@@ -50,7 +50,6 @@ limitations under the License. -->
   import ToolGroup from '@/views/components/dashboard/tool-group.vue';
   import ToolNav from '@/views/components/dashboard/tool-nav.vue';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
-  import { ObjectsType } from '../../constants/constant';
   import { State as globalState } from '@/store/modules/global';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as dataState } from '@/store/modules/dashboard/dashboard-data';
@@ -83,8 +82,6 @@ limitations under the License. -->
     @Mutation('ADD_COMP') private ADD_COMP: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
     @Mutation('SET_TEMPLATES') private SET_TEMPLATES: any;
-
-    private ObjectsType = ObjectsType;
 
     private isRouterAlive: boolean = true;
     public reload(): void {

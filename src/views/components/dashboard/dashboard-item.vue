@@ -21,7 +21,7 @@ limitations under the License. -->
       <span>{{ title }}</span>
       <span v-show="unit"> ( {{ unit }} ) </span>
       <span v-show="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
-      <span v-show="!rocketGlobal.edit && !pageTypes.includes(type)" @click="editComponentConfig">
+      <span v-show="!rocketGlobal.edit && !noEditTypes.includes(type)" @click="editComponentConfig">
         <rk-icon class="r edit" icon="keyboard_control" v-tooltip:bottom="{ content: $t('editConfig') }" />
       </span>
       <span v-show="!rocketGlobal.edit && itemConfig.chartType === 'ChartTable'" @click="copyTable">
@@ -72,7 +72,7 @@ limitations under the License. -->
   import dayjs from 'dayjs';
 
   import { QueryTypes, UpdateDashboardEvents } from './constant';
-  import { TopologyType, ObjectsType } from '@/constants/constant';
+  import { TopologyType } from '@/constants/constant';
   import { CalculationType } from './charts/constant';
   import { State as globalState } from '@/store/modules/global';
   import { State as optionState } from '@/store/modules/global/selectors';
@@ -97,11 +97,11 @@ limitations under the License. -->
     @Prop() private item!: any;
     @Prop() private index!: number;
     @Prop() private type!: string;
-    @Prop() private updateObjects!: string;
+    @Prop() private updateObjects!: boolean;
     @Prop() private rocketOption!: optionState;
     @Prop() private templateType!: string;
 
-    private pageTypes = [
+    private noEditTypes = [
       TopologyType.TOPOLOGY_ENDPOINT,
       TopologyType.TOPOLOGY_INSTANCE,
       TopologyType.TOPOLOGY_SERVICE,
@@ -116,7 +116,7 @@ limitations under the License. -->
     private chartSource: any = {};
     private itemConfig: any = {};
     private itemEvents: Event[] = [];
-    private theme: 'light' | 'dark' = 'light'; // dark
+    private theme: 'light' | 'dark' = 'light';
 
     private created() {
       this.status = this.item.metricType;
@@ -127,21 +127,12 @@ limitations under the License. -->
       this.unit = this.item.unit;
       this.itemConfig = this.item;
       this.itemEvents = this.eventsFilter();
-      const types = [
-        ObjectsType.UPDATE_SERVICES,
-        ObjectsType.UPDATE_INSTANCES,
-        ObjectsType.UPDATE_ENDPOINTS,
-        ObjectsType.UPDATE_DASHBOARD,
-      ] as string[];
-      if (!types.includes(this.updateObjects)) {
-        return;
+      this.theme = this.type === TopologyType.TOPOLOGY_SERVICE ? 'dark' : 'light';
+      if (this.updateObjects) {
+        setTimeout(() => {
+          this.chartRender();
+        }, 1000);
       }
-      if (this.updateObjects === ObjectsType.UPDATE_SERVICES) {
-        this.theme = 'dark';
-      }
-      setTimeout(() => {
-        this.chartRender();
-      }, 1000);
     }
 
     private chartRender() {

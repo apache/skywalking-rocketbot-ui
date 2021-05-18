@@ -78,7 +78,6 @@ limitations under the License. -->
   import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar/tool-bar-endpoint-select.vue';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
-  import { ObjectsType } from '@/constants/constant';
   import { EntityType } from '@/views/components/dashboard/charts/constant';
   import { DurationTime, Option } from '@/types/global';
   import { State as optionState } from '@/store/modules/global/selectors';
@@ -99,7 +98,7 @@ limitations under the License. -->
   export default class WindowInstance extends Vue {
     @Prop() private current!: { key: number | string; label: number | string };
     @Prop() private instanceComps: any;
-    @Prop() private updateObjects!: string;
+    @Prop() private updateObjects!: boolean;
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketData') private rocketComps!: rocketData;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
@@ -152,7 +151,7 @@ limitations under the License. -->
         if (!Array.isArray(data)) {
           throw new Error();
         }
-        this.$emit('changeInstanceComps', { json: data, type: ObjectsType.UPDATE_ENDPOINTS });
+        this.$emit('changeInstanceComps', { json: data, type: false });
         const el: any = document.getElementById('instance-file');
         el!.value = '';
       } catch (e) {
@@ -166,7 +165,7 @@ limitations under the License. -->
     }
 
     private beforeDestroy() {
-      this.$emit('changeInstanceComps', { type: '' });
+      this.$emit('changeInstanceComps', { type: true });
       this.SET_EDIT(false);
     }
   }

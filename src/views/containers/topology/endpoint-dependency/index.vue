@@ -41,7 +41,7 @@ limitations under the License. -->
   import { Action, Getter, State, Mutation } from 'vuex-class';
   import ToolBarSelect from '@/views/components/dashboard/tool-bar/tool-bar-select.vue';
   import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar/tool-bar-endpoint-select.vue';
-  import TopoEndpointDependency from '@/views/components/topology/topo-endpoint-dependency.vue';
+  import TopoEndpointDependency from '@/views/components/topology/dependency/topo-endpoint-dependency.vue';
 
   @Component({
     components: {

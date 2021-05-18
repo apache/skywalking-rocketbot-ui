@@ -74,36 +74,7 @@ limitations under the License. -->
       </div>
     </div>
     <div v-if="showInfo">
-      <div v-if="stateTopo.selectedServiceCall">
-        <TopoChart
-          v-if="stateTopo.getResponseTimeTrend.length"
-          :data="stateTopo.getResponseTimeTrend"
-          :intervalTime="intervalTime"
-          :title="$t('avgResponseTime')"
-          unit="ms"
-        />
-        <TopoChart
-          v-if="stateTopo.getThroughputTrend.length"
-          :data="stateTopo.getThroughputTrend"
-          :intervalTime="intervalTime"
-          :title="$t('avgThroughput')"
-          unit="cpm"
-        />
-        <TopoChart
-          v-if="stateTopo.getSLATrend.length"
-          :data="stateTopo.getSLATrend"
-          :intervalTime="intervalTime"
-          :precent="true"
-          :title="$t('avgSLA')"
-          unit=""
-        />
-        <ChartLine
-          v-if="stateTopo.responsePercentile.p50.length"
-          :data="stateTopo.responsePercentile"
-          :intervalTime="intervalTime"
-          :title="$t('percentResponse')"
-        />
-      </div>
+      <TopoServiceDependency v-if="stateTopo.selectedServiceCall" />
       <div v-else-if="showServerInfo">
         <div class="pl-10 pb-5">
           <span class="label grey">{{ $t('name') }}</span>
@@ -136,9 +107,7 @@ limitations under the License. -->
   import { State as topoState } from '@/store/modules/topology';
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
-  import TopoChart from './topo-chart.vue';
-  import TopoInstanceDependency from './topo-instance-dependency.vue';
-  import ChartLine from './chart-line.vue';
+  import TopoInstanceDependency from './dependency/topo-instance-dependency.vue';
   import { DurationTime } from '@/types/global';
   import TopoServiceMetrics from './topo-service-metrics.vue';
   import ToolBarBtns from '../dashboard/tool-bar/tool-bar-btns.vue';
@@ -147,14 +116,14 @@ limitations under the License. -->
   import compareObj from '@/utils/comparison';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
+  import TopoServiceDependency from './dependency/topo-service-dependency.vue';
 
   @Component({
     components: {
       TopoServiceMetrics,
       TopoInstanceDependency,
+      TopoServiceDependency,
       ToolBarBtns,
-      TopoChart,
-      ChartLine,
     },
   })
   export default class TopoDetectPoint extends Vue {

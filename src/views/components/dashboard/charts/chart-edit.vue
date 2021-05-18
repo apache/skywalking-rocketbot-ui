@@ -352,10 +352,9 @@ limitations under the License. -->
     private created() {
       this.setDefaultValue((this.itemConfig = this.item));
       this.initConfig();
-      if (!this.itemConfig.independentSelector || this.pageTypes.includes(this.type)) {
-        return;
+      if (this.itemConfig.independentSelector) {
+        this.setItemServices();
       }
-      this.setItemServices();
     }
 
     private setDefaultValue(itemConfig: any) {

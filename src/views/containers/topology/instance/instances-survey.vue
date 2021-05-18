@@ -51,7 +51,7 @@ limitations under the License. -->
     @State('rocketOption') private stateDashboardOption!: optionState;
     @Mutation('rocketTopo/ADD_TOPO_INSTANCE_COMP') private ADD_TOPO_INSTANCE_COMP: any;
     @Prop() private instanceComps: any;
-    @Prop() private updateObjects!: string;
+    @Prop() private updateObjects!: boolean;
   }
 </script>
 <style lang="scss" scoped>

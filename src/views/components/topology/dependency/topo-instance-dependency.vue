@@ -77,10 +77,10 @@ limitations under the License. -->
   import { Vue, Component } from 'vue-property-decorator';
   import { State, Action, Getter, Mutation } from 'vuex-class';
   import { State as topoState } from '@/store/modules/topology';
-  import Topo from './chart/topo.vue';
-  import TopoChart from './topo-chart.vue';
-  import DependencySankey from './dependency-sankey.vue';
-  import ChartLine from './chart-line.vue';
+  import Topo from '../chart/topo.vue';
+  import TopoChart from '../topo-chart.vue';
+  import DependencySankey from '../dependency-sankey.vue';
+  import ChartLine from '../chart-line.vue';
 
   @Component({
     components: {

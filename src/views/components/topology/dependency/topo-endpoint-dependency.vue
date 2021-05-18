@@ -44,9 +44,9 @@ limitations under the License. -->
   import { Vue, Component, Watch } from 'vue-property-decorator';
   import { State, Action, Getter } from 'vuex-class';
   import { State as topoState, EndpointDependencyConidition, Call, Duration } from '@/store/modules/topology';
-  import TopoChart from './topo-chart.vue';
-  import DependencySankey from './dependency-sankey.vue';
-  import ChartLine from './chart-line.vue';
+  import TopoChart from '../topo-chart.vue';
+  import DependencySankey from '../dependency-sankey.vue';
+  import ChartLine from '../chart-line.vue';
 
   @Component({
     components: {

@@ -91,6 +91,7 @@ export interface State {
   topoEndpoints: any[];
   topoInstances: any[];
   topoServices: { [key: string]: any[] };
+  topoServicesDependency: { [key: string]: any[] };
 }
 
 const PercentileItem: string[] = ['p50', 'p75', 'p90', 'p95', 'p99'];
@@ -128,6 +129,7 @@ const initState: State = {
   topoEndpoints: [],
   topoInstances: [],
   topoServices: {},
+  topoServicesDependency: {},
 };
 
 // getters
@@ -230,6 +232,10 @@ const mutations = {
   [types.SET_TOPO_INSTANCE](state: State, data: any[]) {
     state.topoInstances = data;
     window.localStorage.setItem('topologyInstances', JSON.stringify(data));
+  },
+  [types.SET_TOPO_SERVICE_DEPENDENCY](state: State, data: any) {
+    state.topoServicesDependency = data;
+    window.localStorage.setItem('topologyServicesDependency', JSON.stringify(data));
   },
   [types.EDIT_TOPO_INSTANCE_CONFIG](state: State, params: { values: any; index: number }) {
     state.topoInstances[params.index] = { ...state.topoInstances[params.index], ...params.values };
