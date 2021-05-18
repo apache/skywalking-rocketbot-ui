@@ -117,6 +117,7 @@ limitations under the License. -->
     private itemConfig: any = {};
     private itemEvents: Event[] = [];
     private theme: 'light' | 'dark' = 'light';
+    private darkThemeTypes = [TopologyType.TOPOLOGY_SERVICE, TopologyType.TOPOLOGY_SERVICE_DEPENDENCY] as string[];
 
     private created() {
       this.status = this.item.metricType;
@@ -127,7 +128,8 @@ limitations under the License. -->
       this.unit = this.item.unit;
       this.itemConfig = this.item;
       this.itemEvents = this.eventsFilter();
-      this.theme = this.type === TopologyType.TOPOLOGY_SERVICE ? 'dark' : 'light';
+      this.theme = this.darkThemeTypes.includes(this.type) ? 'dark' : 'light';
+
       if (this.updateObjects) {
         setTimeout(() => {
           this.chartRender();

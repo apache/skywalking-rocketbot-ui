@@ -270,7 +270,6 @@ const mutations = {
       title: 'Title',
       height: 350,
       entityType: 'ServiceInstance',
-      independentSelector: false,
       metricType: 'UNKNOWN',
     };
     state.topoInstances.push(comp);
@@ -282,7 +281,6 @@ const mutations = {
       title: 'Title',
       height: 350,
       entityType: 'Endpoint',
-      independentSelector: false,
       metricType: 'UNKNOWN',
     };
     state.topoEndpoints.push(comp);
@@ -294,7 +292,6 @@ const mutations = {
       title: 'Title',
       height: 350,
       entityType: 'Service',
-      independentSelector: false,
       metricType: 'UNKNOWN',
     };
     state.topoServices[state.currentNode.type].push(comp);

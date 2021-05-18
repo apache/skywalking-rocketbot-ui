@@ -33,13 +33,12 @@ const actions: ActionTree<State, any> = {
       templateType: string;
     },
   ) {
-    const { currentDatabase, currentEndpoint, currentInstance, currentService } = params.rocketOption;
+    const { currentDatabase, currentEndpoint, currentInstance, currentService, destServiceName } = params.rocketOption;
     const dashboard: string = `${window.localStorage.getItem('dashboard')}`;
     const tree = dashboard ? JSON.parse(dashboard) : context.state.tree;
     const normal = params.type ? true : tree[context.state.group].type === 'database' ? false : true;
     let config = {} as any;
     const names = ['readSampledRecords', 'sortMetrics'];
-
     if (params.type === TopologyType.TOPOLOGY_ENDPOINT) {
       const endpointComps: string = `${window.localStorage.getItem('topologyEndpoints')}`;
       const topoEndpoint = endpointComps ? JSON.parse(endpointComps) : [];
@@ -56,6 +55,13 @@ const actions: ActionTree<State, any> = {
         return new Promise((resolve) => resolve({}));
       }
       config = topoService[params.templateType][params.index];
+    } else if (params.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) {
+      const serviceDependencyComps: string = `${window.localStorage.getItem('topologyServicesDependency')}`;
+      const topoServiceDependency = serviceDependencyComps ? JSON.parse(serviceDependencyComps) : {};
+      if (!topoServiceDependency[params.templateType]) {
+        return new Promise((resolve) => resolve({}));
+      }
+      config = topoServiceDependency[params.templateType][params.index];
     } else {
       config = tree[context.state.group].children[context.state.current].children[params.index];
     }
@@ -73,6 +79,7 @@ const actions: ActionTree<State, any> = {
     const currentEndpointId = config.independentSelector ? config.currentEndpoint : currentEndpoint.label;
     const currentDatabaseId = config.independentSelector ? config.currentDatabase : currentDatabase.label;
     const labels = config.metricType === 'LABELED_VALUE' ? labelsIndex : undefined;
+    const isRelation = ['ServiceRelation', 'ServiceInstanceRelation', 'EndpointRelation'].includes(config.entityType);
     const variablesList = metricNames.map((name: string) => {
       let variables = {} as any;
 
@@ -139,10 +146,18 @@ const actions: ActionTree<State, any> = {
                 serviceInstanceName: config.entityType === 'ServiceInstance' ? currentInstanceId : undefined,
                 endpointName: config.entityType === 'Endpoint' ? currentEndpointId : undefined,
                 normal,
-                // destNormal: normal,
-                // destServiceName: '',
-                // destServiceInstanceName: '',
-                // destEndpointName: '',
+                destNormal: isRelation ? normal : undefined,
+                destServiceName: isRelation ? destServiceName.label : undefined,
+                destServiceInstanceName: isRelation
+                  ? config.entityType === 'ServiceInstanceRelation'
+                    ? currentInstanceId
+                    : undefined
+                  : undefined,
+                destEndpointName: isRelation
+                  ? config.entityType === 'EndpointRelation'
+                    ? currentInstanceId
+                    : undefined
+                  : undefined,
               },
             },
             labels,
@@ -174,6 +189,32 @@ const actions: ActionTree<State, any> = {
     ).then((data: any) => {
       return data;
     });
+  },
+  GET_METRICS_CONFIG(
+    context: { state: State },
+    params: { type: string; index: number; templateType: string; tree: any },
+  ) {
+    let config = {};
+    if (params.type === TopologyType.TOPOLOGY_ENDPOINT) {
+      const endpointComps: string = `${window.localStorage.getItem('topologyEndpoints')}`;
+      const topoEndpoint = endpointComps ? JSON.parse(endpointComps) : [];
+      config = topoEndpoint[params.index];
+    } else if (params.type === TopologyType.TOPOLOGY_INSTANCE) {
+      const instanceComps: string = `${window.localStorage.getItem('topologyInstances')}`;
+      const topoInstance = instanceComps ? JSON.parse(instanceComps) : [];
+      config = topoInstance[params.index];
+    } else if (params.type === TopologyType.TOPOLOGY_SERVICE) {
+      const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
+      const topoService = serviceComps ? JSON.parse(serviceComps) : {};
+
+      if (!topoService[params.templateType]) {
+        return new Promise((resolve) => resolve({}));
+      }
+      config = topoService[params.templateType][params.index];
+    } else {
+      config = params.tree[context.state.group].children[context.state.current].children[params.index];
+    }
+    return config;
   },
 };
 

@@ -154,12 +154,12 @@ limitations under the License. -->
             this.SET_TOPO_ENDPOINT(endpointComps);
           }
           if (!window.localStorage.getItem('topologyServices')) {
-            const serviceTemplate =
-              allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_SERVICE && item.activated)[0] ||
-              {};
-            const topoService = JSON.parse(serviceTemplate.configuration) || [];
-            this.SET_TOPO_SERVICE(topoService);
-            // this.SET_TOPO_SERVICE(TopoServiceMetricsConfig.configuration);
+            // const serviceTemplate =
+            //   allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_SERVICE && item.activated)[0] ||
+            //   {};
+            // const topoService = JSON.parse(serviceTemplate.configuration) || [];
+            // this.SET_TOPO_SERVICE(topoService);
+            this.SET_TOPO_SERVICE(TopoServiceMetricsConfig.configuration);
           }
           if (!window.localStorage.getItem('topologyServicesDependency')) {
             this.SET_TOPO_SERVICE_DEPENDENCY(TopoServiceDependencyMetricsConfig.configuration);

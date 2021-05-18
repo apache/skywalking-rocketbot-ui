@@ -125,6 +125,7 @@ limitations under the License. -->
         event.stopPropagation();
         this.$store.commit('rocketTopo/SET_NODE', {});
         this.$store.commit('rocketTopo/SET_LINK', d);
+        this.$store.commit('SET_SERVICE_DEPENDENCY', d);
         this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
         this.$store.commit('rocketTopo/SET_MODE', d.detectPoints);
         this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' :

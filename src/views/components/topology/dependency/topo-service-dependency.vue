@@ -15,15 +15,15 @@ limitations under the License. -->
 <template>
   <div class="service-metrics scroll_bar_style" :style="`height: ${height}px`">
     <DashboardItem
-      v-for="(i, index) in serviceComps || []"
-      :key="index + i.title + i.width"
+      v-for="(i, index) in serviceDependencyComps || []"
+      :key="index"
       :rocketGlobal="rocketGlobal"
       :item="i"
       :index="index"
-      :type="'TOPOLOGY_SERVICE'"
+      :type="'TOPOLOGY_SERVICE_DEPENDENCY'"
       :updateObjects="true"
       :rocketOption="stateDashboardOption"
-      :templateType="stateTopo.currentNode.type"
+      :templateType="templateType"
     />
     <!-- <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="ADD_TOPO_SERVICE_COMP">
       + Add An Item
@@ -31,7 +31,7 @@ limitations under the License. -->
   </div>
 </template>
 <script lang="ts">
-  import { Action, Getter, Mutation, State } from 'vuex-class';
+  import { State } from 'vuex-class';
   import { Component, Vue } from 'vue-property-decorator';
   import { State as topoState } from '@/store/modules/topology';
   import { State as optionState } from '@/store/modules/global/selectors';
@@ -47,6 +47,18 @@ limitations under the License. -->
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @State('rocketTopo') private stateTopo!: topoState;
+
+    private serviceDependencyComps: any[] = [];
+    private height = 800;
+    private templateType: string = '';
+
+    private beforeMount() {
+      const { type } = this.stateTopo.currentLink.source;
+
+      this.serviceDependencyComps = this.stateTopo.topoServicesDependency[type];
+      this.templateType = type;
+      this.height = document.body.clientHeight - 230;
+    }
   }
 </script>
 <style lang="scss">

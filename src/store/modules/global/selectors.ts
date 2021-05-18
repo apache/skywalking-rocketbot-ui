@@ -34,6 +34,7 @@ export interface State {
   currentInstance: Option;
   updateDashboard: { key: string; label?: string | undefined };
   pageType: string;
+  destServiceName: Option;
 }
 
 const LOG = 'Log';
@@ -49,6 +50,7 @@ const initState: State = {
   currentDatabase: { key: '', label: '' },
   updateDashboard: { key: '' },
   pageType: '',
+  destServiceName: { key: '', label: '' },
 };
 
 // mutations
@@ -106,6 +108,11 @@ const mutations: MutationTree<State> = {
   },
   [types.SET_PAGE_TYPE](state: State, type: string) {
     state.pageType = type;
+  },
+  [types.SET_SERVICE_DEPENDENCY](state: State, call: any) {
+    state.currentService = { key: call.source.id, label: call.source.name };
+    state.destServiceName = { key: call.target.id, label: call.target.name };
+    state.updateDashboard = { key: call.id };
   },
 };
 
