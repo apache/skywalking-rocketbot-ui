@@ -4,9 +4,7 @@ this work for additional information regarding copyright ownership.
 The ASF licenses this file to You under the Apache License, Version 2.0
 (the "License"); you may not use this file except in compliance with
 the License.  You may obtain a copy of the License at
-
   http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -68,66 +66,45 @@ limitations under the License. -->
       copy,
       compute(data){
         let traceData = [];
-        let map = new Map();
+        const map = new Map();
         for (let i=0; i<data.length;i++) {
           traceData = traceData.concat(data[i].children);
         }
-
-        for (let i=0; i<traceData.length;i++) {
-          const element = traceData[i];
-
-          if (map.has(element.endpointName)) {
-            let arr =  map.get(element.endpointName);
-            arr.push(element);
-            map.set(element.endpointName,arr);
-          }else{
-            let arr = [];
-            arr.push(element);
-            map.set(element.endpointName,arr);
-          }
+        for (let element of traceData) {
+          let arr =  map.get(element.endpointName) || [];
+          arr.push(element);
+          map.set(element.endpointName,arr);
         };
-       const result = [];
-       for(let value of map.values()){
+        const result = [];
+        for(let value of map.values()){
           let maxTime = 0;
-          let minTime;
+          let minTime = 0;
           let sumTime = 0;
           let count = value.length;
           let endpointName;
-          //If it only happens once,get it as value[0]
-          if(count == 0){
-            let element = value[0];
-            count = 1;
+
+          // get each endpointName group maxTime,minTime,sumTime
+          for (let i = 0; i < value.length;i++) {
+            let element = value[i];
             let a = element.endTime;
             let b = element.startTime;
-            let ms = a - b;
-            maxTime = ms;
-            minTime = ms;
-            sumTime = ms;
-            endpointName = element.endpointName;
-
-          } else {
-            //get each endpointName group maxTime,minTime,sumTime
-            for (let i = 0; i < value.length;i++) {
-              let element = value[i];
-              let a = element.endTime;
-              let b = element.startTime;
-              let ms = a - b;
-              //set default value
-              if(i == 0){
-                endpointName = element.endpointName;
-                maxTime = ms;
-                minTime = ms;
-              }else{
-                if (ms > maxTime){
-                  maxTime = ms;
-                }
-                if (ms < minTime) {
-                  minTime = ms;
-                }
+            let duration = a - b;
+            //set default value
+            if(i == 0){
+              endpointName = element.endpointName;
+              maxTime = duration;
+              minTime = duration;
+            }else{
+              if (duration > maxTime){
+                maxTime = duration;
               }
-              sumTime = sumTime + ms;
-            };
-          }
+              if (duration < minTime) {
+                minTime = duration;
+              }
+            }
+            sumTime = sumTime + duration;
+          };
+
           let avgTime = count == 0 ? 0 :(sumTime / count);
           let jsonStr = {
               'maxTime': maxTime,
@@ -139,10 +116,8 @@ limitations under the License. -->
               };
           result.push(jsonStr);
         };
-
         return result;
       },
-
       traverseTree(node, spanId, segmentId, data) {
         if (!node || node.isBroken) {
           return;
