@@ -174,7 +174,7 @@ limitations under the License. -->
           <option v-for="type in IndependentType" :value="type.key" :key="type.key">{{ type.label }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="nameMetrics.includes(itemConfig.queryMetricType)">
+      <div class="flex-h mb-5" v-show="isChartSlow">
         <div class="title grey sm">{{ $t('parentService') }}:</div>
         <select
           class="long"
@@ -185,7 +185,7 @@ limitations under the License. -->
           <option :value="false">{{ $t('noneParentService') }}</option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="nameMetrics.includes(itemConfig.queryMetricType)">
+      <div class="flex-h mb-5" v-show="isChartSlow">
         <div class="title grey sm">{{ $t('sortOrder') }}:</div>
         <select
           class="long"
@@ -226,7 +226,7 @@ limitations under the License. -->
           @change="setItemConfig({ type: 'height', value: $event.target.value })"
         />
       </div>
-      <div class="flex-h mb-5" v-show="!isChartType">
+      <div class="flex-h mb-5" v-show="isChartSlow">
         <div class="title grey sm">{{ $t('maxItemNum') }}:</div>
         <input
           type="number"
@@ -308,6 +308,7 @@ limitations under the License. -->
     CalculationType,
     ChartTypeOptions,
     ReadValueChartType,
+    MaxItemNum,
   } from './constant';
   import { DASHBOARDTYPE } from '../constant';
 
@@ -329,9 +330,6 @@ limitations under the License. -->
     @Prop() private intervalTime!: any;
     @Prop() private type!: string;
     private itemConfig: any = {};
-    private itemConfigDefault: any = {
-      maxItemNum: '10',
-    };
     private EntityType = EntityType;
     private IndependentType = IndependentType;
     private CalculationType = CalculationType;
@@ -344,32 +342,17 @@ limitations under the License. -->
     private isBrowser = false;
     private isLabel = false;
     private isIndependentSelector = false;
-    private nameMetrics = ['sortMetrics', 'readSampledRecords'];
+    private isChartSlow = false;
     private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as string[];
     private isChartType = false;
     private ChartTable = 'ChartTable';
 
     private created() {
-      this.setDefaultValue((this.itemConfig = this.item));
+      this.itemConfig = this.item;
       this.initConfig();
       if (this.itemConfig.independentSelector) {
         this.setItemServices();
       }
-    }
-
-    private setDefaultValue(itemConfig: any) {
-      const currentKeys: string[] = Object.keys(itemConfig);
-      const defaultKeys: string[] = Object.keys(this.itemConfigDefault);
-
-      if (!currentKeys.length || !defaultKeys.length) {
-        return;
-      }
-
-      defaultKeys.forEach((key: string) => {
-        if (!currentKeys.includes(key)) {
-          itemConfig[key] = this.itemConfigDefault[key];
-        }
-      });
     }
 
     private initConfig() {
@@ -388,6 +371,10 @@ limitations under the License. -->
         this.rocketComps.tree[this.rocketComps.group].type === 'metric' || this.pageTypes.includes(this.type);
       this.chartTypeOptions =
         this.itemConfig.queryMetricType === 'readMetricsValue' ? ReadValueChartType : ChartTypeOptions;
+      this.isChartSlow = ['sortMetrics', 'readSampledRecords'].includes(this.itemConfig.queryMetricType);
+      if (this.isChartSlow && !this.itemConfig.maxItemNum) {
+        this.itemConfig.maxItemNum = MaxItemNum;
+      }
     }
 
     private editComponentConfig(params: { index: number; values: any }) {
@@ -427,6 +414,10 @@ limitations under the License. -->
       if (params.type === 'queryMetricType') {
         this.chartTypeOptions =
           this.itemConfig.queryMetricType === 'readMetricsValue' ? ReadValueChartType : ChartTypeOptions;
+        this.isChartSlow = ['sortMetrics', 'readSampledRecords'].includes(this.itemConfig.queryMetricType);
+        if (this.isChartSlow) {
+          this.itemConfig.maxItemNum = MaxItemNum;
+        }
         this.updateQueryMetricType(params);
         return;
       }
