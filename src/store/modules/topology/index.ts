@@ -231,6 +231,13 @@ const mutations = {
     state.topoServices[state.currentNode.type].splice(index, 1);
     window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
   },
+  [types.DELETE_TOPO_SERVICE_DEPENDENCY](state: State, index: number) {
+    const { source } = state.currentLink;
+    const mode: any = state.mode ? 'server' : 'client';
+
+    state.topoServicesDependency[source.type][mode].splice(index, 1);
+    window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
+  },
   [types.EDIT_TOPO_SERVICE_CONFIG](state: State, params: { values: any; index: number }) {
     state.topoServices[state.currentNode.type][params.index] = {
       ...state.topoServices[state.currentNode.type][params.index],
@@ -242,6 +249,9 @@ const mutations = {
     const { source } = state.currentLink;
     const mode: any = state.mode ? 'server' : 'client';
 
+    if (!(state.topoServicesDependency[source.type] && state.topoServicesDependency[source.type][mode])) {
+      return;
+    }
     state.topoServicesDependency[source.type][mode][params.index] = {
       ...state.topoServicesDependency[source.type][mode][params.index],
       ...params.values,
@@ -252,7 +262,7 @@ const mutations = {
     const comp = {
       width: 3,
       title: 'Title',
-      height: 350,
+      height: 250,
       entityType: 'ServiceInstance',
       metricType: 'UNKNOWN',
     };
@@ -263,7 +273,7 @@ const mutations = {
     const comp = {
       width: 3,
       title: 'Title',
-      height: 350,
+      height: 250,
       entityType: 'Endpoint',
       metricType: 'UNKNOWN',
     };
@@ -274,12 +284,29 @@ const mutations = {
     const comp = {
       width: 12,
       title: 'Title',
-      height: 350,
+      height: 250,
       entityType: 'Service',
       metricType: 'UNKNOWN',
     };
     state.topoServices[state.currentNode.type].push(comp);
     window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
+  },
+  [types.ADD_TOPO_SERVICE_DEPENDENCY_COMP](state: State) {
+    const { source } = state.currentLink;
+    const mode: any = state.mode ? 'server' : 'client';
+
+    if (!(state.topoServicesDependency[source.type] && state.topoServicesDependency[source.type][mode])) {
+      return;
+    }
+    const comp = {
+      width: 12,
+      title: 'Title',
+      height: 250,
+      entityType: 'ServiceRelation',
+      metricType: 'UNKNOWN',
+    };
+    state.topoServicesDependency[source.type][mode].push(comp);
+    window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
   },
   [types.SET_ENDPOINT_DEPENDENCY](state: State, data: { calls: Call[]; nodes: Node[] }) {
     state.endpointDependency = data;

@@ -26,9 +26,9 @@ limitations under the License. -->
       :templateType="templateType"
       :templateMode="templateMode"
     />
-    <!-- <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="ADD_TOPO_SERVICE_COMP">
+    <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="ADD_TOPO_SERVICE_DEPENDENCY_COMP">
       + Add An Item
-    </div> -->
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -49,6 +49,7 @@ limitations under the License. -->
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @State('rocketTopo') private stateTopo!: topoState;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
+    @Mutation('rocketTopo/ADD_TOPO_SERVICE_DEPENDENCY_COMP') private ADD_TOPO_SERVICE_DEPENDENCY_COMP: any;
 
     private serviceDependencyComps: any[] = [];
     private height = 800;
@@ -87,7 +88,7 @@ limitations under the License. -->
     cursor: pointer;
     display: inline-block;
     font-size: 16px;
-    width: 399px;
+    width: 340px;
     margin-left: 5px;
   }
 </style>

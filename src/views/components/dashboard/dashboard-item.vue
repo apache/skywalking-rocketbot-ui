@@ -91,6 +91,7 @@ limitations under the License. -->
     @Mutation('rocketTopo/DELETE_TOPO_ENDPOINT') private DELETE_TOPO_ENDPOINT: any;
     @Mutation('rocketTopo/DELETE_TOPO_INSTANCE') private DELETE_TOPO_INSTANCE: any;
     @Mutation('rocketTopo/DELETE_TOPO_SERVICE') private DELETE_TOPO_SERVICE: any;
+    @Mutation('rocketTopo/DELETE_TOPO_SERVICE_DEPENDENCY') private DELETE_TOPO_SERVICE_DEPENDENCY: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
@@ -352,6 +353,8 @@ limitations under the License. -->
         this.DELETE_TOPO_INSTANCE(index);
       } else if (this.type === TopologyType.TOPOLOGY_SERVICE) {
         this.DELETE_TOPO_SERVICE(index);
+      } else if (this.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) {
+        this.DELETE_TOPO_SERVICE_DEPENDENCY(index);
       } else {
         this.DELETE_COMP(index);
       }

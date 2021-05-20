@@ -72,7 +72,7 @@ limitations under the License. -->
     cursor: pointer;
     display: inline-block;
     font-size: 16px;
-    width: 399px;
+    width: 340px;
     margin-left: 5px;
   }
 </style>
