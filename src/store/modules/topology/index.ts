@@ -138,6 +138,7 @@ const getters = {};
 // mutations
 const mutations = {
   [types.SET_CALLBACK](state: State, data: any) {
+    console.log(data);
     state.callback = data;
   },
   [types.SET_MODE](state: State, data: string[]) {

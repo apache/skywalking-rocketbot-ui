@@ -94,6 +94,7 @@ limitations under the License. -->
     private updateObjects: boolean = true;
 
     private created() {
+      localStorage.removeItem('topologyServicesDependency');
       if (window.localStorage.getItem('topologyServices')) {
         const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
         const topoService = serviceComps ? JSON.parse(serviceComps) : [];

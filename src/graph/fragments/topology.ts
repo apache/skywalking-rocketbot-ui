@@ -32,7 +32,7 @@ export const TopoServiceInfo = {
     }, duration: $duration) {
       values {
         value
-      }
+      } 
     }
     getSLATrend: getLinearIntValues(metric: {
       name: "service_relation_server_call_sla"

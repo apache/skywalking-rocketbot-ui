@@ -24,6 +24,7 @@ limitations under the License. -->
       :updateObjects="true"
       :rocketOption="stateDashboardOption"
       :templateType="templateType"
+      :templateMode="templateMode"
     />
     <!-- <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="ADD_TOPO_SERVICE_COMP">
       + Add An Item
@@ -32,7 +33,7 @@ limitations under the License. -->
 </template>
 <script lang="ts">
   import { State } from 'vuex-class';
-  import { Component, Vue } from 'vue-property-decorator';
+  import { Component, Vue, Watch } from 'vue-property-decorator';
   import { State as topoState } from '@/store/modules/topology';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketbotGlobal } from '@/store/modules/global';
@@ -51,17 +52,25 @@ limitations under the License. -->
     private serviceDependencyComps: any[] = [];
     private height = 800;
     private templateType: string = '';
+    private templateMode: any = 'server';
 
     private beforeMount() {
       const { type } = this.stateTopo.currentLink.source;
+      this.templateMode = this.stateTopo.mode ? 'server' : 'client';
 
-      this.serviceDependencyComps = this.stateTopo.topoServicesDependency[type];
+      this.serviceDependencyComps = this.stateTopo.topoServicesDependency[type][this.templateMode];
       this.templateType = type;
       this.height = document.body.clientHeight - 230;
     }
+
+    @Watch('stateTopo.mode')
+    private updateServiceDependency() {
+      this.templateMode = this.stateTopo.mode ? 'server' : 'client';
+      this.serviceDependencyComps = this.stateTopo.topoServicesDependency[this.templateType][this.templateMode];
+    }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .service-metrics {
     overflow: auto;
   }

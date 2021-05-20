@@ -100,6 +100,7 @@ limitations under the License. -->
     @Prop() private updateObjects!: boolean;
     @Prop() private rocketOption!: optionState;
     @Prop() private templateType!: string;
+    @Prop() private templateMode!: string; // server client
 
     private noEditTypes = [
       TopologyType.TOPOLOGY_ENDPOINT,
@@ -148,6 +149,7 @@ limitations under the License. -->
         type: this.type,
         rocketOption: this.rocketOption,
         templateType: this.templateType,
+        templateMode: this.templateMode,
       }).then((params: Array<{ metricName: string; [key: string]: any; config: any }>) => {
         if (!params) {
           this.itemConfig = {};
@@ -395,6 +397,7 @@ limitations under the License. -->
     @Watch('rocketOption.updateDashboard.key')
     private watchCurrentSelectors() {
       this.itemEvents = this.eventsFilter();
+      console.log(this.templateMode);
       if (
         this.rocketOption.updateDashboard.key &&
         this.rocketOption.updateDashboard.key.includes(UpdateDashboardEvents)

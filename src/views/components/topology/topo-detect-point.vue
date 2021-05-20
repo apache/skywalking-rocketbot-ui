@@ -26,7 +26,7 @@ limitations under the License. -->
       <use xlink:href="#chevron-left" />
     </svg>
     <div class="mb-5 clear flex-h">
-      <span v-if="stateTopo.selectedServiceCall">
+      <span class="title" v-if="stateTopo.selectedServiceCall">
         <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
         <span
           v-if="stateTopo.detectPoints.indexOf('CLIENT') !== -1"
@@ -170,7 +170,7 @@ limitations under the License. -->
 
     private setMode(mode: boolean) {
       this.SET_MODE_STATUS(mode);
-      this.stateTopo.callback();
+      // this.stateTopo.callback();
     }
 
     private clearInstance() {

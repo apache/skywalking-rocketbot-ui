@@ -31,6 +31,7 @@ const actions: ActionTree<State, any> = {
       type: string;
       rocketOption: any;
       templateType: string;
+      templateMode: string;
     },
   ) {
     const { currentDatabase, currentEndpoint, currentInstance, currentService, destServiceName } = params.rocketOption;
@@ -58,10 +59,12 @@ const actions: ActionTree<State, any> = {
     } else if (params.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) {
       const serviceDependencyComps: string = `${window.localStorage.getItem('topologyServicesDependency')}`;
       const topoServiceDependency = serviceDependencyComps ? JSON.parse(serviceDependencyComps) : {};
-      if (!topoServiceDependency[params.templateType]) {
+      if (
+        !(topoServiceDependency[params.templateType] && topoServiceDependency[params.templateType][params.templateMode])
+      ) {
         return new Promise((resolve) => resolve({}));
       }
-      config = topoServiceDependency[params.templateType][params.index];
+      config = topoServiceDependency[params.templateType][params.templateMode][params.index];
     } else {
       config = tree[context.state.group].children[context.state.current].children[params.index];
     }
