@@ -329,6 +329,24 @@ const mutations = {
     }
     window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
   },
+  [types.IMPORT_TREE_SERVICE_DEPENDENCY](state: State, data: any) {
+    const keys = Object.keys(data);
+    const { source } = state.currentLink;
+    const mode: any = state.mode ? 'server' : 'client';
+
+    for (const key of keys) {
+      if (state.topoServices[key]) {
+        if (state.topoServicesDependency[key][mode]) {
+          state.topoServicesDependency[key][mode].push(...data[key][mode]);
+        } else {
+          state.topoServicesDependency[key][mode] = data[key][mode];
+        }
+      } else {
+        state.topoServicesDependency[key] = data[key];
+      }
+    }
+    window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
+  },
 };
 
 // actions

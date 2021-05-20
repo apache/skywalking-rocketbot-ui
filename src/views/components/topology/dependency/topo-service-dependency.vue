@@ -61,7 +61,7 @@ limitations under the License. -->
 
       this.templateMode = this.stateTopo.mode ? 'server' : 'client';
       this.templateType = type;
-      this.height = document.body.clientHeight - 230;
+      this.height = document.body.clientHeight - 280;
       if (!this.stateTopo.topoServicesDependency[type]) {
         return;
       }

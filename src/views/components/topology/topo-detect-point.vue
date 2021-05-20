@@ -154,6 +154,7 @@ limitations under the License. -->
     @Action('rocketTopo/GET_TOPO_INSTANCE_DEPENDENCY')
     private GET_INSTANCE_DEPENDENCY: any;
     @Mutation('rocketTopo/IMPORT_TREE_SERVICE') private IMPORT_TREE_SERVICE: any;
+    @Mutation('rocketTopo/IMPORT_TREE_SERVICE_DEPENDENCY') private IMPORT_TREE_SERVICE_DEPENDENCY: any;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
 
     private isMini: boolean = true;
@@ -206,7 +207,11 @@ limitations under the License. -->
         if (!Array.isArray(data)) {
           throw new Error();
         }
-        this.IMPORT_TREE_SERVICE(data[0]);
+        if (this.showServerInfo) {
+          this.IMPORT_TREE_SERVICE(data[0]);
+        } else {
+          this.IMPORT_TREE_SERVICE_DEPENDENCY(data[0]);
+        }
         const el: any = document.getElementById('endpoint-file');
         el!.value = '';
       } catch (e) {
@@ -214,8 +219,16 @@ limitations under the License. -->
       }
     }
     private exportTopoServiceMetrics() {
-      const group = this.stateTopo.topoServices;
-      const name = 'topo_service_metrics.json';
+      let name = '';
+      let group;
+
+      if (this.showServerInfo) {
+        group = this.stateTopo.topoServices;
+        name = 'topo_service_metrics.json';
+      } else {
+        group = this.stateTopo.topoServicesDependency;
+        name = 'topo_service_dependency_metrics.json';
+      }
       saveFile([group], name);
     }
 
