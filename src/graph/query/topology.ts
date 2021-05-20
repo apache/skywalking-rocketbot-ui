@@ -25,8 +25,6 @@ import {
   TopoInstanceServerInfo,
   TopoServiceMetric,
   TopoClientMetric,
-  TopoServiceInfo,
-  TopoClientInfo,
   DependencyInstanceServerMetric,
   DependencyInstanceClientMetric,
   TopoServiceDetail,
@@ -50,12 +48,6 @@ export const queryTopoInfo = `query queryTopoInfo(
         ${TopoServiceMetric.query},
         ${TopoClientMetric.query}
       }`;
-
-export const queryTopoServiceInfo = `query queryTopoServiceInfo(
-  ${TopoServiceInfo.variable}) {${TopoServiceInfo.query}}`;
-
-export const queryTopoClientInfo = `query queryTopoClientInfo(
-  ${TopoClientInfo.variable}) {${TopoClientInfo.query}}`;
 
 export const queryTopoInstanceDependency = `query queryTopoInstanceDependency(
   ${TopoInstanceDependency.variable}) {${TopoInstanceDependency.query}}`;

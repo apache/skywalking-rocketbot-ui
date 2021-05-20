@@ -32,7 +32,7 @@ limitations under the License. -->
   </div>
 </template>
 <script lang="ts">
-  import { State } from 'vuex-class';
+  import { State, Mutation } from 'vuex-class';
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { State as topoState } from '@/store/modules/topology';
   import { State as optionState } from '@/store/modules/global/selectors';
@@ -48,6 +48,7 @@ limitations under the License. -->
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @State('rocketTopo') private stateTopo!: topoState;
+    @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
 
     private serviceDependencyComps: any[] = [];
     private height = 800;
@@ -67,6 +68,7 @@ limitations under the License. -->
     private updateServiceDependency() {
       this.templateMode = this.stateTopo.mode ? 'server' : 'client';
       this.serviceDependencyComps = this.stateTopo.topoServicesDependency[this.templateType][this.templateMode];
+      this.UPDATE_DASHBOARD();
     }
   }
 </script>

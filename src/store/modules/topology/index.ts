@@ -71,10 +71,6 @@ export interface State {
   currentLink: any;
   current: Option;
   mode: boolean;
-  getResponseTimeTrend: number[];
-  getSLATrend: number[];
-  getThroughputTrend: number[];
-  responsePercentile: { [key: string]: number[] };
   instanceDependency: {
     calls: Call[];
     nodes: Node[];
@@ -109,10 +105,6 @@ const initState: State = {
     key: 'default',
     label: 'default',
   },
-  getResponseTimeTrend: [],
-  getSLATrend: [],
-  getThroughputTrend: [],
-  responsePercentile: {},
   instanceDependency: {
     calls: [],
     nodes: [],
@@ -138,7 +130,6 @@ const getters = {};
 // mutations
 const mutations = {
   [types.SET_CALLBACK](state: State, data: any) {
-    console.log(data);
     state.callback = data;
   },
   [types.SET_MODE](state: State, data: string[]) {
@@ -163,21 +154,6 @@ const mutations = {
   },
   [types.SET_SELECTED_CALL](state: State, data: any) {
     state.selectedServiceCall = data;
-  },
-  [types.SET_TOPO_RELATION](state: State, data: any) {
-    state.getResponseTimeTrend = data.getResponseTimeTrend
-      ? data.getResponseTimeTrend.values.map((i: any) => i.value)
-      : [];
-    state.getSLATrend = data.getSLATrend ? data.getSLATrend.values.map((i: any) => i.value) : [];
-    state.getThroughputTrend = data.getThroughputTrend ? data.getThroughputTrend.values.map((i: any) => i.value) : [];
-
-    if (!data.getPercentile) {
-      state.responsePercentile = {};
-      return;
-    }
-    data.getPercentile.forEach((item: any, index: number) => {
-      state.responsePercentile[PercentileItem[index]] = item.values.map((i: any) => i.value);
-    });
   },
   [types.SET_INSTANCE_DEPENDENCY](state: State, data: any) {
     state.instanceDependency = data;
@@ -352,7 +328,6 @@ const actions: ActionTree<State, any> = {
     context.commit(types.SET_TOPO, { calls: [], nodes: [] });
   },
   CLEAR_TOPO_INFO(context: { commit: Commit; state: State }) {
-    context.commit(types.SET_TOPO_RELATION, {});
     context.commit(types.SET_SELECTED_CALL, null);
   },
   GET_INSTANCE_DEPENDENCY_METRICS(
@@ -367,36 +342,6 @@ const actions: ActionTree<State, any> = {
       params.queryType = 'queryTopoInstanceClientInfo';
       context.dispatch('INSTANCE_RELATION_INFO', params);
     }
-  },
-  GET_TOPO_SERVICE_INFO(context: { commit: Commit; state: State }, params: { id: string; duration: Duration }) {
-    if (!params.id) {
-      return;
-    }
-    return graph
-      .query('queryTopoServiceInfo')
-      .params({
-        id: params.id,
-        duration: params.duration,
-      })
-      .then((res: AxiosResponse) => {
-        if (!res.data.data) {
-          return;
-        }
-        context.commit('SET_TOPO_RELATION', res.data.data);
-        context.commit(types.SET_SELECTED_CALL, params);
-      });
-  },
-  GET_TOPO_CLIENT_INFO(context: { commit: Commit; state: State }, params: any) {
-    return graph
-      .query('queryTopoClientInfo')
-      .params(params)
-      .then((res: AxiosResponse) => {
-        if (!res.data.data) {
-          return;
-        }
-        context.commit('SET_TOPO_RELATION', res.data.data);
-        context.commit(types.SET_SELECTED_CALL, params);
-      });
   },
   GET_TOPO(context: { commit: Commit; state: State }, params: any) {
     let query = 'queryTopo';

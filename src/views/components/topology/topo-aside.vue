@@ -75,13 +75,6 @@ limitations under the License. -->
       this.SET_COMPS_TREE(this.initState.tree);
     }
 
-    private handleRefresh() {
-      this.$store.dispatch(
-        this.stateTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' : 'rocketTopo/GET_TOPO_CLIENT_INFO',
-        { ...this.stateTopo.currentLink, duration: this.durationTime },
-      );
-    }
-
     private mounted() {
       this.resize();
       window.addEventListener('resize', this.resize);
@@ -112,7 +105,7 @@ limitations under the License. -->
     @Watch('durationTime')
     private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
       if (compareObj(newValue, oldValue)) {
-        this.handleRefresh();
+        // this.handleRefresh();
       }
     }
   }

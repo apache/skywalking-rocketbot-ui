@@ -397,7 +397,6 @@ limitations under the License. -->
     @Watch('rocketOption.updateDashboard.key')
     private watchCurrentSelectors() {
       this.itemEvents = this.eventsFilter();
-      console.log(this.templateMode);
       if (
         this.rocketOption.updateDashboard.key &&
         this.rocketOption.updateDashboard.key.includes(UpdateDashboardEvents)
