@@ -74,7 +74,17 @@ limitations under the License. -->
       </div>
     </div>
     <div v-if="showInfo">
-      <TopoServiceDependency v-if="stateTopo.selectedServiceCall" />
+      <div v-if="stateTopo.selectedServiceCall">
+        <div class="pl-10 pb-5">
+          <span class="label grey">{{ $t('service') }}</span>
+          <span class="content">{{ stateTopo.currentLink.source.name }}</span>
+        </div>
+        <div class="pl-10 pb-5">
+          <span class="label grey">{{ $t('destService') }}</span>
+          <span class="content">{{ stateTopo.currentLink.target.name }}</span>
+        </div>
+        <TopoServiceDependency />
+      </div>
       <div v-else-if="showServerInfo">
         <div class="pl-10 pb-5">
           <span class="label grey">{{ $t('name') }}</span>
@@ -170,7 +180,6 @@ limitations under the License. -->
 
     private setMode(mode: boolean) {
       this.SET_MODE_STATUS(mode);
-      // this.stateTopo.callback();
     }
 
     private clearInstance() {

@@ -57,11 +57,14 @@ limitations under the License. -->
 
     private beforeMount() {
       const { type } = this.stateTopo.currentLink.source;
-      this.templateMode = this.stateTopo.mode ? 'server' : 'client';
 
-      this.serviceDependencyComps = this.stateTopo.topoServicesDependency[type][this.templateMode];
+      this.templateMode = this.stateTopo.mode ? 'server' : 'client';
       this.templateType = type;
       this.height = document.body.clientHeight - 230;
+      if (!this.stateTopo.topoServicesDependency[type]) {
+        return;
+      }
+      this.serviceDependencyComps = this.stateTopo.topoServicesDependency[type][this.templateMode];
     }
 
     @Watch('stateTopo.mode')

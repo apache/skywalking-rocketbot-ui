@@ -225,6 +225,7 @@ const m = {
   tooltipsContent: 'Tooltip Content',
   alarmDetail: 'Alarm Detail',
   scope: 'Scope',
+  destService: 'Destination Service',
 };
 
 export default m;

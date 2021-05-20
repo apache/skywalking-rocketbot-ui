@@ -24,21 +24,18 @@ limitations under the License. -->
       <use xlink:href="#issues" />
     </svg>
     <TopoService />
-    <TopoDetectPoint v-if="show" />
+    <TopoDetectPoint />
   </aside>
 </template>
 <script lang="ts">
   import { initState } from '@/store/modules/dashboard/dashboard-data-layout';
   import { State as topoState } from '@/store/modules/topology';
-  import { Component, Vue, Watch } from 'vue-property-decorator';
+  import { Component, Vue } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import Radial from './radial.vue';
   import TopoChart from './topo-chart.vue';
   import TopoService from './topo-services.vue';
   import TopoDetectPoint from './topo-detect-point.vue';
-  import { DurationTime } from '@/types/global';
-  import compareObj from '@/utils/comparison';
-  // import { TopoServiceMetrics } from './topo-config';
 
   @Component({
     components: {
@@ -56,32 +53,18 @@ limitations under the License. -->
     @Action('rocketTopo/CLEAR_TOPO_INFO') private CLEAR_TOPO_INFO: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('rocketTopo/SET_MODE_STATUS') private SET_MODE_STATUS: any;
-    private dialogTopoVisible = false;
-    private drawerMainBodyHeight = '100%';
     private initState = initState;
     private radioStatus: boolean = false;
-    private show: boolean = true;
-    // private TopoServiceMetrics = TopoServiceMetrics;
 
     private get showServerInfo() {
       return this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal;
-    }
-
-    private resize() {
-      this.drawerMainBodyHeight = `${document.body.clientHeight - 50}px`;
     }
 
     private created() {
       this.SET_COMPS_TREE(this.initState.tree);
     }
 
-    private mounted() {
-      this.resize();
-      window.addEventListener('resize', this.resize);
-    }
-
     private beforeDestroy() {
-      window.removeEventListener('resize', this.resize);
       this.CLEAR_TOPO_INFO();
       this.CLEAR_TOPO();
     }
@@ -100,13 +83,6 @@ limitations under the License. -->
 
     private showRadial() {
       this.radioStatus = !this.radioStatus;
-    }
-
-    @Watch('durationTime')
-    private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
-      if (compareObj(newValue, oldValue)) {
-        // this.handleRefresh();
-      }
     }
   }
 </script>

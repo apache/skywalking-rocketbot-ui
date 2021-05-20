@@ -164,7 +164,7 @@ limitations under the License. -->
           </option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="!isIndependentSelector && !isBrowser">
+      <div class="flex-h mb-5" v-show="hasIndependentSelector">
         <div class="title grey sm">{{ $t('independentSelector') }}:</div>
         <select
           class="long"
@@ -320,6 +320,7 @@ limitations under the License. -->
     @Mutation('rocketTopo/EDIT_TOPO_INSTANCE_CONFIG') private EDIT_TOPO_INSTANCE_CONFIG: any;
     @Mutation('rocketTopo/EDIT_TOPO_ENDPOINT_CONFIG') private EDIT_TOPO_ENDPOINT_CONFIG: any;
     @Mutation('rocketTopo/EDIT_TOPO_SERVICE_CONFIG') private EDIT_TOPO_SERVICE_CONFIG: any;
+    @Mutation('rocketTopo/EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG') private EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG: any;
     @Action('GET_ITEM_SERVICES') private GET_ITEM_SERVICES: any;
     @Action('GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
     @Action('GET_ITEM_INSTANCES') private GET_ITEM_INSTANCES: any;
@@ -341,7 +342,7 @@ limitations under the License. -->
     private isDatabase = false;
     private isBrowser = false;
     private isLabel = false;
-    private isIndependentSelector = false;
+    private hasIndependentSelector = false;
     private isChartSlow = false;
     private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as string[];
     private isChartType = false;
@@ -367,7 +368,7 @@ limitations under the License. -->
       }
       this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
       this.isLabel = this.itemConfig.metricType === MetricsType.LABELED_VALUE ? true : false;
-      this.isIndependentSelector =
+      this.hasIndependentSelector =
         this.rocketComps.tree[this.rocketComps.group].type === 'metric' || this.pageTypes.includes(this.type);
       this.chartTypeOptions =
         this.itemConfig.queryMetricType === 'readMetricsValue' ? ReadValueChartType : ChartTypeOptions;
@@ -377,13 +378,15 @@ limitations under the License. -->
       }
     }
 
-    private editComponentConfig(params: { index: number; values: any }) {
+    private editComponentConfig(params: { index: number; values: unknown }) {
       if (this.type === TopologyType.TOPOLOGY_SERVICE) {
         this.EDIT_TOPO_SERVICE_CONFIG(params);
       } else if (this.type === TopologyType.TOPOLOGY_ENDPOINT) {
         this.EDIT_TOPO_ENDPOINT_CONFIG(params);
       } else if (this.type === TopologyType.TOPOLOGY_INSTANCE) {
         this.EDIT_TOPO_INSTANCE_CONFIG(params);
+      } else if (this.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) {
+        this.EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG(params);
       } else {
         this.EDIT_COMP_CONFIG(params);
       }

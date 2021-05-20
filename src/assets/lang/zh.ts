@@ -223,6 +223,7 @@ const m = {
   tooltipsContent: '提示内容',
   alarmDetail: '警告详情',
   scope: '范围',
+  destService: '终点服务',
 };
 
 export default m;

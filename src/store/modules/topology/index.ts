@@ -129,9 +129,6 @@ const getters = {};
 
 // mutations
 const mutations = {
-  [types.SET_CALLBACK](state: State, data: any) {
-    state.callback = data;
-  },
   [types.SET_MODE](state: State, data: string[]) {
     state.detectPoints = data;
     const temp = state.mode ? 'SERVER' : 'CLIENT';
@@ -240,6 +237,16 @@ const mutations = {
       ...params.values,
     };
     window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
+  },
+  [types.EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG](state: State, params: { values: any; index: number }) {
+    const { source } = state.currentLink;
+    const mode: any = state.mode ? 'server' : 'client';
+
+    state.topoServicesDependency[source.type][mode][params.index] = {
+      ...state.topoServicesDependency[source.type][mode][params.index],
+      ...params.values,
+    };
+    window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
   },
   [types.ADD_TOPO_INSTANCE_COMP](state: State) {
     const comp = {

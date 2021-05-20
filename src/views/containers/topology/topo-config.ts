@@ -205,7 +205,6 @@ export const TopoServiceDependencyMetricsConfig: any = {
           title: 'Service Response Time Percentile',
           height: 200,
           entityType: 'ServiceRelation',
-          independentSelector: false,
           metricType: 'LABELED_VALUE',
           metricName: 'service_relation_server_percentile',
           queryMetricType: 'readLabeledMetricsValues',
