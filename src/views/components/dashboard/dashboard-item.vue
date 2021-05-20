@@ -48,9 +48,10 @@ limitations under the License. -->
     <rk-sidebox
       width="70%"
       :fixed="true"
+      :right="theme === 'dark'"
       :title="$t('editConfig')"
       :show.sync="dialogConfigVisible"
-      @closeSideboxCallback="chartRender()"
+      @closeSideboxCallback="chartRender"
     >
       <div class="config-box">
         <component
@@ -60,6 +61,8 @@ limitations under the License. -->
           :index="index"
           :intervalTime="intervalTime"
           :data="chartSource"
+          :theme="theme"
+          :type="type"
         ></component>
       </div>
     </rk-sidebox>
@@ -483,5 +486,8 @@ limitations under the License. -->
   }
   .config-box {
     padding: 40px 30px;
+  }
+  .rk-sidebox-title {
+    color: #333;
   }
 </style>
