@@ -36,7 +36,7 @@ limitations under the License. -->
   import { State, Mutation } from 'vuex-class';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketbotGlobal } from '@/store/modules/global';
-  import DashboardItem from '../dashboard/dashboard-item.vue';
+  import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
 
   @Component({
     components: {

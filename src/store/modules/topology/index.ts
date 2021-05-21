@@ -88,6 +88,8 @@ export interface State {
   topoInstances: any[];
   topoServices: { [key: string]: any[] };
   topoServicesDependency: { [key: string]: any[] };
+  topoServicesInstanceDependency: { [key: string]: any[] };
+  instanceDependencyMode: string;
 }
 
 const PercentileItem: string[] = ['p50', 'p75', 'p90', 'p95', 'p99'];
@@ -122,6 +124,8 @@ const initState: State = {
   topoInstances: [],
   topoServices: {},
   topoServicesDependency: {},
+  topoServicesInstanceDependency: {},
+  instanceDependencyMode: '',
 };
 
 // getters
@@ -139,13 +143,16 @@ const mutations = {
   [types.SET_MODE_STATUS](state: State, data: boolean) {
     state.mode = data;
   },
-  [types.SET_NODE](state: State, data: any) {
+  [types.SET_INSTANCE_DEPENDENCY_MODE_STATUS](state: State, data: string) {
+    state.instanceDependencyMode = data;
+  },
+  [types.SET_NODE](state: State, data: Node) {
     state.currentNode = data;
   },
-  [types.SET_LINK](state: State, data: any) {
+  [types.SET_LINK](state: State, data: Call) {
     state.currentLink = data;
   },
-  [types.SET_TOPO](state: State, data: any) {
+  [types.SET_TOPO](state: State, data: { nodes: Node[]; calls: Call[] }) {
     state.calls = data.calls;
     state.nodes = data.nodes;
   },
@@ -196,9 +203,6 @@ const mutations = {
       );
     }
   },
-  [types.SET_INSTANCE_DEPEDENCE_TYPE](state: State, data: string) {
-    state.queryInstanceMetricsType = data;
-  },
   [types.SET_TOPO_ENDPOINT](state: State, data: any[]) {
     state.topoEndpoints = data;
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(data));
@@ -209,7 +213,11 @@ const mutations = {
   },
   [types.SET_TOPO_SERVICE_DEPENDENCY](state: State, data: any) {
     state.topoServicesDependency = data;
-    window.localStorage.setItem('topologyServicesDependency', JSON.stringify(data));
+    localStorage.setItem('topologyServicesDependency', JSON.stringify(data));
+  },
+  [types.SET_TOPO_SERVICE_INSTANCE_DEPENDENCY](state: State, data: any) {
+    state.topoServicesInstanceDependency = data;
+    localStorage.setItem('topologyServicesInstanceDependency', JSON.stringify(data));
   },
   [types.EDIT_TOPO_INSTANCE_CONFIG](state: State, params: { values: any; index: number }) {
     state.topoInstances[params.index] = { ...state.topoInstances[params.index], ...params.values };
@@ -382,19 +390,6 @@ const actions: ActionTree<State, any> = {
   },
   CLEAR_TOPO_INFO(context: { commit: Commit; state: State }) {
     context.commit(types.SET_SELECTED_CALL, null);
-  },
-  GET_INSTANCE_DEPENDENCY_METRICS(
-    context: { commit: Commit; state: State; dispatch: Dispatch; getters: any },
-    params: any,
-  ) {
-    if (params.mode === 'SERVER') {
-      params.queryType = 'queryTopoInstanceServerInfo';
-      context.dispatch('INSTANCE_RELATION_INFO', params);
-    }
-    if (params.mode === 'CLIENT') {
-      params.queryType = 'queryTopoInstanceClientInfo';
-      context.dispatch('INSTANCE_RELATION_INFO', params);
-    }
   },
   GET_TOPO(context: { commit: Commit; state: State }, params: any) {
     let query = 'queryTopo';
@@ -695,6 +690,16 @@ const actions: ActionTree<State, any> = {
             nodes: res.data.data.topo.nodes,
             calls: [...values[0], ...values[1]],
           };
+          for (const call of instanceDependency.calls) {
+            for (const node of instanceDependency.nodes) {
+              if (call.source === node.id) {
+                call.sourceObj = node;
+              }
+              if (call.target === node.id) {
+                call.targetObj = node;
+              }
+            }
+          }
           context.commit(types.SET_INSTANCE_DEPENDENCY, instanceDependency);
         });
       });
@@ -714,7 +719,7 @@ const actions: ActionTree<State, any> = {
           return;
         }
         context.commit(types.SET_SELECTED_INSTANCE_CALL, params);
-        context.commit(types.SET_INSTANCE_DEPEDENCE_TYPE, params.mode);
+        context.commit(types.SET_INSTANCE_DEPENDENCY_MODE_STATUS, params.mode);
         context.commit(types.SET_INSTANCE_DEPEDENCE_METRICS, res.data.data);
       });
   },

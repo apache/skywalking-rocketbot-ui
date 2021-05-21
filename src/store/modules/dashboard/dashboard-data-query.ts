@@ -34,7 +34,14 @@ const actions: ActionTree<State, any> = {
       templateMode: string;
     },
   ) {
-    const { currentDatabase, currentEndpoint, currentInstance, currentService, destServiceName } = params.rocketOption;
+    const {
+      currentDatabase,
+      currentEndpoint,
+      currentInstance,
+      currentService,
+      destService,
+      destInstance,
+    } = params.rocketOption;
     const dashboard: string = `${window.localStorage.getItem('dashboard')}`;
     const tree = dashboard ? JSON.parse(dashboard) : context.state.tree;
     const normal = params.type ? true : tree[context.state.group].type === 'database' ? false : true;
@@ -65,6 +72,20 @@ const actions: ActionTree<State, any> = {
         return new Promise((resolve) => resolve({}));
       }
       config = topoServiceDependency[params.templateType][params.templateMode][params.index];
+    } else if (params.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) {
+      const serviceInstanceDependencyComps: string = `${localStorage.getItem('topologyServicesInstanceDependency')}`;
+      const topoServiceInstanceDependency = serviceInstanceDependencyComps
+        ? JSON.parse(serviceInstanceDependencyComps)
+        : {};
+      if (
+        !(
+          topoServiceInstanceDependency[params.templateType] &&
+          topoServiceInstanceDependency[params.templateType][params.templateMode]
+        )
+      ) {
+        return new Promise((resolve) => resolve({}));
+      }
+      config = topoServiceInstanceDependency[params.templateType][params.templateMode][params.index];
     } else {
       config = tree[context.state.group].children[context.state.current].children[params.index];
     }
@@ -146,19 +167,19 @@ const actions: ActionTree<State, any> = {
               entity: {
                 scope: normal ? config.entityType : 'Service',
                 serviceName,
-                serviceInstanceName: config.entityType === 'ServiceInstance' ? currentInstanceId : undefined,
-                endpointName: config.entityType === 'Endpoint' ? currentEndpointId : undefined,
+                serviceInstanceName: config.entityType.includes('ServiceInstance') ? currentInstanceId : undefined,
+                endpointName: config.entityType.includes('Endpoint') ? currentEndpointId : undefined,
                 normal,
                 destNormal: isRelation ? normal : undefined,
-                destServiceName: isRelation ? destServiceName.label : undefined,
+                destServiceName: isRelation ? destService.label : undefined,
                 destServiceInstanceName: isRelation
                   ? config.entityType === 'ServiceInstanceRelation'
-                    ? currentInstanceId
+                    ? destInstance.label
                     : undefined
                   : undefined,
                 destEndpointName: isRelation
                   ? config.entityType === 'EndpointRelation'
-                    ? currentInstanceId
+                    ? destInstance.label
                     : undefined
                   : undefined,
               },

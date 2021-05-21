@@ -21,53 +21,40 @@ limitations under the License. -->
       <div v-if="!stateTopo.instanceDependency.nodes.length">
         No Instance Dependency
       </div>
-      <div v-if="stateTopo.selectedInstanceCall" class="rk-instance-dependency-metrics" :style="`height: ${height}px`">
+      <div v-if="stateTopo.selectedInstanceCall" :style="`height: ${height}px`">
         <div class="mb-5 clear">
           <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
           <span
             v-if="stateTopo.selectedInstanceCall.detectPoints.includes('CLIENT')"
             class="link-topo-aside-box-btn tc r sm cp b"
-            :class="{ active: stateTopo.queryInstanceMetricsType === 'CLIENT' }"
-            @click="setMode('CLIENT')"
+            :class="{ active: stateTopo.instanceDependencyMode === 'client' }"
+            @click="setMode('client')"
             >{{ $t('client') }}</span
           >
           <span
             v-if="stateTopo.selectedInstanceCall.detectPoints.includes('SERVER')"
             class="link-topo-aside-box-btn tc r sm cp b"
-            :class="{ active: stateTopo.queryInstanceMetricsType === 'SERVER' }"
-            @click="setMode('SERVER')"
+            :class="{ active: stateTopo.instanceDependencyMode === 'server' }"
+            @click="setMode('server')"
             >{{ $t('server') }}</span
           >
         </div>
-        <div v-if="stateTopo.selectedInstanceCall">
-          <TopoChart
-            v-if="stateTopo.instanceDependencyMetrics.getResponseTimeTrend"
-            :data="stateTopo.instanceDependencyMetrics.getResponseTimeTrend"
-            :intervalTime="intervalTime"
-            :title="$t('avgResponseTime')"
-            unit="ms"
+        <div v-if="stateTopo.selectedInstanceCall" class="rk-instance-dependency-metrics scroll_bar_style">
+          <DashboardItem
+            v-for="(i, index) in serviceInstanceDependencyComps || []"
+            :key="index"
+            :rocketGlobal="rocketGlobal"
+            :item="i"
+            :index="index"
+            :type="'TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY'"
+            :updateObjects="true"
+            :rocketOption="stateDashboardOption"
+            :templateType="templateType"
+            :templateMode="stateTopo.instanceDependencyMode"
           />
-          <TopoChart
-            v-if="stateTopo.instanceDependencyMetrics.getThroughputTrend"
-            :data="stateTopo.instanceDependencyMetrics.getThroughputTrend"
-            :intervalTime="intervalTime"
-            :title="$t('avgThroughput')"
-            unit="cpm"
-          />
-          <TopoChart
-            v-if="stateTopo.instanceDependencyMetrics.getSLATrend"
-            :data="stateTopo.instanceDependencyMetrics.getSLATrend"
-            :intervalTime="intervalTime"
-            :precent="true"
-            :title="$t('avgSLA')"
-            unit="%"
-          />
-          <ChartLine
-            v-if="stateTopo.instanceDependencyMetrics.percentResponse"
-            :data="stateTopo.instanceDependencyMetrics.percentResponse"
-            :intervalTime="intervalTime"
-            :title="$t('percentResponse')"
-          />
+          <!-- <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="ADD_TOPO_SERVICE_DEPENDENCY_COMP">
+            + Add An Item
+          </div> -->
         </div>
       </div>
     </div>
@@ -75,58 +62,61 @@ limitations under the License. -->
 </template>
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator';
-  import { State, Action, Getter, Mutation } from 'vuex-class';
+  import { State, Getter, Mutation } from 'vuex-class';
   import { State as topoState } from '@/store/modules/topology';
+  import { State as optionState } from '@/store/modules/global/selectors';
+  import { State as rocketbotGlobal } from '@/store/modules/global';
   import Topo from '../chart/topo.vue';
-  import TopoChart from '../topo-chart.vue';
   import DependencySankey from '../chart/dependency-sankey.vue';
-  import ChartLine from '../chart-line.vue';
+  import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
 
   @Component({
     components: {
       Topo,
-      ChartLine,
-      TopoChart,
       DependencySankey,
+      DashboardItem,
     },
   })
   export default class TopoInstanceDependency extends Vue {
     @Getter('durationTime') private durationTime: any;
     @State('rocketTopo') private stateTopo!: topoState;
     @Getter('intervalTime') private intervalTime: any;
-    @Mutation('rocketTopo/SET_INSTANCE_DEPEDENCE_TYPE')
-    private SET_MODE_STATUS: any;
-    @Action('rocketTopo/GET_INSTANCE_DEPENDENCY_METRICS')
-    private GET_INSTANCE_DEPENDENCY_METRICS: any;
+    @State('rocketOption') private stateDashboardOption!: optionState;
+    @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
+    @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY_MODE_STATUS') private SET_INSTANCE_DEPENDENCY_MODE_STATUS: any;
+    @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL') private SET_SELECTED_INSTANCE_CALL: any;
+    @Mutation('SET_SERVICE_INSTANCE_DEPENDENCY') private SET_SERVICE_INSTANCE_DEPENDENCY: any;
 
     private showInfo: boolean = true;
     private height: number = 500;
+    private serviceInstanceDependencyComps: any = [];
+    private mode: string = 'server';
+    private templateType: string = '';
+    private templateMode: string = '';
 
     private beforeMount() {
-      const { type } = this.stateTopo.currentLink.source;
-
-      // this.templateMode = this.stateTopo.mode ? 'server' : 'client';
-      // this.templateType = type;
       this.height = document.body.clientHeight - 180;
-      // if (!this.stateTopo.topoServicesDependency[type]) {
-      //   return;
-      // }
-      // this.serviceDependencyComps = this.stateTopo.topoServicesDependency[type][this.templateMode];
     }
 
     private setMode(mode: string) {
-      this.GET_INSTANCE_DEPENDENCY_METRICS({
-        ...this.stateTopo.selectedInstanceCall,
-        durationTime: this.durationTime,
-        mode,
-      });
+      this.SET_INSTANCE_DEPENDENCY_MODE_STATUS(mode);
     }
     private showDependencyMetrics(data: any) {
-      this.GET_INSTANCE_DEPENDENCY_METRICS({
-        ...data,
-        durationTime: this.durationTime,
-        mode: data.detectPoints[0],
-      });
+      this.SET_INSTANCE_DEPENDENCY_MODE_STATUS(data.detectPoints[0].toLowerCase());
+      this.SET_SELECTED_INSTANCE_CALL(data);
+      this.SET_SERVICE_INSTANCE_DEPENDENCY(data);
+      const { instanceDependencyMode } = this.stateTopo as any;
+
+      this.templateType = data.sourceObj.type || 'SpringMVC';
+      if (!this.templateType) {
+        return;
+      }
+      if (!this.stateTopo.topoServicesInstanceDependency[this.templateType][instanceDependencyMode]) {
+        return;
+      }
+      this.serviceInstanceDependencyComps = this.stateTopo.topoServicesInstanceDependency[this.templateType][
+        instanceDependencyMode
+      ];
     }
   }
 </script>
@@ -142,21 +132,21 @@ limitations under the License. -->
       text-align: center;
       width: 100%;
     }
-    .rk-instance-metric-box {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .rk-instance-dependency-metrics {
-      width: 320px;
-      background: #252a2f;
-      padding: 20px;
-      overflow: auto;
-    }
-    .rk-dependency-chart {
-      height: 100%;
-      width: calc(100% - 330px);
-    }
+  }
+  .rk-instance-metric-box {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .rk-instance-dependency-metrics {
+    width: 320px;
+    background: #252a2f;
+    padding: 20px;
+    overflow: auto;
+  }
+  .rk-dependency-chart {
+    height: 100%;
+    width: calc(100% - 340px);
   }
 </style>

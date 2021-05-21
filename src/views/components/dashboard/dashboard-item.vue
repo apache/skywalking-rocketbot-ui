@@ -122,7 +122,11 @@ limitations under the License. -->
     private itemConfig: any = {};
     private itemEvents: Event[] = [];
     private theme: 'light' | 'dark' = 'light';
-    private darkThemeTypes = [TopologyType.TOPOLOGY_SERVICE, TopologyType.TOPOLOGY_SERVICE_DEPENDENCY] as string[];
+    private darkThemeTypes = [
+      TopologyType.TOPOLOGY_SERVICE,
+      TopologyType.TOPOLOGY_SERVICE_DEPENDENCY,
+      TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY,
+    ] as string[];
 
     private created() {
       this.status = this.item.metricType;
@@ -402,6 +406,7 @@ limitations under the License. -->
     // watch selectors and events
     @Watch('rocketOption.updateDashboard.key')
     private watchCurrentSelectors() {
+      console.log(this.templateType);
       this.itemEvents = this.eventsFilter();
       if (
         this.rocketOption.updateDashboard.key &&
