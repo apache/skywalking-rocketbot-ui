@@ -16,9 +16,9 @@ limitations under the License. -->
 <template>
   <div class="trace">
     <div class="trace-header" v-if="type === 'statistics'">
-      <div :class="item.label" v-for="(item, index) in data" :key="index">
+      <div :class="item.label" v-for="(item, index) in headerData" :key="index">
         {{ item.value }}
-        <span class="r cp" @click="sortFunc(item.key)" :key="componentKey" v-if="item.key != 'endpointName'">
+        <span class="r cp" @click="sortStatistics(item.key)" :key="componentKey" v-if="item.key != 'endpointName'">
           <svg class="icon">
             <use xlink:href="#sort"></use>
           </svg>
@@ -32,47 +32,54 @@ limitations under the License. -->
             <use xlink:href="#settings_ethernet"></use>
           </svg>
         </span>
-        {{ data[0].value }}
+        {{ headerData[0].value }}
       </div>
-      <div :class="item.label" v-for="(item, index) in data.slice(1)" :key="index">
+      <div :class="item.label" v-for="(item, index) in headerData.slice(1)" :key="index">
         {{ item.value }}
       </div>
     </div>
-
     <Item :method="method" v-for="(item, index) in tableData" :data="item" :key="'key' + index" :type="type" />
     <slot></slot>
   </div>
 </template>
-<script lang="js">
+<script lang="ts">
+  import { Vue, Component, Prop } from 'vue-property-decorator';
   import { ProfileConstant, TraceConstant, StatisticsConstant } from './trace-constant';
-  import Item from './trace-item';
+  import Item from './trace-item.vue';
 
-  export default {
-    components: {Item},
-    name: 'TraceContainer',
-    props: ['type', 'tableData'],
-    data() {
-      return {
-        method: 300,
-        componentKey: 0,
-        flag: true,
-      };
+  @Component({
+    components: {
+      Item,
     },
-    created() {
+  })
+
+  export default class TraceContainer extends Vue {
+    @Prop()
+    public tableData: any;
+    @Prop()
+    public type!: string;
+
+    private headerData: Array<{ label: string; value: string; }>|undefined;
+    private method: number = 300;
+    private componentKey: number = 0;
+    private flag: boolean =  true;
+
+    public created(): void {
       if ( this.type === 'profile' ) {
-         this.data = ProfileConstant;
+          this.headerData = ProfileConstant;
       } else if ( this.type === 'statistics' ) {
-         this.data = StatisticsConstant;
+          this.headerData = StatisticsConstant;
       } else {
-         this.data = TraceConstant;
+          this.headerData = TraceConstant;
       }
-    },
-    mounted() {
-      const drag = this.$refs.dragger;
+    }
+
+    public mounted(): void {
       if (this.type === 'statistics') {
         /* Do nothing, consider the possibility of other types in the future, so use else to manual default process */
       } else {
-        drag.onmousedown = (event) => {
+        const drag: any = this.$refs.dragger;
+        drag.onmousedown = (event: any) => {
           const diffX = event.clientX;
           const copy = this.method;
           document.onmousemove = (documentEvent) => {
@@ -85,55 +92,54 @@ limitations under the License. -->
           };
         };
       }
-    },
-    methods: {
-      sortFunc(key) {
-        const element = this.tableData;
-        for (let i = 0; i < element.length; i++) {
-           for (let j = 0; j < element.length - i - 1; j++) {
-            let val1;
-            let val2;
-            if (key === 'maxTime') {
-              val1 = element[j].maxTime;
-              val2 = element[j + 1].maxTime;
+    }
+
+    private sortStatistics(key: string): void {
+      const element = this.tableData;
+      for (let i = 0; i < element.length; i++) {
+        for (let j = 0; j < element.length - i - 1; j++) {
+          let val1;
+          let val2;
+          if (key === 'maxTime') {
+            val1 = element[j].maxTime;
+            val2 = element[j + 1].maxTime;
+          }
+          if (key === 'minTime') {
+            val1 = element[j].minTime;
+            val2 = element[j + 1].minTime;
+          }
+          if (key === 'avgTime') {
+            val1 = element[j].avgTime;
+            val2 = element[j + 1].avgTime;
+          }
+          if (key === 'sumTime') {
+            val1 = element[j].sumTime;
+            val2 = element[j + 1].sumTime;
+          }
+          if (key === 'count') {
+            val1 = element[j].count;
+            val2 = element[j + 1].count;
+          }
+          if (this.flag) {
+            if (val1 < val2) {
+              const tmp = element[j];
+              element[j] = element[j + 1];
+              element[j + 1] = tmp;
             }
-            if (key === 'minTime') {
-              val1 = element[j].minTime;
-              val2 = element[j + 1].minTime;
-            }
-            if (key === 'avgTime') {
-              val1 = element[j].avgTime;
-              val2 = element[j + 1].avgTime;
-            }
-            if (key === 'sumTime') {
-              val1 = element[j].sumTime;
-              val2 = element[j + 1].sumTime;
-            }
-            if (key === 'count') {
-              val1 = element[j].count;
-              val2 = element[j + 1].count;
-            }
-            if (this.flag) {
-              if (val1 < val2) {
-                const tmp = element[j];
-                element[j] = element[j + 1];
-                element[j + 1] = tmp;
-              }
-            } else {
-              if (val1 > val2) {
-                const tmp = element[j];
-                element[j] = element[j + 1];
-                element[j + 1] = tmp;
-              }
+          } else {
+            if (val1 > val2) {
+              const tmp = element[j];
+              element[j] = element[j + 1];
+              element[j + 1] = tmp;
             }
           }
         }
-        this.tableData = element;
-        this.componentKey += 1;
-        this.flag = !this.flag;
-      },
-    },
-  };
+      }
+      this.tableData = element;
+      this.componentKey += 1;
+      this.flag = !this.flag;
+    }
+  }
 </script>
 <style lang="scss" scoped>
   @import './trace.scss';

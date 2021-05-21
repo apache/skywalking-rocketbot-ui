@@ -89,68 +89,72 @@ limitations under the License. -->
     </div>
   </div>
 </template>
-<script lang="js">
-  export default {
-    name: 'item',
-    props: ['data', 'type', 'method'],
-    watch: {
-      data() {
-        const items = document.querySelectorAll('.trace-item');
-        for (const item of items) {
-          item.style.background = '#fff';
-        }
-      },
+<script lang="ts">
+  import { Vue, Prop, Watch, Component } from 'vue-property-decorator';
+
+  @Component({
+    components: {
     },
-    data() {
-      return {
-        displayChildren: true,
-        selectedSpan: 0,
-      };
-    },
-    computed: {
-      selfTime() {
-        const {data} = this;
-        return  data.dur ? data.dur : 0;
-      },
-      execTime() {
-        const {data} = this;
-        return  (data.endTime - data.startTime) ? (data.endTime - data.startTime) : 0;
-      },
-      outterPercent() {
-        if (this.data.level === 1) {
-          return '100%';
-        } else {
-          const data = this.data;
-          const exec = (data.endTime - data.startTime) ? (data.endTime - data.startTime) : 0;
-          let result = (exec / data.totalExec * 100);
-          result = result > 100 ? 100 : result;
-          result = result.toFixed(4) + '%';
-          return result === '0.0000%' ? '0.9%' : result;
-        }
-      },
-      innerPercent() {
-        const result = (this.selfTime / this.execTime) * 100 .toFixed(4) + '%';
-        return result === '0.0000%' ? '0.9%' : result;
-      },
-    },
-    methods: {
-      toggle() {
-        this.displayChildren = !this.displayChildren;
-      },
-      showSelectSpan() {
-        const items = document.querySelectorAll('.trace-item');
-        for (const item of items) {
-          item.style.background = '#fff';
-        }
-        this.$refs.traceItem.style.background = 'rgba(0, 0, 0, 0.1)';
-        this.$eventBus.$emit('HANDLE-SELECT-SPAN', this.data);
-      },
-      viewSpanDetail() {
-        this.showSelectSpan();
-        this.$eventBus.$emit('HANDLE-VIEW-SPAN', this.data);
-      },
-    },
-  };
+  })
+
+  export default class Item extends Vue {
+    @Prop()
+    public data: any ;
+    @Prop()
+    public type!: string;
+    @Prop()
+    public method!: string;
+
+    public displayChildren: boolean = true;
+
+    get selfTime() {
+      return  this.data.dur ? this.data.dur : 0;
+    }
+    get execTime() {
+      return  (this.data.endTime - this.data.startTime) ? (this.data.endTime - this.data.startTime) : 0;
+    }
+    get outterPercent() {
+      if (this.data.level === 1) {
+        return '100%';
+      } else {
+        const data = this.data;
+        const exec = (data.endTime - data.startTime) ? (data.endTime - data.startTime) : 0;
+        let result: number = (exec / data.totalExec * 100);
+        result = result > 100 ? 100 : result;
+        const resultStr: string = result.toFixed(4) + '%';
+        return resultStr === '0.0000%' ? '0.9%' : resultStr;
+      }
+    }
+    get innerPercent() {
+      const result: number = ((this.selfTime / this.execTime) * 100);
+      const resultStr: string =  result.toFixed(4) + '%';
+      return resultStr === '0.0000%' ? '0.9%' : resultStr;
+    }
+
+    @Watch('data')
+    public onDataChanged(): void {
+      const items = document.querySelectorAll('.trace-item') as NodeListOf<HTMLElement>;
+      for (const item of items) {
+        item.style.background = '#fff';
+      }
+    }
+
+    private toggle() {
+      this.displayChildren = !this.displayChildren;
+    }
+    private showSelectSpan() {
+      const items = document.querySelectorAll('.trace-item') as NodeListOf<HTMLElement>;
+      for (const item of items) {
+        item.style.background = '#fff';
+      }
+      (this.$refs.traceItem as HTMLElement).style.background = 'rgba(0, 0, 0, 0.1)';
+      this.$eventBus.$emit('HANDLE-SELECT-SPAN', this.data);
+    }
+    private viewSpanDetail() {
+      this.showSelectSpan();
+      this.$eventBus.$emit('HANDLE-VIEW-SPAN', this.data);
+    }
+  }
 </script>
 <style lang="scss" scoped>
   @import './trace.scss';

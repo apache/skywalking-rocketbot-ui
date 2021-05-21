@@ -123,6 +123,7 @@ limitations under the License. -->
       LogTable,
     },
   })
+
   export default class TraceDetail extends Vue {
     @State('rocketTrace') private rocketTrace!: traceState;
     @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
