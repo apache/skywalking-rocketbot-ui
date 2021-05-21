@@ -62,7 +62,7 @@ limitations under the License. -->
   import TopoAside from '../../components/topology/topo-aside.vue';
   import TopoGroup from '../../components/topology/topo-group/index.vue';
   import WindowEndpointDependency from '@/views/containers/topology/endpoint-dependency/index.vue';
-  import { TopoServiceMetricsConfig, TopoServiceDependencyMetricsConfig } from './topo-config';
+  import { TopoServiceMetricsConfig, TopoServiceDependencyMetricsConfig } from './topo-metrics-template';
   import { Option } from '@/types/global';
 
   @Component({

@@ -101,7 +101,7 @@ limitations under the License. -->
       <a class="rk-btn lg" @click="openInstanceModal">{{ $t('ShowInstanceDependency') }}</a>
       <rk-sidebox
         class="instance-dependency"
-        width="80%"
+        width="100%"
         :fixed="false"
         :title="
           `${stateTopo.selectedServiceCall.source.name} -> ${stateTopo.selectedServiceCall.target.name} Instance Dependency`
@@ -270,7 +270,7 @@ limitations under the License. -->
     }
   }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
   .title {
     padding: 10px;
   }
@@ -295,6 +295,16 @@ limitations under the License. -->
       color: #448dfe;
     }
   }
+  .instance-dependency {
+    .rk-sidebox {
+      background: #2b3037;
+      outline: none;
+      z-index: 200;
+    }
+    .rk-sidebox-inner {
+      height: 100%;
+    }
+  }
 
   .show-dependency {
     margin-top: 20px;
@@ -308,15 +318,6 @@ limitations under the License. -->
       width: 100%;
       padding-left: 40px;
       font-size: 16px;
-    }
-  }
-  .instance-dependency {
-    .rk-sidebox {
-      background: #2b3037;
-      outline: none;
-    }
-    .rk-sidebox-inner {
-      height: 100%;
     }
   }
 

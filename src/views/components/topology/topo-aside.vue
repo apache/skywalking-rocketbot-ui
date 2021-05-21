@@ -32,7 +32,7 @@ limitations under the License. -->
   import { State as topoState } from '@/store/modules/topology';
   import { Component, Vue } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
-  import Radial from './radial.vue';
+  import Radial from './chart/radial.vue';
   import TopoChart from './topo-chart.vue';
   import TopoService from './topo-services.vue';
   import TopoDetectPoint from './topo-detect-point.vue';

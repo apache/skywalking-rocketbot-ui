@@ -21,7 +21,7 @@ limitations under the License. -->
       <div v-if="!stateTopo.instanceDependency.nodes.length">
         No Instance Dependency
       </div>
-      <div v-if="stateTopo.selectedInstanceCall" class="rk-instance-dependency-metrics">
+      <div v-if="stateTopo.selectedInstanceCall" class="rk-instance-dependency-metrics" :style="`height: ${height}px`">
         <div class="mb-5 clear">
           <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
           <span
@@ -79,7 +79,7 @@ limitations under the License. -->
   import { State as topoState } from '@/store/modules/topology';
   import Topo from '../chart/topo.vue';
   import TopoChart from '../topo-chart.vue';
-  import DependencySankey from '../dependency-sankey.vue';
+  import DependencySankey from '../chart/dependency-sankey.vue';
   import ChartLine from '../chart-line.vue';
 
   @Component({
@@ -100,6 +100,19 @@ limitations under the License. -->
     private GET_INSTANCE_DEPENDENCY_METRICS: any;
 
     private showInfo: boolean = true;
+    private height: number = 500;
+
+    private beforeMount() {
+      const { type } = this.stateTopo.currentLink.source;
+
+      // this.templateMode = this.stateTopo.mode ? 'server' : 'client';
+      // this.templateType = type;
+      this.height = document.body.clientHeight - 180;
+      // if (!this.stateTopo.topoServicesDependency[type]) {
+      //   return;
+      // }
+      // this.serviceDependencyComps = this.stateTopo.topoServicesDependency[type][this.templateMode];
+    }
 
     private setMode(mode: string) {
       this.GET_INSTANCE_DEPENDENCY_METRICS({
@@ -122,6 +135,7 @@ limitations under the License. -->
     height: 100%;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     background: #2b3037;
     & > :first-child {
       line-height: 400px;
@@ -131,18 +145,18 @@ limitations under the License. -->
     .rk-instance-metric-box {
       height: 100%;
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .rk-instance-dependency-metrics {
       width: 320px;
-      height: 650px;
-      margin-top: 10px;
       background: #252a2f;
       padding: 20px;
+      overflow: auto;
     }
     .rk-dependency-chart {
-      width: 850px;
       height: 100%;
+      width: calc(100% - 330px);
     }
   }
 </style>
