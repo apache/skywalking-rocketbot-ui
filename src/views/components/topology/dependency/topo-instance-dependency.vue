@@ -21,7 +21,7 @@ limitations under the License. -->
       <div v-if="!stateTopo.instanceDependency.nodes.length">
         No Instance Dependency
       </div>
-      <div v-if="stateTopo.selectedInstanceCall">
+      <div v-if="stateTopo.selectedInstanceCall" class="rk-instance-metric-content">
         <div class="mb-5 clear header">
           <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
           <span
@@ -90,6 +90,7 @@ limitations under the License. -->
     @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY_MODE_STATUS') private SET_INSTANCE_DEPENDENCY_MODE_STATUS: any;
     @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL') private SET_SELECTED_INSTANCE_CALL: any;
     @Mutation('SET_SERVICE_INSTANCE_DEPENDENCY') private SET_SERVICE_INSTANCE_DEPENDENCY: any;
+    @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
 
     private showInfo: boolean = true;
     private height: number = 500;
@@ -99,28 +100,36 @@ limitations under the License. -->
     private templateMode: string = '';
 
     private beforeMount() {
-      this.height = document.body.clientHeight - 230;
+      this.height = document.body.clientHeight - 200;
     }
 
-    private setMode(mode: string) {
+    private setMode(mode: any) {
       this.SET_INSTANCE_DEPENDENCY_MODE_STATUS(mode);
+      const call: any = this.stateTopo.selectedInstanceCall || { sourceObj: {} };
+      this.templateType = call.sourceObj.type || 'SpringMVC';
+      if (!this.templateType) {
+        return;
+      }
+      if (!this.stateTopo.topoServicesInstanceDependency[this.templateType][mode]) {
+        return;
+      }
+      this.serviceInstanceDependencyComps = this.stateTopo.topoServicesInstanceDependency[this.templateType][mode];
+      this.UPDATE_DASHBOARD();
     }
     private showDependencyMetrics(data: any) {
       this.SET_INSTANCE_DEPENDENCY_MODE_STATUS(data.detectPoints[0].toLowerCase());
       this.SET_SELECTED_INSTANCE_CALL(data);
       this.SET_SERVICE_INSTANCE_DEPENDENCY(data);
-      const { instanceDependencyMode } = this.stateTopo as any;
+      const mode = this.stateTopo.instanceDependencyMode as any;
 
       this.templateType = data.sourceObj.type || 'SpringMVC';
       if (!this.templateType) {
         return;
       }
-      if (!this.stateTopo.topoServicesInstanceDependency[this.templateType][instanceDependencyMode]) {
+      if (!this.stateTopo.topoServicesInstanceDependency[this.templateType][mode]) {
         return;
       }
-      this.serviceInstanceDependencyComps = this.stateTopo.topoServicesInstanceDependency[this.templateType][
-        instanceDependencyMode
-      ];
+      this.serviceInstanceDependencyComps = this.stateTopo.topoServicesInstanceDependency[this.templateType][mode];
     }
   }
 </script>
@@ -135,7 +144,6 @@ limitations under the License. -->
   .rk-instance-metric-box {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     background: #252a2f;
   }
   .rk-instance-dependency-metrics {
@@ -146,10 +154,9 @@ limitations under the License. -->
     height: 100%;
     width: calc(100% - 340px);
   }
-  .rk-sidebox-title {
-    color: #eee;
-  }
   .header {
     padding: 10px;
+    width: 100%;
+    overflow: hidden;
   }
 </style>

@@ -423,7 +423,7 @@ export const TopoServiceInstanceDependencyMetricsConfig: any = {
           width: 12,
           title: 'Service Instance Response Time Percentile',
           height: 200,
-          entityType: 'ServiceRelation',
+          entityType: 'ServiceInstanceRelation',
           metricType: 'LABELED_VALUE',
           metricName: 'service_instance_relation_server_percentile',
           queryMetricType: 'readLabeledMetricsValues',

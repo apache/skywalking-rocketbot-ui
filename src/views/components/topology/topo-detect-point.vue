@@ -319,6 +319,10 @@ limitations under the License. -->
       padding-left: 40px;
       font-size: 16px;
     }
+
+    .rk-sidebox-title {
+      color: #eee;
+    }
   }
 
   .link-topo-aside-box {

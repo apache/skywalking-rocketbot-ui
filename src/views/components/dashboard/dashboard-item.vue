@@ -406,11 +406,22 @@ limitations under the License. -->
     // watch selectors and events
     @Watch('rocketOption.updateDashboard.key')
     private watchCurrentSelectors() {
-      console.log(this.templateType);
       this.itemEvents = this.eventsFilter();
       if (
         this.rocketOption.updateDashboard.key &&
         this.rocketOption.updateDashboard.key.includes(UpdateDashboardEvents)
+      ) {
+        return;
+      }
+      if (
+        this.rocketOption.updateDashboard.key.includes(TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) &&
+        this.itemConfig.entityType !== EntityType[4].key
+      ) {
+        return;
+      }
+      if (
+        this.rocketOption.updateDashboard.key.includes(TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) &&
+        this.itemConfig.entityType !== EntityType[5].key
       ) {
         return;
       }

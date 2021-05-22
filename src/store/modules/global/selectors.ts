@@ -20,7 +20,7 @@ import * as types from '../dashboard/mutation-types';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
 import { Duration, DurationTime, Option } from '@/types/global';
-import { PageTypes } from '@/constants/constant';
+import { PageTypes, TopologyType } from '@/constants/constant';
 
 const EntityType = ['Service', 'ServiceInstance', 'Endpoint'];
 export interface State {
@@ -114,14 +114,14 @@ const mutations: MutationTree<State> = {
   [types.SET_SERVICE_DEPENDENCY](state: State, call: any) {
     state.currentService = { key: call.source.id, label: call.source.name };
     state.destService = { key: call.target.id, label: call.target.name };
-    state.updateDashboard = { key: call.id };
+    state.updateDashboard = { key: TopologyType.TOPOLOGY_SERVICE_DEPENDENCY + call.id };
   },
   [types.SET_SERVICE_INSTANCE_DEPENDENCY](state: State, call: any) {
     state.currentService = { key: call.sourceObj.serviceId, label: call.sourceObj.serviceName };
     state.currentInstance = { key: call.sourceObj.id, label: call.sourceObj.name };
     state.destService = { key: call.targetObj.serviceId, label: call.targetObj.serviceName };
     state.destInstance = { key: call.targetObj.id, label: call.targetObj.name };
-    state.updateDashboard = { key: call.id };
+    state.updateDashboard = { key: TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY + call.id };
   },
 };
 

@@ -224,6 +224,7 @@ const m = {
   alarmDetail: '警告详情',
   scope: '范围',
   destService: '终点服务',
+  destServiceInstance: '终点实例',
 };
 
 export default m;
