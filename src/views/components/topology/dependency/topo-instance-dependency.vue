@@ -21,8 +21,8 @@ limitations under the License. -->
       <div v-if="!stateTopo.instanceDependency.nodes.length">
         No Instance Dependency
       </div>
-      <div v-if="stateTopo.selectedInstanceCall" :style="`height: ${height}px`">
-        <div class="mb-5 clear">
+      <div v-if="stateTopo.selectedInstanceCall">
+        <div class="mb-5 clear header">
           <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
           <span
             v-if="stateTopo.selectedInstanceCall.detectPoints.includes('CLIENT')"
@@ -39,7 +39,11 @@ limitations under the License. -->
             >{{ $t('server') }}</span
           >
         </div>
-        <div v-if="stateTopo.selectedInstanceCall" class="rk-instance-dependency-metrics scroll_bar_style">
+        <div
+          v-if="stateTopo.selectedInstanceCall"
+          class="rk-instance-dependency-metrics scroll_bar_style"
+          :style="`height: ${height}px`"
+        >
           <DashboardItem
             v-for="(i, index) in serviceInstanceDependencyComps || []"
             :key="index"
@@ -95,7 +99,7 @@ limitations under the License. -->
     private templateMode: string = '';
 
     private beforeMount() {
-      this.height = document.body.clientHeight - 180;
+      this.height = document.body.clientHeight - 230;
     }
 
     private setMode(mode: string) {
@@ -127,26 +131,25 @@ limitations under the License. -->
     flex-direction: row;
     justify-content: space-between;
     background: #2b3037;
-    & > :first-child {
-      line-height: 400px;
-      text-align: center;
-      width: 100%;
-    }
   }
   .rk-instance-metric-box {
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background: #252a2f;
   }
   .rk-instance-dependency-metrics {
     width: 320px;
-    background: #252a2f;
-    padding: 20px;
     overflow: auto;
   }
   .rk-dependency-chart {
     height: 100%;
     width: calc(100% - 340px);
+  }
+  .rk-sidebox-title {
+    color: #eee;
+  }
+  .header {
+    padding: 10px;
   }
 </style>
