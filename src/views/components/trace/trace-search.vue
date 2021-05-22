@@ -58,6 +58,7 @@ limitations under the License. -->
           :title="$t('endpointName')"
           :value="endpoint"
           @input="chooseEndpoint"
+          @search="searchEndpoint"
           :data="rocketTrace.endpoints"
         />
       </div>
@@ -170,6 +171,13 @@ limitations under the License. -->
       this.GET_ITEM_ENDPOINTS({
         serviceId: i.key,
         keyword: '',
+        duration: this.durationTime,
+      });
+    }
+    private searchEndpoint(search: string) {
+      this.GET_ITEM_ENDPOINTS({
+        serviceId: this.service.key,
+        keyword: search,
         duration: this.durationTime,
       });
     }
