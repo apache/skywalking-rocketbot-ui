@@ -80,7 +80,6 @@ export interface State {
     nodes: Node[];
   };
   selectedInstanceCall: Call | null;
-  instanceDependencyMetrics: { [key: string]: any };
   endpointDependencyMetrics: { [key: string]: any };
   currentEndpointDepth: { key: number; label: string };
   queryInstanceMetricsType: string;
@@ -90,6 +89,7 @@ export interface State {
   topoServicesDependency: { [key: string]: any[] };
   topoServicesInstanceDependency: { [key: string]: any[] };
   instanceDependencyMode: string;
+  editInstanceDependencyMetrics: boolean;
 }
 
 const PercentileItem: string[] = ['p50', 'p75', 'p90', 'p95', 'p99'];
@@ -116,7 +116,6 @@ const initState: State = {
     nodes: [],
   },
   selectedInstanceCall: null,
-  instanceDependencyMetrics: {},
   endpointDependencyMetrics: {},
   currentEndpointDepth: { key: 2, label: '2' },
   queryInstanceMetricsType: '',
@@ -126,6 +125,7 @@ const initState: State = {
   topoServicesDependency: {},
   topoServicesInstanceDependency: {},
   instanceDependencyMode: '',
+  editInstanceDependencyMetrics: false,
 };
 
 // getters
@@ -164,24 +164,6 @@ const mutations = {
   },
   [types.SET_SELECTED_INSTANCE_CALL](state: State, data: Call) {
     state.selectedInstanceCall = data;
-  },
-  [types.SET_INSTANCE_DEPEDENCE_METRICS](state: State, data: any) {
-    state.instanceDependencyMetrics.getResponseTimeTrend = data.getResponseTimeTrend
-      ? data.getResponseTimeTrend.values.map((i: any) => i.value)
-      : [];
-    state.instanceDependencyMetrics.getSLATrend = data.getSLATrend
-      ? data.getSLATrend.values.map((i: any) => i.value)
-      : [];
-    state.instanceDependencyMetrics.getThroughputTrend = data.getThroughputTrend
-      ? data.getThroughputTrend.values.map((i: any) => i.value)
-      : [];
-    state.instanceDependencyMetrics.percentResponse = {};
-    if (!data.getPercentile) {
-      return;
-    }
-    data.getPercentile.forEach((item: any, index: number) => {
-      state.instanceDependencyMetrics.percentResponse[PercentileItem[index]] = item.values.map((i: any) => i.value);
-    });
   },
   [types.SET_ENDPOINT_DEPENDENCY_METRICS](state: State, data: { [key: string]: any }) {
     state.endpointDependencyMetrics.cpm = data.endpointRelationCpm
@@ -266,6 +248,20 @@ const mutations = {
     };
     window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
   },
+  [types.EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG](state: State, params: { values: any; index: number }) {
+    const { sourceObj } = state.selectedInstanceCall || ({} as any);
+    const type = sourceObj.type || 'SpringMVC';
+    const mode: any = state.instanceDependencyMode ? 'server' : 'client';
+
+    if (!(state.topoServicesInstanceDependency[type] && state.topoServicesInstanceDependency[type][mode])) {
+      return;
+    }
+    state.topoServicesInstanceDependency[type][mode][params.index] = {
+      ...state.topoServicesInstanceDependency[type][mode][params.index],
+      ...params.values,
+    };
+    localStorage.setItem('topologyServicesInstanceDependency', JSON.stringify(state.topoServicesInstanceDependency));
+  },
   [types.ADD_TOPO_INSTANCE_COMP](state: State) {
     const comp = {
       width: 3,
@@ -316,6 +312,24 @@ const mutations = {
     state.topoServicesDependency[source.type][mode].push(comp);
     window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
   },
+  [types.ADD_TOPO_INSTANCE_DEPENDENCY_COMP](state: State) {
+    const { sourceObj } = state.selectedInstanceCall || ({} as any);
+    const type = sourceObj.type || 'SpringMVC';
+    const mode: any = state.instanceDependencyMode;
+
+    if (!(state.topoServicesInstanceDependency[type] && state.topoServicesInstanceDependency[type][mode])) {
+      return;
+    }
+    const comp = {
+      width: 12,
+      title: 'Title',
+      height: 250,
+      entityType: 'ServiceInstanceRelation',
+      metricType: 'UNKNOWN',
+    };
+    state.topoServicesInstanceDependency[type][mode].push(comp);
+    localStorage.setItem('topologyServicesInstanceDependency', JSON.stringify(state.topoServicesInstanceDependency));
+  },
   [types.SET_ENDPOINT_DEPENDENCY](state: State, data: { calls: Call[]; nodes: Node[] }) {
     state.endpointDependency = data;
   },
@@ -355,6 +369,9 @@ const mutations = {
       }
     }
     window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
+  },
+  [types.SET_INSTANCE_DEPENDENCY_METRICS](state: State, isEdit: boolean) {
+    state.editInstanceDependencyMetrics = isEdit;
   },
 };
 
@@ -410,8 +427,8 @@ const actions: ActionTree<State, any> = {
         const calls = res.data.data.topo.calls;
         const nodes = res.data.data.topo.nodes;
         const ids = nodes.map((i: any) => i.id);
-        const idsC = calls.filter((i: any) => i.detectPoints.indexOf('CLIENT') !== -1).map((b: any) => b.id);
-        const idsS = calls.filter((i: any) => i.detectPoints.indexOf('CLIENT') === -1).map((b: any) => b.id);
+        const idsC = calls.filter((i: any) => i.detectPoints.includes('CLIENT')).map((b: any) => b.id);
+        const idsS = calls.filter((i: any) => i.detectPoints.includes('CLIENT')).map((b: any) => b.id);
         return graph
           .query('queryTopoInfo')
           .params({ ...params, ids, idsC, idsS })
@@ -702,25 +719,6 @@ const actions: ActionTree<State, any> = {
           }
           context.commit(types.SET_INSTANCE_DEPENDENCY, instanceDependency);
         });
-      });
-  },
-  INSTANCE_RELATION_INFO(
-    context: { commit: Commit; state: State },
-    params: Call & { mode: string; queryType: string; durationTime: Duration },
-  ) {
-    graph
-      .query(params.queryType)
-      .params({
-        id: params.id,
-        duration: params.durationTime,
-      })
-      .then((res: AxiosResponse) => {
-        if (!(res.data && res.data.data)) {
-          return;
-        }
-        context.commit(types.SET_SELECTED_INSTANCE_CALL, params);
-        context.commit(types.SET_INSTANCE_DEPENDENCY_MODE_STATUS, params.mode);
-        context.commit(types.SET_INSTANCE_DEPEDENCE_METRICS, res.data.data);
       });
   },
   GET_ENDPOINT_DEPENDENCY_METRICS(context: { commit: Commit; state: State }, params: EndpointDependencyConidition) {

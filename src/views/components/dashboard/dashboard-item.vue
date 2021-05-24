@@ -32,7 +32,7 @@ limitations under the License. -->
     <div class="rk-dashboard-item-body" ref="chartBody">
       <div style="height:100%;width:100%">
         <component
-          :is="rocketGlobal.edit ? 'ChartEdit' : itemConfig.chartType"
+          :is="rocketGlobal.edit || stateTopo.editInstanceDependencyMetrics ? 'ChartEdit' : itemConfig.chartType"
           ref="chart"
           :item="itemConfig"
           :index="index"
@@ -90,6 +90,7 @@ limitations under the License. -->
   export default class DashboardItem extends Vue {
     @State('rocketbot') private rocketGlobal!: globalState;
     @State('rocketData') private rocketData!: rocketData;
+    @State('rocketTopo') private stateTopo!: any;
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('rocketTopo/DELETE_TOPO_ENDPOINT') private DELETE_TOPO_ENDPOINT: any;
     @Mutation('rocketTopo/DELETE_TOPO_INSTANCE') private DELETE_TOPO_INSTANCE: any;
@@ -168,9 +169,9 @@ limitations under the License. -->
           return;
         }
         this.itemConfig = params[0].config;
-        const { queryMetricType, chartType } = this.itemConfig;
+        const { queryMetricType } = this.itemConfig;
         let data = params;
-        if (queryMetricType === QueryTypes.ReadMetricsValue /*&& chartType === 'ChartSlow'*/) {
+        if (queryMetricType === QueryTypes.ReadMetricsValue) {
           const arr: any = [
             {
               config: this.itemConfig,
@@ -435,6 +436,19 @@ limitations under the License. -->
     }
     @Watch('rocketGlobal.edit')
     private watchRerender() {
+      if (this.stateTopo.editInstanceDependencyMetrics) {
+        return;
+      }
+      this.chartRender();
+    }
+    @Watch('stateTopo.editInstanceDependencyMetrics')
+    private watchDependency() {
+      if (
+        this.type !== TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY ||
+        this.stateTopo.editInstanceDependencyMetrics
+      ) {
+        return;
+      }
       this.chartRender();
     }
   }

@@ -38,6 +38,30 @@ limitations under the License. -->
             @click="setMode('server')"
             >{{ $t('server') }}</span
           >
+          <span class="topo-tool-btn" @click="handleSetEdit">
+            <rk-icon
+              class="lg rk-icon"
+              :style="`color:${stateTopo.editInstanceDependencyMetrics ? '#ffc107' : ''}`"
+              :icon="stateTopo.editInstanceDependencyMetrics ? 'lock-open' : 'lock'"
+              v-tooltip:bottom="{ content: stateTopo.editInstanceDependencyMetrics ? 'view' : 'edit' }"
+            />
+          </span>
+          <span class="topo-tool-btn" v-tooltip:bottom="{ content: 'import' }">
+            <input
+              id="tool-bar-file"
+              type="file"
+              name="file"
+              title=""
+              accept=".json"
+              @change="importInstanceDependencyMetricsTemplate"
+            />
+            <label for="tool-bar-file">
+              <rk-icon class="lg import" icon="folder_open" />
+            </label>
+          </span>
+          <span class="topo-tool-btn" @click="exportTopoInstanceDependencyMetrics">
+            <rk-icon class="lg" icon="save_alt" v-tooltip:bottom="{ content: 'export' }" />
+          </span>
         </div>
         <div
           v-if="stateTopo.selectedInstanceCall"
@@ -56,9 +80,13 @@ limitations under the License. -->
             :templateType="templateType"
             :templateMode="stateTopo.instanceDependencyMode"
           />
-          <!-- <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="ADD_TOPO_SERVICE_DEPENDENCY_COMP">
+          <div
+            v-show="stateTopo.editInstanceDependencyMetrics"
+            class="rk-add-metric-item g-sm-3"
+            @click="ADD_TOPO_INSTANCE_DEPENDENCY_COMP"
+          >
             + Add An Item
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
@@ -91,6 +119,8 @@ limitations under the License. -->
     @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL') private SET_SELECTED_INSTANCE_CALL: any;
     @Mutation('SET_SERVICE_INSTANCE_DEPENDENCY') private SET_SERVICE_INSTANCE_DEPENDENCY: any;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
+    @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY_METRICS') private SET_INSTANCE_DEPENDENCY_METRICS: any;
+    @Mutation('rocketTopo/ADD_TOPO_INSTANCE_DEPENDENCY_COMP') private ADD_TOPO_INSTANCE_DEPENDENCY_COMP: any;
 
     private showInfo: boolean = true;
     private height: number = 500;
@@ -131,9 +161,15 @@ limitations under the License. -->
       }
       this.serviceInstanceDependencyComps = this.stateTopo.topoServicesInstanceDependency[this.templateType][mode];
     }
+    private handleSetEdit() {
+      this.SET_INSTANCE_DEPENDENCY_METRICS(!this.stateTopo.editInstanceDependencyMetrics);
+    }
+    private importInstanceDependencyMetricsTemplate() {}
+    private exportTopoInstanceDependencyMetrics() {}
   }
 </script>
 <style lang="scss" scoped>
+  @import url('../styles/common.scss');
   .rk-topo-instance-dependency {
     height: 100%;
     display: flex;
@@ -147,7 +183,7 @@ limitations under the License. -->
     background: #252a2f;
   }
   .rk-instance-dependency-metrics {
-    width: 320px;
+    width: 350px;
     overflow: auto;
   }
   .rk-dependency-chart {

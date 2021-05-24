@@ -214,32 +214,6 @@ const actions: ActionTree<State, any> = {
       return data;
     });
   },
-  GET_METRICS_CONFIG(
-    context: { state: State },
-    params: { type: string; index: number; templateType: string; tree: any },
-  ) {
-    let config = {};
-    if (params.type === TopologyType.TOPOLOGY_ENDPOINT) {
-      const endpointComps: string = `${window.localStorage.getItem('topologyEndpoints')}`;
-      const topoEndpoint = endpointComps ? JSON.parse(endpointComps) : [];
-      config = topoEndpoint[params.index];
-    } else if (params.type === TopologyType.TOPOLOGY_INSTANCE) {
-      const instanceComps: string = `${window.localStorage.getItem('topologyInstances')}`;
-      const topoInstance = instanceComps ? JSON.parse(instanceComps) : [];
-      config = topoInstance[params.index];
-    } else if (params.type === TopologyType.TOPOLOGY_SERVICE) {
-      const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
-      const topoService = serviceComps ? JSON.parse(serviceComps) : {};
-
-      if (!topoService[params.templateType]) {
-        return new Promise((resolve) => resolve({}));
-      }
-      config = topoService[params.templateType][params.index];
-    } else {
-      config = params.tree[context.state.group].children[context.state.current].children[params.index];
-    }
-    return config;
-  },
 };
 
 export default {

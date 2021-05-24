@@ -107,6 +107,7 @@ limitations under the License. -->
           `${stateTopo.selectedServiceCall.source.name} -> ${stateTopo.selectedServiceCall.target.name} Instance Dependency`
         "
         :show.sync="dialogTopoVisible"
+        :closeSideboxCallback="clearInstance"
       >
         <TopoInstanceDependency />
       </rk-sidebox>

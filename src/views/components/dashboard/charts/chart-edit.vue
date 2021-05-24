@@ -43,7 +43,7 @@ limitations under the License. -->
           </option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="isChartType">
+      <div class="flex-h mb-5" v-show="hasChartType">
         <div class="title grey sm">{{ $t('chartType') }}:</div>
         <select
           class="long"
@@ -73,7 +73,7 @@ limitations under the License. -->
           @change="setItemConfig({ type: 'labelsIndex', value: $event.target.value })"
         />
       </div>
-      <div class="flex-h mb-5" v-show="!isDatabase && !pageTypes.includes(type)">
+      <div class="flex-h mb-5" v-show="!noEntity">
         <div class="title grey sm">{{ $t('entityType') }}:</div>
         <select
           class="long"
@@ -321,6 +321,7 @@ limitations under the License. -->
     @Mutation('rocketTopo/EDIT_TOPO_ENDPOINT_CONFIG') private EDIT_TOPO_ENDPOINT_CONFIG: any;
     @Mutation('rocketTopo/EDIT_TOPO_SERVICE_CONFIG') private EDIT_TOPO_SERVICE_CONFIG: any;
     @Mutation('rocketTopo/EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG') private EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG: any;
+    @Mutation('rocketTopo/EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG') private EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG: any;
     @Action('GET_ITEM_SERVICES') private GET_ITEM_SERVICES: any;
     @Action('GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
     @Action('GET_ITEM_INSTANCES') private GET_ITEM_INSTANCES: any;
@@ -344,11 +345,11 @@ limitations under the License. -->
     private isLabel = false;
     private hasIndependentSelector = false;
     private isChartSlow = false;
-    private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as string[];
     private isChartType = false;
     private ChartTable = 'ChartTable';
+    private noEntity = false;
 
-    private created() {
+    private beforeMount() {
       this.itemConfig = this.item;
       this.initConfig();
       if (this.itemConfig.independentSelector) {
@@ -357,19 +358,22 @@ limitations under the License. -->
     }
 
     private initConfig() {
-      this.isDatabase = this.pageTypes.includes(this.type)
-        ? false
-        : this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.DATABASE
-        ? true
-        : false;
-      this.isBrowser = this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.BROWSER;
+      const dashboardComps = this.rocketComps.tree[this.rocketComps.group] || {};
+      const topoPageTypes = [
+        TopologyType.TOPOLOGY_SERVICE,
+        TopologyType.TOPOLOGY_SERVICE_DEPENDENCY,
+        TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY,
+      ] as string[];
+
+      this.noEntity = topoPageTypes.includes(this.type);
+      this.isDatabase = dashboardComps.type === DASHBOARDTYPE.DATABASE;
+      this.isBrowser = dashboardComps.type === DASHBOARDTYPE.BROWSER;
       if (this.isBrowser) {
         this.EntityType = BrowserEntityType;
       }
       this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
-      this.isLabel = this.itemConfig.metricType === MetricsType.LABELED_VALUE ? true : false;
-      this.hasIndependentSelector =
-        this.rocketComps.tree[this.rocketComps.group].type === 'metric' || this.pageTypes.includes(this.type);
+      this.isLabel = this.itemConfig.metricType === MetricsType.LABELED_VALUE;
+      this.hasIndependentSelector = dashboardComps.type === 'metric';
       this.chartTypeOptions =
         this.itemConfig.queryMetricType === 'readMetricsValue' ? ReadValueChartType : ChartTypeOptions;
       this.isChartSlow = ['sortMetrics', 'readSampledRecords'].includes(this.itemConfig.queryMetricType);
@@ -387,6 +391,8 @@ limitations under the License. -->
         this.EDIT_TOPO_INSTANCE_CONFIG(params);
       } else if (this.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) {
         this.EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG(params);
+      } else if (this.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) {
+        this.EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG(params);
       } else {
         this.EDIT_COMP_CONFIG(params);
       }
@@ -426,12 +432,12 @@ limitations under the License. -->
       }
       if (params.type === 'independentSelector' || params.type === 'parentService') {
         this.itemConfig[params.type] = params.value === 'true' ? true : false;
-        if (this.type === this.pageTypes[0]) {
+        if (this.type === TopologyType.TOPOLOGY_ENDPOINT) {
           this.editComponentConfig({
             index: this.index,
             values: { [params.type]: this.itemConfig[params.type] },
           });
-        } else if (this.type === this.pageTypes[1]) {
+        } else if (this.type === TopologyType.TOPOLOGY_INSTANCE) {
           this.editComponentConfig({
             index: this.index,
             values: { [params.type]: this.itemConfig[params.type] },
@@ -445,12 +451,12 @@ limitations under the License. -->
         this.updateAggregation(params);
         return;
       }
-      if (this.type === this.pageTypes[0]) {
+      if (this.type === TopologyType.TOPOLOGY_ENDPOINT) {
         this.editComponentConfig({
           index: this.index,
           values: { [params.type]: params.value },
         });
-      } else if (this.type === this.pageTypes[1]) {
+      } else if (this.type === TopologyType.TOPOLOGY_INSTANCE) {
         this.editComponentConfig({
           index: this.index,
           values: { [params.type]: params.value },
@@ -485,12 +491,12 @@ limitations under the License. -->
           chartType: MetricChartType[this.itemConfig.queryMetricType],
           metricName: params.value,
         };
-        if (this.type === this.pageTypes[0]) {
+        if (this.type === TopologyType.TOPOLOGY_ENDPOINT) {
           this.editComponentConfig({
             index: this.index,
             values,
           });
-        } else if (this.type === this.pageTypes[1]) {
+        } else if (this.type === TopologyType.TOPOLOGY_INSTANCE) {
           this.editComponentConfig({
             index: this.index,
             values,
@@ -528,22 +534,10 @@ limitations under the License. -->
         chartType: MetricChartType[params.value],
         [params.type]: params.value,
       };
-      if (this.type === this.pageTypes[0]) {
-        this.editComponentConfig({
-          index: this.index,
-          values,
-        });
-      } else if (this.type === this.pageTypes[1]) {
-        this.editComponentConfig({
-          index: this.index,
-          values,
-        });
-      } else {
-        this.editComponentConfig({
-          index: this.index,
-          values,
-        });
-      }
+      this.editComponentConfig({
+        index: this.index,
+        values,
+      });
       this.itemConfig = {
         ...this.itemConfig,
         ...values,

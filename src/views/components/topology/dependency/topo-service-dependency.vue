@@ -77,18 +77,8 @@ limitations under the License. -->
   }
 </script>
 <style lang="scss" scoped>
+  @import url('../styles/common.scss');
   .service-metrics {
     overflow: auto;
-  }
-  .rk-add-metric-item {
-    height: 200px;
-    text-align: center;
-    line-height: 250px;
-    border: 1px dashed rgba(196, 200, 225, 0.5);
-    cursor: pointer;
-    display: inline-block;
-    font-size: 16px;
-    width: 340px;
-    margin-left: 5px;
   }
 </style>
