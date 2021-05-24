@@ -213,7 +213,7 @@ limitations under the License. -->
         } else {
           this.IMPORT_TREE_SERVICE_DEPENDENCY(data[0]);
         }
-        const el: any = document.getElementById('endpoint-file');
+        const el: any = document.getElementById('tool-bar-file');
         el!.value = '';
       } catch (e) {
         this.$modal.show('dialog', { text: 'ERROR' });

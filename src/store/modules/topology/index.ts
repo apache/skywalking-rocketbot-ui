@@ -228,6 +228,17 @@ const mutations = {
     state.topoServicesDependency[source.type][mode].splice(index, 1);
     window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
   },
+  [types.DELETE_TOPO_INSTANCE_DEPENDENCY](state: State, index: number) {
+    const { sourceObj } = state.selectedInstanceCall || ({} as any);
+    const type = sourceObj.type || 'SpringMVC';
+    const mode: any = state.instanceDependencyMode;
+
+    state.topoServicesInstanceDependency[type][mode].splice(index, 1);
+    window.localStorage.setItem(
+      'topologyServicesInstanceDependency',
+      JSON.stringify(state.topoServicesInstanceDependency),
+    );
+  },
   [types.EDIT_TOPO_SERVICE_CONFIG](state: State, params: { values: any; index: number }) {
     state.topoServices[state.currentNode.type][params.index] = {
       ...state.topoServices[state.currentNode.type][params.index],
@@ -251,7 +262,7 @@ const mutations = {
   [types.EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG](state: State, params: { values: any; index: number }) {
     const { sourceObj } = state.selectedInstanceCall || ({} as any);
     const type = sourceObj.type || 'SpringMVC';
-    const mode: any = state.instanceDependencyMode ? 'server' : 'client';
+    const mode: any = state.instanceDependencyMode;
 
     if (!(state.topoServicesInstanceDependency[type] && state.topoServicesInstanceDependency[type][mode])) {
       return;
@@ -328,6 +339,7 @@ const mutations = {
       metricType: 'UNKNOWN',
     };
     state.topoServicesInstanceDependency[type][mode].push(comp);
+    console.log(state.topoServicesInstanceDependency);
     localStorage.setItem('topologyServicesInstanceDependency', JSON.stringify(state.topoServicesInstanceDependency));
   },
   [types.SET_ENDPOINT_DEPENDENCY](state: State, data: { calls: Call[]; nodes: Node[] }) {
@@ -356,7 +368,7 @@ const mutations = {
     const modes: any = ['server', 'client'];
 
     for (const key of keys) {
-      if (state.topoServices[key]) {
+      if (state.topoServicesDependency[key]) {
         for (const mode of modes) {
           if (state.topoServicesDependency[key][mode]) {
             state.topoServicesDependency[key][mode].push(...data[key][mode]);
@@ -368,10 +380,30 @@ const mutations = {
         state.topoServicesDependency[key] = data[key];
       }
     }
-    window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
+    localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
   },
   [types.SET_INSTANCE_DEPENDENCY_METRICS](state: State, isEdit: boolean) {
     state.editInstanceDependencyMetrics = isEdit;
+  },
+  [types.IMPORT_TREE_INSTANCE_DEPENDENCY](state: State, data: any) {
+    console.log(data);
+    const keys = Object.keys(data);
+    const modes: any = ['server', 'client'];
+
+    for (const key of keys) {
+      if (state.topoServicesInstanceDependency[key]) {
+        for (const mode of modes) {
+          if (state.topoServicesInstanceDependency[key][mode]) {
+            state.topoServicesInstanceDependency[key][mode].push(...data[key][mode]);
+          } else {
+            state.topoServicesInstanceDependency[key][mode] = data[key][mode];
+          }
+        }
+      } else {
+        state.topoServicesInstanceDependency[key] = data[key];
+      }
+    }
+    localStorage.setItem('topologyServicesInstanceDependency', JSON.stringify(state.topoServicesInstanceDependency));
   },
 };
 

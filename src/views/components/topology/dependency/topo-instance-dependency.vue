@@ -48,14 +48,14 @@ limitations under the License. -->
           </span>
           <span class="topo-tool-btn" v-tooltip:bottom="{ content: 'import' }">
             <input
-              id="tool-bar-file"
+              id="instance-tool-bar-file"
               type="file"
               name="file"
               title=""
               accept=".json"
               @change="importInstanceDependencyMetricsTemplate"
             />
-            <label for="tool-bar-file">
+            <label for="instance-tool-bar-file">
               <rk-icon class="lg import" icon="folder_open" />
             </label>
           </span>
@@ -101,6 +101,9 @@ limitations under the License. -->
   import Topo from '../chart/topo.vue';
   import DependencySankey from '../chart/dependency-sankey.vue';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
+  import { readFile } from '@/utils/readFile';
+  import { saveFile } from '@/utils/saveFile';
+  import { Event } from 'noty';
 
   @Component({
     components: {
@@ -110,9 +113,9 @@ limitations under the License. -->
     },
   })
   export default class TopoInstanceDependency extends Vue {
+    @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
     @State('rocketTopo') private stateTopo!: topoState;
-    @Getter('intervalTime') private intervalTime: any;
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY_MODE_STATUS') private SET_INSTANCE_DEPENDENCY_MODE_STATUS: any;
@@ -121,6 +124,7 @@ limitations under the License. -->
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY_METRICS') private SET_INSTANCE_DEPENDENCY_METRICS: any;
     @Mutation('rocketTopo/ADD_TOPO_INSTANCE_DEPENDENCY_COMP') private ADD_TOPO_INSTANCE_DEPENDENCY_COMP: any;
+    @Mutation('rocketTopo/IMPORT_TREE_INSTANCE_DEPENDENCY') private IMPORT_TREE_INSTANCE_DEPENDENCY: any;
 
     private showInfo: boolean = true;
     private height: number = 500;
@@ -164,8 +168,25 @@ limitations under the License. -->
     private handleSetEdit() {
       this.SET_INSTANCE_DEPENDENCY_METRICS(!this.stateTopo.editInstanceDependencyMetrics);
     }
-    private importInstanceDependencyMetricsTemplate() {}
-    private exportTopoInstanceDependencyMetrics() {}
+    private async importInstanceDependencyMetricsTemplate(event: Event) {
+      try {
+        const data: any = await readFile(event);
+        if (!Array.isArray(data)) {
+          throw new Error();
+        }
+        this.IMPORT_TREE_INSTANCE_DEPENDENCY(data[0]);
+        const el: any = document.getElementById('instance-tool-bar-file');
+        el!.value = '';
+      } catch (e) {
+        this.$modal.show('dialog', { text: 'ERROR' });
+      }
+    }
+    private exportTopoInstanceDependencyMetrics() {
+      const group = this.stateTopo.topoServicesInstanceDependency;
+      const name = 'topo_service_instance_dependency_metrics.json';
+
+      saveFile([group], name);
+    }
   }
 </script>
 <style lang="scss" scoped>
@@ -194,5 +215,14 @@ limitations under the License. -->
     padding: 10px;
     width: 100%;
     overflow: hidden;
+  }
+  .rk-add-metric-item {
+    width: 325px;
+  }
+  .topo-tool-btn {
+    cursor: pointer;
+  }
+  #instance-tool-bar-file {
+    display: none;
   }
 </style>

@@ -83,17 +83,17 @@ const actions: ActionTree<State, any> = {
           topoServiceInstanceDependency[params.templateType][params.templateMode]
         )
       ) {
-        return new Promise((resolve) => resolve({}));
+        return new Promise((resolve) => resolve([]));
       }
       config = topoServiceInstanceDependency[params.templateType][params.templateMode][params.index];
     } else {
       config = tree[context.state.group].children[context.state.current].children[params.index];
     }
     if (!config) {
-      return new Promise((resolve) => resolve({}));
+      return new Promise((resolve) => resolve([]));
     }
     if (!config.metricName) {
-      return new Promise((resolve) => resolve({}));
+      return new Promise((resolve) => resolve([{ config }]));
     }
     // remove the space at the beginning and end of the string
     const metricNames = config.metricName.split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));

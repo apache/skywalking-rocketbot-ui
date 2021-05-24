@@ -15,16 +15,22 @@ limitations under the License. -->
 <template>
   <div class="rk-dashboard-item" :class="`g-sm-${width}`" :style="`height:${height}px;`" v-if="itemConfig.entityType">
     <div class="rk-dashboard-item-title ell">
-      <span v-show="rocketGlobal.edit" @click="deleteItem(index)">
+      <span v-show="rocketGlobal.edit || stateTopo.editInstanceDependencyMetrics" @click="deleteItem(index)">
         <rk-icon class="r edit red" icon="file-deletion" />
       </span>
       <span>{{ title }}</span>
       <span v-show="unit"> ( {{ unit }} ) </span>
       <span v-show="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
-      <span v-show="!rocketGlobal.edit && !noEditTypes.includes(type)" @click="editComponentConfig">
+      <span
+        v-show="!rocketGlobal.edit && !stateTopo.editInstanceDependencyMetrics && !noEditTypes.includes(type)"
+        @click="editComponentConfig"
+      >
         <rk-icon class="r edit" icon="keyboard_control" v-tooltip:bottom="{ content: $t('editConfig') }" />
       </span>
-      <span v-show="!rocketGlobal.edit && itemConfig.chartType === 'ChartTable'" @click="copyTable">
+      <span
+        v-show="!rocketGlobal.edit && stateTopo.editInstanceDependencyMetrics && itemConfig.chartType === 'ChartTable'"
+        @click="copyTable"
+      >
         <rk-icon class="r cp" icon="review-list" />
       </span>
       <rk-icon v-if="tips" class="r edit" icon="info_outline" v-tooltip:bottom="{ content: tips }" />
@@ -96,6 +102,7 @@ limitations under the License. -->
     @Mutation('rocketTopo/DELETE_TOPO_INSTANCE') private DELETE_TOPO_INSTANCE: any;
     @Mutation('rocketTopo/DELETE_TOPO_SERVICE') private DELETE_TOPO_SERVICE: any;
     @Mutation('rocketTopo/DELETE_TOPO_SERVICE_DEPENDENCY') private DELETE_TOPO_SERVICE_DEPENDENCY: any;
+    @Mutation('rocketTopo/DELETE_TOPO_INSTANCE_DEPENDENCY') private DELETE_TOPO_INSTANCE_DEPENDENCY: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
@@ -169,6 +176,7 @@ limitations under the License. -->
           return;
         }
         this.itemConfig = params[0].config;
+
         const { queryMetricType } = this.itemConfig;
         let data = params;
         if (queryMetricType === QueryTypes.ReadMetricsValue) {
@@ -363,6 +371,8 @@ limitations under the License. -->
         this.DELETE_TOPO_SERVICE(index);
       } else if (this.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) {
         this.DELETE_TOPO_SERVICE_DEPENDENCY(index);
+      } else if (this.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) {
+        this.DELETE_TOPO_INSTANCE_DEPENDENCY(index);
       } else {
         this.DELETE_COMP(index);
       }
