@@ -47,7 +47,7 @@ export default class TraceUtil {
           spanId: span.spanId - 1,
           parentSpanId: span.spanId - 2,
         };
-        if (index === -1 && !lodash.find(fixSpans, fixSpanKeyContent)) {
+        if (index === -1 &&  !lodash.find(fixSpans, fixSpanKeyContent) ) {
           fixSpans.push(
             {
               ...fixSpanKeyContent,
@@ -147,14 +147,15 @@ export default class TraceUtil {
       }
     });
     segmentIdGroup.forEach( (segmentId: string) => {
-      const currentSegment = segmentMap.get(segmentId)!.sort((a, b) => b.parentSpanId - a.parentSpanId);
-      currentSegment.forEach( ( curSegment: Span ) => {
-        const index = currentSegment.findIndex( (curSegment2: Span) => curSegment2.spanId === curSegment.parentSpanId);
+      const currentSegmentSet = segmentMap.get(segmentId)!.sort((a, b) => b.parentSpanId - a.parentSpanId);
+      currentSegmentSet.forEach( ( curSegment: Span ) => {
+        const index = currentSegmentSet.findIndex(
+          (curSegment2: Span) => curSegment2.spanId === curSegment.parentSpanId );
         if (index !== -1) {
-          if ((currentSegment[index].isBroken && currentSegment[index].parentSpanId === -1)
-            || !currentSegment[index].isBroken) {
-            currentSegment[index].children!.push(curSegment);
-            currentSegment[index].children!.sort((a, b) => a.spanId - b.spanId);
+          if ((currentSegmentSet[index].isBroken && currentSegmentSet[index].parentSpanId === -1)
+            || !currentSegmentSet[index].isBroken) {
+              currentSegmentSet[index].children!.push(curSegment);
+              currentSegmentSet[index].children!.sort((a, b) => a.spanId - b.spanId);
           }
         }
         if (curSegment.isBroken) {
@@ -165,14 +166,14 @@ export default class TraceUtil {
           curSegment.children!.concat(children);
         }
       });
-      segmentMap2.set(segmentId, currentSegment[currentSegment.length - 1]);
+      segmentMap2.set(segmentId, currentSegmentSet[currentSegmentSet.length - 1]);
     });
     segmentIdGroup.forEach( (segmentId: string) => {
       if (segmentMap2.get(segmentId)!.refs) {
         segmentMap2.get(segmentId)!.refs.forEach( (ref: Ref) => {
           if (ref.traceId === cureentTraceId) {
             this.traverseTree(segmentMap2.get(ref.parentSegmentId) as Span, ref.parentSpanId, ref.parentSegmentId,
-            segmentMap2.get(ref.parentSegmentId) as Span);
+            segmentMap2.get(segmentId) as Span);
           }
         });
       }
