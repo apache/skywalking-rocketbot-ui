@@ -57,16 +57,6 @@ limitations under the License. -->
     public list: any[] = [];
     public loading: boolean = true;
 
-    public created(): void {
-      this.loading = true;
-    }
-
-    public mounted(): void {
-      this.tableData = this.calculationDataforStatistics(TraceUtil.changeTree(this.data, this.traceId));
-      this.loading = false;
-      this.$eventBus.$on('TRACE-TABLE-LOADING', this, () => { this.loading = true; });
-    }
-
     @Watch('data')
     public onDataChanged(val: any, oldVal: any) {
       if ( !this.data.length ) {
@@ -122,6 +112,16 @@ limitations under the License. -->
         result.push({maxTime, minTime, avgTime, count, endpointName,  sumTime});
       }
       return result;
+    }
+
+    private created(): void {
+      this.loading = true;
+    }
+
+    private mounted(): void {
+      this.tableData = this.calculationDataforStatistics(TraceUtil.changeTree(this.data, this.traceId));
+      this.loading = false;
+      this.$eventBus.$on('TRACE-TABLE-LOADING', this, () => { this.loading = true; });
     }
   }
 </script>
