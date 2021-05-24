@@ -40,9 +40,7 @@ limitations under the License. -->
         </svg>
       </div>
       <a class="rk-btn mr-5 sm r" :class="{ ghost: displayMode !== 'statistics' }" @click="displayMode = 'statistics'">
-        <svg class="icon vm sm">
-          <use xlink:href="#statistics-bulleted"></use>
-        </svg>
+        <rk-icon icon="statistics-bulleted" />
         {{ $t('statistics') }}</a
       >
       <a class="rk-btn mr-5 sm r" :class="{ ghost: displayMode !== 'table' }" @click="displayMode = 'table'">
