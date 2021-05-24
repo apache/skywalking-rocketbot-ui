@@ -339,7 +339,6 @@ const mutations = {
       metricType: 'UNKNOWN',
     };
     state.topoServicesInstanceDependency[type][mode].push(comp);
-    console.log(state.topoServicesInstanceDependency);
     localStorage.setItem('topologyServicesInstanceDependency', JSON.stringify(state.topoServicesInstanceDependency));
   },
   [types.SET_ENDPOINT_DEPENDENCY](state: State, data: { calls: Call[]; nodes: Node[] }) {
@@ -386,7 +385,6 @@ const mutations = {
     state.editInstanceDependencyMetrics = isEdit;
   },
   [types.IMPORT_TREE_INSTANCE_DEPENDENCY](state: State, data: any) {
-    console.log(data);
     const keys = Object.keys(data);
     const modes: any = ['server', 'client'];
 

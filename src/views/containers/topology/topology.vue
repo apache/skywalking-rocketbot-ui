@@ -66,6 +66,7 @@ limitations under the License. -->
     TopoServiceMetricsConfig,
     TopoServiceDependencyMetricsConfig,
     TopoServiceInstanceDependencyMetricsConfig,
+    TopoEndpointDependencyMetricsConfig,
   } from './topo-metrics-template';
   import { Option } from '@/types/global';
 
