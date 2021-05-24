@@ -38,8 +38,7 @@ limitations under the License. -->
   import { Span, StatisticsSpan } from '@/types/trace';
   import TraceContainer from './trace-chart-table/trace-container.vue';
   import TraceUtil from '../trace/trace-util';
-  /* eslint-disable */
-  /* tslint:disable */
+
   @Component({
     components: {
       TraceContainer,
@@ -47,59 +46,70 @@ limitations under the License. -->
   })
 
   export default class TraceDetailStatisticsTable extends Vue {
+
     @Prop() public data!: Span[];
     @Prop() public traceId!: string;
     @Prop() public showBtnDetail!: boolean;
     @Prop() public HeaderType!: string;
 
     public tableData: StatisticsSpan[] = [];
-    public diaplay: boolean =true;
+    public diaplay: boolean = true;
     public list: any[] = [];
     public loading: boolean = true;
 
-    @Watch('data')
-    onDataChanged(val: any, oldVal: any) {
-      if (!this.data.length) {
-          this.tableData = [];
-          return;
-        }
-        this.tableData = this.calculationDataforStatistics(TraceUtil.changeTree(this.data,this.traceId));
-        this.loading = false;
+    public created(): void {
+      this.loading = true;
     }
 
-    private calculationDataforStatistics(data: Span[]): StatisticsSpan[]{
+    public mounted(): void {
+      this.tableData = this.calculationDataforStatistics(TraceUtil.changeTree(this.data, this.traceId));
+      this.loading = false;
+      this.$eventBus.$on('TRACE-TABLE-LOADING', this, () => { this.loading = true; });
+    }
+
+    @Watch('data')
+    public onDataChanged(val: any, oldVal: any) {
+      if ( !this.data.length ) {
+        this.tableData = [];
+        return;
+      }
+      this.tableData = this.calculationDataforStatistics(TraceUtil.changeTree(this.data, this.traceId));
+      this.loading = false;
+    }
+
+    private calculationDataforStatistics(data: Span[]): StatisticsSpan[] {
       this.list = TraceUtil.buildTraceDataList(data);
       let traceData: Span[] = [];
       const map = new Map();
-      for ( let child of data ){
+      for ( const child of data ) {
         traceData = traceData.concat(child.children || []);
       }
-      for (let element of traceData) {
-        let arr =  map.get(element.endpointName) || [];
+      for (const element of traceData) {
+        const arr =  map.get(element.endpointName) || [];
         arr.push(element);
-        map.set(element.endpointName,arr);
-      };
+        map.set(element.endpointName, arr);
+      }
       const result: StatisticsSpan[] = [];
-      for(let value of map.values()){
+      for (const value of map.values()) {
         let maxTime = 0;
         let minTime = 0;
         let sumTime = 0;
-        let count = value.length;
+        const count = value.length;
         let endpointName;
 
         // get each endpointName group maxTime,minTime,sumTime
-        for (let i = 0; i < value.length;i++) {
-          let element = value[i];
-          let a = element.endTime;
-          let b = element.startTime;
-          let duration = a - b;
-          //set default value
-          if(i == 0){
+        for (let i: number = 0; i < value.length; i++) {
+          const element = value[i];
+          const a = element.endTime;
+          const b = element.startTime;
+          const duration = a - b;
+          // set default value
+          if ( i === 0 ) {
             endpointName = element.endpointName;
             maxTime = duration;
             minTime = duration;
-          }else{
-            if (duration > maxTime){
+          } else {
+            if (duration > maxTime) {
               maxTime = duration;
             }
             if (duration < minTime) {
@@ -107,22 +117,11 @@ limitations under the License. -->
             }
           }
           sumTime = sumTime + duration;
-        };
-
-        let avgTime = count == 0 ? 0 :(sumTime / count);
+        }
+        const avgTime = count === 0 ? 0 : (sumTime / count);
         result.push({maxTime, minTime, avgTime, count, endpointName,  sumTime});
-      };
+      }
       return result;
-    }
-
-    public created(): void {
-      this.loading = true;
-    }
-
-    public mounted(): void{
-      this.tableData = this.calculationDataforStatistics(TraceUtil.changeTree(this.data,this.traceId));
-      this.loading = false;
-      this.$eventBus.$on('TRACE-TABLE-LOADING', this, ()=>{ this.loading = true });
     }
   }
 </script>

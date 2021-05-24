@@ -76,22 +76,21 @@ limitations under the License. -->
 
     public mounted(): void {
       if (this.type === 'statistics') {
-        /* Do nothing, consider the possibility of other types in the future, so use else to manual default process */
-      } else {
-        const drag: any = this.$refs.dragger;
-        drag.onmousedown = (event: any) => {
-          const diffX = event.clientX;
-          const copy = this.method;
-          document.onmousemove = (documentEvent) => {
-            const moveX = documentEvent.clientX - diffX;
-            this.method = copy + moveX;
-          };
-          document.onmouseup = () => {
-            document.onmousemove = null;
-            document.onmouseup = null;
-          };
-        };
+        return;
       }
+      const drag: any = this.$refs.dragger;
+      drag.onmousedown = (event: any) => {
+        const diffX = event.clientX;
+        const copy = this.method;
+        document.onmousemove = (documentEvent) => {
+          const moveX = documentEvent.clientX - diffX;
+          this.method = copy + moveX;
+        };
+        document.onmouseup = () => {
+          document.onmousemove = null;
+          document.onmouseup = null;
+        };
+      };
     }
 
     private sortStatistics(key: string): void {
