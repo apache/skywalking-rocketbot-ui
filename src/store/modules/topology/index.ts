@@ -38,6 +38,7 @@ export interface Call {
   target: string | any;
   id: string;
   detectPoints: string[];
+  type?: string;
 }
 interface Node {
   apdex: number;
@@ -90,7 +91,7 @@ export interface State {
   topoServicesDependency: { [key: string]: any[] };
   topoServicesInstanceDependency: { [key: string]: any[] };
   instanceDependencyMode: string;
-  editInstanceDependencyMetrics: boolean;
+  editDependencyMetrics: boolean;
   topoEndpointDependency: { [key: string]: any[] };
 }
 
@@ -128,7 +129,7 @@ const initState: State = {
   topoServicesDependency: {},
   topoServicesInstanceDependency: {},
   instanceDependencyMode: '',
-  editInstanceDependencyMetrics: false,
+  editDependencyMetrics: false,
   topoEndpointDependency: {},
 };
 
@@ -171,26 +172,6 @@ const mutations = {
   },
   [types.SET_SELECTED_ENDPOINT_CALL](state: State, data: Call) {
     state.selectedEndpointCall = data;
-  },
-  [types.SET_ENDPOINT_DEPENDENCY_METRICS](state: State, data: { [key: string]: any }) {
-    state.endpointDependencyMetrics.cpm = data.endpointRelationCpm
-      ? data.endpointRelationCpm.values.values.map((i: any) => i.value)
-      : [];
-    state.endpointDependencyMetrics.respTime = data.endpointRelationRespTime
-      ? data.endpointRelationRespTime.values.values.map((i: any) => i.value)
-      : [];
-    state.endpointDependencyMetrics.sla = data.endpointRelationSla
-      ? data.endpointRelationSla.values.values.map((i: any) => i.value)
-      : [];
-    state.endpointDependencyMetrics.percentile = {};
-    if (!data.endpointRelationPercentile) {
-      return;
-    }
-    for (const item of data.endpointRelationPercentile) {
-      state.endpointDependencyMetrics.percentile[PercentileItem[Number(item.label)]] = item.values.values.map(
-        (i: any) => i.value,
-      );
-    }
   },
   [types.SET_TOPO_ENDPOINT](state: State, data: any[]) {
     state.topoEndpoints = data;
@@ -239,6 +220,14 @@ const mutations = {
     state.topoServicesDependency[source.type][mode].splice(index, 1);
     window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
   },
+  [types.DELETE_TOPO_ENDPOINT_DEPENDENCY](state: State, index: number) {
+    if (!state.selectedEndpointCall) {
+      return;
+    }
+    const type = state.selectedEndpointCall.type || 'SpringMVC';
+    state.topoEndpointDependency[type].splice(index, 1);
+    localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
+  },
   [types.DELETE_TOPO_INSTANCE_DEPENDENCY](state: State, index: number) {
     const { sourceObj } = state.selectedInstanceCall || ({} as any);
     const type = sourceObj.type || 'SpringMVC';
@@ -256,6 +245,18 @@ const mutations = {
       ...params.values,
     };
     window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
+  },
+  [types.EDIT_ENDPOINT_DEPENDENCY_CONFIG](state: State, params: { values: any; index: number }) {
+    if (!state.selectedEndpointCall) {
+      return;
+    }
+    const type = state.selectedEndpointCall.type || 'SpringMVC';
+
+    state.topoEndpointDependency[type][params.index] = {
+      ...state.topoEndpointDependency[type][params.index],
+      ...params.values,
+    };
+    localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
   },
   [types.EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG](state: State, params: { values: any; index: number }) {
     const { source } = state.currentLink;
@@ -317,6 +318,21 @@ const mutations = {
     state.topoServices[state.currentNode.type].push(comp);
     window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
   },
+  [types.ADD_TOPO_ENDPOINT_DEPENDENCY_COMP](state: State) {
+    if (!state.selectedEndpointCall) {
+      return;
+    }
+    const type = state.selectedEndpointCall.type || 'SpringMVC';
+    const comp = {
+      width: 3,
+      title: 'Title',
+      height: 200,
+      entityType: 'EndpointRelation',
+      metricType: 'UNKNOWN',
+    };
+    state.topoEndpointDependency[type].push(comp);
+    window.localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
+  },
   [types.ADD_TOPO_SERVICE_DEPENDENCY_COMP](state: State) {
     const { source } = state.currentLink;
     const mode: any = state.mode ? 'server' : 'client';
@@ -354,13 +370,17 @@ const mutations = {
   },
   [types.SET_ENDPOINT_DEPENDENCY](state: State, data: { calls: Call[]; nodes: Node[] }) {
     state.endpointDependency = data;
+    state.selectedEndpointCall = null;
   },
   [types.SET_ENDPOINT_DEPTH](state: State, data: { key: number; label: string }) {
     state.currentEndpointDepth = data;
   },
   [types.SET_TOPO_SERVICE](state: State, data: any) {
     state.topoServices = data;
-    window.localStorage.setItem('topologyServices', JSON.stringify(data));
+    localStorage.setItem('topologyServices', JSON.stringify(data));
+  },
+  [types.EDIT_DEPENDENCY_METRICS](state: State, isEdit: boolean) {
+    state.editDependencyMetrics = isEdit;
   },
   [types.IMPORT_TREE_SERVICE](state: State, data: any) {
     const keys = Object.keys(data);
@@ -371,7 +391,7 @@ const mutations = {
         state.topoServices[key] = data[key];
       }
     }
-    window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
+    localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
   },
   [types.IMPORT_TREE_SERVICE_DEPENDENCY](state: State, data: any) {
     const keys = Object.keys(data);
@@ -392,8 +412,17 @@ const mutations = {
     }
     localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
   },
-  [types.SET_INSTANCE_DEPENDENCY_METRICS](state: State, isEdit: boolean) {
-    state.editInstanceDependencyMetrics = isEdit;
+  [types.IMPORT_TREE_ENDPOINT_DEPENDENCY](state: State, data: any) {
+    const keys = Object.keys(data);
+
+    for (const key of keys) {
+      if (state.topoEndpointDependency[key]) {
+        state.topoEndpointDependency[key].push(...data[key]);
+      } else {
+        state.topoEndpointDependency[key] = data[key];
+      }
+    }
+    localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
   },
   [types.IMPORT_TREE_INSTANCE_DEPENDENCY](state: State, data: any) {
     const keys = Object.keys(data);
@@ -760,17 +789,6 @@ const actions: ActionTree<State, any> = {
           }
           context.commit(types.SET_INSTANCE_DEPENDENCY, instanceDependency);
         });
-      });
-  },
-  GET_ENDPOINT_DEPENDENCY_METRICS(context: { commit: Commit; state: State }, params: EndpointDependencyConidition) {
-    return graph
-      .query('queryTopoEndpointDependencyMetrics')
-      .params(params)
-      .then((res: AxiosResponse) => {
-        if (!(res.data && res.data.data)) {
-          return;
-        }
-        context.commit(types.SET_ENDPOINT_DEPENDENCY_METRICS, res.data.data);
       });
   },
 };

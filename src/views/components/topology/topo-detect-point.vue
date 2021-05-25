@@ -157,6 +157,7 @@ limitations under the License. -->
     @Mutation('rocketTopo/IMPORT_TREE_SERVICE') private IMPORT_TREE_SERVICE: any;
     @Mutation('rocketTopo/IMPORT_TREE_SERVICE_DEPENDENCY') private IMPORT_TREE_SERVICE_DEPENDENCY: any;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
+    @Mutation('rocketTopo/EDIT_DEPENDENCY_METRICS') private EDIT_DEPENDENCY_METRICS: any;
 
     private isMini: boolean = true;
     private showInfoCount: number = 0;
@@ -187,6 +188,7 @@ limitations under the License. -->
     private clearInstance() {
       this.dialogTopoVisible = false;
       this.SET_SELECTED_INSTANCE_CALL(null);
+      this.EDIT_DEPENDENCY_METRICS(false);
     }
 
     private openInstanceModal() {

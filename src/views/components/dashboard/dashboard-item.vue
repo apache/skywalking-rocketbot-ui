@@ -15,20 +15,20 @@ limitations under the License. -->
 <template>
   <div class="rk-dashboard-item" :class="`g-sm-${width}`" :style="`height:${height}px;`" v-if="itemConfig.entityType">
     <div class="rk-dashboard-item-title ell">
-      <span v-show="rocketGlobal.edit || stateTopo.editInstanceDependencyMetrics" @click="deleteItem(index)">
+      <span v-show="rocketGlobal.edit || stateTopo.editDependencyMetrics" @click="deleteItem(index)">
         <rk-icon class="r edit red" icon="file-deletion" />
       </span>
       <span>{{ title }}</span>
       <span v-show="unit"> ( {{ unit }} ) </span>
       <span v-show="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
       <span
-        v-show="!rocketGlobal.edit && !stateTopo.editInstanceDependencyMetrics && !noEditTypes.includes(type)"
+        v-show="!rocketGlobal.edit && !stateTopo.editDependencyMetrics && !noEditTypes.includes(type)"
         @click="editComponentConfig"
       >
         <rk-icon class="r edit" icon="keyboard_control" v-tooltip:bottom="{ content: $t('editConfig') }" />
       </span>
       <span
-        v-show="!rocketGlobal.edit && stateTopo.editInstanceDependencyMetrics && itemConfig.chartType === 'ChartTable'"
+        v-show="!rocketGlobal.edit && stateTopo.editDependencyMetrics && itemConfig.chartType === 'ChartTable'"
         @click="copyTable"
       >
         <rk-icon class="r cp" icon="review-list" />
@@ -38,7 +38,7 @@ limitations under the License. -->
     <div class="rk-dashboard-item-body" ref="chartBody">
       <div style="height:100%;width:100%">
         <component
-          :is="rocketGlobal.edit || stateTopo.editInstanceDependencyMetrics ? 'ChartEdit' : itemConfig.chartType"
+          :is="rocketGlobal.edit || stateTopo.editDependencyMetrics ? 'ChartEdit' : itemConfig.chartType"
           ref="chart"
           :item="itemConfig"
           :index="index"
@@ -103,6 +103,7 @@ limitations under the License. -->
     @Mutation('rocketTopo/DELETE_TOPO_SERVICE') private DELETE_TOPO_SERVICE: any;
     @Mutation('rocketTopo/DELETE_TOPO_SERVICE_DEPENDENCY') private DELETE_TOPO_SERVICE_DEPENDENCY: any;
     @Mutation('rocketTopo/DELETE_TOPO_INSTANCE_DEPENDENCY') private DELETE_TOPO_INSTANCE_DEPENDENCY: any;
+    @Mutation('rocketTopo/DELETE_TOPO_ENDPOINT_DEPENDENCY') private DELETE_TOPO_ENDPOINT_DEPENDENCY: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
@@ -370,6 +371,8 @@ limitations under the License. -->
         this.DELETE_TOPO_SERVICE_DEPENDENCY(index);
       } else if (this.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) {
         this.DELETE_TOPO_INSTANCE_DEPENDENCY(index);
+      } else if (this.type === TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) {
+        this.DELETE_TOPO_ENDPOINT_DEPENDENCY(index);
       } else {
         this.DELETE_COMP(index);
       }
@@ -422,6 +425,12 @@ limitations under the License. -->
         return;
       }
       if (
+        this.rocketOption.updateDashboard.key.includes(TopologyType.TOPOLOGY_SERVICE) &&
+        this.itemConfig.entityType !== EntityType[0].key
+      ) {
+        return;
+      }
+      if (
         this.rocketOption.updateDashboard.key.includes(TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) &&
         this.itemConfig.entityType !== EntityType[4].key
       ) {
@@ -430,6 +439,12 @@ limitations under the License. -->
       if (
         this.rocketOption.updateDashboard.key.includes(TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) &&
         this.itemConfig.entityType !== EntityType[5].key
+      ) {
+        return;
+      }
+      if (
+        this.rocketOption.updateDashboard.key.includes(TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) &&
+        this.itemConfig.entityType !== EntityType[6].key
       ) {
         return;
       }
@@ -443,16 +458,17 @@ limitations under the License. -->
     }
     @Watch('rocketGlobal.edit')
     private watchRerender() {
-      if (this.stateTopo.editInstanceDependencyMetrics) {
+      if (this.stateTopo.editDependencyMetrics) {
         return;
       }
       this.chartRender();
     }
-    @Watch('stateTopo.editInstanceDependencyMetrics')
+    @Watch('stateTopo.editDependencyMetrics')
     private watchDependency() {
       if (
-        this.type !== TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY ||
-        this.stateTopo.editInstanceDependencyMetrics
+        (this.type !== TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY &&
+          this.type !== TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) ||
+        this.stateTopo.editDependencyMetrics
       ) {
         return;
       }

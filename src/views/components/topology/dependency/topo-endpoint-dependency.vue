@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div class="rk-endpoint-dependency">
+  <div class="rk-endpoint-dependency" :style="`height: ${height}px`">
     <div class="endpoint-dependency-chart">
       <DependencySankey
         v-if="stateTopo.endpointDependency.nodes.length"
@@ -23,6 +23,32 @@ limitations under the License. -->
       <div v-else class="endpoint-dependency-empty">
         No Endpoint Dependency
       </div>
+    </div>
+    <div class="mb-5 header" v-if="stateTopo.selectedEndpointCall">
+      <span class="topo-tool-btn" @click="handleSetEdit">
+        <rk-icon
+          class="lg rk-icon"
+          :style="`color:${stateTopo.editDependencyMetrics ? '#ffc107' : ''}`"
+          :icon="stateTopo.editDependencyMetrics ? 'lock-open' : 'lock'"
+          v-tooltip:bottom="{ content: stateTopo.editDependencyMetrics ? 'view' : 'edit' }"
+        />
+      </span>
+      <span class="topo-tool-btn" v-tooltip:bottom="{ content: 'import' }">
+        <input
+          id="endpoint-tool-bar-file"
+          type="file"
+          name="file"
+          title=""
+          accept=".json"
+          @change="importEndpointDependencyMetricsTemplate"
+        />
+        <label for="endpoint-tool-bar-file">
+          <rk-icon class="lg import" icon="folder_open" />
+        </label>
+      </span>
+      <span class="topo-tool-btn" @click="exportTopoEndpointDependencyMetrics">
+        <rk-icon class="lg" icon="save_alt" v-tooltip:bottom="{ content: 'export' }" />
+      </span>
     </div>
     <div v-if="stateTopo.selectedEndpointCall" class="endpoint-dependency-metrics scroll_bar_style">
       <DashboardItem
@@ -36,24 +62,26 @@ limitations under the License. -->
         :rocketOption="stateDashboardOption"
         :templateType="templateType"
       />
-      <!-- <div
-        v-show="stateTopo.editInstanceDependencyMetrics"
+      <div
+        v-show="stateTopo.editDependencyMetrics"
         class="rk-add-metric-item g-sm-3"
-        @click="ADD_TOPO_INSTANCE_DEPENDENCY_COMP"
+        @click="ADD_TOPO_ENDPOINT_DEPENDENCY_COMP"
       >
         + Add An Item
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
 <script lang="ts">
   import { Vue, Component, Watch } from 'vue-property-decorator';
-  import { State, Action, Getter, Mutation } from 'vuex-class';
+  import { State, Getter, Mutation } from 'vuex-class';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketbotGlobal } from '@/store/modules/global';
   import { State as topoState, EndpointDependencyConidition, Call, Duration } from '@/store/modules/topology';
   import DependencySankey from '../chart/dependency-sankey.vue';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
+  import { readFile } from '@/utils/readFile';
+  import { saveFile } from '@/utils/saveFile';
 
   @Component({
     components: {
@@ -69,10 +97,17 @@ limitations under the License. -->
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @Mutation('rocketTopo/SET_SELECTED_ENDPOINT_CALL') private SET_SELECTED_ENDPOINT_CALL: any;
     @Mutation('SET_ENDPOINT_DEPENDENCY') private SET_ENDPOINT_DEPENDENCY: any;
-    @Action('rocketTopo/GET_ENDPOINT_DEPENDENCY_METRICS') private GET_ENDPOINT_DEPENDENCY_METRICS: any;
+    @Mutation('rocketTopo/EDIT_DEPENDENCY_METRICS') private EDIT_DEPENDENCY_METRICS: any;
+    @Mutation('rocketTopo/IMPORT_TREE_ENDPOINT_DEPENDENCY') private IMPORT_TREE_ENDPOINT_DEPENDENCY: any;
+    @Mutation('rocketTopo/ADD_TOPO_ENDPOINT_DEPENDENCY_COMP') private ADD_TOPO_ENDPOINT_DEPENDENCY_COMP: any;
 
     private templateType: string = '';
     private topoEndpointDependencyMetrics: any = [];
+    private height = 500;
+
+    private beforeMount() {
+      this.height = document.body.clientHeight - 133;
+    }
 
     private showEndpointMetrics(data: EndpointDependencyConidition & Call) {
       this.SET_SELECTED_ENDPOINT_CALL(data);
@@ -88,8 +123,35 @@ limitations under the License. -->
       this.topoEndpointDependencyMetrics = this.stateTopo.topoEndpointDependency[this.templateType];
     }
 
+    private handleSetEdit() {
+      this.EDIT_DEPENDENCY_METRICS(!this.stateTopo.editDependencyMetrics);
+    }
+
+    private async importEndpointDependencyMetricsTemplate(event: Event) {
+      try {
+        const data: any = await readFile(event);
+        if (!Array.isArray(data)) {
+          throw new Error();
+        }
+        this.IMPORT_TREE_ENDPOINT_DEPENDENCY(data[0]);
+        const el: any = document.getElementById('endpoint-tool-bar-file');
+        el!.value = '';
+      } catch (e) {
+        this.$modal.show('dialog', { text: 'ERROR' });
+      }
+    }
+
+    private exportTopoEndpointDependencyMetrics() {
+      const group = this.stateTopo.topoEndpointDependency;
+      const name = 'topo_endpoint_dependency_metrics.json';
+
+      saveFile([group], name);
+    }
+
     @Watch('stateTopo.endpointDependency.nodes')
-    private updateMetrics() {}
+    private updateMetrics() {
+      this.topoEndpointDependencyMetrics = [];
+    }
 
     private beforeDestroy() {
       this.stateTopo.endpointDependency = {
@@ -100,14 +162,13 @@ limitations under the License. -->
   }
 </script>
 <style lang="scss" scoped>
+  @import url('../styles/common.scss');
   .rk-endpoint-dependency {
     background: #333840;
-    height: 100%;
     display: flex;
     flex-direction: column;
-    overflow: auto;
     .endpoint-dependency-chart {
-      height: 80%;
+      height: 75%;
       min-height: 500px;
     }
     .endpoint-dependency-empty {
@@ -118,7 +179,22 @@ limitations under the License. -->
     }
   }
   .endpoint-dependency-metrics {
-    // display: flex;
-    // flex-direction: row;
+    background: #333840;
+    height: 25%;
+    overflow: auto;
+  }
+  .header {
+    z-index: 1;
+  }
+  #endpoint-tool-bar-file {
+    display: none;
+  }
+  .topo-tool-btn {
+    cursor: pointer;
+    color: #fff;
+    margin-right: 5px;
+  }
+  .rk-add-metric-item {
+    color: #eee;
   }
 </style>

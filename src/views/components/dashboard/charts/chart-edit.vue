@@ -322,6 +322,7 @@ limitations under the License. -->
     @Mutation('rocketTopo/EDIT_TOPO_SERVICE_CONFIG') private EDIT_TOPO_SERVICE_CONFIG: any;
     @Mutation('rocketTopo/EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG') private EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG: any;
     @Mutation('rocketTopo/EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG') private EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG: any;
+    @Mutation('rocketTopo/EDIT_ENDPOINT_DEPENDENCY_CONFIG') private EDIT_ENDPOINT_DEPENDENCY_CONFIG: any;
     @Action('GET_ITEM_SERVICES') private GET_ITEM_SERVICES: any;
     @Action('GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
     @Action('GET_ITEM_INSTANCES') private GET_ITEM_INSTANCES: any;
@@ -393,6 +394,8 @@ limitations under the License. -->
         this.EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG(params);
       } else if (this.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) {
         this.EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG(params);
+      } else if (this.type === TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) {
+        this.EDIT_ENDPOINT_DEPENDENCY_CONFIG(params);
       } else {
         this.EDIT_COMP_CONFIG(params);
       }

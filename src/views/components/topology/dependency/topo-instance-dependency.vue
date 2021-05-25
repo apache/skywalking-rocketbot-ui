@@ -41,9 +41,9 @@ limitations under the License. -->
           <span class="topo-tool-btn" @click="handleSetEdit">
             <rk-icon
               class="lg rk-icon"
-              :style="`color:${stateTopo.editInstanceDependencyMetrics ? '#ffc107' : ''}`"
-              :icon="stateTopo.editInstanceDependencyMetrics ? 'lock-open' : 'lock'"
-              v-tooltip:bottom="{ content: stateTopo.editInstanceDependencyMetrics ? 'view' : 'edit' }"
+              :style="`color:${stateTopo.editDependencyMetrics ? '#ffc107' : ''}`"
+              :icon="stateTopo.editDependencyMetrics ? 'lock-open' : 'lock'"
+              v-tooltip:bottom="{ content: stateTopo.editDependencyMetrics ? 'view' : 'edit' }"
             />
           </span>
           <span class="topo-tool-btn" v-tooltip:bottom="{ content: 'import' }">
@@ -81,7 +81,7 @@ limitations under the License. -->
             :templateMode="stateTopo.instanceDependencyMode"
           />
           <div
-            v-show="stateTopo.editInstanceDependencyMetrics"
+            v-show="stateTopo.editDependencyMetrics"
             class="rk-add-metric-item g-sm-3"
             @click="ADD_TOPO_INSTANCE_DEPENDENCY_COMP"
           >
@@ -120,7 +120,7 @@ limitations under the License. -->
     @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL') private SET_SELECTED_INSTANCE_CALL: any;
     @Mutation('SET_SERVICE_INSTANCE_DEPENDENCY') private SET_SERVICE_INSTANCE_DEPENDENCY: any;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
-    @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY_METRICS') private SET_INSTANCE_DEPENDENCY_METRICS: any;
+    @Mutation('rocketTopo/EDIT_DEPENDENCY_METRICS') private EDIT_DEPENDENCY_METRICS: any;
     @Mutation('rocketTopo/ADD_TOPO_INSTANCE_DEPENDENCY_COMP') private ADD_TOPO_INSTANCE_DEPENDENCY_COMP: any;
     @Mutation('rocketTopo/IMPORT_TREE_INSTANCE_DEPENDENCY') private IMPORT_TREE_INSTANCE_DEPENDENCY: any;
 
@@ -164,7 +164,7 @@ limitations under the License. -->
       this.serviceInstanceDependencyComps = this.stateTopo.topoServicesInstanceDependency[this.templateType][mode];
     }
     private handleSetEdit() {
-      this.SET_INSTANCE_DEPENDENCY_METRICS(!this.stateTopo.editInstanceDependencyMetrics);
+      this.EDIT_DEPENDENCY_METRICS(!this.stateTopo.editDependencyMetrics);
     }
     private async importInstanceDependencyMetricsTemplate(event: Event) {
       try {

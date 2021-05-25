@@ -92,7 +92,7 @@ limitations under the License. -->
     @Mutation('rocketTopo/SET_TOPO_SERVICE') private SET_TOPO_SERVICE: any;
     @Mutation('rocketTopo/SET_TOPO_SERVICE_DEPENDENCY') private SET_TOPO_SERVICE_DEPENDENCY: any;
     @Mutation('rocketTopo/SET_TOPO_SERVICE_INSTANCE_DEPENDENCY') private SET_TOPO_SERVICE_INSTANCE_DEPENDENCY: any;
-    @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY_METRICS') private SET_INSTANCE_DEPENDENCY_METRICS: any;
+    @Mutation('rocketTopo/EDIT_DEPENDENCY_METRICS') private EDIT_DEPENDENCY_METRICS: any;
     @Mutation('rocketTopo/SET_TOPO_ENDPOINT_DEPENDENCY') private SET_TOPO_ENDPOINT_DEPENDENCY: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
@@ -236,7 +236,7 @@ limitations under the License. -->
       this.CLEAR_TOPO_INFO();
       this.CLEAR_TOPO();
       this.SET_EDIT(false);
-      this.SET_INSTANCE_DEPENDENCY_METRICS(false);
+      this.EDIT_DEPENDENCY_METRICS(false);
     }
   }
 </script>

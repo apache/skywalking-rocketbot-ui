@@ -56,7 +56,6 @@ limitations under the License. -->
     @Getter('durationTime') private durationTime: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
-    @Mutation('rocketTopo/SET_ENDPOINT_DEPENDENCY_METRICS') private SET_ENDPOINT_DEPENDENCY_METRICS: any;
     @Mutation('rocketTopo/SET_ENDPOINT_DEPTH') private SET_ENDPOINT_DEPTH: any;
     @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
@@ -78,7 +77,6 @@ limitations under the License. -->
     private selectEndpoint(i: any) {
       this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
       this.GET_ALL_ENDPOINT_DEPENDENCY({ endpointIds: [i.key], duration: this.durationTime });
-      this.SET_ENDPOINT_DEPENDENCY_METRICS({ respTime: [], sla: [], cpm: [], percentile: {} });
     }
 
     private selectDepth(i: { key: number; label: string }) {
@@ -87,8 +85,6 @@ limitations under the License. -->
         endpointIds: [this.stateDashboardOption.currentEndpoint.key],
         duration: this.durationTime,
       });
-
-      this.SET_ENDPOINT_DEPENDENCY_METRICS({ respTime: [], sla: [], cpm: [], percentile: {} });
     }
 
     private beforeDestroy() {
