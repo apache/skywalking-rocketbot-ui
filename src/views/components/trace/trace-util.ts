@@ -1,3 +1,4 @@
+import { CalculationType } from './../dashboard/charts/constant';
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -15,7 +16,7 @@
  * limitations under the License.
  */
 
-import { Ref, Span } from '@/types/trace';
+import { Ref, Span, StatisticsSpan, StatisticsGroupRef, TraceTreeRef } from '@/types/trace';
 import lodash from 'lodash';
 
 export default class TraceUtil {
@@ -23,13 +24,60 @@ export default class TraceUtil {
     return Array.from(new Set(data.map((span: Span) => span.serviceCode)));
   }
 
-  public static changeTree(data: Span[], cureentTraceId: string): any[] {
-    if (data.length === 0) {
-      return [];
-    }
+  public static changeTree(data: Span[], cureentTraceId: string) {
     const segmentIdList: Span[] = [];
-    const segmentMap: Map<string, Span[]> = new Map();
-    const segmentMap2: Map<string, Span> = new Map();
+    const traceTreeRef = this.changeTreeCore(data, cureentTraceId);
+    traceTreeRef.segmentIdGroup.forEach( (segmentId: string) => {
+      if (traceTreeRef.segmentMap.get(segmentId)!.refs) {
+        traceTreeRef.segmentMap.get(segmentId)!.refs.forEach( (ref: Ref) => {
+          if (ref.traceId === cureentTraceId) {
+            this.traverseTree(traceTreeRef.segmentMap.get(ref.parentSegmentId) as Span,
+            ref.parentSpanId, ref.parentSegmentId, traceTreeRef.segmentMap.get(segmentId) as Span);
+          }
+        });
+      }
+    });
+    // set a breakpoint at this line
+    traceTreeRef.segmentMap.forEach((value , key) => {
+      if ( value!.refs.length === 0 ) {
+        segmentIdList.push(value as Span);
+      }
+    });
+    segmentIdList.forEach( (segmentId: Span) => {
+      this.collapse(segmentId);
+    });
+    return segmentIdList;
+  }
+
+  public static changeStatisticsTree(data: Span[], cureentTraceId: string): Map<string, Span[]> {
+    const result = new Map<string, Span[]>();
+    const traceTreeRef = this.changeTreeCore(data, cureentTraceId);
+    traceTreeRef.segmentMap.forEach((span, segmentId) => {
+      const groupRef = span.endpointName + ':' + span.type;
+      if ( span.children && span.children.length > 0 ) {
+        this.calculationChildren(span.children, result);
+        this.collapse(span);
+      }
+      if (result.get(groupRef) === undefined ) {
+        result.set(groupRef, []);
+        result.get(groupRef)!.push(span);
+      } else {
+        result.get(groupRef)!.push(span);
+      }
+    });
+    return result;
+  }
+
+  private static changeTreeCore(data: Span[], cureentTraceId: string): TraceTreeRef {
+    // set a breakpoint at this line
+    if (data.length === 0) {
+      return {
+        segmentMap: new Map(),
+        segmentIdGroup: [],
+      };
+    }
+    const tempMap: Map<string, Span[]> = new Map();
+    const segmentMap: Map<string, Span> = new Map();
     const segmentIdGroup: string[] = [];
     const fixSpans: Span[] = [];
     const segmentHeaders: Span[] = [];
@@ -40,7 +88,6 @@ export default class TraceUtil {
         const index = data.findIndex( (patchSpan: Span) => {
           return (patchSpan.segmentId === span.segmentId && patchSpan.spanId === (span.spanId - 1));
         });
-
         const fixSpanKeyContent = {
           traceId: span.traceId,
           segmentId: span.segmentId,
@@ -138,16 +185,16 @@ export default class TraceUtil {
     [...fixSpans, ...data].forEach( (fixSpan: Span) => {
       fixSpan.label = fixSpan.endpointName || 'no operation name';
       fixSpan.children = [];
-      if (segmentMap.get(fixSpan.segmentId) === undefined ) {
+      if (tempMap.get(fixSpan.segmentId) === undefined ) {
         segmentIdGroup.push(fixSpan.segmentId);
-        segmentMap.set(fixSpan.segmentId, []);
-        segmentMap.get(fixSpan.segmentId)!.push(fixSpan);
+        tempMap.set(fixSpan.segmentId, []);
+        tempMap.get(fixSpan.segmentId)!.push(fixSpan);
       } else {
-        segmentMap.get(fixSpan.segmentId)!.push(fixSpan);
+        tempMap.get(fixSpan.segmentId)!.push(fixSpan);
       }
     });
     segmentIdGroup.forEach( (segmentId: string) => {
-      const currentSegmentSet = segmentMap.get(segmentId)!.sort((a, b) => b.parentSpanId - a.parentSpanId);
+      const currentSegmentSet = tempMap.get(segmentId)!.sort((a, b) => b.parentSpanId - a.parentSpanId);
       currentSegmentSet.forEach( ( curSegment: Span ) => {
         const index = currentSegmentSet.findIndex(
           (curSegment2: Span) => curSegment2.spanId === curSegment.parentSpanId );
@@ -166,27 +213,12 @@ export default class TraceUtil {
           curSegment.children!.concat(children);
         }
       });
-      segmentMap2.set(segmentId, currentSegmentSet[currentSegmentSet.length - 1]);
+      segmentMap.set(segmentId, currentSegmentSet[currentSegmentSet.length - 1]);
     });
-    segmentIdGroup.forEach( (segmentId: string) => {
-      if (segmentMap2.get(segmentId)!.refs) {
-        segmentMap2.get(segmentId)!.refs.forEach( (ref: Ref) => {
-          if (ref.traceId === cureentTraceId) {
-            this.traverseTree(segmentMap2.get(ref.parentSegmentId) as Span, ref.parentSpanId, ref.parentSegmentId,
-            segmentMap2.get(segmentId) as Span);
-          }
-        });
-      }
-    });
-    segmentMap2.forEach((value , key) => {
-      if ( value!.refs.length === 0 ) {
-        segmentIdList.push(value as Span);
-      }
-    });
-    segmentIdList.forEach( (segmentId: Span) => {
-      this.collapse(segmentId);
-    });
-    return segmentIdList;
+    return {
+      segmentMap,
+      segmentIdGroup,
+    };
   }
 
   private static collapse(span: Span) {
@@ -209,10 +241,51 @@ export default class TraceUtil {
       return;
     }
     if (node.children && node.children.length > 0) {
-      for (const item of node.children) {
-        this.traverseTree(item, spanId, segmentId, childNode);
+      for (const grandchild of node.children) {
+        this.traverseTree(grandchild, spanId, segmentId, childNode);
       }
     }
+  }
+
+  private static getSpanGroupData(groupspans: Span[], groupRef: StatisticsGroupRef): StatisticsSpan {
+    let maxTime = 0;
+    let minTime = 0;
+    let sumTime = 0;
+    const count = groupspans.length;
+    groupspans.forEach( (groupspan: Span) => {
+      const duration = groupspan.dur || 0;
+      if ( duration > maxTime) {
+        maxTime = duration;
+      }
+      if (duration < minTime) {
+        minTime = duration;
+      }
+      sumTime = sumTime + duration;
+    });
+    const avgTime = count === 0 ? 0 : (sumTime / count);
+    return {
+      groupRef,
+      maxTime,
+      minTime,
+      sumTime,
+      avgTime,
+      count,
+    };
+  }
+
+  private static calculationChildren(nodes: Span[], result: Map<string, Span[]>): void  {
+    nodes.forEach( (node: Span) => {
+      const groupRef = node.endpointName + ':' + node.type;
+      if ( node.children && node.children.length > 0 ) {
+        this.calculationChildren(node.children, result);
+      }
+      if (result.get(groupRef) === undefined ) {
+        result.set(groupRef, []);
+        result.get(groupRef)!.push(node);
+      } else {
+        result.get(groupRef)!.push(node);
+      }
+    });
   }
 }
 

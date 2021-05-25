@@ -59,11 +59,21 @@ export interface Ref{
   type: string;
 }
 
-export class StatisticsSpan{
+export interface StatisticsSpan{
+  groupRef: StatisticsGroupRef;
   maxTime: number;
   minTime: number;
+  sumTime: number;
   avgTime: number;
   count: number;
-  endpointName: number;
-  sumTime: number;
+}
+
+export interface StatisticsGroupRef{
+  endpointName: string;
+  type: string;
+}
+
+export class TraceTreeRef {
+  segmentMap: Map<string, Span>;
+  segmentIdGroup: string[];
 }

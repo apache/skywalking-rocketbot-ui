@@ -35,7 +35,7 @@ limitations under the License. -->
 
 <script lang="ts">
   import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-  import { Span, StatisticsSpan } from '@/types/trace';
+  import { Span, StatisticsSpan, StatisticsGroupRef } from '@/types/trace';
   import TraceContainer from './trace-chart-table/trace-container.vue';
   import TraceUtil from '../trace/trace-util';
 
@@ -63,63 +63,54 @@ limitations under the License. -->
         this.tableData = [];
         return;
       }
-      this.tableData = this.calculationDataforStatistics(TraceUtil.changeTree(this.data, this.traceId));
+      this.tableData = this.calculationDataforStatistics(this.data);
       this.loading = false;
     }
 
     private calculationDataforStatistics(data: Span[]): StatisticsSpan[] {
       this.list = TraceUtil.buildTraceDataList(data);
-      let traceData: Span[] = [];
-      const map = new Map();
-      for ( const child of data ) {
-        traceData = traceData.concat(child.children || []);
-      }
-      for (const element of traceData) {
-        const arr =  map.get(element.endpointName) || [];
-        arr.push(element);
-        map.set(element.endpointName, arr);
-      }
       const result: StatisticsSpan[] = [];
-      for (const value of map.values()) {
-        let maxTime = 0;
-        let minTime = 0;
-        let sumTime = 0;
-        const count = value.length;
-        let endpointName;
-
-        // get each endpointName group maxTime,minTime,sumTime
-        for (let i: number = 0; i < value.length; i++) {
-          const element = value[i];
-          const a = element.endTime;
-          const b = element.startTime;
-          const duration = a - b;
-          // set default value
-          if ( i === 0 ) {
-            endpointName = element.endpointName;
-            maxTime = duration;
-            minTime = duration;
-          } else {
-            if (duration > maxTime) {
-              maxTime = duration;
-            }
-            if (duration < minTime) {
-              minTime = duration;
-            }
-          }
-          sumTime = sumTime + duration;
-        }
-        const avgTime = count === 0 ? 0 : (sumTime / count);
-        result.push({maxTime, minTime, avgTime, count, endpointName,  sumTime});
-      }
+      const map = TraceUtil.changeStatisticsTree(data, this.traceId);
+      map.forEach( (nodes, nodeKey) => {
+        const nodeKeyData = nodeKey.split(':');
+        result.push( this.getSpanGroupData( nodes, { endpointName: nodeKeyData[0], type: nodeKeyData[1] }));
+      });
       return result;
     }
+
+    private getSpanGroupData(groupspans: Span[], groupRef: StatisticsGroupRef): StatisticsSpan {
+      let maxTime = 0;
+      let minTime = 0;
+      let sumTime = 0;
+      const count = groupspans.length;
+      groupspans.forEach( (groupspan: Span) => {
+        const duration = groupspan.dur || 0;
+        if ( duration > maxTime) {
+          maxTime = duration;
+        }
+        if (duration < minTime) {
+          minTime = duration;
+        }
+        sumTime = sumTime + duration;
+      });
+      const avgTime = count === 0 ? 0 : (sumTime / count);
+      return {
+        groupRef,
+        maxTime,
+        minTime,
+        sumTime,
+        avgTime,
+        count,
+      };
+    }
+
 
     private created(): void {
       this.loading = true;
     }
 
     private mounted(): void {
-      this.tableData = this.calculationDataforStatistics(TraceUtil.changeTree(this.data, this.traceId));
+      this.tableData = this.calculationDataforStatistics(this.data);
       this.loading = false;
       this.$eventBus.$on('TRACE-TABLE-LOADING', this, () => { this.loading = true; });
     }

@@ -16,22 +16,27 @@ limitations under the License. -->
 <template>
   <div v-if="type === 'statistics'">
     <div :class="['trace-item']" ref="traceItem">
-      <div :class="['method']" :style="{ 'text-indent': 10 + 'px', width: `${method}px` }">
-        <span v-tooltip:bottom="{ content: data.endpointName, popperCls: ['trace-table-tooltip'] }">
-          {{ data.endpointName }}
+      <div :class="['method']">
+        <span v-tooltip:bottom="{ content: data.groupRef.endpointName, popperCls: ['trace-table-tooltip'] }">
+          {{ data.groupRef.endpointName }}
+        </span>
+      </div>
+      <div :class="['type']">
+        <span v-tooltip:bottom="{ content: data.groupRef.type, popperCls: ['trace-table-tooltip'] }">
+          {{ data.groupRef.type }}
         </span>
       </div>
       <div class="max-time">
         {{ data.maxTime }}
-      </div>
-      <div class="avg-time">
-        {{ parseInt(data.avgTime) }}
       </div>
       <div class="min-time">
         {{ data.minTime }}
       </div>
       <div class="sum-time">
         {{ data.sumTime }}
+      </div>
+      <div class="avg-time">
+        {{ parseInt(data.avgTime) }}
       </div>
       <div class="count">
         {{ data.count }}
