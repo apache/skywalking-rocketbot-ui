@@ -93,6 +93,7 @@ limitations under the License. -->
     @Mutation('rocketTopo/SET_TOPO_SERVICE_DEPENDENCY') private SET_TOPO_SERVICE_DEPENDENCY: any;
     @Mutation('rocketTopo/SET_TOPO_SERVICE_INSTANCE_DEPENDENCY') private SET_TOPO_SERVICE_INSTANCE_DEPENDENCY: any;
     @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY_METRICS') private SET_INSTANCE_DEPENDENCY_METRICS: any;
+    @Mutation('rocketTopo/SET_TOPO_ENDPOINT_DEPENDENCY') private SET_TOPO_ENDPOINT_DEPENDENCY: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
 
@@ -134,12 +135,19 @@ limitations under the License. -->
 
         this.SET_TOPO_SERVICE_INSTANCE_DEPENDENCY(topoServiceInstanceDependency);
       }
+      if (localStorage.getItem('topologyEndpointDependency')) {
+        const serviceEndpointComps: string = `${localStorage.getItem('topologyEndpointDependency')}`;
+        const topoEndpointDependency = serviceEndpointComps ? JSON.parse(serviceEndpointComps) : [];
+
+        this.SET_TOPO_ENDPOINT_DEPENDENCY(topoEndpointDependency);
+      }
       if (
         localStorage.getItem('topologyServices') &&
         localStorage.getItem('topologyInstances') &&
         localStorage.getItem('topologyEndpoints') &&
         localStorage.getItem('topologyServicesDependency') &&
-        localStorage.getItem('topologyServicesInstanceDependency')
+        localStorage.getItem('topologyServicesInstanceDependency') &&
+        localStorage.getItem('topologyEndpointDependency')
       ) {
         return;
       }
@@ -193,6 +201,13 @@ limitations under the License. -->
             // const topoServiceInstanceDependency = JSON.parse(serviceInstanceDependencyTemplate.configuration) || [];
             // this.SET_TOPO_SERVICE_INSTANCE_DEPENDENCY(topoServiceInstanceDependency);
             this.SET_TOPO_SERVICE_INSTANCE_DEPENDENCY(TopoServiceInstanceDependencyMetricsConfig.configuration);
+          }
+          if (!localStorage.getItem('topologyEndpointDependency')) {
+            // const serviceEndpointDependencyTemplate = allTemplates.filter((item: any) =>
+            //   item.type === TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY && item.activated)[0] || {};
+            // const topoEndpointDependency = JSON.parse(serviceEndpointDependencyTemplate.configuration) || [];
+            // this.SET_TOPO_ENDPOINT_DEPENDENCY(topoEndpointDependency);
+            this.SET_TOPO_ENDPOINT_DEPENDENCY(TopoEndpointDependencyMetricsConfig.configuration);
           }
         },
       );

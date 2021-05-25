@@ -24,67 +24,72 @@ limitations under the License. -->
         No Endpoint Dependency
       </div>
     </div>
-    <div class="endpoint-dependency-metrics">
-      <div v-if="respTime.length">
-        <TopoChart :data="respTime" :intervalTime="intervalTime" :title="$t('avgResponseTime')" unit="ms" />
-      </div>
-      <div v-if="cpm.length">
-        <TopoChart :data="cpm" :intervalTime="intervalTime" :title="$t('avgThroughput')" unit="cpm" />
-      </div>
-      <div v-if="sla.length">
-        <TopoChart :data="sla" :intervalTime="intervalTime" :precent="true" :title="$t('avgSLA')" unit="" />
-      </div>
-      <div v-if="percentile.p50">
-        <ChartLine :data="percentile" :intervalTime="intervalTime" :title="$t('percentResponse')" />
-      </div>
+    <div v-if="stateTopo.selectedEndpointCall" class="endpoint-dependency-metrics scroll_bar_style">
+      <DashboardItem
+        v-for="(i, index) in topoEndpointDependencyMetrics || []"
+        :key="index"
+        :rocketGlobal="rocketGlobal"
+        :item="i"
+        :index="index"
+        :type="'TOPOLOGY_ENDPOINT_DEPENDENCY'"
+        :updateObjects="true"
+        :rocketOption="stateDashboardOption"
+        :templateType="templateType"
+      />
+      <!-- <div
+        v-show="stateTopo.editInstanceDependencyMetrics"
+        class="rk-add-metric-item g-sm-3"
+        @click="ADD_TOPO_INSTANCE_DEPENDENCY_COMP"
+      >
+        + Add An Item
+      </div> -->
     </div>
   </div>
 </template>
 <script lang="ts">
   import { Vue, Component, Watch } from 'vue-property-decorator';
-  import { State, Action, Getter } from 'vuex-class';
+  import { State, Action, Getter, Mutation } from 'vuex-class';
+  import { State as optionState } from '@/store/modules/global/selectors';
+  import { State as rocketbotGlobal } from '@/store/modules/global';
   import { State as topoState, EndpointDependencyConidition, Call, Duration } from '@/store/modules/topology';
-  import TopoChart from '../topo-chart.vue';
   import DependencySankey from '../chart/dependency-sankey.vue';
-  import ChartLine from '../chart-line.vue';
+  import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
 
   @Component({
     components: {
-      ChartLine,
-      TopoChart,
       DependencySankey,
+      DashboardItem,
     },
   })
   export default class TopoEndpointDependency extends Vue {
     @Getter('durationTime') private durationTime!: Duration;
     @Getter('intervalTime') private intervalTime: any;
     @State('rocketTopo') private stateTopo!: topoState;
+    @State('rocketOption') private stateDashboardOption!: optionState;
+    @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
+    @Mutation('rocketTopo/SET_SELECTED_ENDPOINT_CALL') private SET_SELECTED_ENDPOINT_CALL: any;
+    @Mutation('SET_ENDPOINT_DEPENDENCY') private SET_ENDPOINT_DEPENDENCY: any;
     @Action('rocketTopo/GET_ENDPOINT_DEPENDENCY_METRICS') private GET_ENDPOINT_DEPENDENCY_METRICS: any;
 
-    private respTime: number[] = [];
-    private cpm: number[] = [];
-    private sla: number[] = [];
-    private percentile: { [key: string]: number[] } = {};
+    private templateType: string = '';
+    private topoEndpointDependencyMetrics: any = [];
 
     private showEndpointMetrics(data: EndpointDependencyConidition & Call) {
-      this.GET_ENDPOINT_DEPENDENCY_METRICS({
-        serviceName: data.serviceName,
-        endpointName: data.endpointName,
-        destServiceName: data.destServiceName,
-        destEndpointName: data.destEndpointName,
-        duration: this.durationTime,
-      }).then(() => {
-        this.updateMetrics();
-      });
+      this.SET_SELECTED_ENDPOINT_CALL(data);
+      this.SET_ENDPOINT_DEPENDENCY(data);
+      this.templateType = 'SpringMVC';
+
+      if (!this.templateType) {
+        return;
+      }
+      if (!this.stateTopo.topoEndpointDependency[this.templateType]) {
+        return;
+      }
+      this.topoEndpointDependencyMetrics = this.stateTopo.topoEndpointDependency[this.templateType];
     }
 
     @Watch('stateTopo.endpointDependency.nodes')
-    private updateMetrics() {
-      this.respTime = this.stateTopo.endpointDependencyMetrics.respTime;
-      this.cpm = this.stateTopo.endpointDependencyMetrics.cpm;
-      this.sla = this.stateTopo.endpointDependencyMetrics.sla;
-      this.percentile = this.stateTopo.endpointDependencyMetrics.percentile;
-    }
+    private updateMetrics() {}
 
     private beforeDestroy() {
       this.stateTopo.endpointDependency = {
@@ -113,14 +118,7 @@ limitations under the License. -->
     }
   }
   .endpoint-dependency-metrics {
-    height: 20%;
-    min-height: 100px;
-    display: flex;
-    flex-direction: row;
-    padding-left: 10px;
-    > div {
-      width: 25%;
-      height: 100%;
-    }
+    // display: flex;
+    // flex-direction: row;
   }
 </style>

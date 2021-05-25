@@ -36,6 +36,7 @@ export interface State {
   pageType: string;
   destService: Option;
   destInstance: Option;
+  destEndpoint: Option;
 }
 
 const LOG = 'Log';
@@ -53,6 +54,7 @@ const initState: State = {
   pageType: '',
   destService: { key: '', label: '' },
   destInstance: { key: '', label: '' },
+  destEndpoint: { key: '', label: '' },
 };
 
 // mutations
@@ -122,6 +124,13 @@ const mutations: MutationTree<State> = {
     state.destService = { key: call.targetObj.serviceId, label: call.targetObj.serviceName };
     state.destInstance = { key: call.targetObj.id, label: call.targetObj.name };
     state.updateDashboard = { key: TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY + call.id };
+  },
+  [types.SET_ENDPOINT_DEPENDENCY](state: State, call: any) {
+    state.currentService = { key: call.serviceName, label: call.serviceName };
+    state.currentEndpoint = { key: call.endpointName, label: call.endpointName };
+    state.destService = { key: call.destServiceName, label: call.destServiceName };
+    state.destEndpoint = { key: call.destEndpointName, label: call.destEndpointName };
+    state.updateDashboard = { key: TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY + call.id };
   },
 };
 

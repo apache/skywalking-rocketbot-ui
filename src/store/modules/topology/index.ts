@@ -80,6 +80,7 @@ export interface State {
     nodes: Node[];
   };
   selectedInstanceCall: Call | null;
+  selectedEndpointCall: Call | null;
   endpointDependencyMetrics: { [key: string]: any };
   currentEndpointDepth: { key: number; label: string };
   queryInstanceMetricsType: string;
@@ -90,6 +91,7 @@ export interface State {
   topoServicesInstanceDependency: { [key: string]: any[] };
   instanceDependencyMode: string;
   editInstanceDependencyMetrics: boolean;
+  topoEndpointDependency: { [key: string]: any[] };
 }
 
 const PercentileItem: string[] = ['p50', 'p75', 'p90', 'p95', 'p99'];
@@ -116,6 +118,7 @@ const initState: State = {
     nodes: [],
   },
   selectedInstanceCall: null,
+  selectedEndpointCall: null,
   endpointDependencyMetrics: {},
   currentEndpointDepth: { key: 2, label: '2' },
   queryInstanceMetricsType: '',
@@ -126,6 +129,7 @@ const initState: State = {
   topoServicesInstanceDependency: {},
   instanceDependencyMode: '',
   editInstanceDependencyMetrics: false,
+  topoEndpointDependency: {},
 };
 
 // getters
@@ -165,6 +169,9 @@ const mutations = {
   [types.SET_SELECTED_INSTANCE_CALL](state: State, data: Call) {
     state.selectedInstanceCall = data;
   },
+  [types.SET_SELECTED_ENDPOINT_CALL](state: State, data: Call) {
+    state.selectedEndpointCall = data;
+  },
   [types.SET_ENDPOINT_DEPENDENCY_METRICS](state: State, data: { [key: string]: any }) {
     state.endpointDependencyMetrics.cpm = data.endpointRelationCpm
       ? data.endpointRelationCpm.values.values.map((i: any) => i.value)
@@ -200,6 +207,10 @@ const mutations = {
   [types.SET_TOPO_SERVICE_INSTANCE_DEPENDENCY](state: State, data: any) {
     state.topoServicesInstanceDependency = data;
     localStorage.setItem('topologyServicesInstanceDependency', JSON.stringify(data));
+  },
+  [types.SET_TOPO_ENDPOINT_DEPENDENCY](state: State, data: any) {
+    state.topoEndpointDependency = data;
+    localStorage.setItem('topologyEndpointDependency', JSON.stringify(data));
   },
   [types.EDIT_TOPO_INSTANCE_CONFIG](state: State, params: { values: any; index: number }) {
     state.topoInstances[params.index] = { ...state.topoInstances[params.index], ...params.values };

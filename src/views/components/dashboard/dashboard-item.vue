@@ -114,11 +114,7 @@ limitations under the License. -->
     @Prop() private templateType!: string;
     @Prop() private templateMode!: string; // server client
 
-    private noEditTypes = [
-      TopologyType.TOPOLOGY_ENDPOINT,
-      TopologyType.TOPOLOGY_INSTANCE,
-      TopologyType.TOPOLOGY_SERVICE,
-    ] as string[];
+    private noEditTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as string[];
     private dialogConfigVisible = false;
     private status = 'UNKNOWN';
     private title = 'Title';
@@ -134,6 +130,7 @@ limitations under the License. -->
       TopologyType.TOPOLOGY_SERVICE,
       TopologyType.TOPOLOGY_SERVICE_DEPENDENCY,
       TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY,
+      TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY,
     ] as string[];
 
     private created() {
@@ -473,6 +470,9 @@ limitations under the License. -->
     .edit {
       cursor: pointer;
     }
+    .rk-sidebox-title {
+      color: #333;
+    }
   }
   .dashboard-item-shadow {
     background-color: #448dfe15;
@@ -526,8 +526,5 @@ limitations under the License. -->
   }
   .config-box {
     padding: 40px 30px;
-  }
-  .rk-sidebox-title {
-    color: #333;
   }
 </style>

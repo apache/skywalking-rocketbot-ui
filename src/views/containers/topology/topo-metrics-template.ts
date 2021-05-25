@@ -583,7 +583,7 @@ export const TopoEndpointDependencyMetricsConfig: any = {
   configuration: {
     SpringMVC: [
       {
-        width: 12,
+        width: 3,
         title: 'Service Avg Response Time',
         height: '200',
         entityType: 'EndpointRelation',
@@ -595,7 +595,7 @@ export const TopoEndpointDependencyMetricsConfig: any = {
         unit: 'ms',
       },
       {
-        width: 12,
+        width: 3,
         title: 'Service Load',
         height: '200',
         entityType: 'EndpointRelation',
@@ -607,7 +607,7 @@ export const TopoEndpointDependencyMetricsConfig: any = {
         unit: 'CPM - calls per minute',
       },
       {
-        width: 12,
+        width: 3,
         title: 'Service Response Time Percentile',
         height: '200',
         entityType: 'EndpointRelation',
@@ -621,7 +621,7 @@ export const TopoEndpointDependencyMetricsConfig: any = {
         labelsIndex: '0, 1, 2, 3, 4',
       },
       {
-        width: 12,
+        width: 3,
         title: 'Successful Rate',
         height: '200',
         entityType: 'EndpointRelation',
@@ -637,7 +637,7 @@ export const TopoEndpointDependencyMetricsConfig: any = {
     ],
     Nginx: [
       {
-        width: 12,
+        width: 3,
         title: 'Service Load',
         height: '200',
         entityType: 'EndpointRelation',
@@ -649,7 +649,7 @@ export const TopoEndpointDependencyMetricsConfig: any = {
         unit: 'CPM - calls per minute',
       },
       {
-        width: 12,
+        width: 3,
         title: 'Service Response Time Percentile',
         height: '200',
         entityType: 'EndpointRelation',
@@ -663,7 +663,7 @@ export const TopoEndpointDependencyMetricsConfig: any = {
         labelsIndex: '0, 1, 2, 3, 4',
       },
       {
-        width: 12,
+        width: 3,
         title: 'Successful Rate',
         height: '200',
         entityType: 'EndpointRelation',

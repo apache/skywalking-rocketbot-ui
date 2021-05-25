@@ -26,7 +26,7 @@ limitations under the License. -->
       <use xlink:href="#chevron-left" />
     </svg>
     <div class="mb-5 clear flex-h">
-      <span class="title" v-if="stateTopo.selectedServiceCall">
+      <span class="tool-title" v-if="stateTopo.selectedServiceCall">
         <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
         <span
           v-if="stateTopo.detectPoints.indexOf('CLIENT') !== -1"
@@ -45,7 +45,7 @@ limitations under the License. -->
           {{ $t('server') }}
         </span>
       </span>
-      <span v-else-if="showServerInfo" class="b dib vm title">{{ $t('serviceDetail') }}</span>
+      <span v-else-if="showServerInfo" class="b dib vm tool-title">{{ $t('serviceDetail') }}</span>
       <div class="flex-h">
         <div class="topo-tool-btn" @click="handleSetEdit">
           <rk-icon
@@ -272,9 +272,6 @@ limitations under the License. -->
   }
 </script>
 <style lang="scss">
-  .title {
-    padding: 10px;
-  }
   .tool-btns {
     height: 30px;
   }
@@ -337,6 +334,10 @@ limitations under the License. -->
     .label {
       display: inline-block;
       width: 40%;
+    }
+
+    .tool-title {
+      padding: 10px;
     }
 
     .content {

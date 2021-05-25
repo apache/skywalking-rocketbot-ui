@@ -33,13 +33,11 @@ limitations under the License. -->
   import { Component, Vue } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import Radial from './chart/radial.vue';
-  import TopoChart from './topo-chart.vue';
   import TopoService from './topo-services.vue';
   import TopoDetectPoint from './topo-detect-point.vue';
 
   @Component({
     components: {
-      TopoChart,
       TopoService,
       Radial,
       TopoDetectPoint,

@@ -41,12 +41,14 @@ const actions: ActionTree<State, any> = {
       currentService,
       destService,
       destInstance,
+      destEndpoint,
     } = params.rocketOption;
     const dashboard: string = `${window.localStorage.getItem('dashboard')}`;
     const tree = dashboard ? JSON.parse(dashboard) : context.state.tree;
     const normal = params.type ? true : tree[context.state.group].type === 'database' ? false : true;
     let config = {} as any;
     const names = ['readSampledRecords', 'sortMetrics'];
+
     if (params.type === TopologyType.TOPOLOGY_ENDPOINT) {
       const endpointComps: string = `${window.localStorage.getItem('topologyEndpoints')}`;
       const topoEndpoint = endpointComps ? JSON.parse(endpointComps) : [];
@@ -69,7 +71,7 @@ const actions: ActionTree<State, any> = {
       if (
         !(topoServiceDependency[params.templateType] && topoServiceDependency[params.templateType][params.templateMode])
       ) {
-        return new Promise((resolve) => resolve({}));
+        return new Promise((resolve) => resolve([]));
       }
       config = topoServiceDependency[params.templateType][params.templateMode][params.index];
     } else if (params.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) {
@@ -86,9 +88,18 @@ const actions: ActionTree<State, any> = {
         return new Promise((resolve) => resolve([]));
       }
       config = topoServiceInstanceDependency[params.templateType][params.templateMode][params.index];
+    } else if (params.type === TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) {
+      const endpointDependencyComps: string = `${localStorage.getItem('topologyEndpointDependency')}`;
+      const topoEndpointDependency = endpointDependencyComps ? JSON.parse(endpointDependencyComps) : {};
+
+      if (!topoEndpointDependency[params.templateType]) {
+        return new Promise((resolve) => resolve([]));
+      }
+      config = topoEndpointDependency[params.templateType][params.index];
     } else {
       config = tree[context.state.group].children[context.state.current].children[params.index];
     }
+
     if (!config) {
       return new Promise((resolve) => resolve([]));
     }
@@ -179,7 +190,7 @@ const actions: ActionTree<State, any> = {
                   : undefined,
                 destEndpointName: isRelation
                   ? config.entityType === 'EndpointRelation'
-                    ? destInstance.label
+                    ? destEndpoint.label
                     : undefined
                   : undefined,
               },

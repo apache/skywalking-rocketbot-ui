@@ -98,7 +98,6 @@ limitations under the License. -->
   import { State as topoState } from '@/store/modules/topology';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketbotGlobal } from '@/store/modules/global';
-  import Topo from '../chart/topo.vue';
   import DependencySankey from '../chart/dependency-sankey.vue';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
   import { readFile } from '@/utils/readFile';
@@ -107,7 +106,6 @@ limitations under the License. -->
 
   @Component({
     components: {
-      Topo,
       DependencySankey,
       DashboardItem,
     },
