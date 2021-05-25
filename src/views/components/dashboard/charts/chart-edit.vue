@@ -486,6 +486,7 @@ limitations under the License. -->
         this.$emit('updateStatus', 'metricType', typeOfMetrics);
         this.queryMetricTypesList = QueryMetricTypes[typeOfMetrics] || [];
         this.itemConfig.queryMetricType = this.queryMetricTypesList[0] && this.queryMetricTypesList[0].value;
+        this.chartTypeOptions = ReadValueChartType;
         this.hasChartType();
         this.isLabel = typeOfMetrics === MetricsType.LABELED_VALUE ? true : false;
         const values = {

@@ -84,18 +84,15 @@ export interface State {
   selectedEndpointCall: Call | null;
   endpointDependencyMetrics: { [key: string]: any };
   currentEndpointDepth: { key: number; label: string };
-  queryInstanceMetricsType: string;
   topoEndpoints: any[];
   topoInstances: any[];
   topoServices: { [key: string]: any[] };
   topoServicesDependency: { [key: string]: any[] };
   topoServicesInstanceDependency: { [key: string]: any[] };
+  topoEndpointDependency: { [key: string]: any[] };
   instanceDependencyMode: string;
   editDependencyMetrics: boolean;
-  topoEndpointDependency: { [key: string]: any[] };
 }
-
-const PercentileItem: string[] = ['p50', 'p75', 'p90', 'p95', 'p99'];
 
 const initState: State = {
   callback: '',
@@ -122,7 +119,6 @@ const initState: State = {
   selectedEndpointCall: null,
   endpointDependencyMetrics: {},
   currentEndpointDepth: { key: 2, label: '2' },
-  queryInstanceMetricsType: '',
   topoEndpoints: [],
   topoInstances: [],
   topoServices: {},
