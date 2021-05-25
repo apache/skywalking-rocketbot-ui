@@ -77,11 +77,13 @@ limitations under the License. -->
   import { State, Getter, Mutation } from 'vuex-class';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketbotGlobal } from '@/store/modules/global';
-  import { State as topoState, EndpointDependencyConidition, Call, Duration } from '@/store/modules/topology';
+  import { State as topoState } from '@/store/modules/topology';
   import DependencySankey from '../chart/dependency-sankey.vue';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
+  import { Duration } from '@/types/global';
+  import { EndpointDependencyConidition, Call } from '@/types/topo';
 
   @Component({
     components: {

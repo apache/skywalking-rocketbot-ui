@@ -18,7 +18,7 @@
 import graph from '@/graph';
 import * as types from '@/store/mutation-types';
 import { Option } from '@/types/global';
-import { Span, Trace } from '@/types/topo';
+import { Span, Trace } from '@/types/trace';
 import { AxiosResponse } from 'axios';
 import { ActionTree, Commit, Dispatch, MutationTree } from 'vuex';
 

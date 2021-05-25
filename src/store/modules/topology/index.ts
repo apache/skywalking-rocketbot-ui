@@ -20,48 +20,8 @@ import graph from '@/graph';
 import * as types from '../../mutation-types';
 import axios, { AxiosPromise, AxiosResponse } from 'axios';
 import { cancelToken } from '@/utils/cancelToken';
-
-interface Option {
-  key: string;
-  label: string;
-}
-export interface Duration {
-  start: string;
-  end: string;
-  step: string;
-}
-export interface Call {
-  avgResponseTime: number;
-  cpm: number;
-  isAlert: boolean;
-  source: string | any;
-  target: string | any;
-  id: string;
-  detectPoints: string[];
-  type?: string;
-}
-interface Node {
-  apdex: number;
-  avgResponseTime: number;
-  cpm: number;
-  id: string;
-  isAlarm: boolean;
-  name: string;
-  numOfServer: number;
-  numOfServerAlarm: number;
-  numOfServiceAlarm: number;
-  sla: number;
-  type: string;
-}
-
-export interface EndpointDependencyConidition {
-  serviceName: string;
-  endpointName: string;
-  destServiceName: string;
-  destEndpointName: string;
-  duration: Duration;
-}
-
+import { Call, Node, EndpointDependencyConidition } from '@/types/topo';
+import { Duration, Option } from '@/types/global';
 export interface State {
   callback: any;
   calls: Call[];
@@ -93,6 +53,13 @@ export interface State {
   instanceDependencyMode: string;
   editDependencyMetrics: boolean;
 }
+
+const DefaultConfig = {
+  width: 12,
+  title: 'Title',
+  height: 250,
+  metricType: 'UNKNOWN',
+};
 
 const initState: State = {
   callback: '',
@@ -283,33 +250,26 @@ const mutations = {
   },
   [types.ADD_TOPO_INSTANCE_COMP](state: State) {
     const comp = {
+      ...DefaultConfig,
       width: 3,
-      title: 'Title',
-      height: 250,
       entityType: 'ServiceInstance',
-      metricType: 'UNKNOWN',
     };
     state.topoInstances.push(comp);
     window.localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
   },
   [types.ADD_TOPO_ENDPOINT_COMP](state: State) {
     const comp = {
+      ...DefaultConfig,
       width: 3,
-      title: 'Title',
-      height: 250,
       entityType: 'Endpoint',
-      metricType: 'UNKNOWN',
     };
     state.topoEndpoints.push(comp);
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
   },
   [types.ADD_TOPO_SERVICE_COMP](state: State) {
     const comp = {
-      width: 12,
-      title: 'Title',
-      height: 250,
+      ...DefaultConfig,
       entityType: 'Service',
-      metricType: 'UNKNOWN',
     };
     state.topoServices[state.currentNode.type].push(comp);
     window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
@@ -320,11 +280,10 @@ const mutations = {
     }
     const type = state.selectedEndpointCall.type || 'SpringMVC';
     const comp = {
-      width: 3,
-      title: 'Title',
+      ...DefaultConfig,
       height: 200,
+      width: 3,
       entityType: 'EndpointRelation',
-      metricType: 'UNKNOWN',
     };
     state.topoEndpointDependency[type].push(comp);
     window.localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
@@ -337,11 +296,8 @@ const mutations = {
       return;
     }
     const comp = {
-      width: 12,
-      title: 'Title',
-      height: 250,
+      ...DefaultConfig,
       entityType: 'ServiceRelation',
-      metricType: 'UNKNOWN',
     };
     state.topoServicesDependency[source.type][mode].push(comp);
     window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
@@ -355,11 +311,8 @@ const mutations = {
       return;
     }
     const comp = {
-      width: 12,
-      title: 'Title',
-      height: 250,
+      ...DefaultConfig,
       entityType: 'ServiceInstanceRelation',
-      metricType: 'UNKNOWN',
     };
     state.topoServicesInstanceDependency[type][mode].push(comp);
     localStorage.setItem('topologyServicesInstanceDependency', JSON.stringify(state.topoServicesInstanceDependency));

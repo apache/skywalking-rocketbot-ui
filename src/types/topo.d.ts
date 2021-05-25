@@ -14,72 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export interface CompsContainer {
-  service: CompsItem[];
-  database: CompsItem[];
-  proxy: CompsItem[];
-}
-
-export interface CompsItem {
-  o: string;
-  comp: string;
-  n: string;
-  t: string;
+import { Duration } from './global';
+export interface Call {
+  avgResponseTime: number;
+  cpm: number;
+  isAlert: boolean;
+  source: string | any;
+  target: string | any;
+  id: string;
+  detectPoints: string[];
   type?: string;
-  w: number;
 }
-
-export interface CompsGroup {
+export interface Node {
+  apdex: number;
+  avgResponseTime: number;
+  cpm: number;
+  id: string;
+  isAlarm: boolean;
   name: string;
-  children: CompsItem[];
-}
-
-export interface CompQuery {
-  service: Option;
-  database: Option;
-  endpoint: Option;
-  instance: Option;
-}
-
-export interface CompsTree {
-  name?: string;
+  numOfServer: number;
+  numOfServerAlarm: number;
+  numOfServiceAlarm: number;
+  sla: number;
   type: string;
-  query: CompQuery;
-  children: CompsGroup[];
 }
 
-export interface Option {
-  key: string;
-  label: string;
-}
-
-export interface Duration {
-  start: Date;
-  end: Date;
-  step: string;
-}
-
-export interface DurationTime {
-  start: string;
-  end: string;
-  step: string;
-}
-
-export interface Trace {
-  duration: number;
-  isError: boolean;
-  key: string;
-  operationNames: string[];
-  start: string;
-  traceIds: string[];
-}
-
-export interface Span {
-  duration: number;
-  isError: boolean;
-  key: string;
-  operationNames: string[];
-  start: string;
-  traceIds: string[];
+export interface EndpointDependencyConidition {
+  serviceName: string;
+  endpointName: string;
+  destServiceName: string;
+  destEndpointName: string;
+  duration: Duration;
 }
