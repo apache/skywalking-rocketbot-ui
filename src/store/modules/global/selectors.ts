@@ -124,10 +124,10 @@ const mutations: MutationTree<State> = {
     state.updateDashboard = { key: TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY + call.id };
   },
   [types.SET_ENDPOINT_DEPENDENCY](state: State, call: any) {
-    state.currentService = { key: call.serviceName, label: call.serviceName };
-    state.currentEndpoint = { key: call.endpointName, label: call.endpointName };
-    state.destService = { key: call.destServiceName, label: call.destServiceName };
-    state.destEndpoint = { key: call.destEndpointName, label: call.destEndpointName };
+    state.currentService = { key: call.serviceId, label: call.serviceName };
+    state.currentEndpoint = { key: call.endpointId, label: call.endpointName };
+    state.destService = { key: call.destServiceId, label: call.destServiceName };
+    state.destEndpoint = { key: call.destEndpointId, label: call.destEndpointName };
     state.updateDashboard = { key: TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY + call.id };
   },
 };

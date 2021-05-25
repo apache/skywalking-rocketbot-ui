@@ -604,11 +604,15 @@ const actions: ActionTree<State, any> = {
                 source = node;
                 call.serviceName = node.serviceName;
                 call.endpointName = node.name;
+                call.serviceId = node.serviceId;
+                call.endpointId = node.id;
               }
               if (node.id === call.target) {
                 target = node;
                 call.destServiceName = node.serviceName;
+                call.destServiceId = node.serviceId;
                 call.destEndpointName = node.name;
+                call.destEndpointId = node.id;
               }
             }
             return `cpm_${index}: readMetricsValue(condition: {

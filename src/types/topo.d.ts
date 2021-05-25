@@ -41,8 +41,12 @@ export interface Node {
 
 export interface EndpointDependencyConidition {
   serviceName: string;
+  serviceId: string;
   endpointName: string;
+  endpointId: string;
   destServiceName: string;
   destEndpointName: string;
+  destServiceId: string;
+  destEndpointId: string;
   duration: Duration;
 }
