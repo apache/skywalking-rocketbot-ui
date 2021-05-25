@@ -39,4 +39,5 @@ export enum PageEventsType {
 export enum PageTypes {
   DASHBOARD = 'Dashboard',
   LOG = 'Log',
+  TOPOLOGY = 'Topology',
 }

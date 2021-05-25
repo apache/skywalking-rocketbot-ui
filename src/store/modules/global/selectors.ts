@@ -39,8 +39,6 @@ export interface State {
   destEndpoint: Option;
 }
 
-const LOG = 'Log';
-
 const initState: State = {
   services: [],
   currentService: { key: '', label: '' },
@@ -60,12 +58,12 @@ const initState: State = {
 // mutations
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: Option[]) {
-    state.services = state.pageType === LOG ? [{ label: 'All', key: '' }, ...data] : data;
+    state.services = state.pageType === PageTypes.LOG ? [{ label: 'All', key: '' }, ...data] : data;
     state.currentService = state.services[0] || {};
   },
   [types.SET_CURRENT_SERVICE](state: State, service: Option) {
     state.currentService = service;
-    if (state.pageType !== PageTypes.DASHBOARD) {
+    if (state.pageType === PageTypes.LOG) {
       state.updateDashboard = service;
     }
   },
@@ -75,7 +73,7 @@ const mutations: MutationTree<State> = {
   },
 
   [types.SET_ENDPOINTS](state: State, data: Option[]) {
-    state.endpoints = state.pageType === LOG ? [{ label: 'All', key: '' }, ...data] : data;
+    state.endpoints = state.pageType === PageTypes.LOG ? [{ label: 'All', key: '' }, ...data] : data;
     if (!state.endpoints.length) {
       state.currentEndpoint = { key: '', label: '' };
       return;
@@ -87,7 +85,7 @@ const mutations: MutationTree<State> = {
     state.updateDashboard = endpoint;
   },
   [types.SET_INSTANCES](state: State, data: Option[]) {
-    state.instances = state.pageType === LOG ? [{ label: 'All', key: '' }, ...data] : data;
+    state.instances = state.pageType === PageTypes.LOG ? [{ label: 'All', key: '' }, ...data] : data;
     if (!state.instances.length) {
       state.currentInstance = { key: '', label: '' };
       return;

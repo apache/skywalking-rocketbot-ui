@@ -53,7 +53,7 @@ limitations under the License. -->
   import { Vue, Component } from 'vue-property-decorator';
   import { State, Action, Mutation } from 'vuex-class';
   import { State as topoState } from '@/store/modules/topology';
-  import { TopologyType } from '../../../constants/constant';
+  import { TopologyType, PageTypes } from '@/constants/constant';
   import WindowEndpoint from '@/views/containers/topology/endpoint/index.vue';
   import WindowInstance from '@/views/containers/topology/instance/index.vue';
   import WindowTrace from '@/views/containers/topology/trace/index.vue';
@@ -96,12 +96,17 @@ limitations under the License. -->
     @Mutation('rocketTopo/SET_TOPO_ENDPOINT_DEPENDENCY') private SET_TOPO_ENDPOINT_DEPENDENCY: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
+    @Mutation('SET_PAGE_TYPE') private SET_PAGE_TYPE: any;
 
     private current: any = {};
     private dialog: string = '';
     private updateObjects: boolean = true;
 
     private created() {
+      this.SET_PAGE_TYPE(PageTypes.TOPOLOGY);
+      this.initMetricsTemplate();
+    }
+    private initMetricsTemplate() {
       localStorage.removeItem('topologyServicesInstanceDependency');
       if (window.localStorage.getItem('topologyServices')) {
         const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
