@@ -18,7 +18,7 @@ limitations under the License. -->
     <div class="trace-header" v-if="type === 'statistics'">
       <div :class="item.label" v-for="(item, index) in headerData" :key="index">
         {{ item.value }}
-        <span class="r cp" @click="sortStatistics(item.key)" :key="componentKey" v-if="item.key != 'endpointName'">
+        <span class="r cp" @click="sortStatistics(item.key)" :key="componentKey" v-if="(item.key != 'endpointName') & (item.key != 'type')">
           <svg class="icon">
             <use xlink:href="#sort"></use>
           </svg>
