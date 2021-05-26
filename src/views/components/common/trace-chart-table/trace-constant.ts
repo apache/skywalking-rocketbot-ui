@@ -80,3 +80,41 @@ export const TraceConstant = [
     value: 'Service',
   },
 ];
+
+export const StatisticsConstant = [
+  {
+    label: 'method',
+    value: 'Endpoint Name',
+    key: 'endpointName',
+  },
+  {
+    label: 'type',
+    value: 'Type',
+    key: 'type',
+  },
+  {
+    label: 'max-time',
+    value: 'Max Time(ms)',
+    key: 'maxTime',
+  },
+  {
+    label: 'min-time',
+    value: 'Min Time(ms)',
+    key: 'minTime',
+  },
+  {
+    label: 'sum-time',
+    value: 'Sum Time(ms)',
+    key: 'sumTime',
+  },
+  {
+    label: 'avg-time',
+    value: 'Avg Time(ms)',
+    key: 'avgTime',
+  },
+  {
+    label: 'count',
+    value: 'Hits',
+    key: 'count',
+  },
+];
