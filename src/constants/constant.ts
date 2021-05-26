@@ -41,3 +41,4 @@ export enum PageTypes {
   LOG = 'Log',
   TOPOLOGY = 'Topology',
 }
+export const DEFAULT = 'default';

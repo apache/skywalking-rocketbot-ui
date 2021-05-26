@@ -102,7 +102,7 @@ limitations under the License. -->
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
-  import { Event } from 'noty';
+  import { DEFAULT } from '@/constants/constant';
 
   @Component({
     components: {
@@ -138,7 +138,7 @@ limitations under the License. -->
     private setMode(mode: any) {
       this.SET_INSTANCE_DEPENDENCY_MODE_STATUS(mode);
       const call: any = this.stateTopo.selectedInstanceCall || { sourceObj: {} };
-      this.templateType = call.sourceObj.type || 'SpringMVC';
+      this.templateType = call.sourceObj.type || DEFAULT;
       if (!this.templateType) {
         return;
       }
@@ -154,7 +154,7 @@ limitations under the License. -->
       this.SET_SERVICE_INSTANCE_DEPENDENCY(data);
       const mode = this.stateTopo.instanceDependencyMode as any;
 
-      this.templateType = data.sourceObj.type || 'SpringMVC';
+      this.templateType = data.sourceObj.type || DEFAULT;
       if (!this.templateType) {
         return;
       }

@@ -107,7 +107,7 @@ limitations under the License. -->
       this.initMetricsTemplate();
     }
     private initMetricsTemplate() {
-      localStorage.removeItem('topologyServicesInstanceDependency');
+      // localStorage.removeItem('topologyServicesInstanceDependency');
       if (window.localStorage.getItem('topologyServices')) {
         const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
         const topoService = serviceComps ? JSON.parse(serviceComps) : [];
@@ -201,18 +201,22 @@ limitations under the License. -->
             // this.SET_TOPO_SERVICE_DEPENDENCY(TopoServiceDependencyMetricsConfig.configuration);
           }
           if (!localStorage.getItem('topologyServicesInstanceDependency')) {
-            // const serviceInstanceDependencyTemplate = allTemplates.filter((item: any) =>
-            //   item.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY && item.activated)[0] || {};
-            // const topoServiceInstanceDependency = JSON.parse(serviceInstanceDependencyTemplate.configuration) || [];
-            // this.SET_TOPO_SERVICE_INSTANCE_DEPENDENCY(topoServiceInstanceDependency);
-            this.SET_TOPO_SERVICE_INSTANCE_DEPENDENCY(TopoServiceInstanceDependencyMetricsConfig.configuration);
+            const serviceInstanceDependencyTemplate =
+              allTemplates.filter(
+                (item: any) => item.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY && item.activated,
+              )[0] || {};
+            const topoServiceInstanceDependency = JSON.parse(serviceInstanceDependencyTemplate.configuration) || [];
+            this.SET_TOPO_SERVICE_INSTANCE_DEPENDENCY(topoServiceInstanceDependency);
+            // this.SET_TOPO_SERVICE_INSTANCE_DEPENDENCY(TopoServiceInstanceDependencyMetricsConfig.configuration);
           }
           if (!localStorage.getItem('topologyEndpointDependency')) {
-            // const serviceEndpointDependencyTemplate = allTemplates.filter((item: any) =>
-            //   item.type === TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY && item.activated)[0] || {};
-            // const topoEndpointDependency = JSON.parse(serviceEndpointDependencyTemplate.configuration) || [];
-            // this.SET_TOPO_ENDPOINT_DEPENDENCY(topoEndpointDependency);
-            this.SET_TOPO_ENDPOINT_DEPENDENCY(TopoEndpointDependencyMetricsConfig.configuration);
+            const serviceEndpointDependencyTemplate =
+              allTemplates.filter(
+                (item: any) => item.type === TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY && item.activated,
+              )[0] || {};
+            const topoEndpointDependency = JSON.parse(serviceEndpointDependencyTemplate.configuration) || [];
+            this.SET_TOPO_ENDPOINT_DEPENDENCY(topoEndpointDependency);
+            // this.SET_TOPO_ENDPOINT_DEPENDENCY(TopoEndpointDependencyMetricsConfig.configuration);
           }
         },
       );

@@ -84,6 +84,7 @@ limitations under the License. -->
   import { saveFile } from '@/utils/saveFile';
   import { Duration } from '@/types/global';
   import { EndpointDependencyConidition, Call } from '@/types/topo';
+  import { DEFAULT } from '@/constants/constant';
 
   @Component({
     components: {
@@ -114,7 +115,7 @@ limitations under the License. -->
     private showEndpointMetrics(data: EndpointDependencyConidition & Call) {
       this.SET_SELECTED_ENDPOINT_CALL(data);
       this.SET_ENDPOINT_DEPENDENCY(data);
-      this.templateType = 'SpringMVC';
+      this.templateType = DEFAULT;
 
       if (!this.templateType) {
         return;

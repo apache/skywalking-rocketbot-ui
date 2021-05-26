@@ -22,6 +22,7 @@ import axios, { AxiosPromise, AxiosResponse } from 'axios';
 import { cancelToken } from '@/utils/cancelToken';
 import { Call, Node, EndpointDependencyConidition } from '@/types/topo';
 import { Duration, Option } from '@/types/global';
+import { DEFAULT } from '@/constants/constant';
 export interface State {
   callback: any;
   calls: Call[];
@@ -187,13 +188,13 @@ const mutations = {
     if (!state.selectedEndpointCall) {
       return;
     }
-    const type = state.selectedEndpointCall.type || 'SpringMVC';
+    const type = state.selectedEndpointCall.type || DEFAULT;
     state.topoEndpointDependency[type].splice(index, 1);
     localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
   },
   [types.DELETE_TOPO_INSTANCE_DEPENDENCY](state: State, index: number) {
     const { sourceObj } = state.selectedInstanceCall || ({} as any);
-    const type = sourceObj.type || 'SpringMVC';
+    const type = sourceObj.type || DEFAULT;
     const mode: any = state.instanceDependencyMode;
 
     state.topoServicesInstanceDependency[type][mode].splice(index, 1);
@@ -213,7 +214,7 @@ const mutations = {
     if (!state.selectedEndpointCall) {
       return;
     }
-    const type = state.selectedEndpointCall.type || 'SpringMVC';
+    const type = state.selectedEndpointCall.type || DEFAULT;
 
     state.topoEndpointDependency[type][params.index] = {
       ...state.topoEndpointDependency[type][params.index],
@@ -236,7 +237,7 @@ const mutations = {
   },
   [types.EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG](state: State, params: { values: any; index: number }) {
     const { sourceObj } = state.selectedInstanceCall || ({} as any);
-    const type = sourceObj.type || 'SpringMVC';
+    const type = sourceObj.type || DEFAULT;
     const mode: any = state.instanceDependencyMode;
 
     if (!(state.topoServicesInstanceDependency[type] && state.topoServicesInstanceDependency[type][mode])) {
@@ -278,7 +279,7 @@ const mutations = {
     if (!state.selectedEndpointCall) {
       return;
     }
-    const type = state.selectedEndpointCall.type || 'SpringMVC';
+    const type = state.selectedEndpointCall.type || DEFAULT;
     const comp = {
       ...DefaultConfig,
       height: 200,
@@ -304,7 +305,7 @@ const mutations = {
   },
   [types.ADD_TOPO_INSTANCE_DEPENDENCY_COMP](state: State) {
     const { sourceObj } = state.selectedInstanceCall || ({} as any);
-    const type = sourceObj.type || 'SpringMVC';
+    const type = sourceObj.type || DEFAULT;
     const mode: any = state.instanceDependencyMode;
 
     if (!(state.topoServicesInstanceDependency[type] && state.topoServicesInstanceDependency[type][mode])) {
