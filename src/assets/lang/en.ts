@@ -221,6 +221,7 @@ const m = {
   tableValues: 'Table Values',
   show: 'Show',
   hide: 'Hide',
+  statistics: 'Statistics',
   message: 'Message',
   tooltipsContent: 'Tooltip Content',
   alarmDetail: 'Alarm Detail',
