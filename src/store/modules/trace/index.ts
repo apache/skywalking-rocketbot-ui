@@ -100,7 +100,7 @@ const mutations: MutationTree<State> = {
   [types.SET_TRACE_SPANS](state: State, data: Span[]): void {
     state.traceSpans = data;
   },
-  [types.SET_CURRENT_TRACE](state: State, data: Span): void {
+  [types.SET_CURRENT_TRACE](state: State, data: any): void {
     state.currentTrace = data;
   },
   [types.SET_DEFAULT_EMPTY_TRACE](state: State): void {
