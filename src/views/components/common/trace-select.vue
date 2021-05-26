@@ -36,7 +36,13 @@ limitations under the License. -->
     </div>
     <div class="rk-trace-sel" v-if="visible">
       <div v-if="hasSearch">
-        <input type="text" class="rk-trace-sel-search" v-model="search" :placeholder="`${$t('search')}...`" />
+        <input
+          type="text"
+          class="rk-trace-sel-search"
+          v-model="search"
+          @keyup.enter="handlerEnter"
+          :placeholder="`${$t('search')}...`"
+        />
         <svg class="icon sm close" @click="search = ''" v-if="search">
           <use xlink:href="#clear"></use>
         </svg>
@@ -74,6 +80,9 @@ limitations under the License. -->
     public handleSelect(i: any) {
       this.$emit('input', i);
       this.visible = false;
+    }
+    public handlerEnter() {
+      this.$emit('search', this.search);
     }
   }
 </script>
