@@ -74,7 +74,7 @@ limitations under the License. -->
             :rocketGlobal="rocketGlobal"
             :item="i"
             :index="index"
-            :type="'TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY'"
+            :type="TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY"
             :updateObjects="true"
             :rocketOption="stateDashboardOption"
             :templateType="templateType"
@@ -102,7 +102,7 @@ limitations under the License. -->
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
-  import { DEFAULT } from '@/constants/constant';
+  import { DEFAULT, TopologyType } from '@/constants/constant';
 
   @Component({
     components: {
@@ -130,21 +130,23 @@ limitations under the License. -->
     private mode: string = 'server';
     private templateType: string = '';
     private templateMode: string = '';
+    private TopologyType = TopologyType;
 
     private beforeMount() {
+      this.TopologyType = TopologyType;
       this.height = document.body.clientHeight - 200;
     }
 
     private setMode(mode: any) {
       this.SET_INSTANCE_DEPENDENCY_MODE_STATUS(mode);
       const call: any = this.stateTopo.selectedInstanceCall || { sourceObj: {} };
-      this.templateType = call.sourceObj.type || DEFAULT;
-      if (!this.templateType) {
-        return;
-      }
+      const templateType = call.sourceObj.type;
+      this.templateType = this.stateTopo.topoServicesInstanceDependency[templateType] ? templateType : DEFAULT;
+
       if (!this.stateTopo.topoServicesInstanceDependency[this.templateType][mode]) {
         return;
       }
+
       this.serviceInstanceDependencyComps = this.stateTopo.topoServicesInstanceDependency[this.templateType][mode];
       this.UPDATE_DASHBOARD();
     }

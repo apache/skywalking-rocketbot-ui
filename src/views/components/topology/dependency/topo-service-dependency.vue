@@ -20,7 +20,7 @@ limitations under the License. -->
       :rocketGlobal="rocketGlobal"
       :item="i"
       :index="index"
-      :type="'TOPOLOGY_SERVICE_DEPENDENCY'"
+      :type="pageType"
       :updateObjects="true"
       :rocketOption="stateDashboardOption"
       :templateType="templateType"
@@ -38,6 +38,7 @@ limitations under the License. -->
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketbotGlobal } from '@/store/modules/global';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
+  import { TopologyType, DEFAULT } from '@/constants/constant';
 
   @Component({
     components: {
@@ -53,19 +54,22 @@ limitations under the License. -->
 
     private serviceDependencyComps: any[] = [];
     private height = 800;
-    private templateType: string = '';
+    private templateType: string = DEFAULT;
     private templateMode: any = 'server';
+    private TopologyType = TopologyType;
+    private pageType: string = '';
 
     private beforeMount() {
       const { type } = this.stateTopo.currentLink.source;
 
+      this.pageType = TopologyType.TOPOLOGY_SERVICE_DEPENDENCY;
       this.templateMode = this.stateTopo.mode ? 'server' : 'client';
-      this.templateType = type;
+      this.templateType = this.stateTopo.topoServicesDependency[type] ? type : DEFAULT;
       this.height = document.body.clientHeight - 280;
-      if (!this.stateTopo.topoServicesDependency[type]) {
+      if (!this.stateTopo.topoServicesDependency[this.templateType]) {
         return;
       }
-      this.serviceDependencyComps = this.stateTopo.topoServicesDependency[type][this.templateMode];
+      this.serviceDependencyComps = this.stateTopo.topoServicesDependency[this.templateType][this.templateMode];
     }
 
     @Watch('stateTopo.mode')

@@ -62,12 +62,6 @@ limitations under the License. -->
   import TopoAside from '../../components/topology/topo-aside.vue';
   import TopoGroup from '../../components/topology/topo-group/index.vue';
   import WindowEndpointDependency from '@/views/containers/topology/endpoint-dependency/index.vue';
-  import {
-    TopoServiceMetricsConfig,
-    TopoServiceDependencyMetricsConfig,
-    TopoServiceInstanceDependencyMetricsConfig,
-    TopoEndpointDependencyMetricsConfig,
-  } from './topo-metrics-template';
   import { Option } from '@/types/global';
 
   @Component({
@@ -107,7 +101,13 @@ limitations under the License. -->
       this.initMetricsTemplate();
     }
     private initMetricsTemplate() {
-      // localStorage.removeItem('topologyServicesInstanceDependency');
+      localStorage.removeItem('topologyServicesInstanceDependency');
+      localStorage.removeItem('topologyServices');
+      localStorage.removeItem('topologyInstances');
+      localStorage.removeItem('topologyEndpoints');
+      localStorage.removeItem('topologyServicesDependency');
+      localStorage.removeItem('topologyEndpointDependency');
+
       if (window.localStorage.getItem('topologyServices')) {
         const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
         const topoService = serviceComps ? JSON.parse(serviceComps) : [];
@@ -197,7 +197,7 @@ limitations under the License. -->
                 (item: any) => item.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY && item.activated,
               )[0] || {};
             const topoServiceDependency = JSON.parse(serviceDependencyTemplate.configuration) || [];
-            this.SET_TOPO_SERVICE(topoServiceDependency);
+            this.SET_TOPO_SERVICE_DEPENDENCY(topoServiceDependency);
             // this.SET_TOPO_SERVICE_DEPENDENCY(TopoServiceDependencyMetricsConfig.configuration);
           }
           if (!localStorage.getItem('topologyServicesInstanceDependency')) {

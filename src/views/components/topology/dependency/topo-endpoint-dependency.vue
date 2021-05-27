@@ -57,7 +57,7 @@ limitations under the License. -->
         :rocketGlobal="rocketGlobal"
         :item="i"
         :index="index"
-        :type="'TOPOLOGY_ENDPOINT_DEPENDENCY'"
+        :type="TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY"
         :updateObjects="true"
         :rocketOption="stateDashboardOption"
         :templateType="templateType"
@@ -84,7 +84,7 @@ limitations under the License. -->
   import { saveFile } from '@/utils/saveFile';
   import { Duration } from '@/types/global';
   import { EndpointDependencyConidition, Call } from '@/types/topo';
-  import { DEFAULT } from '@/constants/constant';
+  import { DEFAULT, TopologyType } from '@/constants/constant';
 
   @Component({
     components: {
@@ -106,6 +106,7 @@ limitations under the License. -->
 
     private templateType: string = '';
     private topoEndpointDependencyMetrics: any = [];
+    private TopologyType = TopologyType;
     private height = 500;
 
     private beforeMount() {

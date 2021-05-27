@@ -20,10 +20,10 @@ limitations under the License. -->
       :rocketGlobal="rocketGlobal"
       :item="i"
       :index="index"
-      :type="'TOPOLOGY_SERVICE'"
+      :type="type"
       :updateObjects="true"
       :rocketOption="stateDashboardOption"
-      :templateType="stateTopo.currentNode.type"
+      :templateType="templateType"
     />
     <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="ADD_TOPO_SERVICE_COMP">
       + Add An Item
@@ -37,6 +37,7 @@ limitations under the License. -->
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketbotGlobal } from '@/store/modules/global';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
+  import { DEFAULT, TopologyType } from '@/constants/constant';
 
   @Component({
     components: {
@@ -50,12 +51,19 @@ limitations under the License. -->
     @Mutation('rocketTopo/ADD_TOPO_SERVICE_COMP') private ADD_TOPO_SERVICE_COMP: any;
 
     private serviceComps: unknown[] = [];
-    private height = 800;
+    private height: number = 800;
+    private default = DEFAULT;
+    private type: string = '';
+
+    private get templateType() {
+      return this.stateTopo.currentNode.type || DEFAULT;
+    }
 
     private beforeMount() {
-      const { type } = this.stateTopo.currentNode;
+      this.type = TopologyType.TOPOLOGY_SERVICE;
+      const templateType = this.templateType;
 
-      this.serviceComps = this.stateTopo.topoServices[type];
+      this.serviceComps = this.stateTopo.topoServices[templateType] || this.stateTopo.topoServices[DEFAULT];
       this.height = document.body.clientHeight - 230;
     }
   }

@@ -21,7 +21,7 @@ limitations under the License. -->
       :rocketGlobal="rocketGlobal"
       :item="i"
       :index="index"
-      :type="'TOPOLOGY_ENDPOINT'"
+      :type="TopologyType.TOPOLOGY_ENDPOINT"
       :updateObjects="updateObjects"
       :rocketOption="stateDashboardOption"
       :templateType="stateTopo.currentNode.type"
@@ -39,6 +39,7 @@ limitations under the License. -->
   import { State as topoState } from '@/store/modules/topology';
   import { State as optionState } from '@/store/modules/global/selectors';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
+  import { TopologyType } from '@/constants/constant';
 
   @Component({
     components: {
@@ -52,6 +53,12 @@ limitations under the License. -->
     @Mutation('rocketTopo/ADD_TOPO_ENDPOINT_COMP') private ADD_TOPO_ENDPOINT_COMP: any;
     @Prop() private endpointComps: any;
     @Prop() private updateObjects!: boolean;
+
+    private TopologyType = TopologyType;
+
+    private beforeMount() {
+      this.TopologyType = TopologyType;
+    }
   }
 </script>
 <style lang="scss" scoped>
