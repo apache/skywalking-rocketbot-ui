@@ -56,13 +56,11 @@ limitations under the License. -->
     private height = 800;
     private templateType: string = DEFAULT;
     private templateMode: any = 'server';
-    private TopologyType = TopologyType;
-    private pageType: string = '';
+    private pageType: string = TopologyType.TOPOLOGY_SERVICE_DEPENDENCY;
 
     private beforeMount() {
       const { type } = this.stateTopo.currentLink.source;
 
-      this.pageType = TopologyType.TOPOLOGY_SERVICE_DEPENDENCY;
       this.templateMode = this.stateTopo.mode ? 'server' : 'client';
       this.templateType = this.stateTopo.topoServicesDependency[type] ? type : DEFAULT;
       this.height = document.body.clientHeight - 280;

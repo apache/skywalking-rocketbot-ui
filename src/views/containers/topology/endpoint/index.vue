@@ -96,7 +96,6 @@ limitations under the License. -->
   })
   export default class WindowEndpoint extends Vue {
     @Prop() private current!: { key: number | string; label: number | string };
-    @Prop() private endpointComps: any;
     @Prop() private updateObjects!: boolean;
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketData') private rocketComps!: rocketData;
@@ -137,7 +136,7 @@ limitations under the License. -->
       const { type } = this.stateTopo.currentNode;
 
       this.SET_CURRENT_SERVICE(this.current);
-      this.endpointMetrics = this.endpointComps[type];
+      this.endpointMetrics = this.stateTopo.topoEndpoints[type];
       this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 2 });
       this.GET_SERVICE_ENDPOINTS({ duration: this.durationTime, serviceId: this.current.key, keyword: '' }).then(() => {
         this.selectEndpoint(this.stateDashboardOption.endpoints[0]);
@@ -159,7 +158,7 @@ limitations under the License. -->
     }
 
     private exportData() {
-      const data = this.endpointComps;
+      const data = this.stateTopo.topoEndpoints;
       const name = 'endpointComps.json';
       saveFile(data, name);
     }

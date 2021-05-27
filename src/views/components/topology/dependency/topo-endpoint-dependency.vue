@@ -57,7 +57,7 @@ limitations under the License. -->
         :rocketGlobal="rocketGlobal"
         :item="i"
         :index="index"
-        :type="TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY"
+        :type="type"
         :updateObjects="true"
         :rocketOption="stateDashboardOption"
         :templateType="templateType"
@@ -106,7 +106,7 @@ limitations under the License. -->
 
     private templateType: string = '';
     private topoEndpointDependencyMetrics: any = [];
-    private TopologyType = TopologyType;
+    private type = TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY;
     private height = 500;
 
     private beforeMount() {

@@ -56,7 +56,9 @@ limitations under the License. -->
     private type: string = '';
 
     private get templateType() {
-      return this.stateTopo.currentNode.type || DEFAULT;
+      const templateType = this.stateTopo.currentNode.type;
+
+      return this.stateTopo.topoServices[templateType] ? templateType : DEFAULT;
     }
 
     private beforeMount() {

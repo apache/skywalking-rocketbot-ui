@@ -21,7 +21,7 @@ limitations under the License. -->
       :rocketGlobal="rocketGlobal"
       :item="i"
       :index="index"
-      :type="TopologyType.TOPOLOGY_INSTANCE"
+      :type="type"
       :updateObjects="updateObjects"
       :rocketOption="stateDashboardOption"
       :templateType="stateTopo.currentNode.type"
@@ -53,11 +53,7 @@ limitations under the License. -->
     @Mutation('rocketTopo/ADD_TOPO_INSTANCE_COMP') private ADD_TOPO_INSTANCE_COMP: any;
     @Prop() private instanceComps: any;
     @Prop() private updateObjects!: boolean;
-    private TopologyType = TopologyType;
-
-    private beforeMount() {
-      this.TopologyType = TopologyType;
-    }
+    private type: string = TopologyType.TOPOLOGY_INSTANCE;
   }
 </script>
 <style lang="scss" scoped>

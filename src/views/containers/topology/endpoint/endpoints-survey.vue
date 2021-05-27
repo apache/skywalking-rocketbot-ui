@@ -16,12 +16,12 @@ limitations under the License. -->
 <template>
   <div class="dashboard-container clear">
     <DashboardItem
-      v-for="(i, index) in endpointComps || []"
+      v-for="(i, index) in topoEndpoints || []"
       :key="index + i.title + i.width"
       :rocketGlobal="rocketGlobal"
       :item="i"
       :index="index"
-      :type="TopologyType.TOPOLOGY_ENDPOINT"
+      :type="type"
       :updateObjects="updateObjects"
       :rocketOption="stateDashboardOption"
       :templateType="stateTopo.currentNode.type"
@@ -39,7 +39,7 @@ limitations under the License. -->
   import { State as topoState } from '@/store/modules/topology';
   import { State as optionState } from '@/store/modules/global/selectors';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
-  import { TopologyType } from '@/constants/constant';
+  import { TopologyType, DEFAULT } from '@/constants/constant';
 
   @Component({
     components: {
@@ -54,10 +54,17 @@ limitations under the License. -->
     @Prop() private endpointComps: any;
     @Prop() private updateObjects!: boolean;
 
-    private TopologyType = TopologyType;
+    private type = TopologyType.TOPOLOGY_ENDPOINT;
+    private topoEndpoints: unknown = [];
+    private get templateType() {
+      const templateType = this.stateTopo.currentNode.type;
+
+      return this.stateTopo.topoServices[templateType] ? templateType : DEFAULT;
+    }
 
     private beforeMount() {
-      this.TopologyType = TopologyType;
+      this.type = TopologyType.TOPOLOGY_SERVICE;
+      this.topoEndpoints = this.stateTopo.topoEndpoints[this.templateType];
     }
   }
 </script>

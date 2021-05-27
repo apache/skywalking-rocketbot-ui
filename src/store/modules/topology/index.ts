@@ -45,7 +45,7 @@ export interface State {
   selectedEndpointCall: Call | null;
   endpointDependencyMetrics: { [key: string]: any };
   currentEndpointDepth: { key: number; label: string };
-  topoEndpoints: any[];
+  topoEndpoints: { [key: string]: any[] };
   topoInstances: any[];
   topoServices: { [key: string]: any[] };
   topoServicesDependency: { [key: string]: any[] };
@@ -87,7 +87,7 @@ const initState: State = {
   selectedEndpointCall: null,
   endpointDependencyMetrics: {},
   currentEndpointDepth: { key: 2, label: '2' },
-  topoEndpoints: [],
+  topoEndpoints: {},
   topoInstances: [],
   topoServices: {},
   topoServicesDependency: {},
@@ -137,7 +137,7 @@ const mutations = {
   [types.SET_SELECTED_ENDPOINT_CALL](state: State, data: Call) {
     state.selectedEndpointCall = data;
   },
-  [types.SET_TOPO_ENDPOINT](state: State, data: any[]) {
+  [types.SET_TOPO_ENDPOINT](state: State, data: { [key: string]: unknown[] }) {
     state.topoEndpoints = data;
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(data));
   },
@@ -166,7 +166,10 @@ const mutations = {
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
   },
   [types.DELETE_TOPO_ENDPOINT](state: State, index: number) {
-    state.topoEndpoints.splice(index, 1);
+    const templateType = state.currentNode.type;
+    const type = state.topoServices[templateType] ? templateType : DEFAULT;
+
+    state.topoEndpoints[type].splice(index, 1);
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
   },
   [types.DELETE_TOPO_INSTANCE](state: State, index: number) {
@@ -264,7 +267,9 @@ const mutations = {
       width: 3,
       entityType: 'Endpoint',
     };
-    state.topoEndpoints.push(comp);
+    const templateType = state.currentNode.type;
+    const type = state.topoServices[templateType] ? templateType : DEFAULT;
+    state.topoEndpoints[type].push(comp);
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
   },
   [types.ADD_TOPO_SERVICE_COMP](state: State) {

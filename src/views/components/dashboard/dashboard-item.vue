@@ -417,32 +417,28 @@ limitations under the License. -->
     // watch selectors and events
     @Watch('rocketOption.updateDashboard.key')
     private watchCurrentSelectors() {
+      if (!this.rocketOption.updateDashboard) {
+        return;
+      }
+      const key = this.rocketOption.updateDashboard.key || '';
+
       this.itemEvents = this.eventsFilter();
-      if (this.rocketOption.updateDashboard.key.includes(UpdateDashboardEvents)) {
+      if (key.includes(UpdateDashboardEvents)) {
+        return;
+      }
+      if (key.includes(TopologyType.TOPOLOGY_SERVICE) && this.itemConfig.entityType !== EntityType[0].key) {
+        return;
+      }
+      if (key.includes(TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) && this.itemConfig.entityType !== EntityType[4].key) {
         return;
       }
       if (
-        this.rocketOption.updateDashboard.key.includes(TopologyType.TOPOLOGY_SERVICE) &&
-        this.itemConfig.entityType !== EntityType[0].key
-      ) {
-        return;
-      }
-      if (
-        this.rocketOption.updateDashboard.key.includes(TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) &&
-        this.itemConfig.entityType !== EntityType[4].key
-      ) {
-        return;
-      }
-      if (
-        this.rocketOption.updateDashboard.key.includes(TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) &&
+        key.includes(TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) &&
         this.itemConfig.entityType !== EntityType[5].key
       ) {
         return;
       }
-      if (
-        this.rocketOption.updateDashboard.key.includes(TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) &&
-        this.itemConfig.entityType !== EntityType[6].key
-      ) {
+      if (key.includes(TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) && this.itemConfig.entityType !== EntityType[6].key) {
         return;
       }
       setTimeout(() => {

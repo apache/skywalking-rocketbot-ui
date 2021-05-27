@@ -74,7 +74,7 @@ limitations under the License. -->
             :rocketGlobal="rocketGlobal"
             :item="i"
             :index="index"
-            :type="TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY"
+            :type="type"
             :updateObjects="true"
             :rocketOption="stateDashboardOption"
             :templateType="templateType"
@@ -130,10 +130,9 @@ limitations under the License. -->
     private mode: string = 'server';
     private templateType: string = '';
     private templateMode: string = '';
-    private TopologyType = TopologyType;
+    private type = TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY;
 
     private beforeMount() {
-      this.TopologyType = TopologyType;
       this.height = document.body.clientHeight - 200;
     }
 

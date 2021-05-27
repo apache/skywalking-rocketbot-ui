@@ -28,7 +28,6 @@ limitations under the License. -->
       <window-endpoint
         v-if="dialog === 'endpoint'"
         :current="this.current"
-        :endpointComps="stateTopo.topoEndpoints"
         @changeEndpointComps="changeEndpointComps"
         :updateObjects="updateObjects"
       />
