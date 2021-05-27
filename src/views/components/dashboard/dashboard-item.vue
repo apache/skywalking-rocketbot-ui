@@ -144,7 +144,6 @@ limitations under the License. -->
       this.itemConfig = this.item;
       this.itemEvents = this.eventsFilter();
       this.theme = this.darkThemeTypes.includes(this.type) ? 'dark' : 'light';
-
       if (this.updateObjects) {
         setTimeout(() => {
           this.chartRender();

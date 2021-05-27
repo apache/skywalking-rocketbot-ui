@@ -51,12 +51,19 @@ const actions: ActionTree<State, any> = {
 
     if (params.type === TopologyType.TOPOLOGY_ENDPOINT) {
       const endpointComps: string = `${window.localStorage.getItem('topologyEndpoints')}`;
-      const topoEndpoint = endpointComps ? JSON.parse(endpointComps) : [];
-      config = topoEndpoint[params.index];
+      const topoEndpoint = endpointComps ? JSON.parse(endpointComps) : {};
+      if (!topoEndpoint[params.templateType]) {
+        return new Promise((resolve) => resolve({}));
+      }
+      config = topoEndpoint[params.templateType][params.index];
     } else if (params.type === TopologyType.TOPOLOGY_INSTANCE) {
       const instanceComps: string = `${window.localStorage.getItem('topologyInstances')}`;
-      const topoInstance = instanceComps ? JSON.parse(instanceComps) : [];
-      config = topoInstance[params.index];
+      const topoInstance = instanceComps ? JSON.parse(instanceComps) : {};
+
+      if (!topoInstance[params.templateType]) {
+        return new Promise((resolve) => resolve({}));
+      }
+      config = topoInstance[params.templateType][params.index];
     } else if (params.type === TopologyType.TOPOLOGY_SERVICE) {
       const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
       const topoService = serviceComps ? JSON.parse(serviceComps) : {};

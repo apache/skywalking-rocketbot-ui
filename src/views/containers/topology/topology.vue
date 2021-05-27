@@ -34,7 +34,6 @@ limitations under the License. -->
       <window-instance
         v-if="dialog === 'instance'"
         :current="this.current"
-        :instanceComps="stateTopo.topoInstances"
         @changeInstanceComps="changeInstanceComps"
         :updateObjects="updateObjects"
       />
@@ -93,7 +92,7 @@ limitations under the License. -->
 
     private current: any = {};
     private dialog: string = '';
-    private updateObjects: boolean = true;
+    private updateObjects: boolean = false;
 
     private created() {
       this.SET_PAGE_TYPE(PageTypes.TOPOLOGY);

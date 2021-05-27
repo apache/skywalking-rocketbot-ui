@@ -24,7 +24,7 @@ limitations under the License. -->
       :type="type"
       :updateObjects="updateObjects"
       :rocketOption="stateDashboardOption"
-      :templateType="stateTopo.currentNode.type"
+      :templateType="templateType"
     />
     <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item g-sm-3" @click="ADD_TOPO_ENDPOINT_COMP">
       + Add An Item
@@ -51,19 +51,16 @@ limitations under the License. -->
     @State('rocketbot') private rocketGlobal: any;
     @State('rocketOption') private stateDashboardOption!: optionState;
     @Mutation('rocketTopo/ADD_TOPO_ENDPOINT_COMP') private ADD_TOPO_ENDPOINT_COMP: any;
-    @Prop() private endpointComps: any;
     @Prop() private updateObjects!: boolean;
 
     private type = TopologyType.TOPOLOGY_ENDPOINT;
     private topoEndpoints: unknown = [];
-    private get templateType() {
-      const templateType = this.stateTopo.currentNode.type;
-
-      return this.stateTopo.topoServices[templateType] ? templateType : DEFAULT;
-    }
+    private templateType: string = '';
 
     private beforeMount() {
-      this.type = TopologyType.TOPOLOGY_SERVICE;
+      const templateType = this.stateTopo.currentNode.type;
+
+      this.templateType = this.stateTopo.topoEndpoints[templateType] ? templateType : DEFAULT;
       this.topoEndpoints = this.stateTopo.topoEndpoints[this.templateType];
     }
   }

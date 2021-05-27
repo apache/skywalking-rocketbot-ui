@@ -24,7 +24,7 @@ limitations under the License. -->
       :type="type"
       :updateObjects="updateObjects"
       :rocketOption="stateDashboardOption"
-      :templateType="stateTopo.currentNode.type"
+      :templateType="templateType"
     />
     <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item g-sm-3" @click="ADD_TOPO_INSTANCE_COMP">
       + Add An Item
@@ -39,7 +39,7 @@ limitations under the License. -->
   import { State as topoState } from '@/store/modules/topology';
   import { State as optionState } from '@/store/modules/global/selectors';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
-  import { TopologyType } from '@/constants/constant';
+  import { TopologyType, DEFAULT } from '@/constants/constant';
 
   @Component({
     components: {
@@ -51,9 +51,18 @@ limitations under the License. -->
     @State('rocketbot') private rocketGlobal: any;
     @State('rocketOption') private stateDashboardOption!: optionState;
     @Mutation('rocketTopo/ADD_TOPO_INSTANCE_COMP') private ADD_TOPO_INSTANCE_COMP: any;
-    @Prop() private instanceComps: any;
     @Prop() private updateObjects!: boolean;
+
+    private instanceComps: unknown = [];
     private type: string = TopologyType.TOPOLOGY_INSTANCE;
+    private templateType: string = '';
+
+    private beforeMount() {
+      const templateType = this.stateTopo.currentNode.type;
+
+      this.templateType = this.stateTopo.topoInstances[templateType] ? templateType : DEFAULT;
+      this.instanceComps = this.stateTopo.topoInstances[this.templateType];
+    }
   }
 </script>
 <style lang="scss" scoped>

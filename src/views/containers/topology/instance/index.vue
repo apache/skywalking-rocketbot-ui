@@ -65,7 +65,7 @@ limitations under the License. -->
         />
       </div>
     </div>
-    <instances-survey :instanceComps="instanceMetrics" :updateObjects="updateObjects" />
+    <instances-survey :updateObjects="updateObjects" />
   </div>
 </template>
 
@@ -97,7 +97,6 @@ limitations under the License. -->
   })
   export default class WindowInstance extends Vue {
     @Prop() private current!: { key: number | string; label: number | string };
-    @Prop() private instanceComps: any;
     @Prop() private updateObjects!: boolean;
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketData') private rocketComps!: rocketData;
@@ -112,7 +111,6 @@ limitations under the License. -->
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
 
     private pageEventsType = PageEventsType;
-    private instanceMetrics = [];
 
     private selectInstance(i: Option) {
       if (!this.rocketComps.enableEvents) {
@@ -137,7 +135,6 @@ limitations under the License. -->
     private beforeMount() {
       const { type } = this.stateTopo.currentNode;
 
-      this.instanceMetrics = this.instanceComps[type];
       this.SET_CURRENT_SERVICE(this.current);
       this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 3 });
       this.GET_SERVICE_INSTANCES({ duration: this.durationTime, serviceId: this.current.key }).then(() => {
@@ -159,7 +156,7 @@ limitations under the License. -->
       }
     }
     private exportData() {
-      const data = this.instanceComps;
+      const data = this.stateTopo.topoInstances;
       const name = 'instanceComps.json';
       saveFile(data, name);
     }

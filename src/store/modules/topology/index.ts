@@ -46,7 +46,7 @@ export interface State {
   endpointDependencyMetrics: { [key: string]: any };
   currentEndpointDepth: { key: number; label: string };
   topoEndpoints: { [key: string]: any[] };
-  topoInstances: any[];
+  topoInstances: { [key: string]: any[] };
   topoServices: { [key: string]: any[] };
   topoServicesDependency: { [key: string]: any[] };
   topoServicesInstanceDependency: { [key: string]: any[] };
@@ -88,7 +88,7 @@ const initState: State = {
   endpointDependencyMetrics: {},
   currentEndpointDepth: { key: 2, label: '2' },
   topoEndpoints: {},
-  topoInstances: [],
+  topoInstances: {},
   topoServices: {},
   topoServicesDependency: {},
   topoServicesInstanceDependency: {},
@@ -141,7 +141,7 @@ const mutations = {
     state.topoEndpoints = data;
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(data));
   },
-  [types.SET_TOPO_INSTANCE](state: State, data: any[]) {
+  [types.SET_TOPO_INSTANCE](state: State, data: { [key: string]: unknown[] }) {
     state.topoInstances = data;
     window.localStorage.setItem('topologyInstances', JSON.stringify(data));
   },
@@ -167,13 +167,16 @@ const mutations = {
   },
   [types.DELETE_TOPO_ENDPOINT](state: State, index: number) {
     const templateType = state.currentNode.type;
-    const type = state.topoServices[templateType] ? templateType : DEFAULT;
+    const type = state.topoEndpoints[templateType] ? templateType : DEFAULT;
 
     state.topoEndpoints[type].splice(index, 1);
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
   },
   [types.DELETE_TOPO_INSTANCE](state: State, index: number) {
-    state.topoInstances.splice(index, 1);
+    const templateType = state.currentNode.type;
+    const type = state.topoInstances[templateType] ? templateType : DEFAULT;
+
+    state.topoInstances[type].splice(index, 1);
     window.localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
   },
   [types.DELETE_TOPO_SERVICE](state: State, index: number) {
@@ -258,7 +261,9 @@ const mutations = {
       width: 3,
       entityType: 'ServiceInstance',
     };
-    state.topoInstances.push(comp);
+    const templateType = state.currentNode.type;
+    const type = state.topoInstances[templateType] ? templateType : DEFAULT;
+    state.topoInstances[type].push(comp);
     window.localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
   },
   [types.ADD_TOPO_ENDPOINT_COMP](state: State) {
@@ -268,7 +273,7 @@ const mutations = {
       entityType: 'Endpoint',
     };
     const templateType = state.currentNode.type;
-    const type = state.topoServices[templateType] ? templateType : DEFAULT;
+    const type = state.topoEndpoints[templateType] ? templateType : DEFAULT;
     state.topoEndpoints[type].push(comp);
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
   },

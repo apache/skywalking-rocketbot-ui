@@ -64,7 +64,7 @@ limitations under the License. -->
         />
       </div>
     </div>
-    <endpoints-survey :endpointComps="endpointMetrics" :updateObjects="updateObjects" />
+    <endpoints-survey :updateObjects="updateObjects" />
   </div>
 </template>
 
@@ -136,7 +136,6 @@ limitations under the License. -->
       const { type } = this.stateTopo.currentNode;
 
       this.SET_CURRENT_SERVICE(this.current);
-      this.endpointMetrics = this.stateTopo.topoEndpoints[type];
       this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 2 });
       this.GET_SERVICE_ENDPOINTS({ duration: this.durationTime, serviceId: this.current.key, keyword: '' }).then(() => {
         this.selectEndpoint(this.stateDashboardOption.endpoints[0]);
