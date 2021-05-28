@@ -87,12 +87,15 @@ limitations under the License. -->
       </div>
       <div v-else-if="showServerInfo">
         <div class="pl-10 pb-5">
-          <span class="label grey">{{ $t('name') }}</span>
-          <span class="content">{{ stateTopo.currentNode.name }}</span>
-        </div>
-        <div class="pl-10 pb-5">
-          <span class="label grey">{{ $t('type') }}</span>
-          <span class="content">{{ stateTopo.currentNode.type }}</span>
+          <span class="type grey">{{ $t('type') }}</span>
+          <RkSelect
+            class="content grey"
+            :mode="'multiple'"
+            :current="currentType"
+            :data="templateTypes"
+            @onChoose="(item) => changeTemplatesType(item)"
+          />
+          <!-- <span class="content">{{ stateTopo.currentNode.type }}</span> -->
         </div>
         <TopoServiceMetrics />
       </div>
@@ -119,7 +122,7 @@ limitations under the License. -->
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import TopoInstanceDependency from './dependency/topo-instance-dependency.vue';
-  import { DurationTime } from '@/types/global';
+  import { DurationTime, Option } from '@/types/global';
   import TopoServiceMetrics from './topo-service-metrics.vue';
   import ToolBarBtns from '../dashboard/tool-bar/tool-bar-btns.vue';
   import { State as rocketbotGlobal } from '@/store/modules/global';
@@ -163,10 +166,29 @@ limitations under the License. -->
     private showInfoCount: number = 0;
     private showInfo: boolean = false;
     private dialogTopoVisible = false;
+    private templateTypes: Option[] = [];
+    private currentType: Option = { key: '', label: '' };
 
     private get showServerInfo() {
       return this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal;
     }
+
+    private beforeMount() {
+      if (this.showServerInfo) {
+        this.templateTypes = Object.keys(this.stateTopo.topoServices).map((item: string) => {
+          return { label: item, key: item };
+        });
+        this.currentType = this.templateTypes[0];
+      }
+      if (this.stateTopo.selectedServiceCall) {
+        this.templateTypes = Object.keys(this.stateTopo.topoServicesDependency).map((item: string) => {
+          return { label: item, key: item };
+        });
+        this.currentType = this.templateTypes[0];
+      }
+    }
+
+    private changeTemplatesType(item: Option) {}
 
     private setShowInfo() {
       this.showInfo = false;
@@ -336,6 +358,11 @@ limitations under the License. -->
     .label {
       display: inline-block;
       width: 40%;
+    }
+
+    .type {
+      display: inline-block;
+      width: 50px;
     }
 
     .tool-title {

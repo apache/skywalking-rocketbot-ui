@@ -99,13 +99,7 @@ limitations under the License. -->
       this.initMetricsTemplate();
     }
     private initMetricsTemplate() {
-      localStorage.removeItem('topologyServicesInstanceDependency');
-      localStorage.removeItem('topologyServices');
-      localStorage.removeItem('topologyInstances');
-      localStorage.removeItem('topologyEndpoints');
-      localStorage.removeItem('topologyServicesDependency');
-      localStorage.removeItem('topologyEndpointDependency');
-
+      // localStorage.removeItem('topologyServicesInstanceDependency');
       if (window.localStorage.getItem('topologyServices')) {
         const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
         const topoService = serviceComps ? JSON.parse(serviceComps) : [];
@@ -124,8 +118,8 @@ limitations under the License. -->
 
         this.SET_TOPO_ENDPOINT(topoEndpoint);
       }
-      if (window.localStorage.getItem('topologyServicesDependency')) {
-        const serviceDependencyComps: string = `${window.localStorage.getItem('topologyServicesDependency')}`;
+      if (localStorage.getItem('topologyServicesDependency')) {
+        const serviceDependencyComps: string = `${localStorage.getItem('topologyServicesDependency')}`;
         const topoServiceDependency = serviceDependencyComps ? JSON.parse(serviceDependencyComps) : [];
 
         this.SET_TOPO_SERVICE_DEPENDENCY(topoServiceDependency);
