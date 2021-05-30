@@ -23,7 +23,7 @@ limitations under the License. -->
       :type="type"
       :updateObjects="true"
       :rocketOption="stateDashboardOption"
-      :templateType="templateType"
+      :templateTypes="templateTypes"
     />
     <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="ADD_TOPO_SERVICE_COMP">
       + Add An Item
@@ -32,12 +32,13 @@ limitations under the License. -->
 </template>
 <script lang="ts">
   import { State as topoState } from '@/store/modules/topology';
-  import { Component, Vue } from 'vue-property-decorator';
+  import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
   import { State, Mutation } from 'vuex-class';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketbotGlobal } from '@/store/modules/global';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
   import { DEFAULT, TopologyType } from '@/constants/constant';
+  import { Option } from '@/types/global';
 
   @Component({
     components: {
@@ -45,9 +46,11 @@ limitations under the License. -->
     },
   })
   export default class TopoServiceMetrics extends Vue {
+    @Prop() private currentType!: Option;
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @State('rocketTopo') private stateTopo!: topoState;
+    @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     @Mutation('rocketTopo/ADD_TOPO_SERVICE_COMP') private ADD_TOPO_SERVICE_COMP: any;
 
     private serviceComps: unknown[] = [];
@@ -55,18 +58,44 @@ limitations under the License. -->
     private default = DEFAULT;
     private type: string = '';
 
-    private get templateType() {
-      const templateType = this.stateTopo.currentNode.type;
+    private get templateTypes() {
+      let templateTypes = [];
+      const nodeType = this.stateTopo.currentNode.type;
+      const templateStr = localStorage.getItem('topoTemplateTypes');
 
-      return this.stateTopo.topoServices[templateType] ? templateType : DEFAULT;
+      if (templateStr) {
+        const templates: any = JSON.stringify(templateStr);
+
+        if (templates[TopologyType.TOPOLOGY_SERVICE]) {
+          templateTypes = templates[TopologyType.TOPOLOGY_SERVICE].map((item: Option) => item.key);
+        } else {
+          templateTypes = [this.stateTopo.topoServices[nodeType] ? [nodeType] : [DEFAULT]];
+        }
+      } else {
+        templateTypes = this.stateTopo.topoServices[nodeType] ? [nodeType] : [DEFAULT];
+      }
+
+      return templateTypes;
     }
 
     private beforeMount() {
       this.type = TopologyType.TOPOLOGY_SERVICE;
-      const templateType = this.templateType;
-
-      this.serviceComps = this.stateTopo.topoServices[templateType] || this.stateTopo.topoServices[DEFAULT];
       this.height = document.body.clientHeight - 230;
+      this.setServiceTemplates();
+    }
+
+    private setServiceTemplates() {
+      const templateTypes = this.templateTypes;
+
+      for (const type of templateTypes) {
+        this.serviceComps = [...this.serviceComps, ...this.stateTopo.topoServices[type]];
+      }
+    }
+
+    @Watch('currentType')
+    private updateServiceMetrics() {
+      this.setServiceTemplates();
+      // this.UPDATE_DASHBOARD();
     }
   }
 </script>

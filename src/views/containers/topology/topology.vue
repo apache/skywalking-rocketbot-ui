@@ -99,7 +99,7 @@ limitations under the License. -->
       this.initMetricsTemplate();
     }
     private initMetricsTemplate() {
-      // localStorage.removeItem('topologyServicesInstanceDependency');
+      localStorage.removeItem('topoTemplateTypes');
       if (window.localStorage.getItem('topologyServices')) {
         const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
         const topoService = serviceComps ? JSON.parse(serviceComps) : [];

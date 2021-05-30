@@ -52,7 +52,8 @@ export interface State {
   topoServicesInstanceDependency: { [key: string]: any[] };
   topoEndpointDependency: { [key: string]: any[] };
   instanceDependencyMode: string;
-  editDependencyMetrics: boolean;
+  editDependencyMetrics: boolean; // SERVICE_TEMPLATE_TYPE
+  serviceTemplateType: Option | null;
 }
 
 const DefaultConfig = {
@@ -95,6 +96,7 @@ const initState: State = {
   instanceDependencyMode: '',
   editDependencyMetrics: false,
   topoEndpointDependency: {},
+  serviceTemplateType: null,
 };
 
 // getters
@@ -403,6 +405,9 @@ const mutations = {
     }
     localStorage.setItem('topologyServicesInstanceDependency', JSON.stringify(state.topoServicesInstanceDependency));
   },
+  // [types.UPDATE_SERVICE_TEMPLATE_TYPES](state: State, data: any) {
+  //   serviceTemplateType = data;
+  // },
 };
 
 // actions

@@ -25,8 +25,8 @@ limitations under the License. -->
   >
     <div class="rk-bar-i flex-h" @click="visible = !visible" :class="{ dark: theme === 'dark' }">
       <div class="mr-15 rk-bar-i-text">
-        <div v-if="Array.isArray(current)">
-          <div class="selected flex-h" v-for="item in current" :key="item.key">
+        <div v-if="Array.isArray(current)" class="flex-h">
+          <div class="selected" v-for="item in current" :key="item.key">
             <span>{{ item.label }}</span>
             <span class="remove-icon" v-if="current.length !== 1" @click="removeSelected(item)">×</span>
           </div>
@@ -82,10 +82,6 @@ limitations under the License. -->
       return this.mode === Multiple ? this.current.map((item: any) => item.key) : [this.current.key];
     }
 
-    private beforeMount() {
-      console.log(this.current);
-    }
-
     public handleOpen() {
       this.visible = true;
     }
@@ -125,11 +121,9 @@ limitations under the License. -->
       padding: 0 3px;
       border-radius: 3px;
       margin: 3px;
-      overflow: hidden;
       color: rgba(0, 0, 0, 0.65);
       background-color: #fafafa;
       border: 1px solid #e8e8e8;
-      width: 60px;
       text-align: center;
     }
     .remove-icon {

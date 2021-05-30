@@ -98,7 +98,7 @@ limitations under the License. -->
           />
           <!-- <span class="content">{{ stateTopo.currentNode.type }}</span> -->
         </div>
-        <TopoServiceMetrics />
+        <TopoServiceMetrics :currentType="currentType" />
       </div>
     </div>
     <div class="show-dependency" v-if="stateTopo.selectedServiceCall">
@@ -132,6 +132,7 @@ limitations under the License. -->
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
   import TopoServiceDependency from './dependency/topo-service-dependency.vue';
+  import { TopologyType } from '@/constants/constant';
 
   @Component({
     components: {
@@ -174,7 +175,63 @@ limitations under the License. -->
       return this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal;
     }
 
-    private changeTemplatesType(item: Option) {}
+    private changeTemplatesType(item: any) {
+      let topoTemplateTypes;
+      const typesStr = localStorage.getItem('topoTemplateTypes');
+      const types = typesStr ? JSON.parse(typesStr) : null;
+
+      if (this.currentType.find((d) => d.key === item.key)) {
+        this.deleteTemplateTypes(item);
+        return;
+      }
+
+      if (typesStr) {
+        if (this.showServerInfo) {
+          topoTemplateTypes = {
+            ...types,
+            [TopologyType.TOPOLOGY_SERVICE]: this.currentType,
+          };
+        } else {
+          topoTemplateTypes = {
+            ...types,
+            [TopologyType.TOPOLOGY_SERVICE_DEPENDENCY]: this.currentType,
+          };
+        }
+      } else {
+        if (this.showServerInfo) {
+          topoTemplateTypes = {
+            [TopologyType.TOPOLOGY_SERVICE]: this.currentType,
+          };
+        } else {
+          topoTemplateTypes = {
+            [TopologyType.TOPOLOGY_SERVICE_DEPENDENCY]: this.currentType,
+          };
+        }
+      }
+      localStorage.setItem('topoTemplateTypes', JSON.stringify(topoTemplateTypes));
+      this.currentType.push(item);
+    }
+
+    private deleteTemplateTypes(item: any) {
+      let topoTemplateTypes = null;
+      const typesStr = localStorage.getItem('topoTemplateTypes');
+      const types = typesStr ? JSON.parse(typesStr) : null;
+      const index = this.currentType.findIndex((d) => item.key === d);
+
+      this.currentType.splice(index, 1);
+      if (this.showServerInfo) {
+        topoTemplateTypes = {
+          ...types,
+          [TopologyType.TOPOLOGY_SERVICE]: this.currentType,
+        };
+      } else {
+        topoTemplateTypes = {
+          ...types,
+          [TopologyType.TOPOLOGY_SERVICE_DEPENDENCY]: this.currentType,
+        };
+      }
+      localStorage.setItem('topoTemplateTypes', JSON.stringify(topoTemplateTypes));
+    }
 
     private setShowInfo() {
       this.showInfo = false;
@@ -255,7 +312,7 @@ limitations under the License. -->
     private watchDetectPointNodeId(newValue: string) {
       if (newValue || this.stateTopo.currentNode.isReal) {
         this.showInfo = true;
-        this.templateTypes = Object.keys(this.stateTopo.topoServicesDependency).map((item: string) => {
+        this.templateTypes = Object.keys(this.stateTopo.topoServicesInstanceDependency).map((item: string) => {
           return { label: item, key: item };
         });
         this.currentType = [this.templateTypes[0]];

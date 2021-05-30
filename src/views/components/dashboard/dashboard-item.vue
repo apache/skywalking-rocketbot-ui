@@ -112,7 +112,7 @@ limitations under the License. -->
     @Prop() private type!: string;
     @Prop() private updateObjects!: boolean;
     @Prop() private rocketOption!: optionState;
-    @Prop() private templateType!: string;
+    @Prop() private templateTypes!: string[];
     @Prop() private templateMode!: string; // server client
 
     private noEditTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as string[];
@@ -144,6 +144,7 @@ limitations under the License. -->
       this.itemConfig = this.item;
       this.itemEvents = this.eventsFilter();
       this.theme = this.darkThemeTypes.includes(this.type) ? 'dark' : 'light';
+
       if (this.updateObjects) {
         setTimeout(() => {
           this.chartRender();
@@ -161,7 +162,7 @@ limitations under the License. -->
         index: this.index,
         type: this.type,
         rocketOption: this.rocketOption,
-        templateType: this.templateType,
+        templateType: this.templateTypes,
         templateMode: this.templateMode,
       }).then((params: Array<{ metricName: string; [key: string]: any; config: any }>) => {
         if (!params) {

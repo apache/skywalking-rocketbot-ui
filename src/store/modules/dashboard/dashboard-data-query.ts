@@ -46,7 +46,7 @@ const actions: ActionTree<State, any> = {
     const dashboard: string = `${window.localStorage.getItem('dashboard')}`;
     const tree = dashboard ? JSON.parse(dashboard) : context.state.tree;
     const normal = params.type ? true : tree[context.state.group].type === 'database' ? false : true;
-    let config = {} as any;
+    let config = null as any;
     const names = ['readSampledRecords', 'sortMetrics'];
 
     if (params.type === TopologyType.TOPOLOGY_ENDPOINT) {
@@ -68,10 +68,12 @@ const actions: ActionTree<State, any> = {
       const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
       const topoService = serviceComps ? JSON.parse(serviceComps) : {};
 
-      if (!topoService[params.templateType]) {
+      for (const type of params.templateType) {
+        config = { ...config, ...topoService[type][params.index] };
+      }
+      if (!config) {
         return new Promise((resolve) => resolve({}));
       }
-      config = topoService[params.templateType][params.index];
     } else if (params.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) {
       const serviceDependencyComps: string = `${window.localStorage.getItem('topologyServicesDependency')}`;
       const topoServiceDependency = serviceDependencyComps ? JSON.parse(serviceDependencyComps) : {};
