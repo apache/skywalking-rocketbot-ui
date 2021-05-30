@@ -86,13 +86,14 @@ limitations under the License. -->
         <TopoServiceDependency />
       </div>
       <div v-else-if="showServerInfo">
-        <div class="pl-10 pb-5">
-          <span class="type grey">{{ $t('type') }}</span>
+        <div class="pl-10 pb-5 flex-h">
+          <div class="type grey">{{ $t('type') }}</div>
           <RkSelect
             class="content grey"
             :mode="'multiple'"
             :current="currentType"
             :data="templateTypes"
+            :theme="'dark'"
             @onChoose="(item) => changeTemplatesType(item)"
           />
           <!-- <span class="content">{{ stateTopo.currentNode.type }}</span> -->
@@ -167,25 +168,10 @@ limitations under the License. -->
     private showInfo: boolean = false;
     private dialogTopoVisible = false;
     private templateTypes: Option[] = [];
-    private currentType: Option = { key: '', label: '' };
+    private currentType: Option[] = [{ key: '', label: '' }];
 
     private get showServerInfo() {
       return this.stateTopo.currentNode.name && this.stateTopo.currentNode.isReal;
-    }
-
-    private beforeMount() {
-      if (this.showServerInfo) {
-        this.templateTypes = Object.keys(this.stateTopo.topoServices).map((item: string) => {
-          return { label: item, key: item };
-        });
-        this.currentType = this.templateTypes[0];
-      }
-      if (this.stateTopo.selectedServiceCall) {
-        this.templateTypes = Object.keys(this.stateTopo.topoServicesDependency).map((item: string) => {
-          return { label: item, key: item };
-        });
-        this.currentType = this.templateTypes[0];
-      }
     }
 
     private changeTemplatesType(item: Option) {}
@@ -269,6 +255,10 @@ limitations under the License. -->
     private watchDetectPointNodeId(newValue: string) {
       if (newValue || this.stateTopo.currentNode.isReal) {
         this.showInfo = true;
+        this.templateTypes = Object.keys(this.stateTopo.topoServicesDependency).map((item: string) => {
+          return { label: item, key: item };
+        });
+        this.currentType = [this.templateTypes[0]];
       } else {
         this.showInfo = false;
         this.showInfoCount = 0;
@@ -286,6 +276,10 @@ limitations under the License. -->
       }
       if (newValue || this.stateTopo.selectedServiceCall) {
         this.showInfo = true;
+        this.templateTypes = Object.keys(this.stateTopo.topoServices).map((item: string) => {
+          return { label: item, key: item };
+        });
+        this.currentType = [this.templateTypes[0]];
       } else {
         this.showInfo = false;
         this.showInfoCount = 0;
@@ -372,7 +366,7 @@ limitations under the License. -->
     .content {
       vertical-align: top;
       display: inline-block;
-      width: 60%;
+      width: 81%;
     }
 
     .circle {
