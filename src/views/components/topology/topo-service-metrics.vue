@@ -23,7 +23,7 @@ limitations under the License. -->
       :type="type"
       :updateObjects="true"
       :rocketOption="stateDashboardOption"
-      :templateTypes="templateTypes"
+      :templateTypes="templateTypes()"
     />
     <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="ADD_TOPO_SERVICE_COMP">
       + Add An Item
@@ -57,14 +57,15 @@ limitations under the License. -->
     private height: number = 800;
     private default = DEFAULT;
     private type: string = '';
+    private updateObjects = true;
 
-    private get templateTypes() {
+    private templateTypes() {
       let templateTypes = [];
       const nodeType = this.stateTopo.currentNode.type;
       const templateStr = localStorage.getItem('topoTemplateTypes');
 
       if (templateStr) {
-        const templates: any = JSON.stringify(templateStr);
+        const templates: any = JSON.parse(templateStr);
 
         if (templates[TopologyType.TOPOLOGY_SERVICE]) {
           templateTypes = templates[TopologyType.TOPOLOGY_SERVICE].map((item: Option) => item.key);
@@ -85,7 +86,9 @@ limitations under the License. -->
     }
 
     private setServiceTemplates() {
-      const templateTypes = this.templateTypes;
+      const templateTypes = this.templateTypes();
+
+      this.serviceComps = [];
 
       for (const type of templateTypes) {
         this.serviceComps = [...this.serviceComps, ...this.stateTopo.topoServices[type]];
@@ -95,7 +98,6 @@ limitations under the License. -->
     @Watch('currentType')
     private updateServiceMetrics() {
       this.setServiceTemplates();
-      // this.UPDATE_DASHBOARD();
     }
   }
 </script>

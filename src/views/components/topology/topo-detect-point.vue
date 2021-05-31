@@ -96,7 +96,6 @@ limitations under the License. -->
             :theme="'dark'"
             @onChoose="(item) => changeTemplatesType(item)"
           />
-          <!-- <span class="content">{{ stateTopo.currentNode.type }}</span> -->
         </div>
         <TopoServiceMetrics :currentType="currentType" />
       </div>
@@ -185,6 +184,8 @@ limitations under the License. -->
         return;
       }
 
+      this.currentType.push(item);
+
       if (typesStr) {
         if (this.showServerInfo) {
           topoTemplateTypes = {
@@ -208,8 +209,8 @@ limitations under the License. -->
           };
         }
       }
+
       localStorage.setItem('topoTemplateTypes', JSON.stringify(topoTemplateTypes));
-      this.currentType.push(item);
     }
 
     private deleteTemplateTypes(item: any) {

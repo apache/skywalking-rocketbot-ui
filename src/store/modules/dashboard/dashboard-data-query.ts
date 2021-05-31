@@ -65,12 +65,14 @@ const actions: ActionTree<State, any> = {
       }
       config = topoInstance[params.templateType][params.index];
     } else if (params.type === TopologyType.TOPOLOGY_SERVICE) {
-      const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
-      const topoService = serviceComps ? JSON.parse(serviceComps) : {};
+      const serviceCompsStr: string = `${window.localStorage.getItem('topologyServices')}`;
+      const topoService = serviceCompsStr ? JSON.parse(serviceCompsStr) : {};
+      let serviceComps: any[] = [];
 
       for (const type of params.templateType) {
-        config = { ...config, ...topoService[type][params.index] };
+        serviceComps = [...serviceComps, ...topoService[type]];
       }
+      config = serviceComps[params.index];
       if (!config) {
         return new Promise((resolve) => resolve({}));
       }
