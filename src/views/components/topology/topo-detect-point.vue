@@ -276,7 +276,6 @@ limitations under the License. -->
     @Watch('durationTime')
     private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
       if (compareObj(newValue, oldValue)) {
-        const service = this.stateTopo.currentNode;
         this.UPDATE_DASHBOARD();
       }
     }

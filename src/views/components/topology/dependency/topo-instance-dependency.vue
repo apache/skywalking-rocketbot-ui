@@ -63,6 +63,17 @@ limitations under the License. -->
             <rk-icon class="lg" icon="save_alt" v-tooltip:bottom="{ content: 'export' }" />
           </span>
         </div>
+        <div class="pl-10 pb-5 flex-h">
+          <div class="type grey">{{ $t('templateType') }}</div>
+          <RkSelect
+            class="content grey"
+            :mode="'multiple'"
+            :current="currentType"
+            :data="templateNameList"
+            :theme="'dark'"
+            @onChoose="(item) => changeTemplatesType(item)"
+          />
+        </div>
         <div
           v-if="stateTopo.selectedInstanceCall"
           class="rk-instance-dependency-metrics scroll_bar_style"
@@ -70,14 +81,14 @@ limitations under the License. -->
         >
           <DashboardItem
             v-for="(i, index) in serviceInstanceDependencyComps || []"
-            :key="index"
+            :key="i.uuid"
             :rocketGlobal="rocketGlobal"
             :item="i"
             :index="index"
             :type="type"
             :updateObjects="true"
             :rocketOption="stateDashboardOption"
-            :templateType="templateType"
+            :templateTypes="templateType"
             :templateMode="stateTopo.instanceDependencyMode"
           />
           <div
@@ -103,6 +114,8 @@ limitations under the License. -->
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
   import { DEFAULT, TopologyType } from '@/constants/constant';
+  import { Option } from '@/types/global';
+  import { uuid } from '@/utils/uuid';
 
   @Component({
     components: {
@@ -119,51 +132,107 @@ limitations under the License. -->
     @Mutation('rocketTopo/SET_INSTANCE_DEPENDENCY_MODE_STATUS') private SET_INSTANCE_DEPENDENCY_MODE_STATUS: any;
     @Mutation('rocketTopo/SET_SELECTED_INSTANCE_CALL') private SET_SELECTED_INSTANCE_CALL: any;
     @Mutation('SET_SERVICE_INSTANCE_DEPENDENCY') private SET_SERVICE_INSTANCE_DEPENDENCY: any;
-    @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     @Mutation('rocketTopo/EDIT_DEPENDENCY_METRICS') private EDIT_DEPENDENCY_METRICS: any;
     @Mutation('rocketTopo/ADD_TOPO_INSTANCE_DEPENDENCY_COMP') private ADD_TOPO_INSTANCE_DEPENDENCY_COMP: any;
     @Mutation('rocketTopo/IMPORT_TREE_INSTANCE_DEPENDENCY') private IMPORT_TREE_INSTANCE_DEPENDENCY: any;
+    @Mutation('rocketTopo/UPDATE_TOPO_TEMPLATE_TYPES') private UPDATE_TOPO_TEMPLATE_TYPES: any;
 
     private showInfo: boolean = true;
     private height: number = 500;
     private serviceInstanceDependencyComps: any = [];
     private mode: string = 'server';
-    private templateType: string = '';
+    private templateType: string[] = [];
     private templateMode: string = '';
     private type = TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY;
+    private currentType: Option[] = [];
+    private templateNameList: Option[] = [];
 
     private beforeMount() {
-      this.height = document.body.clientHeight - 200;
+      this.height = document.body.clientHeight - 250;
     }
 
     private setMode(mode: any) {
       this.SET_INSTANCE_DEPENDENCY_MODE_STATUS(mode);
       const call: any = this.stateTopo.selectedInstanceCall || { sourceObj: {} };
-      const templateType = call.sourceObj.type;
-      this.templateType = this.stateTopo.topoServicesInstanceDependency[templateType] ? templateType : DEFAULT;
-
-      if (!this.stateTopo.topoServicesInstanceDependency[this.templateType][mode]) {
-        return;
-      }
-
-      this.serviceInstanceDependencyComps = this.stateTopo.topoServicesInstanceDependency[this.templateType][mode];
-      this.UPDATE_DASHBOARD();
+      this.templateTypes();
+      this.setMetircsTemplates();
     }
     private showDependencyMetrics(data: any) {
       this.SET_INSTANCE_DEPENDENCY_MODE_STATUS(data.detectPoints[0].toLowerCase());
       this.SET_SELECTED_INSTANCE_CALL(data);
       this.SET_SERVICE_INSTANCE_DEPENDENCY(data);
+      this.templateTypes();
+      const templates: any = this.stateTopo.topoTemplatesType;
+
+      this.templateNameList = Object.keys(this.stateTopo.instanceDependency).map((item: string) => {
+        return { label: item, key: item };
+      });
+      this.currentType = templates[TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY] || [
+        { label: DEFAULT, key: DEFAULT },
+      ];
+      this.setMetircsTemplates();
+    }
+
+    private changeTemplatesType(item: Option) {
+      let topoTemplateTypes;
+      const types = this.stateTopo.topoTemplatesType;
+
+      if (this.currentType.find((d) => d.key === item.key)) {
+        this.deleteTemplateTypes(item);
+        return;
+      }
+      this.currentType.push(item);
+      topoTemplateTypes = {
+        ...types,
+        [TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY]: this.currentType,
+      };
+      this.UPDATE_TOPO_TEMPLATE_TYPES(topoTemplateTypes);
+      this.setMetircsTemplates();
+    }
+
+    private deleteTemplateTypes(item: any) {
+      let topoTemplateTypes = null;
+      const types = this.stateTopo.topoTemplatesType;
+      const index = this.currentType.findIndex((d) => item.key === d);
+
+      this.currentType.splice(index, 1);
+      topoTemplateTypes = {
+        ...types,
+        [TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY]: this.currentType,
+      };
+      this.UPDATE_TOPO_TEMPLATE_TYPES(topoTemplateTypes);
+    }
+
+    private setMetircsTemplates() {
+      this.serviceInstanceDependencyComps = [];
       const mode = this.stateTopo.instanceDependencyMode as any;
 
-      this.templateType = data.sourceObj.type || DEFAULT;
-      if (!this.templateType) {
-        return;
+      for (const type of this.templateType) {
+        this.serviceInstanceDependencyComps = [
+          ...this.serviceInstanceDependencyComps,
+          ...this.stateTopo.topoServicesInstanceDependency[type][mode],
+        ];
       }
-      if (!this.stateTopo.topoServicesInstanceDependency[this.templateType][mode]) {
-        return;
-      }
-      this.serviceInstanceDependencyComps = this.stateTopo.topoServicesInstanceDependency[this.templateType][mode];
+      this.serviceInstanceDependencyComps = this.serviceInstanceDependencyComps.map((item: any) => {
+        item.uuid = uuid();
+        return item;
+      });
     }
+
+    private templateTypes() {
+      const nodeType = this.stateTopo.currentNode.type;
+      const templates = this.stateTopo.topoTemplatesType;
+      let templateTypes = [];
+
+      if (templates[TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY]) {
+        templateTypes = templates[TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY].map((item: Option) => item.key);
+      } else {
+        templateTypes = this.stateTopo.topoServicesInstanceDependency[nodeType] ? [nodeType] : [DEFAULT];
+      }
+
+      this.templateType = templateTypes;
+    }
+
     private handleSetEdit() {
       this.EDIT_DEPENDENCY_METRICS(!this.stateTopo.editDependencyMetrics);
     }
@@ -196,6 +265,9 @@ limitations under the License. -->
     flex-direction: row;
     justify-content: space-between;
     background: #2b3037;
+    .content {
+      width: 66%;
+    }
   }
   .rk-instance-metric-box {
     display: flex;

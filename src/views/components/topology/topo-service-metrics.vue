@@ -16,10 +16,10 @@ limitations under the License. -->
   <div class="service-metrics scroll_bar_style" :style="`height: ${height}px`">
     <DashboardItem
       v-for="(i, index) in serviceComps || []"
-      :key="index + i.title + i.width"
       :rocketGlobal="rocketGlobal"
       :item="i"
       :index="index"
+      :key="i.uuid"
       :type="type"
       :updateObjects="true"
       :rocketOption="stateDashboardOption"
@@ -39,6 +39,7 @@ limitations under the License. -->
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
   import { DEFAULT, TopologyType } from '@/constants/constant';
   import { Option } from '@/types/global';
+  import { uuid } from '@/utils/uuid';
 
   @Component({
     components: {
@@ -50,7 +51,6 @@ limitations under the License. -->
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @State('rocketTopo') private stateTopo!: topoState;
-    @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     @Mutation('rocketTopo/ADD_TOPO_SERVICE_COMP') private ADD_TOPO_SERVICE_COMP: any;
 
     private serviceComps: unknown[] = [];
@@ -72,6 +72,10 @@ limitations under the License. -->
       for (const type of templateTypes) {
         this.serviceComps = [...this.serviceComps, ...this.stateTopo.topoServices[type]];
       }
+      this.serviceComps = this.serviceComps.map((item: any) => {
+        item.uuid = uuid();
+        return item;
+      });
     }
 
     private templateTypes() {

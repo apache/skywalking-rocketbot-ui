@@ -16,7 +16,7 @@ limitations under the License. -->
   <div class="service-metrics scroll_bar_style" :style="`height: ${height}px`">
     <DashboardItem
       v-for="(i, index) in serviceDependencyComps || []"
-      :key="index"
+      :key="i.uuid"
       :rocketGlobal="rocketGlobal"
       :item="i"
       :index="index"
@@ -40,6 +40,7 @@ limitations under the License. -->
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
   import { TopologyType, DEFAULT } from '@/constants/constant';
   import { Option } from '@/types/global';
+  import { uuid } from '@/utils/uuid';
 
   @Component({
     components: {
@@ -51,7 +52,6 @@ limitations under the License. -->
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @State('rocketTopo') private stateTopo!: topoState;
-    @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     @Mutation('rocketTopo/ADD_TOPO_SERVICE_DEPENDENCY_COMP') private ADD_TOPO_SERVICE_DEPENDENCY_COMP: any;
 
     private serviceDependencyComps: any[] = [];
@@ -91,13 +91,16 @@ limitations under the License. -->
           ...this.stateTopo.topoServicesDependency[type][this.templateMode],
         ];
       }
+      this.serviceDependencyComps = this.serviceDependencyComps.map((item: any) => {
+        item.uuid = uuid();
+        return item;
+      });
     }
 
     @Watch('stateTopo.mode')
     private updateServiceDependency() {
       this.templateMode = this.stateTopo.mode ? 'server' : 'client';
       this.setServiceDependencyTemplates();
-      this.UPDATE_DASHBOARD();
     }
     @Watch('currentType')
     private updateServiceMetrics() {
