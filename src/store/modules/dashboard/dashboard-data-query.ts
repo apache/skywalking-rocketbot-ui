@@ -77,14 +77,14 @@ const actions: ActionTree<State, any> = {
         return new Promise((resolve) => resolve({}));
       }
     } else if (params.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) {
-      const serviceDependencyComps: string = `${window.localStorage.getItem('topologyServicesDependency')}`;
-      const topoServiceDependency = serviceDependencyComps ? JSON.parse(serviceDependencyComps) : {};
-      if (
-        !(topoServiceDependency[params.templateType] && topoServiceDependency[params.templateType][params.templateMode])
-      ) {
-        return new Promise((resolve) => resolve([]));
+      const serviceDependencyCompStr: string = `${window.localStorage.getItem('topologyServicesDependency')}`;
+      const topoServiceDependency = serviceDependencyCompStr ? JSON.parse(serviceDependencyCompStr) : {};
+      let serviceDependencyComps: any[] = [];
+
+      for (const type of params.templateType) {
+        serviceDependencyComps = [...serviceDependencyComps, ...topoServiceDependency[type][params.templateMode]];
       }
-      config = topoServiceDependency[params.templateType][params.templateMode][params.index];
+      config = serviceDependencyComps[params.index];
     } else if (params.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) {
       const serviceInstanceDependencyComps: string = `${localStorage.getItem('topologyServicesInstanceDependency')}`;
       const topoServiceInstanceDependency = serviceInstanceDependencyComps

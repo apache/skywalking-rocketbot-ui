@@ -74,31 +74,19 @@ limitations under the License. -->
       </div>
     </div>
     <div v-if="showInfo">
-      <div v-if="stateTopo.selectedServiceCall">
-        <div class="pl-10 pb-5">
-          <span class="label grey">{{ $t('service') }}</span>
-          <span class="content">{{ stateTopo.currentLink.source.name }}</span>
-        </div>
-        <div class="pl-10 pb-5">
-          <span class="label grey">{{ $t('destService') }}</span>
-          <span class="content">{{ stateTopo.currentLink.target.name }}</span>
-        </div>
-        <TopoServiceDependency />
+      <div class="pl-10 pb-5 flex-h">
+        <div class="type grey">{{ $t('templateType') }}</div>
+        <RkSelect
+          class="content grey"
+          :mode="'multiple'"
+          :current="currentType"
+          :data="templateTypes"
+          :theme="'dark'"
+          @onChoose="(item) => changeTemplatesType(item)"
+        />
       </div>
-      <div v-else-if="showServerInfo">
-        <div class="pl-10 pb-5 flex-h">
-          <div class="type grey">{{ $t('type') }}</div>
-          <RkSelect
-            class="content grey"
-            :mode="'multiple'"
-            :current="currentType"
-            :data="templateTypes"
-            :theme="'dark'"
-            @onChoose="(item) => changeTemplatesType(item)"
-          />
-        </div>
-        <TopoServiceMetrics :currentType="currentType" />
-      </div>
+      <TopoServiceDependency v-if="stateTopo.selectedServiceCall" :currentType="currentType" />
+      <TopoServiceMetrics v-else-if="showServerInfo" :currentType="currentType" />
     </div>
     <div class="show-dependency" v-if="stateTopo.selectedServiceCall">
       <a class="rk-btn lg" @click="openInstanceModal">{{ $t('ShowInstanceDependency') }}</a>
@@ -131,7 +119,7 @@ limitations under the License. -->
   import { readFile } from '@/utils/readFile';
   import { saveFile } from '@/utils/saveFile';
   import TopoServiceDependency from './dependency/topo-service-dependency.vue';
-  import { TopologyType } from '@/constants/constant';
+  import { DEFAULT, TopologyType } from '@/constants/constant';
 
   @Component({
     components: {
@@ -162,6 +150,7 @@ limitations under the License. -->
     @Mutation('rocketTopo/IMPORT_TREE_SERVICE_DEPENDENCY') private IMPORT_TREE_SERVICE_DEPENDENCY: any;
     @Mutation('UPDATE_DASHBOARD') private UPDATE_DASHBOARD: any;
     @Mutation('rocketTopo/EDIT_DEPENDENCY_METRICS') private EDIT_DEPENDENCY_METRICS: any;
+    @Mutation('rocketTopo/UPDATE_TOPO_TEMPLATE_TYPES') private UPDATE_TOPO_TEMPLATE_TYPES: any;
 
     private isMini: boolean = true;
     private showInfoCount: number = 0;
@@ -176,47 +165,30 @@ limitations under the License. -->
 
     private changeTemplatesType(item: any) {
       let topoTemplateTypes;
-      const typesStr = localStorage.getItem('topoTemplateTypes');
-      const types = typesStr ? JSON.parse(typesStr) : null;
+      const types = this.stateTopo.topoTemplatesType;
 
       if (this.currentType.find((d) => d.key === item.key)) {
         this.deleteTemplateTypes(item);
         return;
       }
-
       this.currentType.push(item);
-
-      if (typesStr) {
-        if (this.showServerInfo) {
-          topoTemplateTypes = {
-            ...types,
-            [TopologyType.TOPOLOGY_SERVICE]: this.currentType,
-          };
-        } else {
-          topoTemplateTypes = {
-            ...types,
-            [TopologyType.TOPOLOGY_SERVICE_DEPENDENCY]: this.currentType,
-          };
-        }
+      if (this.showServerInfo) {
+        topoTemplateTypes = {
+          ...types,
+          [TopologyType.TOPOLOGY_SERVICE]: this.currentType,
+        };
       } else {
-        if (this.showServerInfo) {
-          topoTemplateTypes = {
-            [TopologyType.TOPOLOGY_SERVICE]: this.currentType,
-          };
-        } else {
-          topoTemplateTypes = {
-            [TopologyType.TOPOLOGY_SERVICE_DEPENDENCY]: this.currentType,
-          };
-        }
+        topoTemplateTypes = {
+          ...types,
+          [TopologyType.TOPOLOGY_SERVICE_DEPENDENCY]: this.currentType,
+        };
       }
-
-      localStorage.setItem('topoTemplateTypes', JSON.stringify(topoTemplateTypes));
+      this.UPDATE_TOPO_TEMPLATE_TYPES(topoTemplateTypes);
     }
 
     private deleteTemplateTypes(item: any) {
       let topoTemplateTypes = null;
-      const typesStr = localStorage.getItem('topoTemplateTypes');
-      const types = typesStr ? JSON.parse(typesStr) : null;
+      const types = this.stateTopo.topoTemplatesType;
       const index = this.currentType.findIndex((d) => item.key === d);
 
       this.currentType.splice(index, 1);
@@ -231,7 +203,7 @@ limitations under the License. -->
           [TopologyType.TOPOLOGY_SERVICE_DEPENDENCY]: this.currentType,
         };
       }
-      localStorage.setItem('topoTemplateTypes', JSON.stringify(topoTemplateTypes));
+      this.UPDATE_TOPO_TEMPLATE_TYPES(topoTemplateTypes);
     }
 
     private setShowInfo() {
@@ -313,10 +285,12 @@ limitations under the License. -->
     private watchDetectPointNodeId(newValue: string) {
       if (newValue || this.stateTopo.currentNode.isReal) {
         this.showInfo = true;
-        this.templateTypes = Object.keys(this.stateTopo.topoServicesInstanceDependency).map((item: string) => {
+        const templates: any = this.stateTopo.topoTemplatesType;
+
+        this.templateTypes = Object.keys(this.stateTopo.topoServicesDependency).map((item: string) => {
           return { label: item, key: item };
         });
-        this.currentType = [this.templateTypes[0]];
+        this.currentType = templates[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY] || [{ label: DEFAULT, key: DEFAULT }];
       } else {
         this.showInfo = false;
         this.showInfoCount = 0;
@@ -334,10 +308,12 @@ limitations under the License. -->
       }
       if (newValue || this.stateTopo.selectedServiceCall) {
         this.showInfo = true;
+        const templates: any = this.stateTopo.topoTemplatesType;
+
         this.templateTypes = Object.keys(this.stateTopo.topoServices).map((item: string) => {
           return { label: item, key: item };
         });
-        this.currentType = [this.templateTypes[0]];
+        this.currentType = templates[TopologyType.TOPOLOGY_SERVICE] || [{ label: DEFAULT, key: DEFAULT }];
       } else {
         this.showInfo = false;
         this.showInfoCount = 0;
@@ -414,7 +390,7 @@ limitations under the License. -->
 
     .type {
       display: inline-block;
-      width: 50px;
+      width: 100px;
     }
 
     .tool-title {
@@ -424,7 +400,7 @@ limitations under the License. -->
     .content {
       vertical-align: top;
       display: inline-block;
-      width: 81%;
+      width: 67%;
     }
 
     .circle {

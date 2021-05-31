@@ -57,27 +57,6 @@ limitations under the License. -->
     private height: number = 800;
     private default = DEFAULT;
     private type: string = '';
-    private updateObjects = true;
-
-    private templateTypes() {
-      let templateTypes = [];
-      const nodeType = this.stateTopo.currentNode.type;
-      const templateStr = localStorage.getItem('topoTemplateTypes');
-
-      if (templateStr) {
-        const templates: any = JSON.parse(templateStr);
-
-        if (templates[TopologyType.TOPOLOGY_SERVICE]) {
-          templateTypes = templates[TopologyType.TOPOLOGY_SERVICE].map((item: Option) => item.key);
-        } else {
-          templateTypes = [this.stateTopo.topoServices[nodeType] ? [nodeType] : [DEFAULT]];
-        }
-      } else {
-        templateTypes = this.stateTopo.topoServices[nodeType] ? [nodeType] : [DEFAULT];
-      }
-
-      return templateTypes;
-    }
 
     private beforeMount() {
       this.type = TopologyType.TOPOLOGY_SERVICE;
@@ -93,6 +72,20 @@ limitations under the License. -->
       for (const type of templateTypes) {
         this.serviceComps = [...this.serviceComps, ...this.stateTopo.topoServices[type]];
       }
+    }
+
+    private templateTypes() {
+      let templateTypes = [];
+      const nodeType = this.stateTopo.currentNode.type;
+      const templates = this.stateTopo.topoTemplatesType;
+
+      if (templates[TopologyType.TOPOLOGY_SERVICE]) {
+        templateTypes = templates[TopologyType.TOPOLOGY_SERVICE].map((item: Option) => item.key);
+      } else {
+        templateTypes = this.stateTopo.topoServices[nodeType] ? [nodeType] : [DEFAULT];
+      }
+
+      return templateTypes;
     }
 
     @Watch('currentType')
