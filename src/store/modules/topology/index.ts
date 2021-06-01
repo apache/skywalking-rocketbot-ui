@@ -161,95 +161,95 @@ const mutations = {
     state.topoEndpointDependency = data;
     localStorage.setItem('topologyEndpointDependency', JSON.stringify(data));
   },
-  [types.DELETE_TOPO_ENDPOINT](state: State, uuid: number) {
+  [types.DELETE_TOPO_ENDPOINT](state: State, id: string) {
     const templateType = state.currentNode.type;
-    const type = state.topoInstances[templateType] ? templateType : DEFAULT;
+    const typeNode = state.topoInstances[templateType] ? templateType : DEFAULT;
     const serviceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_ENDPOINT] || {};
-    const temps = serviceTemplateType[type];
+    const temps = serviceTemplateType[typeNode];
     let index = -1;
 
     for (const type of temps) {
-      index = state.topoServices[type].findIndex((d) => d.uuid === uuid);
+      index = state.topoServices[type].findIndex((d) => d.uuid === id);
       if (index > -1) {
         state.topoEndpoints[type].splice(index, 1);
         window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
       }
     }
   },
-  [types.DELETE_TOPO_INSTANCE](state: State, uuid: number) {
+  [types.DELETE_TOPO_INSTANCE](state: State, id: string) {
     const templateType = state.currentNode.type;
-    const type = state.topoInstances[templateType] ? templateType : DEFAULT;
+    const typeNode = state.topoInstances[templateType] ? templateType : DEFAULT;
     const serviceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_INSTANCE] || {};
-    const temps = serviceTemplateType[type];
+    const temps = serviceTemplateType[typeNode];
     let index = -1;
 
     for (const type of temps) {
-      index = state.topoServices[type].findIndex((d) => d.uuid === uuid);
+      index = state.topoServices[type].findIndex((d) => d.uuid === id);
       if (index > -1) {
         state.topoInstances[type].splice(index, 1);
         window.localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
       }
     }
   },
-  [types.DELETE_TOPO_SERVICE](state: State, uuid: string) {
+  [types.DELETE_TOPO_SERVICE](state: State, id: string) {
     const serviceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE] || {};
     const temps = serviceTemplateType[state.currentNode.type || DEFAULT] || [{ key: DEFAULT }];
     let index = -1;
 
     for (const type of temps) {
-      index = state.topoServices[type.key].findIndex((d) => d.uuid === uuid);
+      index = state.topoServices[type.key].findIndex((d) => d.uuid === id);
       if (index > -1) {
         state.topoServices[type.key].splice(index, 1);
         window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
       }
     }
   },
-  [types.DELETE_TOPO_SERVICE_DEPENDENCY](state: State, uuid: string) {
+  [types.DELETE_TOPO_SERVICE_DEPENDENCY](state: State, id: string) {
     if (!state.selectedServiceCall) {
       return;
     }
-    const type = state.selectedServiceCall.source.type || DEFAULT;
+    const typeCall = state.selectedServiceCall.source.type || DEFAULT;
     const serviceDependencyTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY] || {};
-    const temps = serviceDependencyTemplateType[type];
+    const temps = serviceDependencyTemplateType[typeCall];
     const mode: any = state.mode ? 'server' : 'client';
     let index = -1;
 
     for (const type of temps) {
-      index = state.topoServicesDependency[type].findIndex((d) => d.uuid === uuid);
+      index = state.topoServicesDependency[type].findIndex((d) => d.uuid === id);
       if (index > -1) {
         state.topoServicesDependency[type][mode].splice(index, 1);
         window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
       }
     }
   },
-  [types.DELETE_TOPO_ENDPOINT_DEPENDENCY](state: State, uuid: number) {
+  [types.DELETE_TOPO_ENDPOINT_DEPENDENCY](state: State, id: string) {
     if (!state.selectedEndpointCall) {
       return;
     }
-    const type = state.selectedEndpointCall.type || DEFAULT;
+    const typeCall = state.selectedEndpointCall.type || DEFAULT;
     const serviceDependencyTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY] || {};
-    const temps = serviceDependencyTemplateType[type];
+    const temps = serviceDependencyTemplateType[typeCall];
     let index = -1;
 
     for (const type of temps) {
-      index = state.topoEndpointDependency[type].findIndex((d) => d.uuid === uuid);
+      index = state.topoEndpointDependency[type].findIndex((d) => d.uuid === id);
       if (index > -1) {
         state.topoEndpointDependency[type].splice(index, 1);
         localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
       }
     }
   },
-  [types.DELETE_TOPO_INSTANCE_DEPENDENCY](state: State, uuid: number) {
+  [types.DELETE_TOPO_INSTANCE_DEPENDENCY](state: State, id: string) {
     const { sourceObj } = state.selectedInstanceCall || ({} as any);
-    const type = sourceObj.type || DEFAULT;
+    const typeCall = sourceObj.type || DEFAULT;
     const mode: any = state.instanceDependencyMode;
     const serviceDependencyTemplateType =
       state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY] || {};
-    const temps = serviceDependencyTemplateType[type];
+    const temps = serviceDependencyTemplateType[typeCall];
     let index = -1;
 
     for (const type of temps) {
-      index = state.topoServicesInstanceDependency[type].findIndex((d) => d.uuid === uuid);
+      index = state.topoServicesInstanceDependency[type].findIndex((d) => d.uuid === id);
       if (index > -1) {
         state.topoServicesInstanceDependency[type][mode].splice(index, 1);
         window.localStorage.setItem(
@@ -325,14 +325,14 @@ const mutations = {
   },
   [types.EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG](state: State, params: { values: any; index: number; uuid: string }) {
     const { sourceObj } = state.selectedInstanceCall || ({} as any);
-    const type = sourceObj.type || DEFAULT;
+    const typeCall = sourceObj.type || DEFAULT;
     const mode: any = state.instanceDependencyMode;
 
-    if (!(state.topoServicesInstanceDependency[type] && state.topoServicesInstanceDependency[type][mode])) {
+    if (!(state.topoServicesInstanceDependency[typeCall] && state.topoServicesInstanceDependency[typeCall][mode])) {
       return;
     }
     const endpointTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY] || {};
-    const temps = endpointTemplateType[type];
+    const temps = endpointTemplateType[typeCall];
     let index = -1;
 
     for (const type of temps) {
