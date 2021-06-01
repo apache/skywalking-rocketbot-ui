@@ -248,14 +248,14 @@ const mutations = {
     const mode: any = state.instanceDependencyMode;
     const serviceDependencyTemplateType =
       state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY] || {};
-    const temps = serviceDependencyTemplateType[typeCall];
+    const temps = serviceDependencyTemplateType[typeCall] || [{ key: DEFAULT, label: DEFAULT }];
     let index = -1;
 
     for (const type of temps) {
-      index = state.topoServicesInstanceDependency[type].findIndex((d) => d.uuid === id);
+      index = state.topoServicesInstanceDependency[type.key][mode].findIndex((d: any) => d.uuid === id);
       if (index > -1) {
-        state.topoServicesInstanceDependency[type][mode].splice(index, 1);
-        window.localStorage.setItem(
+        state.topoServicesInstanceDependency[type.key][mode].splice(index, 1);
+        localStorage.setItem(
           'topologyServicesInstanceDependency',
           JSON.stringify(state.topoServicesInstanceDependency),
         );
@@ -314,7 +314,6 @@ const mutations = {
 
     for (const type of temps) {
       index = state.topoServicesDependency[type.key][mode].findIndex((d: any) => d.uuid === params.uuid);
-      console.log(index);
       if (index > -1) {
         state.topoServicesDependency[type.key][mode][params.index] = {
           ...state.topoServicesDependency[type.key][mode][params.index],
@@ -333,14 +332,14 @@ const mutations = {
       return;
     }
     const endpointTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY] || {};
-    const temps = endpointTemplateType[typeCall];
+    const temps = endpointTemplateType[typeCall] || [{ key: DEFAULT, label: DEFAULT }];
     let index = -1;
 
     for (const type of temps) {
-      index = state.topoServices[type].findIndex((d) => d.uuid === params.uuid);
+      index = state.topoServicesInstanceDependency[type.key][mode].findIndex((d: any) => d.uuid === params.uuid);
       if (index > -1) {
-        state.topoServicesInstanceDependency[type][mode][params.index] = {
-          ...state.topoServicesInstanceDependency[type][mode][params.index],
+        state.topoServicesInstanceDependency[type.key][mode][params.index] = {
+          ...state.topoServicesInstanceDependency[type.key][mode][params.index],
           ...params.values,
         };
         localStorage.setItem(
@@ -431,7 +430,7 @@ const mutations = {
     const sourceType = state.selectedInstanceCall.sourceObj.type || DEFAULT;
     const serviceDependencyTemplateType =
       state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY] || {};
-    const temps = serviceDependencyTemplateType[sourceType];
+    const temps = serviceDependencyTemplateType[sourceType] || [{ key: DEFAULT, label: DEFAULT }];
     const type = temps[temps.length - 1 || 0].key;
     const mode: any = state.instanceDependencyMode;
 
