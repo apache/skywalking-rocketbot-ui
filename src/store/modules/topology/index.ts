@@ -210,15 +210,18 @@ const mutations = {
     }
     const typeCall = state.selectedServiceCall.source.type || DEFAULT;
     const serviceDependencyTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY] || {};
-    const temps = serviceDependencyTemplateType[typeCall];
+    const temps =
+      serviceDependencyTemplateType[typeCall] ||
+      serviceDependencyTemplateType[DEFAULT] || [{ key: DEFAULT, label: DEFAULT }] ||
+      [];
     const mode: any = state.mode ? 'server' : 'client';
     let index = -1;
 
     for (const type of temps) {
-      index = state.topoServicesDependency[type].findIndex((d) => d.uuid === id);
+      index = state.topoServicesDependency[type.key][mode].findIndex((d: any) => d.uuid === id);
       if (index > -1) {
-        state.topoServicesDependency[type][mode].splice(index, 1);
-        window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
+        state.topoServicesDependency[type.key][mode].splice(index, 1);
+        localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
       }
     }
   },
@@ -305,18 +308,16 @@ const mutations = {
   [types.EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG](state: State, params: { values: any; index: number; uuid: string }) {
     const { source } = state.currentLink;
     const mode: any = state.mode ? 'server' : 'client';
-    if (!(state.topoServicesDependency[source.type] && state.topoServicesDependency[source.type][mode])) {
-      return;
-    }
-    const endpointTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY] || {};
-    const temps = endpointTemplateType[source.type || DEFAULT];
+    const serviceEndpointTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY] || {};
+    const temps = serviceEndpointTemplateType[source.type || DEFAULT] || [{ key: DEFAULT, label: DEFAULT }];
     let index = -1;
 
     for (const type of temps) {
-      index = state.topoServices[type].findIndex((d) => d.uuid === params.uuid);
+      index = state.topoServicesDependency[type.key][mode].findIndex((d: any) => d.uuid === params.uuid);
+      console.log(index);
       if (index > -1) {
-        state.topoServicesDependency[source.type][mode][params.index] = {
-          ...state.topoServicesDependency[source.type][mode][params.index],
+        state.topoServicesDependency[type.key][mode][params.index] = {
+          ...state.topoServicesDependency[type.key][mode][params.index],
           ...params.values,
         };
         localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
@@ -409,8 +410,8 @@ const mutations = {
     }
     const sourceType = state.selectedServiceCall.source.type || DEFAULT;
     const serviceDependencyTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY] || {};
-    const temps = serviceDependencyTemplateType[sourceType];
-    const type = temps[temps.length - 1 || 0].key;
+    const temps = serviceDependencyTemplateType[sourceType] || serviceDependencyTemplateType[DEFAULT] || [];
+    const type = temps[temps.length - 1 || 0] ? temps[temps.length - 1 || 0].key : [DEFAULT];
     const mode: any = state.mode ? 'server' : 'client';
 
     if (!(state.topoServicesDependency[type] && state.topoServicesDependency[type][mode])) {

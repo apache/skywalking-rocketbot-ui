@@ -25,8 +25,9 @@ limitations under the License. -->
       :rocketOption="stateDashboardOption"
       :templateTypes="templateType"
       :templateMode="templateMode"
+      @setTemplates="setServiceDependencyTemplates"
     />
-    <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="ADD_TOPO_SERVICE_DEPENDENCY_COMP">
+    <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="addServiceDependencyMetric">
       + Add An Item
     </div>
   </div>
@@ -53,6 +54,7 @@ limitations under the License. -->
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @State('rocketTopo') private stateTopo!: topoState;
     @Mutation('rocketTopo/ADD_TOPO_SERVICE_DEPENDENCY_COMP') private ADD_TOPO_SERVICE_DEPENDENCY_COMP: any;
+    @Mutation('rocketTopo/SET_TOPO_SERVICE_DEPENDENCY') private SET_TOPO_SERVICE_DEPENDENCY: any;
 
     private serviceDependencyComps: any[] = [];
     private height = 800;
@@ -63,6 +65,11 @@ limitations under the License. -->
     private beforeMount() {
       this.templateMode = this.stateTopo.mode ? 'server' : 'client';
       this.height = document.body.clientHeight - 280;
+      this.setServiceDependencyTemplates();
+    }
+
+    private addServiceDependencyMetric() {
+      this.ADD_TOPO_SERVICE_DEPENDENCY_COMP();
       this.setServiceDependencyTemplates();
     }
 
@@ -90,17 +97,31 @@ limitations under the License. -->
       this.templateTypes();
       this.templateMode = this.stateTopo.mode ? 'server' : 'client';
       this.serviceDependencyComps = [];
+      let templates: any = {};
 
-      for (const type of this.templateType) {
+      for (const type of Object.keys(this.stateTopo.topoServicesDependency)) {
+        for (const mode of ['server', 'client']) {
+          const m: any = mode;
+          const metricsTemp = this.stateTopo.topoServicesDependency[type][m].map((item: any) => {
+            item.uuid = item.uuid || uuid();
+            return item;
+          });
+          templates = {
+            ...templates,
+            [type]: {
+              ...templates[type],
+              [m]: metricsTemp,
+            },
+          };
+        }
+      }
+      this.SET_TOPO_SERVICE_DEPENDENCY(templates);
+      for (const tep of this.templateType) {
         this.serviceDependencyComps = [
           ...this.serviceDependencyComps,
-          ...this.stateTopo.topoServicesDependency[type][this.templateMode],
+          ...this.stateTopo.topoServicesDependency[tep][this.templateMode],
         ];
       }
-      this.serviceDependencyComps = this.serviceDependencyComps.map((item: any) => {
-        item.uuid = uuid();
-        return item;
-      });
     }
 
     @Watch('stateTopo.mode')
