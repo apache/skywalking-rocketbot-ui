@@ -24,6 +24,7 @@ limitations under the License. -->
       :updateObjects="true"
       :rocketOption="stateDashboardOption"
       :templateTypes="templateTypes()"
+      @setTemplates="setServiceTemplates"
     />
     <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="addComp">
       + Add An Item

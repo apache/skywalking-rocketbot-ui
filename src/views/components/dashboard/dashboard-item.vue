@@ -367,6 +367,7 @@ limitations under the License. -->
         this.DELETE_TOPO_INSTANCE(uuid);
       } else if (this.type === TopologyType.TOPOLOGY_SERVICE) {
         this.DELETE_TOPO_SERVICE(uuid);
+        this.$emit('setTemplates');
       } else if (this.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) {
         this.DELETE_TOPO_SERVICE_DEPENDENCY(uuid);
       } else if (this.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) {

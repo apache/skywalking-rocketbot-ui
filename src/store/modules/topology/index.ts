@@ -200,7 +200,7 @@ const mutations = {
       index = state.topoServices[type.key].findIndex((d) => d.uuid === id);
       if (index > -1) {
         state.topoServices[type.key].splice(index, 1);
-        window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
+        localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
       }
     }
   },
