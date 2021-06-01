@@ -24,6 +24,7 @@ export interface Call {
   id: string;
   detectPoints: string[];
   type?: string;
+  sourceObj?: any;
 }
 export interface Node {
   apdex: number;

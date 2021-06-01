@@ -68,13 +68,19 @@ limitations under the License. -->
 
     private templateTypes() {
       let templateTypes = [];
-      const nodeType = this.stateTopo.currentNode.type;
+      if (!this.stateTopo.selectedServiceCall) {
+        return;
+      }
+      const callType = this.stateTopo.selectedServiceCall.source.type || DEFAULT;
       const templates = this.stateTopo.topoTemplatesType;
 
-      if (templates[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY]) {
-        templateTypes = templates[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY].map((item: Option) => item.key);
+      if (
+        templates[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY] &&
+        templates[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY][callType]
+      ) {
+        templateTypes = templates[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY][callType].map((item: Option) => item.key);
       } else {
-        templateTypes = this.stateTopo.topoServicesDependency[nodeType] ? [nodeType] : [DEFAULT];
+        templateTypes = this.stateTopo.topoServicesDependency[callType] ? [callType] : [DEFAULT];
       }
 
       this.templateType = templateTypes;

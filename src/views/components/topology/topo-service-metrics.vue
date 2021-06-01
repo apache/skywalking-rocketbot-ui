@@ -25,7 +25,7 @@ limitations under the License. -->
       :rocketOption="stateDashboardOption"
       :templateTypes="templateTypes()"
     />
-    <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="ADD_TOPO_SERVICE_COMP">
+    <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="addComp">
       + Add An Item
     </div>
   </div>
@@ -52,6 +52,7 @@ limitations under the License. -->
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @State('rocketTopo') private stateTopo!: topoState;
     @Mutation('rocketTopo/ADD_TOPO_SERVICE_COMP') private ADD_TOPO_SERVICE_COMP: any;
+    @Mutation('rocketTopo/SET_TOPO_SERVICE') private SET_TOPO_SERVICE: any;
 
     private serviceComps: unknown[] = [];
     private height: number = 800;
@@ -64,18 +65,29 @@ limitations under the License. -->
       this.setServiceTemplates();
     }
 
+    private addComp() {
+      this.ADD_TOPO_SERVICE_COMP();
+      this.setServiceTemplates();
+    }
+
     private setServiceTemplates() {
       const templateTypes = this.templateTypes();
 
       this.serviceComps = [];
-
+      let templates: any = {};
+      for (const type of Object.keys(this.stateTopo.topoServices)) {
+        const metricsTemp = this.stateTopo.topoServices[type].map((item: any) => {
+          item.uuid = item.uuid || uuid();
+          return item;
+        });
+        templates = {
+          [type]: metricsTemp,
+        };
+      }
+      this.SET_TOPO_SERVICE(templates);
       for (const type of templateTypes) {
         this.serviceComps = [...this.serviceComps, ...this.stateTopo.topoServices[type]];
       }
-      this.serviceComps = this.serviceComps.map((item: any) => {
-        item.uuid = uuid();
-        return item;
-      });
     }
 
     private templateTypes() {
@@ -83,8 +95,8 @@ limitations under the License. -->
       const nodeType = this.stateTopo.currentNode.type;
       const templates = this.stateTopo.topoTemplatesType;
 
-      if (templates[TopologyType.TOPOLOGY_SERVICE]) {
-        templateTypes = templates[TopologyType.TOPOLOGY_SERVICE].map((item: Option) => item.key);
+      if (templates[TopologyType.TOPOLOGY_SERVICE] && templates[TopologyType.TOPOLOGY_SERVICE][nodeType]) {
+        templateTypes = templates[TopologyType.TOPOLOGY_SERVICE][nodeType].map((item: Option) => item.key);
       } else {
         templateTypes = this.stateTopo.topoServices[nodeType] ? [nodeType] : [DEFAULT];
       }

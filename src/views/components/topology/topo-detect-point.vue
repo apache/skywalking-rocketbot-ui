@@ -80,7 +80,7 @@ limitations under the License. -->
           class="content grey"
           :mode="'multiple'"
           :current="currentType"
-          :data="templateTypes"
+          :data="templateTypesList"
           :theme="'dark'"
           @onChoose="(item) => changeTemplatesType(item)"
         />
@@ -156,7 +156,7 @@ limitations under the License. -->
     private showInfoCount: number = 0;
     private showInfo: boolean = false;
     private dialogTopoVisible = false;
-    private templateTypes: Option[] = [];
+    private templateTypesList: Option[] = [];
     private currentType: Option[] = [{ key: '', label: '' }];
 
     private get showServerInfo() {
@@ -173,14 +173,21 @@ limitations under the License. -->
       }
       this.currentType.push(item);
       if (this.showServerInfo) {
+        const nodeType = this.stateTopo.currentNode.type || DEFAULT;
+
         topoTemplateTypes = {
           ...types,
-          [TopologyType.TOPOLOGY_SERVICE]: this.currentType,
+          [TopologyType.TOPOLOGY_SERVICE]: { [nodeType]: this.currentType },
         };
       } else {
+        if (!(this.stateTopo.selectedServiceCall && this.stateTopo.selectedServiceCall.source)) {
+          return;
+        }
+        const callType = this.stateTopo.selectedServiceCall.source.type || DEFAULT;
+
         topoTemplateTypes = {
           ...types,
-          [TopologyType.TOPOLOGY_SERVICE_DEPENDENCY]: this.currentType,
+          [TopologyType.TOPOLOGY_SERVICE_DEPENDENCY]: { [callType]: this.currentType },
         };
       }
       this.UPDATE_TOPO_TEMPLATE_TYPES(topoTemplateTypes);
@@ -193,14 +200,21 @@ limitations under the License. -->
 
       this.currentType.splice(index, 1);
       if (this.showServerInfo) {
+        const nodeType = this.stateTopo.currentNode.type || DEFAULT;
+
         topoTemplateTypes = {
           ...types,
-          [TopologyType.TOPOLOGY_SERVICE]: this.currentType,
+          [TopologyType.TOPOLOGY_SERVICE]: { [nodeType]: this.currentType },
         };
       } else {
+        if (!(this.stateTopo.selectedServiceCall && this.stateTopo.selectedServiceCall.source)) {
+          return;
+        }
+        const callType = this.stateTopo.selectedServiceCall.source.type || DEFAULT;
+
         topoTemplateTypes = {
           ...types,
-          [TopologyType.TOPOLOGY_SERVICE_DEPENDENCY]: this.currentType,
+          [TopologyType.TOPOLOGY_SERVICE_DEPENDENCY]: { [callType]: this.currentType },
         };
       }
       this.UPDATE_TOPO_TEMPLATE_TYPES(topoTemplateTypes);
@@ -284,12 +298,22 @@ limitations under the License. -->
     private watchDetectPointNodeId(newValue: string) {
       if (newValue || this.stateTopo.currentNode.isReal) {
         this.showInfo = true;
-        const templates: any = this.stateTopo.topoTemplatesType;
+        if (!(this.stateTopo.selectedServiceCall && this.stateTopo.selectedServiceCall.source)) {
+          return;
+        }
+        const callType = this.stateTopo.selectedServiceCall.source.type || DEFAULT;
+        const topoTemplatesType: any = this.stateTopo.topoTemplatesType;
 
-        this.templateTypes = Object.keys(this.stateTopo.topoServicesDependency).map((item: string) => {
+        this.templateTypesList = Object.keys(this.stateTopo.topoServicesDependency).map((item: string) => {
           return { label: item, key: item };
         });
-        this.currentType = templates[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY] || [{ label: DEFAULT, key: DEFAULT }];
+        if (topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY]) {
+          this.currentType = topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY][callType] || [
+            { label: DEFAULT, key: DEFAULT },
+          ];
+        } else {
+          this.currentType = [{ label: DEFAULT, key: DEFAULT }];
+        }
       } else {
         this.showInfo = false;
         this.showInfoCount = 0;
@@ -307,12 +331,19 @@ limitations under the License. -->
       }
       if (newValue || this.stateTopo.selectedServiceCall) {
         this.showInfo = true;
-        const templates: any = this.stateTopo.topoTemplatesType;
+        const topoTemplatesType: any = this.stateTopo.topoTemplatesType;
+        const nodeType = this.stateTopo.currentNode.type || DEFAULT;
 
-        this.templateTypes = Object.keys(this.stateTopo.topoServices).map((item: string) => {
+        this.templateTypesList = Object.keys(this.stateTopo.topoServices).map((item: string) => {
           return { label: item, key: item };
         });
-        this.currentType = templates[TopologyType.TOPOLOGY_SERVICE] || [{ label: DEFAULT, key: DEFAULT }];
+        if (topoTemplatesType[TopologyType.TOPOLOGY_SERVICE]) {
+          this.currentType = topoTemplatesType[TopologyType.TOPOLOGY_SERVICE][nodeType] || [
+            { label: DEFAULT, key: DEFAULT },
+          ];
+        } else {
+          this.currentType = [{ label: DEFAULT, key: DEFAULT }];
+        }
       } else {
         this.showInfo = false;
         this.showInfoCount = 0;

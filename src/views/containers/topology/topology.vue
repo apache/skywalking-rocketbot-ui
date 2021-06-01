@@ -100,6 +100,8 @@ limitations under the License. -->
     }
     private initMetricsTemplate() {
       localStorage.removeItem('topoTemplateTypes');
+      // localStorage.removeItem('topologyServices');
+
       if (window.localStorage.getItem('topologyServices')) {
         const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
         const topoService = serviceComps ? JSON.parse(serviceComps) : [];

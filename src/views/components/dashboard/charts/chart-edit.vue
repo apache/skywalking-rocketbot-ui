@@ -384,18 +384,22 @@ limitations under the License. -->
     }
 
     private editComponentConfig(params: { index: number; values: unknown }) {
+      const data = {
+        ...params,
+        uuid: this.itemConfig.uuid,
+      };
       if (this.type === TopologyType.TOPOLOGY_SERVICE) {
-        this.EDIT_TOPO_SERVICE_CONFIG(params);
+        this.EDIT_TOPO_SERVICE_CONFIG(data);
       } else if (this.type === TopologyType.TOPOLOGY_ENDPOINT) {
-        this.EDIT_TOPO_ENDPOINT_CONFIG(params);
+        this.EDIT_TOPO_ENDPOINT_CONFIG(data);
       } else if (this.type === TopologyType.TOPOLOGY_INSTANCE) {
-        this.EDIT_TOPO_INSTANCE_CONFIG(params);
+        this.EDIT_TOPO_INSTANCE_CONFIG(data);
       } else if (this.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) {
-        this.EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG(params);
+        this.EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG(data);
       } else if (this.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) {
-        this.EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG(params);
+        this.EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG(data);
       } else if (this.type === TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) {
-        this.EDIT_ENDPOINT_DEPENDENCY_CONFIG(params);
+        this.EDIT_ENDPOINT_DEPENDENCY_CONFIG(data);
       } else {
         this.EDIT_COMP_CONFIG(params);
       }

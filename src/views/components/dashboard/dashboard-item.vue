@@ -15,7 +15,7 @@ limitations under the License. -->
 <template>
   <div class="rk-dashboard-item" :class="`g-sm-${width}`" :style="`height:${height}px;`" v-if="itemConfig.entityType">
     <div class="rk-dashboard-item-title ell">
-      <span v-show="rocketGlobal.edit || stateTopo.editDependencyMetrics" @click="deleteItem(index)">
+      <span v-show="rocketGlobal.edit || stateTopo.editDependencyMetrics" @click="deleteItem(index, itemConfig.uuid)">
         <rk-icon class="r edit red" icon="file-deletion" />
       </span>
       <span>{{ title }}</span>
@@ -360,19 +360,19 @@ limitations under the License. -->
       copy(JSON.stringify(data));
     }
 
-    private deleteItem(index: number) {
+    private deleteItem(index: number, uuid: number) {
       if (this.type === TopologyType.TOPOLOGY_ENDPOINT) {
-        this.DELETE_TOPO_ENDPOINT(index);
+        this.DELETE_TOPO_ENDPOINT(uuid);
       } else if (this.type === TopologyType.TOPOLOGY_INSTANCE) {
-        this.DELETE_TOPO_INSTANCE(index);
+        this.DELETE_TOPO_INSTANCE(uuid);
       } else if (this.type === TopologyType.TOPOLOGY_SERVICE) {
-        this.DELETE_TOPO_SERVICE(index);
+        this.DELETE_TOPO_SERVICE(uuid);
       } else if (this.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) {
-        this.DELETE_TOPO_SERVICE_DEPENDENCY(index);
+        this.DELETE_TOPO_SERVICE_DEPENDENCY(uuid);
       } else if (this.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) {
-        this.DELETE_TOPO_INSTANCE_DEPENDENCY(index);
+        this.DELETE_TOPO_INSTANCE_DEPENDENCY(uuid);
       } else if (this.type === TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) {
-        this.DELETE_TOPO_ENDPOINT_DEPENDENCY(index);
+        this.DELETE_TOPO_ENDPOINT_DEPENDENCY(uuid);
       } else {
         this.DELETE_COMP(index);
       }

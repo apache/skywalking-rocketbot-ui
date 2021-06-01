@@ -22,7 +22,8 @@ import axios, { AxiosPromise, AxiosResponse } from 'axios';
 import { cancelToken } from '@/utils/cancelToken';
 import { Call, Node, EndpointDependencyConidition } from '@/types/topo';
 import { Duration, Option } from '@/types/global';
-import { DEFAULT } from '@/constants/constant';
+import { DEFAULT, TopologyType } from '@/constants/constant';
+import { uuid } from '@/utils/uuid';
 export interface State {
   callback: any;
   calls: Call[];
@@ -52,8 +53,7 @@ export interface State {
   topoServicesInstanceDependency: { [key: string]: any[] };
   topoEndpointDependency: { [key: string]: any[] };
   instanceDependencyMode: string;
-  editDependencyMetrics: boolean; // SERVICE_TEMPLATE_TYPE
-  serviceTemplateType: Option | null;
+  editDependencyMetrics: boolean;
   topoTemplatesType: { [key: string]: any };
 }
 
@@ -62,6 +62,7 @@ const DefaultConfig = {
   title: 'Title',
   height: 250,
   metricType: 'UNKNOWN',
+  uuid: uuid(),
 };
 
 const initState: State = {
@@ -97,7 +98,6 @@ const initState: State = {
   instanceDependencyMode: '',
   editDependencyMetrics: false,
   topoEndpointDependency: {},
-  serviceTemplateType: null,
   topoTemplatesType: JSON.parse(localStorage.getItem('topoTemplateTypes') || JSON.stringify({})),
 };
 
@@ -161,6 +161,104 @@ const mutations = {
     state.topoEndpointDependency = data;
     localStorage.setItem('topologyEndpointDependency', JSON.stringify(data));
   },
+  [types.DELETE_TOPO_ENDPOINT](state: State, uuid: number) {
+    const templateType = state.currentNode.type;
+    const type = state.topoInstances[templateType] ? templateType : DEFAULT;
+    const serviceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_ENDPOINT] || {};
+    const temps = serviceTemplateType[type];
+    let index = -1;
+
+    for (const type of temps) {
+      index = state.topoServices[type].findIndex((d) => d.uuid === uuid);
+      if (index > -1) {
+        state.topoEndpoints[type].splice(index, 1);
+        window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
+      }
+    }
+  },
+  [types.DELETE_TOPO_INSTANCE](state: State, uuid: number) {
+    const templateType = state.currentNode.type;
+    const type = state.topoInstances[templateType] ? templateType : DEFAULT;
+    const serviceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_INSTANCE] || {};
+    const temps = serviceTemplateType[type];
+    let index = -1;
+
+    for (const type of temps) {
+      index = state.topoServices[type].findIndex((d) => d.uuid === uuid);
+      if (index > -1) {
+        state.topoInstances[type].splice(index, 1);
+        window.localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
+      }
+    }
+  },
+  [types.DELETE_TOPO_SERVICE](state: State, uuid: string) {
+    const serviceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE] || {};
+    const temps = serviceTemplateType[state.currentNode.type || DEFAULT] || [{ key: DEFAULT }];
+    let index = -1;
+
+    for (const type of temps) {
+      index = state.topoServices[type.key].findIndex((d) => d.uuid === uuid);
+      if (index > -1) {
+        state.topoServices[type.key].splice(index, 1);
+        window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
+      }
+    }
+  },
+  [types.DELETE_TOPO_SERVICE_DEPENDENCY](state: State, uuid: string) {
+    if (!state.selectedServiceCall) {
+      return;
+    }
+    const type = state.selectedServiceCall.source.type || DEFAULT;
+    const serviceDependencyTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY] || {};
+    const temps = serviceDependencyTemplateType[type];
+    const mode: any = state.mode ? 'server' : 'client';
+    let index = -1;
+
+    for (const type of temps) {
+      index = state.topoServicesDependency[type].findIndex((d) => d.uuid === uuid);
+      if (index > -1) {
+        state.topoServicesDependency[type][mode].splice(index, 1);
+        window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
+      }
+    }
+  },
+  [types.DELETE_TOPO_ENDPOINT_DEPENDENCY](state: State, uuid: number) {
+    if (!state.selectedEndpointCall) {
+      return;
+    }
+    const type = state.selectedEndpointCall.type || DEFAULT;
+    const serviceDependencyTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY] || {};
+    const temps = serviceDependencyTemplateType[type];
+    let index = -1;
+
+    for (const type of temps) {
+      index = state.topoEndpointDependency[type].findIndex((d) => d.uuid === uuid);
+      if (index > -1) {
+        state.topoEndpointDependency[type].splice(index, 1);
+        localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
+      }
+    }
+  },
+  [types.DELETE_TOPO_INSTANCE_DEPENDENCY](state: State, uuid: number) {
+    const { sourceObj } = state.selectedInstanceCall || ({} as any);
+    const type = sourceObj.type || DEFAULT;
+    const mode: any = state.instanceDependencyMode;
+    const serviceDependencyTemplateType =
+      state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY] || {};
+    const temps = serviceDependencyTemplateType[type];
+    let index = -1;
+
+    for (const type of temps) {
+      index = state.topoServicesInstanceDependency[type].findIndex((d) => d.uuid === uuid);
+      if (index > -1) {
+        state.topoServicesInstanceDependency[type][mode].splice(index, 1);
+        window.localStorage.setItem(
+          'topologyServicesInstanceDependency',
+          JSON.stringify(state.topoServicesInstanceDependency),
+        );
+      }
+    }
+  },
   [types.EDIT_TOPO_INSTANCE_CONFIG](state: State, params: { values: any; index: number }) {
     state.topoInstances[params.index] = { ...state.topoInstances[params.index], ...params.values };
     window.localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
@@ -169,83 +267,63 @@ const mutations = {
     state.topoEndpoints[params.index] = { ...state.topoEndpoints[params.index], ...params.values };
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
   },
-  [types.DELETE_TOPO_ENDPOINT](state: State, index: number) {
-    const templateType = state.currentNode.type;
-    const type = state.topoEndpoints[templateType] ? templateType : DEFAULT;
+  [types.EDIT_TOPO_SERVICE_CONFIG](state: State, params: { values: any; index: number; uuid: string }) {
+    const serviceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE] || {};
+    const temps = serviceTemplateType[state.currentNode.type] || [{ key: DEFAULT }];
+    let index = -1;
 
-    state.topoEndpoints[type].splice(index, 1);
-    window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
+    for (const type of temps) {
+      index = state.topoServices[type.key].findIndex((d) => d.uuid === params.uuid);
+      if (index > -1) {
+        state.topoServices[type.key][params.index] = {
+          ...state.topoServices[type.key][params.index],
+          ...params.values,
+        };
+        window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
+      }
+    }
   },
-  [types.DELETE_TOPO_INSTANCE](state: State, index: number) {
-    const templateType = state.currentNode.type;
-    const type = state.topoInstances[templateType] ? templateType : DEFAULT;
-
-    state.topoInstances[type].splice(index, 1);
-    window.localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
-  },
-  [types.DELETE_TOPO_SERVICE](state: State, index: number) {
-    state.topoServices[state.currentNode.type].splice(index, 1);
-    window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
-  },
-  [types.DELETE_TOPO_SERVICE_DEPENDENCY](state: State, index: number) {
-    const { source } = state.currentLink;
-    const mode: any = state.mode ? 'server' : 'client';
-
-    state.topoServicesDependency[source.type][mode].splice(index, 1);
-    window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
-  },
-  [types.DELETE_TOPO_ENDPOINT_DEPENDENCY](state: State, index: number) {
+  [types.EDIT_ENDPOINT_DEPENDENCY_CONFIG](state: State, params: { values: any; index: number; uuid: string }) {
     if (!state.selectedEndpointCall) {
       return;
     }
-    const type = state.selectedEndpointCall.type || DEFAULT;
-    state.topoEndpointDependency[type].splice(index, 1);
-    localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
-  },
-  [types.DELETE_TOPO_INSTANCE_DEPENDENCY](state: State, index: number) {
-    const { sourceObj } = state.selectedInstanceCall || ({} as any);
-    const type = sourceObj.type || DEFAULT;
-    const mode: any = state.instanceDependencyMode;
+    const endpointTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY] || {};
+    const temps = endpointTemplateType[state.selectedEndpointCall.type || DEFAULT];
+    let index = -1;
 
-    state.topoServicesInstanceDependency[type][mode].splice(index, 1);
-    window.localStorage.setItem(
-      'topologyServicesInstanceDependency',
-      JSON.stringify(state.topoServicesInstanceDependency),
-    );
-  },
-  [types.EDIT_TOPO_SERVICE_CONFIG](state: State, params: { values: any; index: number }) {
-    state.topoServices[state.currentNode.type][params.index] = {
-      ...state.topoServices[state.currentNode.type][params.index],
-      ...params.values,
-    };
-    window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
-  },
-  [types.EDIT_ENDPOINT_DEPENDENCY_CONFIG](state: State, params: { values: any; index: number }) {
-    if (!state.selectedEndpointCall) {
-      return;
+    for (const type of temps) {
+      index = state.topoServices[type].findIndex((d) => d.uuid === params.uuid);
+      if (index > -1) {
+        state.topoEndpointDependency[type][index] = {
+          ...state.topoEndpointDependency[type][index],
+          ...params.values,
+        };
+        localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
+      }
     }
-    const type = state.selectedEndpointCall.type || DEFAULT;
-
-    state.topoEndpointDependency[type][params.index] = {
-      ...state.topoEndpointDependency[type][params.index],
-      ...params.values,
-    };
-    localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
   },
-  [types.EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG](state: State, params: { values: any; index: number }) {
+  [types.EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG](state: State, params: { values: any; index: number; uuid: string }) {
     const { source } = state.currentLink;
     const mode: any = state.mode ? 'server' : 'client';
-
     if (!(state.topoServicesDependency[source.type] && state.topoServicesDependency[source.type][mode])) {
       return;
     }
-    state.topoServicesDependency[source.type][mode][params.index] = {
-      ...state.topoServicesDependency[source.type][mode][params.index],
-      ...params.values,
-    };
-    window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
+    const endpointTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY] || {};
+    const temps = endpointTemplateType[source.type || DEFAULT];
+    let index = -1;
+
+    for (const type of temps) {
+      index = state.topoServices[type].findIndex((d) => d.uuid === params.uuid);
+      if (index > -1) {
+        state.topoServicesDependency[source.type][mode][params.index] = {
+          ...state.topoServicesDependency[source.type][mode][params.index],
+          ...params.values,
+        };
+        localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
+      }
+    }
   },
-  [types.EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG](state: State, params: { values: any; index: number }) {
+  [types.EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG](state: State, params: { values: any; index: number; uuid: string }) {
     const { sourceObj } = state.selectedInstanceCall || ({} as any);
     const type = sourceObj.type || DEFAULT;
     const mode: any = state.instanceDependencyMode;
@@ -253,47 +331,69 @@ const mutations = {
     if (!(state.topoServicesInstanceDependency[type] && state.topoServicesInstanceDependency[type][mode])) {
       return;
     }
-    state.topoServicesInstanceDependency[type][mode][params.index] = {
-      ...state.topoServicesInstanceDependency[type][mode][params.index],
-      ...params.values,
-    };
-    localStorage.setItem('topologyServicesInstanceDependency', JSON.stringify(state.topoServicesInstanceDependency));
+    const endpointTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY] || {};
+    const temps = endpointTemplateType[type];
+    let index = -1;
+
+    for (const type of temps) {
+      index = state.topoServices[type].findIndex((d) => d.uuid === params.uuid);
+      if (index > -1) {
+        state.topoServicesInstanceDependency[type][mode][params.index] = {
+          ...state.topoServicesInstanceDependency[type][mode][params.index],
+          ...params.values,
+        };
+        localStorage.setItem(
+          'topologyServicesInstanceDependency',
+          JSON.stringify(state.topoServicesInstanceDependency),
+        );
+      }
+    }
   },
   [types.ADD_TOPO_INSTANCE_COMP](state: State) {
+    const serviceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE] || {};
+    const temps = serviceTemplateType[state.currentNode.type] || [];
+    const type = temps[temps.length - 1 || 0].key;
     const comp = {
       ...DefaultConfig,
       width: 3,
       entityType: 'ServiceInstance',
     };
-    const templateType = state.currentNode.type;
-    const type = state.topoInstances[templateType] ? templateType : DEFAULT;
+
     state.topoInstances[type].push(comp);
     window.localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
   },
   [types.ADD_TOPO_ENDPOINT_COMP](state: State) {
+    const serviceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE] || {};
+    const temps = serviceTemplateType[state.currentNode.type] || [];
+    const type = temps[temps.length - 1 || 0].key;
     const comp = {
       ...DefaultConfig,
       width: 3,
       entityType: 'Endpoint',
     };
-    const templateType = state.currentNode.type;
-    const type = state.topoEndpoints[templateType] ? templateType : DEFAULT;
+
     state.topoEndpoints[type].push(comp);
     window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
   },
   [types.ADD_TOPO_SERVICE_COMP](state: State) {
+    const serviceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE] || {};
+    const temps = serviceTemplateType[state.currentNode.type] || [{ key: DEFAULT }];
+    const type = temps[temps.length - 1 || 0].key;
     const comp = {
       ...DefaultConfig,
       entityType: 'Service',
     };
-    state.topoServices[state.currentNode.type].push(comp);
+    state.topoServices[type].push(comp);
     window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
   },
   [types.ADD_TOPO_ENDPOINT_DEPENDENCY_COMP](state: State) {
     if (!state.selectedEndpointCall) {
       return;
     }
-    const type = state.selectedEndpointCall.type || DEFAULT;
+    const callType = state.selectedEndpointCall.type || DEFAULT;
+    const endpointDependencyTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY] || {};
+    const temps = endpointDependencyTemplateType[callType];
+    const type = temps[temps.length - 1 || 0].key;
     const comp = {
       ...DefaultConfig,
       height: 200,
@@ -304,22 +404,34 @@ const mutations = {
     window.localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
   },
   [types.ADD_TOPO_SERVICE_DEPENDENCY_COMP](state: State) {
-    const { source } = state.currentLink;
+    if (!state.selectedServiceCall) {
+      return;
+    }
+    const sourceType = state.selectedServiceCall.source.type || DEFAULT;
+    const serviceDependencyTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_DEPENDENCY] || {};
+    const temps = serviceDependencyTemplateType[sourceType];
+    const type = temps[temps.length - 1 || 0].key;
     const mode: any = state.mode ? 'server' : 'client';
 
-    if (!(state.topoServicesDependency[source.type] && state.topoServicesDependency[source.type][mode])) {
+    if (!(state.topoServicesDependency[type] && state.topoServicesDependency[type][mode])) {
       return;
     }
     const comp = {
       ...DefaultConfig,
       entityType: 'ServiceRelation',
     };
-    state.topoServicesDependency[source.type][mode].push(comp);
+    state.topoServicesDependency[type][mode].push(comp);
     window.localStorage.setItem('topologyServicesDependency', JSON.stringify(state.topoServicesDependency));
   },
   [types.ADD_TOPO_INSTANCE_DEPENDENCY_COMP](state: State) {
-    const { sourceObj } = state.selectedInstanceCall || ({} as any);
-    const type = sourceObj.type || DEFAULT;
+    if (!state.selectedInstanceCall) {
+      return;
+    }
+    const sourceType = state.selectedInstanceCall.sourceObj.type || DEFAULT;
+    const serviceDependencyTemplateType =
+      state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY] || {};
+    const temps = serviceDependencyTemplateType[sourceType];
+    const type = temps[temps.length - 1 || 0].key;
     const mode: any = state.instanceDependencyMode;
 
     if (!(state.topoServicesInstanceDependency[type] && state.topoServicesInstanceDependency[type][mode])) {
