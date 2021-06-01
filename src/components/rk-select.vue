@@ -128,7 +128,7 @@ limitations under the License. -->
     }
     .remove-icon {
       display: inline-block;
-      margin-left: 5px;
+      padding: 0 6px;
       cursor: pointer;
     }
   }

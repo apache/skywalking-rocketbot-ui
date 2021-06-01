@@ -162,14 +162,9 @@ limitations under the License. -->
       this.SET_SELECTED_INSTANCE_CALL(data);
       this.SET_SERVICE_INSTANCE_DEPENDENCY(data);
       this.templateTypes();
-      const templates: any = this.stateTopo.topoTemplatesType;
-
-      this.templateNameList = Object.keys(this.stateTopo.instanceDependency).map((item: string) => {
+      this.templateNameList = Object.keys(this.stateTopo.topoServicesInstanceDependency).map((item: string) => {
         return { label: item, key: item };
       });
-      this.currentType = templates[TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY] || [
-        { label: DEFAULT, key: DEFAULT },
-      ];
       this.setMetircsTemplates();
     }
 
@@ -187,20 +182,23 @@ limitations under the License. -->
         [TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY]: this.currentType,
       };
       this.UPDATE_TOPO_TEMPLATE_TYPES(topoTemplateTypes);
+      this.templateTypes();
       this.setMetircsTemplates();
     }
 
     private deleteTemplateTypes(item: any) {
       let topoTemplateTypes = null;
       const types = this.stateTopo.topoTemplatesType;
-      const index = this.currentType.findIndex((d) => item.key === d);
+      const index = this.currentType.findIndex((d) => item.key === d.key);
 
       this.currentType.splice(index, 1);
       topoTemplateTypes = {
         ...types,
         [TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY]: this.currentType,
       };
+      this.templateTypes();
       this.UPDATE_TOPO_TEMPLATE_TYPES(topoTemplateTypes);
+      this.setMetircsTemplates();
     }
 
     private setMetircsTemplates() {
@@ -231,6 +229,9 @@ limitations under the License. -->
       }
 
       this.templateType = templateTypes;
+      this.currentType = templateTypes.map((d: Option) => {
+        return { key: d, label: d };
+      });
     }
 
     private handleSetEdit() {

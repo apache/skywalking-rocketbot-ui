@@ -189,7 +189,7 @@ limitations under the License. -->
     private deleteTemplateTypes(item: any) {
       let topoTemplateTypes = null;
       const types = this.stateTopo.topoTemplatesType;
-      const index = this.currentType.findIndex((d) => item.key === d);
+      const index = this.currentType.findIndex((d) => item.key === d.key);
 
       this.currentType.splice(index, 1);
       if (this.showServerInfo) {

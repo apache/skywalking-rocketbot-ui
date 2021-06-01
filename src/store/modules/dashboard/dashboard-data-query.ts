@@ -90,23 +90,24 @@ const actions: ActionTree<State, any> = {
       const topoServiceInstanceDependency = serviceInstanceDependencyComps
         ? JSON.parse(serviceInstanceDependencyComps)
         : {};
-      if (
-        !(
-          topoServiceInstanceDependency[params.templateType] &&
-          topoServiceInstanceDependency[params.templateType][params.templateMode]
-        )
-      ) {
-        return new Promise((resolve) => resolve([]));
-      }
-      config = topoServiceInstanceDependency[params.templateType][params.templateMode][params.index];
-    } else if (params.type === TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) {
-      const endpointDependencyComps: string = `${localStorage.getItem('topologyEndpointDependency')}`;
-      const topoEndpointDependency = endpointDependencyComps ? JSON.parse(endpointDependencyComps) : {};
+      let instanceDependencyComps: any[] = [];
 
-      if (!topoEndpointDependency[params.templateType]) {
-        return new Promise((resolve) => resolve([]));
+      for (const type of params.templateType) {
+        instanceDependencyComps = [
+          ...instanceDependencyComps,
+          ...topoServiceInstanceDependency[type][params.templateMode],
+        ];
       }
-      config = topoEndpointDependency[params.templateType][params.index];
+      config = instanceDependencyComps[params.index];
+    } else if (params.type === TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) {
+      const endpointDependencyCompStr: string = `${localStorage.getItem('topologyEndpointDependency')}`;
+      const topoEndpointDependency = JSON.parse(endpointDependencyCompStr || JSON.stringify({}));
+      let endpointDependencyComps: any[] = [];
+
+      for (const type of params.templateType) {
+        endpointDependencyComps = [...endpointDependencyComps, ...topoEndpointDependency[type]];
+      }
+      config = endpointDependencyComps[params.index];
     } else {
       config = tree[context.state.group].children[context.state.current].children[params.index];
     }

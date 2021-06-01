@@ -625,6 +625,7 @@ const actions: ActionTree<State, any> = {
                 call.endpointName = node.name;
                 call.serviceId = node.serviceId;
                 call.endpointId = node.id;
+                call.type = node.type;
               }
               if (node.id === call.target) {
                 target = node;

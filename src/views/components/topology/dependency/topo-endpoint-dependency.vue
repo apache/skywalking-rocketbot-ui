@@ -49,18 +49,29 @@ limitations under the License. -->
       <span class="topo-tool-btn" @click="exportTopoEndpointDependencyMetrics">
         <rk-icon class="lg" icon="save_alt" v-tooltip:bottom="{ content: 'export' }" />
       </span>
+      <span class="ml-5 pb-5 flex-h">
+        <div class="type grey">{{ $t('templateType') }}</div>
+        <RkSelect
+          class="content grey"
+          :mode="'multiple'"
+          :current="currentType"
+          :data="templateNameList"
+          :theme="'dark'"
+          @onChoose="(item) => changeTemplatesType(item)"
+        />
+      </span>
     </div>
     <div v-if="stateTopo.selectedEndpointCall" class="endpoint-dependency-metrics scroll_bar_style">
       <DashboardItem
         v-for="(i, index) in topoEndpointDependencyMetrics || []"
-        :key="index"
+        :key="i.uuid"
         :rocketGlobal="rocketGlobal"
         :item="i"
         :index="index"
         :type="type"
         :updateObjects="true"
         :rocketOption="stateDashboardOption"
-        :templateType="templateType"
+        :templateTypes="templateType"
       />
       <div
         v-show="stateTopo.editDependencyMetrics"
@@ -85,6 +96,8 @@ limitations under the License. -->
   import { Duration } from '@/types/global';
   import { EndpointDependencyConidition, Call } from '@/types/topo';
   import { DEFAULT, TopologyType } from '@/constants/constant';
+  import { Option } from '@/types/global';
+  import { uuid } from '@/utils/uuid';
 
   @Component({
     components: {
@@ -103,28 +116,94 @@ limitations under the License. -->
     @Mutation('rocketTopo/EDIT_DEPENDENCY_METRICS') private EDIT_DEPENDENCY_METRICS: any;
     @Mutation('rocketTopo/IMPORT_TREE_ENDPOINT_DEPENDENCY') private IMPORT_TREE_ENDPOINT_DEPENDENCY: any;
     @Mutation('rocketTopo/ADD_TOPO_ENDPOINT_DEPENDENCY_COMP') private ADD_TOPO_ENDPOINT_DEPENDENCY_COMP: any;
+    @Mutation('rocketTopo/UPDATE_TOPO_TEMPLATE_TYPES') private UPDATE_TOPO_TEMPLATE_TYPES: any;
 
-    private templateType: string = '';
+    private templateType: string[] = [];
     private topoEndpointDependencyMetrics: any = [];
     private type = TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY;
     private height = 500;
+    private templateNameList: Option[] = [];
+    private currentType: Option[] = [];
 
     private beforeMount() {
       this.height = document.body.clientHeight - 133;
     }
 
+    private changeTemplatesType(item: Option) {
+      let topoTemplateTypes;
+      const types = this.stateTopo.topoTemplatesType;
+
+      if (this.currentType.find((d) => d.key === item.key)) {
+        this.deleteTemplateTypes(item);
+        return;
+      }
+      this.currentType.push(item);
+      topoTemplateTypes = {
+        ...types,
+        [TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY]: this.currentType,
+      };
+      this.UPDATE_TOPO_TEMPLATE_TYPES(topoTemplateTypes);
+      this.setTemplateTypes();
+      this.setMetricsTemplate();
+    }
+
+    private deleteTemplateTypes(item: any) {
+      let topoTemplateTypes = null;
+      const types = this.stateTopo.topoTemplatesType;
+      const index = this.currentType.findIndex((d) => item.key === d.key);
+
+      this.currentType.splice(index, 1);
+      topoTemplateTypes = {
+        ...types,
+        [TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY]: this.currentType,
+      };
+      this.setTemplateTypes();
+      this.UPDATE_TOPO_TEMPLATE_TYPES(topoTemplateTypes);
+      this.setMetricsTemplate();
+    }
+
     private showEndpointMetrics(data: EndpointDependencyConidition & Call) {
       this.SET_SELECTED_ENDPOINT_CALL(data);
       this.SET_ENDPOINT_DEPENDENCY(data);
-      this.templateType = DEFAULT;
+      this.setTemplateTypes();
+      this.templateNameList = Object.keys(this.stateTopo.topoEndpointDependency).map((item: string) => {
+        return { label: item, key: item };
+      });
+      this.setMetricsTemplate();
+    }
 
-      if (!this.templateType) {
+    private setMetricsTemplate() {
+      this.topoEndpointDependencyMetrics = [];
+      for (const type of this.templateType) {
+        this.topoEndpointDependencyMetrics = [
+          ...this.topoEndpointDependencyMetrics,
+          ...this.stateTopo.topoEndpointDependency[type],
+        ];
+      }
+      this.topoEndpointDependencyMetrics = this.topoEndpointDependencyMetrics.map((item: any) => {
+        item.uuid = uuid();
+        return item;
+      });
+    }
+
+    private setTemplateTypes() {
+      if (!this.stateTopo.selectedEndpointCall) {
         return;
       }
-      if (!this.stateTopo.topoEndpointDependency[this.templateType]) {
-        return;
+      const nodeType = this.stateTopo.selectedEndpointCall.type || DEFAULT;
+      const templates = this.stateTopo.topoTemplatesType || {};
+      let templateTypes = [];
+
+      if (templates[TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY]) {
+        templateTypes = templates[TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY].map((item: Option) => item.key);
+      } else {
+        templateTypes = this.stateTopo.topoEndpointDependency[nodeType] ? [nodeType] : [DEFAULT];
       }
-      this.topoEndpointDependencyMetrics = this.stateTopo.topoEndpointDependency[this.templateType];
+
+      this.templateType = templateTypes;
+      this.currentType = templateTypes.map((d: Option) => {
+        return { key: d, label: d };
+      });
     }
 
     private handleSetEdit() {
@@ -186,6 +265,7 @@ limitations under the License. -->
     background: #333840;
     height: 25%;
     overflow: auto;
+    min-height: 210px;
   }
   .header {
     z-index: 1;
@@ -200,5 +280,11 @@ limitations under the License. -->
   }
   .rk-add-metric-item {
     color: #eee;
+  }
+  .type {
+    width: 100px;
+  }
+  .content {
+    width: 400px;
   }
 </style>
