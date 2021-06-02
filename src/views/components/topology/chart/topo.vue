@@ -167,6 +167,11 @@ limitations under the License. -->
         this.simulation.nodes(this.nodes);
         this.simulation.force('link').links(this.links).id((d) => d.id);
         simulationSkip(d3, this.simulation, this.ticked);
+        for (const node of this.nodes) {
+          if (node.velocityX) {
+            node.vx = node.velocityX;
+          }
+        }
         const loopMap = {};
         for (let i = 0; i < this.links.length; i++) {
           const link = this.links[i];
