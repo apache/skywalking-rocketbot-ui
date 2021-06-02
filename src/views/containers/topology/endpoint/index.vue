@@ -64,7 +64,7 @@ limitations under the License. -->
         />
       </div>
     </div>
-    <endpoints-survey :updateObjects="updateObjects" />
+    <endpoints-survey />
   </div>
 </template>
 
@@ -164,7 +164,7 @@ limitations under the License. -->
 
     private beforeDestroy() {
       this.SET_EDIT(false);
-      this.$emit('changeEndpointComps', { type: true });
+      this.$emit('changeEndpointComps', { type: false });
     }
   }
 </script>

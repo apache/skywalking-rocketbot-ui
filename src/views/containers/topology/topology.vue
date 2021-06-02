@@ -183,7 +183,6 @@ limitations under the License. -->
               {};
             const topoService = JSON.parse(serviceTemplate.configuration) || [];
             this.SET_TOPO_SERVICE(topoService);
-            // this.SET_TOPO_SERVICE(TopoServiceMetricsConfig.configuration);
           }
           if (!localStorage.getItem('topologyServicesDependency')) {
             const serviceDependencyTemplate =
@@ -192,7 +191,6 @@ limitations under the License. -->
               )[0] || {};
             const topoServiceDependency = JSON.parse(serviceDependencyTemplate.configuration) || [];
             this.SET_TOPO_SERVICE_DEPENDENCY(topoServiceDependency);
-            // this.SET_TOPO_SERVICE_DEPENDENCY(TopoServiceDependencyMetricsConfig.configuration);
           }
           if (!localStorage.getItem('topologyServicesInstanceDependency')) {
             const serviceInstanceDependencyTemplate =
@@ -201,7 +199,6 @@ limitations under the License. -->
               )[0] || {};
             const topoServiceInstanceDependency = JSON.parse(serviceInstanceDependencyTemplate.configuration) || [];
             this.SET_TOPO_SERVICE_INSTANCE_DEPENDENCY(topoServiceInstanceDependency);
-            // this.SET_TOPO_SERVICE_INSTANCE_DEPENDENCY(TopoServiceInstanceDependencyMetricsConfig.configuration);
           }
           if (!localStorage.getItem('topologyEndpointDependency')) {
             const serviceEndpointDependencyTemplate =
@@ -210,7 +207,6 @@ limitations under the License. -->
               )[0] || {};
             const topoEndpointDependency = JSON.parse(serviceEndpointDependencyTemplate.configuration) || [];
             this.SET_TOPO_ENDPOINT_DEPENDENCY(topoEndpointDependency);
-            // this.SET_TOPO_ENDPOINT_DEPENDENCY(TopoEndpointDependencyMetricsConfig.configuration);
           }
         },
       );

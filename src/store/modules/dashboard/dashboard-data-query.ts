@@ -57,9 +57,9 @@ const actions: ActionTree<State, any> = {
       }
       config = topoEndpoint[params.templateType][params.index];
     } else if (params.type === TopologyType.TOPOLOGY_INSTANCE) {
-      const instanceComps: string = `${window.localStorage.getItem('topologyInstances')}`;
+      const instanceComps: string = `${localStorage.getItem('topologyInstances')}`;
       const topoInstance = instanceComps ? JSON.parse(instanceComps) : {};
-
+      // console.log(params.templateType);
       if (!topoInstance[params.templateType]) {
         return new Promise((resolve) => resolve({}));
       }

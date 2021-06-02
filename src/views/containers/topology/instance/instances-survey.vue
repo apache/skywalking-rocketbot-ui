@@ -17,14 +17,15 @@ limitations under the License. -->
   <div class="dashboard-container clear">
     <DashboardItem
       v-for="(i, index) in instanceComps || []"
-      :key="index + i.title + i.with"
+      :key="i.uuid"
       :rocketGlobal="rocketGlobal"
       :item="i"
       :index="index"
       :type="type"
-      :updateObjects="updateObjects"
+      :updateObjects="false"
       :rocketOption="stateDashboardOption"
-      :templateType="templateType"
+      :templateTypes="templateTypes"
+      @setTemplates="setInstanceTemplates"
     />
     <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item g-sm-3" @click="ADD_TOPO_INSTANCE_COMP">
       + Add An Item
@@ -34,12 +35,14 @@ limitations under the License. -->
 
 <script lang="ts">
   import Vue from 'vue';
-  import { Component, Prop } from 'vue-property-decorator';
+  import { Component } from 'vue-property-decorator';
   import { State, Mutation } from 'vuex-class';
   import { State as topoState } from '@/store/modules/topology';
   import { State as optionState } from '@/store/modules/global/selectors';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
   import { TopologyType, DEFAULT } from '@/constants/constant';
+  import { Option } from '@/types/global';
+  import { uuid } from '@/utils/uuid';
 
   @Component({
     components: {
@@ -51,17 +54,46 @@ limitations under the License. -->
     @State('rocketbot') private rocketGlobal: any;
     @State('rocketOption') private stateDashboardOption!: optionState;
     @Mutation('rocketTopo/ADD_TOPO_INSTANCE_COMP') private ADD_TOPO_INSTANCE_COMP: any;
-    @Prop() private updateObjects!: boolean;
+    @Mutation('rocketTopo/SET_TOPO_INSTANCE') private SET_TOPO_INSTANCE: any;
 
-    private instanceComps: unknown = [];
+    private instanceComps: any = [];
     private type: string = TopologyType.TOPOLOGY_INSTANCE;
-    private templateType: string = '';
+    private templateTypes: string[] = [];
 
     private beforeMount() {
-      const templateType = this.stateTopo.currentNode.type;
+      this.setTemplateTypes();
+      this.setInstanceTemplates();
+    }
 
-      this.templateType = this.stateTopo.topoInstances[templateType] ? templateType : DEFAULT;
-      this.instanceComps = this.stateTopo.topoInstances[this.templateType];
+    private setInstanceTemplates() {
+      this.setTemplateTypes();
+      this.instanceComps = [];
+      let templates: any = {};
+      for (const type of Object.keys(this.stateTopo.topoInstances)) {
+        const metricsTemp = this.stateTopo.topoInstances[type].map((item: any) => {
+          item.uuid = item.uuid || uuid();
+          return item;
+        });
+        templates = {
+          ...templates,
+          [type]: metricsTemp,
+        };
+      }
+      this.SET_TOPO_INSTANCE(templates);
+      for (const type of this.templateTypes) {
+        this.instanceComps = [...this.instanceComps, ...this.stateTopo.topoInstances[type]];
+      }
+    }
+
+    private setTemplateTypes() {
+      const nodeType = this.stateTopo.currentNode.type;
+      const templates = this.stateTopo.topoTemplatesType;
+
+      if (templates[TopologyType.TOPOLOGY_INSTANCE] && templates[TopologyType.TOPOLOGY_INSTANCE][nodeType]) {
+        this.templateTypes = templates[TopologyType.TOPOLOGY_INSTANCE][nodeType].map((item: Option) => item.key);
+      } else {
+        this.templateTypes = this.stateTopo.topoInstances[nodeType] ? [nodeType] : [DEFAULT];
+      }
     }
   }
 </script>

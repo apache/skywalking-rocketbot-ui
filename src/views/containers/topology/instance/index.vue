@@ -56,16 +56,27 @@ limitations under the License. -->
             :data="stateDashboardOption.instances"
             icon="disk"
           />
+          <div class="pl-10 pb-5 flex-h">
+            <div class="type grey">{{ $t('templateType') }}</div>
+            <RkSelect
+              class="content grey"
+              :mode="'multiple'"
+              :current="currentType"
+              :data="templateTypesList"
+              :theme="'dark'"
+              @onChoose="(item) => changeTemplatesType(item)"
+            />
+          </div>
         </div>
         <DashboardEvent
           :rocketComps="rocketComps"
           :stateDashboard="stateDashboardOption"
           :durationTime="durationTime"
-          :type="pageEventsType.TOPO_INSTANCE_EVENTS"
+          :type="pageEventsType"
         />
       </div>
     </div>
-    <instances-survey :updateObjects="updateObjects" />
+    <instances-survey />
   </div>
 </template>
 
@@ -84,7 +95,7 @@ limitations under the License. -->
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { State as rocketbotGlobal } from '@/store/modules/global';
   import DashboardEvent from '@/views/components/dashboard/tool-bar/dashboard-events.vue';
-  import { PageEventsType } from '@/constants/constant';
+  import { PageEventsType, DEFAULT, TopologyType } from '@/constants/constant';
   import { State as topoState } from '@/store/modules/topology';
 
   @Component({
@@ -110,7 +121,32 @@ limitations under the License. -->
     @Mutation('SET_EDIT') private SET_EDIT: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
 
-    private pageEventsType = PageEventsType;
+    private pageEventsType = PageEventsType.TOPO_INSTANCE_EVENTS;
+    private currentType: Option[] = [{ key: '', label: '' }];
+    private templateTypesList: Option[] = [{ key: '', label: '' }];
+
+    private beforeMount() {
+      this.SET_CURRENT_SERVICE(this.current);
+      this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 3 });
+      this.GET_SERVICE_INSTANCES({ duration: this.durationTime, serviceId: this.current.key }).then(() => {
+        this.selectInstance(this.stateDashboardOption.instances[0]);
+      });
+      this.templateTypesList = Object.keys(this.stateTopo.topoInstances).map((item: string) => {
+        return { label: item, key: item };
+      });
+      const topoTemplatesType: any = this.stateTopo.topoTemplatesType;
+      const nodeType = this.stateTopo.currentNode.type || DEFAULT;
+
+      if (topoTemplatesType[TopologyType.TOPOLOGY_INSTANCE]) {
+        this.currentType = topoTemplatesType[TopologyType.TOPOLOGY_INSTANCE][nodeType] || [
+          { label: DEFAULT, key: DEFAULT },
+        ];
+      } else {
+        this.currentType = [{ label: DEFAULT, key: DEFAULT }];
+      }
+    }
+
+    private changeTemplatesType() {}
 
     private selectInstance(i: Option) {
       if (!this.rocketComps.enableEvents) {
@@ -129,16 +165,6 @@ limitations under the License. -->
         type: EntityType[3].key,
       }).then(() => {
         this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
-      });
-    }
-
-    private beforeMount() {
-      const { type } = this.stateTopo.currentNode;
-
-      this.SET_CURRENT_SERVICE(this.current);
-      this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 3 });
-      this.GET_SERVICE_INSTANCES({ duration: this.durationTime, serviceId: this.current.key }).then(() => {
-        this.selectInstance(this.stateDashboardOption.instances[0]);
       });
     }
 
@@ -162,7 +188,7 @@ limitations under the License. -->
     }
 
     private beforeDestroy() {
-      this.$emit('changeInstanceComps', { type: true });
+      this.$emit('changeInstanceComps', { type: false });
       this.SET_EDIT(false);
     }
   }
@@ -189,5 +215,15 @@ limitations under the License. -->
   .input-label {
     display: inline;
     line-height: inherit;
+  }
+  .type {
+    display: inline-block;
+    width: 100px;
+  }
+
+  .content {
+    vertical-align: top;
+    display: inline-block;
+    width: 300px;
   }
 </style>

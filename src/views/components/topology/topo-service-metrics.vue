@@ -23,7 +23,7 @@ limitations under the License. -->
       :type="type"
       :updateObjects="true"
       :rocketOption="stateDashboardOption"
-      :templateTypes="templateTypes()"
+      :templateTypes="setTemplateTypes()"
       @setTemplates="setServiceTemplates"
     />
     <div v-show="rocketGlobal.edit" class="rk-add-metric-item g-sm-3" @click="addComp">
@@ -72,7 +72,7 @@ limitations under the License. -->
     }
 
     private setServiceTemplates() {
-      const templateTypes = this.templateTypes();
+      const templateTypes = this.setTemplateTypes();
 
       this.serviceComps = [];
       let templates: any = {};
@@ -92,7 +92,7 @@ limitations under the License. -->
       }
     }
 
-    private templateTypes() {
+    private setTemplateTypes() {
       let templateTypes = [];
       const nodeType = this.stateTopo.currentNode.type;
       const templates = this.stateTopo.topoTemplatesType;

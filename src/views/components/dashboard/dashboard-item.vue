@@ -144,7 +144,6 @@ limitations under the License. -->
       this.itemConfig = this.item;
       this.itemEvents = this.eventsFilter();
       this.theme = this.darkThemeTypes.includes(this.type) ? 'dark' : 'light';
-
       if (this.updateObjects) {
         setTimeout(() => {
           this.chartRender();
@@ -365,6 +364,7 @@ limitations under the License. -->
         this.DELETE_TOPO_ENDPOINT(uuid);
       } else if (this.type === TopologyType.TOPOLOGY_INSTANCE) {
         this.DELETE_TOPO_INSTANCE(uuid);
+        this.$emit('setTemplates');
       } else if (this.type === TopologyType.TOPOLOGY_SERVICE) {
         this.DELETE_TOPO_SERVICE(uuid);
         this.$emit('setTemplates');

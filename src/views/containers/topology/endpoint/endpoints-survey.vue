@@ -24,7 +24,7 @@ limitations under the License. -->
       :type="type"
       :updateObjects="updateObjects"
       :rocketOption="stateDashboardOption"
-      :templateType="templateType"
+      :templateTypes="templateType"
     />
     <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item g-sm-3" @click="ADD_TOPO_ENDPOINT_COMP">
       + Add An Item
