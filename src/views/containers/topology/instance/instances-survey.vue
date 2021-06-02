@@ -25,7 +25,7 @@ limitations under the License. -->
       :updateObjects="updateObjects"
       :rocketOption="stateDashboardOption"
       :templateTypes="templateTypes"
-      @setTemplates="setInstanceTemplates"
+      @setTemplates="setTemplates"
     />
     <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item g-sm-3" @click="addInstanceMetrics()">
       + Add An Item
@@ -66,6 +66,11 @@ limitations under the License. -->
       this.setInstanceTemplates();
     }
 
+    private setTemplates() {
+      this.updateObjects = true;
+      this.setInstanceTemplates();
+    }
+
     private addInstanceMetrics() {
       this.ADD_TOPO_INSTANCE_COMP();
       this.setInstanceTemplates();
@@ -103,8 +108,7 @@ limitations under the License. -->
 
     @Watch('currentType')
     private updateMetrics() {
-      this.updateObjects = true;
-      this.setInstanceTemplates();
+      this.setTemplates();
     }
   }
 </script>

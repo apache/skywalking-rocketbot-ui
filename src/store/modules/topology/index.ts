@@ -169,7 +169,7 @@ const mutations = {
       index = state.topoEndpoints[type.key].findIndex((d) => d.uuid === id);
       if (index > -1) {
         state.topoEndpoints[type.key].splice(index, 1);
-        window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
+        localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
       }
     }
   },
@@ -273,9 +273,21 @@ const mutations = {
       }
     }
   },
-  [types.EDIT_TOPO_ENDPOINT_CONFIG](state: State, params: { values: any; index: number }) {
-    state.topoEndpoints[params.index] = { ...state.topoEndpoints[params.index], ...params.values };
-    window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
+  [types.EDIT_TOPO_ENDPOINT_CONFIG](state: State, params: { values: any; index: number; uuid: string }) {
+    const templateType = state.topoTemplatesType[TopologyType.TOPOLOGY_INSTANCE] || {};
+    const temps = templateType[state.currentNode.type] || [{ key: DEFAULT, label: DEFAULT }];
+    let index = -1;
+
+    for (const type of temps) {
+      index = state.topoEndpoints[type.key].findIndex((d) => d.uuid === params.uuid);
+      if (index > -1) {
+        state.topoEndpoints[type.key][params.index] = {
+          ...state.topoEndpoints[type.key][params.index],
+          ...params.values,
+        };
+        localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
+      }
+    }
   },
   [types.EDIT_TOPO_SERVICE_CONFIG](state: State, params: { values: any; index: number; uuid: string }) {
     const serviceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE] || {};

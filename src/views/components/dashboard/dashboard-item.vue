@@ -362,8 +362,8 @@ limitations under the License. -->
 
     private deleteItem(index: number, uuid: number) {
       if (this.type === TopologyType.TOPOLOGY_ENDPOINT) {
-        this.$emit('setTemplates');
         this.DELETE_TOPO_ENDPOINT(uuid);
+        this.$emit('setTemplates');
       } else if (this.type === TopologyType.TOPOLOGY_INSTANCE) {
         this.DELETE_TOPO_INSTANCE(uuid);
         this.$emit('setTemplates');
