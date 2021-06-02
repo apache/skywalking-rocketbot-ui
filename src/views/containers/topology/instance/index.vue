@@ -213,9 +213,20 @@ limitations under the License. -->
       }
     }
     private exportData() {
-      const data = this.stateTopo.topoInstances;
+      let topoInstances = {};
       const name = 'instanceComps.json';
-      saveFile(data, name);
+
+      for (const type of Object.keys(this.stateTopo.topoInstances)) {
+        const metricsTemp = this.stateTopo.topoInstances[type].map((item: any) => {
+          delete item.uuid;
+          return item;
+        });
+        topoInstances = {
+          ...topoInstances,
+          [type]: metricsTemp,
+        };
+      }
+      saveFile(topoInstances, name);
     }
 
     private beforeDestroy() {

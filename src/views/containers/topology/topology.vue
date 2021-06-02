@@ -29,13 +29,11 @@ limitations under the License. -->
         v-if="dialog === 'endpoint'"
         :current="this.current"
         @changeEndpointComps="changeEndpointComps"
-        :updateObjects="updateObjects"
       />
       <window-instance
         v-if="dialog === 'instance'"
         :current="this.current"
         @changeInstanceComps="changeInstanceComps"
-        :updateObjects="updateObjects"
       />
       <window-trace v-if="dialog === 'trace'" :current="this.current" />
       <window-alarm v-if="dialog === 'alarm'" :current="this.current" />
@@ -92,7 +90,6 @@ limitations under the License. -->
 
     private current: any = {};
     private dialog: string = '';
-    private updateObjects: boolean = false;
 
     private created() {
       this.SET_PAGE_TYPE(PageTypes.TOPOLOGY);
@@ -100,7 +97,7 @@ limitations under the License. -->
     }
     private initMetricsTemplate() {
       localStorage.removeItem('topoTemplateTypes');
-      // localStorage.removeItem('topologyEndpoints');
+      // localStorage.removeItem('topologyServices');
 
       if (window.localStorage.getItem('topologyServices')) {
         const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
@@ -218,14 +215,12 @@ limitations under the License. -->
       }
     }
     private changeInstanceComps(data: { type: boolean; json: any }) {
-      this.updateObjects = data.type;
       if (!data.json) {
         return;
       }
       this.SET_TOPO_INSTANCE(data.json);
     }
     private changeEndpointComps(data: { type: boolean; json: any }) {
-      this.updateObjects = data.type;
       if (!data.json) {
         return;
       }

@@ -214,9 +214,19 @@ limitations under the License. -->
     }
 
     private exportData() {
-      const data = this.stateTopo.topoEndpoints;
+      let topoEndpoints = {};
       const name = 'endpointComps.json';
-      saveFile(data, name);
+      for (const type of Object.keys(this.stateTopo.topoEndpoints)) {
+        const metricsTemp = this.stateTopo.topoEndpoints[type].map((item: any) => {
+          delete item.uuid;
+          return item;
+        });
+        topoEndpoints = {
+          ...topoEndpoints,
+          [type]: metricsTemp,
+        };
+      }
+      saveFile(topoEndpoints, name);
     }
 
     private beforeDestroy() {

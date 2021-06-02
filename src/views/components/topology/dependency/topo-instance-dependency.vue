@@ -276,8 +276,24 @@ limitations under the License. -->
       }
     }
     private exportTopoInstanceDependencyMetrics() {
-      const group = this.stateTopo.topoServicesInstanceDependency;
+      let group: any = {};
       const name = 'topo_service_instance_dependency_metrics.json';
+      for (const type of Object.keys(this.stateTopo.topoServicesInstanceDependency)) {
+        for (const mode of ['server', 'client']) {
+          const m: any = mode;
+          const metricsTemp = this.stateTopo.topoServicesInstanceDependency[type][m].map((item: any) => {
+            delete item.uuid;
+            return item;
+          });
+          group = {
+            ...group,
+            [type]: {
+              ...group[type],
+              [m]: metricsTemp,
+            },
+          };
+        }
+      }
 
       saveFile([group], name);
     }

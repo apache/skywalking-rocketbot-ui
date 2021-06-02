@@ -273,16 +273,41 @@ limitations under the License. -->
         this.$modal.show('dialog', { text: 'ERROR' });
       }
     }
+
     private exportTopoServiceMetrics() {
       let name = '';
-      let group;
+      let group: any = {};
 
       if (this.showServerInfo) {
-        group = this.stateTopo.topoServices;
         name = 'topo_service_metrics.json';
+        for (const type of Object.keys(this.stateTopo.topoServices)) {
+          const metricsTemp = this.stateTopo.topoServices[type].map((item: any) => {
+            delete item.uuid;
+            return item;
+          });
+          group = {
+            ...group,
+            [type]: metricsTemp,
+          };
+        }
       } else {
-        group = this.stateTopo.topoServicesDependency;
         name = 'topo_service_dependency_metrics.json';
+        for (const type of Object.keys(this.stateTopo.topoServicesDependency)) {
+          for (const mode of ['server', 'client']) {
+            const m: any = mode;
+            const metricsTemp = this.stateTopo.topoServicesDependency[type][m].map((item: any) => {
+              delete item.uuid;
+              return item;
+            });
+            group = {
+              ...group,
+              [type]: {
+                ...group[type],
+                [m]: metricsTemp,
+              },
+            };
+          }
+        }
       }
       saveFile([group], name);
     }

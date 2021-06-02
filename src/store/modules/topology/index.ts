@@ -488,6 +488,7 @@ const mutations = {
   },
   [types.IMPORT_TREE_SERVICE](state: State, data: any) {
     const keys = Object.keys(data);
+
     for (const key of keys) {
       if (state.topoServices[key]) {
         state.topoServices[key].push(...data[key]);

@@ -237,8 +237,19 @@ limitations under the License. -->
     }
 
     private exportTopoEndpointDependencyMetrics() {
-      const group = this.stateTopo.topoEndpointDependency;
       const name = 'topo_endpoint_dependency_metrics.json';
+      let group: any = {};
+
+      for (const type of Object.keys(this.stateTopo.topoEndpointDependency)) {
+        const metricsTemp = this.stateTopo.topoEndpointDependency[type].map((item: any) => {
+          delete item.uuid;
+          return item;
+        });
+        group = {
+          ...group,
+          [type]: metricsTemp,
+        };
+      }
 
       saveFile([group], name);
     }
