@@ -73,7 +73,6 @@ limitations under the License. -->
 
     private setServiceTemplates() {
       const templateTypes = this.setTemplateTypes();
-
       this.serviceComps = [];
       let templates: any = {};
       for (const type of Object.keys(this.stateTopo.topoServices)) {

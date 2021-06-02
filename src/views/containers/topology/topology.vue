@@ -25,23 +25,11 @@ limitations under the License. -->
     <TopoAside />
     <TopoGroup />
     <rk-sidebox :show="dialog.length" @update:show="dialog = ''" :fixed="true" width="100%">
-      <window-endpoint
-        v-if="dialog === 'endpoint'"
-        :current="this.current"
-        @changeEndpointComps="changeEndpointComps"
-      />
-      <window-instance
-        v-if="dialog === 'instance'"
-        :current="this.current"
-        @changeInstanceComps="changeInstanceComps"
-      />
+      <window-endpoint v-if="dialog === 'endpoint'" :current="this.current" />
+      <window-instance v-if="dialog === 'instance'" :current="this.current" />
       <window-trace v-if="dialog === 'trace'" :current="this.current" />
       <window-alarm v-if="dialog === 'alarm'" :current="this.current" />
-      <window-endpoint-dependency
-        v-if="dialog === 'endpoint_dependency'"
-        @changeEndpointComps="changeEndpointComps"
-        :current="this.current"
-      />
+      <window-endpoint-dependency v-if="dialog === 'endpoint_dependency'" :current="this.current" />
     </rk-sidebox>
   </div>
 </template>
@@ -97,7 +85,8 @@ limitations under the License. -->
     }
     private initMetricsTemplate() {
       localStorage.removeItem('topoTemplateTypes');
-      // localStorage.removeItem('topologyServices');
+      localStorage.removeItem('topologyServices');
+      localStorage.removeItem('topologyServicesDependency');
 
       if (window.localStorage.getItem('topologyServices')) {
         const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
@@ -213,18 +202,6 @@ limitations under the License. -->
       if (d.isReal) {
         this.SET_CURRENT_SERVICE({ key: d.key, label: d.label });
       }
-    }
-    private changeInstanceComps(data: { type: boolean; json: any }) {
-      if (!data.json) {
-        return;
-      }
-      this.SET_TOPO_INSTANCE(data.json);
-    }
-    private changeEndpointComps(data: { type: boolean; json: any }) {
-      if (!data.json) {
-        return;
-      }
-      this.SET_TOPO_ENDPOINT(data.json);
     }
     private beforeDestroy() {
       this.CLEAR_TOPO_INFO();

@@ -76,7 +76,7 @@ limitations under the License. -->
         />
       </div>
     </div>
-    <instances-survey :currentType="currentType" />
+    <instances-survey :currentType="currentType" ref="survey" />
   </div>
 </template>
 
@@ -120,6 +120,7 @@ limitations under the License. -->
     @Mutation('SET_EDIT') private SET_EDIT: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Mutation('rocketTopo/UPDATE_TOPO_TEMPLATE_TYPES') private UPDATE_TOPO_TEMPLATE_TYPES: any;
+    @Mutation('rocketTopo/SET_TOPO_INSTANCE') private SET_TOPO_INSTANCE: any;
 
     private pageEventsType = PageEventsType.TOPO_INSTANCE_EVENTS;
     private currentType: Option[] = [{ key: '', label: '' }];
@@ -205,7 +206,9 @@ limitations under the License. -->
         if (!Array.isArray(data)) {
           throw new Error();
         }
-        this.$emit('changeInstanceComps', { json: data, type: false });
+        this.SET_TOPO_INSTANCE(data);
+        const survey: any = this.$refs.survey;
+        survey.setTemplates();
         const el: any = document.getElementById('instance-file');
         el!.value = '';
       } catch (e) {

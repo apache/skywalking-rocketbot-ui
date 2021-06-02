@@ -85,8 +85,8 @@ limitations under the License. -->
           @onChoose="(item) => changeTemplatesType(item)"
         />
       </div>
-      <TopoServiceDependency v-if="stateTopo.selectedServiceCall" :currentType="currentType" />
-      <TopoServiceMetrics v-else-if="showServerInfo" :currentType="currentType" />
+      <TopoServiceDependency v-if="stateTopo.selectedServiceCall" :currentType="currentType" ref="serviceDependency" />
+      <TopoServiceMetrics v-else-if="showServerInfo" :currentType="currentType" ref="serviceTemplate" />
     </div>
     <div class="show-dependency" v-if="stateTopo.selectedServiceCall">
       <a class="rk-btn lg" @click="openInstanceModal">{{ $t('ShowInstanceDependency') }}</a>
@@ -264,8 +264,12 @@ limitations under the License. -->
         }
         if (this.showServerInfo) {
           this.IMPORT_TREE_SERVICE(data[0]);
+          const service: any = this.$refs.serviceTemplate;
+          service.setServiceTemplates();
         } else {
           this.IMPORT_TREE_SERVICE_DEPENDENCY(data[0]);
+          const serviceDependency: any = this.$refs.serviceDependency;
+          serviceDependency.setServiceDependencyTemplates();
         }
         const el: any = document.getElementById('tool-bar-file');
         el!.value = '';

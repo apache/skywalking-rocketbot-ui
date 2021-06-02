@@ -75,7 +75,7 @@ limitations under the License. -->
         />
       </div>
     </div>
-    <endpoints-survey :currentType="currentType" />
+    <endpoints-survey :currentType="currentType" ref="survey" />
   </div>
 </template>
 
@@ -115,6 +115,7 @@ limitations under the License. -->
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
     @Mutation('rocketTopo/UPDATE_TOPO_TEMPLATE_TYPES') private UPDATE_TOPO_TEMPLATE_TYPES: any;
+    @Mutation('rocketTopo/SET_TOPO_ENDPOINT') private SET_TOPO_ENDPOINT: any;
     @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
     @Action('GET_EVENT') private GET_EVENT: any;
@@ -202,10 +203,10 @@ limitations under the License. -->
     private async importData(event: any) {
       try {
         const data: any = await readFile(event);
-        if (!Array.isArray(data)) {
-          throw new Error();
-        }
-        this.$emit('changeEndpointComps', { json: data, type: false });
+
+        this.SET_TOPO_ENDPOINT(data);
+        const survey: any = this.$refs.survey;
+        survey.setTemplates();
         const el: any = document.getElementById('endpoint-file');
         el!.value = '';
       } catch (e) {

@@ -229,6 +229,7 @@ limitations under the License. -->
           throw new Error();
         }
         this.IMPORT_TREE_ENDPOINT_DEPENDENCY(data[0]);
+        this.setMetricsTemplate();
         const el: any = document.getElementById('endpoint-tool-bar-file');
         el!.value = '';
       } catch (e) {

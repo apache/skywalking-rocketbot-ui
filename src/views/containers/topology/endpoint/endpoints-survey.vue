@@ -17,7 +17,7 @@ limitations under the License. -->
   <div class="dashboard-container clear">
     <DashboardItem
       v-for="(i, index) in topoEndpoints || []"
-      :key="index + i.title + i.width"
+      :key="i.uuid"
       :rocketGlobal="rocketGlobal"
       :item="i"
       :index="index"
