@@ -20,15 +20,10 @@ limitations under the License. -->
 <script lang="ts">
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
-  import { State, Action, Getter, Mutation } from 'vuex-class';
-  import * as echarts from 'echarts/lib/echarts';
 
   @Component
   export default class DependencySankey extends Vue {
     @Prop() private data: any;
-    @Getter('durationTime') private durationTime: any;
-    @Action('rocketTopo/GET_INSTANCE_DEPENDENCY_METRICS')
-    private GET_INSTANCE_DEPENDENCY_METRICS: any;
 
     get optionConfigs() {
       return {

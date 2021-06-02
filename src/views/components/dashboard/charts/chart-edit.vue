@@ -43,7 +43,7 @@ limitations under the License. -->
           </option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="isChartType">
+      <div class="flex-h mb-5" v-show="hasChartType">
         <div class="title grey sm">{{ $t('chartType') }}:</div>
         <select
           class="long"
@@ -73,7 +73,7 @@ limitations under the License. -->
           @change="setItemConfig({ type: 'labelsIndex', value: $event.target.value })"
         />
       </div>
-      <div class="flex-h mb-5" v-show="!isDatabase && !pageTypes.includes(type)">
+      <div class="flex-h mb-5" v-show="!noEntity">
         <div class="title grey sm">{{ $t('entityType') }}:</div>
         <select
           class="long"
@@ -164,7 +164,7 @@ limitations under the License. -->
           </option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="!isIndependentSelector && !isBrowser">
+      <div class="flex-h mb-5" v-show="hasIndependentSelector">
         <div class="title grey sm">{{ $t('independentSelector') }}:</div>
         <select
           class="long"
@@ -319,6 +319,10 @@ limitations under the License. -->
     @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
     @Mutation('rocketTopo/EDIT_TOPO_INSTANCE_CONFIG') private EDIT_TOPO_INSTANCE_CONFIG: any;
     @Mutation('rocketTopo/EDIT_TOPO_ENDPOINT_CONFIG') private EDIT_TOPO_ENDPOINT_CONFIG: any;
+    @Mutation('rocketTopo/EDIT_TOPO_SERVICE_CONFIG') private EDIT_TOPO_SERVICE_CONFIG: any;
+    @Mutation('rocketTopo/EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG') private EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG: any;
+    @Mutation('rocketTopo/EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG') private EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG: any;
+    @Mutation('rocketTopo/EDIT_ENDPOINT_DEPENDENCY_CONFIG') private EDIT_ENDPOINT_DEPENDENCY_CONFIG: any;
     @Action('GET_ITEM_SERVICES') private GET_ITEM_SERVICES: any;
     @Action('GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
     @Action('GET_ITEM_INSTANCES') private GET_ITEM_INSTANCES: any;
@@ -340,40 +344,64 @@ limitations under the License. -->
     private isDatabase = false;
     private isBrowser = false;
     private isLabel = false;
-    private isIndependentSelector = false;
+    private hasIndependentSelector = false;
     private isChartSlow = false;
-    private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as string[];
     private isChartType = false;
     private ChartTable = 'ChartTable';
+    private noEntity = false;
 
-    private created() {
+    private beforeMount() {
       this.itemConfig = this.item;
       this.initConfig();
-      if (!this.itemConfig.independentSelector || this.pageTypes.includes(this.type)) {
-        return;
+      if (this.itemConfig.independentSelector) {
+        this.setItemServices();
       }
-      this.setItemServices();
     }
 
     private initConfig() {
-      this.isDatabase = this.pageTypes.includes(this.type)
-        ? false
-        : this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.DATABASE
-        ? true
-        : false;
-      this.isBrowser = this.rocketComps.tree[this.rocketComps.group].type === DASHBOARDTYPE.BROWSER;
+      const dashboardComps = this.rocketComps.tree[this.rocketComps.group] || {};
+      const topoPageTypes = [
+        TopologyType.TOPOLOGY_SERVICE,
+        TopologyType.TOPOLOGY_SERVICE_DEPENDENCY,
+        TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY,
+      ] as string[];
+
+      this.noEntity = topoPageTypes.includes(this.type);
+      this.isDatabase = dashboardComps.type === DASHBOARDTYPE.DATABASE;
+      this.isBrowser = dashboardComps.type === DASHBOARDTYPE.BROWSER;
       if (this.isBrowser) {
         this.EntityType = BrowserEntityType;
       }
       this.queryMetricTypesList = QueryMetricTypes[this.item.metricType] || [];
-      this.isLabel = this.itemConfig.metricType === MetricsType.LABELED_VALUE ? true : false;
-      this.isIndependentSelector =
-        this.rocketComps.tree[this.rocketComps.group].type === 'metric' || this.pageTypes.includes(this.type);
+      this.isLabel = this.itemConfig.metricType === MetricsType.LABELED_VALUE;
+      this.hasIndependentSelector = dashboardComps.type === 'metric';
       this.chartTypeOptions =
         this.itemConfig.queryMetricType === 'readMetricsValue' ? ReadValueChartType : ChartTypeOptions;
       this.isChartSlow = ['sortMetrics', 'readSampledRecords'].includes(this.itemConfig.queryMetricType);
       if (this.isChartSlow && !this.itemConfig.maxItemNum) {
         this.itemConfig.maxItemNum = MaxItemNum;
+      }
+    }
+
+    private editComponentConfig(params: { index: number; values: unknown }) {
+      const data = {
+        ...params,
+        uuid: this.itemConfig.uuid,
+      };
+      if (this.type === TopologyType.TOPOLOGY_SERVICE) {
+        this.EDIT_TOPO_SERVICE_CONFIG(data);
+      } else if (this.type === TopologyType.TOPOLOGY_ENDPOINT) {
+        this.EDIT_TOPO_ENDPOINT_CONFIG(data);
+      } else if (this.type === TopologyType.TOPOLOGY_INSTANCE) {
+        this.EDIT_TOPO_INSTANCE_CONFIG(data);
+      } else if (this.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) {
+        this.EDIT_TOPO_SERVICE_DEPENDENCY_CONFIG(data);
+      } else if (this.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) {
+        this.EDIT_TOPO_INSTANCE_DEPENDENCY_CONFIG(data);
+      } else if (this.type === TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) {
+        this.EDIT_ENDPOINT_DEPENDENCY_CONFIG(data);
+      } else {
+        this.EDIT_COMP_CONFIG(params);
       }
     }
 
@@ -411,18 +439,18 @@ limitations under the License. -->
       }
       if (params.type === 'independentSelector' || params.type === 'parentService') {
         this.itemConfig[params.type] = params.value === 'true' ? true : false;
-        if (this.type === this.pageTypes[0]) {
-          this.EDIT_TOPO_ENDPOINT_CONFIG({
+        if (this.type === TopologyType.TOPOLOGY_ENDPOINT) {
+          this.editComponentConfig({
             index: this.index,
             values: { [params.type]: this.itemConfig[params.type] },
           });
-        } else if (this.type === this.pageTypes[1]) {
-          this.EDIT_TOPO_INSTANCE_CONFIG({
+        } else if (this.type === TopologyType.TOPOLOGY_INSTANCE) {
+          this.editComponentConfig({
             index: this.index,
             values: { [params.type]: this.itemConfig[params.type] },
           });
         } else {
-          this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: this.itemConfig[params.type] } });
+          this.editComponentConfig({ index: this.index, values: { [params.type]: this.itemConfig[params.type] } });
         }
         return;
       }
@@ -430,18 +458,18 @@ limitations under the License. -->
         this.updateAggregation(params);
         return;
       }
-      if (this.type === this.pageTypes[0]) {
-        this.EDIT_TOPO_ENDPOINT_CONFIG({
+      if (this.type === TopologyType.TOPOLOGY_ENDPOINT) {
+        this.editComponentConfig({
           index: this.index,
           values: { [params.type]: params.value },
         });
-      } else if (this.type === this.pageTypes[1]) {
-        this.EDIT_TOPO_INSTANCE_CONFIG({
+      } else if (this.type === TopologyType.TOPOLOGY_INSTANCE) {
+        this.editComponentConfig({
           index: this.index,
           values: { [params.type]: params.value },
         });
       } else {
-        this.EDIT_COMP_CONFIG({ index: this.index, values: { [params.type]: params.value } });
+        this.editComponentConfig({ index: this.index, values: { [params.type]: params.value } });
       }
     }
 
@@ -462,6 +490,7 @@ limitations under the License. -->
         this.$emit('updateStatus', 'metricType', typeOfMetrics);
         this.queryMetricTypesList = QueryMetricTypes[typeOfMetrics] || [];
         this.itemConfig.queryMetricType = this.queryMetricTypesList[0] && this.queryMetricTypesList[0].value;
+        this.chartTypeOptions = ReadValueChartType;
         this.hasChartType();
         this.isLabel = typeOfMetrics === MetricsType.LABELED_VALUE ? true : false;
         const values = {
@@ -470,18 +499,18 @@ limitations under the License. -->
           chartType: MetricChartType[this.itemConfig.queryMetricType],
           metricName: params.value,
         };
-        if (this.type === this.pageTypes[0]) {
-          this.EDIT_TOPO_ENDPOINT_CONFIG({
+        if (this.type === TopologyType.TOPOLOGY_ENDPOINT) {
+          this.editComponentConfig({
             index: this.index,
             values,
           });
-        } else if (this.type === this.pageTypes[1]) {
-          this.EDIT_TOPO_INSTANCE_CONFIG({
+        } else if (this.type === TopologyType.TOPOLOGY_INSTANCE) {
+          this.editComponentConfig({
             index: this.index,
             values,
           });
         } else {
-          this.EDIT_COMP_CONFIG({
+          this.editComponentConfig({
             index: this.index,
             values,
           });
@@ -502,7 +531,7 @@ limitations under the License. -->
         ...this.itemConfig,
         ...values,
       };
-      this.EDIT_COMP_CONFIG({
+      this.editComponentConfig({
         index: this.index,
         values,
       });
@@ -513,22 +542,10 @@ limitations under the License. -->
         chartType: MetricChartType[params.value],
         [params.type]: params.value,
       };
-      if (this.type === this.pageTypes[0]) {
-        this.EDIT_TOPO_ENDPOINT_CONFIG({
-          index: this.index,
-          values,
-        });
-      } else if (this.type === this.pageTypes[1]) {
-        this.EDIT_TOPO_INSTANCE_CONFIG({
-          index: this.index,
-          values,
-        });
-      } else {
-        this.EDIT_COMP_CONFIG({
-          index: this.index,
-          values,
-        });
-      }
+      this.editComponentConfig({
+        index: this.index,
+        values,
+      });
       this.itemConfig = {
         ...this.itemConfig,
         ...values,
@@ -576,7 +593,10 @@ limitations under the License. -->
             } else {
               this.itemConfig.currentEndpoint = '';
             }
-            this.EDIT_COMP_CONFIG({ index: this.index, values: { currentEndpoint: this.itemConfig.currentEndpoint } });
+            this.editComponentConfig({
+              index: this.index,
+              values: { currentEndpoint: this.itemConfig.currentEndpoint },
+            });
           }
         });
       } else if (this.itemConfig.entityType === EntityType[3].key) {
@@ -592,7 +612,10 @@ limitations under the License. -->
             } else {
               this.itemConfig.currentInstance = '';
             }
-            this.EDIT_COMP_CONFIG({ index: this.index, values: { currentInstance: this.itemConfig.currentInstance } });
+            this.editComponentConfig({
+              index: this.index,
+              values: { currentInstance: this.itemConfig.currentInstance },
+            });
           }
         });
       }

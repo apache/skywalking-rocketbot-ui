@@ -20,7 +20,7 @@ import * as types from '../dashboard/mutation-types';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
 import { Duration, DurationTime, Option } from '@/types/global';
-import { PageTypes } from '@/constants/constant';
+import { PageTypes, TopologyType } from '@/constants/constant';
 
 const EntityType = ['Service', 'ServiceInstance', 'Endpoint'];
 export interface State {
@@ -34,9 +34,10 @@ export interface State {
   currentInstance: Option;
   updateDashboard: { key: string; label?: string | undefined };
   pageType: string;
+  destService: Option;
+  destInstance: Option;
+  destEndpoint: Option;
 }
-
-const LOG = 'Log';
 
 const initState: State = {
   services: [],
@@ -49,17 +50,20 @@ const initState: State = {
   currentDatabase: { key: '', label: '' },
   updateDashboard: { key: '' },
   pageType: '',
+  destService: { key: '', label: '' },
+  destInstance: { key: '', label: '' },
+  destEndpoint: { key: '', label: '' },
 };
 
 // mutations
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: Option[]) {
-    state.services = state.pageType === LOG ? [{ label: 'All', key: '' }, ...data] : data;
+    state.services = state.pageType === PageTypes.LOG ? [{ label: 'All', key: '' }, ...data] : data;
     state.currentService = state.services[0] || {};
   },
   [types.SET_CURRENT_SERVICE](state: State, service: Option) {
     state.currentService = service;
-    if (state.pageType !== PageTypes.DASHBOARD) {
+    if (state.pageType === PageTypes.LOG) {
       state.updateDashboard = service;
     }
   },
@@ -69,7 +73,7 @@ const mutations: MutationTree<State> = {
   },
 
   [types.SET_ENDPOINTS](state: State, data: Option[]) {
-    state.endpoints = state.pageType === LOG ? [{ label: 'All', key: '' }, ...data] : data;
+    state.endpoints = state.pageType === PageTypes.LOG ? [{ label: 'All', key: '' }, ...data] : data;
     if (!state.endpoints.length) {
       state.currentEndpoint = { key: '', label: '' };
       return;
@@ -81,7 +85,7 @@ const mutations: MutationTree<State> = {
     state.updateDashboard = endpoint;
   },
   [types.SET_INSTANCES](state: State, data: Option[]) {
-    state.instances = state.pageType === LOG ? [{ label: 'All', key: '' }, ...data] : data;
+    state.instances = state.pageType === PageTypes.LOG ? [{ label: 'All', key: '' }, ...data] : data;
     if (!state.instances.length) {
       state.currentInstance = { key: '', label: '' };
       return;
@@ -106,6 +110,25 @@ const mutations: MutationTree<State> = {
   },
   [types.SET_PAGE_TYPE](state: State, type: string) {
     state.pageType = type;
+  },
+  [types.SET_SERVICE_DEPENDENCY](state: State, call: any) {
+    state.currentService = { key: call.source.id, label: call.source.name };
+    state.destService = { key: call.target.id, label: call.target.name };
+    state.updateDashboard = { key: TopologyType.TOPOLOGY_SERVICE_DEPENDENCY + call.id };
+  },
+  [types.SET_SERVICE_INSTANCE_DEPENDENCY](state: State, call: any) {
+    state.currentService = { key: call.sourceObj.serviceId, label: call.sourceObj.serviceName };
+    state.currentInstance = { key: call.sourceObj.id, label: call.sourceObj.name };
+    state.destService = { key: call.targetObj.serviceId, label: call.targetObj.serviceName };
+    state.destInstance = { key: call.targetObj.id, label: call.targetObj.name };
+    state.updateDashboard = { key: TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY + call.id };
+  },
+  [types.SET_ENDPOINT_DEPENDENCY](state: State, call: any) {
+    state.currentService = { key: call.serviceId, label: call.serviceName };
+    state.currentEndpoint = { key: call.endpointId, label: call.endpointName };
+    state.destService = { key: call.destServiceId, label: call.destServiceName };
+    state.destEndpoint = { key: call.destEndpointId, label: call.destEndpointName };
+    state.updateDashboard = { key: TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY + call.id };
   },
 };
 

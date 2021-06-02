@@ -115,7 +115,7 @@ limitations under the License. -->
         this.$emit('setDialog', 'endpoint_dependency');
       },
       handleNodeClick(d) {
-        this.$emit('setCurrent', { key: d.id, label: d.name });
+        this.$emit('setCurrent', { key: d.id, label: d.name, isReal: d.isReal });
         const {x, y, vx, vy, fx, fy, index, ...rest} = d;
         this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
         this.$store.commit('rocketTopo/SET_NODE', rest);
@@ -125,14 +125,10 @@ limitations under the License. -->
         event.stopPropagation();
         this.$store.commit('rocketTopo/SET_NODE', {});
         this.$store.commit('rocketTopo/SET_LINK', d);
+        this.$store.commit('SET_SERVICE_DEPENDENCY', d);
         this.$store.dispatch('rocketTopo/CLEAR_TOPO_INFO');
         this.$store.commit('rocketTopo/SET_MODE', d.detectPoints);
-        this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' :
-            'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
-        this.$store.commit('rocketTopo/SET_CALLBACK', () => {
-          this.$store.dispatch(this.$store.state.rocketTopo.mode ? 'rocketTopo/GET_TOPO_SERVICE_INFO' :
-            'rocketTopo/GET_TOPO_CLIENT_INFO', { ...d, duration: this.$store.getters.durationTime });
-        });
+        this.$store.commit('rocketTopo/SET_SELECTED_CALL', { ...d, duration: this.$store.getters.durationTime });
       },
       resize() {
         this.svg.attr('height', this.$el.clientHeight);

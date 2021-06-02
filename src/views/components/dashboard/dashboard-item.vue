@@ -13,18 +13,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div class="rk-dashboard-item" :class="`g-sm-${width}`" :style="`height:${height}px;`">
+  <div class="rk-dashboard-item" :class="`g-sm-${width}`" :style="`height:${height}px;`" v-if="itemConfig.entityType">
     <div class="rk-dashboard-item-title ell">
-      <span v-show="rocketGlobal.edit" @click="deleteItem(index)">
+      <span v-show="rocketGlobal.edit || stateTopo.editDependencyMetrics" @click="deleteItem(index, itemConfig.uuid)">
         <rk-icon class="r edit red" icon="file-deletion" />
       </span>
       <span>{{ title }}</span>
       <span v-show="unit"> ( {{ unit }} ) </span>
       <span v-show="status === 'UNKNOWN'" class="item-status">( {{ $t('unknownMetrics') }} )</span>
-      <span v-show="!rocketGlobal.edit && !pageTypes.includes(type)" @click="editComponentConfig">
+      <span
+        v-show="!rocketGlobal.edit && !stateTopo.editDependencyMetrics && !noEditTypes.includes(type)"
+        @click="editComponentConfig"
+      >
         <rk-icon class="r edit" icon="keyboard_control" v-tooltip:bottom="{ content: $t('editConfig') }" />
       </span>
-      <span v-show="!rocketGlobal.edit && itemConfig.chartType === 'ChartTable'" @click="copyTable">
+      <span
+        v-show="!rocketGlobal.edit && stateTopo.editDependencyMetrics && itemConfig.chartType === 'ChartTable'"
+        @click="copyTable"
+      >
         <rk-icon class="r cp" icon="review-list" />
       </span>
       <rk-icon v-if="tips" class="r edit" icon="info_outline" v-tooltip:bottom="{ content: tips }" />
@@ -32,7 +38,7 @@ limitations under the License. -->
     <div class="rk-dashboard-item-body" ref="chartBody">
       <div style="height:100%;width:100%">
         <component
-          :is="rocketGlobal.edit ? 'ChartEdit' : itemConfig.chartType"
+          :is="rocketGlobal.edit || stateTopo.editDependencyMetrics ? 'ChartEdit' : itemConfig.chartType"
           ref="chart"
           :item="itemConfig"
           :index="index"
@@ -40,6 +46,7 @@ limitations under the License. -->
           :data="chartSource"
           :type="type"
           :itemEvents="itemEvents"
+          :theme="theme"
           @updateStatus="(type, value) => setStatus(type, value)"
         ></component>
       </div>
@@ -47,9 +54,10 @@ limitations under the License. -->
     <rk-sidebox
       width="70%"
       :fixed="true"
+      :right="theme === 'dark'"
       :title="$t('editConfig')"
       :show.sync="dialogConfigVisible"
-      @closeSideboxCallback="chartRender()"
+      @closeSideboxCallback="chartRender"
     >
       <div class="config-box">
         <component
@@ -59,6 +67,8 @@ limitations under the License. -->
           :index="index"
           :intervalTime="intervalTime"
           :data="chartSource"
+          :theme="theme"
+          :type="type"
         ></component>
       </div>
     </rk-sidebox>
@@ -71,7 +81,7 @@ limitations under the License. -->
   import dayjs from 'dayjs';
 
   import { QueryTypes, UpdateDashboardEvents } from './constant';
-  import { TopologyType, ObjectsType } from '../../../constants/constant';
+  import { TopologyType } from '@/constants/constant';
   import { CalculationType } from './charts/constant';
   import { State as globalState } from '@/store/modules/global';
   import { State as optionState } from '@/store/modules/global/selectors';
@@ -86,20 +96,26 @@ limitations under the License. -->
   export default class DashboardItem extends Vue {
     @State('rocketbot') private rocketGlobal!: globalState;
     @State('rocketData') private rocketData!: rocketData;
-    @Mutation('EDIT_COMP_CONFIG') private EDIT_COMP_CONFIG: any;
+    @State('rocketTopo') private stateTopo!: any;
     @Mutation('DELETE_COMP') private DELETE_COMP: any;
     @Mutation('rocketTopo/DELETE_TOPO_ENDPOINT') private DELETE_TOPO_ENDPOINT: any;
     @Mutation('rocketTopo/DELETE_TOPO_INSTANCE') private DELETE_TOPO_INSTANCE: any;
+    @Mutation('rocketTopo/DELETE_TOPO_SERVICE') private DELETE_TOPO_SERVICE: any;
+    @Mutation('rocketTopo/DELETE_TOPO_SERVICE_DEPENDENCY') private DELETE_TOPO_SERVICE_DEPENDENCY: any;
+    @Mutation('rocketTopo/DELETE_TOPO_INSTANCE_DEPENDENCY') private DELETE_TOPO_INSTANCE_DEPENDENCY: any;
+    @Mutation('rocketTopo/DELETE_TOPO_ENDPOINT_DEPENDENCY') private DELETE_TOPO_ENDPOINT_DEPENDENCY: any;
     @Action('GET_QUERY') private GET_QUERY: any;
     @Getter('intervalTime') private intervalTime: any;
     @Getter('durationTime') private durationTime: any;
     @Prop() private item!: any;
     @Prop() private index!: number;
     @Prop() private type!: string;
-    @Prop() private updateObjects!: string;
+    @Prop() private updateObjects!: boolean;
     @Prop() private rocketOption!: optionState;
+    @Prop() private templateTypes!: string[];
+    @Prop() private templateMode!: string; // server client
 
-    private pageTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as string[];
+    private noEditTypes = [TopologyType.TOPOLOGY_ENDPOINT, TopologyType.TOPOLOGY_INSTANCE] as string[];
     private dialogConfigVisible = false;
     private status = 'UNKNOWN';
     private title = 'Title';
@@ -110,6 +126,13 @@ limitations under the License. -->
     private chartSource: any = {};
     private itemConfig: any = {};
     private itemEvents: Event[] = [];
+    private theme: 'light' | 'dark' = 'light';
+    private darkThemeTypes = [
+      TopologyType.TOPOLOGY_SERVICE,
+      TopologyType.TOPOLOGY_SERVICE_DEPENDENCY,
+      TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY,
+      TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY,
+    ] as string[];
 
     private created() {
       this.status = this.item.metricType;
@@ -120,18 +143,13 @@ limitations under the License. -->
       this.unit = this.item.unit;
       this.itemConfig = this.item;
       this.itemEvents = this.eventsFilter();
-      const types = [
-        ObjectsType.UPDATE_INSTANCES,
-        ObjectsType.UPDATE_ENDPOINTS,
-        ObjectsType.UPDATE_DASHBOARD,
-      ] as string[];
+      this.theme = this.darkThemeTypes.includes(this.type) ? 'dark' : 'light';
 
-      if (!types.includes(this.updateObjects)) {
-        return;
+      if (this.updateObjects) {
+        setTimeout(() => {
+          this.chartRender();
+        }, 1000);
       }
-      setTimeout(() => {
-        this.chartRender();
-      }, 1000);
     }
 
     private chartRender() {
@@ -144,17 +162,22 @@ limitations under the License. -->
         index: this.index,
         type: this.type,
         rocketOption: this.rocketOption,
+        templateType: this.templateTypes,
+        templateMode: this.templateMode,
       }).then((params: Array<{ metricName: string; [key: string]: any; config: any }>) => {
         if (!params) {
+          this.itemConfig = {};
           return;
         }
         if (!params.length) {
+          this.itemConfig = {};
           return;
         }
         this.itemConfig = params[0].config;
-        const { queryMetricType, chartType } = this.itemConfig;
+
+        const { queryMetricType } = this.itemConfig;
         let data = params;
-        if (queryMetricType === QueryTypes.ReadMetricsValue /*&& chartType === 'ChartSlow'*/) {
+        if (queryMetricType === QueryTypes.ReadMetricsValue) {
           const arr: any = [
             {
               config: this.itemConfig,
@@ -337,11 +360,25 @@ limitations under the License. -->
       copy(JSON.stringify(data));
     }
 
-    private deleteItem(index: number) {
-      if (this.type === this.pageTypes[0]) {
-        this.DELETE_TOPO_ENDPOINT(index);
-      } else if (this.type === this.pageTypes[1]) {
-        this.DELETE_TOPO_INSTANCE(index);
+    private deleteItem(index: number, uuid: number) {
+      if (this.type === TopologyType.TOPOLOGY_ENDPOINT) {
+        this.DELETE_TOPO_ENDPOINT(uuid);
+        this.$emit('setTemplates');
+      } else if (this.type === TopologyType.TOPOLOGY_INSTANCE) {
+        this.DELETE_TOPO_INSTANCE(uuid);
+        this.$emit('setTemplates');
+      } else if (this.type === TopologyType.TOPOLOGY_SERVICE) {
+        this.DELETE_TOPO_SERVICE(uuid);
+        this.$emit('setTemplates');
+      } else if (this.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) {
+        this.DELETE_TOPO_SERVICE_DEPENDENCY(uuid);
+        this.$emit('setTemplates');
+      } else if (this.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) {
+        this.DELETE_TOPO_INSTANCE_DEPENDENCY(uuid);
+        this.$emit('setTemplates');
+      } else if (this.type === TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) {
+        this.DELETE_TOPO_ENDPOINT_DEPENDENCY(uuid);
+        this.$emit('setTemplates');
       } else {
         this.DELETE_COMP(index);
       }
@@ -384,13 +421,30 @@ limitations under the License. -->
     }
 
     // watch selectors and events
-    @Watch('rocketOption.updateDashboard')
+    @Watch('rocketOption.updateDashboard.key')
     private watchCurrentSelectors() {
+      if (!this.rocketOption.updateDashboard) {
+        return;
+      }
+      const key = this.rocketOption.updateDashboard.key || '';
+
       this.itemEvents = this.eventsFilter();
+      if (key.includes(UpdateDashboardEvents)) {
+        return;
+      }
+      if (key.includes(TopologyType.TOPOLOGY_SERVICE) && this.itemConfig.entityType !== EntityType[0].key) {
+        return;
+      }
+      if (key.includes(TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) && this.itemConfig.entityType !== EntityType[4].key) {
+        return;
+      }
       if (
-        this.rocketOption.updateDashboard.key &&
-        this.rocketOption.updateDashboard.key.includes(UpdateDashboardEvents)
+        key.includes(TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) &&
+        this.itemConfig.entityType !== EntityType[5].key
       ) {
+        return;
+      }
+      if (key.includes(TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) && this.itemConfig.entityType !== EntityType[6].key) {
         return;
       }
       setTimeout(() => {
@@ -403,6 +457,20 @@ limitations under the License. -->
     }
     @Watch('rocketGlobal.edit')
     private watchRerender() {
+      if (this.stateTopo.editDependencyMetrics) {
+        return;
+      }
+      this.chartRender();
+    }
+    @Watch('stateTopo.editDependencyMetrics')
+    private watchDependency() {
+      if (
+        (this.type !== TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY &&
+          this.type !== TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) ||
+        this.stateTopo.editDependencyMetrics
+      ) {
+        return;
+      }
       this.chartRender();
     }
   }
@@ -416,6 +484,9 @@ limitations under the License. -->
     padding-right: 5px;
     .edit {
       cursor: pointer;
+    }
+    .rk-sidebox-title {
+      color: #333;
     }
   }
   .dashboard-item-shadow {

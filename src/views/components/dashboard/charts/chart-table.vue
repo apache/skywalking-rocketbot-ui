@@ -16,7 +16,7 @@ limitations under the License. -->
 <template>
   <div class="rk-chart-table">
     <div ref="chartTable">
-      <div class="row header flex-h" :style="`width: ${nameWidth + initWidth}px`">
+      <div class="row header flex-h" :style="`width: ${nameWidth + initWidth}px`" :class="{ dark: theme === 'dark' }">
         <div class="name" :style="`width: ${nameWidth}px`">
           {{ item.tableHeaderCol1 || $t('name') }}
           <i class="r cp" ref="draggerName"><rk-icon icon="settings_ethernet"/></i>
@@ -25,7 +25,13 @@ limitations under the License. -->
           {{ item.tableHeaderCol2 || $t('value') }}
         </div>
       </div>
-      <div class="row flex-h" v-for="key in dataKeys" :key="key" :style="`width: ${nameWidth + initWidth}px`">
+      <div
+        class="row flex-h"
+        :class="{ dark: theme === 'dark' }"
+        v-for="key in dataKeys"
+        :key="key"
+        :style="`width: ${nameWidth + initWidth}px`"
+      >
         <div :style="`width: ${nameWidth}px`">{{ key }}</div>
         <div class="value-col" v-if="showTableValues">{{ data[key][dataLength(data[key])] }}</div>
       </div>
@@ -41,6 +47,7 @@ limitations under the License. -->
   export default class ChartTable extends Vue {
     @Prop() private data!: any;
     @Prop() private item: any;
+    @Prop() private theme!: string;
 
     private nameWidth: number = 0;
     private initWidth: number = 0;
@@ -105,6 +112,9 @@ limitations under the License. -->
       div:nth-last-child(2) {
         border-bottom: 1px solid #ccc;
       }
+    }
+    .dark {
+      color: #eee;
     }
     .row:first-child {
       div {

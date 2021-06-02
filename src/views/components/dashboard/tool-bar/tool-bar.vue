@@ -15,6 +15,7 @@ limitations under the License. -->
 <template>
   <div class="rk-dashboard-bar flex-h">
     <ToolBarBtns
+      class="tool-btns"
       :rocketGlobal="rocketGlobal"
       :rocketComps="rocketComps"
       :compType="compType"
@@ -228,6 +229,9 @@ limitations under the License. -->
 </script>
 
 <style lang="scss" scoped>
+  .tool-btns {
+    height: 58px;
+  }
   .rk-dashboard-bar {
     flex-shrink: 0;
     color: #efefef;

@@ -21,15 +21,15 @@ limitations under the License. -->
         search = '';
       }
     "
-    :class="{ active: visible }"
+    :class="{ active: visible, dark: theme === 'dark' }"
   >
-    <div class="rk-bar-i flex-h" @click="visible = !visible">
+    <div class="rk-bar-i flex-h" @click="visible = !visible" :class="{ dark: theme === 'dark' }">
       <div class="mr-15 rk-bar-i-text">
-        <div v-if="Array.isArray(current)">
-          <span class="selected" v-for="item in current" :key="item.key">
+        <div v-if="Array.isArray(current)" class="flex-h">
+          <div class="selected" v-for="item in current" :key="item.key">
             <span>{{ item.label }}</span>
             <span class="remove-icon" v-if="current.length !== 1" @click="removeSelected(item)">×</span>
-          </span>
+          </div>
         </div>
         <div class="ell" v-else v-tooltip:right.ellipsis="current.label || ''">
           {{ current.label }}
@@ -39,9 +39,9 @@ limitations under the License. -->
         <use xlink:href="#arrow-down"></use>
       </svg>
     </div>
-    <div class="rk-sel" v-show="visible">
+    <div class="rk-sel" v-show="visible" :class="{ dark: theme === 'dark' }">
       <div>
-        <input type="text" class="rk-sel-search" v-model="search" />
+        <input type="text" class="rk-sel-search" v-model="search" :class="{ dark: theme === 'dark' }" />
         <svg class="icon sm close" @click="search = ''" v-if="search">
           <use xlink:href="#clear"></use>
         </svg>
@@ -50,7 +50,7 @@ limitations under the License. -->
         <div
           class="rk-opt ell"
           @click="handleSelect(i)"
-          :class="{ 'select-disabled': selectedOpt.includes(i.key) }"
+          :class="{ 'select-disabled': selectedOpt.includes(i.key), dark: theme === 'dark' }"
           v-for="i in filterData"
           :key="i.key"
         >
@@ -69,6 +69,8 @@ limitations under the License. -->
     @Prop() private mode: any;
     @Prop() private data!: any;
     @Prop() private current!: any;
+    @Prop({ default: 'light' }) private theme!: string;
+
     private search: string = '';
     private visible: boolean = false;
 
@@ -116,18 +118,17 @@ limitations under the License. -->
       flex-shrink: 0;
     }
     .selected {
-      display: inline-block;
-      padding: 5px;
+      padding: 0 3px;
       border-radius: 3px;
       margin: 3px;
-      overflow: hidden;
       color: rgba(0, 0, 0, 0.65);
       background-color: #fafafa;
       border: 1px solid #e8e8e8;
+      text-align: center;
     }
     .remove-icon {
       display: inline-block;
-      margin-left: 5px;
+      padding: 0 6px;
       cursor: pointer;
     }
   }
@@ -137,7 +138,7 @@ limitations under the License. -->
   .rk-bar-i {
     height: 100%;
     width: 100%;
-    padding: 5px 10px;
+    padding: 2px 10px;
     overflow: auto;
   }
   .rk-sel {
@@ -184,5 +185,27 @@ limitations under the License. -->
     overflow: auto;
     max-height: 200px;
     padding-bottom: 2px;
+  }
+  .rk-sel-search.dark {
+    border-bottom: 1px solid #333;
+    border-top: 1px solid #333;
+  }
+  .dark {
+    border: none;
+    background: #3d444f;
+    color: #eee;
+    &:hover {
+      background-color: #333;
+    }
+    &.select-disabled {
+      color: #eee;
+      cursor: not-allowed;
+    }
+  }
+  .selected-ell {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    height: 100%;
   }
 </style>

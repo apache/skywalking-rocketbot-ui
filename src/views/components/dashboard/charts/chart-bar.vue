@@ -24,6 +24,7 @@ limitations under the License. -->
   export default class ChartBar extends Vue {
     @Prop() private data!: any;
     @Prop() private intervalTime!: any;
+    @Prop() private theme!: string;
     @Prop() private itemEvents!: Event[];
     public resize() {
       const chart: any = this.$refs.chart;
@@ -131,6 +132,9 @@ limitations under the License. -->
           top: 0,
           left: 0,
           itemWidth: 12,
+          textStyle: {
+            color: this.theme === 'dark' ? '#fff' : '#333',
+          },
         },
         grid: {
           top: keys.length === 1 ? 15 : 40,
