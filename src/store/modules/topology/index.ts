@@ -62,7 +62,6 @@ const DefaultConfig = {
   title: 'Title',
   height: 250,
   metricType: 'UNKNOWN',
-  uuid: uuid(),
 };
 
 const initState: State = {
@@ -231,13 +230,13 @@ const mutations = {
     }
     const typeCall = state.selectedEndpointCall.type || DEFAULT;
     const serviceDependencyTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY] || {};
-    const temps = serviceDependencyTemplateType[typeCall];
+    const temps = serviceDependencyTemplateType[typeCall] || [{ key: DEFAULT, label: DEFAULT }];
     let index = -1;
 
     for (const type of temps) {
-      index = state.topoEndpointDependency[type].findIndex((d) => d.uuid === id);
+      index = state.topoEndpointDependency[type.key].findIndex((d) => d.uuid === id);
       if (index > -1) {
-        state.topoEndpointDependency[type].splice(index, 1);
+        state.topoEndpointDependency[type.key].splice(index, 1);
         localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
       }
     }
@@ -291,14 +290,16 @@ const mutations = {
       return;
     }
     const endpointTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY] || {};
-    const temps = endpointTemplateType[state.selectedEndpointCall.type || DEFAULT];
+    const temps = endpointTemplateType[state.selectedEndpointCall.type || DEFAULT] || [
+      { key: DEFAULT, label: DEFAULT },
+    ];
     let index = -1;
 
     for (const type of temps) {
-      index = state.topoServices[type].findIndex((d) => d.uuid === params.uuid);
+      index = state.topoEndpointDependency[type.key].findIndex((d) => d.uuid === params.uuid);
       if (index > -1) {
-        state.topoEndpointDependency[type][index] = {
-          ...state.topoEndpointDependency[type][index],
+        state.topoEndpointDependency[type.key][index] = {
+          ...state.topoEndpointDependency[type.key][index],
           ...params.values,
         };
         localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
@@ -356,6 +357,7 @@ const mutations = {
     const comp = {
       ...DefaultConfig,
       width: 3,
+      uuid: uuid(),
       entityType: 'ServiceInstance',
     };
 
@@ -369,6 +371,7 @@ const mutations = {
     const comp = {
       ...DefaultConfig,
       width: 3,
+      uuid: uuid(),
       entityType: 'Endpoint',
     };
 
@@ -382,6 +385,7 @@ const mutations = {
     const comp = {
       ...DefaultConfig,
       entityType: 'Service',
+      uuid: uuid(),
     };
     state.topoServices[type].push(comp);
     window.localStorage.setItem('topologyServices', JSON.stringify(state.topoServices));
@@ -392,16 +396,18 @@ const mutations = {
     }
     const callType = state.selectedEndpointCall.type || DEFAULT;
     const endpointDependencyTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY] || {};
-    const temps = endpointDependencyTemplateType[callType];
+    const temps = endpointDependencyTemplateType[callType] || [{ key: DEFAULT, label: DEFAULT }];
     const type = temps[temps.length - 1 || 0].key;
     const comp = {
       ...DefaultConfig,
       height: 200,
       width: 3,
+      uuid: uuid(),
       entityType: 'EndpointRelation',
     };
+
     state.topoEndpointDependency[type].push(comp);
-    window.localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
+    localStorage.setItem('topologyEndpointDependency', JSON.stringify(state.topoEndpointDependency));
   },
   [types.ADD_TOPO_SERVICE_DEPENDENCY_COMP](state: State) {
     if (!state.selectedServiceCall) {
@@ -418,6 +424,7 @@ const mutations = {
     }
     const comp = {
       ...DefaultConfig,
+      uuid: uuid(),
       entityType: 'ServiceRelation',
     };
     state.topoServicesDependency[type][mode].push(comp);
@@ -439,6 +446,7 @@ const mutations = {
     }
     const comp = {
       ...DefaultConfig,
+      uuid: uuid(),
       entityType: 'ServiceInstanceRelation',
     };
     state.topoServicesInstanceDependency[type][mode].push(comp);

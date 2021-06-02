@@ -72,12 +72,9 @@ limitations under the License. -->
         :updateObjects="true"
         :rocketOption="stateDashboardOption"
         :templateTypes="templateType"
+        @setTemplates="setMetricsTemplate"
       />
-      <div
-        v-show="stateTopo.editDependencyMetrics"
-        class="rk-add-metric-item g-sm-3"
-        @click="ADD_TOPO_ENDPOINT_DEPENDENCY_COMP"
-      >
+      <div v-show="stateTopo.editDependencyMetrics" class="rk-add-metric-item g-sm-3" @click="addMetrics">
         + Add An Item
       </div>
     </div>
@@ -117,6 +114,7 @@ limitations under the License. -->
     @Mutation('rocketTopo/IMPORT_TREE_ENDPOINT_DEPENDENCY') private IMPORT_TREE_ENDPOINT_DEPENDENCY: any;
     @Mutation('rocketTopo/ADD_TOPO_ENDPOINT_DEPENDENCY_COMP') private ADD_TOPO_ENDPOINT_DEPENDENCY_COMP: any;
     @Mutation('rocketTopo/UPDATE_TOPO_TEMPLATE_TYPES') private UPDATE_TOPO_TEMPLATE_TYPES: any;
+    @Mutation('rocketTopo/SET_TOPO_ENDPOINT_DEPENDENCY') private SET_TOPO_ENDPOINT_DEPENDENCY: any;
 
     private templateType: string[] = [];
     private topoEndpointDependencyMetrics: any = [];
@@ -127,6 +125,11 @@ limitations under the License. -->
 
     private beforeMount() {
       this.height = document.body.clientHeight - 133;
+    }
+
+    private addMetrics() {
+      this.ADD_TOPO_ENDPOINT_DEPENDENCY_COMP();
+      this.setMetricsTemplate();
     }
 
     private changeTemplatesType(item: Option) {
@@ -174,16 +177,25 @@ limitations under the License. -->
 
     private setMetricsTemplate() {
       this.topoEndpointDependencyMetrics = [];
+      let templates: any = {};
+
+      for (const type of Object.keys(this.stateTopo.topoEndpointDependency)) {
+        const metricsTemp = this.stateTopo.topoEndpointDependency[type].map((item: any) => {
+          item.uuid = item.uuid || uuid();
+          return item;
+        });
+        templates = {
+          ...templates,
+          [type]: metricsTemp,
+        };
+      }
+      this.SET_TOPO_ENDPOINT_DEPENDENCY(templates);
       for (const type of this.templateType) {
         this.topoEndpointDependencyMetrics = [
           ...this.topoEndpointDependencyMetrics,
           ...this.stateTopo.topoEndpointDependency[type],
         ];
       }
-      this.topoEndpointDependencyMetrics = this.topoEndpointDependencyMetrics.map((item: any) => {
-        item.uuid = uuid();
-        return item;
-      });
     }
 
     private setTemplateTypes() {

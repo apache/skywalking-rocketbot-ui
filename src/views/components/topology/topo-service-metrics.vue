@@ -82,6 +82,7 @@ limitations under the License. -->
           return item;
         });
         templates = {
+          ...templates,
           [type]: metricsTemp,
         };
       }

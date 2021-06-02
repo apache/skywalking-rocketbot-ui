@@ -376,6 +376,7 @@ limitations under the License. -->
         this.$emit('setTemplates');
       } else if (this.type === TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) {
         this.DELETE_TOPO_ENDPOINT_DEPENDENCY(uuid);
+        this.$emit('setTemplates');
       } else {
         this.DELETE_COMP(index);
       }

@@ -16,11 +16,11 @@ limitations under the License. -->
   <div class="rk-topo-instance-dependency">
     <div class="rk-dependency-chart">
       <DependencySankey :data="stateTopo.instanceDependency" @showMetrics="showDependencyMetrics" />
-    </div>
-    <div class="rk-instance-metric-box">
-      <div v-if="!stateTopo.instanceDependency.nodes.length">
+      <div v-show="!stateTopo.instanceDependency.nodes.length">
         No Instance Dependency
       </div>
+    </div>
+    <div class="rk-instance-metric-box">
       <div v-if="stateTopo.selectedInstanceCall" class="rk-instance-metric-content">
         <div class="mb-5 clear header">
           <span class="b dib mr-20 vm">{{ $t('detectPoint') }}</span>
@@ -29,15 +29,17 @@ limitations under the License. -->
             class="link-topo-aside-box-btn tc r sm cp b"
             :class="{ active: stateTopo.instanceDependencyMode === 'client' }"
             @click="setMode('client')"
-            >{{ $t('client') }}</span
           >
+            {{ $t('client') }}
+          </span>
           <span
             v-if="stateTopo.selectedInstanceCall.detectPoints.includes('SERVER')"
             class="link-topo-aside-box-btn tc r sm cp b"
             :class="{ active: stateTopo.instanceDependencyMode === 'server' }"
             @click="setMode('server')"
-            >{{ $t('server') }}</span
           >
+            {{ $t('server') }}
+          </span>
           <span class="topo-tool-btn" @click="handleSetEdit">
             <rk-icon
               class="lg rk-icon"
