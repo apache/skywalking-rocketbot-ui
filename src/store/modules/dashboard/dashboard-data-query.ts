@@ -50,20 +50,31 @@ const actions: ActionTree<State, any> = {
     const names = ['readSampledRecords', 'sortMetrics'];
 
     if (params.type === TopologyType.TOPOLOGY_ENDPOINT) {
-      const endpointComps: string = `${window.localStorage.getItem('topologyEndpoints')}`;
-      const topoEndpoint = endpointComps ? JSON.parse(endpointComps) : {};
-      if (!topoEndpoint[params.templateType]) {
+      const endpointCompStr: string = `${window.localStorage.getItem('topologyEndpoints')}`;
+      const topoEndpoint = endpointCompStr ? JSON.parse(endpointCompStr) : {};
+      let endpointComps: any = [];
+      for (const type of params.templateType) {
+        const t: any = type;
+
+        endpointComps = [...endpointComps, ...topoEndpoint[t]];
+      }
+      config = endpointComps[params.index];
+      if (!config) {
         return new Promise((resolve) => resolve({}));
       }
-      config = topoEndpoint[params.templateType][params.index];
     } else if (params.type === TopologyType.TOPOLOGY_INSTANCE) {
-      const instanceComps: string = `${localStorage.getItem('topologyInstances')}`;
-      const topoInstance = instanceComps ? JSON.parse(instanceComps) : {};
-      // console.log(params.templateType);
-      if (!topoInstance[params.templateType]) {
+      const instanceCompStr: string = `${localStorage.getItem('topologyInstances')}`;
+      const topoInstance = instanceCompStr ? JSON.parse(instanceCompStr) : {};
+      let instanceComps: any[] = [];
+      for (const type of params.templateType) {
+        const t: any = type;
+
+        instanceComps = [...instanceComps, ...topoInstance[t]];
+      }
+      config = instanceComps[params.index];
+      if (!config) {
         return new Promise((resolve) => resolve({}));
       }
-      config = topoInstance[params.templateType][params.index];
     } else if (params.type === TopologyType.TOPOLOGY_SERVICE) {
       const serviceCompsStr: string = `${window.localStorage.getItem('topologyServices')}`;
       const topoService = serviceCompsStr ? JSON.parse(serviceCompsStr) : {};

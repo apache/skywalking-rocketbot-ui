@@ -22,12 +22,12 @@ limitations under the License. -->
       :item="i"
       :index="index"
       :type="type"
-      :updateObjects="false"
+      :updateObjects="updateObjects"
       :rocketOption="stateDashboardOption"
       :templateTypes="templateTypes"
       @setTemplates="setInstanceTemplates"
     />
-    <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item g-sm-3" @click="ADD_TOPO_INSTANCE_COMP">
+    <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item g-sm-3" @click="addInstanceMetrics()">
       + Add An Item
     </div>
   </div>
@@ -35,7 +35,7 @@ limitations under the License. -->
 
 <script lang="ts">
   import Vue from 'vue';
-  import { Component } from 'vue-property-decorator';
+  import { Component, Watch, Prop } from 'vue-property-decorator';
   import { State, Mutation } from 'vuex-class';
   import { State as topoState } from '@/store/modules/topology';
   import { State as optionState } from '@/store/modules/global/selectors';
@@ -55,13 +55,19 @@ limitations under the License. -->
     @State('rocketOption') private stateDashboardOption!: optionState;
     @Mutation('rocketTopo/ADD_TOPO_INSTANCE_COMP') private ADD_TOPO_INSTANCE_COMP: any;
     @Mutation('rocketTopo/SET_TOPO_INSTANCE') private SET_TOPO_INSTANCE: any;
+    @Prop() private currentType: any;
 
     private instanceComps: any = [];
     private type: string = TopologyType.TOPOLOGY_INSTANCE;
     private templateTypes: string[] = [];
+    private updateObjects: boolean = false;
 
     private beforeMount() {
-      this.setTemplateTypes();
+      this.setInstanceTemplates();
+    }
+
+    private addInstanceMetrics() {
+      this.ADD_TOPO_INSTANCE_COMP();
       this.setInstanceTemplates();
     }
 
@@ -86,14 +92,19 @@ limitations under the License. -->
     }
 
     private setTemplateTypes() {
-      const nodeType = this.stateTopo.currentNode.type;
+      const nodeType = this.stateTopo.currentNode.type || DEFAULT;
       const templates = this.stateTopo.topoTemplatesType;
-
       if (templates[TopologyType.TOPOLOGY_INSTANCE] && templates[TopologyType.TOPOLOGY_INSTANCE][nodeType]) {
         this.templateTypes = templates[TopologyType.TOPOLOGY_INSTANCE][nodeType].map((item: Option) => item.key);
       } else {
         this.templateTypes = this.stateTopo.topoInstances[nodeType] ? [nodeType] : [DEFAULT];
       }
+    }
+
+    @Watch('currentType')
+    private updateMetrics() {
+      this.updateObjects = true;
+      this.setInstanceTemplates();
     }
   }
 </script>

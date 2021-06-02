@@ -24,9 +24,10 @@ limitations under the License. -->
       :type="type"
       :updateObjects="updateObjects"
       :rocketOption="stateDashboardOption"
-      :templateTypes="templateType"
+      :templateTypes="templateTypes"
+      @setTemplates="setEndpointTemplates"
     />
-    <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item g-sm-3" @click="ADD_TOPO_ENDPOINT_COMP">
+    <div v-show="rocketGlobal.edit" class="rk-add-dashboard-item g-sm-3" @click="addMetrics()">
       + Add An Item
     </div>
   </div>
@@ -34,12 +35,14 @@ limitations under the License. -->
 
 <script lang="ts">
   import Vue from 'vue';
-  import { Component, Prop } from 'vue-property-decorator';
+  import { Component, Prop, Watch } from 'vue-property-decorator';
   import { State, Mutation } from 'vuex-class';
   import { State as topoState } from '@/store/modules/topology';
   import { State as optionState } from '@/store/modules/global/selectors';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
   import { TopologyType, DEFAULT } from '@/constants/constant';
+  import { Option } from '@/types/global';
+  import { uuid } from '@/utils/uuid';
 
   @Component({
     components: {
@@ -51,17 +54,57 @@ limitations under the License. -->
     @State('rocketbot') private rocketGlobal: any;
     @State('rocketOption') private stateDashboardOption!: optionState;
     @Mutation('rocketTopo/ADD_TOPO_ENDPOINT_COMP') private ADD_TOPO_ENDPOINT_COMP: any;
-    @Prop() private updateObjects!: boolean;
+    @Mutation('rocketTopo/SET_TOPO_ENDPOINT') private SET_TOPO_ENDPOINT: any;
+    @Prop() private currentType!: Option[];
 
     private type = TopologyType.TOPOLOGY_ENDPOINT;
-    private topoEndpoints: unknown = [];
-    private templateType: string = '';
+    private topoEndpoints: unknown[] = [];
+    private templateTypes: string[] = [];
+    private updateObjects: boolean = false;
 
     private beforeMount() {
-      const templateType = this.stateTopo.currentNode.type;
+      this.setEndpointTemplates();
+    }
 
-      this.templateType = this.stateTopo.topoEndpoints[templateType] ? templateType : DEFAULT;
-      this.topoEndpoints = this.stateTopo.topoEndpoints[this.templateType];
+    private addMetrics() {
+      this.ADD_TOPO_ENDPOINT_COMP();
+      this.setEndpointTemplates();
+    }
+
+    private setEndpointTemplates() {
+      this.setTemplateTypes();
+      this.topoEndpoints = [];
+      let templates: any = {};
+      for (const type of Object.keys(this.stateTopo.topoEndpoints)) {
+        const metricsTemp = this.stateTopo.topoEndpoints[type].map((item: any) => {
+          item.uuid = item.uuid || uuid();
+          return item;
+        });
+        templates = {
+          ...templates,
+          [type]: metricsTemp,
+        };
+      }
+      this.SET_TOPO_ENDPOINT(templates);
+      for (const type of this.templateTypes) {
+        this.topoEndpoints = [...this.topoEndpoints, ...this.stateTopo.topoEndpoints[type]];
+      }
+    }
+
+    private setTemplateTypes() {
+      const nodeType = this.stateTopo.currentNode.type || DEFAULT;
+      const templates = this.stateTopo.topoTemplatesType;
+      if (templates[TopologyType.TOPOLOGY_ENDPOINT] && templates[TopologyType.TOPOLOGY_ENDPOINT][nodeType]) {
+        this.templateTypes = templates[TopologyType.TOPOLOGY_ENDPOINT][nodeType].map((item: Option) => item.key);
+      } else {
+        this.templateTypes = this.stateTopo.topoEndpoints[nodeType] ? [nodeType] : [DEFAULT];
+      }
+    }
+
+    @Watch('currentType')
+    private updateMetrics() {
+      this.updateObjects = true;
+      this.setEndpointTemplates();
     }
   }
 </script>

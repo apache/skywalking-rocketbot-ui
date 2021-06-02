@@ -161,31 +161,27 @@ const mutations = {
     localStorage.setItem('topologyEndpointDependency', JSON.stringify(data));
   },
   [types.DELETE_TOPO_ENDPOINT](state: State, id: string) {
-    const templateType = state.currentNode.type;
-    const typeNode = state.topoInstances[templateType] ? templateType : DEFAULT;
     const serviceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_ENDPOINT] || {};
-    const temps = serviceTemplateType[typeNode];
+    const temps = serviceTemplateType[state.currentNode.type || DEFAULT] || [{ key: DEFAULT, label: DEFAULT }];
     let index = -1;
 
     for (const type of temps) {
-      index = state.topoServices[type].findIndex((d) => d.uuid === id);
+      index = state.topoEndpoints[type.key].findIndex((d) => d.uuid === id);
       if (index > -1) {
-        state.topoEndpoints[type].splice(index, 1);
+        state.topoEndpoints[type.key].splice(index, 1);
         window.localStorage.setItem('topologyEndpoints', JSON.stringify(state.topoEndpoints));
       }
     }
   },
   [types.DELETE_TOPO_INSTANCE](state: State, id: string) {
-    const templateType = state.currentNode.type;
-    const typeNode = state.topoInstances[templateType] ? templateType : DEFAULT;
-    const serviceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_INSTANCE] || {};
-    const temps = serviceTemplateType[typeNode];
+    const instanceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_INSTANCE] || {};
+    const temps = instanceTemplateType[state.currentNode.type || DEFAULT] || [{ key: DEFAULT, label: DEFAULT }];
     let index = -1;
 
     for (const type of temps) {
-      index = state.topoServices[type].findIndex((d) => d.uuid === id);
+      index = state.topoInstances[type.key].findIndex((d) => d.uuid === id);
       if (index > -1) {
-        state.topoInstances[type].splice(index, 1);
+        state.topoInstances[type.key].splice(index, 1);
         window.localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
       }
     }
@@ -261,9 +257,21 @@ const mutations = {
       }
     }
   },
-  [types.EDIT_TOPO_INSTANCE_CONFIG](state: State, params: { values: any; index: number }) {
-    state.topoInstances[params.index] = { ...state.topoInstances[params.index], ...params.values };
-    window.localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
+  [types.EDIT_TOPO_INSTANCE_CONFIG](state: State, params: { values: any; index: number; uuid: string }) {
+    const templateType = state.topoTemplatesType[TopologyType.TOPOLOGY_INSTANCE] || {};
+    const temps = templateType[state.currentNode.type] || [{ key: DEFAULT, label: DEFAULT }];
+    let index = -1;
+
+    for (const type of temps) {
+      index = state.topoInstances[type.key].findIndex((d) => d.uuid === params.uuid);
+      if (index > -1) {
+        state.topoInstances[type.key][params.index] = {
+          ...state.topoInstances[type.key][params.index],
+          ...params.values,
+        };
+        localStorage.setItem('topologyInstances', JSON.stringify(state.topoInstances));
+      }
+    }
   },
   [types.EDIT_TOPO_ENDPOINT_CONFIG](state: State, params: { values: any; index: number }) {
     state.topoEndpoints[params.index] = { ...state.topoEndpoints[params.index], ...params.values };
@@ -352,7 +360,7 @@ const mutations = {
   },
   [types.ADD_TOPO_INSTANCE_COMP](state: State) {
     const serviceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE] || {};
-    const temps = serviceTemplateType[state.currentNode.type] || [];
+    const temps = serviceTemplateType[state.currentNode.type] || [{ key: DEFAULT }];
     const type = temps[temps.length - 1 || 0].key;
     const comp = {
       ...DefaultConfig,
@@ -366,7 +374,7 @@ const mutations = {
   },
   [types.ADD_TOPO_ENDPOINT_COMP](state: State) {
     const serviceTemplateType = state.topoTemplatesType[TopologyType.TOPOLOGY_SERVICE] || {};
-    const temps = serviceTemplateType[state.currentNode.type] || [];
+    const temps = serviceTemplateType[state.currentNode.type] || [{ key: DEFAULT }];
     const type = temps[temps.length - 1 || 0].key;
     const comp = {
       ...DefaultConfig,

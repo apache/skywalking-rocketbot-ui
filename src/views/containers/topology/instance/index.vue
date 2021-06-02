@@ -76,7 +76,7 @@ limitations under the License. -->
         />
       </div>
     </div>
-    <instances-survey />
+    <instances-survey :currentType="currentType" />
   </div>
 </template>
 
@@ -108,7 +108,6 @@ limitations under the License. -->
   })
   export default class WindowInstance extends Vue {
     @Prop() private current!: { key: number | string; label: number | string };
-    @Prop() private updateObjects!: boolean;
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketData') private rocketComps!: rocketData;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
@@ -120,6 +119,7 @@ limitations under the License. -->
     @Action('GET_EVENT') private GET_EVENT: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
+    @Mutation('rocketTopo/UPDATE_TOPO_TEMPLATE_TYPES') private UPDATE_TOPO_TEMPLATE_TYPES: any;
 
     private pageEventsType = PageEventsType.TOPO_INSTANCE_EVENTS;
     private currentType: Option[] = [{ key: '', label: '' }];
@@ -146,7 +146,38 @@ limitations under the License. -->
       }
     }
 
-    private changeTemplatesType() {}
+    private changeTemplatesType(item: Option) {
+      let topoTemplateTypes;
+      const types = this.stateTopo.topoTemplatesType;
+
+      if (this.currentType.find((d) => d.key === item.key)) {
+        this.deleteTemplateTypes(item);
+        return;
+      }
+      this.currentType.push(item);
+      const nodeType = this.stateTopo.currentNode.type || DEFAULT;
+
+      topoTemplateTypes = {
+        ...types,
+        [TopologyType.TOPOLOGY_INSTANCE]: { [nodeType]: this.currentType },
+      };
+      this.UPDATE_TOPO_TEMPLATE_TYPES(topoTemplateTypes);
+    }
+
+    private deleteTemplateTypes(item: Option) {
+      let topoTemplateTypes;
+      const types = this.stateTopo.topoTemplatesType;
+      const index = this.currentType.findIndex((d) => item.key === d.key);
+
+      this.currentType.splice(index, 1);
+      const nodeType = this.stateTopo.currentNode.type || DEFAULT;
+
+      topoTemplateTypes = {
+        ...types,
+        [TopologyType.TOPOLOGY_INSTANCE]: { [nodeType]: this.currentType },
+      };
+      this.UPDATE_TOPO_TEMPLATE_TYPES(topoTemplateTypes);
+    }
 
     private selectInstance(i: Option) {
       if (!this.rocketComps.enableEvents) {

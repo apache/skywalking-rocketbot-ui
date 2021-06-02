@@ -55,6 +55,17 @@ limitations under the License. -->
             :data="stateDashboardOption.endpoints"
             icon="code"
           />
+          <div class="pl-10 pb-5 flex-h">
+            <div class="type grey">{{ $t('templateType') }}</div>
+            <RkSelect
+              class="content grey"
+              :mode="'multiple'"
+              :current="currentType"
+              :data="templateTypesList"
+              :theme="'dark'"
+              @onChoose="(item) => changeTemplatesType(item)"
+            />
+          </div>
         </div>
         <DashboardEvent
           :rocketComps="rocketComps"
@@ -64,7 +75,7 @@ limitations under the License. -->
         />
       </div>
     </div>
-    <endpoints-survey />
+    <endpoints-survey :currentType="currentType" />
   </div>
 </template>
 
@@ -83,7 +94,7 @@ limitations under the License. -->
   import { State as rocketbotGlobal } from '@/store/modules/global';
   import { DurationTime, Option } from '@/types/global';
   import { EntityType } from '@/views/components/dashboard/charts/constant';
-  import { PageEventsType } from '@/constants/constant';
+  import { PageEventsType, TopologyType, DEFAULT } from '@/constants/constant';
   import { State as topoState } from '@/store/modules/topology';
 
   @Component({
@@ -96,21 +107,44 @@ limitations under the License. -->
   })
   export default class WindowEndpoint extends Vue {
     @Prop() private current!: { key: number | string; label: number | string };
-    @Prop() private updateObjects!: boolean;
     @State('rocketOption') private stateDashboardOption!: optionState;
     @State('rocketData') private rocketComps!: rocketData;
     @State('rocketbot') private rocketGlobal!: rocketbotGlobal;
     @State('rocketTopo') private stateTopo!: topoState;
     @Getter('durationTime') private durationTime!: DurationTime;
-    @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
+    @Mutation('rocketTopo/UPDATE_TOPO_TEMPLATE_TYPES') private UPDATE_TOPO_TEMPLATE_TYPES: any;
     @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
     @Action('GET_EVENT') private GET_EVENT: any;
+    @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
 
     private pageEventsType = PageEventsType;
     private endpointMetrics: any[] = [];
+    private currentType: Option[] = [{ key: '', label: '' }];
+    private templateTypesList: Option[] = [{ key: '', label: '' }];
+
+    private beforeMount() {
+      this.SET_CURRENT_SERVICE(this.current);
+      this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 2 });
+      this.GET_SERVICE_ENDPOINTS({ duration: this.durationTime, serviceId: this.current.key, keyword: '' }).then(() => {
+        this.selectEndpoint(this.stateDashboardOption.endpoints[0]);
+      });
+      this.templateTypesList = Object.keys(this.stateTopo.topoEndpoints).map((item: string) => {
+        return { label: item, key: item };
+      });
+      const topoTemplatesType: any = this.stateTopo.topoTemplatesType;
+      const nodeType = this.stateTopo.currentNode.type || DEFAULT;
+
+      if (topoTemplatesType[TopologyType.TOPOLOGY_ENDPOINT]) {
+        this.currentType = topoTemplatesType[TopologyType.TOPOLOGY_ENDPOINT][nodeType] || [
+          { label: DEFAULT, key: DEFAULT },
+        ];
+      } else {
+        this.currentType = [{ label: DEFAULT, key: DEFAULT }];
+      }
+    }
 
     private selectEndpoint(i: Option) {
       if (!this.rocketComps.enableEvents) {
@@ -132,14 +166,37 @@ limitations under the License. -->
       });
     }
 
-    private beforeMount() {
-      const { type } = this.stateTopo.currentNode;
+    private changeTemplatesType(item: any) {
+      let topoTemplateTypes;
+      const types = this.stateTopo.topoTemplatesType;
 
-      this.SET_CURRENT_SERVICE(this.current);
-      this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 2 });
-      this.GET_SERVICE_ENDPOINTS({ duration: this.durationTime, serviceId: this.current.key, keyword: '' }).then(() => {
-        this.selectEndpoint(this.stateDashboardOption.endpoints[0]);
-      });
+      if (this.currentType.find((d: any) => d.key === item.key)) {
+        this.deleteTemplateTypes(item);
+        return;
+      }
+      this.currentType.push(item);
+      const nodeType = this.stateTopo.currentNode.type || DEFAULT;
+
+      topoTemplateTypes = {
+        ...types,
+        [TopologyType.TOPOLOGY_ENDPOINT]: { [nodeType]: this.currentType },
+      };
+      this.UPDATE_TOPO_TEMPLATE_TYPES(topoTemplateTypes);
+    }
+
+    private deleteTemplateTypes(item: Option) {
+      let topoTemplateTypes;
+      const types = this.stateTopo.topoTemplatesType;
+      const index = this.currentType.findIndex((d: any) => item.key === d.key);
+
+      this.currentType.splice(index, 1);
+      const nodeType = this.stateTopo.currentNode.type || DEFAULT;
+
+      topoTemplateTypes = {
+        ...types,
+        [TopologyType.TOPOLOGY_ENDPOINT]: { [nodeType]: this.currentType },
+      };
+      this.UPDATE_TOPO_TEMPLATE_TYPES(topoTemplateTypes);
     }
 
     private async importData(event: any) {
@@ -193,5 +250,15 @@ limitations under the License. -->
   }
   .input-label.rk-btn {
     line-height: 22px !important;
+  }
+  .type {
+    display: inline-block;
+    width: 100px;
+  }
+
+  .content {
+    vertical-align: top;
+    display: inline-block;
+    width: 300px;
   }
 </style>

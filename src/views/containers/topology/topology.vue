@@ -100,7 +100,7 @@ limitations under the License. -->
     }
     private initMetricsTemplate() {
       localStorage.removeItem('topoTemplateTypes');
-      // localStorage.removeItem('topologyServicesDependency');
+      localStorage.removeItem('topologyEndpoints');
 
       if (window.localStorage.getItem('topologyServices')) {
         const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
