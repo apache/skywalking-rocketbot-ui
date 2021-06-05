@@ -37,15 +37,36 @@ limitations under the License. -->
         </div>
       </div>
     </div>
-    <rk-sidebox :width="'50%'" :show.sync="isShowDetails" :title="$t('alarmDetail')">
+    <rk-sidebox :width="'100%'" :show.sync="isShowDetails" :title="$t('alarmDetail')">
       <div class="mb-10 clear rk-flex" v-for="(item, index) in AlarmDetailCol" :key="index">
         <template>
-          <span class="g-sm-4 grey">{{ $t(item.value) }}:</span>
-          <span v-if="item.label === 'startTime'" class="g-sm-8">{{ currentDetail[item.label] | dateformat }}</span>
-          <span v-else-if="item.label === 'tags'" class="g-sm-8">
+          <span class="g-sm-2 grey">{{ $t(item.value) }}:</span>
+          <span v-if="item.label === 'startTime'">{{ currentDetail[item.label] | dateformat }}</span>
+          <span v-else-if="item.label === 'tags'">
             <div v-for="(d, index) in alarmTags" :key="index">{{ d }}</div>
           </span>
-          <span v-else class="g-sm-8">{{ currentDetail[item.label] }}</span>
+          <span v-else-if="item.label === 'events'" class="event-detail">
+            <div>
+              <ul>
+                <li class="header">
+                  <span v-for="(i, index) of eventsHeaders" :class="i.class" :key="i.class + index">{{
+                    $t(i.text)
+                  }}</span>
+                </li>
+                <li v-for="event in currentEvents" :key="event.uuid">
+                  <span v-for="(d, index) of eventsHeaders" :class="d.class" :key="event.uuid + index">
+                    <span v-if="d.class === 'startTime' || d.class === 'endTime'">
+                      {{ event[d.class] | dateformat }}
+                    </span>
+                    <span v-else>
+                      {{ event[d.class] }}
+                    </span>
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </span>
+          <span v-else>{{ currentDetail[item.label] }}</span>
         </template>
       </div>
     </rk-sidebox>
@@ -56,6 +77,7 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import { Alarm } from '@/types/alarm';
+  import { EventsDetailHeaders, AlarmDetailCol } from './constant';
 
   @Component
   export default class AlarmTable extends Vue {
@@ -67,29 +89,16 @@ limitations under the License. -->
       message: '',
       key: '',
       startTime: '',
+      events: [],
     };
     private alarmTags: string[] = [];
-    private AlarmDetailCol = [
-      {
-        label: 'scope',
-        value: 'scope',
-      },
-      {
-        label: 'startTime',
-        value: 'startTime',
-      },
-      {
-        label: 'tags',
-        value: 'tags',
-      },
-      {
-        label: 'message',
-        value: 'message',
-      },
-    ];
+    private AlarmDetailCol = AlarmDetailCol;
+    private eventsHeaders = EventsDetailHeaders;
+    private currentEvents: any = [];
 
     private showDetails(item: Alarm) {
       this.currentDetail = item;
+      this.currentEvents = item.events;
       this.alarmTags = this.currentDetail.tags.map((d: { key: string; value: string }) => {
         return `${d.key} = ${d.value}`;
       });
@@ -146,5 +155,33 @@ limitations under the License. -->
   }
   .alarm-item {
     cursor: pointer;
+  }
+  ul {
+    min-height: 100px;
+    overflow: auto;
+    margin-bottom: 20px;
+  }
+  li {
+    cursor: pointer;
+    > span {
+      width: 250px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+      display: inline-block;
+      border-bottom: 1px solid #ccc;
+      overflow: hidden;
+    }
+    .starTime,
+    .endTime {
+      width: 160px;
+    }
+    .uuid,
+    .parameters {
+      width: 280px;
+    }
+    .message {
+      width: 320px;
+    }
   }
 </style>
