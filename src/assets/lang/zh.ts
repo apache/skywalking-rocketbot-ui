@@ -226,6 +226,7 @@ const m = {
   scope: '范围',
   destService: '终点服务',
   destServiceInstance: '终点实例',
+  eventSource: '事件资源',
 };
 
 export default m;

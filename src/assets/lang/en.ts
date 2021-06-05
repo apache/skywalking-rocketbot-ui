@@ -228,6 +228,7 @@ const m = {
   scope: 'Scope',
   destService: 'Destination Service',
   destServiceInstance: 'Destination Service Instance',
+  eventSource: 'Event Source',
 };
 
 export default m;

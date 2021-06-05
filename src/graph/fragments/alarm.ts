@@ -28,6 +28,21 @@ export const Alarm = {
           key
           value
         }
+        events {
+          uuid
+          source {
+            service serviceInstance endpoint
+          }
+          name
+          type
+          message
+          parameters {
+            key
+            value
+          }
+          startTime
+          endTime
+        }
       }
       total
     }`,
