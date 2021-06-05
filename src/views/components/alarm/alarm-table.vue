@@ -37,7 +37,7 @@ limitations under the License. -->
         </div>
       </div>
     </div>
-    <rk-sidebox :width="'100%'" :show.sync="isShowDetails" :title="$t('alarmDetail')">
+    <rk-sidebox :width="'90%'" :show.sync="isShowDetails" :title="$t('alarmDetail')">
       <div class="mb-10 clear rk-flex" v-for="(item, index) in AlarmDetailCol" :key="index">
         <template>
           <span class="g-sm-2 grey">{{ $t(item.value) }}:</span>
@@ -48,12 +48,12 @@ limitations under the License. -->
           <span v-else-if="item.label === 'events'" class="event-detail">
             <div>
               <ul>
-                <li class="header">
-                  <span v-for="(i, index) of eventsHeaders" :class="i.class" :key="i.class + index">{{
-                    $t(i.text)
-                  }}</span>
+                <li>
+                  <span v-for="(i, index) of eventsHeaders" :class="i.class" :key="i.class + index">
+                    {{ $t(i.text) }}
+                  </span>
                 </li>
-                <li v-for="event in currentEvents" :key="event.uuid">
+                <li v-for="event in currentEvents" :key="event.uuid" @click="viewEventDetail(event)">
                   <span v-for="(d, index) of eventsHeaders" :class="d.class" :key="event.uuid + index">
                     <span v-if="d.class === 'startTime' || d.class === 'endTime'">
                       {{ event[d.class] | dateformat }}
@@ -64,6 +64,29 @@ limitations under the License. -->
                   </span>
                 </li>
               </ul>
+              <rk-sidebox :width="'90%'" :show.sync="showEventDetails" :title="$t('eventDetail')">
+                <div class="event-detail">
+                  <div class="mb-10 rk-flex" v-for="(eventKey, index) in eventsDetailKeys" :key="index">
+                    <span class="keys">{{ $t(eventKey.text) }}</span>
+                    <span v-if="eventKey.class === 'parameters'">
+                      <span v-for="(d, index) of currentEvent[d.class]" :key="index">{{ d.key }}={{ d.value }}; </span>
+                    </span>
+                    <span v-else-if="eventKey.class === 'startTime' || eventKey.class === 'endTime'">{{
+                      currentEvent[eventKey.class] | dateformat
+                    }}</span>
+                    <span v-else-if="eventKey.class === 'source'">
+                      <div>{{ $t('currentService') }}: {{ currentEvent[eventKey.class].service }}</div>
+                      <div v-show="currentEvent[eventKey.class].endpoint">
+                        {{ $t('currentEndpoint') }}: {{ currentEvent[eventKey.class].endpoint }}
+                      </div>
+                      <div v-show="currentEvent[eventKey.class].serviceInstance">
+                        {{ $t('currentInstance') }}: {{ currentEvent[eventKey.class].serviceInstance }}
+                      </div>
+                    </span>
+                    <span v-else>{{ currentEvent[eventKey.class] }}</span>
+                  </div>
+                </div>
+              </rk-sidebox>
             </div>
           </span>
           <span v-else>{{ currentDetail[item.label] }}</span>
@@ -76,8 +99,8 @@ limitations under the License. -->
 <script lang="ts">
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
-  import { Alarm } from '@/types/alarm';
-  import { EventsDetailHeaders, AlarmDetailCol } from './constant';
+  import { Alarm, Event } from '@/types/alarm';
+  import { EventsDetailHeaders, AlarmDetailCol, AlarmEventsDetailKeys } from './constant';
 
   @Component
   export default class AlarmTable extends Vue {
@@ -91,10 +114,21 @@ limitations under the License. -->
       startTime: '',
       events: [],
     };
+    private showEventDetails: boolean = false;
     private alarmTags: string[] = [];
     private AlarmDetailCol = AlarmDetailCol;
     private eventsHeaders = EventsDetailHeaders;
-    private currentEvents: any = [];
+    private eventsDetailKeys = AlarmEventsDetailKeys;
+    private currentEvents: Event[] = [];
+    private currentEvent: Event = {
+      startTime: 0,
+      endTime: 0,
+      message: '',
+      name: '',
+      type: '',
+      uuid: '',
+      source: {},
+    };
 
     private showDetails(item: Alarm) {
       this.currentDetail = item;
@@ -103,6 +137,11 @@ limitations under the License. -->
         return `${d.key} = ${d.value}`;
       });
       this.isShowDetails = true;
+    }
+
+    private viewEventDetail(event: Event) {
+      this.showEventDetails = true;
+      this.currentEvent = event;
     }
   }
 </script>
@@ -164,7 +203,7 @@ limitations under the License. -->
   li {
     cursor: pointer;
     > span {
-      width: 250px;
+      width: 160px;
       height: 20px;
       line-height: 20px;
       text-align: center;
@@ -172,16 +211,13 @@ limitations under the License. -->
       border-bottom: 1px solid #ccc;
       overflow: hidden;
     }
-    .starTime,
-    .endTime {
-      width: 160px;
-    }
-    .uuid,
-    .parameters {
+    .uuid {
       width: 280px;
     }
-    .message {
-      width: 320px;
-    }
+  }
+  .keys {
+    font-weight: bold;
+    display: inline-block;
+    width: 120px;
   }
 </style>
