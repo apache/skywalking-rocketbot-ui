@@ -30,7 +30,7 @@ export const AlarmEventsDetailKeys = [
   { text: 'startTime', class: 'startTime' },
   { text: 'endTime', class: 'endTime' },
   { text: 'eventsMessage', class: 'message' },
-  { text: 'eventsSource', class: 'source' },
+  { text: 'eventSource', class: 'source' },
 ];
 
 export const AlarmDetailCol = [

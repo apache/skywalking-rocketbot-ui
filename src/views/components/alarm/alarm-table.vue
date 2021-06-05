@@ -74,7 +74,7 @@ limitations under the License. -->
                     <span v-else-if="eventKey.class === 'startTime' || eventKey.class === 'endTime'">{{
                       currentEvent[eventKey.class] | dateformat
                     }}</span>
-                    <span v-else-if="eventKey.class === 'source'">
+                    <span v-else-if="eventKey.class === 'source'" class="source">
                       <div>{{ $t('currentService') }}: {{ currentEvent[eventKey.class].service }}</div>
                       <div v-show="currentEvent[eventKey.class].endpoint">
                         {{ $t('currentEndpoint') }}: {{ currentEvent[eventKey.class].endpoint }}
@@ -219,5 +219,8 @@ limitations under the License. -->
     font-weight: bold;
     display: inline-block;
     width: 120px;
+  }
+  .source > div {
+    padding-left: 120px;
   }
 </style>
