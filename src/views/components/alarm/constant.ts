@@ -21,10 +21,6 @@ export const EventsDetailHeaders = [
   { text: 'eventsType', class: 'type' },
   { text: 'startTime', class: 'startTime' },
   { text: 'endTime', class: 'endTime' },
-  // { text: 'currentService', class: 'service' },
-  // { text: 'currentInstance', class: 'serviceInstance' },
-  // { text: 'currentEndpoint', class: 'endpoint' },
-  // { text: 'eventsMessage', class: 'message' },
 ];
 
 export const AlarmEventsDetailKeys = [
@@ -33,11 +29,8 @@ export const AlarmEventsDetailKeys = [
   { text: 'eventsType', class: 'type' },
   { text: 'startTime', class: 'startTime' },
   { text: 'endTime', class: 'endTime' },
-  // { text: 'currentService', class: 'service' },
-  // { text: 'currentInstance', class: 'serviceInstance' },
-  // { text: 'currentEndpoint', class: 'endpoint' },
   { text: 'eventsMessage', class: 'message' },
-  { text: 'source', class: 'source' },
+  { text: 'eventsSource', class: 'source' },
 ];
 
 export const AlarmDetailCol = [

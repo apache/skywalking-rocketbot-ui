@@ -227,7 +227,6 @@ const m = {
   destService: '终点服务',
   destServiceInstance: '终点实例',
   eventSource: '事件资源',
-  source: '资源',
 };
 
 export default m;

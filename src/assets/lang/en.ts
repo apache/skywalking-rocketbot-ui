@@ -229,7 +229,6 @@ const m = {
   destService: 'Destination Service',
   destServiceInstance: 'Destination Service Instance',
   eventSource: 'Event Source',
-  source: 'Source',
 };
 
 export default m;
