@@ -49,6 +49,14 @@ export default function dateFormatStep(date: Date, step: string, monthDayDiff?: 
   if (step === 'MINUTE') {
     return `${year}-${month}-${day} ${hour}${minute}`;
   }
+  const secondTemp = date.getSeconds();
+  let second: string = `${secondTemp}`;
+  if (secondTemp < 10) {
+    second = `0${secondTemp}`;
+  }
+  if (step === 'SECOND') {
+    return `${year}-${month}-${day} ${hour}${minute}${second}`;
+  }
   return '';
 }
 
