@@ -80,7 +80,6 @@ limitations under the License. -->
           this.handleRefresh({ pageNum: 1 });
         },
       ]);
-      this.handleRefresh({ pageNum: 1 });
     }
     private handleRefresh(param: { pageNum: number; tagsMap?: Array<{ key: string; value: string }> }) {
       this.pageNum = param.pageNum;
