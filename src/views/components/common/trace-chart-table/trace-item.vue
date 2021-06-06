@@ -14,7 +14,36 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 
 <template>
-  <div>
+  <div v-if="type === 'statistics'">
+    <div :class="['trace-item']" ref="traceItem">
+      <div :class="['method']">
+        <span v-tooltip:bottom="{ content: data.groupRef.endpointName, popperCls: ['trace-table-tooltip'] }">
+          {{ data.groupRef.endpointName }}
+        </span>
+      </div>
+      <div :class="['type']">
+        <span v-tooltip:bottom="{ content: data.groupRef.type, popperCls: ['trace-table-tooltip'] }">
+          {{ data.groupRef.type }}
+        </span>
+      </div>
+      <div class="max-time">
+        {{ data.maxTime }}
+      </div>
+      <div class="min-time">
+        {{ data.minTime }}
+      </div>
+      <div class="sum-time">
+        {{ data.sumTime }}
+      </div>
+      <div class="avg-time">
+        {{ parseInt(data.avgTime) }}
+      </div>
+      <div class="count">
+        {{ data.count }}
+      </div>
+    </div>
+  </div>
+  <div v-else>
     <div
       @click="showSelectSpan"
       :class="['trace-item', 'level' + (data.level - 1), ...{ 'trace-item-error': data.isError }]"
@@ -57,57 +86,22 @@ limitations under the License. -->
         <span v-tooltip:bottom="data.serviceCode || '-'">{{ data.serviceCode }}</span>
       </div>
       <div class="application" v-show="type === 'profile'">
-        <span @click="viewSpanDetail">{{ this.$t('view') }}</span>
+        <span @click="viewSpanDetail">{{ $t('view') }}</span>
       </div>
     </div>
     <div v-show="data.children && data.children.length > 0 && displayChildren" class="children-trace">
-      <item :method="method" v-for="(item, index) in data.children" :key="index" :data="item" :type="type"> </item>
+      <item :method="method" v-for="(child, index) in data.children" :key="index" :data="child" :type="type" />
     </div>
   </div>
 </template>
 <script lang="js">
   export default {
     name: 'item',
-    props: ['data', 'type', 'method'],
-    watch: {
-      data() {
-        const items = document.querySelectorAll('.trace-item');
-        for (const item of items) {
-          item.style.background = '#fff';
-        }
-      },
-    },
+    props: ['data', 'method', 'type'],
     data() {
       return {
         displayChildren: true,
-        selectedSpan: 0,
       };
-    },
-    computed: {
-      selfTime() {
-        const {data} = this;
-        return  data.dur ? data.dur : 0;
-      },
-      execTime() {
-        const {data} = this;
-        return  (data.endTime - data.startTime) ? (data.endTime - data.startTime) : 0;
-      },
-      outterPercent() {
-        if (this.data.level === 1) {
-          return '100%';
-        } else {
-          const data = this.data;
-          const exec = (data.endTime - data.startTime) ? (data.endTime - data.startTime) : 0;
-          let result = (exec / data.totalExec * 100);
-          result = result > 100 ? 100 : result;
-          result = result.toFixed(4) + '%';
-          return result === '0.0000%' ? '0.9%' : result;
-        }
-      },
-      innerPercent() {
-        const result = (this.selfTime / this.execTime) * 100 .toFixed(4) + '%';
-        return result === '0.0000%' ? '0.9%' : result;
-      },
     },
     methods: {
       toggle() {
@@ -118,12 +112,45 @@ limitations under the License. -->
         for (const item of items) {
           item.style.background = '#fff';
         }
-        this.$refs.traceItem.style.background = 'rgba(0, 0, 0, 0.1)';
+        (this.$refs.traceItem).style.background = 'rgba(0, 0, 0, 0.1)';
         this.$eventBus.$emit('HANDLE-SELECT-SPAN', this.data);
       },
       viewSpanDetail() {
         this.showSelectSpan();
         this.$eventBus.$emit('HANDLE-VIEW-SPAN', this.data);
+      },
+    },
+    watch: {
+      data(val, oldVal) {
+        const items = document.querySelectorAll('.trace-item');
+        for (const item of items) {
+          item.style.background = '#fff';
+        }
+      },
+    },
+    computed: {
+      selfTime() {
+        return this.data.dur ? this.data.dur : 0;
+      },
+      execTime() {
+        return this.data.endTime - this.data.startTime ? this.data.endTime - this.data.startTime : 0;
+      },
+      outterPercent() {
+        if (this.data.level === 1) {
+          return '100%';
+        } else {
+          const data = this.data;
+          const exec = data.endTime - data.startTime ? data.endTime - data.startTime : 0;
+          let result = (exec / data.totalExec) * 100;
+          result = result > 100 ? 100 : result;
+          const resultStr = result.toFixed(4) + '%';
+          return resultStr === '0.0000%' ? '0.9%' : resultStr;
+        }
+      },
+      innerPercent() {
+        const result = (this.selfTime / this.execTime) * 100;
+        const resultStr = result.toFixed(4) + '%';
+        return resultStr === '0.0000%' ? '0.9%' : resultStr;
       },
     },
   };

@@ -28,6 +28,7 @@ limitations under the License. -->
     @Prop() private title!: string;
     @Prop() private stateDashboard!: any;
     @Prop() private intervalTime!: any;
+    @Prop() private theme!: string;
     get responseConfig() {
       return {
         color: ['#3f96e3', '#3fbde3'],
@@ -36,6 +37,7 @@ limitations under the License. -->
           backgroundColor: 'rgb(50,50,50)',
           textStyle: {
             fontSize: 13,
+            color: '#ccc',
           },
         },
         legend: {
@@ -43,6 +45,9 @@ limitations under the License. -->
           top: 0,
           left: 0,
           itemWidth: 12,
+          textStyle: {
+            color: this.theme === 'dark' ? '#fff' : '#333',
+          },
         },
         grid: {
           top: 10,

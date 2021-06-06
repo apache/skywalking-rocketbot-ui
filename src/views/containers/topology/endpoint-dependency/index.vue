@@ -15,7 +15,7 @@ limitations under the License. -->
 <template>
   <div class="endpoint-dependency-page">
     <div class="rk-dashboard-bar flex-h">
-      <ToolBarSelect :selectable="false" :title="this.$t('currentService')" :current="current" icon="package" />
+      <ToolBarSelect :selectable="false" :title="$t('currentService')" :current="current" icon="package" />
       <ToolBarEndpointSelect
         @onChoose="selectEndpoint"
         :title="$t('currentEndpoint')"
@@ -39,9 +39,9 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Watch, Prop } from 'vue-property-decorator';
   import { Action, Getter, State, Mutation } from 'vuex-class';
-  import ToolBarSelect from '@/views/components/dashboard/tool-bar-select.vue';
-  import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar-endpoint-select.vue';
-  import TopoEndpointDependency from '@/views/components/topology/topo-endpoint-dependency.vue';
+  import ToolBarSelect from '@/views/components/dashboard/tool-bar/tool-bar-select.vue';
+  import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar/tool-bar-endpoint-select.vue';
+  import TopoEndpointDependency from '@/views/components/topology/dependency/topo-endpoint-dependency.vue';
 
   @Component({
     components: {
@@ -56,7 +56,6 @@ limitations under the License. -->
     @Getter('durationTime') private durationTime: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
-    @Mutation('rocketTopo/SET_ENDPOINT_DEPENDENCY_METRICS') private SET_ENDPOINT_DEPENDENCY_METRICS: any;
     @Mutation('rocketTopo/SET_ENDPOINT_DEPTH') private SET_ENDPOINT_DEPTH: any;
     @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
@@ -78,7 +77,6 @@ limitations under the License. -->
     private selectEndpoint(i: any) {
       this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
       this.GET_ALL_ENDPOINT_DEPENDENCY({ endpointIds: [i.key], duration: this.durationTime });
-      this.SET_ENDPOINT_DEPENDENCY_METRICS({ respTime: [], sla: [], cpm: [], percentile: {} });
     }
 
     private selectDepth(i: { key: number; label: string }) {
@@ -87,8 +85,6 @@ limitations under the License. -->
         endpointIds: [this.stateDashboardOption.currentEndpoint.key],
         duration: this.durationTime,
       });
-
-      this.SET_ENDPOINT_DEPENDENCY_METRICS({ respTime: [], sla: [], cpm: [], percentile: {} });
     }
 
     private beforeDestroy() {
@@ -99,11 +95,14 @@ limitations under the License. -->
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .endpoint-dependency-page {
     height: calc(100% - 48px);
-    .rk-dashboard-bar {
-      border-bottom: 1px solid #252a2f;
-    }
+  }
+  .rk-dashboard-bar {
+    flex-shrink: 0;
+    color: #efefef;
+    background-color: #333840;
+    border-bottom: 1px solid #252a2f;
   }
 </style>

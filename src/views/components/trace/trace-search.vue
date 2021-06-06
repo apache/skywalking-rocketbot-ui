@@ -17,7 +17,7 @@ limitations under the License. -->
   <div class="rk-trace-search">
     <div>
       <a class="rk-trace-clear-btn r" @click="status = !status">
-        <span class="mr-5 vm">{{ this.$t('more') }}</span>
+        <span class="mr-5 vm">{{ $t('more') }}</span>
         <svg class="icon trans vm" :style="`transform: rotate(${status ? 180 : 0}deg);`">
           <use xlink:href="#arrow-down"></use>
         </svg>
@@ -26,25 +26,25 @@ limitations under the License. -->
         <svg class="icon mr-5 vm">
           <use xlink:href="#search"></use>
         </svg>
-        <span class="vm">{{ this.$t('search') }}</span>
+        <span class="vm">{{ $t('search') }}</span>
       </a>
       <a class="rk-trace-clear-btn r mr-10" @click="clearSearch">
         <svg class="icon mr-5 vm">
           <use xlink:href="#clear"></use>
         </svg>
-        <span class="vm">{{ this.$t('clear') }}</span>
+        <span class="vm">{{ $t('clear') }}</span>
       </a>
-      <div class="flex-h">
+      <div class="flex-h trace-select">
         <TraceSelect
           :hasSearch="true"
-          :title="this.$t('service')"
+          :title="$t('service')"
           :value="service"
           @input="chooseService"
           :data="rocketTrace.services"
         />
-        <TraceSelect :hasSearch="true" :title="this.$t('instance')" v-model="instance" :data="rocketTrace.instances" />
+        <TraceSelect :hasSearch="true" :title="$t('instance')" v-model="instance" :data="rocketTrace.instances" />
         <TraceSelect
-          :title="this.$t('status')"
+          :title="$t('status')"
           :value="traceState"
           @input="chooseStatus"
           :data="[
@@ -53,20 +53,24 @@ limitations under the License. -->
             { label: 'Error', key: 'ERROR' },
           ]"
         />
-        <div class="mr-10" style="padding: 3px 15px 0">
-          <div class="sm grey">{{ this.$t('endpointName') }}</div>
-          <input type="text" v-model="endpointName" class="rk-trace-search-input" />
-        </div>
+        <TraceSelect
+          :hasSearch="true"
+          :title="$t('endpointName')"
+          :value="endpoint"
+          @input="chooseEndpoint"
+          @search="searchEndpoint"
+          :data="rocketTrace.endpoints"
+        />
       </div>
     </div>
     <div class="rk-trace-search-more" v-show="status">
       <div class="flex-h">
         <div class="mr-15">
-          <span class="sm b grey mr-10">{{ this.$t('traceID') }}:</span>
+          <span class="sm b grey mr-10">{{ $t('traceID') }}:</span>
           <input type="text" v-model="traceId" class="rk-trace-search-input dib" />
         </div>
         <div class="mr-15">
-          <span class="sm b grey mr-10">{{ this.$t('duration') }}:</span>
+          <span class="sm b grey mr-10">{{ $t('duration') }}:</span>
           <div class="rk-trace-search-range dib">
             <input class="vm tc" v-model="minTraceDuration" />
             <span class="grey vm">-</span>
@@ -74,37 +78,11 @@ limitations under the License. -->
           </div>
         </div>
         <div>
-          <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
+          <span class="sm b grey mr-5">{{ $t('timeRange') }}:</span>
           <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm" />
         </div>
       </div>
-      <div class="flex-h">
-        <div class="mr-10" style="padding-top: 5px">
-          <span class="sm grey">{{ this.$t('tags') }}: </span>
-          <span class="rk-trace-tags">
-            <span class="selected" v-for="(item, index) in tagsList" :key="index">
-              <span>{{ item }}</span>
-              <span class="remove-icon" @click="removeTags(index)">×</span>
-            </span>
-          </span>
-          <input
-            type="text"
-            :placeholder="this.$t('addTag')"
-            v-model="tags"
-            class="rk-trace-new-tag"
-            @keyup="addLabels"
-          />
-          <span class="trace-tips" v-tooltip:bottom="{ content: this.$t('traceTagsTip') }">
-            <a
-              target="blank"
-              href="https://github.com/apache/skywalking/blob/master/docs/en/setup/backend/configuration-vocabulary.md"
-            >
-              {{ this.$t('tagsLink') }}
-            </a>
-            <rk-icon icon="help" class="mr-5" />
-          </span>
-        </div>
-      </div>
+      <ConditionTags :type="'TRACE'" :clearTags="clearTags" @updateTags="updateTags" />
     </div>
   </div>
 </template>
@@ -114,11 +92,11 @@ limitations under the License. -->
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import TraceSelect from '../common/trace-select.vue';
+  import { ConditionTags } from '../common/index';
   import { State as traceState } from '@/store/modules/trace/index';
   import { State as globalState } from '@/store/modules/global/index';
-  import dateFormatStep from '@/utils/dateFormatStep';
-
-  @Component({ components: { TraceSelect } })
+  import dateFormatStep from '@/utils/dateFormat';
+  @Component({ components: { TraceSelect, ConditionTags } })
   export default class TraceSearch extends Vue {
     @State('rocketbot') private rocketbotGlobal!: globalState;
     @State('rocketTrace') private rocketTrace!: traceState;
@@ -127,30 +105,29 @@ limitations under the License. -->
     @Action('RESET_DURATION') private RESET_DURATION: any;
     @Action('rocketTrace/GET_SERVICES') private GET_SERVICES: any;
     @Action('rocketTrace/GET_INSTANCES') private GET_INSTANCES: any;
+    @Action('rocketTrace/GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
     @Action('rocketTrace/GET_TRACELIST') private GET_TRACELIST: any;
     @Action('rocketTrace/SET_TRACE_FORM') private SET_TRACE_FORM: any;
     @Mutation('rocketTrace/SET_TRACE_FORM_ITEM')
     private SET_TRACE_FORM_ITEM: any;
     @Mutation('rocketTrace/SET_INSTANCES') private SET_INSTANCES: any;
+    @Mutation('rocketTrace/SET_ENDPOINTS') private SET_ENDPOINTS: any;
     private service: Option = { label: 'All', key: '' };
     private time!: Date[];
     private status: boolean = true;
     private maxTraceDuration: string = localStorage.getItem('maxTraceDuration') || '';
     private minTraceDuration: string = localStorage.getItem('minTraceDuration') || '';
     private instance: Option = { label: 'All', key: '' };
-    private endpointName: string = localStorage.getItem('endpointName') || '';
+    private endpoint: Option = { label: 'All', key: '' };
     private traceId: string = localStorage.getItem('traceId') || '';
     private traceState: Option = { label: 'All', key: 'ALL' };
-    private tags: string = '';
+    private tagsMap: Array<{ key: string; value: string }> = [];
     private tagsList: string[] = [];
+    private clearTags: boolean = false;
 
     private created() {
-      this.endpointName = this.$route.query.endpointname
-        ? this.$route.query.endpointname.toString()
-        : this.endpointName;
       this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
-      this.tagsList = localStorage.getItem('traceTags') ? JSON.parse(localStorage.getItem('traceTags') || '') : [];
     }
     private mounted() {
       this.getTraceList();
@@ -161,41 +138,52 @@ limitations under the License. -->
         });
       }
     }
-
     private globalTimeFormat(time: Date[]) {
-      let step = 'MINUTE';
-      const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
-      if (unix <= 60 * 60 * 1000) {
-        step = 'MINUTE';
-      } else if (unix <= 24 * 60 * 60 * 1000) {
-        step = 'HOUR';
-      } else {
-        step = 'DAY';
-      }
+      const step = 'SECOND';
+
       return {
         start: dateFormatStep(time[0], step, false),
         end: dateFormatStep(time[1], step, false),
         step,
       };
     }
-
-    private chooseService(i: any) {
+    private chooseService(i: Option) {
       if (this.service.key === i.key) {
         return;
       }
       this.instance = { label: 'All', key: '' };
+      this.endpoint = { label: 'All', key: '' };
       this.service = i;
       if (i.key === '') {
         this.SET_INSTANCES([]);
+        this.SET_ENDPOINTS([]);
         return;
       }
       this.GET_INSTANCES({ duration: this.durationTime, serviceId: i.key });
+      this.SET_ENDPOINTS([]);
+      this.GET_ITEM_ENDPOINTS({
+        serviceId: i.key,
+        keyword: '',
+        duration: this.durationTime,
+      });
     }
-
-    private chooseStatus(i: any) {
+    private searchEndpoint(search: string) {
+      this.GET_ITEM_ENDPOINTS({
+        serviceId: this.service.key,
+        keyword: search,
+        duration: this.durationTime,
+      });
+    }
+    private chooseStatus(i: Option) {
       this.traceState = i;
     }
-
+    private chooseEndpoint(i: Option) {
+      this.endpoint = i;
+    }
+    private updateTags(data: { tagsMap: Array<{ key: string; value: string }>; tagsList: string[] }) {
+      this.tagsList = data.tagsList;
+      this.tagsMap = data.tagsMap;
+    }
     private getTraceList() {
       this.GET_SERVICES({ duration: this.durationTime });
       const temp: any = {
@@ -213,7 +201,6 @@ limitations under the License. -->
         paging: { pageNum: 1, pageSize: 15, needTotal: true },
         queryOrder: this.rocketTrace.traceForm.queryOrder,
       };
-
       if (this.service.key) {
         temp.serviceId = this.service.key;
       }
@@ -228,35 +215,22 @@ limitations under the License. -->
         temp.minTraceDuration = this.minTraceDuration;
         localStorage.setItem('minTraceDuration', this.minTraceDuration);
       }
-      if (this.endpointName) {
-        temp.endpointName = this.endpointName;
-        localStorage.setItem('endpointName', this.endpointName);
+      if (this.endpoint.key) {
+        temp.endpointName = this.endpoint.label;
       }
       if (this.traceId) {
         temp.traceId = this.traceId;
-        localStorage.setItem('traceId', this.traceId);
       }
-      if (this.tagsList.length) {
-        const tagsMap = this.tagsList.map((item: string) => {
-          const key = item.substring(0, item.indexOf('='));
-
-          return {
-            key,
-            value: item.substring(item.indexOf('=') + 1, item.length),
-          };
-        });
-        temp.tags = tagsMap;
-        localStorage.setItem('traceTags', JSON.stringify(this.tagsList));
-      }
+      localStorage.setItem('traceId', this.traceId);
+      temp.tags = this.tagsMap;
+      localStorage.setItem('traceTags', JSON.stringify(this.tagsList));
       this.SET_TRACE_FORM(temp);
-
       this.$eventBus.$emit('SET_LOADING_TRUE', () => {
         this.GET_TRACELIST().then(() => {
           this.$eventBus.$emit('SET_LOADING_FALSE');
         });
       });
     }
-
     private clearSearch() {
       this.RESET_DURATION();
       this.status = true;
@@ -266,28 +240,16 @@ limitations under the License. -->
       localStorage.removeItem('minTraceDuration');
       this.service = { label: 'All', key: '' };
       this.instance = { label: 'All', key: '' };
-      this.endpointName = '';
-      localStorage.removeItem('endpointName');
-      this.tagsList = [];
+      this.endpoint = { label: 'All', key: '' };
       localStorage.removeItem('traceTags');
+      this.clearTags = true;
+      this.tagsMap = [];
+      this.tagsList = [];
       this.traceId = '';
       localStorage.removeItem('traceId');
       this.traceState = { label: 'All', key: 'ALL' };
       this.SET_TRACE_FORM_ITEM({ type: 'queryOrder', data: '' });
       this.getTraceList();
-    }
-
-    private addLabels(event: KeyboardEvent) {
-      if (event.keyCode !== 13 || !this.tags) {
-        return;
-      }
-      this.tagsList.push(this.tags);
-      this.tags = '';
-    }
-
-    private removeTags(index: number) {
-      this.tagsList.splice(index, 1);
-      localStorage.setItem('traceTags', JSON.stringify(this.tagsList));
     }
 
     @Watch('rocketbotGlobal.durationRow')
@@ -298,8 +260,8 @@ limitations under the License. -->
 </script>
 
 <style lang="scss">
-  .rk-log-box {
-    color: #3d444f;
+  .trace-select {
+    height: 52px;
   }
   .rk-trace-search {
     flex-shrink: 0;
@@ -324,7 +286,6 @@ limitations under the License. -->
       cursor: pointer;
     }
   }
-
   .rk-trace-search-input {
     border-style: unset;
     outline: 0;
@@ -346,30 +307,24 @@ limitations under the License. -->
     display: inline-block;
     vertical-align: top;
   }
-
-  .rk-trace-search-range,
-  .rk-auto-select {
+  .rk-trace-search-range {
     border-radius: 3px;
     background-color: #fff;
     padding: 1px;
     border-radius: 3px;
-
     input {
       width: 38px;
       border-style: unset;
       outline: 0;
     }
   }
-
-  .rk-trace-search-btn,
-  .rk-trace-log-btn {
+  .rk-trace-search-btn {
     padding: 3px 9px;
     background-color: #484b55;
     border-radius: 4px;
     color: #eee;
     font-weight: normal;
     cursor: pointer;
-
     &.bg-blue {
       background-color: #448dfe;
     }
@@ -377,26 +332,21 @@ limitations under the License. -->
   .rk-trace-search-btn {
     margin-top: 12px;
   }
-
   .rk-trace-clear-btn {
     padding: 3px 9px;
     background-color: #484b55;
     border-radius: 4px;
     margin-top: 12px;
-
     &.bg-warning {
       background-color: #fbb03b;
     }
   }
-
   .rk-trace-search-more {
     background-color: #484b55;
     padding: 4px 10px;
     border-radius: 3px;
-    margin-top: 8px;
     position: relative;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-
     &:after {
       bottom: 100%;
       right: 30px;

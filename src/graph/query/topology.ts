@@ -21,17 +21,11 @@ import {
   ServicesTopo,
   TopoMetric,
   TopoInstanceDependency,
-  TopoInstanceClientInfo,
-  TopoInstanceServerInfo,
   TopoServiceMetric,
   TopoClientMetric,
-  TopoServiceInfo,
-  TopoClientInfo,
   DependencyInstanceServerMetric,
   DependencyInstanceClientMetric,
-  TopoServiceDetail,
   endpointTopology,
-  TopoEndpointDependencyMetrics,
 } from '../fragments/topology';
 
 export const queryTopo = `query queryTopo(${Topo.variable}) {${Topo.query}}`;
@@ -51,20 +45,8 @@ export const queryTopoInfo = `query queryTopoInfo(
         ${TopoClientMetric.query}
       }`;
 
-export const queryTopoServiceInfo = `query queryTopoServiceInfo(
-  ${TopoServiceInfo.variable}) {${TopoServiceInfo.query}}`;
-
-export const queryTopoClientInfo = `query queryTopoClientInfo(
-  ${TopoClientInfo.variable}) {${TopoClientInfo.query}}`;
-
 export const queryTopoInstanceDependency = `query queryTopoInstanceDependency(
   ${TopoInstanceDependency.variable}) {${TopoInstanceDependency.query}}`;
-
-export const queryTopoInstanceServerInfo = `query queryTopoInstanceServerInfo(
-  ${TopoInstanceServerInfo.variable}) {${TopoInstanceServerInfo.query}}`;
-
-export const queryTopoInstanceClientInfo = `query queryTopoInstanceClientInfo(
-  ${TopoInstanceClientInfo.variable}) {${TopoInstanceClientInfo.query}}`;
 
 export const queryDependencyInstanceServerMetric = `query queryDependencyInstanceServerMetric(
   ${DependencyInstanceServerMetric.variable}) {${DependencyInstanceServerMetric.query}}`;
@@ -72,11 +54,8 @@ export const queryDependencyInstanceServerMetric = `query queryDependencyInstanc
 export const queryDependencyInstanceClientMetric = `query queryDependencyInstanceClientMetric(
   ${DependencyInstanceClientMetric.variable}) {${DependencyInstanceClientMetric.query}}`;
 
-export const queryTopoServiceDetail = `query queryTopoServiceDetail(
-  ${TopoServiceDetail.variable}) {${TopoServiceDetail.query}}`;
+// export const queryTopoServiceDetail = `query queryTopoServiceDetail(
+//   ${TopoServiceDetail.variable}) {${TopoServiceDetail.query}}`;
 
 export const queryEndpointTopology = `query queryEndpointTopology(${endpointTopology.variable}) {
   ${endpointTopology.query}}`;
-
-export const queryTopoEndpointDependencyMetrics = `query queryTopoEndpointDependencyMetrics(
-  ${TopoEndpointDependencyMetrics.variable}) {${TopoEndpointDependencyMetrics.query}}`;

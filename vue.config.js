@@ -17,11 +17,11 @@
 
 module.exports = {
   publicPath: "./",
+  productionSourceMap: process.env.NODE_ENV !== 'production',
   devServer: {
     proxy: {
       '/graphql': {
         target: `${process.env.SW_PROXY_TARGET || 'http://127.0.0.1:12800'}`,
-
         changeOrigin: true,
       },
     },
@@ -35,5 +35,19 @@ module.exports = {
       .options({
         symbolId: '[name]',
       });
+  },
+  configureWebpack: (config) => {
+    config.optimization = {
+      splitChunks: {
+        chunks: 'all',
+        cacheGroups: {
+          echarts: {
+            name: 'echarts',
+            test: /[\\/]node_modules[\\/]echarts[\\/]/,
+            priority: 2,
+          },
+        },
+      },
+    };
   },
 };

@@ -42,9 +42,9 @@ limitations under the License. -->
   </div>
 </template>
 <script lang="ts">
-  import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
-  import { Action, Getter, Mutation, State } from 'vuex-class';
-  import { State as TopoGroupState } from '@/store/modules/topology/group';
+  import { Component, Vue, Prop } from 'vue-property-decorator';
+  import { Mutation } from 'vuex-class';
+
   @Component
   export default class TopoGroupItem extends Vue {
     @Prop() private active!: boolean;

@@ -4,9 +4,7 @@ this work for additional information regarding copyright ownership.
 The ASF licenses this file to You under the Apache License, Version 2.0
 (the "License"); you may not use this file except in compliance with
 the License.  You may obtain a copy of the License at
-
   http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,8 +20,8 @@ limitations under the License. -->
         :total="rocketTrace.traceTotal"
       />
       <select class="grey" @change="changeSort" :value="rocketTrace.traceForm.queryOrder">
-        <option value="BY_START_TIME">{{ this.$t('startTime') }}</option>
-        <option value="BY_DURATION">{{ this.$t('duration') }}</option>
+        <option value="BY_START_TIME">{{ $t('startTime') }}</option>
+        <option value="BY_DURATION">{{ $t('duration') }}</option>
       </select>
     </div>
     <div class="rk-trace-t-loading" v-show="loading">
@@ -62,10 +60,9 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
-  import { Action, Getter, Mutation, State } from 'vuex-class';
+  import { Component, Vue, Watch } from 'vue-property-decorator';
+  import { Action, Mutation, State } from 'vuex-class';
   import { State as traceState } from '@/store/modules/trace/index';
-
   @Component
   export default class TraceTable extends Vue {
     @State('rocketTrace') private rocketTrace!: traceState;
@@ -131,10 +128,6 @@ limitations under the License. -->
   }
 </script>
 <style lang="scss">
-  .rk-trace-t {
-    flex-grow: 1;
-    position: relative;
-  }
   .rk-trace-t-tool {
     flex-shrink: 0;
     background-color: rgba(196, 200, 225, 0.2);
@@ -144,6 +137,7 @@ limitations under the License. -->
       background-color: rgba(0, 0, 0, 0);
       outline: 0;
       border-style: unset;
+      margin: 0 10px;
     }
     padding-top: 1px;
     border-bottom: 1px solid #c1c5ca41;
@@ -172,6 +166,8 @@ limitations under the License. -->
     width: 100%;
     border-spacing: 0;
     table-layout: fixed;
+    flex-grow: 1;
+    position: relative;
   }
   .rk-trace-tr {
     &:hover {

@@ -17,7 +17,7 @@ limitations under the License. -->
     <nav class="rk-dashboard-comp-nav mb-15">
       <a
         class="rk-dashboard-comp-nav-i b mr-20"
-        v-if="value.length"
+        v-show="value.length"
         @click="
           current = key;
           configMode = false;
@@ -51,8 +51,8 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
-  import { State, Mutation } from 'vuex-class';
+  import { Vue, Component, Prop } from 'vue-property-decorator';
+  import { Mutation } from 'vuex-class';
   import copy from '@/utils/copy';
 
   @Component

@@ -17,28 +17,28 @@ limitations under the License. -->
       <div class="flex-h">
         <ToolBarSelect
           @onChoose="selectCategroy"
-          :title="this.$t('logCategory')"
+          :title="$t('logCategory')"
           :current="logState.type"
           :data="logState.logCategories"
           icon="chart"
         />
         <ToolBarSelect
           @onChoose="selectService"
-          :title="this.$t('service')"
+          :title="$t('service')"
           :current="rocketOption.currentService"
           :data="rocketOption.services"
           icon="package"
         />
         <ToolBarSelect
           @onChoose="selectInstance"
-          :title="logState.type.key === cateGoryBrowser ? this.$t('version') : this.$t('currentInstance')"
+          :title="logState.type.key === cateGoryBrowser ? $t('version') : $t('currentInstance')"
           :current="rocketOption.currentInstance"
           :data="rocketOption.instances"
           icon="disk"
         />
         <ToolBarSelect
           @onChoose="selectEndpoint"
-          :title="logState.type.key === cateGoryBrowser ? this.$t('page') : this.$t('currentEndpoint')"
+          :title="logState.type.key === cateGoryBrowser ? $t('page') : $t('currentEndpoint')"
           :current="rocketOption.currentEndpoint"
           :data="rocketOption.endpoints"
           icon="code"
@@ -46,7 +46,7 @@ limitations under the License. -->
         <ToolBarSelect
           v-if="logState.type.key === cateGoryBrowser"
           @onChoose="SELECT_ERROR_CATALOG"
-          :title="this.$t('errorCatalog')"
+          :title="$t('errorCatalog')"
           :current="logState.category"
           :data="logState.categories"
           icon="epic"
@@ -59,14 +59,14 @@ limitations under the License. -->
         </a>
         <a class="rk-log-search-btn bg-blue mr-10" @click="queryLogs">
           <rk-icon icon="search" class="mr-5" />
-          <span class="vm">{{ this.$t('search') }}</span>
+          <span class="vm">{{ $t('search') }}</span>
         </a>
         <a class="rk-log-clear-btn r mr-10" @click="clearSearch">
           <rk-icon icon="clear" class="mr-5" />
-          <span class="vm">{{ this.$t('clear') }}</span>
+          <span class="vm">{{ $t('clear') }}</span>
         </a>
 
-        <RkPage :currentSize="10" :currentPage="pageNum" @changePage="handleRefresh" :total="logState.total" />
+        <RkPage :currentSize="pageSize" :currentPage="pageNum" @changePage="handleRefresh" :total="logState.total" />
       </span>
     </div>
     <div class="flex-h" v-show="showConditionsBox">
@@ -76,15 +76,15 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Duration, Option } from '@/types/global';
   import { Component, Vue } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import TraceSelect from '../common/trace-select.vue';
-  import ToolBarSelect from '../dashboard/tool-bar-select.vue';
-  import ToolBarEndpointSelect from '../dashboard/tool-bar-endpoint-select.vue';
+  import ToolBarSelect from '../dashboard/tool-bar/tool-bar-select.vue';
+  import ToolBarEndpointSelect from '../dashboard/tool-bar/tool-bar-endpoint-select.vue';
   import LogConditions from './log-conditions.vue';
   import { State as logState } from '@/store/modules/log/index';
   import { State as optionState } from '@/store/modules/global/selectors';
+  import { PageTypes } from '@/constants/constant';
 
   @Component({
     components: { TraceSelect, ToolBarSelect, ToolBarEndpointSelect, LogConditions },
@@ -107,13 +107,13 @@ limitations under the License. -->
     private pageNum: number = 1;
     private cateGoryBrowser = 'browser';
     private showConditionsBox = true;
-    private logPage = 'Log';
+    private pageSize = 22;
 
     private beforeMount() {
       this.MIXHANDLE_GET_OPTION({
         compType: this.logState.type.key,
         duration: this.durationTime,
-        pageType: this.logPage,
+        pageType: PageTypes.LOG,
       })
         .then(() => {
           this.QUERY_LOGS_BYKEYWORDS();
@@ -145,7 +145,7 @@ limitations under the License. -->
       this.MIXHANDLE_GET_OPTION({
         compType: i.key,
         duration: this.durationTime,
-        pageType: this.logPage,
+        pageType: PageTypes.LOG,
       }).then(() => {
         this.queryLogs();
       });
@@ -170,7 +170,7 @@ limitations under the License. -->
                 serviceVersionId: currentInstance.key,
                 pagePathId: currentEndpoint.key,
                 category: category.key,
-                paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
+                paging: { pageNum: this.pageNum, pageSize: this.pageSize, needTotal: true },
                 queryDuration: conditions.date,
               }
             : {
@@ -185,7 +185,7 @@ limitations under the License. -->
                     : undefined,
                 relatedTrace: conditions.traceId ? { traceId: conditions.traceId } : undefined,
                 tags: conditions.tags,
-                paging: { pageNum: this.pageNum, pageSize: 35, needTotal: true },
+                paging: { pageNum: this.pageNum, pageSize: this.pageSize, needTotal: true },
                 queryDuration: conditions.traceId ? undefined : conditions.date,
               },
       });

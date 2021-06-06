@@ -38,7 +38,7 @@ limitations under the License. -->
     private group = { key: '', label: 'All groups' };
 
     private created() {
-      this.fetchData();
+      this.fetchData(true);
     }
 
     get currentServiceList() {
@@ -47,12 +47,12 @@ limitations under the License. -->
       return [{ key: '', label: 'All services' }, ...services];
     }
 
-    private fetchData() {
+    private fetchData(isDefault: boolean) {
       this.GET_SERVICES({ duration: this.durationTime }).then(
         (json: Array<{ key: string; label: string; group: string }>) => {
           const groups = [] as string[];
           for (const g of json) {
-            if (!groups.includes(g.group)) {
+            if (g.group && !groups.includes(g.group)) {
               groups.push(g.group);
             }
           }
@@ -65,11 +65,13 @@ limitations under the License. -->
             }),
             { key: '', label: 'All groups' },
           ];
-          this.group = this.groups[0];
+          const tempGroup = isDefault ? undefined : this.groups.find((g) => g.key === this.group.key);
+          this.group = tempGroup ? tempGroup : this.groups[0];
           this.services = json;
           this.currentServices = this.currentServiceList;
-          this.service = this.currentServices[0];
-          this.renderTopo();
+          const tempService = isDefault ? undefined : this.currentServices.find((s) => s.key === this.service.key);
+          this.service = tempService ? tempService : this.currentServices[0];
+          isDefault ? this.renderTopo() : this.changeTopo();
         },
       );
     }
@@ -123,12 +125,12 @@ limitations under the License. -->
     private watchDurationTime(newValue: DurationTime, oldValue: DurationTime) {
       // Avoid repeating fetchData() after enter the component for the first time.
       if (compareObj(newValue, oldValue)) {
-        this.fetchData();
+        this.fetchData(false);
       }
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .topo-server.dao-select .dao-select-main .dao-select-switch {
     border: 0;
   }

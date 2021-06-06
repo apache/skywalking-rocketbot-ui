@@ -19,13 +19,11 @@ import Vue from 'vue';
 import moment from 'dayjs';
 import clickout from '@/utils/clickout';
 import tooltip from '@/utils/tooltip';
-import zh from '@/assets/lang/zh';
-import en from '@/assets/lang/en';
-import VueI18n from 'vue-i18n';
 import eventBus from './event-bus';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import i18n from './i18n';
 import components from './components';
 import 'echarts/lib/chart/line';
 import 'echarts/lib/chart/graph';
@@ -35,37 +33,18 @@ import 'echarts/lib/chart/heatmap';
 import 'echarts/lib/chart/sankey';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/markArea';
 import VModal from 'vue-js-modal';
 import { queryOAPTimeInfo } from './utils/localtime';
 import './assets';
 
 Vue.use(eventBus);
-Vue.use(VueI18n);
 Vue.use(components);
 Vue.use(VModal, { dialog: true });
 Vue.directive('clickout', clickout);
 Vue.directive('tooltip', tooltip);
 
-Vue.filter(
-  'dateformat',
-  (dataStr: any, pattern: string = 'YYYY-MM-DD HH:mm:ss') =>
-    moment(dataStr).format(pattern),
-);
-
-const savedLanguage = window.localStorage.getItem('lang');
-let language = navigator.language.split('-')[0];
-if (!savedLanguage) {
-  window.localStorage.setItem('lang', language);
-}
-language = savedLanguage ? savedLanguage : language;
-
-const i18n = new VueI18n({
-  locale: language,
-  messages: {
-    zh,
-    en,
-  },
-});
+Vue.filter('dateformat', (dataStr: any, pattern: string = 'YYYY-MM-DD HH:mm:ss') => moment(dataStr).format(pattern));
 
 if (!window.Promise) {
   window.Promise = Promise;

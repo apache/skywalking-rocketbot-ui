@@ -165,7 +165,7 @@ pre {
   overflow: auto;
 }
 .scroll_bar_style::-webkit-scrollbar {
-  width: 10px;
+  width: 9px;
   height: 6px;
 }
 .scroll_bar_style::-webkit-scrollbar-track {
@@ -173,5 +173,5 @@ pre {
 }
 .scroll_bar_style::-webkit-scrollbar-thumb {
   border-radius: 5px;
-  background: #777;
+  background: rgba(196, 200, 225, .2);
 }

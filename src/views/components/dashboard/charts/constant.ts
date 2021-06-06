@@ -20,6 +20,9 @@ export const EntityType = [
   { key: 'All', label: 'All' },
   { key: 'Endpoint', label: 'Service Endpoint' },
   { key: 'ServiceInstance', label: 'Service Instance' },
+  { key: 'ServiceRelation', label: 'Service Relation' },
+  { key: 'ServiceInstanceRelation', label: 'Service Instance Relation' },
+  { key: 'EndpointRelation', label: 'Endpoint Relation' },
 ];
 export const BrowserEntityType = [
   { key: 'Service', label: 'Service' },
@@ -29,8 +32,8 @@ export const BrowserEntityType = [
 ];
 
 export const IndependentType = [
-  { key: 'true', label: 'Self selectors' },
-  { key: 'false', label: 'Common selectors' },
+  { key: true, label: 'Self selectors' },
+  { key: false, label: 'Common selectors' },
 ];
 
 export enum MetricsType {
@@ -74,4 +77,12 @@ export const ChartTypeOptions = [
   { value: 'ChartLine', label: 'Line Chart' },
   { value: 'ChartArea', label: 'Area Chart' },
   { value: 'ChartBar', label: 'Bar Chart' },
+  { value: 'ChartTable', label: 'Table Of Latest Values' },
 ];
+
+export const ReadValueChartType = [
+  { value: 'ChartNum', label: 'Digital Card' },
+  { value: 'ChartSlow', label: 'Slow Chart' },
+];
+
+export const MaxItemNum = 10;

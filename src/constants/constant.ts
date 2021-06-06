@@ -18,12 +18,10 @@
 export enum TopologyType {
   TOPOLOGY_ENDPOINT = 'TOPOLOGY_ENDPOINT',
   TOPOLOGY_INSTANCE = 'TOPOLOGY_INSTANCE',
-}
-
-export enum ObjectsType {
-  UPDATE_INSTANCES = 'UPDATE_INSTANCES',
-  UPDATE_ENDPOINTS = 'UPDATE_ENDPOINTS',
-  UPDATE_DASHBOARD = 'UPDATE_DASHBOARD',
+  TOPOLOGY_SERVICE = 'TOPOLOGY_SERVICE',
+  TOPOLOGY_SERVICE_DEPENDENCY = 'TOPOLOGY_SERVICE_RELATION',
+  TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY = 'TOPOLOGY_SERVICE_INSTANCE_RELATION',
+  TOPOLOGY_ENDPOINT_DEPENDENCY = 'TOPOLOGY_ENDPOINT_RELATION',
 }
 
 export enum TimeType {
@@ -31,3 +29,16 @@ export enum TimeType {
   HOUR_TIME = 'HOUR',
   DAY_TIME = 'DAY',
 }
+
+export enum PageEventsType {
+  DASHBOARD_EVENTS = 'dashboardEvents',
+  TOPO_ENDPOINT_EVENTS = 'topoEndpointEvents',
+  TOPO_INSTANCE_EVENTS = 'topoInstanceEvents',
+  TOPO_SERVICE_EVENTS = 'topoInstanceEvents',
+}
+export enum PageTypes {
+  DASHBOARD = 'Dashboard',
+  LOG = 'Log',
+  TOPOLOGY = 'Topology',
+}
+export const DEFAULT = 'default';

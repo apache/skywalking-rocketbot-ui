@@ -25,36 +25,19 @@ limitations under the License. -->
     <TopoAside />
     <TopoGroup />
     <rk-sidebox :show="dialog.length" @update:show="dialog = ''" :fixed="true" width="100%">
-      <window-endpoint
-        v-if="dialog === 'endpoint'"
-        :current="this.current"
-        :endpointComps="stateTopo.topoEndpoints"
-        @changeEndpointComps="changeEndpointComps"
-        :updateObjects="updateObjects"
-      />
-      <window-instance
-        v-if="dialog === 'instance'"
-        :current="this.current"
-        :instanceComps="stateTopo.topoInstances"
-        @changeInstanceComps="changeInstanceComps"
-        :updateObjects="updateObjects"
-      />
+      <window-endpoint v-if="dialog === 'endpoint'" :current="this.current" />
+      <window-instance v-if="dialog === 'instance'" :current="this.current" />
       <window-trace v-if="dialog === 'trace'" :current="this.current" />
       <window-alarm v-if="dialog === 'alarm'" :current="this.current" />
-      <window-endpoint-dependency
-        v-if="dialog === 'endpoint_dependency'"
-        @changeEndpointComps="changeEndpointComps"
-        :current="this.current"
-      />
+      <window-endpoint-dependency v-if="dialog === 'endpoint_dependency'" :current="this.current" />
     </rk-sidebox>
   </div>
 </template>
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator';
-  import { State, Action, Getter, Mutation } from 'vuex-class';
-  import { AxiosResponse } from 'axios';
+  import { State, Action, Mutation } from 'vuex-class';
   import { State as topoState } from '@/store/modules/topology';
-  import { TopologyType } from '../../../constants/constant';
+  import { TopologyType, PageTypes } from '@/constants/constant';
   import WindowEndpoint from '@/views/containers/topology/endpoint/index.vue';
   import WindowInstance from '@/views/containers/topology/instance/index.vue';
   import WindowTrace from '@/views/containers/topology/trace/index.vue';
@@ -63,6 +46,7 @@ limitations under the License. -->
   import TopoAside from '../../components/topology/topo-aside.vue';
   import TopoGroup from '../../components/topology/topo-group/index.vue';
   import WindowEndpointDependency from '@/views/containers/topology/endpoint-dependency/index.vue';
+  import { Option } from '@/types/global';
 
   @Component({
     components: {
@@ -83,24 +67,76 @@ limitations under the License. -->
     @Action('GET_ALL_TEMPLATES') private GET_ALL_TEMPLATES: any;
     @Mutation('rocketTopo/SET_TOPO_ENDPOINT') private SET_TOPO_ENDPOINT: any;
     @Mutation('rocketTopo/SET_TOPO_INSTANCE') private SET_TOPO_INSTANCE: any;
+    @Mutation('rocketTopo/SET_TOPO_SERVICE') private SET_TOPO_SERVICE: any;
+    @Mutation('rocketTopo/SET_TOPO_SERVICE_DEPENDENCY') private SET_TOPO_SERVICE_DEPENDENCY: any;
+    @Mutation('rocketTopo/SET_TOPO_SERVICE_INSTANCE_DEPENDENCY') private SET_TOPO_SERVICE_INSTANCE_DEPENDENCY: any;
+    @Mutation('rocketTopo/EDIT_DEPENDENCY_METRICS') private EDIT_DEPENDENCY_METRICS: any;
+    @Mutation('rocketTopo/SET_TOPO_ENDPOINT_DEPENDENCY') private SET_TOPO_ENDPOINT_DEPENDENCY: any;
     @Mutation('SET_CURRENT_SERVICE') private SET_CURRENT_SERVICE: any;
-    @Getter('durationTime') private durationTime: any;
+    @Mutation('SET_EDIT') private SET_EDIT: any;
+    @Mutation('SET_PAGE_TYPE') private SET_PAGE_TYPE: any;
 
     private current: any = {};
     private dialog: string = '';
-    private updateObjects: string = '';
 
     private created() {
-      if (window.localStorage.getItem('topologyInstances') || window.localStorage.getItem('topologyEndpoints')) {
+      this.SET_PAGE_TYPE(PageTypes.TOPOLOGY);
+      this.initMetricsTemplate();
+    }
+    private initMetricsTemplate() {
+      localStorage.removeItem('topoTemplateTypes');
+      localStorage.removeItem('topologyServices');
+      localStorage.removeItem('topologyServicesDependency');
+
+      if (window.localStorage.getItem('topologyServices')) {
+        const serviceComps: string = `${window.localStorage.getItem('topologyServices')}`;
+        const topoService = serviceComps ? JSON.parse(serviceComps) : [];
+
+        this.SET_TOPO_SERVICE(topoService);
+      }
+      if (window.localStorage.getItem('topologyInstances')) {
         const instanceComps: string = `${window.localStorage.getItem('topologyInstances')}`;
         const topoInstance = instanceComps ? JSON.parse(instanceComps) : [];
+
+        this.SET_TOPO_INSTANCE(topoInstance);
+      }
+      if (window.localStorage.getItem('topologyEndpoints')) {
         const endpointComps: string = `${window.localStorage.getItem('topologyEndpoints')}`;
         const topoEndpoint = endpointComps ? JSON.parse(endpointComps) : [];
-        this.SET_TOPO_INSTANCE(topoInstance);
+
         this.SET_TOPO_ENDPOINT(topoEndpoint);
-      } else {
-        this.queryTemplates();
       }
+      if (localStorage.getItem('topologyServicesDependency')) {
+        const serviceDependencyComps: string = `${localStorage.getItem('topologyServicesDependency')}`;
+        const topoServiceDependency = serviceDependencyComps ? JSON.parse(serviceDependencyComps) : [];
+
+        this.SET_TOPO_SERVICE_DEPENDENCY(topoServiceDependency);
+      }
+      if (localStorage.getItem('topologyServicesInstanceDependency')) {
+        const serviceInstanceDependencyComps: string = `${localStorage.getItem('topologyServicesInstanceDependency')}`;
+        const topoServiceInstanceDependency = serviceInstanceDependencyComps
+          ? JSON.parse(serviceInstanceDependencyComps)
+          : [];
+
+        this.SET_TOPO_SERVICE_INSTANCE_DEPENDENCY(topoServiceInstanceDependency);
+      }
+      if (localStorage.getItem('topologyEndpointDependency')) {
+        const serviceEndpointComps: string = `${localStorage.getItem('topologyEndpointDependency')}`;
+        const topoEndpointDependency = serviceEndpointComps ? JSON.parse(serviceEndpointComps) : [];
+
+        this.SET_TOPO_ENDPOINT_DEPENDENCY(topoEndpointDependency);
+      }
+      if (
+        localStorage.getItem('topologyServices') &&
+        localStorage.getItem('topologyInstances') &&
+        localStorage.getItem('topologyEndpoints') &&
+        localStorage.getItem('topologyServicesDependency') &&
+        localStorage.getItem('topologyServicesInstanceDependency') &&
+        localStorage.getItem('topologyEndpointDependency')
+      ) {
+        return;
+      }
+      this.queryTemplates();
     }
     private queryTemplates() {
       this.GET_ALL_TEMPLATES().then(
@@ -113,40 +149,65 @@ limitations under the License. -->
             disabled: boolean;
           }>,
         ) => {
-          const template =
-            allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_INSTANCE && item.activated)[0] || {};
-          const instanceComps = JSON.parse(template.configuration) || [];
-          this.SET_TOPO_INSTANCE(instanceComps);
-          const endpointTemplate =
-            allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_ENDPOINT && item.activated)[0] || {};
-          const endpointComps = JSON.parse(endpointTemplate.configuration) || [];
-          this.SET_TOPO_ENDPOINT(endpointComps);
+          if (!window.localStorage.getItem('topologyInstances')) {
+            const template =
+              allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_INSTANCE && item.activated)[0] ||
+              {};
+            const instanceComps = JSON.parse(template.configuration) || [];
+            this.SET_TOPO_INSTANCE(instanceComps);
+          }
+          if (!window.localStorage.getItem('topologyEndpoints')) {
+            const endpointTemplate =
+              allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_ENDPOINT && item.activated)[0] ||
+              {};
+            const endpointComps = JSON.parse(endpointTemplate.configuration) || [];
+            this.SET_TOPO_ENDPOINT(endpointComps);
+          }
+          if (!window.localStorage.getItem('topologyServices')) {
+            const serviceTemplate =
+              allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_SERVICE && item.activated)[0] ||
+              {};
+            const topoService = JSON.parse(serviceTemplate.configuration) || [];
+            this.SET_TOPO_SERVICE(topoService);
+          }
+          if (!localStorage.getItem('topologyServicesDependency')) {
+            const serviceDependencyTemplate =
+              allTemplates.filter(
+                (item: any) => item.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY && item.activated,
+              )[0] || {};
+            const topoServiceDependency = JSON.parse(serviceDependencyTemplate.configuration) || [];
+            this.SET_TOPO_SERVICE_DEPENDENCY(topoServiceDependency);
+          }
+          if (!localStorage.getItem('topologyServicesInstanceDependency')) {
+            const serviceInstanceDependencyTemplate =
+              allTemplates.filter(
+                (item: any) => item.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY && item.activated,
+              )[0] || {};
+            const topoServiceInstanceDependency = JSON.parse(serviceInstanceDependencyTemplate.configuration) || [];
+            this.SET_TOPO_SERVICE_INSTANCE_DEPENDENCY(topoServiceInstanceDependency);
+          }
+          if (!localStorage.getItem('topologyEndpointDependency')) {
+            const serviceEndpointDependencyTemplate =
+              allTemplates.filter(
+                (item: any) => item.type === TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY && item.activated,
+              )[0] || {};
+            const topoEndpointDependency = JSON.parse(serviceEndpointDependencyTemplate.configuration) || [];
+            this.SET_TOPO_ENDPOINT_DEPENDENCY(topoEndpointDependency);
+          }
         },
       );
     }
-    private setCurrent(d: any): void {
+    private setCurrent(d: Option & { isReal: boolean }): void {
       this.current = d;
       if (d.isReal) {
-        this.SET_CURRENT_SERVICE(d);
+        this.SET_CURRENT_SERVICE({ key: d.key, label: d.label });
       }
-    }
-    private changeInstanceComps(data: { type: string; json: any }) {
-      this.updateObjects = data.type;
-      if (!data.json) {
-        return;
-      }
-      this.SET_TOPO_INSTANCE(data.json);
-    }
-    private changeEndpointComps(data: { type: string; json: any }) {
-      this.updateObjects = data.type;
-      if (!data.json) {
-        return;
-      }
-      this.SET_TOPO_ENDPOINT(data.json);
     }
     private beforeDestroy() {
       this.CLEAR_TOPO_INFO();
       this.CLEAR_TOPO();
+      this.SET_EDIT(false);
+      this.EDIT_DEPENDENCY_METRICS(false);
     }
   }
 </script>

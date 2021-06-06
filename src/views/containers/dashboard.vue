@@ -32,7 +32,7 @@ limitations under the License. -->
         :index="index"
         :rocketGlobal="rocketGlobal"
         :item="i"
-        :updateObjects="ObjectsType.UPDATE_DASHBOARD"
+        :updateObjects="true"
         :rocketOption="stateDashboardOption"
       >
       </DashboardItem>
@@ -44,16 +44,16 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Component, Vue, Watch } from 'vue-property-decorator';
+  import { Component, Vue } from 'vue-property-decorator';
   import { Action, Getter, State, Mutation } from 'vuex-class';
-  import ToolBar from '@/views/components/dashboard/tool-bar.vue';
+  import ToolBar from '@/views/components/dashboard/tool-bar/tool-bar.vue';
   import ToolGroup from '@/views/components/dashboard/tool-group.vue';
   import ToolNav from '@/views/components/dashboard/tool-nav.vue';
   import DashboardItem from '@/views/components/dashboard/dashboard-item.vue';
-  import { ObjectsType } from '../../constants/constant';
   import { State as globalState } from '@/store/modules/global';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as dataState } from '@/store/modules/dashboard/dashboard-data';
+  import { PageTypes } from '@/constants/constant';
 
   interface ITemplate {
     name: string;
@@ -76,14 +76,12 @@ limitations under the License. -->
     @State('rocketData') private rocketComps!: dataState;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('GET_ALL_TEMPLATES') private GET_ALL_TEMPLATES: any;
-    // @Action('ADD_TEMPLATE') private ADD_TEMPLATE: any;
+    @Action('GET_EVENT') private GET_EVENT: any;
     @Getter('durationTime') private durationTime: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;
     @Mutation('SET_EDIT') private SET_EDIT: any;
     @Mutation('SET_TEMPLATES') private SET_TEMPLATES: any;
-
-    private ObjectsType = ObjectsType;
 
     private isRouterAlive: boolean = true;
     public reload(): void {
@@ -104,17 +102,10 @@ limitations under the License. -->
         duration: this.durationTime,
         keywordServiceName:
           this.rocketComps.tree[this.rocketComps.group] && this.rocketComps.tree[this.rocketComps.group].serviceGroup,
+        pageType: PageTypes.DASHBOARD,
       });
     }
     private beforeMount() {
-      // this.ADD_TEMPLATE({
-      //   name: 'Topology Instance',
-      //   type: 'TOPOLOGY_INSTANCE',
-      //   active: true,
-      //   configuration: JSON.stringify(TopologyInstanceTemp),
-      // }).then((data: any) => {
-      //   console.log(data);
-      // });
       this.GET_ALL_TEMPLATES().then((allTemplate: ITemplate[]) => {
         const dashboardTemplate = allTemplate.filter((item: ITemplate) => item.type === 'DASHBOARD');
         const templatesConfig = dashboardTemplate.map((item: ITemplate) => JSON.parse(item.configuration)).flat(1);
@@ -146,7 +137,16 @@ limitations under the License. -->
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+  .rk-add-dashboard-item {
+    height: 342px;
+    text-align: center;
+    line-height: 250px;
+    border: 1px dashed rgba(196, 200, 225, 0.5);
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+  }
   .dashboard-container {
     overflow: auto;
     padding: 20px 15px;

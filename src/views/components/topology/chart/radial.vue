@@ -52,9 +52,7 @@ limitations under the License. -->
             id: node.id,
             name: node.name,
             label: {
-              normal: {
-                show: true,
-              },
+              show: true,
             },
             category: node.type,
           });
@@ -95,16 +93,12 @@ limitations under the License. -->
               categories,
               roam: true,
               label: {
-                normal: {
-                  position: 'right',
-                  formatter: '{b}',
-                },
+                position: 'right',
+                formatter: '{b}',
               },
               lineStyle: {
-                normal: {
-                  color: 'source',
-                  curveness: 0.3,
-                },
+                color: 'source',
+                curveness: 0.3,
               },
             },
           ],
@@ -124,7 +118,7 @@ limitations under the License. -->
     },
   };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .micro-radil-chart {
     height: 100%;
     position: fixed;

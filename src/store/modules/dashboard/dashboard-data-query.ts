@@ -19,11 +19,7 @@ import { Commit, ActionTree, Dispatch } from 'vuex';
 import { AxiosResponse } from 'axios';
 import { State } from './dashboard-data';
 import graph from '@/graph';
-
-export enum TopologyType {
-  TOPOLOGY_ENDPOINT = 'TOPOLOGY_ENDPOINT',
-  TOPOLOGY_INSTANCE = 'TOPOLOGY_INSTANCE',
-}
+import { TopologyType } from '@/constants/constant';
 
 // actions
 const actions: ActionTree<State, any> = {
@@ -34,31 +30,104 @@ const actions: ActionTree<State, any> = {
       duration: any;
       type: string;
       rocketOption: any;
+      templateType: string;
+      templateMode: string;
     },
   ) {
-    const { currentDatabase, currentEndpoint, currentInstance, currentService } = params.rocketOption;
+    const {
+      currentDatabase,
+      currentEndpoint,
+      currentInstance,
+      currentService,
+      destService,
+      destInstance,
+      destEndpoint,
+    } = params.rocketOption;
     const dashboard: string = `${window.localStorage.getItem('dashboard')}`;
     const tree = dashboard ? JSON.parse(dashboard) : context.state.tree;
     const normal = params.type ? true : tree[context.state.group].type === 'database' ? false : true;
-    let config = {} as any;
+    let config = null as any;
     const names = ['readSampledRecords', 'sortMetrics'];
 
     if (params.type === TopologyType.TOPOLOGY_ENDPOINT) {
-      const endpointComps: string = `${window.localStorage.getItem('topologyEndpoints')}`;
-      const topoEndpoint = endpointComps ? JSON.parse(endpointComps) : [];
-      config = topoEndpoint[params.index];
+      const endpointCompStr: string = `${window.localStorage.getItem('topologyEndpoints')}`;
+      const topoEndpoint = endpointCompStr ? JSON.parse(endpointCompStr) : {};
+      let endpointComps: any = [];
+      for (const type of params.templateType) {
+        const t: any = type;
+
+        endpointComps = [...endpointComps, ...topoEndpoint[t]];
+      }
+      config = endpointComps[params.index];
+      if (!config) {
+        return new Promise((resolve) => resolve({}));
+      }
     } else if (params.type === TopologyType.TOPOLOGY_INSTANCE) {
-      const instanceComps: string = `${window.localStorage.getItem('topologyInstances')}`;
-      const topoInstance = instanceComps ? JSON.parse(instanceComps) : [];
-      config = topoInstance[params.index];
+      const instanceCompStr: string = `${localStorage.getItem('topologyInstances')}`;
+      const topoInstance = instanceCompStr ? JSON.parse(instanceCompStr) : {};
+      let instanceComps: any[] = [];
+      for (const type of params.templateType) {
+        const t: any = type;
+
+        instanceComps = [...instanceComps, ...topoInstance[t]];
+      }
+      config = instanceComps[params.index];
+      if (!config) {
+        return new Promise((resolve) => resolve({}));
+      }
+    } else if (params.type === TopologyType.TOPOLOGY_SERVICE) {
+      const serviceCompsStr: string = `${window.localStorage.getItem('topologyServices')}`;
+      const topoService = serviceCompsStr ? JSON.parse(serviceCompsStr) : {};
+      let serviceComps: any[] = [];
+
+      for (const type of params.templateType) {
+        serviceComps = [...serviceComps, ...topoService[type]];
+      }
+      config = serviceComps[params.index];
+      if (!config) {
+        return new Promise((resolve) => resolve({}));
+      }
+    } else if (params.type === TopologyType.TOPOLOGY_SERVICE_DEPENDENCY) {
+      const serviceDependencyCompStr: string = `${window.localStorage.getItem('topologyServicesDependency')}`;
+      const topoServiceDependency = serviceDependencyCompStr ? JSON.parse(serviceDependencyCompStr) : {};
+      let serviceDependencyComps: any[] = [];
+
+      for (const type of params.templateType) {
+        serviceDependencyComps = [...serviceDependencyComps, ...topoServiceDependency[type][params.templateMode]];
+      }
+      config = serviceDependencyComps[params.index];
+    } else if (params.type === TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY) {
+      const serviceInstanceDependencyComps: string = `${localStorage.getItem('topologyServicesInstanceDependency')}`;
+      const topoServiceInstanceDependency = serviceInstanceDependencyComps
+        ? JSON.parse(serviceInstanceDependencyComps)
+        : {};
+      let instanceDependencyComps: any[] = [];
+
+      for (const type of params.templateType) {
+        instanceDependencyComps = [
+          ...instanceDependencyComps,
+          ...topoServiceInstanceDependency[type][params.templateMode],
+        ];
+      }
+      config = instanceDependencyComps[params.index];
+    } else if (params.type === TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY) {
+      const endpointDependencyCompStr: string = `${localStorage.getItem('topologyEndpointDependency')}`;
+      const topoEndpointDependency = JSON.parse(endpointDependencyCompStr || JSON.stringify({}));
+      let endpointDependencyComps: any[] = [];
+
+      for (const type of params.templateType) {
+        endpointDependencyComps = [...endpointDependencyComps, ...topoEndpointDependency[type]];
+      }
+      config = endpointDependencyComps[params.index];
     } else {
       config = tree[context.state.group].children[context.state.current].children[params.index];
     }
+
     if (!config) {
-      return;
+      return new Promise((resolve) => resolve([]));
     }
     if (!config.metricName) {
-      return;
+      return new Promise((resolve) => resolve([{ config }]));
     }
     // remove the space at the beginning and end of the string
     const metricNames = config.metricName.split(',').map((item: string) => item.replace(/^\s*|\s*$/g, ''));
@@ -68,6 +137,7 @@ const actions: ActionTree<State, any> = {
     const currentEndpointId = config.independentSelector ? config.currentEndpoint : currentEndpoint.label;
     const currentDatabaseId = config.independentSelector ? config.currentDatabase : currentDatabase.label;
     const labels = config.metricType === 'LABELED_VALUE' ? labelsIndex : undefined;
+    const isRelation = ['ServiceRelation', 'ServiceInstanceRelation', 'EndpointRelation'].includes(config.entityType);
     const variablesList = metricNames.map((name: string) => {
       let variables = {} as any;
 
@@ -80,7 +150,7 @@ const actions: ActionTree<State, any> = {
                 parentService: null,
                 normal: true,
                 scope: config.entityType,
-                topN: 10,
+                topN: Number(config.maxItemNum) || 10,
                 order: config.sortOrder || 'DES',
               },
             }
@@ -109,7 +179,7 @@ const actions: ActionTree<State, any> = {
               parentService: config.parentService ? parentService : null,
               normal,
               scope: normal ? config.entityType : config.parentService ? 'Service' : config.entityType,
-              topN: 10,
+              topN: Number(config.maxItemNum) || 10,
               order: config.sortOrder || 'DES',
             },
           };
@@ -131,13 +201,21 @@ const actions: ActionTree<State, any> = {
               entity: {
                 scope: normal ? config.entityType : 'Service',
                 serviceName,
-                serviceInstanceName: config.entityType === 'ServiceInstance' ? currentInstanceId : undefined,
-                endpointName: config.entityType === 'Endpoint' ? currentEndpointId : undefined,
+                serviceInstanceName: config.entityType.includes('ServiceInstance') ? currentInstanceId : undefined,
+                endpointName: config.entityType.includes('Endpoint') ? currentEndpointId : undefined,
                 normal,
-                // destNormal: normal,
-                // destServiceName: '',
-                // destServiceInstanceName: '',
-                // destEndpointName: '',
+                destNormal: isRelation ? normal : undefined,
+                destServiceName: isRelation ? destService.label : undefined,
+                destServiceInstanceName: isRelation
+                  ? config.entityType === 'ServiceInstanceRelation'
+                    ? destInstance.label
+                    : undefined
+                  : undefined,
+                destEndpointName: isRelation
+                  ? config.entityType === 'EndpointRelation'
+                    ? destEndpoint.label
+                    : undefined
+                  : undefined,
               },
             },
             labels,

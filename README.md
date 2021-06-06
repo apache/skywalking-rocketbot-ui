@@ -9,7 +9,7 @@ Apache SkyWalking Rocketbot UI
 
 # Contact Us
 * Submit an [issue](https://github.com/apache/skywalking/issues)
-* Mail list: **dev@skywalking.apache.org**. Mail to `dev-subscribe@skywalking.apache.org`, follow the reply to subscribe the mail list.
+* Mailing list: **dev@skywalking.apache.org**. Mail to `dev-subscribe@skywalking.apache.org`, follow the reply to subscribe the mailing list
 * Join `skywalking` channel at [Apache Slack](http://s.apache.org/slack-invite)
 * QQ Group: 392443393, 901167865
 

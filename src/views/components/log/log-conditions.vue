@@ -15,20 +15,21 @@ limitations under the License. -->
   <div class="rk-search-conditions flex-v">
     <div class="flex-h">
       <div class="mr-15" v-show="rocketLog.type.key === cateGoryService">
-        <span class="sm b grey mr-10">{{ this.$t('traceID') }}:</span>
+        <span class="sm b grey mr-10">{{ $t('traceID') }}:</span>
         <input
           type="text"
-          class="rk-trace-search-input dib"
+          class="rk-log-search-input dib"
+          v-model="traceId"
           @change="changeConditions($event, LogConditionsOpt.TraceID)"
         />
       </div>
       <div class="search-time">
-        <span class="sm b grey mr-5">{{ this.$t('timeRange') }}:</span>
+        <span class="sm b grey mr-5">{{ $t('timeRange') }}:</span>
         <RkDate class="sm" v-model="searchTime" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
       </div>
       <div class="mr-15" v-show="rocketLog.type.key === cateGoryService">
-        <span class="sm b grey mr-10">{{ this.$t('keywordsOfContent') }}:</span>
-        <span class="rk-trace-tags" v-show="rocketLog.supportQueryLogsByKeywords">
+        <span class="sm b grey mr-10">{{ $t('keywordsOfContent') }}:</span>
+        <span class="rk-log-tags" v-show="rocketLog.supportQueryLogsByKeywords">
           <span
             class="selected"
             v-for="(item, index) in rocketLog.conditions.keywordsOfContent"
@@ -41,21 +42,21 @@ limitations under the License. -->
         <input
           type="text"
           :disabled="!rocketLog.supportQueryLogsByKeywords"
-          class="rk-trace-search-input dib mr-5"
+          class="rk-log-search-input dib mr-5"
           v-model="keywordsOfContent"
           @keyup="addLabels($event, LogConditionsOpt.KeywordsOfContent)"
         />
         <span
           class="log-tips"
           v-show="!rocketLog.supportQueryLogsByKeywords"
-          v-tooltip:bottom="{ content: this.$t('keywordsOfContentLogTips') }"
+          v-tooltip:bottom="{ content: $t('keywordsOfContentLogTips') }"
         >
           <rk-icon icon="help" class="mr-5" />
         </span>
       </div>
       <div class="mr-15" v-show="rocketLog.type.key === cateGoryService">
-        <span class="sm b grey mr-10">{{ this.$t('excludingKeywordsOfContent') }}:</span>
-        <span class="rk-trace-tags" v-show="rocketLog.supportQueryLogsByKeywords">
+        <span class="sm b grey mr-10">{{ $t('excludingKeywordsOfContent') }}:</span>
+        <span class="rk-log-tags" v-show="rocketLog.supportQueryLogsByKeywords">
           <span
             class="selected"
             v-for="(item, index) in rocketLog.conditions.excludingKeywordsOfContent"
@@ -68,57 +69,33 @@ limitations under the License. -->
         <input
           type="text"
           :disabled="!rocketLog.supportQueryLogsByKeywords"
-          class="rk-trace-search-input dib mr-5"
+          class="rk-log-search-input dib mr-5"
           v-model="excludingKeywordsOfContent"
           @keyup="addLabels($event, LogConditionsOpt.ExcludingKeywordsOfContent)"
         />
         <span
           class="log-tips"
           v-show="!rocketLog.supportQueryLogsByKeywords"
-          v-tooltip:bottom="{ content: this.$t('keywordsOfContentLogTips') }"
+          v-tooltip:bottom="{ content: $t('keywordsOfContentLogTips') }"
         >
           <rk-icon icon="help" class="mr-5" />
         </span>
       </div>
     </div>
-    <div class="mr-10" style="padding-top: 10px" v-show="rocketLog.type.key === cateGoryService">
-      <span class="sm grey">{{ this.$t('tags') }}: </span>
-      <span class="rk-trace-tags">
-        <span class="selected" v-for="(item, index) in tagsList" :key="index">
-          <span>{{ item }}</span>
-          <span class="remove-icon" @click="removeTags(index)">×</span>
-        </span>
-      </span>
-      <input
-        type="text"
-        :placeholder="this.$t('addTag')"
-        v-model="tags"
-        class="rk-trace-new-tag"
-        @keyup="addLabels($event, LogConditionsOpt.Tags)"
-      />
-      <span class="log-tips" v-tooltip:bottom="{ content: this.$t('logsTagsTip') }">
-        <a
-          target="blank"
-          href="https://github.com/apache/skywalking/blob/master/docs/en/setup/backend/configuration-vocabulary.md"
-        >
-          {{ this.$t('tagsLink') }}
-        </a>
-        <rk-icon icon="help" class="mr-5" />
-      </span>
-    </div>
+    <ConditionTags :type="'LOG'" :clearTags="clearAllTags" @updateTags="updateTags" />
   </div>
 </template>
 
 <script lang="ts">
-  import { Duration, Option } from '@/types/global';
-  import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+  import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Mutation, State } from 'vuex-class';
   import { State as globalState } from '@/store/modules/global/index';
   import { State as logState } from '@/store/modules/log/index';
-  import dateFormatStep from '@/utils/dateFormatStep';
+  import dateFormatStep from '@/utils/dateFormat';
+  import { ConditionTags } from '../common/index';
 
   @Component({
-    components: {},
+    components: { ConditionTags },
   })
   export default class LogConditions extends Vue {
     @State('rocketbot') private rocketbotGlobal!: globalState;
@@ -129,9 +106,8 @@ limitations under the License. -->
     @Mutation('SET_EXCLUDING_KEYWORDS_CONTENT') private SET_EXCLUDING_KEYWORDS_CONTENT: any;
     private keywordsOfContent: string = '';
     private excludingKeywordsOfContent: string = '';
-    private tagsList: string[] = [];
-    private tags: string = '';
     private searchTime: Date[] = [];
+    private traceId: string = '';
     private LogConditionsOpt = {
       TraceID: 'traceId',
       Tags: 'tags',
@@ -140,10 +116,10 @@ limitations under the License. -->
       Date: 'date',
     };
     private cateGoryService = 'service';
+    private clearAllTags: boolean = false;
     private created() {
       this.searchTime = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
-      (this.tagsList = localStorage.getItem('logTags') ? JSON.parse(localStorage.getItem('logTags') || '') : []),
-        this.updateTags();
+      this.traceId = localStorage.getItem('logTraceId') || '';
     }
     private changeConditions(item: any, type: string) {
       item = {
@@ -151,12 +127,10 @@ limitations under the License. -->
         key: item.target.value,
       };
       this.SET_LOG_CONDITIONS(item);
+      localStorage.setItem('logTraceId', this.traceId);
     }
     private addLabels(event: KeyboardEvent, type: string) {
       if (event.keyCode !== 13) {
-        return;
-      }
-      if (type === this.LogConditionsOpt.Tags && !this.tags) {
         return;
       }
       if (type === this.LogConditionsOpt.KeywordsOfContent && !this.keywordsOfContent) {
@@ -165,11 +139,7 @@ limitations under the License. -->
       if (type === this.LogConditionsOpt.ExcludingKeywordsOfContent && !this.excludingKeywordsOfContent) {
         return;
       }
-      if (type === this.LogConditionsOpt.Tags) {
-        this.tagsList.push(this.tags);
-        this.tags = '';
-        this.updateTags();
-      } else if (type === this.LogConditionsOpt.KeywordsOfContent) {
+      if (type === this.LogConditionsOpt.KeywordsOfContent) {
         const keywordsOfContentList = this.rocketLog.conditions.keywordsOfContent || [];
         keywordsOfContentList.push(this.keywordsOfContent);
         this.SET_LOG_CONDITIONS({
@@ -209,24 +179,12 @@ limitations under the License. -->
       this.excludingKeywordsOfContent = '';
       this.updateContent(this.LogConditionsOpt.ExcludingKeywordsOfContent);
     }
-    private removeTags(index: number) {
-      this.tagsList.splice(index, 1);
-      this.updateTags();
-    }
-    private updateTags() {
-      const tagsMap = this.tagsList.map((item: string) => {
-        const key = item.substring(0, item.indexOf('='));
-
-        return {
-          key,
-          value: item.substring(item.indexOf('=') + 1, item.length),
-        };
-      });
+    private updateTags(data: { tagsMap: Array<{ key: string; value: string }>; tagsList: string[] }) {
       this.SET_LOG_CONDITIONS({
         label: this.LogConditionsOpt.Tags,
-        key: tagsMap,
+        key: data.tagsMap,
       });
-      localStorage.setItem('logTags', JSON.stringify(this.tagsList));
+      localStorage.setItem('logTags', JSON.stringify(data.tagsList));
     }
     private updateContent(type: string) {
       let list = [];
@@ -242,25 +200,22 @@ limitations under the License. -->
       localStorage.setItem(storageContent, JSON.stringify(list));
     }
     private globalTimeFormat(time: Date[]) {
-      let step = 'MINUTE';
-      const unix = Math.round(time[1].getTime()) - Math.round(time[0].getTime());
-      if (unix <= 60 * 60 * 1000) {
-        step = 'MINUTE';
-      } else if (unix <= 24 * 60 * 60 * 1000) {
-        step = 'HOUR';
-      } else {
-        step = 'DAY';
-      }
+      const step = 'SECOND';
+
       return {
         start: dateFormatStep(time[0], step, true),
         end: dateFormatStep(time[1], step, true),
         step,
       };
     }
-    @Watch('rocketLog.conditions.tags')
+    @Watch('rocketLog.conditions')
     private clearTags() {
       if (!this.rocketLog.conditions.tags) {
-        this.tagsList = [];
+        localStorage.removeItem('logTags');
+        this.clearAllTags = true;
+      }
+      if (!this.rocketLog.conditions.traceId) {
+        this.traceId = '';
       }
     }
     @Watch('searchTime')
@@ -282,7 +237,7 @@ limitations under the License. -->
   }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
   .rk-search-conditions {
     width: 100%;
     background-color: #484b55;
@@ -337,6 +292,30 @@ limitations under the License. -->
     }
     .search-time {
       color: #eee;
+    }
+
+    .rk-log-search-input {
+      border-style: unset;
+      outline: 0;
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+
+    .rk-log-tags {
+      padding: 1px 5px 0 0;
+      border-radius: 3px;
+      height: 24px;
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    .rk-log-new-tag {
+      border-style: unset;
+      outline: 0;
+      padding: 2px 5px;
+      border-radius: 3px;
+      width: 175px;
+      margin-right: 3px;
     }
   }
 </style>

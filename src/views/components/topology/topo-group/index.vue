@@ -37,13 +37,14 @@ limitations under the License. -->
   </div>
 </template>
 <script lang="ts">
-  import topo, { State as topoState } from '@/store/modules/topology';
-  import { Component, Vue, Watch } from 'vue-property-decorator';
+  import { State as topoState } from '@/store/modules/topology';
+  import { Component, Vue } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import { State as TopoGroupState } from '@/store/modules/topology/group';
   import CreateGroup from './create-group.vue';
   import GroupItem from './group-item.vue';
   import Axios, { AxiosResponse } from 'axios';
+  import { Option } from '@/types/global';
 
   @Component({
     components: {
@@ -98,7 +99,10 @@ limitations under the License. -->
           duration: this.durationTime,
         },
       }).then((res: AxiosResponse) => {
-        this.servicesMap = res.data.data.services ? res.data.data.services : [];
+        const map = res.data.data.services ? res.data.data.services : [];
+        this.servicesMap = map.sort((a: Option, b: Option) => {
+          return a.label.localeCompare(b.label);
+        });
       });
     }
     private initGroupTopo() {
@@ -130,6 +134,7 @@ limitations under the License. -->
     position: absolute;
     bottom: 10px;
     left: 10px;
+    z-index: 2;
     .rk-page {
       color: #eee;
     }

@@ -34,6 +34,7 @@ limitations under the License. -->
           backgroundColor: 'rgb(50,50,50)',
           textStyle: {
             fontSize: 13,
+            color: '#ccc',
           },
           formatter: (a: any) => a.data.tip,
         },
@@ -51,15 +52,11 @@ limitations under the License. -->
             data: this.data.nodes,
             links: this.data.calls,
             itemStyle: {
-              normal: {
-                borderWidth: 0,
-              },
+              borderWidth: 0,
             },
             lineStyle: {
-              normal: {
-                color: 'source',
-                opacity: 0.12,
-              },
+              color: 'source',
+              opacity: 0.12,
             },
           },
         ],
