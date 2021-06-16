@@ -25,7 +25,7 @@ limitations under the License. -->
       </div>
       <div class="search-time">
         <span class="sm b grey mr-5">{{ $t('timeRange') }}:</span>
-        <RkDate class="sm" v-model="searchTime" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
+        <RkDate class="sm" v-model="searchTime" position="left" format="YYYY-MM-DD HH:mm:ss" />
       </div>
       <div class="mr-15" v-show="rocketLog.type.key === cateGoryService">
         <span class="sm b grey mr-10">{{ $t('keywordsOfContent') }}:</span>

@@ -37,7 +37,7 @@ limitations under the License. -->
     <transition name="datepicker-anim">
       <div
         class="datepicker-popup"
-        :class="[popupClass, { 'datepicker-inline': type === 'inline' }, position === 'top' ? 'top' : 'bottom']"
+        :class="[popupClass, { 'datepicker-inline': type === 'inline' }, position]"
         tabindex="-1"
         v-if="show || type === 'inline'"
       >
@@ -368,7 +368,7 @@ limitations under the License. -->
   }
 
   .datepicker-popup {
-    right: 0px;
+    // right: 0px;
     border-radius: 4px;
     position: absolute;
     transition: all 200ms ease;
@@ -383,11 +383,23 @@ limitations under the License. -->
     overflow: hidden;
     z-index: 999;
     &.top {
-      bottom: 35px;
+      bottom: 30px;
+      right: 0;
       transform-origin: center bottom;
     }
     &.bottom {
-      top: 35px;
+      top: 30px;
+      right: 0;
+      transform-origin: center top;
+    }
+    &.left {
+      left: -80px;
+      top: 30px;
+      transform-origin: center top;
+    }
+    &.right {
+      right: 0;
+      top: 30px;
       transform-origin: center top;
     }
     &__sidebar {
