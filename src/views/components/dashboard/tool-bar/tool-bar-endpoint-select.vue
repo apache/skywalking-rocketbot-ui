@@ -54,8 +54,8 @@ limitations under the License. -->
         <EndpointOpt
           @handleSelect="handleSelect"
           :class="{ active: i.key === current.key }"
-          v-for="i in filterData"
-          :key="i.key"
+          v-for="(i, index) in filterData"
+          :key="i.key + index"
           :data="i"
         />
       </div>
@@ -67,11 +67,12 @@ limitations under the License. -->
   import { Vue, Component, Prop } from 'vue-property-decorator';
   import { Action } from 'vuex-class';
   import EndpointOpt from './tool-bar-endpoint-select-opt.vue';
+  import { Option } from '@/types/global';
   @Component({ components: { EndpointOpt } })
   export default class ToolBarEndpointSelect extends Vue {
     @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
-    @Prop() private data!: any;
-    @Prop() private current!: any;
+    @Prop() private data!: Option[];
+    @Prop() private current!: Option;
     @Prop() private title!: string;
     @Prop() private icon!: string;
     @Prop() private currentService: any;
@@ -79,7 +80,7 @@ limitations under the License. -->
     private visible: boolean = false;
 
     get filterData() {
-      return this.data.filter((i: any) => i.label.toUpperCase().indexOf(this.search.toUpperCase()) !== -1);
+      return this.data.filter((i: Option) => i.label.toUpperCase().includes(this.search.toUpperCase()));
     }
     private handleOpen() {
       this.visible = true;
