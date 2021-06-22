@@ -46,8 +46,8 @@ limitations under the License. -->
           class="rk-topo-opt ell"
           @click="handleSelect(i)"
           :class="{ active: i.key === current.key }"
-          v-for="i in filterData"
-          :key="i.key"
+          v-for="(i, index) in filterData"
+          :key="i.key + index"
         >
           {{ i.label }}
         </div>
@@ -58,16 +58,17 @@ limitations under the License. -->
 
 <script lang="ts">
   import { Vue, Component, Prop } from 'vue-property-decorator';
+  import { Option } from '@/types/global';
   @Component
   export default class TopoSelect extends Vue {
-    @Prop() public data!: any;
-    @Prop() public current!: any;
+    @Prop() public data!: Option[];
+    @Prop() public current!: Option;
     @Prop() public title!: string;
     @Prop() public icon!: string;
     public search: string = '';
     public visible: boolean = false;
     get filterData() {
-      return this.data.filter((i: any) => i.label.toUpperCase().indexOf(this.search.toUpperCase()) !== -1);
+      return this.data.filter((i: Option) => i.label.toUpperCase().includes(this.search.toUpperCase()));
     }
     public handleOpen() {
       this.visible = true;
