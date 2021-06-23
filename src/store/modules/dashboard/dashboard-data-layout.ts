@@ -18,6 +18,7 @@
 import { MutationTree } from 'vuex';
 import { CompsTree } from '@/types/dashboard';
 import * as types from './mutation-types';
+import { DASHBOARDTYPE } from '@/views/components/dashboard/constant';
 export interface State {
   current: number;
   group: number;
@@ -117,12 +118,13 @@ const mutations: MutationTree<State> = {
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
   },
   [types.ADD_COMP](state: State) {
+    const type = state.tree[state.group].type;
     const comp = {
       width: 3,
       title: 'Title',
       height: 350,
       entityType: 'Service',
-      independentSelector: true,
+      independentSelector: type === DASHBOARDTYPE.METRIC ? true : false,
       metricType: 'UNKNOWN',
     };
     state.tree[state.group].children[state.current].children.push(comp);

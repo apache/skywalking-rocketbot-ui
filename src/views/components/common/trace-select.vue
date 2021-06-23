@@ -52,8 +52,8 @@ limitations under the License. -->
           class="rk-trace-opt ell"
           @click="handleSelect(i)"
           :class="{ active: i.key === value.key }"
-          v-for="i in filterData"
-          :key="i.key"
+          v-for="(i, index) in filterData"
+          :key="i.key + index"
         >
           {{ i.label }}
         </div>
@@ -64,10 +64,11 @@ limitations under the License. -->
 
 <script lang="ts">
   import { Vue, Component, Prop } from 'vue-property-decorator';
+  import { Option } from '@/types/global';
   @Component
   export default class TraceSelect extends Vue {
-    @Prop() public data!: any;
-    @Prop() public value!: any;
+    @Prop() public data!: Option[];
+    @Prop() public value!: Option;
     @Prop() public title!: string;
     @Prop({ default: false }) public hasSearch!: boolean;
     @Prop({ default: false })
@@ -75,7 +76,7 @@ limitations under the License. -->
     public search: string = '';
     public visible: boolean = false;
     get filterData() {
-      return this.data.filter((i: any) => i.label.toUpperCase().indexOf(this.search.toUpperCase()) !== -1);
+      return this.data.filter((i: Option) => i.label.toUpperCase().includes(this.search.toUpperCase()));
     }
     public handleSelect(i: any) {
       this.$emit('input', i);
