@@ -26,10 +26,10 @@ export default class TraceUtil {
 
   public static changeTree(data: Span[], cureentTraceId: string) {
     const segmentIdList: Span[] = [];
-    const traceTreeRef = this.changeTreeCore(data, cureentTraceId);
+    const traceTreeRef: any = this.changeTreeCore(data, cureentTraceId);
     traceTreeRef.segmentIdGroup.forEach((segmentId: string) => {
-      if (traceTreeRef.segmentMap.get(segmentId)!.refs) {
-        traceTreeRef.segmentMap.get(segmentId)!.refs.forEach((ref: Ref) => {
+      if (traceTreeRef.segmentMap.get(segmentId).refs) {
+        traceTreeRef.segmentMap.get(segmentId).refs.forEach((ref: Ref) => {
           if (ref.traceId === cureentTraceId) {
             this.traverseTree(
               traceTreeRef.segmentMap.get(ref.parentSegmentId) as Span,
@@ -42,7 +42,7 @@ export default class TraceUtil {
       }
     });
     // set a breakpoint at this line
-    traceTreeRef.segmentMap.forEach((value) => {
+    traceTreeRef.segmentMap.forEach((value: Span) => {
       if ((value.refs && value.refs.length === 0) || !value.refs) {
         segmentIdList.push(value as Span);
       }
