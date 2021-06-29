@@ -729,7 +729,7 @@ const actions: ActionTree<State, any> = {
     });
     const querys = `query queryData(${variables}) {${fragment}}`;
     return axios
-      .post('/graphql', { query: querys, variables: { duration: params.duration } }, { cancelToken: cancelToken() })
+      .post('./graphql', { query: querys, variables: { duration: params.duration } }, { cancelToken: cancelToken() })
       .then((res: AxiosResponse) => {
         if (res.data.errors) {
           context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });
@@ -792,7 +792,7 @@ const actions: ActionTree<State, any> = {
           .join(' ');
         const query = `query queryData(${queryVariables}) {${fragments}}`;
         return axios
-          .post('/graphql', { query, variables: { duration: params.duration } }, { cancelToken: cancelToken() })
+          .post('./graphql', { query, variables: { duration: params.duration } }, { cancelToken: cancelToken() })
           .then((json: AxiosResponse<any>) => {
             if (json.data.errors) {
               context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });
