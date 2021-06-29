@@ -43,8 +43,7 @@ limitations under the License. -->
   import TraceContainer from './trace-chart-table/trace-container';
   import TraceUtil from '../trace/trace-util';
   import TraceSpanLogs from '../trace/trace-span-logs.vue';
-  /* eslint-disable */
-  /* tslint:disable */
+
   export default {
     components: {
       TraceContainer,
@@ -57,7 +56,7 @@ limitations under the License. -->
           this.tableData = [];
           return;
         }
-        this.tableData = this.formatData(TraceUtil.changeTree(this.data,this.traceId));
+        this.tableData = this.formatData(TraceUtil.changeTree(this.data, this.traceId));
         this.loading = false;
       },
     },
@@ -96,7 +95,7 @@ limitations under the License. -->
       showCurrentSpanDetail(title, text) {
         const textLineNumber = text.split('\n').length;
         let textHeight = textLineNumber * 20.2 + 10;
-        const tmpHeight = window.innerHeight * 0.9
+        const tmpHeight = window.innerHeight * 0.9;
         textHeight = textHeight >= tmpHeight ? tmpHeight : textHeight;
         this.$modal.show('dialog', {
           title,
@@ -112,21 +111,21 @@ limitations under the License. -->
               title: 'Close',
             },
           ],
-        })
+        });
       },
       handleViewSpan(data) {
         this.showDetail = true;
-      }
+      },
     },
     created() {
       this.loading = true;
     },
     mounted() {
-      this.tableData = this.formatData(TraceUtil.changeTree(this.data,this.traceId));
+      this.tableData = this.formatData(TraceUtil.changeTree(this.data, this.traceId));
       this.loading = false;
       this.$eventBus.$on('HANDLE-SELECT-SPAN', this, this.handleSelectSpan);
       this.$eventBus.$on('HANDLE-VIEW-SPAN', this, this.handleViewSpan);
-      this.$eventBus.$on('TRACE-TABLE-LOADING', this, ()=>{ this.loading = true });
+      this.$eventBus.$on('TRACE-TABLE-LOADING', this, () => { this.loading = true; });
     },
   };
 </script>

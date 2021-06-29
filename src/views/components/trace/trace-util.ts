@@ -26,24 +26,28 @@ export default class TraceUtil {
 
   public static changeTree(data: Span[], cureentTraceId: string) {
     const segmentIdList: Span[] = [];
-    const traceTreeRef = this.changeTreeCore(data, cureentTraceId);
-    traceTreeRef.segmentIdGroup.forEach( (segmentId: string) => {
-      if (traceTreeRef.segmentMap.get(segmentId)!.refs) {
-        traceTreeRef.segmentMap.get(segmentId)!.refs.forEach( (ref: Ref) => {
+    const traceTreeRef: any = this.changeTreeCore(data, cureentTraceId);
+    traceTreeRef.segmentIdGroup.forEach((segmentId: string) => {
+      if (traceTreeRef.segmentMap.get(segmentId).refs) {
+        traceTreeRef.segmentMap.get(segmentId).refs.forEach((ref: Ref) => {
           if (ref.traceId === cureentTraceId) {
-            this.traverseTree(traceTreeRef.segmentMap.get(ref.parentSegmentId) as Span,
-            ref.parentSpanId, ref.parentSegmentId, traceTreeRef.segmentMap.get(segmentId) as Span);
+            this.traverseTree(
+              traceTreeRef.segmentMap.get(ref.parentSegmentId) as Span,
+              ref.parentSpanId,
+              ref.parentSegmentId,
+              traceTreeRef.segmentMap.get(segmentId) as Span,
+            );
           }
         });
       }
     });
     // set a breakpoint at this line
-    traceTreeRef.segmentMap.forEach((value , key) => {
-      if ( value!.refs.length === 0 ) {
+    traceTreeRef.segmentMap.forEach((value: Span) => {
+      if ((value.refs && value.refs.length === 0) || !value.refs) {
         segmentIdList.push(value as Span);
       }
     });
-    segmentIdList.forEach( (segmentId: Span) => {
+    segmentIdList.forEach((segmentId: Span) => {
       this.collapse(segmentId);
     });
     return segmentIdList;
@@ -54,11 +58,11 @@ export default class TraceUtil {
     const traceTreeRef = this.changeTreeCore(data, cureentTraceId);
     traceTreeRef.segmentMap.forEach((span, segmentId) => {
       const groupRef = span.endpointName + ':' + span.type;
-      if ( span.children && span.children.length > 0 ) {
+      if (span.children && span.children.length > 0) {
         this.calculationChildren(span.children, result);
         this.collapse(span);
       }
-      if (result.get(groupRef) === undefined ) {
+      if (result.get(groupRef) === undefined) {
         result.set(groupRef, []);
         result.get(groupRef)!.push(span);
       } else {
@@ -76,17 +80,17 @@ export default class TraceUtil {
         segmentIdGroup: [],
       };
     }
-    const tempMap: Map<string, Span[]> = new Map();
+    const segmentGroup: any = {};
     const segmentMap: Map<string, Span> = new Map();
     const segmentIdGroup: string[] = [];
     const fixSpans: Span[] = [];
     const segmentHeaders: Span[] = [];
     data.forEach((span) => {
       if (span.parentSpanId === -1) {
-          segmentHeaders.push(span);
+        segmentHeaders.push(span);
       } else {
-        const index = data.findIndex( (patchSpan: Span) => {
-          return (patchSpan.segmentId === span.segmentId && patchSpan.spanId === (span.spanId - 1));
+        const index = data.findIndex((patchSpan: Span) => {
+          return patchSpan.segmentId === span.segmentId && patchSpan.spanId === span.spanId - 1;
         });
         const fixSpanKeyContent = {
           traceId: span.traceId,
@@ -94,34 +98,31 @@ export default class TraceUtil {
           spanId: span.spanId - 1,
           parentSpanId: span.spanId - 2,
         };
-        if (index === -1 &&  !lodash.find(fixSpans, fixSpanKeyContent) ) {
-          fixSpans.push(
-            {
-              ...fixSpanKeyContent,
-              refs: [],
-              endpointName: `VNode: ${span.segmentId}`,
-              serviceCode: 'VirtualNode',
-              type: `[Broken] ${span.type}`,
-              peer: '',
-              component: `VirtualNode: #${span.spanId - 1}`,
-              isError: true,
-              isBroken: true,
-              layer: 'Broken',
-              tags: [],
-              logs: [],
-              startTime: 0,
-              endTime: 0,
-            },
-          );
+        if (index === -1 && !lodash.find(fixSpans, fixSpanKeyContent)) {
+          fixSpans.push({
+            ...fixSpanKeyContent,
+            refs: [],
+            endpointName: `VNode: ${span.segmentId}`,
+            serviceCode: 'VirtualNode',
+            type: `[Broken] ${span.type}`,
+            peer: '',
+            component: `VirtualNode: #${span.spanId - 1}`,
+            isError: true,
+            isBroken: true,
+            layer: 'Broken',
+            tags: [],
+            logs: [],
+            startTime: 0,
+            endTime: 0,
+          });
         }
       }
     });
     segmentHeaders.forEach((span) => {
       if (span.refs && span.refs.length) {
         span.refs.forEach((ref) => {
-          const index = data.findIndex(
-            (patchSpan: Span) => {
-              return (ref.parentSegmentId === patchSpan.segmentId && ref.parentSpanId === patchSpan.spanId);
+          const index = data.findIndex((patchSpan: Span) => {
+            return ref.parentSegmentId === patchSpan.segmentId && ref.parentSpanId === patchSpan.spanId;
           });
           if (index === -1) {
             // create a known broken node.
@@ -159,62 +160,73 @@ export default class TraceUtil {
                 parentSpanId: -1,
               };
               if (lodash.find(fixSpans, fixRootSpanKeyContent)) {
-                fixSpans.push(
-                  {
-                    ...fixRootSpanKeyContent,
-                    refs: [],
-                    endpointName: `VNode: ${ref.parentSegmentId}`,
-                    serviceCode: 'VirtualNode',
-                    type: `[Broken] ${ref.type}`,
-                    peer: '',
-                    component: `VirtualNode: #0`,
-                    isError: true,
-                    isBroken: true,
-                    layer: 'Broken',
-                    tags: [],
-                    logs: [],
-                    startTime: 0,
-                    endTime: 0,
-                  });
+                fixSpans.push({
+                  ...fixRootSpanKeyContent,
+                  refs: [],
+                  endpointName: `VNode: ${ref.parentSegmentId}`,
+                  serviceCode: 'VirtualNode',
+                  type: `[Broken] ${ref.type}`,
+                  peer: '',
+                  component: `VirtualNode: #0`,
+                  isError: true,
+                  isBroken: true,
+                  layer: 'Broken',
+                  tags: [],
+                  logs: [],
+                  startTime: 0,
+                  endTime: 0,
+                });
               }
             }
           }
         });
       }
     });
-    [...fixSpans, ...data].forEach( (fixSpan: Span) => {
+    [...fixSpans, ...data].forEach((fixSpan: Span) => {
       fixSpan.label = fixSpan.endpointName || 'no operation name';
       fixSpan.children = [];
-      if (tempMap.get(fixSpan.segmentId) === undefined ) {
-        segmentIdGroup.push(fixSpan.segmentId);
-        tempMap.set(fixSpan.segmentId, []);
-        tempMap.get(fixSpan.segmentId)!.push(fixSpan);
+      const id = fixSpan.segmentId || 'top';
+      if (segmentGroup[id] === undefined) {
+        segmentIdGroup.push(id);
+        segmentGroup[id] = [];
+        segmentGroup[id].push(fixSpan);
       } else {
-        tempMap.get(fixSpan.segmentId)!.push(fixSpan);
+        segmentGroup[id].push(fixSpan);
       }
     });
-    segmentIdGroup.forEach( (segmentId: string) => {
-      const currentSegmentSet = tempMap.get(segmentId)!.sort((a, b) => b.parentSpanId - a.parentSpanId);
-      currentSegmentSet.forEach( ( curSegment: Span ) => {
+
+    segmentIdGroup.forEach((segmentId: string) => {
+      const currentSegmentSet = segmentGroup[segmentId].sort((a: Span, b: Span) => b.parentSpanId - a.parentSpanId);
+      currentSegmentSet.forEach((curSegment: Span) => {
         const index = currentSegmentSet.findIndex(
-          (curSegment2: Span) => curSegment2.spanId === curSegment.parentSpanId );
+          (curSegment2: Span) => curSegment2.spanId === curSegment.parentSpanId,
+        );
         if (index !== -1) {
-          if ((currentSegmentSet[index].isBroken && currentSegmentSet[index].parentSpanId === -1)
-            || !currentSegmentSet[index].isBroken) {
-              currentSegmentSet[index].children!.push(curSegment);
-              currentSegmentSet[index].children!.sort((a, b) => a.spanId - b.spanId);
+          if (
+            (currentSegmentSet[index].isBroken && currentSegmentSet[index].parentSpanId === -1) ||
+            !currentSegmentSet[index].isBroken
+          ) {
+            currentSegmentSet[index].children.push(curSegment);
+            currentSegmentSet[index].children.sort((a: Span, b: Span) => a.spanId - b.spanId);
           }
         }
         if (curSegment.isBroken) {
           const children = lodash.filter(data, (span: Span) => {
-            return lodash.find(span.refs,
-              {traceId: curSegment.traceId, parentSegmentId: curSegment.segmentId, parentSpanId: curSegment.spanId});
+            return lodash.find(span.refs, {
+              traceId: curSegment.traceId,
+              parentSegmentId: curSegment.segmentId,
+              parentSpanId: curSegment.spanId,
+            });
           }) as Span[];
-          curSegment.children!.concat(children);
+          if (children.length) {
+            curSegment.children = curSegment.children || [];
+            curSegment.children.push(...children);
+          }
         }
       });
       segmentMap.set(segmentId, currentSegmentSet[currentSegmentSet.length - 1]);
     });
+
     return {
       segmentMap,
       segmentIdGroup,
@@ -225,7 +237,7 @@ export default class TraceUtil {
     if (span.children) {
       let dur = span.endTime - span.startTime;
       span.children.forEach((chlid: Span) => {
-        dur -= (chlid.endTime - chlid.startTime);
+        dur -= chlid.endTime - chlid.startTime;
       });
       span.dur = dur < 0 ? 0 : dur;
       span.children.forEach((chlid) => this.collapse(chlid));
@@ -252,9 +264,9 @@ export default class TraceUtil {
     let minTime = 0;
     let sumTime = 0;
     const count = groupspans.length;
-    groupspans.forEach( (groupspan: Span) => {
+    groupspans.forEach((groupspan: Span) => {
       const duration = groupspan.dur || 0;
-      if ( duration > maxTime) {
+      if (duration > maxTime) {
         maxTime = duration;
       }
       if (duration < minTime) {
@@ -262,7 +274,7 @@ export default class TraceUtil {
       }
       sumTime = sumTime + duration;
     });
-    const avgTime = count === 0 ? 0 : (sumTime / count);
+    const avgTime = count === 0 ? 0 : sumTime / count;
     return {
       groupRef,
       maxTime,
@@ -273,13 +285,13 @@ export default class TraceUtil {
     };
   }
 
-  private static calculationChildren(nodes: Span[], result: Map<string, Span[]>): void  {
-    nodes.forEach( (node: Span) => {
+  private static calculationChildren(nodes: Span[], result: Map<string, Span[]>): void {
+    nodes.forEach((node: Span) => {
       const groupRef = node.endpointName + ':' + node.type;
-      if ( node.children && node.children.length > 0 ) {
+      if (node.children && node.children.length > 0) {
         this.calculationChildren(node.children, result);
       }
-      if (result.get(groupRef) === undefined ) {
+      if (result.get(groupRef) === undefined) {
         result.set(groupRef, []);
         result.get(groupRef)!.push(node);
       } else {
@@ -288,5 +300,3 @@ export default class TraceUtil {
     });
   }
 }
-
-
