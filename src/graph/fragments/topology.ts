@@ -157,7 +157,7 @@ export const TopoServiceMetric = {
     }
   }
   latencyS: getValues(metric: {
-    name: "service_relation_client_resp_time"
+    name: "service_relation_server_resp_time"
     ids: $idsS
   }, duration: $duration) {
     values {
