@@ -24,9 +24,7 @@ limitations under the License. -->
     :class="{ active: visible, cp: selectable, cd: !selectable }"
   >
     <div class="rk-dashboard-bar-i flex-h" @click="selectable && (visible = !visible)">
-      <svg class="icon lg mr-15">
-        <use :xlink:href="`#${icon}`"></use>
-      </svg>
+      <rk-icon :icon="`${icon}`" class="icon lg mr-15" />
       <div class="mr-15 rk-dashboard-bar-i-text">
         <div class="sm grey">{{ title }}</div>
         <div class="selector-ell" v-tooltip:right.ellipsis="current.label || ''">

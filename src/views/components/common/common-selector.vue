@@ -24,6 +24,7 @@ limitations under the License. -->
     :class="{ active: visible }"
   >
     <div class="rk-common-bar-i flex-h" @click="visible = !visible">
+      <rk-icon :icon="`${icon}`" class="icon lg mr-15" />
       <div class="mr-15 rk-common-bar-i-text">
         <div class="sm grey">{{ title }}</div>
         <div class="ell" v-tooltip:right.ellipsis="value.label || ''">
@@ -64,6 +65,7 @@ limitations under the License. -->
     @Prop() public value!: any;
     @Prop() public title!: string;
     @Prop({ default: false }) public hasSearch!: boolean;
+    @Prop() private icon!: string;
     public search: string = '';
     public visible: boolean = false;
     get filterData() {

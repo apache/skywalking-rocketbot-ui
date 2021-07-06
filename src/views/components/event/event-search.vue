@@ -17,24 +17,27 @@ limitations under the License. -->
     <div class="flex-h event-selector">
       <CommonSelector
         :hasSearch="true"
-        :title="$t('service')"
+        :title="$t('currentService')"
         @input="selectService"
         :value="rocketOption.currentService"
         :data="rocketOption.services"
+        icon="package"
       />
       <CommonSelector
         :hasSearch="true"
-        :title="$t('instance')"
+        :title="$t('currentInstance')"
         :value="rocketOption.currentInstance"
         :data="rocketOption.instances"
         @input="selectInstance"
+        icon="disk"
       />
       <CommonSelector
         :hasSearch="true"
-        :title="$t('endpoint')"
+        :title="$t('currentEndpoint')"
         @input="selectEndpoint"
         :value="rocketOption.currentEndpoint"
         :data="rocketOption.endpoints"
+        icon="code"
       />
       <CommonSelector
         :title="$t('eventsType')"
@@ -45,6 +48,7 @@ limitations under the License. -->
           { label: 'Normal', key: 'Normal' },
           { label: 'Error', key: 'ERROR' },
         ]"
+        icon="equalizer"
       />
     </div>
     <div class="flex-h rk-right">
