@@ -22,7 +22,6 @@ limitations under the License. -->
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
-  import { State } from 'vuex-class';
   import EventSearch from '../components/event/event-search.vue';
   import EventTimeline from '../components/event/event-timeline.vue';
 

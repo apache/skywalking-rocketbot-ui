@@ -71,7 +71,7 @@ limitations under the License. -->
 <script lang="ts">
   import Vue from 'vue';
   import { Component } from 'vue-property-decorator';
-  import { Action, Getter, State } from 'vuex-class';
+  import { State } from 'vuex-class';
   import { State as EventState } from '@/store/modules/event';
   import { Event } from '@/types/dashboard';
   import { EventsDetailKeys } from '../common/constant';
@@ -80,14 +80,18 @@ limitations under the License. -->
   export default class EventTimeline extends Vue {
     @State('rocketEvent') private rocketEvent!: EventState;
     private showDetails: boolean = false;
-    private currentEvent: Event = {
+    private currentEvent: any = {
       startTime: 0,
       endTime: 0,
       message: '',
       name: '',
       type: '',
       uuid: '',
-      source: {},
+      source: {
+        service: '',
+        endpoint: '',
+        serviceInstance: '',
+      },
     };
     private eventsDetailKeys = EventsDetailKeys;
 

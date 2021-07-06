@@ -41,7 +41,7 @@ limitations under the License. -->
         :value="eventType"
         @input="chooseStatus"
         :data="[
-          { label: 'All', key: 'All' },
+          { label: 'All', key: '' },
           { label: 'Normal', key: 'Normal' },
           { label: 'Error', key: 'ERROR' },
         ]"
@@ -60,7 +60,7 @@ limitations under the License. -->
 <script lang="ts">
   import Vue from 'vue';
   import { Component } from 'vue-property-decorator';
-  import { Action, Getter, State } from 'vuex-class';
+  import { Action, Getter, State, Mutation } from 'vuex-class';
   import { Option, DurationTime } from '@/types/global';
   import { CommonSelector } from '../common/index';
   import { State as optionState } from '@/store/modules/global/selectors';
@@ -73,12 +73,13 @@ limitations under the License. -->
     @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Getter('durationTime') private durationTime!: DurationTime;
+    @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @State('rocketOption') private rocketOption!: optionState;
     @State('rocketEvent') private rocketEvent!: EventState;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('FETCH_EVENTS') private FETCH_EVENTS: any;
 
-    private eventType: Option = { label: 'All', key: 'All' };
+    private eventType: Option = { label: 'All', key: '' };
     private pageSize: number = 20;
     private pageNum: number = 1;
 
@@ -90,6 +91,11 @@ limitations under the License. -->
       }).then(() => {
         this.queryEvents();
       });
+      this.SET_EVENTS([
+        () => {
+          this.queryEvents();
+        },
+      ]);
     }
 
     private selectService(i: { key: string; label: string }) {
@@ -113,14 +119,23 @@ limitations under the License. -->
     }
 
     private queryEvents() {
+      const { currentService, currentEndpoint, currentInstance } = this.rocketOption;
+
       this.FETCH_EVENTS({
         condition: {
           time: this.durationTime,
           size: this.pageSize,
-          source: {},
-          type: this.eventType.key !== 'All' ? this.eventType.key : undefined,
+          source: {
+            service: currentService.key ? currentService.label : '',
+            endpoint: currentEndpoint.key ? currentEndpoint.label : '',
+            serviceInstance: currentInstance.key ? currentInstance.label : '',
+          },
+          type: this.eventType.key || undefined,
         },
       });
+    }
+    private beforeDestroy() {
+      this.SET_EVENTS([]);
     }
   }
 </script>
