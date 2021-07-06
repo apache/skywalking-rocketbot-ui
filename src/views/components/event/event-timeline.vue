@@ -18,7 +18,7 @@ limitations under the License. -->
     <div
       v-for="(i, index) in rocketEvent.currentEvents"
       :key="index"
-      class="mb-10 clear event-item"
+      class="mb-10 clear timeline-item"
       @click="showEventDetails(i)"
     >
       <div class="g-sm-3 grey sm hide-xs rk-time-line tr">
@@ -43,6 +43,29 @@ limitations under the License. -->
         </div>
       </div>
     </div>
+    <rk-sidebox :width="'90%'" :show.sync="showDetails" :title="$t('eventDetail')">
+      <div class="event-detail">
+        <div class="mb-10 rk-flex" v-for="(eventKey, index) in eventsDetailKeys" :key="index">
+          <span class="keys">{{ $t(eventKey.text) }}</span>
+          <span v-if="eventKey.class === 'parameters'">
+            <span v-for="(d, index) of currentEvent[d.class]" :key="index">{{ d.key }}={{ d.value }}; </span>
+          </span>
+          <span v-else-if="eventKey.class === 'startTime' || eventKey.class === 'endTime'">{{
+            currentEvent[eventKey.class] | dateformat
+          }}</span>
+          <span v-else-if="eventKey.class === 'source'" class="source">
+            <div>{{ $t('currentService') }}: {{ currentEvent[eventKey.class].service }}</div>
+            <div v-show="currentEvent[eventKey.class].endpoint">
+              {{ $t('currentEndpoint') }}: {{ currentEvent[eventKey.class].endpoint }}
+            </div>
+            <div v-show="currentEvent[eventKey.class].serviceInstance">
+              {{ $t('currentInstance') }}: {{ currentEvent[eventKey.class].serviceInstance }}
+            </div>
+          </span>
+          <span v-else>{{ currentEvent[eventKey.class] }}</span>
+        </div>
+      </div>
+    </rk-sidebox>
   </div>
 </template>
 <script lang="ts">
@@ -51,17 +74,29 @@ limitations under the License. -->
   import { Action, Getter, State } from 'vuex-class';
   import { State as EventState } from '@/store/modules/event';
   import { Event } from '@/types/dashboard';
+  import { EventsDetailKeys } from '../common/constant';
 
   @Component({ components: {} })
   export default class EventTimeline extends Vue {
     @State('rocketEvent') private rocketEvent!: EventState;
+    private showDetails: boolean = false;
+    private currentEvent: Event = {
+      startTime: 0,
+      endTime: 0,
+      message: '',
+      name: '',
+      type: '',
+      uuid: '',
+      source: {},
+    };
+    private eventsDetailKeys = EventsDetailKeys;
 
-    private showEventDetails(item: Event) {}
+    private showEventDetails(item: Event) {
+      this.showDetails = true;
+      this.currentEvent = item;
+    }
   }
 </script>
 <style lang="scss" scoped>
   @import '../common/index.scss';
-  .event-item {
-    cursor: pointer;
-  }
 </style>

@@ -3,6 +3,34 @@
   flex-grow: 1;
   overflow: auto;
   height: 100%;
+  ul {
+    min-height: 100px;
+    overflow: auto;
+    margin-bottom: 20px;
+  }
+  li {
+    cursor: pointer;
+    > span {
+      width: 160px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+      display: inline-block;
+      border-bottom: 1px solid #ccc;
+      overflow: hidden;
+    }
+    .uuid {
+      width: 280px;
+    }
+  }
+  .keys {
+    font-weight: bold;
+    display: inline-block;
+    width: 120px;
+  }
+  .source > div {
+    padding-left: 120px;
+  }
 }
 .rk-time-line {
   padding: 14px 30px;
@@ -42,4 +70,7 @@
   border: 1px solid;
   margin-top: -1px;
   border-radius: 4px;
+}
+.timeline-item {
+  cursor: pointer;
 }

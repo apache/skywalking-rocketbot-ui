@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div class="rk-timeline-table clear">
-    <div v-for="(i, index) in data" :key="index" class="mb-10 clear alarm-item" @click="showDetails(i)">
+    <div v-for="(i, index) in data" :key="index" class="mb-10 clear timeline-item" @click="showDetails(i)">
       <div class="g-sm-3 grey sm hide-xs rk-time-line tr">
         {{ parseInt(i.startTime) | dateformat }}
       </div>
@@ -100,7 +100,8 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import { Alarm, Event } from '@/types/alarm';
-  import { EventsDetailHeaders, AlarmDetailCol, AlarmEventsDetailKeys } from './constant';
+  import { EventsDetailHeaders, AlarmDetailCol } from './constant';
+  import { EventsDetailKeys } from '../common/constant';
 
   @Component
   export default class AlarmTable extends Vue {
@@ -118,7 +119,7 @@ limitations under the License. -->
     private alarmTags: string[] = [];
     private AlarmDetailCol = AlarmDetailCol;
     private eventsHeaders = EventsDetailHeaders;
-    private eventsDetailKeys = AlarmEventsDetailKeys;
+    private eventsDetailKeys = EventsDetailKeys;
     private currentEvents: Event[] = [];
     private currentEvent: Event = {
       startTime: 0,
@@ -148,35 +149,4 @@ limitations under the License. -->
 
 <style lang="scss" scoped>
   @import '../common/index.scss';
-  .alarm-item {
-    cursor: pointer;
-  }
-  ul {
-    min-height: 100px;
-    overflow: auto;
-    margin-bottom: 20px;
-  }
-  li {
-    cursor: pointer;
-    > span {
-      width: 160px;
-      height: 20px;
-      line-height: 20px;
-      text-align: center;
-      display: inline-block;
-      border-bottom: 1px solid #ccc;
-      overflow: hidden;
-    }
-    .uuid {
-      width: 280px;
-    }
-  }
-  .keys {
-    font-weight: bold;
-    display: inline-block;
-    width: 120px;
-  }
-  .source > div {
-    padding-left: 120px;
-  }
 </style>
