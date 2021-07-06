@@ -13,43 +13,27 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div class="rk-trace flex-v">
-    <TraceSearch :service="current" />
-    <div class="rk-trace-inner">
-      <TraceTable />
-      <TraceDetail :current="stateTrace.currentTrace" :spans="stateTrace.traceSpans" />
-    </div>
+  <div class="rk-event flex-v">
+    <EventSearch />
   </div>
 </template>
 
 <script lang="ts">
-  import { Option } from '@/types/global';
-  import { Component, Vue, Prop } from 'vue-property-decorator';
+  import Vue from 'vue';
+  import Component from 'vue-class-component';
   import { State } from 'vuex-class';
-  import TraceSearch from '@/views/components/trace/trace-search.vue';
-  import TraceTable from '@/views/components/trace/trace-table.vue';
-  import TraceDetail from '@/views/components/trace/trace-detail.vue';
+  import EventSearch from '../components/event/event-search.vue';
+
   @Component({
-    components: {
-      TraceTable,
-      TraceDetail,
-      TraceSearch,
-    },
+    components: { EventSearch },
   })
-  export default class WindowTrace extends Vue {
-    @State('rocketTrace') private stateTrace!: any;
-    @Prop() private current!: Option;
-  }
+  export default class Event extends Vue {}
 </script>
-<style lang="scss">
-  .rk-trace {
+
+<style lang="scss" scoped>
+  .rk-event {
     flex-grow: 1;
     height: 100%;
-    min-height: 0;
-  }
-  .rk-trace-inner {
-    height: 100%;
-    display: flex;
     min-height: 0;
   }
 </style>

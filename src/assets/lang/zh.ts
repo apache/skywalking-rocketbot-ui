@@ -36,6 +36,7 @@ const m = {
   topology: '拓扑图',
   trace: '追踪',
   alarm: '告警',
+  event: '事件',
   auto: '自动',
   reload: '刷新',
   usermode: '用户模式',

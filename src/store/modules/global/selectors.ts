@@ -58,12 +58,14 @@ const initState: State = {
 // mutations
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: Option[]) {
-    state.services = state.pageType === PageTypes.LOG ? [{ label: 'All', key: '' }, ...data] : data;
+    const pageTypes = [PageTypes.LOG, PageTypes.EVENT] as string[];
+    state.services = pageTypes.includes(state.pageType) ? [{ label: 'All', key: '' }, ...data] : data;
     state.currentService = state.services[0] || {};
   },
   [types.SET_CURRENT_SERVICE](state: State, service: Option) {
     state.currentService = service;
-    if (state.pageType === PageTypes.LOG) {
+    const pageTypes = [PageTypes.LOG, PageTypes.EVENT] as string[];
+    if (pageTypes.includes(state.pageType)) {
       state.updateDashboard = service;
     }
   },
@@ -73,7 +75,8 @@ const mutations: MutationTree<State> = {
   },
 
   [types.SET_ENDPOINTS](state: State, data: Option[]) {
-    state.endpoints = state.pageType === PageTypes.LOG ? [{ label: 'All', key: '' }, ...data] : data;
+    const pageTypes = [PageTypes.LOG, PageTypes.EVENT] as string[];
+    state.endpoints = pageTypes.includes(state.pageType) ? [{ label: 'All', key: '' }, ...data] : data;
     if (!state.endpoints.length) {
       state.currentEndpoint = { key: '', label: '' };
       return;
@@ -85,7 +88,8 @@ const mutations: MutationTree<State> = {
     state.updateDashboard = endpoint;
   },
   [types.SET_INSTANCES](state: State, data: Option[]) {
-    state.instances = state.pageType === PageTypes.LOG ? [{ label: 'All', key: '' }, ...data] : data;
+    const pageTypes = [PageTypes.LOG, PageTypes.EVENT] as string[];
+    state.instances = pageTypes.includes(state.pageType) ? [{ label: 'All', key: '' }, ...data] : data;
     if (!state.instances.length) {
       state.currentInstance = { key: '', label: '' };
       return;

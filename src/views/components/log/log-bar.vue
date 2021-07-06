@@ -78,7 +78,7 @@ limitations under the License. -->
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
-  import TraceSelect from '../common/trace-select.vue';
+  import { CommonSelector } from '../common/index';
   import ToolBarSelect from '../dashboard/tool-bar/tool-bar-select.vue';
   import ToolBarEndpointSelect from '../dashboard/tool-bar/tool-bar-endpoint-select.vue';
   import LogConditions from './log-conditions.vue';
@@ -87,7 +87,7 @@ limitations under the License. -->
   import { PageTypes } from '@/constants/constant';
 
   @Component({
-    components: { TraceSelect, ToolBarSelect, ToolBarEndpointSelect, LogConditions },
+    components: { CommonSelector, ToolBarSelect, ToolBarEndpointSelect, LogConditions },
   })
   export default class Bar extends Vue {
     @State('rocketLog') private logState!: logState;

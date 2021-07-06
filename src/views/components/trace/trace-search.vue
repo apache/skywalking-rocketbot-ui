@@ -35,15 +35,15 @@ limitations under the License. -->
         <span class="vm">{{ $t('clear') }}</span>
       </a>
       <div class="flex-h trace-select">
-        <TraceSelect
+        <CommonSelector
           :hasSearch="true"
           :title="$t('service')"
           :value="service"
           @input="chooseService"
           :data="rocketTrace.services"
         />
-        <TraceSelect :hasSearch="true" :title="$t('instance')" v-model="instance" :data="rocketTrace.instances" />
-        <TraceSelect
+        <CommonSelector :hasSearch="true" :title="$t('instance')" v-model="instance" :data="rocketTrace.instances" />
+        <CommonSelector
           :title="$t('status')"
           :value="traceState"
           @input="chooseStatus"
@@ -53,7 +53,7 @@ limitations under the License. -->
             { label: 'Error', key: 'ERROR' },
           ]"
         />
-        <TraceSelect
+        <CommonSelector
           :hasSearch="true"
           :title="$t('endpointName')"
           :value="endpoint"
@@ -91,12 +91,11 @@ limitations under the License. -->
   import { Duration, Option } from '@/types/global';
   import { Component, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
-  import TraceSelect from '../common/trace-select.vue';
-  import { ConditionTags } from '../common/index';
+  import { ConditionTags, CommonSelector } from '../common/index';
   import { State as traceState } from '@/store/modules/trace/index';
   import { State as globalState } from '@/store/modules/global/index';
   import dateFormatStep from '@/utils/dateFormat';
-  @Component({ components: { TraceSelect, ConditionTags } })
+  @Component({ components: { CommonSelector, ConditionTags } })
   export default class TraceSearch extends Vue {
     @State('rocketbot') private rocketbotGlobal!: globalState;
     @State('rocketTrace') private rocketTrace!: traceState;
