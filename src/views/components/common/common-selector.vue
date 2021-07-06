@@ -61,13 +61,15 @@ limitations under the License. -->
   import { Vue, Component, Prop } from 'vue-property-decorator';
   @Component
   export default class CommonSelector extends Vue {
-    @Prop() public data!: any;
-    @Prop() public value!: any;
-    @Prop() public title!: string;
-    @Prop({ default: false }) public hasSearch!: boolean;
     @Prop() private icon!: string;
-    public search: string = '';
-    public visible: boolean = false;
+    @Prop() private data!: any;
+    @Prop() private value!: any;
+    @Prop() private title!: string;
+    @Prop({ default: false }) private hasSearch!: boolean;
+
+    private search: string = '';
+    private visible: boolean = false;
+
     get filterData() {
       return this.data.filter((i: any) => i.label.toUpperCase().indexOf(this.search.toUpperCase()) !== -1);
     }
