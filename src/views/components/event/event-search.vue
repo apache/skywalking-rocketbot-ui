@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <nav class="rk-event-tool flex-h">
-    <div class="flex-h event-select">
+    <div class="flex-h event-selector">
       <CommonSelector
         :hasSearch="true"
         :title="$t('service')"
@@ -41,22 +41,30 @@ limitations under the License. -->
         :value="eventType"
         @input="chooseStatus"
         :data="[
-          { label: 'All', key: 'ALL' },
+          { label: 'All', key: 'All' },
           { label: 'Normal', key: 'Normal' },
           { label: 'Error', key: 'ERROR' },
         ]"
       />
+    </div>
+    <div class="flex-h rk-right">
+      <a class="rk-event-search-btn bg-blue" @click="queryEvents">
+        <rk-icon icon="search" class="mr-5" />
+        <span class="vm">{{ $t('search') }}</span>
+      </a>
+      <RkPage :currentSize="pageSize" :currentPage="pageNum" @changePage="updatePage" :total="rocketEvent.totalSize" />
     </div>
   </nav>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
-  import { Component, Prop } from 'vue-property-decorator';
-  import { Action, Mutation, Getter, State } from 'vuex-class';
+  import { Component } from 'vue-property-decorator';
+  import { Action, Getter, State } from 'vuex-class';
   import { Option, DurationTime } from '@/types/global';
   import { CommonSelector } from '../common/index';
   import { State as optionState } from '@/store/modules/global/selectors';
+  import { State as EventState } from '@/store/modules/event';
   import { PageTypes } from '@/constants/constant';
 
   @Component({ components: { CommonSelector } })
@@ -66,15 +74,21 @@ limitations under the License. -->
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Getter('durationTime') private durationTime!: DurationTime;
     @State('rocketOption') private rocketOption!: optionState;
+    @State('rocketEvent') private rocketEvent!: EventState;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
+    @Action('FETCH_EVENTS') private FETCH_EVENTS: any;
 
-    private eventType: Option = { key: 'Normal', label: 'Normal' };
+    private eventType: Option = { label: 'All', key: 'All' };
+    private pageSize: number = 20;
+    private pageNum: number = 1;
 
     private beforeMount() {
       this.MIXHANDLE_GET_OPTION({
         compType: 'service',
         duration: this.durationTime,
         pageType: PageTypes.EVENT,
+      }).then(() => {
+        this.queryEvents();
       });
     }
 
@@ -92,20 +106,48 @@ limitations under the License. -->
     private chooseStatus(i: Option) {
       this.eventType = i;
     }
+
+    private updatePage(pageNum: number) {
+      this.pageNum = pageNum;
+      this.queryEvents();
+    }
+
+    private queryEvents() {
+      this.FETCH_EVENTS({
+        condition: {
+          time: this.durationTime,
+          size: this.pageSize,
+          source: {},
+          type: this.eventType.key !== 'All' ? this.eventType.key : undefined,
+        },
+      });
+    }
   }
 </script>
 
 <style lang="scss" scoped>
   .rk-event-tool {
-    border-bottom: 1px solid #c1c5ca41;
-    height: 52px;
-    background-color: #333840;
-    padding: 0 15px;
-    color: #efefef;
     flex-shrink: 0;
+    background-color: #333840;
+    color: #eee;
+    width: 100%;
+    height: 52px;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
     justify-content: space-between;
   }
-
+  .event-selector {
+    height: 52px;
+  }
+  .rk-event-search-btn {
+    padding: 2px 9px;
+    background-color: #484b55;
+    border-radius: 4px;
+    margin-right: 20px;
+    &.bg-blue {
+      background-color: #448dfe;
+    }
+  }
   .rk-event-tool-input {
     border-style: unset;
     outline: 0;

@@ -15,6 +15,7 @@ limitations under the License. -->
 <template>
   <div class="rk-event flex-v">
     <EventSearch />
+    <EventTimeline />
   </div>
 </template>
 
@@ -23,9 +24,10 @@ limitations under the License. -->
   import Component from 'vue-class-component';
   import { State } from 'vuex-class';
   import EventSearch from '../components/event/event-search.vue';
+  import EventTimeline from '../components/event/event-timeline.vue';
 
   @Component({
-    components: { EventSearch },
+    components: { EventSearch, EventTimeline },
   })
   export default class Event extends Vue {}
 </script>

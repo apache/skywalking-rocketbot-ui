@@ -99,4 +99,5 @@ export type Event = {
   endTime: number | string;
   entityType?: string;
   checked?: boolean;
+  scope?: string;
 };
