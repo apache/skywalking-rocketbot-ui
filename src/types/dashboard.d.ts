@@ -75,7 +75,7 @@ export interface QueryEventCondition {
   type: EventType;
   time: Duration;
   order: string;
-  size: number;
+  paging: { pageNum: number; pageSize: number; needTotal: boolean };
 }
 
 type SourceInput = {

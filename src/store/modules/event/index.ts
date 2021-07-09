@@ -15,13 +15,12 @@
  * limitations under the License.
  */
 
-import { ActionTree, MutationTree, Commit, Dispatch } from 'vuex';
+import { ActionTree, MutationTree, Commit } from 'vuex';
 import { Event } from '@/types/dashboard';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
 import { QueryEventCondition } from '../../../types/dashboard';
-import { dateFormatTime } from '@/utils/dateFormat';
-import { DurationTime, Option } from '@/types/global';
+import { DurationTime } from '@/types/global';
 import * as types from '../../mutation-types';
 
 const Scopes = ['Service', 'ServiceInstance', 'Endpoint'];

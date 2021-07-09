@@ -128,7 +128,11 @@ limitations under the License. -->
       this.FETCH_EVENTS({
         condition: {
           time: this.durationTime,
-          size: this.pageSize,
+          paging: {
+            pageNum: this.pageNum,
+            pageSize: this.pageSize,
+            needTotal: true,
+          },
           source: {
             service: currentService.key ? currentService.label : '',
             endpoint: currentEndpoint.key ? currentEndpoint.label : '',
