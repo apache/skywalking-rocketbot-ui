@@ -43,7 +43,7 @@ limitations under the License. -->
           </option>
         </select>
       </div>
-      <div class="flex-h mb-5" v-show="hasChartType">
+      <div class="flex-h mb-5" v-show="isChartType">
         <div class="title grey sm">{{ $t('chartType') }}:</div>
         <select
           class="long"
@@ -381,6 +381,7 @@ limitations under the License. -->
       if (this.isChartSlow && !this.itemConfig.maxItemNum) {
         this.itemConfig.maxItemNum = MaxItemNum;
       }
+      this.hasChartType();
     }
 
     private editComponentConfig(params: { index: number; values: unknown }) {
