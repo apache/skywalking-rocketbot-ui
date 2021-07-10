@@ -46,7 +46,7 @@ limitations under the License. -->
         :data="[
           { label: 'All', key: '' },
           { label: 'Normal', key: 'Normal' },
-          { label: 'Error', key: 'ERROR' },
+          { label: 'Error', key: 'Error' },
         ]"
         icon="equalizer"
       />
@@ -117,8 +117,8 @@ limitations under the License. -->
       this.eventType = i;
     }
 
-    private updatePage(pageNum: number) {
-      this.pageNum = pageNum;
+    private updatePage(pageNum: string) {
+      this.pageNum = Number(pageNum);
       this.queryEvents();
     }
 
