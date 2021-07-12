@@ -26,7 +26,7 @@ limitations under the License. -->
         <span class="vm">{{ $t('search') }}</span>
       </a>
       <div class="flex-h">
-        <TraceSelect
+        <CommonSelector
           :hasSearch="true"
           :title="$t('service')"
           :value="headerSource.currentService"
@@ -49,10 +49,10 @@ limitations under the License. -->
   import { Duration, Option } from '@/types/global';
   import { Component, Prop, Vue } from 'vue-property-decorator';
   import { Mutation } from 'vuex-class';
-  import TraceSelect from '../common/trace-select.vue';
+  import { CommonSelector } from '../common/index';
   import ProfileTask from './profile-task.vue';
 
-  @Component({ components: { TraceSelect, ProfileTask } })
+  @Component({ components: { CommonSelector, ProfileTask } })
   export default class ProfileHeader extends Vue {
     @Prop() private headerSource: any;
     @Prop() private newTaskFields: any;

@@ -76,7 +76,6 @@ limitations under the License. -->
     @State('rocketData') private rocketComps!: dataState;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('GET_ALL_TEMPLATES') private GET_ALL_TEMPLATES: any;
-    @Action('GET_EVENT') private GET_EVENT: any;
     @Getter('durationTime') private durationTime: any;
     @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('ADD_COMP') private ADD_COMP: any;

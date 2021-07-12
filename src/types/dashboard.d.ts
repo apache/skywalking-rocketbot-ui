@@ -75,7 +75,7 @@ export interface QueryEventCondition {
   type: EventType;
   time: Duration;
   order: string;
-  size: number;
+  paging: { pageNum: number; pageSize: number; needTotal: boolean };
 }
 
 type SourceInput = {
@@ -99,4 +99,5 @@ export type Event = {
   endTime: number | string;
   entityType?: string;
   checked?: boolean;
+  scope?: string;
 };

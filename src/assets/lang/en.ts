@@ -36,6 +36,7 @@ const m = {
   topology: 'Topology',
   trace: 'Trace',
   alarm: 'Alarm',
+  event: 'Event',
   auto: 'Auto',
   reload: 'Reload',
   usermode: 'User Mode',

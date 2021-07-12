@@ -290,7 +290,11 @@ limitations under the License. -->
       return this.GET_EVENT({
         condition: {
           time: this.durationTime,
-          size: 20,
+          paging: {
+            pageNum: 1,
+            pageSize: 20,
+            needTotal: true,
+          },
           source: {
             service: this.stateDashboard.currentService.label,
           },
@@ -303,7 +307,11 @@ limitations under the License. -->
       return this.GET_EVENT({
         condition: {
           time: this.durationTime,
-          size: 20,
+          paging: {
+            pageNum: 1,
+            pageSize: 20,
+            needTotal: true,
+          },
           source: {
             service: this.stateDashboard.currentService.label,
             serviceInstance: this.stateDashboard.currentInstance.label,
@@ -317,7 +325,11 @@ limitations under the License. -->
       return this.GET_EVENT({
         condition: {
           time: this.durationTime,
-          size: 20,
+          paging: {
+            pageNum: 1,
+            pageSize: 20,
+            needTotal: true,
+          },
           source: {
             service: this.stateDashboard.currentService.label,
             endpoint: this.stateDashboard.currentEndpoint.label,

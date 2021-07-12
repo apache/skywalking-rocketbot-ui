@@ -15,7 +15,7 @@ limitations under the License. -->
 <template>
   <nav class="rk-alarm-tool flex-h">
     <div class="flex-h alarm-conditions">
-      <AlarmSelect
+      <CommonSelector
         :title="$t('filterScope')"
         :value="alarmOption"
         @input="
@@ -51,11 +51,10 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import { Action, Mutation, Getter } from 'vuex-class';
-  import AlarmSelect from './alarm-select.vue';
   import { Option, DurationTime } from '@/types/global';
-  import { ConditionTags } from '../common/index';
+  import { ConditionTags, CommonSelector } from '../common/index';
 
-  @Component({ components: { AlarmSelect, ConditionTags } })
+  @Component({ components: { CommonSelector, ConditionTags } })
   export default class AlarmTool extends Vue {
     @Getter('durationTime') private durationTime!: DurationTime;
     @Mutation('SET_EVENTS') private SET_EVENTS: any;

@@ -26,6 +26,7 @@ import rocketTrace, { State as TraceState } from '@/store/modules/trace';
 import rocketAlarm, { State as AlarmState } from '@/store/modules/alarm';
 import profileStore, { State as ProfileState } from '@/store/modules/profile/profile-store';
 import rocketLog, { State as LogState } from '@/store/modules/log';
+import rocketEvent, { State as EventState } from '@/store/modules/event';
 
 Vue.use(Vuex);
 
@@ -39,6 +40,7 @@ export interface State {
   rocketAlarm: AlarmState;
   profileStore: ProfileState;
   logStore: LogState;
+  eventStore: EventState;
 }
 
 export default new Vuex.Store({
@@ -52,5 +54,6 @@ export default new Vuex.Store({
     rocketAlarm,
     profileStore,
     rocketLog,
+    rocketEvent,
   },
 });
