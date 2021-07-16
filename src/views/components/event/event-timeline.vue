@@ -103,6 +103,4 @@ limitations under the License. -->
 </script>
 <style lang="scss" scoped>
   @import '../common/index.scss';
-  .source {
-  }
 </style>
