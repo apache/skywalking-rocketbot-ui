@@ -75,7 +75,7 @@ limitations under the License. -->
                       currentEvent[eventKey.class] | dateformat
                     }}</span>
                     <span v-else-if="eventKey.class === 'source'" class="source">
-                      <div>{{ $t('currentService') }}: {{ currentEvent[eventKey.class].service }}</div>
+                      <span>{{ $t('currentService') }}: {{ currentEvent[eventKey.class].service }}</span>
                       <div v-show="currentEvent[eventKey.class].endpoint">
                         {{ $t('currentEndpoint') }}: {{ currentEvent[eventKey.class].endpoint }}
                       </div>
