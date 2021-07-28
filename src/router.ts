@@ -65,6 +65,11 @@ export const routes: RouteConfig[] = [
         component: () => import('./views/containers/alarm.vue'),
         meta: { icon: 'spam', title: 'alarm', exact: false },
       },
+      {
+        path: 'event',
+        component: () => import('./views/containers/event.vue'),
+        meta: { icon: 'storage', title: 'event', exact: false },
+      },
     ],
   },
 ];

@@ -168,7 +168,11 @@ limitations under the License. -->
       this.GET_EVENT({
         condition: {
           time: this.durationTime,
-          size: 20,
+          paging: {
+            pageNum: 1,
+            pageSize: 20,
+            needTotal: true,
+          },
           source: {
             service: i.label,
           },
@@ -184,7 +188,11 @@ limitations under the License. -->
       this.GET_EVENT({
         condition: {
           time: this.durationTime,
-          size: 20,
+          paging: {
+            pageNum: 1,
+            pageSize: 20,
+            needTotal: true,
+          },
           source: {
             service: this.stateDashboard.currentService.label,
             endpoint: i.label,
@@ -203,7 +211,11 @@ limitations under the License. -->
       this.GET_EVENT({
         condition: {
           time: this.durationTime,
-          size: 20,
+          paging: {
+            pageNum: 1,
+            pageSize: 20,
+            needTotal: true,
+          },
           source: {
             service: this.stateDashboard.currentService.label,
             serviceInstance: i.label,

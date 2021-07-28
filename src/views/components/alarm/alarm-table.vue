@@ -13,17 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div class="rk-alarm-table clear">
-    <div v-for="(i, index) in data" :key="index" class="mb-10 clear alarm-item" @click="showDetails(i)">
-      <div class="g-sm-3 grey sm hide-xs rk-alarm-time-line tr">
+  <div class="rk-timeline-table clear">
+    <div v-for="(i, index) in data" :key="index" class="mb-10 clear timeline-item" @click="showDetails(i)">
+      <div class="g-sm-3 grey sm hide-xs rk-time-line tr">
         {{ parseInt(i.startTime) | dateformat }}
       </div>
-      <div class="rk-alarm-table-i g-sm-9">
+      <div class="rk-timeline-table-i g-sm-9">
         <div class="message mb-5 b">
           {{ i.message }}
         </div>
         <div
-          class="rk-alarm-table-i-scope mr-10 l sm"
+          class="rk-timeline-table-i-scope mr-10 l sm"
           :class="{
             blue: i.scope === 'Service',
             green: i.scope === 'Endpoint',
@@ -75,7 +75,7 @@ limitations under the License. -->
                       currentEvent[eventKey.class] | dateformat
                     }}</span>
                     <span v-else-if="eventKey.class === 'source'" class="source">
-                      <div>{{ $t('currentService') }}: {{ currentEvent[eventKey.class].service }}</div>
+                      <span>{{ $t('currentService') }}: {{ currentEvent[eventKey.class].service }}</span>
                       <div v-show="currentEvent[eventKey.class].endpoint">
                         {{ $t('currentEndpoint') }}: {{ currentEvent[eventKey.class].endpoint }}
                       </div>
@@ -100,7 +100,8 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import { Alarm, Event } from '@/types/alarm';
-  import { EventsDetailHeaders, AlarmDetailCol, AlarmEventsDetailKeys } from './constant';
+  import { EventsDetailHeaders, AlarmDetailCol } from './constant';
+  import { EventsDetailKeys } from '../common/constant';
 
   @Component
   export default class AlarmTable extends Vue {
@@ -118,7 +119,7 @@ limitations under the License. -->
     private alarmTags: string[] = [];
     private AlarmDetailCol = AlarmDetailCol;
     private eventsHeaders = EventsDetailHeaders;
-    private eventsDetailKeys = AlarmEventsDetailKeys;
+    private eventsDetailKeys = EventsDetailKeys;
     private currentEvents: Event[] = [];
     private currentEvent: Event = {
       startTime: 0,
@@ -147,80 +148,5 @@ limitations under the License. -->
 </script>
 
 <style lang="scss" scoped>
-  .rk-alarm-table {
-    padding: 30px 20px 20px 40px;
-    flex-grow: 1;
-    overflow: auto;
-    height: 100%;
-  }
-  .rk-alarm-time-line {
-    padding: 14px 30px;
-    min-height: 63px;
-    max-width: 132px;
-  }
-  .rk-alarm-table-i {
-    padding: 10px 15px;
-    border-left: 4px solid rgba(46, 47, 51, 0.05);
-    position: relative;
-    &:after {
-      content: '';
-      display: inline-block;
-      position: absolute;
-      width: 7px;
-      height: 7px;
-      left: -23px;
-      top: 25px;
-      border-radius: 4px;
-      background-color: #448dfe;
-    }
-    &:before {
-      content: '';
-      display: inline-block;
-      position: absolute;
-      width: 1px;
-      height: calc(100% + 11px);
-      top: 0;
-      left: -20px;
-      border-radius: 5px;
-      background-color: #448dfe99;
-    }
-  }
-  .rk-alarm-table-i-scope {
-    display: inline-block;
-    padding: 0px 8px;
-    border: 1px solid;
-    margin-top: -1px;
-    border-radius: 4px;
-  }
-  .alarm-item {
-    cursor: pointer;
-  }
-  ul {
-    min-height: 100px;
-    overflow: auto;
-    margin-bottom: 20px;
-  }
-  li {
-    cursor: pointer;
-    > span {
-      width: 160px;
-      height: 20px;
-      line-height: 20px;
-      text-align: center;
-      display: inline-block;
-      border-bottom: 1px solid #ccc;
-      overflow: hidden;
-    }
-    .uuid {
-      width: 280px;
-    }
-  }
-  .keys {
-    font-weight: bold;
-    display: inline-block;
-    width: 120px;
-  }
-  .source > div {
-    padding-left: 120px;
-  }
+  @import '../common/index.scss';
 </style>

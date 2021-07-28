@@ -40,5 +40,6 @@ export enum PageTypes {
   DASHBOARD = 'Dashboard',
   LOG = 'Log',
   TOPOLOGY = 'Topology',
+  EVENT = 'Event',
 }
 export const DEFAULT = 'default';

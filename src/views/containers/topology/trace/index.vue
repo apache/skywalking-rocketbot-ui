@@ -24,8 +24,8 @@ limitations under the License. -->
 
 <script lang="ts">
   import { Option } from '@/types/global';
-  import { Component, Vue, Prop, PropSync, Watch } from 'vue-property-decorator';
-  import { State, Action, Mutation } from 'vuex-class';
+  import { Component, Vue, Prop } from 'vue-property-decorator';
+  import { State } from 'vuex-class';
   import TraceSearch from '@/views/components/trace/trace-search.vue';
   import TraceTable from '@/views/components/trace/trace-table.vue';
   import TraceDetail from '@/views/components/trace/trace-detail.vue';
