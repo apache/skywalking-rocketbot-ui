@@ -19,7 +19,7 @@ limitations under the License. -->
         :currentSize="pageSize"
         :currentPage="pageNum"
         @changePage="turnLogsPage"
-        :total="rocketTrace.traceLogsTotal"
+        :total="rocketTrace.traceSpanLogsTotal"
       />
       <LogTable :tableData="rocketTrace.traceSpanLogs || []" :type="`service`" :noLink="true">
         <div class="log-tips" v-if="!rocketTrace.traceSpanLogs.length">{{ $t('noData') }}</div>
@@ -121,7 +121,6 @@ limitations under the License. -->
       LogTable,
     },
   })
-
   export default class TraceDetail extends Vue {
     @State('rocketTrace') private rocketTrace!: traceState;
     @Action('rocketTrace/GET_TRACE_SPANS') private GET_TRACE_SPANS: any;
