@@ -49,7 +49,7 @@ limitations under the License. -->
     private isServiceChart: boolean = false;
 
     private created() {
-      const serviceMetricNames = ['service_cpm', 'service_resp_time', 'service_apdex', 'endpoint_avg'];
+      const serviceMetricNames = ['service_cpm', 'service_resp_time', 'service_apdex', 'service_sla'];
       this.isServiceChart = 'Service' === this.item.entityType && serviceMetricNames.includes(this.item.metricName);
     }
 
