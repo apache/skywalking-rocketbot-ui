@@ -38,7 +38,7 @@ limitations under the License. -->
         <CommonSelector
           :hasSearch="true"
           :title="$t('service')"
-          :value="service"
+          :value="rocketTrace.currentService"
           @input="chooseService"
           :data="rocketTrace.services"
         />
@@ -95,6 +95,7 @@ limitations under the License. -->
   import { State as traceState } from '@/store/modules/trace/index';
   import { State as globalState } from '@/store/modules/global/index';
   import dateFormatStep from '@/utils/dateFormat';
+  import { getServiceName } from '@/utils/queryParameter';
   @Component({ components: { CommonSelector, ConditionTags } })
   export default class TraceSearch extends Vue {
     @State('rocketbot') private rocketbotGlobal!: globalState;
@@ -111,7 +112,6 @@ limitations under the License. -->
     private SET_TRACE_FORM_ITEM: any;
     @Mutation('rocketTrace/SET_INSTANCES') private SET_INSTANCES: any;
     @Mutation('rocketTrace/SET_ENDPOINTS') private SET_ENDPOINTS: any;
-    private service: Option = { label: 'All', key: '' };
     private time!: Date[];
     private status: boolean = true;
     private maxTraceDuration: string = localStorage.getItem('maxTraceDuration') || '';
@@ -123,17 +123,22 @@ limitations under the License. -->
     private tagsMap: Array<{ key: string; value: string }> = [];
     private tagsList: string[] = [];
     private clearTags: boolean = false;
+    private serviceName: string = getServiceName();
 
     private created() {
       this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     }
     private mounted() {
+      this.GET_SERVICES({ duration: this.durationTime });
+      if (this.serviceName) {
+        return;
+      }
       this.getTraceList();
-      if (this.service && this.service.key) {
+      if (this.rocketTrace.currentService && this.rocketTrace.currentService.key) {
         this.GET_INSTANCES({
           duration: this.durationTime,
-          serviceId: this.service.key,
+          serviceId: this.rocketTrace.currentService.key,
         });
       }
     }
@@ -147,12 +152,12 @@ limitations under the License. -->
       };
     }
     private chooseService(i: Option) {
-      if (this.service.key === i.key) {
+      if (this.rocketTrace.currentService.key === i.key) {
         return;
       }
       this.instance = { label: 'All', key: '' };
       this.endpoint = { label: 'All', key: '' };
-      this.service = i;
+      this.rocketTrace.currentService = i;
       if (i.key === '') {
         this.SET_INSTANCES([]);
         this.SET_ENDPOINTS([]);
@@ -168,7 +173,7 @@ limitations under the License. -->
     }
     private searchEndpoint(search: string) {
       this.GET_ITEM_ENDPOINTS({
-        serviceId: this.service.key,
+        serviceId: this.rocketTrace.currentService.key,
         keyword: search,
         duration: this.durationTime,
       });
@@ -184,7 +189,6 @@ limitations under the License. -->
       this.tagsMap = data.tagsMap;
     }
     private getTraceList() {
-      this.GET_SERVICES({ duration: this.durationTime });
       const temp: any = {
         queryDuration: this.globalTimeFormat([
           new Date(
@@ -200,8 +204,8 @@ limitations under the License. -->
         paging: { pageNum: 1, pageSize: 15, needTotal: true },
         queryOrder: this.rocketTrace.traceForm.queryOrder,
       };
-      if (this.service.key) {
-        temp.serviceId = this.service.key;
+      if (this.rocketTrace.currentService.key) {
+        temp.serviceId = this.rocketTrace.currentService.key;
       }
       if (this.instance.key) {
         temp.serviceInstanceId = this.instance.key;
@@ -237,7 +241,7 @@ limitations under the License. -->
       localStorage.removeItem('maxTraceDuration');
       this.minTraceDuration = '';
       localStorage.removeItem('minTraceDuration');
-      this.service = { label: 'All', key: '' };
+      this.rocketTrace.currentService = { label: 'All', key: '' };
       this.instance = { label: 'All', key: '' };
       this.endpoint = { label: 'All', key: '' };
       localStorage.removeItem('traceTags');
@@ -248,12 +252,24 @@ limitations under the License. -->
       localStorage.removeItem('traceId');
       this.traceState = { label: 'All', key: 'ALL' };
       this.SET_TRACE_FORM_ITEM({ type: 'queryOrder', data: '' });
+      this.GET_SERVICES({ duration: this.durationTime });
       this.getTraceList();
     }
 
     @Watch('rocketbotGlobal.durationRow')
     private durationRowWatch(value: Duration) {
       this.time = [value.start, value.end];
+    }
+
+    @Watch('rocketTrace.updateCurrentService')
+    private watchCurrentService() {
+      setTimeout(() => {
+        this.GET_INSTANCES({
+          duration: this.durationTime,
+          serviceId: this.rocketTrace.currentService.key,
+        });
+        this.getTraceList();
+      }, 10);
     }
   }
 </script>
