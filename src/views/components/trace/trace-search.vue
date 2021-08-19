@@ -55,7 +55,7 @@ limitations under the License. -->
         />
         <CommonSelector
           :hasSearch="true"
-          :title="$t('endpointName')"
+          :title="$t('endpoint')"
           :value="endpoint"
           @input="chooseEndpoint"
           @search="searchEndpoint"
@@ -219,7 +219,7 @@ limitations under the License. -->
         localStorage.setItem('minTraceDuration', this.minTraceDuration);
       }
       if (this.endpoint.key) {
-        temp.endpointName = this.endpoint.label;
+        temp.endpointId = this.endpoint.key;
       }
       if (this.traceId) {
         temp.traceId = this.traceId;
