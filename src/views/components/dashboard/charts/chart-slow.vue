@@ -39,6 +39,7 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import copy from '@/utils/copy';
+  import {MetricsName} from "@/views/components/dashboard/charts/constant";
 
   @Component({})
   export default class ChartSlow extends Vue {
@@ -49,7 +50,13 @@ limitations under the License. -->
     private isServiceChart: boolean = false;
 
     private created() {
-      const serviceMetricNames = ['service_cpm', 'service_resp_time', 'service_apdex', 'service_sla'];
+      const serviceMetricNames = [
+              MetricsName.SERVICE_RESP_TIME,
+              MetricsName.SERVICE_SLA,
+              MetricsName.SERVICE_CPM,
+              MetricsName.SERVICE_PERCENTILE,
+              MetricsName.SERVICE_APDEX,
+      ];
       this.isServiceChart = 'Service' === this.item.entityType && serviceMetricNames.includes(this.item.metricName);
     }
 
