@@ -37,7 +37,13 @@ limitations under the License. -->
     </div>
     <div class="rk-common-sel" v-if="visible">
       <div v-if="hasSearch">
-        <input type="text" class="rk-common-sel-search" v-model="search" placeholder="Search..." />
+        <input
+          type="text"
+          class="rk-common-sel-search"
+          v-model="search"
+          @change="fliterSearch"
+          placeholder="Search..."
+        />
         <svg class="icon sm close" @click="search = ''" v-if="search">
           <use xlink:href="#clear"></use>
         </svg>
@@ -73,12 +79,17 @@ limitations under the License. -->
     get filterData() {
       return this.data.filter((i: any) => i.label.toUpperCase().indexOf(this.search.toUpperCase()) !== -1);
     }
-    public handleOpen() {
+    private handleOpen() {
       this.visible = true;
     }
-    public handleSelect(i: any) {
+    private handleSelect(i: any) {
       this.$emit('input', i);
       this.visible = false;
+    }
+
+    private fliterSearch() {
+      console.log(this.search);
+      this.$emit('search', this.search);
     }
   }
 </script>

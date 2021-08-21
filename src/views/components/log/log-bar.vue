@@ -36,7 +36,7 @@ limitations under the License. -->
           :data="rocketOption.instances"
           icon="disk"
         />
-        <ToolBarSelect
+        <ToolBarEndpointSelect
           @onChoose="selectEndpoint"
           :title="logState.type.key === cateGoryBrowser ? $t('page') : $t('currentEndpoint')"
           :current="rocketOption.currentEndpoint"
