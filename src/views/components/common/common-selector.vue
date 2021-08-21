@@ -44,7 +44,14 @@ limitations under the License. -->
           @change="fliterSearch"
           placeholder="Search..."
         />
-        <svg class="icon sm close" @click="search = ''" v-if="search">
+        <svg
+          class="icon sm close"
+          @click="
+            search = '';
+            fliterSearch();
+          "
+          v-if="search"
+        >
           <use xlink:href="#clear"></use>
         </svg>
       </div>
@@ -88,7 +95,6 @@ limitations under the License. -->
     }
 
     private fliterSearch() {
-      console.log(this.search);
       this.$emit('search', this.search);
     }
   }
