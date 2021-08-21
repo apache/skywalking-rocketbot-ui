@@ -41,8 +41,24 @@ limitations under the License. -->
           :value="service"
           @input="chooseService"
           :data="rocketTrace.services"
+          icon="package"
         />
-        <CommonSelector :hasSearch="true" :title="$t('instance')" v-model="instance" :data="rocketTrace.instances" />
+        <CommonSelector
+          :hasSearch="true"
+          :title="$t('instance')"
+          v-model="instance"
+          :data="rocketTrace.instances"
+          icon="disk"
+        />
+        <CommonSelector
+          :hasSearch="true"
+          :title="$t('endpoint')"
+          :value="endpoint"
+          @input="chooseEndpoint"
+          @search="searchEndpoint"
+          :data="rocketTrace.endpoints"
+          icon="code"
+        />
         <CommonSelector
           :title="$t('status')"
           :value="traceState"
@@ -52,14 +68,7 @@ limitations under the License. -->
             { label: 'Success', key: 'SUCCESS' },
             { label: 'Error', key: 'ERROR' },
           ]"
-        />
-        <CommonSelector
-          :hasSearch="true"
-          :title="$t('endpoint')"
-          :value="endpoint"
-          @input="chooseEndpoint"
-          @search="searchEndpoint"
-          :data="rocketTrace.endpoints"
+          icon="epic"
         />
       </div>
     </div>
@@ -171,6 +180,8 @@ limitations under the License. -->
         serviceId: this.service.key,
         keyword: search,
         duration: this.durationTime,
+      }).then((endpoints: any) => {
+        this.SET_ENDPOINTS(endpoints);
       });
     }
     private chooseStatus(i: Option) {

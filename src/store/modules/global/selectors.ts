@@ -77,6 +77,7 @@ const mutations: MutationTree<State> = {
   [types.SET_ENDPOINTS](state: State, data: Option[]) {
     const pageTypes = [PageTypes.LOG, PageTypes.EVENT] as string[];
     state.endpoints = pageTypes.includes(state.pageType) ? [{ label: 'All', key: '' }, ...data] : data;
+
     if (!state.endpoints.length) {
       state.currentEndpoint = { key: '', label: '' };
       return;
