@@ -180,7 +180,7 @@ limitations under the License. -->
         serviceId: this.service.key,
         keyword: search,
         duration: this.durationTime,
-      }).then((endpoints: any) => {
+      }).then((endpoints: Array<{ key: string; label: string }>) => {
         this.SET_ENDPOINTS(endpoints);
       });
     }
