@@ -102,9 +102,11 @@ limitations under the License. -->
     @Mutation('SELECT_ERROR_CATALOG') private SELECT_ERROR_CATALOG: any;
     @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Mutation('CLEAR_LOG_CONDITIONS') private CLEAR_LOG_CONDITIONS: any;
+    @Mutation('SET_ENDPOINTS') private SET_ENDPOINTS: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
     @Action('GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
+    @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('QUERY_LOGS') private QUERY_LOGS: any;
     @Action('QUERY_LOGS_BYKEYWORDS') private QUERY_LOGS_BYKEYWORDS: any;
@@ -139,7 +141,7 @@ limitations under the License. -->
     }
 
     private selectEndpoint(i: { key: string; label: string }) {
-      this.GET_ITEM_ENDPOINTS({ endpoint: i, duration: this.durationTime });
+      this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
     }
 
     private selectInstance(i: { key: string; label: string }) {
@@ -162,6 +164,8 @@ limitations under the License. -->
         serviceId: this.rocketOption.currentService.key,
         keyword: search,
         duration: this.durationTime,
+      }).then((endpoints: any) => {
+        this.SET_ENDPOINTS(endpoints);
       });
     }
 
