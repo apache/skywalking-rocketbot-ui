@@ -230,6 +230,8 @@ const m = {
   destService: 'Destination Service',
   destServiceInstance: 'Destination Service Instance',
   eventSource: 'Event Source',
+  modalTitle: 'Tooltip',
+  selectRedirectPage: 'Please select the page to be redirected:',
 };
 
 export default m;

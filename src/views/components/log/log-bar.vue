@@ -119,6 +119,15 @@ limitations under the License. -->
           this.QUERY_LOGS_BYKEYWORDS();
         })
         .then(() => {
+          const serviceName = this.$route.query.service ? this.$route.query.service.toString() : undefined;
+          if (serviceName) {
+            for (const s of this.rocketOption.services) {
+              if (s.label === serviceName) {
+                this.selectService(s);
+                break;
+              }
+            }
+          }
           this.queryLogs();
         });
     }

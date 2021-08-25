@@ -22,16 +22,20 @@ limitations under the License. -->
         </svg>
         <div class="mb-5 ell" v-tooltip:top.ellipsis="i.name || ''">
           <span class="calls sm mr-10">{{ i.value }}</span>
-          <span class="cp link-hover">
-            <a v-if="i.url" :href="i.url" target="_blank">
-            {{ i.name + getTraceId(i) }}
-            </a>
-            {{i.url ? '' : i.name + getTraceId(i) }}
-          </span>
+          <span class="cp link-hover" @click="handleLink(i)">{{ i.name + getTraceId(i) }}</span>
         </div>
         <RkProgress :precent="(i.value / maxValue) * 100" color="#bf99f8" />
       </div>
     </div>
+    <rk-modal :show.sync="showModal" :title="$t('modalTitle')">
+      <div>
+        {{ $t('selectRedirectPage') }}
+      </div>
+      <div class="mt-15">
+        <router-link :to="redirectData.log" class="rk-chart-slow-link mr-20">{{ $t('log') }}</router-link>
+        <router-link :to="redirectData.trace" class="rk-chart-slow-link mr-20">{{ $t('trace') }}</router-link>
+      </div>
+    </rk-modal>
   </div>
 </template>
 
@@ -47,6 +51,8 @@ limitations under the License. -->
     @Prop() private item!: any;
     @Prop() private type!: any;
     @Prop() private intervalTime!: any;
+    private showModal: boolean = false;
+    private redirectData: any = {};
     private isServiceChart: boolean = false;
 
     private created() {
@@ -72,6 +78,23 @@ limitations under the License. -->
     }
     private handleClick(i: any) {
       copy(i);
+    }
+    private handleLink(i: any) {
+      if (this.isServiceChart) {
+        this.redirectData.log = {
+          path: 'log',
+          query: {
+            service: encodeURIComponent(i.name),
+          },
+        };
+        this.redirectData.trace = {
+          path: 'trace',
+          query: {
+            service: encodeURIComponent(i.name),
+          },
+        };
+        this.showModal = true;
+      }
     }
     get datas() {
       if (!this.data.length) {
@@ -113,5 +136,13 @@ limitations under the License. -->
   }
   .rk-chart-slow-i {
     padding: 6px 0;
+  }
+  .rk-chart-slow-link {
+    padding: 4px 10px;
+    border-radius: 4px;
+    color: #efeff1;
+    background-color: #333844;
+    will-change: opacity, background-color;
+    transition: opacity 0.3s, background-color 0.3s;
   }
 </style>

@@ -24,6 +24,7 @@ import RkPage from './rk-page.vue';
 import RkDate from './rk-date.vue';
 import RkPanel from './rk-panel.vue';
 import RkSidebox from './rk-sidebox.vue';
+import RkModal from './rk-modal.vue';
 import RkEcharts from './rk-echarts.vue';
 import RkSelect from './rk-select.vue';
 import RkPopper from './rk-popper.vue';
@@ -42,6 +43,7 @@ const components: any = {
   RkEcharts,
   RkPage,
   RkSidebox,
+  RkModal,
   RkFooterTime,
   RkSelect,
   RkPopper,

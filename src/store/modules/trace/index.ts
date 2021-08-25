@@ -21,7 +21,6 @@ import { Option } from '@/types/global';
 import { Span, Trace } from '@/types/trace';
 import { AxiosResponse } from 'axios';
 import { ActionTree, Commit, Dispatch, MutationTree } from 'vuex';
-import { getServiceName } from '@/utils/queryParameter';
 
 export interface State {
   services: Option[];
@@ -35,7 +34,6 @@ export interface State {
   traceSpanLogs: any[];
   traceSpanLogsTotal: number;
   currentService: any;
-  updateCurrentService: object;
 }
 
 const initState: State = {
@@ -60,24 +58,12 @@ const initState: State = {
   traceSpanLogs: [],
   traceSpanLogsTotal: 0,
   currentService: { label: 'All', key: '' },
-  updateCurrentService: {},
 };
 
 // mutations
 const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: Option[]): void {
     state.services = [{ label: 'All', key: '' }].concat(data);
-    const serviceName = getServiceName();
-    if (serviceName) {
-      for (let s of data) {
-        if (s.label === serviceName) {
-          state.currentService.key = s.key;
-          state.currentService.label = s.label;
-          state.updateCurrentService = s;
-          break;
-        }
-      }
-    }
   },
   [types.SET_INSTANCES](state: State, data: Option[]): void {
     state.instances = [{ label: 'All', key: '' }].concat(data);

@@ -95,7 +95,6 @@ limitations under the License. -->
   import { State as traceState } from '@/store/modules/trace/index';
   import { State as globalState } from '@/store/modules/global/index';
   import dateFormatStep from '@/utils/dateFormat';
-  import { getServiceName } from '@/utils/queryParameter';
   @Component({ components: { CommonSelector, ConditionTags } })
   export default class TraceSearch extends Vue {
     @State('rocketbot') private rocketbotGlobal!: globalState;
@@ -123,24 +122,33 @@ limitations under the License. -->
     private tagsMap: Array<{ key: string; value: string }> = [];
     private tagsList: string[] = [];
     private clearTags: boolean = false;
-    private serviceName: string = getServiceName();
+    private serviceName: string = '';
 
     private created() {
       this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
+      this.serviceName = this.$route.query.service ? this.$route.query.service.toString() : this.serviceName;
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     }
     private mounted() {
-      this.GET_SERVICES({ duration: this.durationTime });
-      if (this.serviceName) {
-        return;
-      }
-      this.getTraceList();
-      if (this.rocketTrace.currentService && this.rocketTrace.currentService.key) {
-        this.GET_INSTANCES({
-          duration: this.durationTime,
-          serviceId: this.rocketTrace.currentService.key,
+      this.GET_SERVICES({ duration: this.durationTime })
+        .then(() => {
+          if (this.serviceName) {
+            for (const s of this.rocketTrace.services) {
+              if (s.label === this.serviceName) {
+                this.rocketTrace.currentService.key = s.key;
+                this.rocketTrace.currentService.label = s.label;
+                break;
+              }
+            }
+          }
+          this.getTraceList();
+          if (this.rocketTrace.currentService && this.rocketTrace.currentService.key) {
+            this.GET_INSTANCES({
+              duration: this.durationTime,
+              serviceId: this.rocketTrace.currentService.key,
+            });
+          }
         });
-      }
     }
     private globalTimeFormat(time: Date[]) {
       const step = 'SECOND';
@@ -259,17 +267,6 @@ limitations under the License. -->
     @Watch('rocketbotGlobal.durationRow')
     private durationRowWatch(value: Duration) {
       this.time = [value.start, value.end];
-    }
-
-    @Watch('rocketTrace.updateCurrentService')
-    private watchCurrentService() {
-      setTimeout(() => {
-        this.GET_INSTANCES({
-          duration: this.durationTime,
-          serviceId: this.rocketTrace.currentService.key,
-        });
-        this.getTraceList();
-      }, 10);
     }
   }
 </script>
