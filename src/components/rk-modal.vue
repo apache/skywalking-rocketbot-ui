@@ -27,6 +27,7 @@ limitations under the License. -->
                 <slot></slot>
             </div>
             <div v-if="showButton" class="rk-modal-footer">
+                <rk-button class="cancel" @click="cancel">{{ $t('cancel') }}</rk-button>
                 <rk-button @click="confirm">{{ $t('confirm') }}</rk-button>
             </div>
         </div>
@@ -116,7 +117,7 @@ limitations under the License. -->
 
     .rk-modal-header {
         height: 35px;
-        background: #252a2f;
+        background: #333840;
         color: #efefef;
         display: flex;
         align-items: center;
@@ -149,8 +150,15 @@ limitations under the License. -->
     .rk-modal-footer {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: right;
         height: 35px;
         border-top: 1px solid #ddd;
+        padding-right: 10px;
+    }
+    .rk-modal-footer .cancel{
+        margin-right: 10px;
+        border: 1px solid #ddd;
+        color: #333;
+        background-color: #fff;
     }
 </style>

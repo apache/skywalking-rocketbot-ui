@@ -38,7 +38,7 @@ limitations under the License. -->
         <CommonSelector
           :hasSearch="true"
           :title="$t('service')"
-          :value="rocketTrace.currentService"
+          :value="service"
           @input="chooseService"
           :data="rocketTrace.services"
           icon="package"
@@ -120,6 +120,7 @@ limitations under the License. -->
     private SET_TRACE_FORM_ITEM: any;
     @Mutation('rocketTrace/SET_INSTANCES') private SET_INSTANCES: any;
     @Mutation('rocketTrace/SET_ENDPOINTS') private SET_ENDPOINTS: any;
+    private service: Option = { label: 'All', key: '' };
     private time!: Date[];
     private status: boolean = true;
     private maxTraceDuration: string = localStorage.getItem('maxTraceDuration') || '';
@@ -144,17 +145,16 @@ limitations under the License. -->
           if (this.serviceName) {
             for (const s of this.rocketTrace.services) {
               if (s.label === this.serviceName) {
-                this.rocketTrace.currentService.key = s.key;
-                this.rocketTrace.currentService.label = s.label;
+                this.service = s;
                 break;
               }
             }
           }
           this.getTraceList();
-          if (this.rocketTrace.currentService && this.rocketTrace.currentService.key) {
+          if (this.service && this.service.key) {
             this.GET_INSTANCES({
               duration: this.durationTime,
-              serviceId: this.rocketTrace.currentService.key,
+              serviceId: this.service.key,
             });
           }
         });
@@ -169,12 +169,12 @@ limitations under the License. -->
       };
     }
     private chooseService(i: Option) {
-      if (this.rocketTrace.currentService.key === i.key) {
+      if (this.service.key === i.key) {
         return;
       }
       this.instance = { label: 'All', key: '' };
       this.endpoint = { label: 'All', key: '' };
-      this.rocketTrace.currentService = i;
+      this.service = i;
       if (i.key === '') {
         this.SET_INSTANCES([]);
         this.SET_ENDPOINTS([]);
@@ -190,7 +190,7 @@ limitations under the License. -->
     }
     private searchEndpoint(search: string) {
       this.GET_ITEM_ENDPOINTS({
-        serviceId: this.rocketTrace.currentService.key,
+        serviceId: this.service.key,
         keyword: search,
         duration: this.durationTime,
       }).then((endpoints: Array<{ key: string; label: string }>) => {
@@ -223,8 +223,8 @@ limitations under the License. -->
         paging: { pageNum: 1, pageSize: 15, needTotal: true },
         queryOrder: this.rocketTrace.traceForm.queryOrder,
       };
-      if (this.rocketTrace.currentService.key) {
-        temp.serviceId = this.rocketTrace.currentService.key;
+      if (this.service.key) {
+        temp.serviceId = this.service.key;
       }
       if (this.instance.key) {
         temp.serviceInstanceId = this.instance.key;
@@ -260,7 +260,7 @@ limitations under the License. -->
       localStorage.removeItem('maxTraceDuration');
       this.minTraceDuration = '';
       localStorage.removeItem('minTraceDuration');
-      this.rocketTrace.currentService = { label: 'All', key: '' };
+      this.service = { label: 'All', key: '' };
       this.instance = { label: 'All', key: '' };
       this.endpoint = { label: 'All', key: '' };
       localStorage.removeItem('traceTags');

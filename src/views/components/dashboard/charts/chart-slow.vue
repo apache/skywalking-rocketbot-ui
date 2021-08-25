@@ -27,7 +27,7 @@ limitations under the License. -->
         <RkProgress :precent="(i.value / maxValue) * 100" color="#bf99f8" />
       </div>
     </div>
-    <rk-modal :show.sync="showModal" :title="$t('modalTitle')">
+    <rk-modal :show.sync="showModal" :title="$t('modalTitle')" :showButton="true">
       <div>
         {{ $t('selectRedirectPage') }}
       </div>
@@ -100,13 +100,6 @@ limitations under the License. -->
       if (!this.data.length) {
         return [];
       }
-      for (const i of this.data) {
-        if (this.isServiceChart) {
-          i.url = '/trace?service=' + encodeURIComponent(i.name);
-        } else {
-          i.url = undefined;
-        }
-      }
       const val = this.item.sortOrder;
 
       switch (val) {
@@ -140,8 +133,9 @@ limitations under the License. -->
   .rk-chart-slow-link {
     padding: 4px 10px;
     border-radius: 4px;
-    color: #efeff1;
-    background-color: #333844;
+    border: 1px solid #ddd;
+    color: #333;
+    background-color: #fff;
     will-change: opacity, background-color;
     transition: opacity 0.3s, background-color 0.3s;
   }
