@@ -27,7 +27,7 @@ limitations under the License. -->
         <RkProgress :precent="(i.value / maxValue) * 100" color="#bf99f8" />
       </div>
     </div>
-    <rk-modal :show.sync="showModal" :title="$t('modalTitle')" :showButton="true">
+    <rk-modal :show.sync="showModal" :title="$t('modalTitle')">
       <div>
         {{ $t('selectRedirectPage') }}
       </div>
