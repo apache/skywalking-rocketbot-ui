@@ -33,7 +33,6 @@ export interface State {
   currentTrace: Trace;
   traceSpanLogs: any[];
   traceSpanLogsTotal: number;
-  currentService: any;
 }
 
 const initState: State = {
@@ -57,7 +56,6 @@ const initState: State = {
   },
   traceSpanLogs: [],
   traceSpanLogsTotal: 0,
-  currentService: { label: 'All', key: '' },
 };
 
 // mutations
