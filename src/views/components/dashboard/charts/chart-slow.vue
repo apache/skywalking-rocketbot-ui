@@ -52,7 +52,21 @@ limitations under the License. -->
     @Prop() private type!: any;
     @Prop() private intervalTime!: any;
     private showModal: boolean = false;
-    private redirectData: any = {};
+    private redirectData: any = {
+      name: '',
+      log: {
+        path: '',
+        query: {
+          service: '',
+        },
+      },
+      trace: {
+        path: '',
+        query: {
+          service: '',
+        },
+      },
+    };
     private isServiceChart: boolean = false;
 
     private created() {
