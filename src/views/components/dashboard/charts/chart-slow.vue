@@ -29,7 +29,7 @@ limitations under the License. -->
     </div>
     <rk-modal :show.sync="showModal" :title="$t('modalTitle')">
       <div>
-        {{ $t('selectRedirectPage') }}
+        {{ $t('selectRedirectPage').replace('%s', redirectData.name) }}
       </div>
       <div class="mt-15">
         <router-link :to="redirectData.log" class="rk-chart-slow-link mr-20">{{ $t('log') }}</router-link>
@@ -81,6 +81,7 @@ limitations under the License. -->
     }
     private handleLink(i: any) {
       if (this.isServiceChart) {
+        this.redirectData.name = i.name;
         this.redirectData.log = {
           path: 'log',
           query: {
@@ -131,7 +132,7 @@ limitations under the License. -->
     padding: 6px 0;
   }
   .rk-chart-slow-link {
-    padding: 4px 10px;
+    padding: 4px 10px 7px 10px;
     border-radius: 4px;
     border: 1px solid #ddd;
     color: #333;
