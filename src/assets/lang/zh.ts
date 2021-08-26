@@ -228,6 +228,8 @@ const m = {
   destService: '终点服务',
   destServiceInstance: '终点实例',
   eventSource: '事件资源',
+  modalTitle: '查看',
+  selectRedirectPage: '查看 %s 服务的追踪或日志？',
 };
 
 export default m;
