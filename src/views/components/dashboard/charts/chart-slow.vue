@@ -43,7 +43,7 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import copy from '@/utils/copy';
-  import {MetricsName} from "@/views/components/dashboard/charts/constant";
+  import {MetricsName} from '@/views/components/dashboard/charts/constant';
 
   @Component({})
   export default class ChartSlow extends Vue {
@@ -63,7 +63,9 @@ limitations under the License. -->
               MetricsName.SERVICE_PERCENTILE,
               MetricsName.SERVICE_APDEX,
       ];
-      this.isServiceChart = 'Service' === this.item.entityType && serviceMetricNames.includes(this.item.metricName);
+      this.isServiceChart = 'Service' === this.item.entityType
+              && 'sortMetrics' === this.item.queryMetricType
+              && serviceMetricNames.includes(this.item.metricName);
     }
 
     get maxValue() {
@@ -80,7 +82,7 @@ limitations under the License. -->
       copy(i);
     }
     private handleLink(i: any) {
-      if (this.isServiceChart) {
+      if (this.isServiceChart && i.name) {
         this.redirectData.name = i.name;
         this.redirectData.log = {
           path: 'log',
