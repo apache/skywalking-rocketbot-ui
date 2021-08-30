@@ -230,6 +230,7 @@ const m = {
   eventSource: '事件资源',
   modalTitle: '查看',
   selectRedirectPage: '查看 %s 服务的追踪或日志？',
+  logAnalysis: '日志分析语言',
 };
 
 export default m;

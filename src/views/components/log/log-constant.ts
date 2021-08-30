@@ -113,9 +113,18 @@ export const BrowserLogConstants = [
     label: 'category',
     value: 'category',
   },
-
   {
     label: 'grade',
     value: 'grade',
   },
 ];
+
+export enum LogTestConstants {
+  Timestamp = 'timestamp',
+  Service = 'service',
+  ServiceInstance = 'serviceInstance',
+  Endpoint = 'endpoint',
+  Body = 'body',
+  TraceContext = 'traceContext',
+  Tags = 'tags',
+}

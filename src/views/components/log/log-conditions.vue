@@ -12,7 +12,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 
 <template>
-  <div class="rk-search-conditions flex-v">
+  <div class="rk-search-conditions">
     <div class="flex-h">
       <div class="mr-15" v-show="rocketLog.type.key === cateGoryService">
         <span class="sm b grey mr-10">{{ $t('traceID') }}:</span>

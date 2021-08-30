@@ -43,7 +43,7 @@ limitations under the License. -->
 <script lang="ts">
   import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
   import LogTable from './log-table/log-table.vue';
-  import { ServiceLogDetail } from './log-table/log-constant';
+  import { ServiceLogDetail } from './log-constant';
   import { formatJson } from '@/utils/formatJson';
 
   @Component({

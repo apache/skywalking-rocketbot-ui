@@ -232,6 +232,7 @@ const m = {
   eventSource: 'Event Source',
   modalTitle: 'Inspection',
   selectRedirectPage: 'Do you want to inspect Traces or Logs of %s service?',
+  logAnalysis: 'LAL',
 };
 
 export default m;

@@ -15,28 +15,26 @@
  * limitations under the License.
  */
 
-import { Commit, ActionTree, MutationTree, Dispatch } from 'vuex';
+import { Commit, ActionTree, MutationTree } from 'vuex';
 import * as types from '@/store/mutation-types';
 import { AxiosResponse } from 'axios';
+import logAna from './log-ana';
 import graph from '@/graph';
-
-interface Options {
-  key: string;
-  label: string;
-}
+import { Option } from '@/types/global';
+import { State as logAnaState } from './log-ana';
 export interface State {
-  type: Options;
-  logCategories: Options[];
+  type: Option;
+  logCategories: Option[];
   logs: any[];
   total: number;
-  categories: Options[];
-  category: Options;
+  categories: Option[];
+  category: Option;
   loading: boolean;
   conditions: any;
   supportQueryLogsByKeywords: boolean;
 }
 
-const categories: Options[] = [
+const categories: Option[] = [
   { label: 'All', key: 'ALL' },
   { label: 'Ajax', key: 'AJAX' },
   { label: 'Resource', key: 'RESOURCE' },
@@ -46,7 +44,7 @@ const categories: Options[] = [
   { label: 'Unknown', key: 'UNKNOWN' },
 ];
 
-const logState: State = {
+const logState: State & logAnaState = {
   type: { label: 'Service', key: 'service' },
   logCategories: [
     { label: 'Service', key: 'service' },
@@ -67,14 +65,16 @@ const logState: State = {
       : [],
   },
   supportQueryLogsByKeywords: true,
+  ...logAna.state,
 };
 
 // mutations
 const mutations: MutationTree<State> = {
-  [types.SELECT_LOG_TYPE](state: State, data: Options) {
+  ...logAna.mutations,
+  [types.SELECT_LOG_TYPE](state: State, data: Option) {
     state.type = data;
   },
-  [types.SELECT_ERROR_CATALOG](state: State, data: Options) {
+  [types.SELECT_ERROR_CATALOG](state: State, data: Option) {
     state.category = data;
   },
   [types.SET_LOGS](state: State, data: any[]) {
@@ -86,7 +86,7 @@ const mutations: MutationTree<State> = {
   [types.SET_LOADING](state: State, data: boolean) {
     state.loading = data;
   },
-  [types.SET_LOG_CONDITIONS](state: State, item: Options) {
+  [types.SET_LOG_CONDITIONS](state: State, item: Option) {
     state.conditions = {
       ...state.conditions,
       [item.label]: item.key,
@@ -108,6 +108,7 @@ const mutations: MutationTree<State> = {
 
 // actions
 const actions: ActionTree<State, any> = {
+  ...logAna.actions,
   QUERY_LOGS(context: { commit: Commit; state: State }, params: any) {
     context.commit('SET_LOADING', true);
     switch (context.state.type.key) {

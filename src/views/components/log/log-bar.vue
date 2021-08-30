@@ -59,6 +59,10 @@ limitations under the License. -->
         />
       </div>
       <span class="flex-h rk-right">
+        <a class="rk-log-search-btn bg-blue mr-10" @click="openLALBox">
+          <rk-icon icon="library_books" class="mr-5" />
+          <span class="vm">{{ $t('logAnalysis') }}</span>
+        </a>
         <a class="rk-log-search-btn bg-blue mr-10" @click="openConditionsBox">
           <rk-icon icon="settings" class="mr-5" />
           <span class="vm">{{ $t('setConditions') }}</span>
@@ -75,9 +79,12 @@ limitations under the License. -->
         <RkPage :currentSize="pageSize" :currentPage="pageNum" @changePage="handleRefresh" :total="logState.total" />
       </span>
     </div>
-    <div class="flex-h" v-show="showConditionsBox">
+    <div v-show="showConditionsBox">
       <LogConditions />
     </div>
+    <rk-sidebox :width="'100%'" :show.sync="showLALBox" :title="$t('logAnalysis')">
+      <LogAna />
+    </rk-sidebox>
   </div>
 </template>
 
@@ -88,12 +95,13 @@ limitations under the License. -->
   import ToolBarSelect from '../dashboard/tool-bar/tool-bar-select.vue';
   import ToolBarEndpointSelect from '../dashboard/tool-bar/tool-bar-endpoint-select.vue';
   import LogConditions from './log-conditions.vue';
+  import LogAna from './log-ana.vue';
   import { State as logState } from '@/store/modules/log/index';
   import { State as optionState } from '@/store/modules/global/selectors';
   import { PageTypes } from '@/constants/constant';
 
   @Component({
-    components: { CommonSelector, ToolBarSelect, ToolBarEndpointSelect, LogConditions },
+    components: { CommonSelector, ToolBarSelect, ToolBarEndpointSelect, LogConditions, LogAna },
   })
   export default class Bar extends Vue {
     @State('rocketLog') private logState!: logState;
@@ -111,11 +119,15 @@ limitations under the License. -->
     @Action('QUERY_LOGS') private QUERY_LOGS: any;
     @Action('QUERY_LOGS_BYKEYWORDS') private QUERY_LOGS_BYKEYWORDS: any;
     @Getter('durationTime') private durationTime: any;
+    @Action('GET_LOG_ANA_SERVICES') private GET_LOG_ANA_SERVICES: any;
+    @Action('GET_LOG_ANA_ENDPOINTS') private GET_LOG_ANA_ENDPOINTS: any;
+    @Action('GET_LOG_ANA_INSTANCES') private GET_LOG_ANA_INSTANCES: any;
 
     private pageNum: number = 1;
     private cateGoryBrowser = 'browser';
     private showConditionsBox = true;
     private pageSize = 22;
+    private showLALBox = false;
 
     private beforeMount() {
       this.MIXHANDLE_GET_OPTION({
@@ -219,7 +231,15 @@ limitations under the License. -->
     }
 
     private openConditionsBox() {
-      this.showConditionsBox = !this.showConditionsBox;
+      this.showConditionsBox = true;
+    }
+
+    private openLALBox() {
+      this.showLALBox = true;
+      this.GET_LOG_ANA_SERVICES({ duration: this.durationTime }).then(() => {
+        this.GET_LOG_ANA_INSTANCES({ duration: this.durationTime });
+        this.GET_LOG_ANA_ENDPOINTS({ duration: this.durationTime });
+      });
     }
   }
 </script>
