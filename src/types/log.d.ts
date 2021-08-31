@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 export interface LogTestOptions {
-  dsl: string;
   service: string;
   serviceInstance: string;
   endpoint: string;

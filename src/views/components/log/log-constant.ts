@@ -127,4 +127,5 @@ export enum LogTestConstants {
   Body = 'body',
   TraceContext = 'traceContext',
   Tags = 'tags',
+  DSL = 'dsl',
 }

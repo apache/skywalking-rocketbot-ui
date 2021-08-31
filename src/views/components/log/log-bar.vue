@@ -82,7 +82,7 @@ limitations under the License. -->
     <div v-show="showConditionsBox">
       <LogConditions />
     </div>
-    <rk-sidebox :width="'100%'" :show.sync="showLALBox" :title="$t('logAnalysis')">
+    <rk-sidebox :width="'900px'" :show.sync="showLALBox" :title="$t('logAnalysis')">
       <LogAna />
     </rk-sidebox>
   </div>

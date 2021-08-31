@@ -20,16 +20,17 @@ import * as types from '@/store/mutation-types';
 import { LogTestOptions } from '@/types/log';
 import graph from '@/graph';
 import { AxiosResponse } from 'axios';
-import { Duration, DurationTime, Option } from '@/types/global';
+import { DurationTime, Option } from '@/types/global';
 
 export interface State {
-  logTestFields: LogTestOptions | {};
+  logTestFields: LogTestOptions | any;
   services: Option[];
   instances: Option[];
   endpoints: Option[];
   selectedService: Option;
   selectedEndpoint: Option;
   selectedInstance: Option;
+  dsl: string;
 }
 
 const logAnaState: State = {
@@ -40,6 +41,7 @@ const logAnaState: State = {
   selectedInstance: { key: '', label: '' },
   endpoints: [],
   selectedEndpoint: { key: '', label: '' },
+  dsl: '',
 };
 
 // mutations
@@ -53,6 +55,10 @@ const mutations: MutationTree<State> = {
   [types.SET_LOG_ANA_SERVICES](state, items: Option[]) {
     state.services = items;
     state.selectedService = items[0] || state.selectedService;
+    // state.logTestFields = {
+    //   ...state.logTestFields,
+    //   service: state.selectedService.key,
+    // };
   },
   [types.SET_LOG_ANA_ENDPOINTS](state, items: Option[]) {
     state.endpoints = [{ key: '', label: 'None' }, ...items];
@@ -70,6 +76,9 @@ const mutations: MutationTree<State> = {
   },
   [types.SET_SELECTED_INSTANCE](state, item: Option) {
     state.selectedInstance = item;
+  },
+  [types.SET_DSL](state, content: string) {
+    state.dsl = content;
   },
 };
 
@@ -117,6 +126,20 @@ const actions: ActionTree<State, any> = {
       .params({ serviceId: context.state.selectedService.key || '', ...params })
       .then((res: AxiosResponse) => {
         context.commit(types.SET_LOG_ANA_INSTANCES, res.data.data.getServiceInstances);
+      });
+  },
+  LOG_ANA_QUERY(context: { commit: Commit; state: State }) {
+    const params = {
+      dsl: context.state.dsl,
+      log: JSON.stringify(context.state.logTestFields),
+    };
+
+    return graph
+      .query('queryLogTest')
+      .params(params)
+      .then((res: AxiosResponse) => {
+        console.log(res);
+        // context.commit(types.SET_LOG_ANA_INSTANCES, res.data.data.getServiceInstances);
       });
   },
 };

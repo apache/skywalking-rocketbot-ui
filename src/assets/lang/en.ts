@@ -96,7 +96,7 @@ const m = {
   search: 'Search',
   clear: 'Clear',
   more: 'More',
-  traceID: 'TraceID',
+  traceID: 'Trace ID',
   range: 'Range',
   timeRange: 'Time Range',
   duration: 'Duration',
@@ -233,6 +233,15 @@ const m = {
   modalTitle: 'Inspection',
   selectRedirectPage: 'Do you want to inspect Traces or Logs of %s service?',
   logAnalysis: 'LAL',
+  logDataBody: 'The content of the log data',
+  addType: 'Please input a type',
+  traceContext: 'Logs with trace context',
+  traceSegmentId: 'Trace Segment ID',
+  spanId: 'Span ID',
+  inputTraceSegmentId: 'Please input the trace segment ID',
+  inputSpanId: 'Please input the span ID',
+  inputTraceId: 'Please input the trace ID',
+  dsl: 'Script input for LAL',
 };
 
 export default m;

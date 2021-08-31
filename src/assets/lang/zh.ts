@@ -231,6 +231,15 @@ const m = {
   modalTitle: '查看',
   selectRedirectPage: '查看 %s 服务的追踪或日志？',
   logAnalysis: '日志分析语言',
+  logDataBody: '日志数据的内容',
+  addType: '请输入一个类型',
+  traceContext: '具有跟踪上下文的日志',
+  traceSegmentId: '跟踪段ID',
+  spanId: '跨度ID',
+  inputTraceSegmentId: '请输入跟踪段ID',
+  inputSpanId: '请输入跨度ID',
+  inputTraceId: '请输入跟踪ID',
+  dsl: 'LAL的脚本输入',
 };
 
 export default m;
