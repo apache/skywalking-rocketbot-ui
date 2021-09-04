@@ -95,37 +95,38 @@ limitations under the License. -->
       </div>
       <div>
         <label>{{ $t('dsl') }}</label>
-        <input type="text" v-model="dslContent" @change="changeLogAnaOptions(logTestConstants.DSL)" />
+        <textarea class="dsl" v-model="dslContent" @change="changeLogAnaOptions(logTestConstants.DSL)" />
       </div>
     </div>
     <div>
       <div class="log-ana-btn bg-blue" @click="logAnalysis">Analysis</div>
     </div>
-    <div>
+    <rk-sidebox :width="'900px'" :show.sync="showLALResp" :title="$t('logAnalysis')">
       <div class="log-metrics">
         <div>{{ $t('metrics') }}</div>
         <ul>
-          <li class="header">
+          <li>
             <span v-for="item of logMetricsHeader" :class="item.value" :key="item.value">
               {{ $t(item.label) }}
             </span>
           </li>
-          <li class="no-data" v-show="!logState.logTestResp.length">{{ $t('noData') }}</li>
-          <li v-for="metric in logState.logTestResp.metrics" :key="metric.name" @click="viewEventDetail(metric)">
+          <li class="no-data" v-show="!logState.logTestResp.metrics.length">{{ $t('noData') }}</li>
+          <li v-for="metric in logState.logTestResp.metrics" :key="metric.name">
             <span v-for="(item, index) of logMetricsHeader" :class="item.value" :key="item.value + index">
               <b v-if="item.value === 'tags'">
-                <a v-for="t of metric[item.label]" :key="t.key">{{ `${(t.key = t.value)}` }}</a>
+                <a v-for="t of metric.tags" :key="t.key">{{ `${t.key}=${t.value};` }} </a>
               </b>
-              <b else>{{ metric[item.label] }}</b>
+              <b v-else-if="item.value === 'timestamp'">{{ metric[item.value] | dateformat }}</b>
+              <b v-else>{{ metric[item.value] }}</b>
             </span>
           </li>
         </ul>
       </div>
       <div>
-        <label>{{ $t('logRespContent') }}</label>
-        <textarea v-model="logState.logTestResp.content" class="logRespContent" />
+        <div class="log-detail">{{ $t('log') }}</div>
+        <LogServiceDetailContent :currentLog="logState.logTestResp.log" />
       </div>
-    </div>
+    </rk-sidebox>
   </div>
 </template>
 <script lang="ts">
@@ -137,8 +138,9 @@ limitations under the License. -->
   import { LogTestConstants, TypeList, LogMetricsHeader } from './log-constant';
   import { Option } from '@/types/global';
   import { ConditionTags } from '../common/index';
+  import LogServiceDetailContent from './log-detail-content.vue';
 
-  @Component({ components: { ConditionTags } })
+  @Component({ components: { ConditionTags, LogServiceDetailContent } })
   export default class LogAna extends Vue {
     @State('rocketLog') private logState!: rocketLogState & rocketLogAnaState;
     @State('rocketOption') private rocketOption!: optionState;
@@ -168,6 +170,7 @@ limitations under the License. -->
       value: 'text',
     };
     private logRespContent: string = '';
+    private showLALResp: boolean = false;
 
     private created() {
       this.time = this.rocketbotGlobal.durationRow.start;
@@ -216,12 +219,14 @@ limitations under the License. -->
     }
 
     private updateTags(data: { tagsMap: Array<{ key: string; value: string }>; tagsList: string[] }) {
-      this.SET_LOG_TEST_FIELDS({ label: this.logTestConstants.Tags, key: data.tagsMap });
+      this.SET_LOG_TEST_FIELDS({ label: this.logTestConstants.Tags, key: { data: data.tagsMap } });
     }
 
     private logAnalysis() {
       this.SET_LOG_TEST_FIELDS({ label: this.logTestConstants.Timestamp, key: this.time.getTime() });
-      this.LOG_ANA_QUERY();
+      this.LOG_ANA_QUERY().then(() => {
+        this.showLALResp = true;
+      });
     }
 
     @Watch('rocketLog.conditions')
@@ -243,6 +248,9 @@ limitations under the License. -->
   }
   .logDataBody {
     margin-top: 5px;
+    textarea {
+      height: 200px;
+    }
   }
   .log-ana-btn {
     color: #fff;
@@ -259,32 +267,39 @@ limitations under the License. -->
     }
   }
   .logRespContent {
-    height: 600px;
+    height: 300px;
   }
   ul {
     max-height: 200px;
     min-height: 100px;
     overflow: auto;
     margin: 5px 0;
-    .header {
-      font-weight: bold;
-    }
     .tags {
-      width: 290px;
+      width: 390px;
     }
   }
   li {
     span {
       width: 150px;
-      height: 20px;
       line-height: 20px;
       text-align: center;
       display: inline-block;
       border-bottom: 1px solid #ccc;
-      overflow: hidden;
     }
   }
   .no-data {
     text-align: center;
+  }
+  .dsl {
+    height: 300px;
+  }
+  b {
+    font-weight: normal;
+  }
+  textarea {
+    padding: 5px;
+  }
+  .log-detail {
+    margin-bottom: 10px;
   }
 </style>

@@ -31,7 +31,7 @@ export interface State {
   selectedEndpoint: Option;
   selectedInstance: Option;
   dsl: string;
-  logTestResp: { content: string; metrics: LogTestMetrics[] };
+  logTestResp: { log: { content: string }; metrics: LogTestMetrics[] };
 }
 
 const logAnaState: State = {
@@ -43,7 +43,7 @@ const logAnaState: State = {
   endpoints: [],
   selectedEndpoint: { key: '', label: '' },
   dsl: '',
-  logTestResp: { content: '', metrics: [] },
+  logTestResp: { log: { content: '' }, metrics: [] },
 };
 
 // mutations
@@ -57,12 +57,12 @@ const mutations: MutationTree<State> = {
   [types.SET_LOG_ANA_SERVICES](state, items: Option[]) {
     state.services = items;
     state.selectedService = items[0] || state.selectedService;
-    state.logTestFields.service = state.selectedService.label;
+    state.logTestFields.service = state.selectedService.label || undefined;
   },
   [types.SET_LOG_ANA_ENDPOINTS](state, items: Option[]) {
     state.endpoints = [{ key: '', label: 'None' }, ...items];
     state.selectedEndpoint = state.endpoints[0];
-    state.logTestFields.endpoint = state.selectedEndpoint ? state.selectedEndpoint.label : undefined;
+    state.logTestFields.endpoint = state.selectedEndpoint.key ? state.selectedEndpoint.label : undefined;
   },
   [types.SET_LOG_ANA_INSTANCES](state, items: Option[]) {
     state.instances = [{ key: '', label: 'None' }, ...items];
@@ -81,7 +81,7 @@ const mutations: MutationTree<State> = {
   [types.SET_DSL](state, content: string) {
     state.dsl = content;
   },
-  [types.SET_LOG_TEST_RESPONSE](state, resp: { content: string; metrics: LogTestMetrics[] }) {
+  [types.SET_LOG_TEST_RESPONSE](state, resp: { log: { content: string }; metrics: LogTestMetrics[] }) {
     state.logTestResp = resp;
   },
 };
@@ -133,14 +133,13 @@ const actions: ActionTree<State, any> = {
       });
   },
   LOG_ANA_QUERY(context: { commit: Commit; state: State }) {
-    // console.log(context.state.logTestFields);
-    if (!context.state.logTestFields.tags.length) {
-      context.state.logTestFields.tags = undefined;
-    }
-    const params = {
+    context.state.logTestFields.service = 'dte';
+    context.state.logTestFields.timestamp = 12312313;
+    const requests = {
       dsl: context.state.dsl,
       log: JSON.stringify(context.state.logTestFields),
     };
+    const params = { requests };
 
     return graph
       .query('queryLogTest')
@@ -150,7 +149,7 @@ const actions: ActionTree<State, any> = {
           context.commit(types.SET_LOG_TEST_RESPONSE, {});
           return;
         }
-        context.commit(types.SET_LOG_TEST_RESPONSE, res.data.data.log.content);
+        context.commit(types.SET_LOG_TEST_RESPONSE, res.data.data.test);
       });
   },
 };

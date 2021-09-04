@@ -23,19 +23,7 @@ limitations under the License. -->
       <div class="log-tips" v-if="!data.length">{{ $t('noData') }}</div>
     </LogTable>
     <rk-sidebox :width="'800px'" :show.sync="showDetail" :title="$t('logDetail')">
-      <div class="rk-log-detail">
-        <div class="mb-10 clear rk-flex" v-for="(item, index) in columns" :key="index">
-          <template>
-            <span class="g-sm-4 grey">{{ $t(item.value) }}:</span>
-            <span v-if="item.label === 'timestamp'" class="g-sm-8">{{ currentLog[item.label] | dateformat }}</span>
-            <textarea class="content" readonly="readonly" v-else-if="item.label === 'content'" v-model="logContent" />
-            <span v-else-if="item.label === 'tags'" class="g-sm-8">
-              <div v-for="(d, index) in logTags" :key="index">{{ d }}</div>
-            </span>
-            <span v-else class="g-sm-8">{{ currentLog[item.label] }}</span>
-          </template>
-        </div>
-      </div>
+      <LogServiceDetailContent :currentLog="currentLog" />
     </rk-sidebox>
   </div>
 </template>
@@ -43,11 +31,12 @@ limitations under the License. -->
 <script lang="ts">
   import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
   import LogTable from './log-table/log-table.vue';
+  import LogServiceDetailContent from './log-detail-content.vue';
   import { ServiceLogDetail } from './log-constant';
   import { formatJson } from '@/utils/formatJson';
 
   @Component({
-    components: { LogTable },
+    components: { LogTable, LogServiceDetailContent },
   })
   export default class LogServiceDetail extends Vue {
     @Prop() private data: any;
@@ -59,13 +48,9 @@ limitations under the License. -->
     private list = [];
     private currentLog: any = {};
     private logContent: string = '';
-    private logTags: string = '';
 
     private handleSelectLog(data: any[]) {
       this.currentLog = data;
-      this.logTags = this.currentLog.tags.map((d: { key: string; value: string }) => {
-        return `${d.key} = ${d.value}`;
-      });
       if (this.currentLog.contentType === 'JSON') {
         this.logContent = formatJson(JSON.parse(this.currentLog.content));
       } else {
@@ -108,12 +93,5 @@ limitations under the License. -->
   }
   .g-sm-4.grey {
     flex-shrink: 0;
-  }
-  .content {
-    width: 500px;
-    height: 500px;
-    border: none;
-    outline: none;
-    color: #3d444f;
   }
 </style>
