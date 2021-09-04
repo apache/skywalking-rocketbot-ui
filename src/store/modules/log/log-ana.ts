@@ -133,8 +133,6 @@ const actions: ActionTree<State, any> = {
       });
   },
   LOG_ANA_QUERY(context: { commit: Commit; state: State }) {
-    context.state.logTestFields.service = 'dte';
-    context.state.logTestFields.timestamp = 12312313;
     const requests = {
       dsl: context.state.dsl,
       log: JSON.stringify(context.state.logTestFields),
