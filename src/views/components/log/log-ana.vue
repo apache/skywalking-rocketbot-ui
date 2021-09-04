@@ -99,7 +99,7 @@ limitations under the License. -->
       </div>
     </div>
     <div>
-      <div class="log-ana-btn bg-blue" @click="logAnalysis">Analysis</div>
+      <div class="log-ana-btn bg-blue" @click="logAnalysis">{{ isLoading ? $t('waitLoading') : $t('analysis') }}</div>
     </div>
     <rk-sidebox :width="'900px'" :show.sync="showLALResp" :title="$t('logAnalysis')">
       <div class="log-metrics">
@@ -171,6 +171,7 @@ limitations under the License. -->
     };
     private logRespContent: string = '';
     private showLALResp: boolean = false;
+    private isLoading: boolean = false;
 
     private created() {
       this.time = this.rocketbotGlobal.durationRow.start;
@@ -223,9 +224,14 @@ limitations under the License. -->
     }
 
     private logAnalysis() {
+      if (this.isLoading) {
+        return;
+      }
+      this.isLoading = true;
       this.SET_LOG_TEST_FIELDS({ label: this.logTestConstants.Timestamp, key: this.time.getTime() });
       this.LOG_ANA_QUERY().then(() => {
         this.showLALResp = true;
+        this.isLoading = false;
       });
     }
 

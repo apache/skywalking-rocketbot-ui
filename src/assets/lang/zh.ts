@@ -242,6 +242,8 @@ const m = {
   dsl: 'LAL的脚本输入',
   logContentType: '日志内容的类型',
   logRespContent: '日志内容',
+  analysis: '分析',
+  waitLoading: '加载中',
 };
 
 export default m;

@@ -244,6 +244,8 @@ const m = {
   dsl: 'Script input for LAL',
   logContentType: 'The type of the log content',
   logRespContent: 'Log Content',
+  analysis: 'Analysis',
+  waitLoading: 'Loading',
 };
 
 export default m;
