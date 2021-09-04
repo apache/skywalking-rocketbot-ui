@@ -53,6 +53,15 @@ limitations under the License. -->
         <label>{{ $t('tags') }}</label>
         <ConditionTags :theme="'light'" :clearTags="clearAllTags" @updateTags="updateTags" />
       </div>
+      <div>
+        <label>{{ $t('logContentType') }}</label>
+        <RkSelect
+          class="mb-5"
+          :current="currentType"
+          :data="typeList"
+          @onChoose="(item) => changeLogAnaOptions(logTestConstants.Type, item)"
+        />
+      </div>
       <div class="logDataBody">
         <label>{{ $t('logDataBody') }}</label>
         <textarea v-model="logContent" @change="changeLogAnaOptions(logTestConstants.Body)" />
@@ -90,9 +99,32 @@ limitations under the License. -->
       </div>
     </div>
     <div>
-      <a class="log-ana-btn bg-blue" @click="logAnalysis">
-        <span class="vm">Analysis</span>
-      </a>
+      <div class="log-ana-btn bg-blue" @click="logAnalysis">Analysis</div>
+    </div>
+    <div>
+      <div class="log-metrics">
+        <div>{{ $t('metrics') }}</div>
+        <ul>
+          <li class="header">
+            <span v-for="item of logMetricsHeader" :class="item.value" :key="item.value">
+              {{ $t(item.label) }}
+            </span>
+          </li>
+          <li class="no-data" v-show="!logState.logTestResp.length">{{ $t('noData') }}</li>
+          <li v-for="metric in logState.logTestResp.metrics" :key="metric.name" @click="viewEventDetail(metric)">
+            <span v-for="(item, index) of logMetricsHeader" :class="item.value" :key="item.value + index">
+              <b v-if="item.value === 'tags'">
+                <a v-for="t of metric[item.label]" :key="t.key">{{ `${(t.key = t.value)}` }}</a>
+              </b>
+              <b else>{{ metric[item.label] }}</b>
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <label>{{ $t('logRespContent') }}</label>
+        <textarea v-model="logState.logTestResp.content" class="logRespContent" />
+      </div>
     </div>
   </div>
 </template>
@@ -102,7 +134,7 @@ limitations under the License. -->
   import { State as rocketLogState } from '@/store/modules/log/index';
   import { State as rocketLogAnaState } from '@/store/modules/log/log-ana';
   import { State as optionState } from '@/store/modules/global/selectors';
-  import { LogTestConstants } from './log-constant';
+  import { LogTestConstants, TypeList, LogMetricsHeader } from './log-constant';
   import { Option } from '@/types/global';
   import { ConditionTags } from '../common/index';
 
@@ -129,6 +161,13 @@ limitations under the License. -->
     private segmentID: string = '';
     private spanID: string = '';
     private dslContent: string = '';
+    private typeList = TypeList;
+    private logMetricsHeader = LogMetricsHeader;
+    private currentType = {
+      label: 'Text',
+      value: 'text',
+    };
+    private logRespContent: string = '';
 
     private created() {
       this.time = this.rocketbotGlobal.durationRow.start;
@@ -136,8 +175,11 @@ limitations under the License. -->
 
     private changeLogAnaOptions(type: string, item: Option) {
       if (type === this.logTestConstants.Body) {
+        const contentType = this.typeList.filter(
+          (d: { value: string; label: string }) => d.value === this.currentType.value,
+        )[0];
         const val = {
-          content: this.logContent,
+          [contentType.value]: { [contentType.value]: this.logContent },
         };
         this.SET_LOG_TEST_FIELDS({ label: type, key: val });
         return;
@@ -153,6 +195,10 @@ limitations under the License. -->
       }
       if (type === this.logTestConstants.DSL) {
         this.SET_DSL(this.dslContent);
+        return;
+      }
+      if (type === this.logTestConstants.Type) {
+        this.currentType = { value: item.key, label: item.label };
         return;
       }
       if (type === this.logTestConstants.Service) {
@@ -193,21 +239,52 @@ limitations under the License. -->
     width: 100%;
     display: block;
     margin-bottom: 6px;
+    outline: none;
   }
   .logDataBody {
     margin-top: 5px;
   }
   .log-ana-btn {
-    display: block;
     color: #fff;
-    width: 150px;
+    width: 100%;
+    height: 30px;
     line-height: 30px;
     text-align: center;
     background-color: #484b55;
     border-radius: 4px;
-    margin-top: 10px;
+    margin: 20px 0;
+    cursor: pointer;
     &.bg-blue {
       background-color: #448dfe;
     }
+  }
+  .logRespContent {
+    height: 600px;
+  }
+  ul {
+    max-height: 200px;
+    min-height: 100px;
+    overflow: auto;
+    margin: 5px 0;
+    .header {
+      font-weight: bold;
+    }
+    .tags {
+      width: 290px;
+    }
+  }
+  li {
+    span {
+      width: 150px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+      display: inline-block;
+      border-bottom: 1px solid #ccc;
+      overflow: hidden;
+    }
+  }
+  .no-data {
+    text-align: center;
   }
 </style>

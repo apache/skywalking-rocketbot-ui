@@ -67,36 +67,19 @@ export const QueryLogsByKeywords = {
 export const QueryLogTest = {
   variable: '$requests: LogTestRequest!',
   query: `
-    queryTest(requests: $requests) {
-      LogTestResponse {
-        log {
-          serviceName
-          serviceId
-          serviceInstanceName
-          serviceInstanceId
-          endpointName
-          endpointId
-          traceId
-          timestamp
-          contentType
-          content
+    test(requests: $requests) {
+      log {
+        content
+      }
+      metrics {
+        {
+          name
           tags {
             key
             value
           }
-        }
-        metrics {
-          {
-            name
-            tags {
-              key
-              value
-            }
-            value
-            timestamp
-          }
+          value
         }
       }
-    }
-  `,
+    }`,
 };

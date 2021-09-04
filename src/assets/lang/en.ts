@@ -232,8 +232,8 @@ const m = {
   eventSource: 'Event Source',
   modalTitle: 'Inspection',
   selectRedirectPage: 'Do you want to inspect Traces or Logs of %s service?',
-  logAnalysis: 'LAL',
-  logDataBody: 'The content of the log data',
+  logAnalysis: 'Log Analysis Language',
+  logDataBody: 'The content of the log',
   addType: 'Please input a type',
   traceContext: 'Logs with trace context',
   traceSegmentId: 'Trace Segment ID',
@@ -242,6 +242,8 @@ const m = {
   inputSpanId: 'Please input the span ID',
   inputTraceId: 'Please input the trace ID',
   dsl: 'Script input for LAL',
+  logContentType: 'The type of the log content',
+  logRespContent: 'Log Content',
 };
 
 export default m;

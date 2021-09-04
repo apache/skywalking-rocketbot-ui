@@ -38,3 +38,9 @@ interface TraceContext {
 interface LogTags {
   data: { key: string; value: string };
 }
+export interface LogTestMetrics {
+  name: String;
+  tags: { key: string; value: string };
+  value: number;
+  timestamp: number;
+}

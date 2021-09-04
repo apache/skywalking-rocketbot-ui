@@ -21,4 +21,4 @@ export const queryBrowserErrorLogs = `query queryBrowserErrorLogs(${QueryBrowser
   ${QueryBrowserErrorLogs.query}}`;
 export const queryServiceLogs = `query queryLogs(${QueryServiceLogs.variable}) {${QueryServiceLogs.query}}`;
 export const queryLogsByKeywords = `query queryLogsByKeywords {${QueryLogsByKeywords.query}}`;
-export const queryLogTest = `query QueryLogTest(${QueryLogTest.variable}) {${QueryLogTest.query}}`;
+export const queryLogTest = `query test(${QueryLogTest.variable}) {${QueryLogTest.query}}`;

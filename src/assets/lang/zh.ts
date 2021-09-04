@@ -240,6 +240,8 @@ const m = {
   inputSpanId: '请输入跨度ID',
   inputTraceId: '请输入跟踪ID',
   dsl: 'LAL的脚本输入',
+  logContentType: '日志内容的类型',
+  logRespContent: '日志内容',
 };
 
 export default m;
