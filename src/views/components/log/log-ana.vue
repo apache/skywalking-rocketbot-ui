@@ -15,7 +15,7 @@ limitations under the License. -->
   <div>
     <div class="flex-v">
       <div>
-        <label>{{ $t('service') }}</label>
+        <label>{{ $t('service') }}<b class="require"> *</b></label>
         <RkSelect
           class="mb-5"
           :current="logState.selectedService"
@@ -42,7 +42,7 @@ limitations under the License. -->
         />
       </div>
       <div>
-        <label>{{ $t('time') }}</label>
+        <label>{{ $t('time') }}<b class="require"> *</b></label>
         <div>
           <span>
             <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
@@ -63,7 +63,7 @@ limitations under the License. -->
         />
       </div>
       <div class="logDataBody">
-        <label>{{ $t('logDataBody') }}</label>
+        <label>{{ $t('logDataBody') }}<b class="require"> *</b></label>
         <textarea v-model="logContent" @change="changeLogAnaOptions(logTestConstants.Body)" />
       </div>
       <div>
@@ -94,10 +94,11 @@ limitations under the License. -->
         />
       </div>
       <div>
-        <label>{{ $t('dsl') }}</label>
-        <textarea class="dsl" v-model="dslContent" @change="changeLogAnaOptions(logTestConstants.DSL)" />
+        <label>{{ $t('dsl') }}<b class="require"> *</b></label>
+        <div ref="dslContent" id="dsl" contenteditable="true" />
       </div>
     </div>
+    <div class="error-tips" v-show="errorCnt">{{ errorCnt }}</div>
     <div>
       <div class="log-ana-btn bg-blue" @click="logAnalysis">{{ isLoading ? $t('waitLoading') : $t('analysis') }}</div>
     </div>
@@ -162,7 +163,6 @@ limitations under the License. -->
     private traceID: string = '';
     private segmentID: string = '';
     private spanID: string = '';
-    private dslContent: string = '';
     private typeList = TypeList;
     private logMetricsHeader = LogMetricsHeader;
     private currentType = {
@@ -172,12 +172,30 @@ limitations under the License. -->
     private logRespContent: string = '';
     private showLALResp: boolean = false;
     private isLoading: boolean = false;
+    private monacoInstance: any;
+    private errorCnt: string = '';
 
     private created() {
       this.time = this.rocketbotGlobal.durationRow.start;
     }
 
-    private changeLogAnaOptions(type: string, item: Option) {
+    private mounted() {
+      import('monaco-editor/esm/vs/editor/editor.main.js').then((monaco) => {
+        this.monacoInstanceGen(monaco);
+      });
+    }
+
+    private monacoInstanceGen(monaco: any) {
+      this.monacoInstance = monaco.editor.create(this.$refs.dslContent, {
+        value: '',
+        language: 'java',
+      });
+      this.monacoInstance.onDidChangeModelContent((event: any) => {
+        this.SET_DSL(this.monacoInstance.getValue());
+      });
+    }
+
+    private changeLogAnaOptions(type: string, item: Option | any) {
       if (type === this.logTestConstants.Body) {
         const contentType = this.typeList.filter(
           (d: { value: string; label: string }) => d.value === this.currentType.value,
@@ -195,10 +213,6 @@ limitations under the License. -->
           spanId: this.spanID,
         };
         this.SET_LOG_TEST_FIELDS({ label: type, key: val });
-        return;
-      }
-      if (type === this.logTestConstants.DSL) {
-        this.SET_DSL(this.dslContent);
         return;
       }
       if (type === this.logTestConstants.Type) {
@@ -229,10 +243,24 @@ limitations under the License. -->
       }
       this.isLoading = true;
       this.SET_LOG_TEST_FIELDS({ label: this.logTestConstants.Timestamp, key: this.time.getTime() });
+      if (!this.logState.dsl) {
+        this.isLoading = false;
+        this.errorCnt = this.$t('dslEmpty') as string;
+        return;
+      }
+      if (!(this.logState.logTestFields.body && this.logState.logTestFields.body.content)) {
+        this.isLoading = false;
+        this.errorCnt = this.$t('logContentEmpty') as string;
+        return;
+      }
       this.LOG_ANA_QUERY().then(() => {
         this.showLALResp = true;
         this.isLoading = false;
       });
+    }
+
+    private unmounted() {
+      this.monacoInstance.dispose();
     }
 
     @Watch('rocketLog.conditions')
@@ -296,8 +324,11 @@ limitations under the License. -->
   .no-data {
     text-align: center;
   }
-  .dsl {
+  #dsl {
     height: 300px;
+    width: 100%;
+    border: 1px solid #ccc;
+    outline: none;
   }
   b {
     font-weight: normal;
@@ -307,5 +338,12 @@ limitations under the License. -->
   }
   .log-detail {
     margin-bottom: 10px;
+  }
+  .require,
+  .error-tips {
+    color: red;
+  }
+  .error-tips {
+    margin-top: 20px;
   }
 </style>

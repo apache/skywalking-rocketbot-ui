@@ -144,7 +144,7 @@ const actions: ActionTree<State, any> = {
       .params(params)
       .then((res: AxiosResponse) => {
         if (res.data.errors) {
-          context.commit(types.SET_LOG_TEST_RESPONSE, {});
+          context.commit(types.SET_LOG_TEST_RESPONSE, { log: {}, metrics: [] });
           return;
         }
         context.commit(types.SET_LOG_TEST_RESPONSE, res.data.data.test);

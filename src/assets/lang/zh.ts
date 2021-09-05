@@ -244,6 +244,8 @@ const m = {
   logRespContent: '日志内容',
   analysis: '分析',
   waitLoading: '加载中',
+  dslEmpty: 'LAL的脚本输入不应该是空',
+  logContentEmpty: '日志数据的内容不应该是空',
 };
 
 export default m;
