@@ -134,7 +134,6 @@ limitations under the License. -->
   import { Component, Vue } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
   import { State as rocketLogAnaState } from '@/store/modules/debug/log-lal';
-  import { State as optionState } from '@/store/modules/global/selectors';
   import { LogTestConstants, TypeList, LogMetricsHeader } from './debug-constant';
   import { Option } from '@/types/global';
   import { ConditionTags } from '../common/index';
@@ -142,9 +141,7 @@ limitations under the License. -->
 
   @Component({ components: { ConditionTags, LogServiceDetailContent } })
   export default class LogLAL extends Vue {
-    // @State('rocketLog') private logState!: rocketLogState;
     @State('rocketDebugLAL') private rocketLogLAL!: rocketLogAnaState;
-    @State('rocketOption') private rocketOption!: optionState;
     @State('rocketbot') private rocketbotGlobal: any;
     @Getter('durationTime') private durationTime: any;
     @Mutation('SET_SELECTED_SERVICE') private SET_SELECTED_SERVICE: any;
