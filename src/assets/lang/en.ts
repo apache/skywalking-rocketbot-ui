@@ -248,6 +248,7 @@ const m = {
   waitLoading: 'Loading',
   dslEmpty: 'Script input of LAL should not be empty',
   logContentEmpty: 'The content of the log should not not be empty',
+  debug: 'Debug',
 };
 
 export default m;

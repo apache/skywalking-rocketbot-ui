@@ -12,14 +12,14 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 
 <template>
-  <div>
+  <div class="log-lal">
     <div class="flex-v">
       <div>
         <label>{{ $t('service') }}<b class="require"> *</b></label>
         <RkSelect
           class="mb-5"
-          :current="logState.selectedService"
-          :data="logState.services"
+          :current="rocketLogLAL.selectedService"
+          :data="rocketLogLAL.services"
           @onChoose="(item) => changeLogAnaOptions(logTestConstants.Service, item)"
         />
       </div>
@@ -27,8 +27,8 @@ limitations under the License. -->
         <label>{{ $t('serviceinstance') }}</label>
         <RkSelect
           class="mb-5"
-          :current="logState.selectedInstance"
-          :data="logState.instances"
+          :current="rocketLogLAL.selectedInstance"
+          :data="rocketLogLAL.instances"
           @onChoose="(item) => changeLogAnaOptions(logTestConstants.ServiceInstance, item)"
         />
       </div>
@@ -36,8 +36,8 @@ limitations under the License. -->
         <label>{{ $t('endpoint') }}</label>
         <RkSelect
           class="mb-5"
-          :current="logState.selectedEndpoint"
-          :data="logState.endpoints"
+          :current="rocketLogLAL.selectedEndpoint"
+          :data="rocketLogLAL.endpoints"
           @onChoose="(item) => changeLogAnaOptions(logTestConstants.Endpoint, item)"
         />
       </div>
@@ -51,7 +51,7 @@ limitations under the License. -->
       </div>
       <div>
         <label>{{ $t('tags') }}</label>
-        <ConditionTags :theme="'light'" :clearTags="clearAllTags" @updateTags="updateTags" />
+        <ConditionTags :theme="'light'" :clearTags="false" @updateTags="updateTags" />
       </div>
       <div>
         <label>{{ $t('logContentType') }}</label>
@@ -111,8 +111,8 @@ limitations under the License. -->
               {{ $t(item.label) }}
             </span>
           </li>
-          <li class="no-data" v-show="!logState.logTestResp.metrics.length">{{ $t('noData') }}</li>
-          <li v-for="metric in logState.logTestResp.metrics" :key="metric.name">
+          <li class="no-data" v-show="!rocketLogLAL.logTestResp.metrics.length">{{ $t('noData') }}</li>
+          <li v-for="metric in rocketLogLAL.logTestResp.metrics" :key="metric.name">
             <span v-for="(item, index) of logMetricsHeader" :class="item.value" :key="item.value + index">
               <b v-if="item.value === 'tags'">
                 <a v-for="t of metric.tags" :key="t.key">{{ `${t.key}=${t.value};` }} </a>
@@ -125,25 +125,25 @@ limitations under the License. -->
       </div>
       <div>
         <div class="log-detail">{{ $t('log') }}</div>
-        <LogServiceDetailContent :currentLog="logState.logTestResp.log" />
+        <LogServiceDetailContent :currentLog="rocketLogLAL.logTestResp.log" />
       </div>
     </rk-sidebox>
   </div>
 </template>
 <script lang="ts">
-  import { Component, Vue, Watch } from 'vue-property-decorator';
+  import { Component, Vue } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
-  import { State as rocketLogState } from '@/store/modules/log/index';
-  import { State as rocketLogAnaState } from '@/store/modules/log/log-ana';
+  import { State as rocketLogAnaState } from '@/store/modules/debug/log-lal';
   import { State as optionState } from '@/store/modules/global/selectors';
-  import { LogTestConstants, TypeList, LogMetricsHeader } from './log-constant';
+  import { LogTestConstants, TypeList, LogMetricsHeader } from './debug-constant';
   import { Option } from '@/types/global';
   import { ConditionTags } from '../common/index';
-  import LogServiceDetailContent from './log-detail-content.vue';
+  import LogServiceDetailContent from '../log/log-detail-content.vue';
 
   @Component({ components: { ConditionTags, LogServiceDetailContent } })
-  export default class LogAna extends Vue {
-    @State('rocketLog') private logState!: rocketLogState & rocketLogAnaState;
+  export default class LogLAL extends Vue {
+    // @State('rocketLog') private logState!: rocketLogState;
+    @State('rocketDebugLAL') private rocketLogLAL!: rocketLogAnaState;
     @State('rocketOption') private rocketOption!: optionState;
     @State('rocketbot') private rocketbotGlobal: any;
     @Getter('durationTime') private durationTime: any;
@@ -155,10 +155,10 @@ limitations under the License. -->
     @Action('GET_LOG_ANA_ENDPOINTS') private GET_LOG_ANA_ENDPOINTS: any;
     @Action('GET_LOG_ANA_INSTANCES') private GET_LOG_ANA_INSTANCES: any;
     @Action('LOG_ANA_QUERY') private LOG_ANA_QUERY: any;
+    @Action('GET_LOG_ANA_SERVICES') private GET_LOG_ANA_SERVICES: any;
 
     private logTestConstants = LogTestConstants;
     private time!: Date;
-    private clearAllTags: boolean = false;
     private logContent: string = '';
     private traceID: string = '';
     private segmentID: string = '';
@@ -177,6 +177,10 @@ limitations under the License. -->
 
     private created() {
       this.time = this.rocketbotGlobal.durationRow.start;
+      this.GET_LOG_ANA_SERVICES({ duration: this.durationTime }).then(() => {
+        this.GET_LOG_ANA_INSTANCES({ duration: this.durationTime });
+        this.GET_LOG_ANA_ENDPOINTS({ duration: this.durationTime });
+      });
     }
 
     private mounted() {
@@ -243,12 +247,12 @@ limitations under the License. -->
       }
       this.isLoading = true;
       this.SET_LOG_TEST_FIELDS({ label: this.logTestConstants.Timestamp, key: this.time.getTime() });
-      if (!this.logState.dsl) {
+      if (!this.rocketLogLAL.dsl) {
         this.isLoading = false;
         this.errorCnt = this.$t('dslEmpty') as string;
         return;
       }
-      if (!this.logState.logTestFields.body) {
+      if (!this.rocketLogLAL.logTestFields.body) {
         this.isLoading = false;
         this.errorCnt = this.$t('logContentEmpty') as string;
         return;
@@ -262,16 +266,14 @@ limitations under the License. -->
     private unmounted() {
       this.monacoInstance.dispose();
     }
-
-    @Watch('rocketLog.conditions')
-    private clearTags() {
-      if (!this.logState.conditions.tags) {
-        this.clearAllTags = true;
-      }
-    }
   }
 </script>
 <style lang="scss" scoped>
+  .log-lal {
+    padding: 10px;
+    height: calc(100% - 100);
+    overflow: auto;
+  }
   input,
   textarea {
     border: 1px solid #ccc;

@@ -246,6 +246,7 @@ const m = {
   waitLoading: '加载中',
   dslEmpty: 'LAL的脚本输入不应该是空',
   logContentEmpty: '日志数据的内容不应该是空',
+  debug: '调试',
 };
 
 export default m;

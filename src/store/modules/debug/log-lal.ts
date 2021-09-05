@@ -17,7 +17,7 @@
 
 import { Commit, ActionTree, MutationTree } from 'vuex';
 import * as types from '@/store/mutation-types';
-import { LogTestOptions, LogTestMetrics } from '@/types/log';
+import { LogTestOptions, LogTestMetrics } from '@/types/debug';
 import graph from '@/graph';
 import { AxiosResponse } from 'axios';
 import { DurationTime, Option } from '@/types/global';
@@ -32,6 +32,7 @@ export interface State {
   selectedInstance: Option;
   dsl: string;
   logTestResp: { log: { content: string }; metrics: LogTestMetrics[] };
+  tabType: string;
 }
 
 const logAnaState: State = {
@@ -44,6 +45,7 @@ const logAnaState: State = {
   selectedEndpoint: { key: '', label: '' },
   dsl: '',
   logTestResp: { log: { content: '' }, metrics: [] },
+  tabType: 'LAL',
 };
 
 // mutations
@@ -83,6 +85,9 @@ const mutations: MutationTree<State> = {
   },
   [types.SET_LOG_TEST_RESPONSE](state, resp: { log: { content: string }; metrics: LogTestMetrics[] }) {
     state.logTestResp = resp;
+  },
+  [types.SET_TAB_TYPE](state, type: string) {
+    state.tabType = type;
   },
 };
 
@@ -133,6 +138,8 @@ const actions: ActionTree<State, any> = {
       });
   },
   LOG_ANA_QUERY(context: { commit: Commit; state: State }) {
+    context.state.logTestFields.service = 'dte';
+    context.state.logTestFields.timestamp = 12312313;
     const requests = {
       dsl: context.state.dsl,
       log: JSON.stringify(context.state.logTestFields),
