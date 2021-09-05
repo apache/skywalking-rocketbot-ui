@@ -248,7 +248,7 @@ limitations under the License. -->
         this.errorCnt = this.$t('dslEmpty') as string;
         return;
       }
-      if (!(this.logState.logTestFields.body && this.logState.logTestFields.body.content)) {
+      if (!this.logState.logTestFields.body) {
         this.isLoading = false;
         this.errorCnt = this.$t('logContentEmpty') as string;
         return;
