@@ -345,4 +345,8 @@ limitations under the License. -->
   .error-tips {
     margin-top: 20px;
   }
+  label {
+    font-size: 14px;
+    font-weight: bold;
+  }
 </style>
