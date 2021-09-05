@@ -281,6 +281,9 @@ const actions: ActionTree<State, any> = {
       });
   },
   GET_ITEM_ENDPOINTS(context, params) {
+    if (!params.keyword) {
+      params.keyword = '';
+    }
     return graph
       .query('queryEndpoints')
       .params(params)

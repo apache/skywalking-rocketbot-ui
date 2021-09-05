@@ -41,8 +41,24 @@ limitations under the License. -->
           :value="service"
           @input="chooseService"
           :data="rocketTrace.services"
+          icon="package"
         />
-        <CommonSelector :hasSearch="true" :title="$t('instance')" v-model="instance" :data="rocketTrace.instances" />
+        <CommonSelector
+          :hasSearch="true"
+          :title="$t('instance')"
+          v-model="instance"
+          :data="rocketTrace.instances"
+          icon="disk"
+        />
+        <CommonSelector
+          :hasSearch="true"
+          :title="$t('endpoint')"
+          :value="endpoint"
+          @input="chooseEndpoint"
+          @search="searchEndpoint"
+          :data="rocketTrace.endpoints"
+          icon="code"
+        />
         <CommonSelector
           :title="$t('status')"
           :value="traceState"
@@ -52,14 +68,7 @@ limitations under the License. -->
             { label: 'Success', key: 'SUCCESS' },
             { label: 'Error', key: 'ERROR' },
           ]"
-        />
-        <CommonSelector
-          :hasSearch="true"
-          :title="$t('endpointName')"
-          :value="endpoint"
-          @input="chooseEndpoint"
-          @search="searchEndpoint"
-          :data="rocketTrace.endpoints"
+          icon="epic"
         />
       </div>
     </div>
@@ -123,19 +132,32 @@ limitations under the License. -->
     private tagsMap: Array<{ key: string; value: string }> = [];
     private tagsList: string[] = [];
     private clearTags: boolean = false;
+    private serviceName: string = '';
 
     private created() {
       this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
+      this.serviceName = this.$route.query.service ? this.$route.query.service.toString() : this.serviceName;
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     }
     private mounted() {
-      this.getTraceList();
-      if (this.service && this.service.key) {
-        this.GET_INSTANCES({
-          duration: this.durationTime,
-          serviceId: this.service.key,
+      this.GET_SERVICES({ duration: this.durationTime })
+        .then(() => {
+          if (this.serviceName) {
+            for (const s of this.rocketTrace.services) {
+              if (s.label === this.serviceName) {
+                this.service = s;
+                break;
+              }
+            }
+          }
+          this.getTraceList();
+          if (this.service && this.service.key) {
+            this.GET_INSTANCES({
+              duration: this.durationTime,
+              serviceId: this.service.key,
+            });
+          }
         });
-      }
     }
     private globalTimeFormat(time: Date[]) {
       const step = 'SECOND';
@@ -171,6 +193,8 @@ limitations under the License. -->
         serviceId: this.service.key,
         keyword: search,
         duration: this.durationTime,
+      }).then((endpoints: Array<{ key: string; label: string }>) => {
+        this.SET_ENDPOINTS(endpoints);
       });
     }
     private chooseStatus(i: Option) {
@@ -184,7 +208,6 @@ limitations under the License. -->
       this.tagsMap = data.tagsMap;
     }
     private getTraceList() {
-      this.GET_SERVICES({ duration: this.durationTime });
       const temp: any = {
         queryDuration: this.globalTimeFormat([
           new Date(
@@ -215,7 +238,7 @@ limitations under the License. -->
         localStorage.setItem('minTraceDuration', this.minTraceDuration);
       }
       if (this.endpoint.key) {
-        temp.endpointName = this.endpoint.label;
+        temp.endpointId = this.endpoint.key;
       }
       if (this.traceId) {
         temp.traceId = this.traceId;
@@ -248,6 +271,7 @@ limitations under the License. -->
       localStorage.removeItem('traceId');
       this.traceState = { label: 'All', key: 'ALL' };
       this.SET_TRACE_FORM_ITEM({ type: 'queryOrder', data: '' });
+      this.GET_SERVICES({ duration: this.durationTime });
       this.getTraceList();
     }
 

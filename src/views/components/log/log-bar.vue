@@ -15,39 +15,45 @@ limitations under the License. -->
   <div class="rk-log-nav">
     <div class="rk-error-log-bar flex-h">
       <div class="flex-h">
-        <ToolBarSelect
-          @onChoose="selectCategroy"
+        <CommonSelector
+          :hasSearch="true"
           :title="$t('logCategory')"
-          :current="logState.type"
+          :value="logState.type"
+          @input="selectCategroy"
           :data="logState.logCategories"
           icon="chart"
         />
-        <ToolBarSelect
-          @onChoose="selectService"
+        <CommonSelector
+          :hasSearch="true"
           :title="$t('service')"
-          :current="rocketOption.currentService"
+          :value="rocketOption.currentService"
+          @input="selectService"
           :data="rocketOption.services"
           icon="package"
         />
-        <ToolBarSelect
-          @onChoose="selectInstance"
+        <CommonSelector
+          :hasSearch="true"
           :title="logState.type.key === cateGoryBrowser ? $t('version') : $t('currentInstance')"
-          :current="rocketOption.currentInstance"
+          :value="rocketOption.currentInstance"
+          @input="selectInstance"
           :data="rocketOption.instances"
           icon="disk"
         />
-        <ToolBarSelect
-          @onChoose="selectEndpoint"
+        <CommonSelector
+          :hasSearch="true"
           :title="logState.type.key === cateGoryBrowser ? $t('page') : $t('currentEndpoint')"
-          :current="rocketOption.currentEndpoint"
+          :value="rocketOption.currentEndpoint"
+          @input="selectEndpoint"
+          @search="searchEndpoint"
           :data="rocketOption.endpoints"
           icon="code"
         />
-        <ToolBarSelect
+        <CommonSelector
           v-if="logState.type.key === cateGoryBrowser"
-          @onChoose="SELECT_ERROR_CATALOG"
+          :hasSearch="true"
           :title="$t('errorCatalog')"
-          :current="logState.category"
+          :value="logState.category"
+          @input="SELECT_ERROR_CATALOG"
           :data="logState.categories"
           icon="epic"
         />
@@ -96,9 +102,11 @@ limitations under the License. -->
     @Mutation('SELECT_ERROR_CATALOG') private SELECT_ERROR_CATALOG: any;
     @Mutation('SET_EVENTS') private SET_EVENTS: any;
     @Mutation('CLEAR_LOG_CONDITIONS') private CLEAR_LOG_CONDITIONS: any;
+    @Mutation('SET_ENDPOINTS') private SET_ENDPOINTS: any;
     @Action('SELECT_SERVICE') private SELECT_SERVICE: any;
-    @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
+    @Action('GET_ITEM_ENDPOINTS') private GET_ITEM_ENDPOINTS: any;
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
+    @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
     @Action('QUERY_LOGS') private QUERY_LOGS: any;
     @Action('QUERY_LOGS_BYKEYWORDS') private QUERY_LOGS_BYKEYWORDS: any;
@@ -119,6 +127,15 @@ limitations under the License. -->
           this.QUERY_LOGS_BYKEYWORDS();
         })
         .then(() => {
+          const serviceName = this.$route.query.service ? this.$route.query.service.toString() : undefined;
+          if (serviceName) {
+            for (const s of this.rocketOption.services) {
+              if (s.label === serviceName) {
+                this.selectService(s);
+                break;
+              }
+            }
+          }
           this.queryLogs();
         });
     }
@@ -148,6 +165,16 @@ limitations under the License. -->
         pageType: PageTypes.LOG,
       }).then(() => {
         this.queryLogs();
+      });
+    }
+
+    private searchEndpoint(search: string) {
+      this.GET_ITEM_ENDPOINTS({
+        serviceId: this.rocketOption.currentService.key,
+        keyword: search,
+        duration: this.durationTime,
+      }).then((endpoints: any) => {
+        this.SET_ENDPOINTS(endpoints);
       });
     }
 
