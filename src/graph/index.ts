@@ -24,6 +24,7 @@ import * as alarm from './query/alarm';
 import * as profile from './query/profile';
 import * as dashboard from './query/dashboard';
 import * as errorLog from './query/log';
+import * as logDebug from './query/debug';
 
 const query: any = {
   ...errorLog,
@@ -33,6 +34,7 @@ const query: any = {
   ...alarm,
   ...profile,
   ...dashboard,
+  ...logDebug,
 };
 
 class Graph {

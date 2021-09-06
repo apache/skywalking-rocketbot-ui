@@ -129,6 +129,9 @@ limitations under the License. -->
         <label class="log-detail">{{ $t('log') }}</label>
         <LogServiceDetailContent :currentLog="rocketLogLAL.logTestResp.log" />
       </div>
+      <div class="error-tips">
+        <i v-for="err of errorsMessage" :key="err.message">{{ err.message }}</i>
+      </div>
     </div>
   </div>
 </template>
@@ -174,6 +177,7 @@ limitations under the License. -->
     private isLoading: boolean = false;
     private monacoInstance: any;
     private errorCnt: string = '';
+    private errorsMessage: Array<{ message: string }> = [];
 
     private created() {
       this.time = this.rocketbotGlobal.durationRow.start;
@@ -258,9 +262,10 @@ limitations under the License. -->
         this.errorCnt = this.$t('logContentEmpty') as string;
         return;
       }
-      this.LOG_ANA_QUERY().then(() => {
+      this.LOG_ANA_QUERY().then((errors: Array<{ message: string }>) => {
         this.showLALResp = true;
         this.isLoading = false;
+        this.errorsMessage = errors || [];
       });
     }
 
@@ -360,6 +365,9 @@ limitations under the License. -->
   .require,
   .error-tips {
     color: red;
+    i {
+      display: block;
+    }
   }
   .error-tips {
     margin-bottom: 20px;
