@@ -13,98 +13,100 @@ limitations under the License. -->
 
 <template>
   <div class="log-lal">
-    <div class="flex-v">
-      <div>
-        <label>{{ $t('service') }}<b class="require"> *</b></label>
-        <RkSelect
-          class="mb-5"
-          :current="rocketLogLAL.selectedService"
-          :data="rocketLogLAL.services"
-          @onChoose="(item) => changeLogAnaOptions(logTestConstants.Service, item)"
-        />
-      </div>
-      <div>
-        <label>{{ $t('serviceinstance') }}</label>
-        <RkSelect
-          class="mb-5"
-          :current="rocketLogLAL.selectedInstance"
-          :data="rocketLogLAL.instances"
-          @onChoose="(item) => changeLogAnaOptions(logTestConstants.ServiceInstance, item)"
-        />
-      </div>
-      <div>
-        <label>{{ $t('endpoint') }}</label>
-        <RkSelect
-          class="mb-5"
-          :current="rocketLogLAL.selectedEndpoint"
-          :data="rocketLogLAL.endpoints"
-          @onChoose="(item) => changeLogAnaOptions(logTestConstants.Endpoint, item)"
-        />
-      </div>
-      <div>
-        <label>{{ $t('time') }}<b class="require"> *</b></label>
+    <div class="lal-conditions">
+      <div class="flex-v">
         <div>
-          <span>
-            <RkDate class="sm" v-model="time" position="bottom" format="YYYY-MM-DD HH:mm:ss" />
-          </span>
+          <label>{{ $t('service') }}<b class="require"> *</b></label>
+          <RkSelect
+            class="mb-5"
+            :current="rocketLogLAL.selectedService"
+            :data="rocketLogLAL.services"
+            @onChoose="(item) => changeLogAnaOptions(logTestConstants.Service, item)"
+          />
+        </div>
+        <div>
+          <label>{{ $t('serviceinstance') }}</label>
+          <RkSelect
+            class="mb-5"
+            :current="rocketLogLAL.selectedInstance"
+            :data="rocketLogLAL.instances"
+            @onChoose="(item) => changeLogAnaOptions(logTestConstants.ServiceInstance, item)"
+          />
+        </div>
+        <div>
+          <label>{{ $t('endpoint') }}</label>
+          <RkSelect
+            class="mb-5"
+            :current="rocketLogLAL.selectedEndpoint"
+            :data="rocketLogLAL.endpoints"
+            @onChoose="(item) => changeLogAnaOptions(logTestConstants.Endpoint, item)"
+          />
+        </div>
+        <div>
+          <label>{{ $t('time') }}<b class="require"> *</b></label>
+          <div>
+            <span>
+              <RkDate class="sm" v-model="time" position="right" format="YYYY-MM-DD HH:mm:ss" />
+            </span>
+          </div>
+        </div>
+        <div>
+          <label>{{ $t('tags') }}</label>
+          <ConditionTags :theme="'light'" :clearTags="false" @updateTags="updateTags" />
+        </div>
+        <div>
+          <label>{{ $t('logContentType') }}</label>
+          <RkSelect
+            class="mb-5"
+            :current="currentType"
+            :data="typeList"
+            @onChoose="(item) => changeLogAnaOptions(logTestConstants.Type, item)"
+          />
+        </div>
+        <div class="logDataBody">
+          <label>{{ $t('logDataBody') }}<b class="require"> *</b></label>
+          <textarea v-model="logContent" @change="changeLogAnaOptions(logTestConstants.Body)" />
+        </div>
+        <div>
+          <label>{{ $t('traceID') }}</label>
+          <input
+            type="text"
+            :placeholder="$t('inputTraceId')"
+            v-model="traceID"
+            @change="changeLogAnaOptions(logTestConstants.TraceContext)"
+          />
+        </div>
+        <div>
+          <label>{{ $t('traceSegmentId') }}</label>
+          <input
+            type="text"
+            :placeholder="$t('inputTraceSegmentId')"
+            v-model="segmentID"
+            @change="changeLogAnaOptions(logTestConstants.TraceContext)"
+          />
+        </div>
+        <div>
+          <label>{{ $t('spanId') }}</label>
+          <input
+            type="number"
+            :placeholder="$t('inputSpanId')"
+            v-model="spanID"
+            @change="changeLogAnaOptions(logTestConstants.TraceContext)"
+          />
+        </div>
+        <div>
+          <label>{{ $t('dsl') }}<b class="require"> *</b></label>
+          <div ref="dslContent" id="dsl" contenteditable="true" />
         </div>
       </div>
-      <div>
-        <label>{{ $t('tags') }}</label>
-        <ConditionTags :theme="'light'" :clearTags="false" @updateTags="updateTags" />
-      </div>
-      <div>
-        <label>{{ $t('logContentType') }}</label>
-        <RkSelect
-          class="mb-5"
-          :current="currentType"
-          :data="typeList"
-          @onChoose="(item) => changeLogAnaOptions(logTestConstants.Type, item)"
-        />
-      </div>
-      <div class="logDataBody">
-        <label>{{ $t('logDataBody') }}<b class="require"> *</b></label>
-        <textarea v-model="logContent" @change="changeLogAnaOptions(logTestConstants.Body)" />
-      </div>
-      <div>
-        <label>{{ $t('traceID') }}</label>
-        <input
-          type="text"
-          :placeholder="$t('inputTraceId')"
-          v-model="traceID"
-          @change="changeLogAnaOptions(logTestConstants.TraceContext)"
-        />
-      </div>
-      <div>
-        <label>{{ $t('traceSegmentId') }}</label>
-        <input
-          type="text"
-          :placeholder="$t('inputTraceSegmentId')"
-          v-model="segmentID"
-          @change="changeLogAnaOptions(logTestConstants.TraceContext)"
-        />
-      </div>
-      <div>
-        <label>{{ $t('spanId') }}</label>
-        <input
-          type="number"
-          :placeholder="$t('inputSpanId')"
-          v-model="spanID"
-          @change="changeLogAnaOptions(logTestConstants.TraceContext)"
-        />
-      </div>
-      <div>
-        <label>{{ $t('dsl') }}<b class="require"> *</b></label>
-        <div ref="dslContent" id="dsl" contenteditable="true" />
-      </div>
     </div>
-    <div class="error-tips" v-show="errorCnt">{{ errorCnt }}</div>
-    <div>
+    <div class="log-analysis">
+      <div class="error-tips">{{ errorCnt }}</div>
       <div class="log-ana-btn bg-blue" @click="logAnalysis">{{ isLoading ? $t('waitLoading') : $t('analysis') }}</div>
     </div>
-    <rk-sidebox :width="'900px'" :show.sync="showLALResp" :title="$t('logAnalysis')">
+    <div class="lal-resp">
       <div class="log-metrics">
-        <div>{{ $t('metrics') }}</div>
+        <label>{{ $t('metrics') }}</label>
         <ul>
           <li>
             <span v-for="item of logMetricsHeader" :class="item.value" :key="item.value">
@@ -124,10 +126,10 @@ limitations under the License. -->
         </ul>
       </div>
       <div>
-        <div class="log-detail">{{ $t('log') }}</div>
+        <label class="log-detail">{{ $t('log') }}</label>
         <LogServiceDetailContent :currentLog="rocketLogLAL.logTestResp.log" />
       </div>
-    </rk-sidebox>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -149,6 +151,7 @@ limitations under the License. -->
     @Mutation('SET_SELECTED_INSTANCE') private SET_SELECTED_INSTANCE: any;
     @Mutation('SET_LOG_TEST_FIELDS') private SET_LOG_TEST_FIELDS: any;
     @Mutation('SET_DSL') private SET_DSL: any;
+    @Mutation('SET_LOG_TEST_RESPONSE') private SET_LOG_TEST_RESPONSE: any;
     @Action('GET_LOG_ANA_ENDPOINTS') private GET_LOG_ANA_ENDPOINTS: any;
     @Action('GET_LOG_ANA_INSTANCES') private GET_LOG_ANA_INSTANCES: any;
     @Action('LOG_ANA_QUERY') private LOG_ANA_QUERY: any;
@@ -239,6 +242,7 @@ limitations under the License. -->
     }
 
     private logAnalysis() {
+      this.SET_LOG_TEST_RESPONSE({ log: {}, metrics: [] });
       if (this.isLoading) {
         return;
       }
@@ -267,9 +271,26 @@ limitations under the License. -->
 </script>
 <style lang="scss" scoped>
   .log-lal {
-    padding: 10px;
-    height: calc(100% - 100);
     overflow: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .lal-resp {
+    height: 1026px;
+    margin: 10px;
+  }
+  .lal-conditions,
+  .lal-resp {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  .lal-conditions {
+    margin: 10px 10px 20px;
+  }
+  .log-analysis {
+    align-self: center;
   }
   input,
   textarea {
@@ -287,13 +308,11 @@ limitations under the License. -->
   }
   .log-ana-btn {
     color: #fff;
-    width: 100%;
+    width: 150px;
     height: 30px;
     line-height: 30px;
     text-align: center;
-    background-color: #484b55;
     border-radius: 4px;
-    margin: 20px 0;
     cursor: pointer;
     &.bg-blue {
       background-color: #448dfe;
@@ -308,12 +327,12 @@ limitations under the License. -->
     overflow: auto;
     margin: 5px 0;
     .tags {
-      width: 390px;
+      width: 40%;
     }
   }
   li {
     span {
-      width: 150px;
+      width: 20%;
       line-height: 20px;
       text-align: center;
       display: inline-block;
@@ -343,7 +362,7 @@ limitations under the License. -->
     color: red;
   }
   .error-tips {
-    margin-top: 20px;
+    margin-bottom: 20px;
   }
   label {
     font-size: 14px;
