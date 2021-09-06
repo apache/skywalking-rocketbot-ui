@@ -75,7 +75,7 @@ limitations under the License. -->
         <RkPage :currentSize="pageSize" :currentPage="pageNum" @changePage="handleRefresh" :total="logState.total" />
       </span>
     </div>
-    <div class="flex-h" v-show="showConditionsBox">
+    <div v-show="showConditionsBox">
       <LogConditions />
     </div>
   </div>
@@ -219,7 +219,7 @@ limitations under the License. -->
     }
 
     private openConditionsBox() {
-      this.showConditionsBox = !this.showConditionsBox;
+      this.showConditionsBox = true;
     }
   }
 </script>

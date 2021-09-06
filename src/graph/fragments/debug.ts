@@ -15,6 +15,9 @@
  * limitations under the License.
  */
 
-declare module '*.js';
-declare module 'echarts/lib/echarts';
-declare module 'monaco-editor/esm/vs/editor/editor.main.js';
+export const QueryLogTest = {
+  variable: '$requests: LogTestRequest!',
+  query: `test(requests: $requests) { log { content, serviceName, serviceInstanceName, endpointName,
+    traceId, timestamp, contentType, content, tags { key, value }}
+  metrics { name, value, timestamp, tags { key, value }} }`,
+};

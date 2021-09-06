@@ -103,7 +103,7 @@ limitations under the License. -->
     right: 10px;
     top: 0;
     cursor: pointer;
-    color: #d8d8d8;
+    color: #666;
     transition: color 0.3s;
     .icon {
       width: 18px;

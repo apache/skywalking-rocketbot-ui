@@ -113,7 +113,6 @@ export const BrowserLogConstants = [
     label: 'category',
     value: 'category',
   },
-
   {
     label: 'grade',
     value: 'grade',

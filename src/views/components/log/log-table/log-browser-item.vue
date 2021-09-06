@@ -32,7 +32,7 @@ limitations under the License. -->
 </template>
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator';
-  import { BrowserLogConstants } from './log-constant';
+  import { BrowserLogConstants } from '../log-constant';
 
   @Component
   export default class ServiceItem extends Vue {

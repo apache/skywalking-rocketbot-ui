@@ -368,7 +368,6 @@ limitations under the License. -->
   }
 
   .datepicker-popup {
-    // right: 0px;
     border-radius: 4px;
     position: absolute;
     transition: all 200ms ease;
@@ -398,7 +397,7 @@ limitations under the License. -->
       transform-origin: center top;
     }
     &.right {
-      right: 0;
+      right: -80px;
       top: 30px;
       transform-origin: center top;
     }

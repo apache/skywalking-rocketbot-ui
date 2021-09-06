@@ -38,7 +38,7 @@ limitations under the License. -->
   </div>
 </template>
 <script lang="js">
-  import { ServiceLogConstants, BrowserLogConstants } from './log-constant';
+  import { ServiceLogConstants, BrowserLogConstants } from '../log-constant';
   import BrowserItem from './log-browser-item';
   import ServiceItem from './log-service-item';
 
