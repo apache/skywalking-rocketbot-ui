@@ -34,6 +34,7 @@ limitations under the License. -->
   import { Mutation, State } from 'vuex-class';
   import Component from 'vue-class-component';
   import { State as rocketLogAnaState } from '@/store/modules/debug/log-lal';
+  import { DebuggerTools } from './debug-constant';
 
   @Component({
     components: {},
@@ -41,7 +42,10 @@ limitations under the License. -->
   export default class DebugToolBar extends Vue {
     @Mutation('SET_TAB_TYPE') private SET_TAB_TYPE: any;
     @State('rocketDebugLAL') private rocketLogLAL!: rocketLogAnaState;
-    private tabConstant = ['LAL'];
+    private tabConstant = DebuggerTools;
+    private created() {
+      this.SET_TAB_TYPE(this.tabConstant[0]);
+    }
     private handleTab(i: string) {
       this.SET_TAB_TYPE(i);
     }

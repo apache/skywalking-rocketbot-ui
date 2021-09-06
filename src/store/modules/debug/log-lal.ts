@@ -45,7 +45,7 @@ const logAnaState: State = {
   selectedEndpoint: { key: '', label: '' },
   dsl: '',
   logTestResp: { log: { content: '' }, metrics: [] },
-  tabType: 'LAL',
+  tabType: '',
 };
 
 // mutations
