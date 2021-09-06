@@ -60,3 +60,5 @@ export const LogMetricsHeader = [
     value: 'tags',
   },
 ];
+
+export const DebuggerTools = ['Log Analysis Language Debugger'];
