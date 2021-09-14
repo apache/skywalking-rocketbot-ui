@@ -84,7 +84,9 @@ limitations under the License. -->
     }
     private handleSelectGroup(id: string) {
       this.SELECT_GROUP(id);
-      this.GET_TOPO({ duration: this.durationTime, serviceIds: this.services.map((i) => i.key) });
+      const serviceIds = this.services.filter((item) => item.key).map((item) => item.key);
+
+      this.GET_TOPO({ duration: this.durationTime, serviceIds });
     }
     private fetchData() {
       return Axios.post('/graphql', {

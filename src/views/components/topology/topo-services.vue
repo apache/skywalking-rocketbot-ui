@@ -102,7 +102,9 @@ limitations under the License. -->
     }
 
     private getServicesTopo() {
-      const serviceIds = this.group.key ? this.currentServices.map((item) => item.key) : undefined;
+      const serviceIds = this.group.key
+        ? this.currentServices.filter((item) => item.key).map((item) => item.key)
+        : undefined;
 
       this.GET_TOPO({
         serviceIds,
