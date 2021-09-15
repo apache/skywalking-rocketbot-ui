@@ -69,7 +69,6 @@ limitations under the License. -->
   export default class ToolGroup extends Vue {
     @Prop() private rocketGlobal: any;
     @Prop() private rocketComps: any;
-    @Mutation('SET_COMPS_TREE') private SET_COMPS_TREE: any;
     @Mutation('DELETE_COMPS_GROUP') private DELETE_COMPS_GROUP: any;
     @Mutation('ADD_COMPS_GROUP') private ADD_COMPS_GROUP: any;
     @Action('MIXHANDLE_CHANGE_GROUP') private MIXHANDLE_CHANGE_GROUP: any;

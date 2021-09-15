@@ -35,7 +35,9 @@ limitations under the License. -->
   export default {
     name: 'RkSidebox',
     props: {
-      show: {},
+      show: {
+        default: false,
+      },
       title: {
         default: '',
       },

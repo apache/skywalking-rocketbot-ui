@@ -33,6 +33,7 @@ import RkBack from './rk-back.vue';
 import RkButton from './rk-button.vue';
 import RkIcon from './rk-icon.vue';
 import RkRadio from './rk-radio.vue';
+import RkAlert from './rk-alert.vue';
 
 const components: any = {
   RkHeader,
@@ -52,6 +53,7 @@ const components: any = {
   RkButton,
   RkIcon,
   RkRadio,
+  RkAlert,
 };
 
 const componentsName: string[] = Object.keys(components);
