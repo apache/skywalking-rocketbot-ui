@@ -116,6 +116,14 @@ limitations under the License. -->
         icon="epic"
       />
     </div>
+    <rk-alert
+      :show.sync="eventsErrors"
+      type="error"
+      message="Fetch events errors"
+      :description="rocketComps.getEventsErrors"
+      :showIcon="true"
+      :closable="true"
+    />
   </div>
 </template>
 
@@ -152,6 +160,7 @@ limitations under the License. -->
     private dialogAttributesVisible: boolean = false;
     private dashboardType = DASHBOARDTYPE;
     private pageEventsType = PageEventsType;
+    private eventsErrors: boolean = false;
 
     private selectService(i: Option) {
       if (!this.rocketComps.enableEvents) {
@@ -172,6 +181,10 @@ limitations under the License. -->
           },
         },
         type: EntityType[0].key,
+      }).then(() => {
+        if (this.rocketComps.getEventsErrors) {
+          this.eventsErrors = true;
+        }
       });
     }
     private selectEndpoint(i: Option) {
@@ -194,6 +207,9 @@ limitations under the License. -->
         },
         type: EntityType[2].key,
       }).then(() => {
+        if (this.rocketComps.getEventsErrors) {
+          this.eventsErrors = true;
+        }
         this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
       });
     }
@@ -217,6 +233,9 @@ limitations under the License. -->
         },
         type: EntityType[3].key,
       }).then(() => {
+        if (this.rocketComps.getEventsErrors) {
+          this.eventsErrors = true;
+        }
         this.SELECT_INSTANCE({ instance: i, duration: this.durationTime });
       });
     }

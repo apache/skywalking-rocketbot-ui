@@ -38,6 +38,7 @@ export interface State {
   enableEvents: boolean;
   eventsPageType: string;
   currentSeriesType: Option[];
+  getEventsErrors: string;
 }
 
 const initState: State = {
@@ -47,6 +48,7 @@ const initState: State = {
   enableEvents: false,
   eventsPageType: PageEventsType.DASHBOARD_EVENTS,
   currentSeriesType: [],
+  getEventsErrors: '',
   ...dashboardLayout.state,
 };
 
@@ -122,6 +124,9 @@ const mutations: MutationTree<any> = {
       item.checked = false;
     }
   },
+  [types.SET_GET_EVENTS_ERRORS](state: State, errors: Array<{ message: string }>) {
+    state.getEventsErrors = errors.map((err: { message: string }) => err.message).join(' ');
+  },
 };
 
 // actions
@@ -179,6 +184,11 @@ const actions: ActionTree<State, any> = {
           .query('queryTypeOfMetrics')
           .params({ name: item })
           .then((res: AxiosResponse) => {
+            if (res.data.errors) {
+              const message = res.data.errors.map((err: { message: string }) => err.message).join(' ');
+
+              return { message };
+            }
             return res.data.data;
           });
       }),
@@ -189,8 +199,10 @@ const actions: ActionTree<State, any> = {
       .query('queryGetAllTemplates')
       .params({})
       .then((res: AxiosResponse) => {
-        if (!res.data.data) {
-          return;
+        if (res.data.errors) {
+          const message = res.data.errors.map((err: { message: string }) => err.message).join(' ');
+
+          return { message };
         }
         return res.data.data.getAllTemplates || [];
       });
@@ -200,9 +212,11 @@ const actions: ActionTree<State, any> = {
       .query('queryEvents')
       .params({ condition: params.condition })
       .then((res: AxiosResponse) => {
-        if (!(res.data.data && res.data.data.fetchEvents)) {
+        if (res.data.errors) {
           context.commit('SET_DASHBOARD_EVENTS', { events: [], type: params.type, duration: params.condition.time });
-          return [];
+          context.commit('SET_GET_EVENTS_ERRORS', res.data.errors);
+
+          return res.data.errors;
         }
         context.commit('SET_DASHBOARD_EVENTS', {
           events: res.data.data.fetchEvents.events,

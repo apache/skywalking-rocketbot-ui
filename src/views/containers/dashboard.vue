@@ -40,6 +40,14 @@ limitations under the License. -->
         + Add An Item
       </div>
     </div>
+    <rk-alert
+      :show.sync="templatesErrors"
+      type="error"
+      message="Dashboard template errors"
+      :description="templatesErrorsDesc"
+      :showIcon="true"
+      :closable="true"
+    />
   </div>
 </template>
 
@@ -83,6 +91,8 @@ limitations under the License. -->
     @Mutation('SET_TEMPLATES') private SET_TEMPLATES: any;
 
     private isRouterAlive: boolean = true;
+    private templatesErrors: boolean = false;
+    private templatesErrorsDesc: string = '';
     public reload(): void {
       this.isRouterAlive = false;
       this.$nextTick(() => {
@@ -105,13 +115,20 @@ limitations under the License. -->
       });
     }
     private beforeMount() {
-      this.GET_ALL_TEMPLATES().then((allTemplate: ITemplate[]) => {
-        const dashboardTemplate = allTemplate.filter((item: ITemplate) => item.type === 'DASHBOARD');
+      this.GET_ALL_TEMPLATES().then((templateResp: ITemplate[] | { message?: string }) => {
+        if (!Array.isArray(templateResp)) {
+          if (templateResp.message) {
+            this.templatesErrorsDesc = templateResp.message;
+            this.templatesErrors = true;
+          }
+          return;
+        }
+        const dashboardTemplate = templateResp.filter((item: ITemplate) => item.type === 'DASHBOARD');
         const templatesConfig = dashboardTemplate.map((item: ITemplate) => JSON.parse(item.configuration)).flat(1);
         this.SET_TEMPLATES(templatesConfig);
         if (window.localStorage.getItem('version') !== '8.0') {
           window.localStorage.removeItem('dashboard');
-          const template = allTemplate.filter((item: ITemplate) => item.type === 'DASHBOARD' && item.activated);
+          const template = templateResp.filter((item: ITemplate) => item.type === 'DASHBOARD' && item.activated);
           const templatesConfiguration = template.map((item: ITemplate) => JSON.parse(item.configuration)).flat(1);
           this.SET_COMPS_TREE(templatesConfiguration || []);
           window.localStorage.setItem('version', '8.0');

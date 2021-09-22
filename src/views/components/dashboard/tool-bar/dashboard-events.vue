@@ -123,6 +123,14 @@ limitations under the License. -->
         </div>
       </div>
     </rk-sidebox>
+    <rk-alert
+      :show.sync="eventsErrors"
+      type="error"
+      message="Fetch events errors"
+      :description="rocketComps.getEventsErrors"
+      :showIcon="true"
+      :closable="true"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -167,6 +175,7 @@ limitations under the License. -->
     private seriesTypes = SeriesTypes;
     private eventsHeaders = EventsHeaders;
     private eventsDetailHeaders = EventsDetailHeaders;
+    private eventsErrors: boolean = false;
 
     private created() {
       this.initEvents();
@@ -268,21 +277,39 @@ limitations under the License. -->
 
     private fetchEvents() {
       if (this.type === PageEventsType.DASHBOARD_EVENTS) {
-        Promise.all([this.fetchServiceEvents(), this.fetchInstanceEvents(), this.fetchEndpointEvents()]).then(() => {
-          this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
-        });
+        Promise.all([this.fetchServiceEvents(), this.fetchInstanceEvents(), this.fetchEndpointEvents()])
+          .then(() => {
+            this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
+          })
+          .then(() => {
+            if (this.rocketComps.getEventsErrors) {
+              this.eventsErrors = true;
+            }
+          });
         return;
       }
       if (this.type === PageEventsType.TOPO_INSTANCE_EVENTS) {
-        this.fetchInstanceEvents().then(() => {
-          this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
-        });
+        this.fetchInstanceEvents()
+          .then(() => {
+            this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
+          })
+          .then(() => {
+            if (this.rocketComps.getEventsErrors) {
+              this.eventsErrors = true;
+            }
+          });
         return;
       }
       if (this.type === PageEventsType.TOPO_ENDPOINT_EVENTS) {
-        this.fetchEndpointEvents().then(() => {
-          this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
-        });
+        this.fetchEndpointEvents()
+          .then(() => {
+            this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
+          })
+          .then(() => {
+            if (this.rocketComps.getEventsErrors) {
+              this.eventsErrors = true;
+            }
+          });
       }
     }
 

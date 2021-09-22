@@ -47,6 +47,9 @@ limitations under the License. -->
           : this.type === 'info'
           ? 'info_outline'
           : 'sentiment_satisfied_alt';
+      setTimeout(() => {
+        this.$emit('update:show', false);
+      }, 2 * 60 * 1000);
     }
 
     private closeAlert() {
@@ -58,12 +61,13 @@ limitations under the License. -->
 <style lang="scss" scoped>
   .rk-alert {
     position: fixed;
-    top: 50px;
+    word-wrap: break-word;
+    top: 60px;
     right: 5px;
-    width: 280px;
+    width: 580px;
     z-index: 1000;
     color: #000;
-    border-radius: 3px;
+    border-radius: 2px;
     padding: 10px 10px;
     align-items: flex-start;
     transition: all 0.7s;
@@ -105,7 +109,7 @@ limitations under the License. -->
     }
   }
   .close {
-    font-size: 14px;
+    font-size: 20px;
     color: #00000073;
     transition: color 0.3s;
     position: absolute;

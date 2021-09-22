@@ -290,6 +290,14 @@ limitations under the License. -->
         />
       </div>
     </div>
+    <rk-alert
+      :show.sync="showTypeMetricsErrors"
+      type="error"
+      message="Metric type errors"
+      :description="typeMetricsErrors"
+      :showIcon="true"
+      :closable="true"
+    />
   </div>
 </template>
 
@@ -349,6 +357,8 @@ limitations under the License. -->
     private isChartType = false;
     private ChartTable = 'ChartTable';
     private noEntity = false;
+    private typeMetricsErrors = '';
+    private showTypeMetricsErrors = false;
 
     private beforeMount() {
       this.itemConfig = this.item;
@@ -475,14 +485,31 @@ limitations under the License. -->
     }
 
     private updateMetricName(params: { type: string; value: string }) {
-      this.TYPE_METRICS({ name: params.value }).then((data: Array<{ typeOfMetrics: string }>) => {
+      this.TYPE_METRICS({ name: params.value }).then((data: Array<{ typeOfMetrics: string } | any>) => {
+        this.typeMetricsErrors = '';
         if (!data.length) {
           return;
         }
+        if (data.length === 1 && data[0].message) {
+          this.typeMetricsErrors = data[0].message;
+          this.showTypeMetricsErrors = true;
+          return;
+        }
         if (data.length > 1) {
-          const length = data.filter((d: { typeOfMetrics: string }) => d.typeOfMetrics !== MetricsType.REGULAR_VALUE)
-            .length;
-          if (length) {
+          let len = 0;
+          for (const d of data) {
+            if (d.typeOfMetrics !== MetricsType.REGULAR_VALUE) {
+              len++;
+            }
+            if (d.message) {
+              this.typeMetricsErrors = d.message + ' ';
+            }
+          }
+          if (this.typeMetricsErrors) {
+            this.showTypeMetricsErrors = true;
+            return;
+          }
+          if (len) {
             this.$emit('updateStatus', 'metricType', MetricsType.UNKNOWN);
             return;
           }

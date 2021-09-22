@@ -76,6 +76,14 @@ limitations under the License. -->
       </div>
     </div>
     <endpoints-survey :currentType="currentType" ref="survey" />
+    <rk-alert
+      :show.sync="endpointEventsErrors"
+      type="error"
+      message="Fetch endpoint event errors"
+      :description="rocketComps.getEventsErrors"
+      :showIcon="true"
+      :closable="true"
+    />
   </div>
 </template>
 
@@ -125,6 +133,7 @@ limitations under the License. -->
     private endpointMetrics: any[] = [];
     private currentType: Option[] = [{ key: '', label: '' }];
     private templateTypesList: Option[] = [{ key: '', label: '' }];
+    private endpointEventsErrors: boolean = false;
 
     private beforeMount() {
       this.SET_CURRENT_SERVICE(this.current);
@@ -167,6 +176,9 @@ limitations under the License. -->
         },
         type: EntityType[2].key,
       }).then(() => {
+        if (this.rocketComps.getEventsErrors) {
+          this.endpointEventsErrors = true;
+        }
         this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
       });
     }
