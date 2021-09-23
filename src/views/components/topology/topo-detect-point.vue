@@ -103,6 +103,12 @@ limitations under the License. -->
         <TopoInstanceDependency />
       </rk-sidebox>
     </div>
+    <rk-alert
+      :show.sync="stateTopo.instanceTopoErrors"
+      type="error"
+      message="Endpoint dependency errors"
+      :description="stateTopo.instanceTopoErrors"
+    />
   </div>
 </template>
 <script lang="ts">

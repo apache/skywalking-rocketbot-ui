@@ -34,10 +34,20 @@ limitations under the License. -->
     <rk-alert
       :show.sync="templatesErrors"
       type="error"
-      message="Dashboard template errors"
+      message="Metric template errors"
       :description="templatesErrorsDesc"
-      :showIcon="true"
-      :closable="true"
+    />
+    <rk-alert
+      :show.sync="stateTopo.endpointErrors"
+      type="error"
+      message="Endpoint errors"
+      :description="stateTopo.endpointErrors"
+    />
+    <rk-alert
+      :show.sync="stateTopo.getTopoErrors"
+      type="error"
+      message="Topology errors"
+      :description="stateTopo.getTopoErrors"
     />
   </div>
 </template>

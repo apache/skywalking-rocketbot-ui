@@ -93,6 +93,30 @@ limitations under the License. -->
       </div>
       <ConditionTags :type="'TRACE'" :clearTags="clearTags" @updateTags="updateTags" />
     </div>
+    <rk-alert
+      :show.sync="showServiceErrors"
+      type="error"
+      message="Fetch service errors"
+      :description="serviceErrorsMsg"
+      :showIcon="true"
+      :closable="true"
+    />
+    <rk-alert
+      :show.sync="showInstanceErrors"
+      type="error"
+      message="Fetch service instance errors"
+      :description="instanceErrorsMsg"
+      :showIcon="true"
+      :closable="true"
+    />
+    <rk-alert
+      :show.sync="showEndpointErrors"
+      type="error"
+      message="Fetch endpoint errors"
+      :description="endpointErrorsMsg"
+      :showIcon="true"
+      :closable="true"
+    />
   </div>
 </template>
 
@@ -133,6 +157,12 @@ limitations under the License. -->
     private tagsList: string[] = [];
     private clearTags: boolean = false;
     private serviceName: string = '';
+    private showServiceErrors: boolean = false;
+    private serviceErrorsMsg: string = '';
+    private showInstanceErrors: boolean = false;
+    private instanceErrorsMsg: string = '';
+    private showEndpointErrors: boolean = false;
+    private endpointErrorsMsg: string = '';
 
     private created() {
       this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
@@ -140,24 +170,36 @@ limitations under the License. -->
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     }
     private mounted() {
-      this.GET_SERVICES({ duration: this.durationTime })
-        .then(() => {
-          if (this.serviceName) {
-            for (const s of this.rocketTrace.services) {
-              if (s.label === this.serviceName) {
-                this.service = s;
-                break;
-              }
+      this.GET_SERVICES({ duration: this.durationTime }).then((msg: string) => {
+        if (msg) {
+          this.showServiceErrors = true;
+          this.serviceErrorsMsg = msg;
+          return;
+        }
+        if (this.serviceName) {
+          for (const s of this.rocketTrace.services) {
+            if (s.label === this.serviceName) {
+              this.service = s;
+              break;
             }
           }
-          this.getTraceList();
-          if (this.service && this.service.key) {
-            this.GET_INSTANCES({
-              duration: this.durationTime,
-              serviceId: this.service.key,
-            });
-          }
-        });
+        }
+        this.getTraceList();
+        if (this.service && this.service.key) {
+          this.getInstance();
+        }
+      });
+    }
+    private getInstance(serviceId?: string) {
+      this.GET_INSTANCES({
+        duration: this.durationTime,
+        serviceId: serviceId || this.service.key,
+      }).then((msg: string) => {
+        if (msg) {
+          this.showInstanceErrors = true;
+          this.instanceErrorsMsg = msg;
+        }
+      });
     }
     private globalTimeFormat(time: Date[]) {
       const step = 'SECOND';
@@ -180,21 +222,24 @@ limitations under the License. -->
         this.SET_ENDPOINTS([]);
         return;
       }
-      this.GET_INSTANCES({ duration: this.durationTime, serviceId: i.key });
+      this.getInstance(i.key);
       this.SET_ENDPOINTS([]);
-      this.GET_ITEM_ENDPOINTS({
-        serviceId: i.key,
-        keyword: '',
-        duration: this.durationTime,
-      });
+      this.getItemEndpoints(i.key, '');
     }
     private searchEndpoint(search: string) {
+      this.getItemEndpoints(this.service.key, search);
+    }
+    private getItemEndpoints(serviceId: string, keyword?: string) {
       this.GET_ITEM_ENDPOINTS({
-        serviceId: this.service.key,
-        keyword: search,
+        serviceId,
+        keyword,
         duration: this.durationTime,
-      }).then((endpoints: Array<{ key: string; label: string }>) => {
-        this.SET_ENDPOINTS(endpoints);
+      }).then((result: string) => {
+        if (!result) {
+          return;
+        }
+        this.showEndpointErrors = true;
+        this.endpointErrorsMsg = result;
       });
     }
     private chooseStatus(i: Option) {

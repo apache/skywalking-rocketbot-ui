@@ -33,6 +33,9 @@ export interface State {
   currentTrace: Trace;
   traceSpanLogs: any[];
   traceSpanLogsTotal: number;
+  traceListErrors: string;
+  traceSpanErrors: string;
+  traceSpanLogErrors: string;
 }
 
 const initState: State = {
@@ -56,6 +59,9 @@ const initState: State = {
   },
   traceSpanLogs: [],
   traceSpanLogsTotal: 0,
+  traceListErrors: '',
+  traceSpanErrors: '',
+  traceSpanLogErrors: '',
 };
 
 // mutations
@@ -119,6 +125,15 @@ const mutations: MutationTree<State> = {
   [types.SET_TRACE_SPAN_LOGS_TOTAL](state: State, data: number) {
     state.traceSpanLogsTotal = data;
   },
+  [types.SET_TRACELIST_ERROR](state: State, msg: string) {
+    state.traceListErrors = msg;
+  },
+  [types.SET_TRACE_SPAN_ERROR](state: State, msg: string) {
+    state.traceSpanErrors = msg;
+  },
+  [types.SET_TRACE_SPAN_LOG_ERROR](state: State, msg: string) {
+    state.traceSpanLogErrors = msg;
+  },
 };
 
 // actions
@@ -131,6 +146,10 @@ const actions: ActionTree<State, any> = {
       .query('queryServices')
       .params(params)
       .then((res: AxiosResponse) => {
+        if (res.data.errors) {
+          context.commit(types.SET_SERVICES, []);
+          return res.data.errors;
+        }
         context.commit(types.SET_SERVICES, res.data.data.services);
       });
   },
@@ -139,6 +158,10 @@ const actions: ActionTree<State, any> = {
       .query('queryServiceInstance')
       .params(params)
       .then((res: AxiosResponse) => {
+        if (res.data.errors) {
+          context.commit(types.SET_INSTANCES, []);
+          return res.data.errors;
+        }
         context.commit(types.SET_INSTANCES, res.data.data.instanceId);
       });
   },
@@ -147,6 +170,10 @@ const actions: ActionTree<State, any> = {
       .query('queryEndpoints')
       .params(params)
       .then((res: AxiosResponse) => {
+        if (res.data.errors) {
+          context.commit(types.SET_ENDPOINTS, []);
+          return res.data.errors;
+        }
         context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
       });
   },
@@ -159,8 +186,14 @@ const actions: ActionTree<State, any> = {
       .query('queryTraces')
       .params({ condition: context.state.traceForm })
       .then((res: AxiosResponse) => {
+        if (res.data.errors) {
+          context.commit(types.SET_TRACELIST, []);
+          context.commit(types.SET_TRACELIST_TOTAL, 0);
+          context.commit(types.SET_TRACELIST_ERROR, res.data.errors);
+        }
         context.commit(types.SET_TRACELIST, res.data.data.data.traces);
         context.commit(types.SET_TRACELIST_TOTAL, res.data.data.data.total);
+        context.commit(types.SET_TRACELIST_ERROR, '');
       });
   },
   GET_TRACE_SPANS(context: { commit: Commit }, params: any): Promise<void> {
@@ -169,7 +202,13 @@ const actions: ActionTree<State, any> = {
       .query('queryTrace')
       .params(params)
       .then((res: AxiosResponse) => {
+        if (res.data.errors) {
+          context.commit(types.SET_TRACE_SPAN_ERROR, res.data.errors);
+          context.commit(types.SET_TRACE_SPANS, []);
+          return;
+        }
         context.commit(types.SET_TRACE_SPANS, res.data.data.trace.spans);
+        context.commit(types.SET_TRACE_SPAN_ERROR, '');
       });
   },
   GET_TRACE_SPAN_LOGS(context: { commit: Commit }, params: any) {
@@ -180,11 +219,13 @@ const actions: ActionTree<State, any> = {
         if (res.data && res.data.errors) {
           context.commit('SET_TRACE_SPAN_LOGS', []);
           context.commit('SET_TRACE_SPAN_LOGS_TOTAL', 0);
+          context.commit('SET_TRACE_SPAN_LOG_ERROR', res.data.errors);
 
           return;
         }
         context.commit('SET_TRACE_SPAN_LOGS', res.data.data.queryLogs.logs);
         context.commit('SET_TRACE_SPAN_LOGS_TOTAL', res.data.data.queryLogs.total);
+        context.commit('SET_TRACE_SPAN_LOG_ERROR', '');
       });
   },
 };

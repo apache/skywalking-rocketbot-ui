@@ -32,8 +32,8 @@ limitations under the License. -->
     @Prop() private message!: string;
     @Prop() private type!: string;
     @Prop() private description!: string;
-    @Prop() private showIcon!: boolean;
-    @Prop() private closable!: boolean;
+    @Prop({ default: true }) private showIcon!: boolean;
+    @Prop({ default: true }) private closable!: boolean;
     @Prop() private show!: boolean;
 
     private iconType: string = 'error';
