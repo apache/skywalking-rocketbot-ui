@@ -123,11 +123,26 @@ limitations under the License. -->
         </table>
       </div>
     </div>
+    <rk-alert
+      :show.sync="showSegmentsError"
+      type="error"
+      message="Fetch segment errors"
+      :description="getSegmentsErrors"
+      :showIcon="true"
+      :closable="true"
+    />
+    <rk-alert
+      :show.sync="showSpansError"
+      type="error"
+      message="Fetch span errors"
+      :description="getSpansErrors"
+      :showIcon="true"
+      :closable="true"
+    />
   </div>
 </template>
 
 <script lang="ts">
-  import { Duration, Option } from '@/types/global';
   import { Component, Prop, Vue } from 'vue-property-decorator';
   import { Action, Mutation } from 'vuex-class';
 
@@ -136,19 +151,28 @@ limitations under the License. -->
     @Prop() private taskListSource: any;
     @Prop() private segmentList: any;
     @Prop() private headerSource: any;
-    @Action('profileStore/GET_SEGMENT_LIST') private GET_SEGMENT_LIST: any;
     @Mutation('profileStore/SET_CURRENT_SEGMENT') private SET_CURRENT_SEGMENT: any;
+    @Action('profileStore/GET_SEGMENT_LIST') private GET_SEGMENT_LIST: any;
     @Action('profileStore/GET_SEGMENT_SPANS') private GET_SEGMENT_SPANS: any;
     private selectedKey: string = '';
     private selectedTask: any = {};
     private viewDetail: boolean = false;
     private selectedTaskService: any = {};
+    private showSegmentsError: boolean = false;
+    private getSegmentsErrors: string = '';
+    private showSpansError: boolean = false;
+    private getSpansErrors: string = '';
 
     private selectTask(item: { id: string; serviceId: string }) {
       this.selectedTask = item;
       this.selectedTaskService =
         this.headerSource.serviceSource.filter((service: any) => service.key === item.serviceId)[0] || {};
-      this.GET_SEGMENT_LIST({ taskID: item.id });
+      this.GET_SEGMENT_LIST({ taskID: item.id }).then((res: { msg: string }) => {
+        if (res) {
+          this.getSegmentsErrors = res.msg;
+          this.showSegmentsError = true;
+        }
+      });
     }
 
     private viewTask(item: any) {
@@ -159,7 +183,12 @@ limitations under the License. -->
     private selectTrace(item: { segmentId: string }) {
       this.SET_CURRENT_SEGMENT(item);
       this.selectedKey = item.segmentId;
-      this.GET_SEGMENT_SPANS({ segmentId: item.segmentId });
+      this.GET_SEGMENT_SPANS({ segmentId: item.segmentId }).then((res: { msg: string }) => {
+        if (res) {
+          this.getSpansErrors = res.msg;
+          this.showSpansError = true;
+        }
+      });
     }
   }
 </script>

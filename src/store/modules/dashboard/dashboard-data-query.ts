@@ -237,8 +237,7 @@ const actions: ActionTree<State, any> = {
             .params(variable)
             .then((res: AxiosResponse) => {
               if (res.data.errors) {
-                const message = res.data.errors.map((err: { message: string }) => err.message).join(' ');
-                return { message };
+                return { message: res.data.errors };
               }
               const resData = res.data.data;
 

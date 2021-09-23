@@ -116,7 +116,7 @@ const actions: ActionTree<State, any> = {
               context.commit('SET_LOGS', []);
               context.commit('SET_LOGS_TOTAL', 0);
 
-              return res.data.errors.map((e: { message: string }) => e.message).join(' ');
+              return res.data.errors;
             }
             context.commit('SET_LOGS', res.data.data.queryBrowserErrorLogs.logs);
             context.commit('SET_LOGS_TOTAL', res.data.data.queryBrowserErrorLogs.total);
@@ -133,7 +133,7 @@ const actions: ActionTree<State, any> = {
               context.commit('SET_LOGS', []);
               context.commit('SET_LOGS_TOTAL', 0);
 
-              return res.data.errors.map((e: { message: string }) => e.message).join(' ');
+              return res.data.errors;
             }
             context.commit('SET_LOGS', res.data.data.queryLogs.logs);
             context.commit('SET_LOGS_TOTAL', res.data.data.queryLogs.total);
@@ -151,7 +151,7 @@ const actions: ActionTree<State, any> = {
       .params({})
       .then((res: AxiosResponse<any>) => {
         if (res.data && res.data.errors) {
-          return res.data.errors.map((e: { message: string }) => e.message).join(' ');
+          return res.data.errors;
         }
         context.commit('SET_SUPPORT_QUERY_LOGS_KEYWORDS', res.data.data.support);
       });

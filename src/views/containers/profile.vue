@@ -34,13 +34,20 @@ limitations under the License. -->
         :currentSpan="profile.currentSpan"
       />
     </div>
+    <rk-alert
+      :show.sync="showServiceErrors"
+      type="error"
+      message="Fetch service errors"
+      :description="serviceErrorsMsg"
+      :showIcon="true"
+      :closable="true"
+    />
   </div>
 </template>
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
-  import { State, Getter, Mutation } from 'vuex-class';
-  import { DurationTime } from '@/types/global';
+  import { State, Getter } from 'vuex-class';
   import ProfileHeader from '@/views/components/profile/profile-header.vue';
   import ProfileTaskList from '@/views/components/profile/task-list.vue';
   import ProfileTraceDetail from '@/views/components/profile/profile-trace-detail.vue';
@@ -52,10 +59,20 @@ limitations under the License. -->
     @State('profileStore') private profile: any;
     @Getter('durationTime') private durationTime: any;
 
+    private showServiceErrors: boolean = false;
+    private serviceErrorsMsg: string = '';
+
     private beforeMount() {
-      this.$store.dispatch('profileStore/GET_SERVICES', {
-        duration: this.durationTime,
-      });
+      this.$store
+        .dispatch('profileStore/GET_SERVICES', {
+          duration: this.durationTime,
+        })
+        .then((data?: { msg: string }) => {
+          if (data) {
+            this.serviceErrorsMsg = data.msg;
+            this.showServiceErrors = true;
+          }
+        });
     }
   }
 </script>

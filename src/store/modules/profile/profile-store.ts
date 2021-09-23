@@ -126,8 +126,8 @@ const actions = {
       .query('queryServices')
       .params(params)
       .then((res: AxiosResponse) => {
-        if (!res.data.data) {
-          return;
+        if (res.data.errors) {
+          return { msg: res.data.errors };
         }
         context.commit(types.SET_SERVICES, res.data.data.services);
         context.dispatch('GET_TASK_LIST');
@@ -144,17 +144,16 @@ const actions = {
       .query('getProfileTaskList')
       .params(param)
       .then((res: AxiosResponse) => {
-        if (!res.data.data) {
-          return;
+        if (res.data.errors) {
+          return { msg: res.data.errors };
         }
         context.commit(types.SET_TASK_LIST, res.data.data.getProfileTaskList);
-        return res.data.data.getProfileTaskList;
-      })
-      .then((data: any) => {
-        if (!data) {
+        const list = res.data.data.getProfileTaskList;
+        if (!list.length) {
           return;
         }
-        context.dispatch('GET_SEGMENT_LIST', { taskID: data[0].id });
+        context.dispatch('GET_SEGMENT_LIST', { taskID: list[0].id });
+        return;
       });
   },
   GET_SEGMENT_LIST(context: { commit: Commit; dispatch: Dispatch }, params: { taskID: string }) {
@@ -162,8 +161,8 @@ const actions = {
       .query('getProfileTaskSegmentList')
       .params(params)
       .then((res: AxiosResponse) => {
-        if (!res.data.data.getProfileTaskSegmentList) {
-          return;
+        if (res.data.errors) {
+          return { msg: res.data.errors };
         }
         const { getProfileTaskSegmentList } = res.data.data;
 
@@ -185,6 +184,9 @@ const actions = {
       .query('queryProfileSegment')
       .params(params)
       .then((res: AxiosResponse) => {
+        if (res.data.errors) {
+          return { msg: res.data.errors };
+        }
         const { getProfiledSegment } = res.data.data;
         if (!getProfiledSegment) {
           return;
@@ -208,9 +210,12 @@ const actions = {
       .query('getProfileAnalyze')
       .params(params)
       .then((res: AxiosResponse) => {
+        if (res.data.errors) {
+          return { msg: res.data.errors };
+        }
         const { getProfileAnalyze, tip } = res.data.data;
         if (tip) {
-          return tip;
+          return { tip };
         }
         if (!getProfileAnalyze) {
           context.commit(types.SET_PROFILE_ANALYZATION, []);
@@ -243,6 +248,9 @@ const actions = {
       .query('saveProfileTask')
       .params({ creationRequest })
       .then((res: AxiosResponse) => {
+        if (res.data.errors) {
+          return { msg: res.data.errors };
+        }
         if (res.data.data && res.data.data.createTask && res.data.data.createTask.errorReason) {
           return res.data.data.createTask;
         }

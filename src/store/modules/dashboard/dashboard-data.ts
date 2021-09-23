@@ -124,8 +124,8 @@ const mutations: MutationTree<any> = {
       item.checked = false;
     }
   },
-  [types.SET_GET_EVENTS_ERRORS](state: State, errors: Array<{ message: string }>) {
-    state.getEventsErrors = errors.map((err: { message: string }) => err.message).join(' ');
+  [types.SET_GET_EVENTS_ERRORS](state: State, errors: string) {
+    state.getEventsErrors = errors;
   },
 };
 
@@ -185,9 +185,7 @@ const actions: ActionTree<State, any> = {
           .params({ name: item })
           .then((res: AxiosResponse) => {
             if (res.data.errors) {
-              const message = res.data.errors.map((err: { message: string }) => err.message).join(' ');
-
-              return { message };
+              return { message: res.data.errors };
             }
             return res.data.data;
           });
@@ -200,9 +198,7 @@ const actions: ActionTree<State, any> = {
       .params({})
       .then((res: AxiosResponse) => {
         if (res.data.errors) {
-          const message = res.data.errors.map((err: { message: string }) => err.message).join(' ');
-
-          return { message };
+          return { message: res.data.errors };
         }
         return res.data.data.getAllTemplates || [];
       });

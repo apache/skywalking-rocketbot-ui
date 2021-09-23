@@ -54,9 +54,7 @@ const actions: ActionTree<State, any> = {
       .params(params)
       .then((res: AxiosResponse<any>) => {
         if (res.data.errors) {
-          const message = res.data.errors.map((e: { message: string }) => e.message).join(' ');
-
-          return { message };
+          return { message: res.data.errors };
         }
         if (res.data.data.getAlarm.items) {
           context.commit(types.SET_ALARM, res.data.data.getAlarm);

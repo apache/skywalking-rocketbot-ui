@@ -48,8 +48,8 @@ const mutations: MutationTree<any> = {
   [types.SET_TOTAL_SIZE](state: State, total: number) {
     state.totalSize = total;
   },
-  [types.SET_ERROR_MESSAGE](state: State, errors: { message: string }[]) {
-    state.errorMessage = errors.map((e: { message: string }) => e.message).join(' ');
+  [types.SET_ERROR_MESSAGE](state: State, errors: string) {
+    state.errorMessage = errors;
   },
 };
 

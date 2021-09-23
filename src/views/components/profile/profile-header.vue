@@ -42,13 +42,21 @@ limitations under the License. -->
         <ProfileTask :taskFieldSource="taskFieldSource" :newTaskFields="newTaskFields" @closeSidebox="closeSidebox" />
       </rk-sidebox>
     </div>
+    <rk-alert
+      :show.sync="showTasksError"
+      type="error"
+      message="Fetch task errors"
+      :description="getTasksErrors"
+      :showIcon="true"
+      :closable="true"
+    />
   </div>
 </template>
 
 <script lang="ts">
   import { Duration, Option } from '@/types/global';
   import { Component, Prop, Vue } from 'vue-property-decorator';
-  import { Mutation } from 'vuex-class';
+  import { Mutation, Action } from 'vuex-class';
   import { CommonSelector } from '../common/index';
   import ProfileTask from './profile-task.vue';
 
@@ -58,10 +66,13 @@ limitations under the License. -->
     @Prop() private newTaskFields: any;
     @Prop() private taskFieldSource: any;
     @Mutation('profileStore/SET_HEADER_SOURCE') private SET_HEADER_SOURCE: any;
+    @Action('profileStore/GET_TASK_LIST') private GET_TASK_LIST: any;
 
     private endpointName: string = '';
     private dialogVisible = false;
     private serviceOpt: any;
+    private getTasksErrors: string = '';
+    private showTasksError: boolean = false;
 
     private chooseService(item: { key: string; label: string }) {
       this.SET_HEADER_SOURCE({ currentService: item });
@@ -69,7 +80,12 @@ limitations under the License. -->
 
     private searchTask() {
       this.SET_HEADER_SOURCE({ endpointName: this.endpointName });
-      this.$store.dispatch('profileStore/GET_TASK_LIST');
+      this.GET_TASK_LIST().then((result?: { msg: string }) => {
+        if (result) {
+          this.showTasksError = true;
+          this.getTasksErrors = result.msg;
+        }
+      });
     }
 
     private created() {
