@@ -106,7 +106,7 @@ limitations under the License. -->
     <rk-alert
       :show.sync="stateTopo.instanceTopoErrors"
       type="error"
-      message="Endpoint dependency errors"
+      message="Service instance dependency errors"
       :description="stateTopo.instanceTopoErrors"
     />
   </div>
