@@ -236,6 +236,10 @@ const actions: ActionTree<State, any> = {
             .query(config.queryMetricType)
             .params(variable)
             .then((res: AxiosResponse) => {
+              if (res.data.errors) {
+                const message = res.data.errors.map((err: { message: string }) => err.message).join(' ');
+                return { message };
+              }
               const resData = res.data.data;
 
               return { ...resData, config, metricName: variable.condition.name };

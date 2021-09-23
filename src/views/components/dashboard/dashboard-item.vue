@@ -72,6 +72,14 @@ limitations under the License. -->
         ></component>
       </div>
     </rk-sidebox>
+    <rk-alert
+      :show.sync="showMetricErrors"
+      type="error"
+      message="Query metric errors"
+      :description="metricErrorsMessage"
+      :showIcon="true"
+      :closable="true"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -133,6 +141,8 @@ limitations under the License. -->
       TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY,
       TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY,
     ] as string[];
+    private showMetricErrors: boolean = false;
+    private metricErrorsMessage: string = '';
 
     private created() {
       this.status = this.item.metricType;
@@ -173,8 +183,14 @@ limitations under the License. -->
           this.itemConfig = {};
           return;
         }
+        if (params[0].message) {
+          for (const p of params) {
+            this.metricErrorsMessage = p.message + ' ';
+          }
+          this.showMetricErrors = true;
+          return;
+        }
         this.itemConfig = params[0].config;
-
         const { queryMetricType } = this.itemConfig;
         let data = params;
         if (queryMetricType === QueryTypes.ReadMetricsValue) {
