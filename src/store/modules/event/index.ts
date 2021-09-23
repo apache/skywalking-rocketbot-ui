@@ -27,11 +27,13 @@ const Scopes = ['Service', 'ServiceInstance', 'Endpoint'];
 export interface State {
   currentEvents: Event[];
   totalSize: number;
+  errorMessage: string;
 }
 
 const initState: State = {
   currentEvents: [],
   totalSize: 1,
+  errorMessage: '',
 };
 
 // mutations
@@ -46,6 +48,9 @@ const mutations: MutationTree<any> = {
   [types.SET_TOTAL_SIZE](state: State, total: number) {
     state.totalSize = total;
   },
+  [types.SET_ERROR_MESSAGE](state: State, errors: { message: string }[]) {
+    state.errorMessage = errors.map((e: { message: string }) => e.message).join(' ');
+  },
 };
 
 // actions
@@ -55,9 +60,10 @@ const actions: ActionTree<State, any> = {
       .query('queryEvents')
       .params({ condition: params.condition })
       .then((res: AxiosResponse) => {
-        if (!(res.data.data && res.data.data.fetchEvents)) {
+        if (res.data.errors) {
           context.commit('UPDATE_EVENTS', { events: [], duration: params.condition.time });
           context.commit('SET_TOTAL_SIZE', 1);
+          context.commit('SET_ERROR_MESSAGE', res.data.errors);
           return [];
         }
         context.commit('UPDATE_EVENTS', {

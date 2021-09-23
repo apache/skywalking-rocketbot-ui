@@ -58,6 +58,14 @@ limitations under the License. -->
       </a>
       <RkPage :currentSize="pageSize" :currentPage="pageNum" @changePage="updatePage" :total="rocketEvent.totalSize" />
     </div>
+    <rk-alert
+      :show.sync="showEventErrors"
+      type="error"
+      message="Query Event errors"
+      :description="rocketEvent.errorMessage"
+      :showIcon="true"
+      :closable="true"
+    />
   </nav>
 </template>
 
@@ -78,6 +86,7 @@ limitations under the License. -->
     @Action('SELECT_INSTANCE') private SELECT_INSTANCE: any;
     @Getter('durationTime') private durationTime!: DurationTime;
     @Mutation('SET_EVENTS') private SET_EVENTS: any;
+    @Mutation('SET_ERROR_MESSAGE') private SET_ERROR_MESSAGE: any;
     @State('rocketOption') private rocketOption!: optionState;
     @State('rocketEvent') private rocketEvent!: EventState;
     @Action('MIXHANDLE_GET_OPTION') private MIXHANDLE_GET_OPTION: any;
@@ -86,6 +95,7 @@ limitations under the License. -->
     private eventType: Option = { label: 'All', key: '' };
     private pageSize: number = 20;
     private pageNum: number = 1;
+    private showEventErrors: boolean = false;
 
     private beforeMount() {
       this.MIXHANDLE_GET_OPTION({
@@ -125,6 +135,7 @@ limitations under the License. -->
     private queryEvents() {
       const { currentService, currentEndpoint, currentInstance } = this.rocketOption;
 
+      this.SET_ERROR_MESSAGE([]);
       this.FETCH_EVENTS({
         condition: {
           time: this.durationTime,
@@ -140,6 +151,10 @@ limitations under the License. -->
           },
           type: this.eventType.key || undefined,
         },
+      }).then(() => {
+        if (this.rocketEvent.errorMessage) {
+          this.showEventErrors = true;
+        }
       });
     }
     private beforeDestroy() {

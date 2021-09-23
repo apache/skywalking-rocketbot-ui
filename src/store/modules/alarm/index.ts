@@ -48,11 +48,16 @@ const mutations: MutationTree<State> = {
 
 // actions
 const actions: ActionTree<State, any> = {
-  GET_ALARM(context: { commit: Commit; state: State }, params: AlarmParams): Promise<void> {
+  GET_ALARM(context: { commit: Commit; state: State }, params: AlarmParams): Promise<any> {
     return graph
       .query('queryAlarms')
       .params(params)
       .then((res: AxiosResponse<any>) => {
+        if (res.data.errors) {
+          const message = res.data.errors.map((e: { message: string }) => e.message).join(' ');
+
+          return { message };
+        }
         if (res.data.data.getAlarm.items) {
           context.commit(types.SET_ALARM, res.data.data.getAlarm);
         }

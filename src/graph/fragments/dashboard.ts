@@ -45,7 +45,7 @@ export const addTemplate = {
 export const fetchEvents = {
   variable: ['$condition: EventQueryCondition'],
   query: `
-  fetchEvents: queryEvents(condition: condition) {
+  fetchEvents: queryEvents(condition: $condition) {
     events {
       uuid
       source {

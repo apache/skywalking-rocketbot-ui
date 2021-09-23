@@ -153,6 +153,7 @@ export const CLEAR_LOG_CONDITIONS = 'CLEAR_LOG_CONDITIONS';
 // Event
 export const UPDATE_EVENTS = 'UPDATE_EVENTS';
 export const SET_TOTAL_SIZE = 'SET_TOTAL_SIZE';
+export const SET_ERROR_MESSAGE = 'SET_ERROR_MESSAGE';
 
 // debug
 export const SET_TAB_TYPE = 'SET_TAB_TYPE';
