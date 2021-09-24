@@ -26,7 +26,6 @@ limitations under the License. -->
       @changePage="(pageNum) => handleFetch(pageNum)"
       :total="total"
     />
-    <rk-alert :show.sync="alarmErrors" type="error" message="Query alarm errors" :description="alarmErrorsDesc" />
   </nav>
 </template>
 
@@ -60,11 +59,6 @@ limitations under the License. -->
           needTotal: true,
         },
         keyword: this.keyword,
-      }).then((errors: { message: string }) => {
-        if (errors) {
-          this.alarmErrors = true;
-          this.alarmErrorsDesc = errors.message;
-        }
       });
     }
 

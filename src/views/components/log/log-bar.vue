@@ -78,13 +78,6 @@ limitations under the License. -->
     <div v-show="showConditionsBox">
       <LogConditions />
     </div>
-    <rk-alert :show.sync="showLogErrors" type="error" message="Query log errors" :description="logErrorDesc" />
-    <rk-alert
-      :show.sync="showKeyWordsErrors"
-      type="error"
-      message="Query log errors"
-      :description="logKeyWordsErrorMsg"
-    />
   </div>
 </template>
 
@@ -123,10 +116,6 @@ limitations under the License. -->
     private cateGoryBrowser = 'browser';
     private showConditionsBox = true;
     private pageSize = 22;
-    private showLogErrors: boolean = false;
-    private showKeyWordsErrors: boolean = false;
-    private logErrorDesc: string = '';
-    private logKeyWordsErrorMsg: string = '';
 
     private beforeMount() {
       this.MIXHANDLE_GET_OPTION({
@@ -135,12 +124,7 @@ limitations under the License. -->
         pageType: PageTypes.LOG,
       })
         .then(() => {
-          this.QUERY_LOGS_BYKEYWORDS().then((msg: string) => {
-            if (msg) {
-              this.showKeyWordsErrors = true;
-              this.logKeyWordsErrorMsg = msg;
-            }
-          });
+          this.QUERY_LOGS_BYKEYWORDS();
         })
         .then(() => {
           const serviceName = this.$route.query.service ? this.$route.query.service.toString() : undefined;
@@ -231,11 +215,6 @@ limitations under the License. -->
                 paging: { pageNum: this.pageNum, pageSize: this.pageSize, needTotal: true },
                 queryDuration: conditions.traceId ? undefined : conditions.date,
               },
-      }).then((msg: string) => {
-        if (msg) {
-          this.logErrorDesc = msg;
-          this.showLogErrors = true;
-        }
       });
     }
 

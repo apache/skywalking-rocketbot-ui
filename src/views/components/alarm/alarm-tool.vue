@@ -44,7 +44,6 @@ limitations under the License. -->
       @changePage="(pageNum) => handleRefresh({ pageNum })"
       :total="total"
     />
-    <rk-alert :show.sync="alarmErrors" type="error" message="Query alarm errors" :description="alarmErrorsDesc" />
   </nav>
 </template>
 
@@ -73,8 +72,6 @@ limitations under the License. -->
       { label: 'EndpointRelation', key: 'EndpointRelation' },
     ];
     private keyword: string = '';
-    private alarmErrors: boolean = false;
-    private alarmErrorsDesc: string = '';
 
     private beforeMount() {
       this.SET_EVENTS([
@@ -100,12 +97,7 @@ limitations under the License. -->
       if (this.keyword) {
         params.keyword = this.keyword;
       }
-      this.GET_ALARM(params).then((errors: { message: string }) => {
-        if (errors) {
-          this.alarmErrors = true;
-          this.alarmErrorsDesc = errors.message;
-        }
-      });
+      this.GET_ALARM(params);
     }
     private enterUpdateAlarm(event: KeyboardEvent) {
       if (event.keyCode !== 13) {

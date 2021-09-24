@@ -28,12 +28,14 @@ export interface State {
   currentEvents: Event[];
   totalSize: number;
   errorMessage: string;
+  eventErrors: { [key: string]: string };
 }
 
 const initState: State = {
   currentEvents: [],
   totalSize: 1,
   errorMessage: '',
+  eventErrors: {},
 };
 
 // mutations
@@ -48,8 +50,11 @@ const mutations: MutationTree<any> = {
   [types.SET_TOTAL_SIZE](state: State, total: number) {
     state.totalSize = total;
   },
-  [types.SET_ERROR_MESSAGE](state: State, errors: string) {
-    state.errorMessage = errors;
+  [types.SET_EVENT_ERRORS](state: State, data: { msg: string; desc: string }) {
+    state.eventErrors = {
+      ...state.eventErrors,
+      [data.msg]: data.desc,
+    };
   },
 };
 
@@ -60,10 +65,10 @@ const actions: ActionTree<State, any> = {
       .query('queryEvents')
       .params({ condition: params.condition })
       .then((res: AxiosResponse) => {
+        context.commit(types.SET_EVENT_ERRORS, { msg: 'queryEvents', desc: res.data.errors || '' });
         if (res.data.errors) {
           context.commit('UPDATE_EVENTS', { events: [], duration: params.condition.time });
           context.commit('SET_TOTAL_SIZE', 1);
-          context.commit('SET_ERROR_MESSAGE', res.data.errors);
           return [];
         }
         context.commit('UPDATE_EVENTS', {

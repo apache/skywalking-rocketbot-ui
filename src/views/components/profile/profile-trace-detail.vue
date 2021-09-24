@@ -43,12 +43,6 @@ limitations under the License. -->
       </div>
       <div v-if="message">{{ message }}</div>
     </div>
-    <rk-alert
-      :show.sync="showAnalyzeError"
-      type="error"
-      message="Fetch Analyze errors"
-      :description="getAnalyzeErrors"
-    />
   </div>
 </template>
 
@@ -74,8 +68,6 @@ limitations under the License. -->
     private mode: string = 'include';
     private message: string = '';
     private loading: boolean = false;
-    private showAnalyzeError: boolean = false;
-    private getAnalyzeErrors: string = '';
 
     private selectSpan(data: any) {
       this.SET_CURRENT_SPAN(data);
@@ -141,15 +133,11 @@ limitations under the License. -->
         segmentId: this.currentSegment.segmentId,
         timeRanges: this.timeRange,
       })
-        .then((result: { tip: string; msg: string }) => {
+        .then((result: { tip: string }) => {
           if (!result) {
             return;
           }
           this.message = result.tip;
-          if (result.msg) {
-            this.showAnalyzeError = true;
-            this.getAnalyzeErrors = result.msg;
-          }
         })
         .finally(() => {
           this.loading = false;

@@ -30,6 +30,7 @@ export interface State {
   loading: boolean;
   conditions: any;
   supportQueryLogsByKeywords: boolean;
+  logErrors: { [key: string]: string };
 }
 
 const categories: Option[] = [
@@ -63,6 +64,7 @@ const logState: State = {
       : [],
   },
   supportQueryLogsByKeywords: true,
+  logErrors: {},
 };
 
 // mutations
@@ -100,6 +102,12 @@ const mutations: MutationTree<State> = {
     localStorage.removeItem('logTags');
     localStorage.removeItem('logTraceId');
   },
+  [types.SET_LOG_ERRORS](state: State, data: { msg: string; desc: string }) {
+    state.logErrors = {
+      ...state.logErrors,
+      [data.msg]: data.desc,
+    };
+  },
 };
 
 // actions
@@ -112,11 +120,12 @@ const actions: ActionTree<State, any> = {
           .query('queryBrowserErrorLogs')
           .params(params)
           .then((res: AxiosResponse<any>) => {
+            context.commit(types.SET_LOG_ERRORS, { msg: 'queryBrowserErrorLogs', desc: res.data.errors || '' });
             if (res.data && res.data.errors) {
               context.commit('SET_LOGS', []);
               context.commit('SET_LOGS_TOTAL', 0);
 
-              return res.data.errors;
+              return;
             }
             context.commit('SET_LOGS', res.data.data.queryBrowserErrorLogs.logs);
             context.commit('SET_LOGS_TOTAL', res.data.data.queryBrowserErrorLogs.total);
@@ -129,11 +138,12 @@ const actions: ActionTree<State, any> = {
           .query('queryServiceLogs')
           .params(params)
           .then((res: AxiosResponse<any>) => {
+            context.commit(types.SET_LOG_ERRORS, { msg: 'queryServiceLogs', desc: res.data.errors || '' });
             if (res.data && res.data.errors) {
               context.commit('SET_LOGS', []);
               context.commit('SET_LOGS_TOTAL', 0);
 
-              return res.data.errors;
+              return;
             }
             context.commit('SET_LOGS', res.data.data.queryLogs.logs);
             context.commit('SET_LOGS_TOTAL', res.data.data.queryLogs.total);
@@ -150,8 +160,9 @@ const actions: ActionTree<State, any> = {
       .query('queryLogsByKeywords')
       .params({})
       .then((res: AxiosResponse<any>) => {
+        context.commit(types.SET_LOG_ERRORS, { msg: 'queryLogsByKeywords', desc: res.data.errors || '' });
         if (res.data && res.data.errors) {
-          return res.data.errors;
+          return;
         }
         context.commit('SET_SUPPORT_QUERY_LOGS_KEYWORDS', res.data.data.support);
       });

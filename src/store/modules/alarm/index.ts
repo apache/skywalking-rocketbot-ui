@@ -24,11 +24,13 @@ import { Alarm, AlarmParams } from '@/types/alarm';
 export interface State {
   alarmService: Alarm[];
   total: number;
+  alarmErrors: { [key: string]: string };
 }
 
 const initState: State = {
   alarmService: [],
   total: 0,
+  alarmErrors: {},
 };
 
 // getters
@@ -44,6 +46,12 @@ const mutations: MutationTree<State> = {
     state.alarmService = [];
     state.total = 0;
   },
+  [types.SET_ALARM_ERRORS](state: State, data: { msg: string; desc: string }) {
+    state.alarmErrors = {
+      ...state.alarmErrors,
+      [data.msg]: data.desc,
+    };
+  },
 };
 
 // actions
@@ -53,8 +61,9 @@ const actions: ActionTree<State, any> = {
       .query('queryAlarms')
       .params(params)
       .then((res: AxiosResponse<any>) => {
+        context.commit(types.SET_ALARM_ERRORS, { msg: 'queryAlarms', desc: res.data.errors || '' });
         if (res.data.errors) {
-          return { message: res.data.errors };
+          return;
         }
         if (res.data.data.getAlarm.items) {
           context.commit(types.SET_ALARM, res.data.data.getAlarm);

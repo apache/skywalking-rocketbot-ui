@@ -72,12 +72,11 @@ limitations under the License. -->
         <span class="mr-5 vm">{{ $t('createTask') }}</span>
       </a>
     </div>
-    <rk-alert :show.sync="showTaskError" type="error" message="Fetch span errors" :description="getTaskErrors" />
   </div>
 </template>
 
 <script lang="ts">
-  import { Duration, Option } from '@/types/global';
+  import { Duration } from '@/types/global';
   import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
 
@@ -86,8 +85,6 @@ limitations under the License. -->
     private time!: Date;
     private message: string = '';
     private locale: string = 'en';
-    private showTaskError: boolean = false;
-    private getTaskErrors: string = '';
     @Prop() private newTaskFields: any;
     @Prop() private taskFieldSource: any;
     @Getter('profileStore/updateTaskOpt') private updateTaskOpt: any;
@@ -106,20 +103,14 @@ limitations under the License. -->
     }
 
     private createTask() {
-      this.CREATE_PROFILE_TASK({ startTime: this.time.getTime() }).then(
-        (res: { errorReason?: string; msg?: string }) => {
-          if (res.msg) {
-            this.getTaskErrors = res.msg;
-            this.showTaskError = true;
-          }
-          if (res.errorReason) {
-            this.message = res.errorReason;
-            return;
-          } else {
-            this.$emit('closeSidebox');
-          }
-        },
-      );
+      this.CREATE_PROFILE_TASK({ startTime: this.time.getTime() }).then((res: { errorReason?: string }) => {
+        if (res.errorReason) {
+          this.message = res.errorReason;
+          return;
+        } else {
+          this.$emit('closeSidebox');
+        }
+      });
     }
 
     @Watch('rocketbotGlobal.durationRow')

@@ -42,7 +42,6 @@ limitations under the License. -->
         <ProfileTask :taskFieldSource="taskFieldSource" :newTaskFields="newTaskFields" @closeSidebox="closeSidebox" />
       </rk-sidebox>
     </div>
-    <rk-alert :show.sync="showTasksError" type="error" message="Fetch task errors" :description="getTasksErrors" />
   </div>
 </template>
 
@@ -64,8 +63,6 @@ limitations under the License. -->
     private endpointName: string = '';
     private dialogVisible = false;
     private serviceOpt: any;
-    private getTasksErrors: string = '';
-    private showTasksError: boolean = false;
 
     private chooseService(item: { key: string; label: string }) {
       this.SET_HEADER_SOURCE({ currentService: item });
@@ -73,12 +70,7 @@ limitations under the License. -->
 
     private searchTask() {
       this.SET_HEADER_SOURCE({ endpointName: this.endpointName });
-      this.GET_TASK_LIST().then((result?: { msg: string }) => {
-        if (result) {
-          this.showTasksError = true;
-          this.getTasksErrors = result.msg;
-        }
-      });
+      this.GET_TASK_LIST();
     }
 
     private created() {

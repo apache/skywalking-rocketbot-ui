@@ -77,7 +77,7 @@ export const ServiceTopo = {
 export const ServicesTopo = {
   variable: '$duration: Duration!, $serviceIds: [ID!]!',
   query: `
-  topo: getServicesTopology(duration: $duration, serviceIds: serviceIds) {
+  topo: getServicesTopology(duration: $duration, serviceIds: $serviceIds) {
     nodes {
       id
       name

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Commit, Dispatch } from 'vuex';
+import { Commit, Dispatch, MutationTree } from 'vuex';
 import { AxiosResponse } from 'axios';
 
 import graph from '@/graph';
@@ -41,6 +41,7 @@ export interface State {
   profileAnalyzation: any;
   highlightTop: boolean;
   currentSpan: any;
+  profileErrors: { [key: string]: string };
 }
 const initState: State = {
   headerSource: {
@@ -64,6 +65,7 @@ const initState: State = {
   profileAnalyzation: [],
   highlightTop: true,
   currentSpan: {},
+  profileErrors: {},
 };
 // getters
 const getters = {
@@ -73,7 +75,7 @@ const getters = {
 };
 
 // mutations
-const mutations = {
+const mutations: MutationTree<State> = {
   [types.SET_SERVICES](state: State, data: any[]) {
     state.headerSource.serviceSource = [{ key: 'all', label: 'All' }, ...data];
     state.headerSource.currentService = state.headerSource.serviceSource[0];
@@ -114,6 +116,12 @@ const mutations = {
   [types.SET_HIGHLIGHT_TOP](state: State) {
     state.highlightTop = !state.highlightTop;
   },
+  [types.SET_PROFILE_ERRORS](state: State, data: { msg: string; desc: string }) {
+    state.profileErrors = {
+      ...state.profileErrors,
+      [data.msg]: data.desc,
+    };
+  },
 };
 
 // actions
@@ -126,8 +134,9 @@ const actions = {
       .query('queryServices')
       .params(params)
       .then((res: AxiosResponse) => {
+        context.commit(types.SET_PROFILE_ERRORS, { msg: 'serviceErrors', desc: res.data.errors || '' });
         if (res.data.errors) {
-          return { msg: res.data.errors };
+          return context.commit(types.SET_SERVICES, []);
         }
         context.commit(types.SET_SERVICES, res.data.data.services);
         context.dispatch('GET_TASK_LIST');
@@ -144,8 +153,9 @@ const actions = {
       .query('getProfileTaskList')
       .params(param)
       .then((res: AxiosResponse) => {
+        context.commit(types.SET_PROFILE_ERRORS, { msg: 'getProfileTaskList', desc: res.data.errors || '' });
         if (res.data.errors) {
-          return { msg: res.data.errors };
+          return context.commit(types.SET_TASK_LIST, []);
         }
         context.commit(types.SET_TASK_LIST, res.data.data.getProfileTaskList);
         const list = res.data.data.getProfileTaskList;
@@ -161,8 +171,9 @@ const actions = {
       .query('getProfileTaskSegmentList')
       .params(params)
       .then((res: AxiosResponse) => {
+        context.commit(types.SET_PROFILE_ERRORS, { msg: 'getProfileTaskSegmentList', desc: res.data.errors || '' });
         if (res.data.errors) {
-          return { msg: res.data.errors };
+          return context.commit(types.SET_SEGMENT_LIST, []);
         }
         const { getProfileTaskSegmentList } = res.data.data;
 
@@ -184,8 +195,9 @@ const actions = {
       .query('queryProfileSegment')
       .params(params)
       .then((res: AxiosResponse) => {
+        context.commit(types.SET_PROFILE_ERRORS, { msg: 'queryProfileSegment', desc: res.data.errors || '' });
         if (res.data.errors) {
-          return { msg: res.data.errors };
+          return context.commit(types.SET_SEGMENT_SPANS, []);
         }
         const { getProfiledSegment } = res.data.data;
         if (!getProfiledSegment) {
@@ -210,8 +222,9 @@ const actions = {
       .query('getProfileAnalyze')
       .params(params)
       .then((res: AxiosResponse) => {
+        context.commit(types.SET_PROFILE_ERRORS, { msg: 'getProfileAnalyze', desc: res.data.errors || '' });
         if (res.data.errors) {
-          return { msg: res.data.errors };
+          return context.commit(types.SET_PROFILE_ANALYZATION, []);
         }
         const { getProfileAnalyze, tip } = res.data.data;
         if (tip) {
@@ -248,8 +261,9 @@ const actions = {
       .query('saveProfileTask')
       .params({ creationRequest })
       .then((res: AxiosResponse) => {
+        context.commit(types.SET_PROFILE_ERRORS, { msg: 'saveProfileTask', desc: res.data.errors || '' });
         if (res.data.errors) {
-          return { msg: res.data.errors };
+          return;
         }
         if (res.data.data && res.data.data.createTask && res.data.data.createTask.errorReason) {
           return res.data.data.createTask;

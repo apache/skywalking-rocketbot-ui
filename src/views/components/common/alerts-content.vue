@@ -38,6 +38,38 @@ limitations under the License. -->
       :message="msg"
       :description="stateTopo.topoErrors[msg]"
     />
+    <rk-alert
+      v-for="(msg, index) in Object.keys(stateProfile.profileErrors)"
+      :key="msg + index"
+      :show.sync="stateProfile.profileErrors[msg]"
+      type="error"
+      :message="msg"
+      :description="stateProfile.profileErrors[msg]"
+    />
+    <rk-alert
+      v-for="(msg, index) in Object.keys(rocketLog.logErrors)"
+      :key="msg + index"
+      :show.sync="rocketLog.logErrors[msg]"
+      type="error"
+      :message="msg"
+      :description="rocketLog.logErrors[msg]"
+    />
+    <rk-alert
+      v-for="(msg, index) in Object.keys(rocketAlarm.alarmErrors)"
+      :key="msg + index"
+      :show.sync="rocketAlarm.alarmErrors[msg]"
+      type="error"
+      :message="msg"
+      :description="rocketAlarm.alarmErrors[msg]"
+    />
+    <rk-alert
+      v-for="(msg, index) in Object.keys(rocketEvent.eventErrors)"
+      :key="msg + index"
+      :show.sync="rocketEvent.eventErrors[msg]"
+      type="error"
+      :message="msg"
+      :description="rocketEvent.eventErrors[msg]"
+    />
   </div>
 </template>
 
@@ -47,12 +79,20 @@ limitations under the License. -->
   import { State as optionState } from '@/store/modules/global/selectors';
   import { State as rocketData } from '@/store/modules/dashboard/dashboard-data';
   import { State as topoState } from '@/store/modules/topology';
+  import { State as profileState } from '@/store/modules/profile/profile-store';
+  import { State as logState } from '@/store/modules/log';
+  import { State as alarmState } from '@/store/modules/alarm';
+  import { State as EventState } from '@/store/modules/event';
 
   @Component
   export default class AlertsContent extends Vue {
     @State('rocketOption') private stateOption!: optionState;
     @State('rocketData') private rocketData!: rocketData;
     @State('rocketTopo') private stateTopo!: topoState;
+    @State('profileStore') private stateProfile!: profileState;
+    @State('rocketLog') private rocketLog!: logState;
+    @State('rocketAlarm') private rocketAlarm!: alarmState;
+    @State('rocketEvent') private rocketEvent!: EventState;
   }
 </script>
 <style lang="scss" scoped>
