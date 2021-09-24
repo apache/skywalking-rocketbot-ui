@@ -49,7 +49,7 @@ limitations under the License. -->
           : 'sentiment_satisfied_alt';
       setTimeout(() => {
         this.$emit('update:show', false);
-      }, 2 * 60 * 1000);
+      }, 30000);
     }
 
     private closeAlert() {
