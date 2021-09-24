@@ -32,12 +32,6 @@ limitations under the License. -->
       />
     </div>
     <TopoEndpointDependency />
-    <rk-alert
-      :show.sync="rocketTopo.endpointTopoErrors"
-      type="error"
-      message="Endpoint dependency errors"
-      :description="rocketTopo.endpointTopoErrors"
-    />
   </div>
 </template>
 

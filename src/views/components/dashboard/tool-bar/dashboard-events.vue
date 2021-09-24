@@ -123,12 +123,6 @@ limitations under the License. -->
         </div>
       </div>
     </rk-sidebox>
-    <rk-alert
-      :show.sync="eventsErrors"
-      type="error"
-      message="Fetch events errors"
-      :description="rocketComps.getEventsErrors"
-    />
   </div>
 </template>
 <script lang="ts">
@@ -173,7 +167,6 @@ limitations under the License. -->
     private seriesTypes = SeriesTypes;
     private eventsHeaders = EventsHeaders;
     private eventsDetailHeaders = EventsDetailHeaders;
-    private eventsErrors: boolean = false;
 
     private created() {
       this.initEvents();

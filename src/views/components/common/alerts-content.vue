@@ -15,60 +15,12 @@ limitations under the License. -->
 <template>
   <div class="alert-content">
     <rk-alert
-      v-for="(msg, index) in Object.keys(stateOption.selectorErrors)"
+      v-for="(msg, index) in Object.keys(allAlerts)"
       :key="msg + index"
-      :show.sync="stateOption.selectorErrors[msg]"
+      :show.sync="allAlerts[msg]"
       type="error"
       :message="msg"
-      :description="stateOption.selectorErrors[msg]"
-    />
-    <rk-alert
-      v-for="(msg, index) in Object.keys(rocketData.dashboardErrors)"
-      :key="msg + index"
-      :show.sync="rocketData.dashboardErrors[msg]"
-      type="error"
-      :message="msg"
-      :description="rocketData.dashboardErrors[msg]"
-    />
-    <rk-alert
-      v-for="(msg, index) in Object.keys(stateTopo.topoErrors)"
-      :key="msg + index"
-      :show.sync="stateTopo.topoErrors[msg]"
-      type="error"
-      :message="msg"
-      :description="stateTopo.topoErrors[msg]"
-    />
-    <rk-alert
-      v-for="(msg, index) in Object.keys(stateProfile.profileErrors)"
-      :key="msg + index"
-      :show.sync="stateProfile.profileErrors[msg]"
-      type="error"
-      :message="msg"
-      :description="stateProfile.profileErrors[msg]"
-    />
-    <rk-alert
-      v-for="(msg, index) in Object.keys(rocketLog.logErrors)"
-      :key="msg + index"
-      :show.sync="rocketLog.logErrors[msg]"
-      type="error"
-      :message="msg"
-      :description="rocketLog.logErrors[msg]"
-    />
-    <rk-alert
-      v-for="(msg, index) in Object.keys(rocketAlarm.alarmErrors)"
-      :key="msg + index"
-      :show.sync="rocketAlarm.alarmErrors[msg]"
-      type="error"
-      :message="msg"
-      :description="rocketAlarm.alarmErrors[msg]"
-    />
-    <rk-alert
-      v-for="(msg, index) in Object.keys(rocketEvent.eventErrors)"
-      :key="msg + index"
-      :show.sync="rocketEvent.eventErrors[msg]"
-      type="error"
-      :message="msg"
-      :description="rocketEvent.eventErrors[msg]"
+      :description="allAlerts[msg]"
     />
   </div>
 </template>
@@ -83,6 +35,7 @@ limitations under the License. -->
   import { State as logState } from '@/store/modules/log';
   import { State as alarmState } from '@/store/modules/alarm';
   import { State as EventState } from '@/store/modules/event';
+  import { State as traceState } from '@/store/modules/trace/index';
 
   @Component
   export default class AlertsContent extends Vue {
@@ -93,6 +46,20 @@ limitations under the License. -->
     @State('rocketLog') private rocketLog!: logState;
     @State('rocketAlarm') private rocketAlarm!: alarmState;
     @State('rocketEvent') private rocketEvent!: EventState;
+    @State('rocketTrace') private rocketTrace!: traceState;
+
+    private get allAlerts() {
+      return {
+        ...this.rocketEvent.eventErrors,
+        ...this.stateOption.selectorErrors,
+        ...this.rocketData.dashboardErrors,
+        ...this.stateTopo.topoErrors,
+        ...this.stateProfile.profileErrors,
+        ...this.rocketLog.logErrors,
+        ...this.rocketAlarm.alarmErrors,
+        ...this.rocketTrace.traceErrors,
+      };
+    }
   }
 </script>
 <style lang="scss" scoped>

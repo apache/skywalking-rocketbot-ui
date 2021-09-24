@@ -77,12 +77,6 @@ limitations under the License. -->
       </div>
     </div>
     <instances-survey :currentType="currentType" ref="survey" />
-    <rk-alert
-      :show.sync="instanceEventsErrors"
-      type="error"
-      message="Fetch instance event errors"
-      :description="rocketComps.getEventsErrors"
-    />
   </div>
 </template>
 
@@ -131,7 +125,6 @@ limitations under the License. -->
     private pageEventsType = PageEventsType.TOPO_INSTANCE_EVENTS;
     private currentType: Option[] = [{ key: '', label: '' }];
     private templateTypesList: Option[] = [{ key: '', label: '' }];
-    private instanceEventsErrors: boolean = false;
 
     private beforeMount() {
       this.SET_CURRENT_SERVICE(this.current);

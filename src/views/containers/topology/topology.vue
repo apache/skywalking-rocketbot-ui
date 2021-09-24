@@ -31,18 +31,6 @@ limitations under the License. -->
       <window-alarm v-if="dialog === 'alarm'" :current="this.current" />
       <window-endpoint-dependency v-if="dialog === 'endpoint_dependency'" :current="this.current" />
     </rk-sidebox>
-    <rk-alert
-      :show.sync="stateTopo.endpointErrors"
-      type="error"
-      message="Endpoint errors"
-      :description="stateTopo.endpointErrors"
-    />
-    <rk-alert
-      :show.sync="stateTopo.getTopoErrors"
-      type="error"
-      message="Topology errors"
-      :description="stateTopo.getTopoErrors"
-    />
   </div>
 </template>
 <script lang="ts">

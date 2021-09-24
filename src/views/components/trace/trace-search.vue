@@ -93,24 +93,6 @@ limitations under the License. -->
       </div>
       <ConditionTags :type="'TRACE'" :clearTags="clearTags" @updateTags="updateTags" />
     </div>
-    <rk-alert
-      :show.sync="showServiceErrors"
-      type="error"
-      message="Fetch service errors"
-      :description="serviceErrorsMsg"
-    />
-    <rk-alert
-      :show.sync="showInstanceErrors"
-      type="error"
-      message="Fetch service instance errors"
-      :description="instanceErrorsMsg"
-    />
-    <rk-alert
-      :show.sync="showEndpointErrors"
-      type="error"
-      message="Fetch endpoint errors"
-      :description="endpointErrorsMsg"
-    />
   </div>
 </template>
 
@@ -151,12 +133,6 @@ limitations under the License. -->
     private tagsList: string[] = [];
     private clearTags: boolean = false;
     private serviceName: string = '';
-    private showServiceErrors: boolean = false;
-    private serviceErrorsMsg: string = '';
-    private showInstanceErrors: boolean = false;
-    private instanceErrorsMsg: string = '';
-    private showEndpointErrors: boolean = false;
-    private endpointErrorsMsg: string = '';
 
     private created() {
       this.traceId = this.$route.query.traceid ? this.$route.query.traceid.toString() : this.traceId;
@@ -164,12 +140,7 @@ limitations under the License. -->
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     }
     private mounted() {
-      this.GET_SERVICES({ duration: this.durationTime }).then((msg: string) => {
-        if (msg) {
-          this.showServiceErrors = true;
-          this.serviceErrorsMsg = msg;
-          return;
-        }
+      this.GET_SERVICES({ duration: this.durationTime }).then(() => {
         if (this.serviceName) {
           for (const s of this.rocketTrace.services) {
             if (s.label === this.serviceName) {
@@ -188,11 +159,6 @@ limitations under the License. -->
       this.GET_INSTANCES({
         duration: this.durationTime,
         serviceId: serviceId || this.service.key,
-      }).then((msg: string) => {
-        if (msg) {
-          this.showInstanceErrors = true;
-          this.instanceErrorsMsg = msg;
-        }
       });
     }
     private globalTimeFormat(time: Date[]) {
@@ -228,12 +194,6 @@ limitations under the License. -->
         serviceId,
         keyword,
         duration: this.durationTime,
-      }).then((result: string) => {
-        if (!result) {
-          return;
-        }
-        this.showEndpointErrors = true;
-        this.endpointErrorsMsg = result;
       });
     }
     private chooseStatus(i: Option) {

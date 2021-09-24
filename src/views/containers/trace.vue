@@ -18,19 +18,7 @@ limitations under the License. -->
     <div class="rk-trace-inner">
       <TraceTable />
       <TraceDetail :current="stateTrace.currentTrace" :spans="stateTrace.traceSpans" />
-      <rk-alert
-        :show.sync="stateTrace.traceSpanErrors"
-        type="error"
-        message="Fetch trace span errors"
-        :description="stateTrace.traceSpanErrors"
-      />
     </div>
-    <rk-alert
-      :show.sync="stateTrace.traceListErrors"
-      type="error"
-      message="Fetch trace errors"
-      :description="stateTrace.traceListErrors"
-    />
   </div>
 </template>
 

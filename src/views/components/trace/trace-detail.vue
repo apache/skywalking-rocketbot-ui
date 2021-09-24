@@ -98,12 +98,6 @@ limitations under the License. -->
         <use xlink:href="#unlink"></use>
       </svg>
     </div>
-    <rk-alert
-      :show.sync="rocketTrace.traceSpanLogErrors"
-      type="error"
-      message="Fetch trace errors"
-      :description="rocketTrace.traceSpanLogErrors"
-    />
   </div>
 </template>
 

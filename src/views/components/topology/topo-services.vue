@@ -16,12 +16,6 @@ limitations under the License. -->
   <div class="selector-topo-aside-box">
     <TopoSelect :current="group" :data="groups" @onChoose="changeGroup" />
     <TopoSelect :current="service" :data="currentServices" @onChoose="changeService" />
-    <rk-alert
-      :show.sync="showServiceErrors"
-      type="error"
-      message="Fetch service errors"
-      :description="serviceErrorsDesc"
-    />
   </div>
 </template>
 <script lang="ts">
@@ -43,7 +37,6 @@ limitations under the License. -->
     private groups = [{ key: '', label: 'All groups' }];
     private group = { key: '', label: 'All groups' };
     private showServiceErrors: boolean = false;
-    private serviceErrorsDesc: string = '';
 
     private created() {
       this.fetchData(true);
@@ -57,12 +50,7 @@ limitations under the License. -->
 
     private fetchData(isDefault: boolean) {
       this.GET_SERVICES({ duration: this.durationTime }).then(
-        (json: Array<{ key: string; label: string; group: string }> | any) => {
-          if (json.msg) {
-            this.serviceErrorsDesc = json.msg;
-            this.showServiceErrors = true;
-            return;
-          }
+        (json: Array<{ key: string; label: string; group: string }>) => {
           const groups = [] as string[];
           for (const g of json) {
             if (g.group && !groups.includes(g.group)) {

@@ -76,12 +76,6 @@ limitations under the License. -->
       </div>
     </div>
     <endpoints-survey :currentType="currentType" ref="survey" />
-    <rk-alert
-      :show.sync="endpointEventsErrors"
-      type="error"
-      message="Fetch endpoint event errors"
-      :description="rocketComps.getEventsErrors"
-    />
   </div>
 </template>
 
@@ -131,7 +125,6 @@ limitations under the License. -->
     private endpointMetrics: any[] = [];
     private currentType: Option[] = [{ key: '', label: '' }];
     private templateTypesList: Option[] = [{ key: '', label: '' }];
-    private endpointEventsErrors: boolean = false;
 
     private beforeMount() {
       this.SET_CURRENT_SERVICE(this.current);

@@ -116,12 +116,6 @@ limitations under the License. -->
         icon="epic"
       />
     </div>
-    <rk-alert
-      :show.sync="eventsErrors"
-      type="error"
-      message="Fetch events errors"
-      :description="rocketComps.getEventsErrors"
-    />
   </div>
 </template>
 
@@ -158,7 +152,6 @@ limitations under the License. -->
     private dialogAttributesVisible: boolean = false;
     private dashboardType = DASHBOARDTYPE;
     private pageEventsType = PageEventsType;
-    private eventsErrors: boolean = false;
 
     private selectService(i: Option) {
       if (!this.rocketComps.enableEvents) {
