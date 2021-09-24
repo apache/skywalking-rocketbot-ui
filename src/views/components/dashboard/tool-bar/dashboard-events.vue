@@ -275,39 +275,21 @@ limitations under the License. -->
 
     private fetchEvents() {
       if (this.type === PageEventsType.DASHBOARD_EVENTS) {
-        Promise.all([this.fetchServiceEvents(), this.fetchInstanceEvents(), this.fetchEndpointEvents()])
-          .then(() => {
-            this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
-          })
-          .then(() => {
-            if (this.rocketComps.getEventsErrors) {
-              this.eventsErrors = true;
-            }
-          });
+        Promise.all([this.fetchServiceEvents(), this.fetchInstanceEvents(), this.fetchEndpointEvents()]).then(() => {
+          this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
+        });
         return;
       }
       if (this.type === PageEventsType.TOPO_INSTANCE_EVENTS) {
-        this.fetchInstanceEvents()
-          .then(() => {
-            this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
-          })
-          .then(() => {
-            if (this.rocketComps.getEventsErrors) {
-              this.eventsErrors = true;
-            }
-          });
+        this.fetchInstanceEvents().then(() => {
+          this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
+        });
         return;
       }
       if (this.type === PageEventsType.TOPO_ENDPOINT_EVENTS) {
-        this.fetchEndpointEvents()
-          .then(() => {
-            this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
-          })
-          .then(() => {
-            if (this.rocketComps.getEventsErrors) {
-              this.eventsErrors = true;
-            }
-          });
+        this.fetchEndpointEvents().then(() => {
+          this.UPDATE_DASHBOARD({ key: UpdateDashboardEvents + new Date().getTime() });
+        });
       }
     }
 

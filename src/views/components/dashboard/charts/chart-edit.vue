@@ -290,12 +290,6 @@ limitations under the License. -->
         />
       </div>
     </div>
-    <rk-alert
-      :show.sync="showTypeMetricsErrors"
-      type="error"
-      message="Metric type errors"
-      :description="typeMetricsErrors"
-    />
   </div>
 </template>
 
@@ -355,8 +349,6 @@ limitations under the License. -->
     private isChartType = false;
     private ChartTable = 'ChartTable';
     private noEntity = false;
-    private typeMetricsErrors = '';
-    private showTypeMetricsErrors = false;
 
     private beforeMount() {
       this.itemConfig = this.item;
@@ -483,14 +475,8 @@ limitations under the License. -->
     }
 
     private updateMetricName(params: { type: string; value: string }) {
-      this.TYPE_METRICS({ name: params.value }).then((data: Array<{ typeOfMetrics: string } | any>) => {
-        this.typeMetricsErrors = '';
+      this.TYPE_METRICS({ name: params.value }).then((data: Array<{ typeOfMetrics: string }>) => {
         if (!data.length) {
-          return;
-        }
-        if (data.length === 1 && data[0].message) {
-          this.typeMetricsErrors = data[0].message;
-          this.showTypeMetricsErrors = true;
           return;
         }
         if (data.length > 1) {
@@ -499,13 +485,6 @@ limitations under the License. -->
             if (d.typeOfMetrics !== MetricsType.REGULAR_VALUE) {
               len++;
             }
-            if (d.message) {
-              this.typeMetricsErrors = d.message + ' ';
-            }
-          }
-          if (this.typeMetricsErrors) {
-            this.showTypeMetricsErrors = true;
-            return;
           }
           if (len) {
             this.$emit('updateStatus', 'metricType', MetricsType.UNKNOWN);

@@ -60,10 +60,9 @@ limitations under the License. -->
 
 <style lang="scss" scoped>
   .rk-alert {
-    position: fixed;
+    position: relative;
+    display: flex;
     word-wrap: break-word;
-    top: 60px;
-    right: 5px;
     width: 580px;
     z-index: 1000;
     color: #000;
@@ -71,6 +70,7 @@ limitations under the License. -->
     padding: 10px 10px;
     align-items: flex-start;
     transition: all 0.7s;
+    margin-bottom: 15px;
     &.error {
       border: 1px solid #ffccc7;
       background-color: #fff2f0;

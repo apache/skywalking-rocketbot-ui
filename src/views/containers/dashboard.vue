@@ -40,12 +40,6 @@ limitations under the License. -->
         + Add An Item
       </div>
     </div>
-    <rk-alert
-      :show.sync="templatesErrors"
-      type="error"
-      message="Dashboard template errors"
-      :description="templatesErrorsDesc"
-    />
   </div>
 </template>
 
@@ -90,7 +84,6 @@ limitations under the License. -->
 
     private isRouterAlive: boolean = true;
     private templatesErrors: boolean = false;
-    private templatesErrorsDesc: string = '';
     public reload(): void {
       this.isRouterAlive = false;
       this.$nextTick(() => {
@@ -113,14 +106,7 @@ limitations under the License. -->
       });
     }
     private beforeMount() {
-      this.GET_ALL_TEMPLATES().then((templateResp: ITemplate[] | { message?: string }) => {
-        if (!Array.isArray(templateResp)) {
-          if (templateResp.message) {
-            this.templatesErrorsDesc = templateResp.message;
-            this.templatesErrors = true;
-          }
-          return;
-        }
+      this.GET_ALL_TEMPLATES().then((templateResp: ITemplate[]) => {
         const dashboardTemplate = templateResp.filter((item: ITemplate) => item.type === 'DASHBOARD');
         const templatesConfig = dashboardTemplate.map((item: ITemplate) => JSON.parse(item.configuration)).flat(1);
         this.SET_TEMPLATES(templatesConfig);

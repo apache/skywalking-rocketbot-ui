@@ -17,7 +17,7 @@ limitations under the License. -->
     <RkHeader @reloadFooter="reloadFooter" />
     <router-view></router-view>
     <RkFooter ref="footer" />
-    <SelectorAlerts />
+    <AlertsContent />
   </div>
 </template>
 
@@ -27,13 +27,13 @@ limitations under the License. -->
   import { State as optionState } from '@/store/modules/global/selectors';
   import RkHeader from '@/views/components/common/rk-header.vue';
   import RkFooter from '@/views/components/common/rk-footer.vue';
-  import SelectorAlerts from '@/views/components/common/selector-alerts.vue';
+  import AlertsContent from '@/views/components/common/alerts-content.vue';
 
   @Component({
     components: {
       RkHeader,
       RkFooter,
-      SelectorAlerts,
+      AlertsContent,
     },
   })
   export default class RouterIndex extends Vue {

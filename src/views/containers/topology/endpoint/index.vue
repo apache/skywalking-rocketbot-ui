@@ -174,9 +174,6 @@ limitations under the License. -->
         },
         type: EntityType[2].key,
       }).then(() => {
-        if (this.rocketComps.getEventsErrors) {
-          this.endpointEventsErrors = true;
-        }
         this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
       });
     }

@@ -38,7 +38,7 @@ export interface State {
   enableEvents: boolean;
   eventsPageType: string;
   currentSeriesType: Option[];
-  getEventsErrors: string;
+  dashboardErrors: { [key: string]: string };
 }
 
 const initState: State = {
@@ -48,12 +48,12 @@ const initState: State = {
   enableEvents: false,
   eventsPageType: PageEventsType.DASHBOARD_EVENTS,
   currentSeriesType: [],
-  getEventsErrors: '',
+  dashboardErrors: {},
   ...dashboardLayout.state,
 };
 
 // mutations
-const mutations: MutationTree<any> = {
+const mutations: MutationTree<State> = {
   ...dashboardLayout.mutations,
   [types.SET_DASHBOARD_EVENTS](state: State, param: { events: Event[]; type: string; duration: DurationTime }) {
     const events = param.events.map((d: Event, index: number) => {
@@ -124,8 +124,11 @@ const mutations: MutationTree<any> = {
       item.checked = false;
     }
   },
-  [types.SET_GET_EVENTS_ERRORS](state: State, errors: string) {
-    state.getEventsErrors = errors;
+  [types.SET_DASHBOARD_ERRORS](state: State, data: { msg: string; desc: string }) {
+    state.dashboardErrors = {
+      ...state.dashboardErrors,
+      [data.msg]: data.desc,
+    };
   },
 };
 
@@ -184,8 +187,9 @@ const actions: ActionTree<State, any> = {
           .query('queryTypeOfMetrics')
           .params({ name: item })
           .then((res: AxiosResponse) => {
+            context.commit(types.SET_DASHBOARD_ERRORS, { msg: 'queryTypeOfMetrics', desc: res.data.errors });
             if (res.data.errors) {
-              return { message: res.data.errors };
+              return;
             }
             return res.data.data;
           });
@@ -197,8 +201,9 @@ const actions: ActionTree<State, any> = {
       .query('queryGetAllTemplates')
       .params({})
       .then((res: AxiosResponse) => {
+        context.commit(types.SET_DASHBOARD_ERRORS, { msg: 'queryGetAllTemplates', desc: res.data.errors });
         if (res.data.errors) {
-          return { message: res.data.errors };
+          return;
         }
         return res.data.data.getAllTemplates || [];
       });
@@ -208,11 +213,11 @@ const actions: ActionTree<State, any> = {
       .query('queryEvents')
       .params({ condition: params.condition })
       .then((res: AxiosResponse) => {
+        context.commit(types.SET_DASHBOARD_ERRORS, { msg: 'queryEvents', desc: res.data.errors });
         if (res.data.errors) {
           context.commit('SET_DASHBOARD_EVENTS', { events: [], type: params.type, duration: params.condition.time });
-          context.commit('SET_GET_EVENTS_ERRORS', res.data.errors);
 
-          return res.data.errors;
+          return;
         }
         context.commit('SET_DASHBOARD_EVENTS', {
           events: res.data.data.fetchEvents.events,

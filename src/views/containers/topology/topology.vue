@@ -32,12 +32,6 @@ limitations under the License. -->
       <window-endpoint-dependency v-if="dialog === 'endpoint_dependency'" :current="this.current" />
     </rk-sidebox>
     <rk-alert
-      :show.sync="templatesErrors"
-      type="error"
-      message="Metric template errors"
-      :description="templatesErrorsDesc"
-    />
-    <rk-alert
       :show.sync="stateTopo.endpointErrors"
       type="error"
       message="Endpoint errors"
@@ -96,8 +90,6 @@ limitations under the License. -->
 
     private current: any = {};
     private dialog: string = '';
-    private templatesErrors: boolean = false;
-    private templatesErrorsDesc: string = '';
 
     private created() {
       this.SET_PAGE_TYPE(PageTypes.TOPOLOGY);
@@ -161,23 +153,14 @@ limitations under the License. -->
     private queryTemplates() {
       this.GET_ALL_TEMPLATES().then(
         (
-          allTemplates:
-            | Array<{
-                name: string;
-                type: string;
-                configuration: string;
-                activated: boolean;
-                disabled: boolean;
-              }>
-            | { message?: string },
+          allTemplates: Array<{
+            name: string;
+            type: string;
+            configuration: string;
+            activated: boolean;
+            disabled: boolean;
+          }>,
         ) => {
-          if (!Array.isArray(allTemplates)) {
-            if (allTemplates.message) {
-              this.templatesErrorsDesc = allTemplates.message;
-              this.templatesErrors = true;
-            }
-            return;
-          }
           if (!window.localStorage.getItem('topologyInstances')) {
             const template =
               allTemplates.filter((item: any) => item.type === TopologyType.TOPOLOGY_INSTANCE && item.activated)[0] ||
