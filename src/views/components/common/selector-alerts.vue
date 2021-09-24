@@ -13,11 +13,25 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div id="app">
-    <RkHeader @reloadFooter="reloadFooter" />
-    <router-view></router-view>
-    <RkFooter ref="footer" />
-    <SelectorAlerts />
+  <div>
+    <rk-alert
+      :show.sync="stateDashboardOption.serviceErrors"
+      type="error"
+      message="Fetch service errors"
+      :description="stateDashboardOption.serviceErrors"
+    />
+    <rk-alert
+      :show.sync="stateDashboardOption.instanceErrors"
+      type="error"
+      message="Fetch service instance errors"
+      :description="stateDashboardOption.instanceErrors"
+    />
+    <rk-alert
+      :show.sync="stateDashboardOption.endpointErrors"
+      type="error"
+      message="Fetch endpoint errors"
+      :description="stateDashboardOption.endpointErrors"
+    />
   </div>
 </template>
 
@@ -25,23 +39,9 @@ limitations under the License. -->
   import { Component, Vue } from 'vue-property-decorator';
   import { State } from 'vuex-class';
   import { State as optionState } from '@/store/modules/global/selectors';
-  import RkHeader from '@/views/components/common/rk-header.vue';
-  import RkFooter from '@/views/components/common/rk-footer.vue';
-  import SelectorAlerts from '@/views/components/common/selector-alerts.vue';
 
-  @Component({
-    components: {
-      RkHeader,
-      RkFooter,
-      SelectorAlerts,
-    },
-  })
-  export default class RouterIndex extends Vue {
+  @Component
+  export default class SelectorAlerts extends Vue {
     @State('rocketOption') private stateDashboardOption!: optionState;
-    private isRouterAlive: boolean = true;
-    public reloadFooter(timeArray: Date[]): void {
-      const footer: any = this.$refs.footer;
-      footer.time = timeArray;
-    }
   }
 </script>

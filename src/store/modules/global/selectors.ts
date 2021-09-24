@@ -37,6 +37,9 @@ export interface State {
   destService: Option;
   destInstance: Option;
   destEndpoint: Option;
+  serviceErrors: string;
+  instanceErrors: string;
+  endpointErrors: string;
 }
 
 const initState: State = {
@@ -53,6 +56,9 @@ const initState: State = {
   destService: { key: '', label: '' },
   destInstance: { key: '', label: '' },
   destEndpoint: { key: '', label: '' },
+  serviceErrors: '',
+  instanceErrors: '',
+  endpointErrors: '',
 };
 
 // mutations
@@ -134,6 +140,15 @@ const mutations: MutationTree<State> = {
     state.destEndpoint = { key: call.destEndpointId, label: call.destEndpointName };
     state.updateDashboard = { key: TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY + call.id };
   },
+  [types.SET_SERVICE_ERRORS](state: State, msg) {
+    state.serviceErrors = msg;
+  },
+  [types.SET_INSTANCE_ERRORS](state: State, msg) {
+    state.instanceErrors = msg;
+  },
+  [types.SET_ENDPOINT_ERRORS](state: State, msg) {
+    state.endpointErrors = msg;
+  },
 };
 
 // actions
@@ -146,7 +161,13 @@ const actions: ActionTree<State, any> = {
       .query('queryServices')
       .params(params)
       .then((res: AxiosResponse) => {
+        if (res.data.errors) {
+          context.commit(types.SET_SERVICE_ERRORS, res.data.errors);
+          context.commit(types.SET_SERVICES, []);
+          return;
+        }
         context.commit(types.SET_SERVICES, res.data.data.services);
+        context.commit(types.SET_SERVICE_ERRORS, '');
       });
   },
   GET_SERVICE_ENDPOINTS(
@@ -167,7 +188,13 @@ const actions: ActionTree<State, any> = {
         keyword: params.keyword,
       })
       .then((res: AxiosResponse) => {
+        if (res.data.errors) {
+          context.commit(types.SET_ENDPOINT_ERRORS, res.data.errors);
+          context.commit(types.SET_ENDPOINTS, []);
+          return;
+        }
         context.commit(types.SET_ENDPOINTS, res.data.data.getEndpoints);
+        context.commit(types.SET_ENDPOINT_ERRORS, '');
       });
   },
   GET_SERVICE_INSTANCES(context: { commit: Commit; state: State }, params: any) {
@@ -179,7 +206,13 @@ const actions: ActionTree<State, any> = {
       .query('queryInstances')
       .params({ serviceId: context.state.currentService.key || '', ...params })
       .then((res: AxiosResponse) => {
+        if (res.data.errors) {
+          context.commit(types.SET_INSTANCE_ERRORS, res.data.errors);
+          context.commit(types.SET_INSTANCES, []);
+          return;
+        }
         context.commit(types.SET_INSTANCES, res.data.data.getServiceInstances);
+        context.commit(types.SET_INSTANCE_ERRORS, '');
       });
   },
   GET_DATABASES(context: { commit: Commit; rootState: any }, params: any) {

@@ -121,8 +121,6 @@ limitations under the License. -->
       type="error"
       message="Fetch events errors"
       :description="rocketComps.getEventsErrors"
-      :showIcon="true"
-      :closable="true"
     />
   </div>
 </template>
