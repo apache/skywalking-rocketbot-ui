@@ -45,8 +45,6 @@ limitations under the License. -->
       type="error"
       message="Dashboard template errors"
       :description="templatesErrorsDesc"
-      :showIcon="true"
-      :closable="true"
     />
   </div>
 </template>

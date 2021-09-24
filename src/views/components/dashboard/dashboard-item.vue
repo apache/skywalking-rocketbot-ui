@@ -77,8 +77,6 @@ limitations under the License. -->
       type="error"
       message="Query metric errors"
       :description="metricErrorsMessage"
-      :showIcon="true"
-      :closable="true"
     />
   </div>
 </template>

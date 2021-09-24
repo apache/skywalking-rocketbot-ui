@@ -98,24 +98,18 @@ limitations under the License. -->
       type="error"
       message="Fetch service errors"
       :description="serviceErrorsMsg"
-      :showIcon="true"
-      :closable="true"
     />
     <rk-alert
       :show.sync="showInstanceErrors"
       type="error"
       message="Fetch service instance errors"
       :description="instanceErrorsMsg"
-      :showIcon="true"
-      :closable="true"
     />
     <rk-alert
       :show.sync="showEndpointErrors"
       type="error"
       message="Fetch endpoint errors"
       :description="endpointErrorsMsg"
-      :showIcon="true"
-      :closable="true"
     />
   </div>
 </template>

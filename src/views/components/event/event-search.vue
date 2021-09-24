@@ -63,8 +63,6 @@ limitations under the License. -->
       type="error"
       message="Query Event errors"
       :description="rocketEvent.errorMessage"
-      :showIcon="true"
-      :closable="true"
     />
   </nav>
 </template>

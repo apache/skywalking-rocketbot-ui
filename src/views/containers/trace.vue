@@ -23,8 +23,6 @@ limitations under the License. -->
         type="error"
         message="Fetch trace span errors"
         :description="stateTrace.traceSpanErrors"
-        :showIcon="true"
-        :closable="true"
       />
     </div>
     <rk-alert
@@ -32,8 +30,6 @@ limitations under the License. -->
       type="error"
       message="Fetch trace errors"
       :description="stateTrace.traceListErrors"
-      :showIcon="true"
-      :closable="true"
     />
   </div>
 </template>

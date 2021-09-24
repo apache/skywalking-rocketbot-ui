@@ -39,8 +39,6 @@ limitations under the License. -->
       type="error"
       message="Fetch service errors"
       :description="serviceErrorsMsg"
-      :showIcon="true"
-      :closable="true"
     />
   </div>
 </template>

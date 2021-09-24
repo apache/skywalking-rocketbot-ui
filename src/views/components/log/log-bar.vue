@@ -78,21 +78,12 @@ limitations under the License. -->
     <div v-show="showConditionsBox">
       <LogConditions />
     </div>
-    <rk-alert
-      :show.sync="showLogErrors"
-      type="error"
-      message="Query log errors"
-      :description="logErrorDesc"
-      :showIcon="true"
-      :closable="true"
-    />
+    <rk-alert :show.sync="showLogErrors" type="error" message="Query log errors" :description="logErrorDesc" />
     <rk-alert
       :show.sync="showKeyWordsErrors"
       type="error"
       message="Query log errors"
       :description="logKeyWordsErrorMsg"
-      :showIcon="true"
-      :closable="true"
     />
   </div>
 </template>

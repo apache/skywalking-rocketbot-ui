@@ -44,14 +44,7 @@ limitations under the License. -->
       @changePage="(pageNum) => handleRefresh({ pageNum })"
       :total="total"
     />
-    <rk-alert
-      :show.sync="alarmErrors"
-      type="error"
-      message="Query alarm errors"
-      :description="alarmErrorsDesc"
-      :showIcon="true"
-      :closable="true"
-    />
+    <rk-alert :show.sync="alarmErrors" type="error" message="Query alarm errors" :description="alarmErrorsDesc" />
   </nav>
 </template>
 

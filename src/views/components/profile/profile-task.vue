@@ -72,14 +72,7 @@ limitations under the License. -->
         <span class="mr-5 vm">{{ $t('createTask') }}</span>
       </a>
     </div>
-    <rk-alert
-      :show.sync="showTaskError"
-      type="error"
-      message="Fetch span errors"
-      :description="getTaskErrors"
-      :showIcon="true"
-      :closable="true"
-    />
+    <rk-alert :show.sync="showTaskError" type="error" message="Fetch span errors" :description="getTaskErrors" />
   </div>
 </template>
 

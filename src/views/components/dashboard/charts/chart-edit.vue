@@ -295,8 +295,6 @@ limitations under the License. -->
       type="error"
       message="Metric type errors"
       :description="typeMetricsErrors"
-      :showIcon="true"
-      :closable="true"
     />
   </div>
 </template>

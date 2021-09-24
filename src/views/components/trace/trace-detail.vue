@@ -103,8 +103,6 @@ limitations under the License. -->
       type="error"
       message="Fetch trace errors"
       :description="rocketTrace.traceSpanLogErrors"
-      :showIcon="true"
-      :closable="true"
     />
   </div>
 </template>

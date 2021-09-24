@@ -42,14 +42,7 @@ limitations under the License. -->
         <ProfileTask :taskFieldSource="taskFieldSource" :newTaskFields="newTaskFields" @closeSidebox="closeSidebox" />
       </rk-sidebox>
     </div>
-    <rk-alert
-      :show.sync="showTasksError"
-      type="error"
-      message="Fetch task errors"
-      :description="getTasksErrors"
-      :showIcon="true"
-      :closable="true"
-    />
+    <rk-alert :show.sync="showTasksError" type="error" message="Fetch task errors" :description="getTasksErrors" />
   </div>
 </template>
 

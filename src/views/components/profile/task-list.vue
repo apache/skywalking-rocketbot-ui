@@ -128,17 +128,8 @@ limitations under the License. -->
       type="error"
       message="Fetch segment errors"
       :description="getSegmentsErrors"
-      :showIcon="true"
-      :closable="true"
     />
-    <rk-alert
-      :show.sync="showSpansError"
-      type="error"
-      message="Fetch span errors"
-      :description="getSpansErrors"
-      :showIcon="true"
-      :closable="true"
-    />
+    <rk-alert :show.sync="showSpansError" type="error" message="Fetch span errors" :description="getSpansErrors" />
   </div>
 </template>
 
