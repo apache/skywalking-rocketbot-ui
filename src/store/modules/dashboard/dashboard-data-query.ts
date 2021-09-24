@@ -239,7 +239,7 @@ const actions: ActionTree<State, any> = {
             .then((res: AxiosResponse) => {
               if (res.data.errors) {
                 context.commit(types.SET_DASHBOARD_ERRORS, {
-                  msg: 'queryMetricErrors' + variable.condition.name,
+                  msg: variable.condition.name,
                   desc: res.data.errors,
                 });
                 return;
