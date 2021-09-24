@@ -83,6 +83,7 @@ limitations under the License. -->
     @Mutation('SET_TEMPLATES') private SET_TEMPLATES: any;
 
     private isRouterAlive: boolean = true;
+    private templatesErrors: boolean = false;
     public reload(): void {
       this.isRouterAlive = false;
       this.$nextTick(() => {
@@ -105,13 +106,13 @@ limitations under the License. -->
       });
     }
     private beforeMount() {
-      this.GET_ALL_TEMPLATES().then((allTemplate: ITemplate[]) => {
-        const dashboardTemplate = allTemplate.filter((item: ITemplate) => item.type === 'DASHBOARD');
+      this.GET_ALL_TEMPLATES().then((templateResp: ITemplate[]) => {
+        const dashboardTemplate = templateResp.filter((item: ITemplate) => item.type === 'DASHBOARD');
         const templatesConfig = dashboardTemplate.map((item: ITemplate) => JSON.parse(item.configuration)).flat(1);
         this.SET_TEMPLATES(templatesConfig);
         if (window.localStorage.getItem('version') !== '8.0') {
           window.localStorage.removeItem('dashboard');
-          const template = allTemplate.filter((item: ITemplate) => item.type === 'DASHBOARD' && item.activated);
+          const template = templateResp.filter((item: ITemplate) => item.type === 'DASHBOARD' && item.activated);
           const templatesConfiguration = template.map((item: ITemplate) => JSON.parse(item.configuration)).flat(1);
           this.SET_COMPS_TREE(templatesConfiguration || []);
           window.localStorage.setItem('version', '8.0');

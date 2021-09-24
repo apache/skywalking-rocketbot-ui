@@ -140,24 +140,26 @@ limitations under the License. -->
       this.time = [this.rocketbotGlobal.durationRow.start, this.rocketbotGlobal.durationRow.end];
     }
     private mounted() {
-      this.GET_SERVICES({ duration: this.durationTime })
-        .then(() => {
-          if (this.serviceName) {
-            for (const s of this.rocketTrace.services) {
-              if (s.label === this.serviceName) {
-                this.service = s;
-                break;
-              }
+      this.GET_SERVICES({ duration: this.durationTime }).then(() => {
+        if (this.serviceName) {
+          for (const s of this.rocketTrace.services) {
+            if (s.label === this.serviceName) {
+              this.service = s;
+              break;
             }
           }
-          this.getTraceList();
-          if (this.service && this.service.key) {
-            this.GET_INSTANCES({
-              duration: this.durationTime,
-              serviceId: this.service.key,
-            });
-          }
-        });
+        }
+        this.getTraceList();
+        if (this.service && this.service.key) {
+          this.getInstance();
+        }
+      });
+    }
+    private getInstance(serviceId?: string) {
+      this.GET_INSTANCES({
+        duration: this.durationTime,
+        serviceId: serviceId || this.service.key,
+      });
     }
     private globalTimeFormat(time: Date[]) {
       const step = 'SECOND';
@@ -180,21 +182,18 @@ limitations under the License. -->
         this.SET_ENDPOINTS([]);
         return;
       }
-      this.GET_INSTANCES({ duration: this.durationTime, serviceId: i.key });
+      this.getInstance(i.key);
       this.SET_ENDPOINTS([]);
-      this.GET_ITEM_ENDPOINTS({
-        serviceId: i.key,
-        keyword: '',
-        duration: this.durationTime,
-      });
+      this.getItemEndpoints(i.key, '');
     }
     private searchEndpoint(search: string) {
+      this.getItemEndpoints(this.service.key, search);
+    }
+    private getItemEndpoints(serviceId: string, keyword?: string) {
       this.GET_ITEM_ENDPOINTS({
-        serviceId: this.service.key,
-        keyword: search,
+        serviceId,
+        keyword,
         duration: this.durationTime,
-      }).then((endpoints: Array<{ key: string; label: string }>) => {
-        this.SET_ENDPOINTS(endpoints);
       });
     }
     private chooseStatus(i: Option) {

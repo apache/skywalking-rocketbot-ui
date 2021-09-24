@@ -47,9 +47,7 @@ function setAttributes($inner: any, el: any) {
     return;
   }
   const isShow =
-    !popper._disabled &&
-    (popper._visible || popper._always) &&
-    (!popper._ellipsis || isEllipsisTooltip(el));
+    !popper._disabled && (popper._visible || popper._always) && (!popper._ellipsis || isEllipsisTooltip(el));
 
   if (popper._appendToBody) {
     if (isShow && popper.popper.parentNode !== document.body) {
@@ -82,13 +80,11 @@ function handleClosePopper(e: any) {
   }
 }
 
-// 添加事件
 function addEvent(el: any) {
   el.addEventListener('mouseenter', handleShowPopper);
   el.addEventListener('mouseleave', handleClosePopper);
 }
 
-// 移除事件
 function removeEvent(el: any) {
   el.removeEventListener('mouseenter', handleShowPopper);
   el.removeEventListener('mouseleave', handleClosePopper);
@@ -122,9 +118,7 @@ export default {
         $popper.style.display = 'none';
         el.appendChild($popper);
       } else {
-        $popper.className += ` append-to-body ${
-          binding.value.popperCls ? binding.value.popperCls.join(' ') : ''
-        }`;
+        $popper.className += ` append-to-body ${binding.value.popperCls ? binding.value.popperCls.join(' ') : ''}`;
       }
     }
 
@@ -145,10 +139,7 @@ export default {
       if (el.popper.popper) {
         el.removeChild(el.popper.popper);
       }
-    } else if (
-      el.popper.popper &&
-      el.popper.popper.parentNode === document.body
-    ) {
+    } else if (el.popper.popper && el.popper.popper.parentNode === document.body) {
       document.body.removeChild(el.popper.popper);
     }
   },

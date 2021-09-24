@@ -55,7 +55,7 @@ limitations under the License. -->
 
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator';
-  import { Action, State, Getter } from 'vuex-class';
+  import { Action, Getter } from 'vuex-class';
   import { routes } from '@/router';
   import timeFormat from '@/utils/timeFormat';
 

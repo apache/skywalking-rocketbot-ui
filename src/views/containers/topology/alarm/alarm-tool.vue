@@ -46,6 +46,8 @@ limitations under the License. -->
     @Prop() private total!: number;
     @Prop() private keyword!: string;
     private pageNum: number = 1;
+    private alarmErrors: boolean = false;
+    private alarmErrorsDesc: string = '';
     private handleFetch(pageNum: number) {
       this.pageNum = pageNum;
       this.GET_ALARM({

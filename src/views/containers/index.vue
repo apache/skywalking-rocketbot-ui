@@ -17,21 +17,27 @@ limitations under the License. -->
     <RkHeader @reloadFooter="reloadFooter" />
     <router-view></router-view>
     <RkFooter ref="footer" />
+    <AlertsContent />
   </div>
 </template>
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
-  import RkHeader from '@/components/rk-header.vue';
-  import RkFooter from '@/components/rk-footer.vue';
+  import { State } from 'vuex-class';
+  import { State as optionState } from '@/store/modules/global/selectors';
+  import RkHeader from '@/views/components/common/rk-header.vue';
+  import RkFooter from '@/views/components/common/rk-footer.vue';
+  import AlertsContent from '@/views/components/common/alerts-content.vue';
 
   @Component({
     components: {
       RkHeader,
       RkFooter,
+      AlertsContent,
     },
   })
   export default class RouterIndex extends Vue {
+    @State('rocketOption') private stateDashboardOption!: optionState;
     private isRouterAlive: boolean = true;
     public reloadFooter(timeArray: Date[]): void {
       const footer: any = this.$refs.footer;

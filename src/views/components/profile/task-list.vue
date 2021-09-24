@@ -127,7 +127,6 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Duration, Option } from '@/types/global';
   import { Component, Prop, Vue } from 'vue-property-decorator';
   import { Action, Mutation } from 'vuex-class';
 
@@ -136,8 +135,8 @@ limitations under the License. -->
     @Prop() private taskListSource: any;
     @Prop() private segmentList: any;
     @Prop() private headerSource: any;
-    @Action('profileStore/GET_SEGMENT_LIST') private GET_SEGMENT_LIST: any;
     @Mutation('profileStore/SET_CURRENT_SEGMENT') private SET_CURRENT_SEGMENT: any;
+    @Action('profileStore/GET_SEGMENT_LIST') private GET_SEGMENT_LIST: any;
     @Action('profileStore/GET_SEGMENT_SPANS') private GET_SEGMENT_SPANS: any;
     private selectedKey: string = '';
     private selectedTask: any = {};

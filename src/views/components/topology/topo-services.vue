@@ -36,6 +36,7 @@ limitations under the License. -->
     private service = { key: '', label: 'All services' };
     private groups = [{ key: '', label: 'All groups' }];
     private group = { key: '', label: 'All groups' };
+    private showServiceErrors: boolean = false;
 
     private created() {
       this.fetchData(true);

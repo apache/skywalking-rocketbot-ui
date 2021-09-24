@@ -480,9 +480,13 @@ limitations under the License. -->
           return;
         }
         if (data.length > 1) {
-          const length = data.filter((d: { typeOfMetrics: string }) => d.typeOfMetrics !== MetricsType.REGULAR_VALUE)
-            .length;
-          if (length) {
+          let len = 0;
+          for (const d of data) {
+            if (d.typeOfMetrics !== MetricsType.REGULAR_VALUE) {
+              len++;
+            }
+          }
+          if (len) {
             this.$emit('updateStatus', 'metricType', MetricsType.UNKNOWN);
             return;
           }

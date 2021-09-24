@@ -27,9 +27,8 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Duration } from '@/types/global';
   import { Vue, Component, Watch } from 'vue-property-decorator';
-  import { State, Action, Mutation } from 'vuex-class';
+  import { State, Action } from 'vuex-class';
 
   @Component
   export default class Footerssd extends Vue {

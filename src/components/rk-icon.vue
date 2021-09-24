@@ -18,6 +18,7 @@ limitations under the License. -->
     :class="{
       sm: size === 'sm',
       lg: size === 'lg',
+      xll: size === 'xll',
       offset: offset,
       loading: loading,
     }"
@@ -46,12 +47,16 @@ limitations under the License. -->
     vertical-align: middle;
     fill: currentColor;
     &.sm {
-      width: 13px;
+      width: 1px;
       height: 13px;
     }
     &.lg {
       width: 18px;
       height: 18px;
+    }
+    &.xll {
+      width: 25px;
+      height: 25px;
     }
     &.offset {
       margin-top: -2px;
