@@ -60,8 +60,8 @@ limitations under the License. -->
           class="rk-common-opt ell"
           @click="handleSelect(i)"
           :class="{ active: i.key === value.key }"
-          v-for="i in filterData"
-          :key="i.key"
+          v-for="(i, idx) in filterData"
+          :key="idx"
         >
           {{ i.label || '' }}
         </div>

@@ -392,7 +392,6 @@ limitations under the License. -->
       transform-origin: center top;
     }
     &.left {
-      left: -80px;
       top: 30px;
       transform-origin: center top;
     }
