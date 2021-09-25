@@ -624,7 +624,7 @@ const actions: ActionTree<State, any> = {
       .params(params)
       .then((res: AxiosResponse) => {
         context.commit(types.SET_TOPO_ERRORS, { msg: query, desc: res.data.errors || '' });
-        if (res.data.errors) {
+        if (!res.data.data) {
           context.commit(types.SET_TOPO, { calls: [], nodes: [] });
           return;
         }
@@ -632,17 +632,21 @@ const actions: ActionTree<State, any> = {
         const nodes = res.data.data.topo.nodes;
         const ids = nodes.map((i: any) => i.id);
         const idsC = calls.filter((i: any) => i.detectPoints.includes('CLIENT')).map((b: any) => b.id);
-        const idsS = calls.filter((i: any) => i.detectPoints.includes('CLIENT')).map((b: any) => b.id);
+        const idsS = calls.filter((i: any) => i.detectPoints.includes('SERVER')).map((b: any) => b.id);
+        if (!ids.length) {
+          return context.commit(types.SET_TOPO, { calls: [], nodes: [] });
+        }
+        const queryName = !idsC.length ? 'queryTopoInfoServer' : !idsS.length ? 'queryTopoInfoClient' : 'queryTopoInfo';
         return graph
-          .query('queryTopoInfo')
+          .query(queryName)
           .params({ ...params, ids, idsC, idsS })
           .then((info: AxiosResponse) => {
             context.commit(types.SET_TOPO_ERRORS, { msg: 'queryTopoInfo', desc: info.data.errors || '' });
-            if (info.data.errors) {
+            const resInfo = info.data.data;
+            if (!resInfo) {
               context.commit(types.SET_TOPO, { calls: [], nodes: [] });
               return;
             }
-            const resInfo = info.data.data;
             if (!resInfo.sla) {
               return context.commit(types.SET_TOPO, { calls, nodes });
             }
