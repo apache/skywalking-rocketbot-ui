@@ -15,12 +15,60 @@ limitations under the License. -->
 <template>
   <div class="alert-content">
     <rk-alert
-      v-for="(msg, index) in Object.keys(allAlerts)"
+      v-for="(msg, index) in Object.keys(stateOption.selectorErrors)"
       :key="msg + index"
-      :show.sync="allAlerts[msg]"
-      type="error"
+      :show.sync="stateOption.selectorErrors[msg]"
       :message="msg"
-      :description="allAlerts[msg]"
+      :description="stateOption.selectorErrors[msg]"
+    />
+    <rk-alert
+      v-for="(msg, index) in Object.keys(rocketData.dashboardErrors)"
+      :key="msg + index"
+      :show.sync="rocketData.dashboardErrors[msg]"
+      :message="msg"
+      :description="rocketData.dashboardErrors[msg]"
+    />
+    <rk-alert
+      v-for="(msg, index) in Object.keys(stateTopo.topoErrors)"
+      :key="msg + index"
+      :show.sync="stateTopo.topoErrors[msg]"
+      :message="msg"
+      :description="stateTopo.topoErrors[msg]"
+    />
+    <rk-alert
+      v-for="(msg, index) in Object.keys(rocketTrace.traceErrors)"
+      :key="msg + index"
+      :show.sync="rocketTrace.traceErrors[msg]"
+      :message="msg"
+      :description="rocketTrace.traceErrors[msg]"
+    />
+    <rk-alert
+      v-for="(msg, index) in Object.keys(rocketLog.logErrors)"
+      :key="msg + index"
+      :show.sync="rocketLog.logErrors[msg]"
+      :message="msg"
+      :description="rocketLog.logErrors[msg]"
+    />
+    <rk-alert
+      v-for="(msg, index) in Object.keys(rocketAlarm.alarmErrors)"
+      :key="msg + index"
+      :show.sync="rocketAlarm.alarmErrors[msg]"
+      :message="msg"
+      :description="rocketAlarm.alarmErrors[msg]"
+    />
+    <rk-alert
+      v-for="(msg, index) in Object.keys(stateProfile.profileErrors)"
+      :key="msg + index"
+      :show.sync="stateProfile.profileErrors[msg]"
+      :message="msg"
+      :description="stateProfile.profileErrors[msg]"
+    />
+    <rk-alert
+      v-for="(msg, index) in Object.keys(rocketEvent.eventErrors)"
+      :key="msg + index"
+      :show.sync="rocketEvent.eventErrors[msg]"
+      :message="msg"
+      :description="rocketEvent.eventErrors[msg]"
     />
   </div>
 </template>
@@ -47,19 +95,6 @@ limitations under the License. -->
     @State('rocketAlarm') private rocketAlarm!: alarmState;
     @State('rocketEvent') private rocketEvent!: EventState;
     @State('rocketTrace') private rocketTrace!: traceState;
-
-    private get allAlerts() {
-      return {
-        ...this.rocketEvent.eventErrors,
-        ...this.stateOption.selectorErrors,
-        ...this.rocketData.dashboardErrors,
-        ...this.stateTopo.topoErrors,
-        ...this.stateProfile.profileErrors,
-        ...this.rocketLog.logErrors,
-        ...this.rocketAlarm.alarmErrors,
-        ...this.rocketTrace.traceErrors,
-      };
-    }
   }
 </script>
 <style lang="scss" scoped>

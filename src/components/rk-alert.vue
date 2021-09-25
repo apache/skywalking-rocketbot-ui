@@ -30,7 +30,7 @@ limitations under the License. -->
   @Component
   export default class RkAlert extends Vue {
     @Prop() private message!: string;
-    @Prop() private type!: string;
+    @Prop({ default: 'error' }) private type!: string;
     @Prop() private description!: string;
     @Prop({ default: true }) private showIcon!: boolean;
     @Prop({ default: true }) private closable!: boolean;
