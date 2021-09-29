@@ -733,6 +733,7 @@ const actions: ActionTree<State, any> = {
               }
             });
           } else {
+            console.log(json);
             context.commit(types.SET_ENDPOINT_DEPENDENCY, json);
           }
         });
@@ -773,7 +774,7 @@ const actions: ActionTree<State, any> = {
           return;
         }
         const topo = res.data.data;
-        const calls = [] as any;
+        let calls = [] as any;
         let nodes = [] as any;
         for (const key of Object.keys(topo)) {
           calls.push(...topo[key].calls);
@@ -786,6 +787,13 @@ const actions: ActionTree<State, any> = {
         }
         const obj = {} as any;
         nodes = nodes.reduce((prev: Node[], next: Node) => {
+          if (!obj[next.id]) {
+            obj[next.id] = true;
+            prev.push(next);
+          }
+          return prev;
+        }, []);
+        calls = calls.reduce((prev: Call[], next: Call) => {
           if (!obj[next.id]) {
             obj[next.id] = true;
             prev.push(next);
