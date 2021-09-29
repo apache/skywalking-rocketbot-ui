@@ -134,7 +134,7 @@ const actions = {
       .query('queryServices')
       .params(params)
       .then((res: AxiosResponse) => {
-        context.commit(types.SET_PROFILE_ERRORS, { msg: 'serviceErrors', desc: res.data.errors || '' });
+        context.commit(types.SET_PROFILE_ERRORS, { msg: 'serviceProfileErrors', desc: res.data.errors || '' });
         if (res.data.errors) {
           return context.commit(types.SET_SERVICES, []);
         }

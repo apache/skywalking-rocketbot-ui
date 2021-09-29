@@ -145,7 +145,7 @@ const actions: ActionTree<State, any> = {
       .query('queryServices')
       .params(params)
       .then((res: AxiosResponse) => {
-        context.commit(types.SET_TRACE_ERRORS, { msg: 'serviceError', desc: res.data.errors || '' });
+        context.commit(types.SET_TRACE_ERRORS, { msg: 'serviceTraceError', desc: res.data.errors || '' });
         if (res.data.errors) {
           context.commit(types.SET_SERVICES, []);
           return;
