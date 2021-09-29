@@ -733,7 +733,6 @@ const actions: ActionTree<State, any> = {
               }
             });
           } else {
-            console.log(json);
             context.commit(types.SET_ENDPOINT_DEPENDENCY, json);
           }
         });
