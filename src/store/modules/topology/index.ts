@@ -580,7 +580,7 @@ const actions: ActionTree<State, any> = {
       .query('queryServices')
       .params(params)
       .then((res: AxiosResponse) => {
-        context.commit(types.SET_TOPO_ERRORS, { msg: 'serviceErrors', desc: res.data.errors });
+        context.commit(types.SET_TOPO_ERRORS, { msg: 'serviceTopoErrors', desc: res.data.errors });
         if (res.data.errors) {
           return [];
         }
