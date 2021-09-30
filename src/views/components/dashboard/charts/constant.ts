@@ -86,3 +86,11 @@ export const ReadValueChartType = [
 ];
 
 export const MaxItemNum = 10;
+
+export enum MetricsName {
+  SERVICE_RESP_TIME = 'service_resp_time',
+  SERVICE_SLA = 'service_sla',
+  SERVICE_CPM = 'service_cpm',
+  SERVICE_PERCENTILE = 'service_percentile',
+  SERVICE_APDEX = 'service_apdex',
+}

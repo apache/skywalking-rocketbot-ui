@@ -24,6 +24,7 @@ import * as alarm from './query/alarm';
 import * as profile from './query/profile';
 import * as dashboard from './query/dashboard';
 import * as errorLog from './query/log';
+import * as logDebug from './query/debug';
 
 const query: any = {
   ...errorLog,
@@ -33,6 +34,7 @@ const query: any = {
   ...alarm,
   ...profile,
   ...dashboard,
+  ...logDebug,
 };
 
 class Graph {
@@ -42,14 +44,24 @@ class Graph {
     return this;
   }
   public params(variablesData: any): AxiosPromise<void> {
-    return axios.post(
-      './graphql',
-      {
-        query: query[this.queryData],
-        variables: variablesData,
-      },
-      { cancelToken: cancelToken() },
-    );
+    return axios
+      .post(
+        './graphql',
+        {
+          query: query[this.queryData],
+          variables: variablesData,
+        },
+        { cancelToken: cancelToken() },
+      )
+      .then((res: any) => {
+        if (res.data.errors) {
+          res.data.errors = res.data.errors.map((e: { message: string }) => e.message).join(' ');
+        }
+        return res;
+      })
+      .catch((err) => {
+        throw err;
+      });
   }
 }
 

@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-import { Commit, ActionTree, Dispatch } from 'vuex';
+import { Commit, ActionTree, Dispatch, MutationTree } from 'vuex';
 import { AxiosResponse } from 'axios';
+import * as types from './mutation-types';
 import { State } from './dashboard-data';
 import graph from '@/graph';
 import { TopologyType } from '@/constants/constant';
@@ -236,6 +237,13 @@ const actions: ActionTree<State, any> = {
             .query(config.queryMetricType)
             .params(variable)
             .then((res: AxiosResponse) => {
+              if (res.data.errors) {
+                context.commit(types.SET_DASHBOARD_ERRORS, {
+                  msg: variable.condition.name,
+                  desc: res.data.errors,
+                });
+                return;
+              }
               const resData = res.data.data;
 
               return { ...resData, config, metricName: variable.condition.name };

@@ -15,6 +15,6 @@
  * limitations under the License.
  */
 
-declare module '*.js';
-declare module 'echarts/lib/echarts';
-declare module 'monaco-editor/esm/vs/editor/editor.main.js';
+import { QueryLogTest } from '../fragments/debug';
+
+export const queryLogTest = `query test(${QueryLogTest.variable}) {${QueryLogTest.query}}`;

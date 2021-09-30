@@ -35,8 +35,10 @@ export const ProfileSegment = {
         key value
       }
       logs {
-        time data {
-            key value
+        time
+        data {
+          key
+          value
         }
       }
     }

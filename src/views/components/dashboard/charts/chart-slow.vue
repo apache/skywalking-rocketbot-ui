@@ -22,11 +22,20 @@ limitations under the License. -->
         </svg>
         <div class="mb-5 ell" v-tooltip:top.ellipsis="i.name || ''">
           <span class="calls sm mr-10">{{ i.value }}</span>
-          <span class="cp link-hover">{{ i.name + getTraceId(i) }}</span>
+          <span class="cp link-hover" @click="handleLink(i)">{{ i.name + getTraceId(i) }}</span>
         </div>
         <RkProgress :precent="(i.value / maxValue) * 100" color="#bf99f8" />
       </div>
     </div>
+    <rk-modal :show.sync="showModal" :title="$t('modalTitle')">
+      <div>
+        {{ $t('selectRedirectPage').replace('%s', redirectData.name) }}
+      </div>
+      <div class="mt-15">
+        <router-link :to="redirectData.log" class="rk-chart-slow-link mr-20">{{ $t('log') }}</router-link>
+        <router-link :to="redirectData.trace" class="rk-chart-slow-link mr-20">{{ $t('trace') }}</router-link>
+      </div>
+    </rk-modal>
   </div>
 </template>
 
@@ -34,6 +43,7 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import copy from '@/utils/copy';
+  import {MetricsName} from '@/views/components/dashboard/charts/constant';
 
   @Component({})
   export default class ChartSlow extends Vue {
@@ -41,6 +51,37 @@ limitations under the License. -->
     @Prop() private item!: any;
     @Prop() private type!: any;
     @Prop() private intervalTime!: any;
+    private showModal: boolean = false;
+    private redirectData: any = {
+      name: '',
+      log: {
+        path: '',
+        query: {
+          service: '',
+        },
+      },
+      trace: {
+        path: '',
+        query: {
+          service: '',
+        },
+      },
+    };
+    private isServiceChart: boolean = false;
+
+    private created() {
+      const serviceMetricNames = [
+              MetricsName.SERVICE_RESP_TIME,
+              MetricsName.SERVICE_SLA,
+              MetricsName.SERVICE_CPM,
+              MetricsName.SERVICE_PERCENTILE,
+              MetricsName.SERVICE_APDEX,
+      ];
+      this.isServiceChart = 'Service' === this.item.entityType
+              && 'sortMetrics' === this.item.queryMetricType
+              && serviceMetricNames.includes(this.item.metricName);
+    }
+
     get maxValue() {
       if (!this.data.length) {
         return null;
@@ -53,6 +94,24 @@ limitations under the License. -->
     }
     private handleClick(i: any) {
       copy(i);
+    }
+    private handleLink(i: any) {
+      if (this.isServiceChart && i.name) {
+        this.redirectData.name = i.name;
+        this.redirectData.log = {
+          path: 'log',
+          query: {
+            service: encodeURIComponent(i.name),
+          },
+        };
+        this.redirectData.trace = {
+          path: 'trace',
+          query: {
+            service: encodeURIComponent(i.name),
+          },
+        };
+        this.showModal = true;
+      }
     }
     get datas() {
       if (!this.data.length) {
@@ -87,5 +146,14 @@ limitations under the License. -->
   }
   .rk-chart-slow-i {
     padding: 6px 0;
+  }
+  .rk-chart-slow-link {
+    padding: 4px 10px 7px 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    color: #333;
+    background-color: #fff;
+    will-change: opacity, background-color;
+    transition: opacity 0.3s, background-color 0.3s;
   }
 </style>

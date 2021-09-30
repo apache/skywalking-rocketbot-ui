@@ -44,6 +44,22 @@ export const queryTopoInfo = `query queryTopoInfo(
         ${TopoServiceMetric.query},
         ${TopoClientMetric.query}
       }`;
+export const queryTopoInfoServer = `query queryTopoInfo(
+  ${Topo.variable},
+  ${TopoMetric.variable},
+  ${TopoServiceMetric.variable})
+    {
+      ${TopoMetric.query},
+      ${TopoServiceMetric.query}
+    }`;
+export const queryTopoInfoClient = `query queryTopoInfo(
+  ${Topo.variable},
+  ${TopoMetric.variable},
+  ${TopoClientMetric.variable})
+    {
+      ${TopoMetric.query},
+      ${TopoClientMetric.query}
+    }`;
 
 export const queryTopoInstanceDependency = `query queryTopoInstanceDependency(
   ${TopoInstanceDependency.variable}) {${TopoInstanceDependency.query}}`;

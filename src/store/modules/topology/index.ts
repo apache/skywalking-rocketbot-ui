@@ -55,6 +55,11 @@ export interface State {
   instanceDependencyMode: string;
   editDependencyMetrics: boolean;
   topoTemplatesType: { [key: string]: any };
+  endpointErrors: string;
+  getTopoErrors: string;
+  endpointTopoErrors: string;
+  instanceTopoErrors: string;
+  topoErrors: { [key: string]: string };
 }
 
 const DefaultConfig = {
@@ -98,6 +103,11 @@ const initState: State = {
   editDependencyMetrics: false,
   topoEndpointDependency: {},
   topoTemplatesType: JSON.parse(localStorage.getItem('topoTemplateTypes') || JSON.stringify({})),
+  endpointErrors: '',
+  getTopoErrors: '',
+  endpointTopoErrors: '',
+  instanceTopoErrors: '',
+  topoErrors: {},
 };
 
 // getters
@@ -552,6 +562,12 @@ const mutations = {
     state.topoTemplatesType = data;
     localStorage.setItem('topoTemplateTypes', JSON.stringify(data));
   },
+  [types.SET_TOPO_ERRORS](state: State, data: { msg: string; desc: string }) {
+    state.topoErrors = {
+      ...state.topoErrors,
+      [data.msg]: data.desc,
+    };
+  },
 };
 
 // actions
@@ -564,6 +580,10 @@ const actions: ActionTree<State, any> = {
       .query('queryServices')
       .params(params)
       .then((res: AxiosResponse) => {
+        context.commit(types.SET_TOPO_ERRORS, { msg: 'serviceTopoErrors', desc: res.data.errors });
+        if (res.data.errors) {
+          return [];
+        }
         return res.data.data.services || [];
       });
   },
@@ -578,6 +598,10 @@ const actions: ActionTree<State, any> = {
       .query('queryEndpoints')
       .params(params)
       .then((res: AxiosResponse) => {
+        context.commit(types.SET_TOPO_ERRORS, { msg: 'endpointErrors', desc: res.data.errors });
+        if (res.data.errors) {
+          return [];
+        }
         return res.data.data.getEndpoints || [];
       });
   },
@@ -599,7 +623,8 @@ const actions: ActionTree<State, any> = {
       .query(query)
       .params(params)
       .then((res: AxiosResponse) => {
-        if (res.data.errors) {
+        context.commit(types.SET_TOPO_ERRORS, { msg: query, desc: res.data.errors || '' });
+        if (!res.data.data) {
           context.commit(types.SET_TOPO, { calls: [], nodes: [] });
           return;
         }
@@ -607,12 +632,21 @@ const actions: ActionTree<State, any> = {
         const nodes = res.data.data.topo.nodes;
         const ids = nodes.map((i: any) => i.id);
         const idsC = calls.filter((i: any) => i.detectPoints.includes('CLIENT')).map((b: any) => b.id);
-        const idsS = calls.filter((i: any) => i.detectPoints.includes('CLIENT')).map((b: any) => b.id);
+        const idsS = calls.filter((i: any) => i.detectPoints.includes('SERVER')).map((b: any) => b.id);
+        if (!ids.length) {
+          return context.commit(types.SET_TOPO, { calls: [], nodes: [] });
+        }
+        const queryName = !idsC.length ? 'queryTopoInfoServer' : !idsS.length ? 'queryTopoInfoClient' : 'queryTopoInfo';
         return graph
-          .query('queryTopoInfo')
+          .query(queryName)
           .params({ ...params, ids, idsC, idsS })
           .then((info: AxiosResponse) => {
+            context.commit(types.SET_TOPO_ERRORS, { msg: 'queryTopoInfo', desc: info.data.errors || '' });
             const resInfo = info.data.data;
+            if (!resInfo) {
+              context.commit(types.SET_TOPO, { calls: [], nodes: [] });
+              return;
+            }
             if (!resInfo.sla) {
               return context.commit(types.SET_TOPO, { calls, nodes });
             }
@@ -732,22 +766,33 @@ const actions: ActionTree<State, any> = {
       .post('./graphql', { query: querys, variables: { duration: params.duration } }, { cancelToken: cancelToken() })
       .then((res: AxiosResponse) => {
         if (res.data.errors) {
+          const msg = res.data.errors.map((e: { message: string }) => e.message).join(' ');
+
+          context.commit(types.SET_TOPO_ERRORS, { msg: 'endpointDependencyError', desc: msg });
           context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });
           return;
         }
         const topo = res.data.data;
-        const calls = [] as any;
+        let calls = [] as any;
         let nodes = [] as any;
         for (const key of Object.keys(topo)) {
           calls.push(...topo[key].calls);
           nodes.push(...topo[key].nodes);
         }
         if (!nodes.length) {
+          context.commit(types.SET_TOPO_ERRORS, { msg: 'endpointDependencyError', desc: '' });
           context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });
           return;
         }
         const obj = {} as any;
         nodes = nodes.reduce((prev: Node[], next: Node) => {
+          if (!obj[next.id]) {
+            obj[next.id] = true;
+            prev.push(next);
+          }
+          return prev;
+        }, []);
+        calls = calls.reduce((prev: Call[], next: Call) => {
           if (!obj[next.id]) {
             obj[next.id] = true;
             prev.push(next);
@@ -795,9 +840,13 @@ const actions: ActionTree<State, any> = {
           .post('./graphql', { query, variables: { duration: params.duration } }, { cancelToken: cancelToken() })
           .then((json: AxiosResponse<any>) => {
             if (json.data.errors) {
+              const msg = json.data.errors.map((e: { message: string }) => e.message).join(' ');
+
+              context.commit(types.SET_TOPO_ERRORS, { msg: 'endpointDependencyError', desc: msg });
               context.commit(types.SET_ENDPOINT_DEPENDENCY, { calls: [], nodes: [] });
               return;
             }
+            context.commit(types.SET_TOPO_ERRORS, { msg: 'endpointDependencyError', desc: '' });
             const cpms = json.data.data;
             const keys = Object.keys(cpms);
             for (const key of keys) {
@@ -823,8 +872,9 @@ const actions: ActionTree<State, any> = {
       .query('queryTopoInstanceDependency')
       .params(params)
       .then((res: AxiosResponse) => {
-        if (!(res.data && res.data.data)) {
-          return;
+        context.commit(types.SET_TOPO_ERRORS, { msg: 'queryTopoInstanceDependency', desc: res.data.errors || '' });
+        if (res.data.errors) {
+          return [];
         }
         const clientIdsC = [] as string[];
         const serverIdsC = [] as string[];
@@ -846,6 +896,13 @@ const actions: ActionTree<State, any> = {
               duration: params.duration,
             })
             .then((json: AxiosResponse) => {
+              context.commit(types.SET_TOPO_ERRORS, {
+                msg: 'queryDependencyInstanceClientMetric',
+                desc: json.data.errors || '',
+              });
+              if (json.data.errors) {
+                return [];
+              }
               const clientCalls = [] as string[];
               for (const call of topoCalls) {
                 for (const cpm of json.data.data.cpmC.values) {
@@ -870,6 +927,13 @@ const actions: ActionTree<State, any> = {
               duration: params.duration,
             })
             .then((jsonResp: AxiosResponse) => {
+              context.commit(types.SET_TOPO_ERRORS, {
+                msg: 'queryDependencyInstanceServerMetric',
+                desc: jsonResp.data.errors || '',
+              });
+              if (jsonResp.data.errors) {
+                return [];
+              }
               const serverCalls = [] as string[];
               for (const call of topoCalls) {
                 for (const cpm of jsonResp.data.data.cpmC.values) {

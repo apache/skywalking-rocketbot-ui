@@ -40,7 +40,7 @@ limitations under the License. -->
 <script lang="ts">
   import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
   import LogTable from './log-table/log-table.vue';
-  import { BrowserLogConstants } from './log-table/log-constant';
+  import { BrowserLogConstants } from './log-constant';
 
   @Component({
     components: { LogTable },

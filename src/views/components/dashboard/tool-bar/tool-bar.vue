@@ -152,13 +152,7 @@ limitations under the License. -->
     private dialogAttributesVisible: boolean = false;
     private dashboardType = DASHBOARDTYPE;
     private pageEventsType = PageEventsType;
-    get lastKey() {
-      const current = this.rocketComps.tree[this.rocketComps.group].children[this.rocketComps.current].children;
-      if (!current.length) {
-        return 0;
-      }
-      return current[current.length - 1].k;
-    }
+
     private selectService(i: Option) {
       if (!this.rocketComps.enableEvents) {
         this.SELECT_SERVICE({ service: i, duration: this.durationTime });

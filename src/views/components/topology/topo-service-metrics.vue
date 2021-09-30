@@ -60,7 +60,7 @@ limitations under the License. -->
     private default = DEFAULT;
     private type: string = '';
 
-    private beforeMount() {
+    private mounted() {
       this.type = TopologyType.TOPOLOGY_SERVICE;
       this.height = document.body.clientHeight - 230;
       this.setServiceTemplates();

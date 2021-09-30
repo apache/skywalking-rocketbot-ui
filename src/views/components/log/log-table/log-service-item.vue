@@ -34,7 +34,7 @@ limitations under the License. -->
 </template>
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator';
-  import { ServiceLogConstants } from './log-constant';
+  import { ServiceLogConstants } from '../log-constant';
 
   @Component
   export default class ServiceItem extends Vue {

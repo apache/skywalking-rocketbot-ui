@@ -36,6 +36,7 @@ limitations under the License. -->
     private service = { key: '', label: 'All services' };
     private groups = [{ key: '', label: 'All groups' }];
     private group = { key: '', label: 'All groups' };
+    private showServiceErrors: boolean = false;
 
     private created() {
       this.fetchData(true);
@@ -102,7 +103,9 @@ limitations under the License. -->
     }
 
     private getServicesTopo() {
-      const serviceIds = this.group.key ? this.currentServices.map((item) => item.key) : undefined;
+      const serviceIds = this.group.key
+        ? this.currentServices.filter((item) => item.key).map((item) => item.key)
+        : undefined;
 
       this.GET_TOPO({
         serviceIds,

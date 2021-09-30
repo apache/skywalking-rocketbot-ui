@@ -133,11 +133,11 @@ limitations under the License. -->
         segmentId: this.currentSegment.segmentId,
         timeRanges: this.timeRange,
       })
-        .then((result: string) => {
-          this.message = result;
-        })
-        .catch((err: any) => {
-          throw err;
+        .then((result: { tip: string }) => {
+          if (!result) {
+            return;
+          }
+          this.message = result.tip;
         })
         .finally(() => {
           this.loading = false;

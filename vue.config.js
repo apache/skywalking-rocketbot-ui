@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 module.exports = {
   publicPath: "./",
   productionSourceMap: process.env.NODE_ENV !== 'production',
@@ -36,8 +36,9 @@ module.exports = {
         symbolId: '[name]',
       });
   },
-  configureWebpack: (config) => {
-    config.optimization = {
+  configureWebpack: {
+    plugins: [new MonacoWebpackPlugin()],
+    optimization: {
       splitChunks: {
         chunks: 'all',
         cacheGroups: {
@@ -46,8 +47,13 @@ module.exports = {
             test: /[\\/]node_modules[\\/]echarts[\\/]/,
             priority: 2,
           },
+          monacoEditor: {
+            name: 'monaco-editor',
+            test: /[\\/]node_modules[\\/]monaco-editor[\\/]/,
+            priority: 1,
+          },
         },
       },
-    };
+    },
   },
 };

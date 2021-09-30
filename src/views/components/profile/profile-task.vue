@@ -76,7 +76,7 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Duration, Option } from '@/types/global';
+  import { Duration } from '@/types/global';
   import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
   import { Action, Getter, Mutation, State } from 'vuex-class';
 
@@ -103,7 +103,7 @@ limitations under the License. -->
     }
 
     private createTask() {
-      this.CREATE_PROFILE_TASK({ startTime: this.time.getTime() }).then((res: any) => {
+      this.CREATE_PROFILE_TASK({ startTime: this.time.getTime() }).then((res: { errorReason?: string }) => {
         if (res.errorReason) {
           this.message = res.errorReason;
           return;

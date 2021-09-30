@@ -16,14 +16,13 @@
  */
 
 import noty from './noty';
-import RkHeader from './rk-header.vue';
-import RkFooter from './rk-footer.vue';
 import RkFooterTime from './rk-footer-time.vue';
 import RkProgress from './rk-progress.vue';
 import RkPage from './rk-page.vue';
 import RkDate from './rk-date.vue';
 import RkPanel from './rk-panel.vue';
 import RkSidebox from './rk-sidebox.vue';
+import RkModal from './rk-modal.vue';
 import RkEcharts from './rk-echarts.vue';
 import RkSelect from './rk-select.vue';
 import RkPopper from './rk-popper.vue';
@@ -32,16 +31,16 @@ import RkBack from './rk-back.vue';
 import RkButton from './rk-button.vue';
 import RkIcon from './rk-icon.vue';
 import RkRadio from './rk-radio.vue';
+import RkAlert from './rk-alert.vue';
 
 const components: any = {
-  RkHeader,
-  RkFooter,
   RkProgress,
   RkDate,
   RkPanel,
   RkEcharts,
   RkPage,
   RkSidebox,
+  RkModal,
   RkFooterTime,
   RkSelect,
   RkPopper,
@@ -50,6 +49,7 @@ const components: any = {
   RkButton,
   RkIcon,
   RkRadio,
+  RkAlert,
 };
 
 const componentsName: string[] = Object.keys(components);

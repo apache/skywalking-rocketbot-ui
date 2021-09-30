@@ -15,28 +15,25 @@
  * limitations under the License.
  */
 
-import { Commit, ActionTree, MutationTree, Dispatch } from 'vuex';
+import { Commit, ActionTree, MutationTree } from 'vuex';
 import * as types from '@/store/mutation-types';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
-
-interface Options {
-  key: string;
-  label: string;
-}
+import { Option } from '@/types/global';
 export interface State {
-  type: Options;
-  logCategories: Options[];
+  type: Option;
+  logCategories: Option[];
   logs: any[];
   total: number;
-  categories: Options[];
-  category: Options;
+  categories: Option[];
+  category: Option;
   loading: boolean;
   conditions: any;
   supportQueryLogsByKeywords: boolean;
+  logErrors: { [key: string]: string };
 }
 
-const categories: Options[] = [
+const categories: Option[] = [
   { label: 'All', key: 'ALL' },
   { label: 'Ajax', key: 'AJAX' },
   { label: 'Resource', key: 'RESOURCE' },
@@ -67,14 +64,15 @@ const logState: State = {
       : [],
   },
   supportQueryLogsByKeywords: true,
+  logErrors: {},
 };
 
 // mutations
 const mutations: MutationTree<State> = {
-  [types.SELECT_LOG_TYPE](state: State, data: Options) {
+  [types.SELECT_LOG_TYPE](state: State, data: Option) {
     state.type = data;
   },
-  [types.SELECT_ERROR_CATALOG](state: State, data: Options) {
+  [types.SELECT_ERROR_CATALOG](state: State, data: Option) {
     state.category = data;
   },
   [types.SET_LOGS](state: State, data: any[]) {
@@ -86,7 +84,7 @@ const mutations: MutationTree<State> = {
   [types.SET_LOADING](state: State, data: boolean) {
     state.loading = data;
   },
-  [types.SET_LOG_CONDITIONS](state: State, item: Options) {
+  [types.SET_LOG_CONDITIONS](state: State, item: Option) {
     state.conditions = {
       ...state.conditions,
       [item.label]: item.key,
@@ -104,6 +102,12 @@ const mutations: MutationTree<State> = {
     localStorage.removeItem('logTags');
     localStorage.removeItem('logTraceId');
   },
+  [types.SET_LOG_ERRORS](state: State, data: { msg: string; desc: string }) {
+    state.logErrors = {
+      ...state.logErrors,
+      [data.msg]: data.desc,
+    };
+  },
 };
 
 // actions
@@ -116,6 +120,7 @@ const actions: ActionTree<State, any> = {
           .query('queryBrowserErrorLogs')
           .params(params)
           .then((res: AxiosResponse<any>) => {
+            context.commit(types.SET_LOG_ERRORS, { msg: 'queryBrowserErrorLogs', desc: res.data.errors || '' });
             if (res.data && res.data.errors) {
               context.commit('SET_LOGS', []);
               context.commit('SET_LOGS_TOTAL', 0);
@@ -133,6 +138,7 @@ const actions: ActionTree<State, any> = {
           .query('queryServiceLogs')
           .params(params)
           .then((res: AxiosResponse<any>) => {
+            context.commit(types.SET_LOG_ERRORS, { msg: 'queryServiceLogs', desc: res.data.errors || '' });
             if (res.data && res.data.errors) {
               context.commit('SET_LOGS', []);
               context.commit('SET_LOGS_TOTAL', 0);
@@ -154,6 +160,7 @@ const actions: ActionTree<State, any> = {
       .query('queryLogsByKeywords')
       .params({})
       .then((res: AxiosResponse<any>) => {
+        context.commit(types.SET_LOG_ERRORS, { msg: 'queryLogsByKeywords', desc: res.data.errors || '' });
         if (res.data && res.data.errors) {
           return;
         }

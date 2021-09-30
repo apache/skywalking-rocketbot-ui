@@ -39,8 +39,8 @@ limitations under the License. -->
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
-  import { State, Getter, Mutation } from 'vuex-class';
-  import { DurationTime } from '@/types/global';
+  import { State, Getter } from 'vuex-class';
+  import { State as profileState } from '@/store/modules/profile/profile-store';
   import ProfileHeader from '@/views/components/profile/profile-header.vue';
   import ProfileTaskList from '@/views/components/profile/task-list.vue';
   import ProfileTraceDetail from '@/views/components/profile/profile-trace-detail.vue';
@@ -49,7 +49,7 @@ limitations under the License. -->
     components: { ProfileHeader, ProfileTaskList, ProfileTraceDetail },
   })
   export default class Profile extends Vue {
-    @State('profileStore') private profile: any;
+    @State('profileStore') private profile!: profileState;
     @Getter('durationTime') private durationTime: any;
 
     private beforeMount() {

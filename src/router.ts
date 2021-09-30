@@ -70,6 +70,11 @@ export const routes: RouteConfig[] = [
         component: () => import('./views/containers/event.vue'),
         meta: { icon: 'storage', title: 'event', exact: false },
       },
+      {
+        path: 'debug',
+        component: () => import('./views/containers/debug.vue'),
+        meta: { icon: 'library_books', title: 'debug', exact: false },
+      },
     ],
   },
 ];

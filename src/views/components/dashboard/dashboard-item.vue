@@ -173,8 +173,7 @@ limitations under the License. -->
           this.itemConfig = {};
           return;
         }
-        this.itemConfig = params[0].config;
-
+        this.itemConfig = params[0] && params[0].config;
         const { queryMetricType } = this.itemConfig;
         let data = params;
         if (queryMetricType === QueryTypes.ReadMetricsValue) {
