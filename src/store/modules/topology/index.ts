@@ -706,23 +706,34 @@ const actions: ActionTree<State, any> = {
         return;
       }
       if (context.state.currentEndpointDepth.key > 1) {
-        const endpointIds = res.nodes.map((item: Node) => item.id);
+        const endpointIds = res.nodes
+          .map((item: Node) => item.id)
+          .filter((d: string) => !params.endpointIds.includes(d));
 
         context.dispatch('GET_ENDPOINT_TOPO', { endpointIds, duration: params.duration }).then((json) => {
           if (context.state.currentEndpointDepth.key > 2) {
-            const ids = json.nodes.map((item: Node) => item.id);
+            const ids = json.nodes
+              .map((item: Node) => item.id)
+              .filter((d: string) => ![...endpointIds, ...params.endpointIds].includes(d));
 
             context.dispatch('GET_ENDPOINT_TOPO', { endpointIds: ids, duration: params.duration }).then((topo) => {
               if (context.state.currentEndpointDepth.key > 3) {
-                const endpoints = topo.nodes.map((item: Node) => item.id);
+                const endpoints = topo.nodes
+                  .map((item: Node) => item.id)
+                  .filter((d: string) => ![...ids, ...endpointIds, ...params.endpointIds].includes(d));
                 context
                   .dispatch('GET_ENDPOINT_TOPO', { endpointIds: endpoints, duration: params.duration })
                   .then((data) => {
                     if (context.state.currentEndpointDepth.key > 4) {
+                      const nodeIds = data.nodes
+                        .map((item: Node) => item.id)
+                        .filter(
+                          (d: string) => ![...endpoints, ...ids, ...endpointIds, ...params.endpointIds].includes(d),
+                        );
                       context
-                        .dispatch('GET_ENDPOINT_TOPO', { endpointIds: endpoints, duration: params.duration })
-                        .then((topos) => {
-                          context.commit(types.SET_ENDPOINT_DEPENDENCY, topos);
+                        .dispatch('GET_ENDPOINT_TOPO', { endpointIds: nodeIds, duration: params.duration })
+                        .then((toposObj) => {
+                          context.commit(types.SET_ENDPOINT_DEPENDENCY, toposObj);
                         });
                     } else {
                       context.commit(types.SET_ENDPOINT_DEPENDENCY, data);

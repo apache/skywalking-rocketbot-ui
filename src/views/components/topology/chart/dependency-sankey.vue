@@ -27,6 +27,9 @@ limitations under the License. -->
 
     get optionConfigs() {
       return {
+        tooltip: {
+          trigger: 'item',
+        },
         series: {
           type: 'sankey',
           left: 40,
@@ -47,6 +50,15 @@ limitations under the License. -->
           lineStyle: {
             color: 'source',
             opacity: 0.12,
+          },
+          tooltip: {
+            position: 'bottom',
+            formatter: (param: { data: { serviceName: string; destServiceName: string }; dataType: string }) => {
+              if (param.dataType === 'edge') {
+                return `${param.data.serviceName} -> ${param.data.destServiceName}`;
+              }
+              return param.data.serviceName;
+            },
           },
         },
       };
