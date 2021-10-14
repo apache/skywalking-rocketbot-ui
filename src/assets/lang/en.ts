@@ -176,7 +176,7 @@ const m = {
   traceTagsTip: `Only tags defined in the core/default/searchableTracesTags are searchable.
   Check more details on the Configuration Vocabulary page`,
   tagsLink: 'Configuration Vocabulary page',
-  addTag: 'Please add a tag',
+  addTag: 'Please input a tag',
   log: 'Log',
   logCategory: 'Log Category',
   errorCatalog: 'Error Catalog',
@@ -249,6 +249,11 @@ const m = {
   dslEmpty: 'Script input of LAL should not be empty',
   logContentEmpty: 'The content of the log should not be empty.',
   debug: 'Debug',
+  addTraceID: 'Please input a trace ID',
+  addKeywordsOfContent: 'Please input a keyword of content',
+  addExcludingKeywordsOfContent: 'Please input a keyword of excluding content',
+  noticeTag: 'Please press enter after inputting a tag.',
+  conditionNotice: 'Notice: Please press enter after inputting a tag, key of content, exclude key of content.',
 };
 
 export default m;

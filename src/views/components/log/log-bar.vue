@@ -219,7 +219,7 @@ limitations under the License. -->
     }
 
     private openConditionsBox() {
-      this.showConditionsBox = true;
+      this.showConditionsBox = !this.showConditionsBox;
     }
   }
 </script>

@@ -16,7 +16,7 @@ limitations under the License. -->
   <div class="flex-h" :class="{ light: theme === 'light' }">
     <div class="mr-10 pt-5">
       <span class="sm grey" v-show="theme === 'dark'">{{ $t('tags') }}: </span>
-      <span class="rk-trace-tags">
+      <span class="rk-trace-tags" :style="type === 'LOG' ? `min-width: 122px;` : ''">
         <span class="selected" v-for="(item, index) in tagsList" :key="index">
           <span>{{ item }}</span>
           <span class="remove-icon" @click="removeTags(index)">×</span>
@@ -31,6 +31,7 @@ limitations under the License. -->
           {{ $t('tagsLink') }}
         </a>
         <rk-icon icon="help" class="mr-5" />
+        <b v-if="type === 'TRACE'">{{ $t('noticeTag') }}</b>
       </span>
     </div>
   </div>
@@ -119,7 +120,7 @@ limitations under the License. -->
     outline: 0;
     padding: 2px 5px;
     border-radius: 3px;
-    width: 175px;
+    width: 250px;
     margin-right: 3px;
   }
   .remove-icon {
@@ -138,5 +139,8 @@ limitations under the License. -->
     .selected {
       color: #3d444f;
     }
+  }
+  b {
+    color: #fff;
   }
 </style>
