@@ -19,7 +19,7 @@ import { ActionTree, MutationTree, Commit, Dispatch } from 'vuex';
 import { CompsTree, Event } from '@/types/dashboard';
 import { AxiosResponse } from 'axios';
 import graph from '@/graph';
-import dashboardLayout from './dashboard-data-layout';
+import dashboardLayout, { State as layoutState } from './dashboard-data-layout';
 import dashboardQuery from './dashboard-data-query';
 import { QueryEventCondition } from '../../../types/dashboard';
 import { dateFormatTime } from '@/utils/dateFormat';

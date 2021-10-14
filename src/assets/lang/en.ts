@@ -254,6 +254,9 @@ const m = {
   addExcludingKeywordsOfContent: 'Please input a keyword of excluding content',
   noticeTag: 'Please press enter after inputting a tag.',
   conditionNotice: 'Notice: Please press enter after inputting a tag, key of content, exclude key of content.',
+  cacheModalTitle: 'Clear cache reminder',
+  yes: 'Yes',
+  no: 'No',
 };
 
 export default m;
