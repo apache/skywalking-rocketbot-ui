@@ -252,8 +252,8 @@ const m = {
   addTraceID: 'Please input a trace ID',
   addKeywordsOfContent: 'Please input a keyword of content',
   addExcludingKeywordsOfContent: 'Please input a keyword of excluding content',
-  noticeTag: 'Please enter after inputting a tag.',
-  conditionNotice: 'Notice: Please enter after inputting a tag, key of content, exclude key of content.',
+  noticeTag: 'Please press enter after inputting a tag.',
+  conditionNotice: 'Notice: Please press enter after inputting a tag, key of content, exclude key of content.',
 };
 
 export default m;
