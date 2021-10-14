@@ -52,7 +52,7 @@ limitations under the License. -->
         </div>
         <div>
           <label>{{ $t('tags') }}</label>
-          <ConditionTags :theme="'light'" :clearTags="false" @updateTags="updateTags" />
+          <ConditionTags :theme="'light'" :type="'LAL'" :clearTags="false" @updateTags="updateTags" />
         </div>
         <div>
           <label>{{ $t('logContentType') }}</label>
