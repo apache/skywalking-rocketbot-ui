@@ -13,6 +13,13 @@ limitations under the License. -->
 
 <template>
   <div class="rk-search-conditions">
+    <div class="search-time">
+      <span class="sm b grey mr-5">{{ $t('timeRange') }}:</span>
+      <RkDate class="sm" v-model="searchTime" position="left" format="YYYY-MM-DD HH:mm:ss" />
+    </div>
+    <div class="condition-notice">
+      <b>{{ $t('conditionNotice') }}</b>
+    </div>
     <div class="flex-h">
       <div class="mr-20" v-show="rocketLog.type.key === cateGoryService">
         <span class="sm b grey traceID">{{ $t('traceID') }}:</span>
@@ -83,13 +90,6 @@ limitations under the License. -->
           <rk-icon icon="help" class="mr-5" />
         </span>
       </div>
-    </div>
-    <div class="search-time">
-      <span class="sm b grey mr-5">{{ $t('timeRange') }}:</span>
-      <RkDate class="sm" v-model="searchTime" position="left" format="YYYY-MM-DD HH:mm:ss" />
-    </div>
-    <div class="condition-notice">
-      <b>{{ $t('conditionNotice') }}</b>
     </div>
   </div>
 </template>
