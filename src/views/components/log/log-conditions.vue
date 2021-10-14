@@ -88,9 +88,8 @@ limitations under the License. -->
       <span class="sm b grey mr-5">{{ $t('timeRange') }}:</span>
       <RkDate class="sm" v-model="searchTime" position="left" format="YYYY-MM-DD HH:mm:ss" />
     </div>
-    <!-- <ConditionTags :type="'LOG'" :clearTags="clearAllTags" @updateTags="updateTags" /> -->
     <div class="condition-notice">
-      <b>Notice: Please enter after inputting a tag, key of content, exclude key of content.</b>
+      <b>{{ $t('conditionNotice') }}</b>
     </div>
   </div>
 </template>

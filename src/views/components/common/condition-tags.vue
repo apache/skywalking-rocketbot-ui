@@ -31,7 +31,7 @@ limitations under the License. -->
           {{ $t('tagsLink') }}
         </a>
         <rk-icon icon="help" class="mr-5" />
-        <b v-if="type === 'TRACE'">Notice: Please enter after inputting a tag.</b>
+        <b v-if="type === 'TRACE'">{{ $t('noticeTag') }}</b>
       </span>
     </div>
   </div>
