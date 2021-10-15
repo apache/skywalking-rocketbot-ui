@@ -36,61 +36,61 @@ limitations under the License. -->
 <script lang="js">
   import RkButton from '@/components/rk-button';
   export default {
-      name: 'RkModal',
-      components: {RkButton},
-      props: {
-          show: {
-              type: Boolean,
-              default: false,
-          },
-          showButton: {
-              type: Boolean,
-              default: false,
-          },
-          title: {
-              type: String,
-              default: '',
-          },
+    name: 'RkModal',
+    components: {RkButton},
+    props: {
+      show: {
+        type: Boolean,
+        default: false,
       },
-      data() {
-          return {
-              x: 0,
-              y: 0,
-              node: null,
-              isCanMove: false,
-          };
+      showButton: {
+        type: Boolean,
+        default: false,
       },
-      mounted() {
-          this.node = document.querySelector('.rk-modal-container');
+      title: {
+        type: String,
+        default: '',
       },
-      methods: {
-          cancel() {
-              this.$emit('update:show', false);
-              this.$emit('cancelModalCallback');
-          },
-
-          confirm() {
-              this.$emit('update:show', false);
-              this.$emit('confirmModalCallback');
-          },
-
-          setStartingPoint(e) {
-              this.x = e.clientX - this.node.offsetLeft;
-              this.y = e.clientY - this.node.offsetTop;
-              this.isCanMove = true;
-          },
-
-          modalMove(e) {
-              if (this.isCanMove) {
-                  this.node.style.left = e.clientX - this.x + 'px';
-                  this.node.style.top = e.clientY - this.y + 'px';
-              }
-          },
-
-          cancelMove() {
-              this.isCanMove = false;
-          },
+    },
+    data() {
+      return {
+        x: 0,
+        y: 0,
+        node: null,
+        isCanMove: false,
+      };
+    },
+    mounted() {
+      this.node = document.querySelector('.rk-modal-container');
+    },
+    methods: {
+      cancel() {
+        this.$emit('update:show', false);
+        this.$emit('cancelModalCallback');
       },
+
+      confirm() {
+        this.$emit('update:show', false);
+        this.$emit('confirmModalCallback');
+      },
+
+      setStartingPoint(e) {
+        this.x = e.clientX - this.node.offsetLeft;
+        this.y = e.clientY - this.node.offsetTop;
+        this.isCanMove = true;
+      },
+
+      modalMove(e) {
+        if (this.isCanMove) {
+          this.node.style.left = e.clientX - this.x + 'px';
+          this.node.style.top = e.clientY - this.y + 'px';
+        }
+      },
+
+      cancelMove() {
+        this.isCanMove = false;
+      },
+    },
   };
 </script>
 
