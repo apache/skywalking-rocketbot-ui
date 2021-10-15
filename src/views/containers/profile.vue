@@ -39,7 +39,7 @@ limitations under the License. -->
 
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
-  import { State, Getter } from 'vuex-class';
+  import { State, Getter, Action, Mutation } from 'vuex-class';
   import { State as profileState } from '@/store/modules/profile/profile-store';
   import ProfileHeader from '@/views/components/profile/profile-header.vue';
   import ProfileTaskList from '@/views/components/profile/task-list.vue';
@@ -51,11 +51,21 @@ limitations under the License. -->
   export default class Profile extends Vue {
     @State('profileStore') private profile!: profileState;
     @Getter('durationTime') private durationTime: any;
+    @Action('profileStore/GET_SERVICES') private GET_SERVICES: any;
+    @Mutation('SET_EVENTS') private SET_EVENTS: any;
 
     private beforeMount() {
-      this.$store.dispatch('profileStore/GET_SERVICES', {
+      this.GET_SERVICES({
         duration: this.durationTime,
       });
+      this.SET_EVENTS([
+        () => {
+          this.GET_SERVICES({ duration: this.durationTime });
+        },
+      ]);
+    }
+    private beforeDestroy() {
+      this.SET_EVENTS([]);
     }
   }
 </script>

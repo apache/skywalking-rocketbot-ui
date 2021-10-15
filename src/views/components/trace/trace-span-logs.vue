@@ -153,3 +153,13 @@ limitations under the License. -->
     }
   }
 </script>
+<style lang="scss" scoped>
+  .rk-popup-btn {
+    color: #fff;
+    padding: 10px 9px;
+    border-radius: 4px;
+    margin-top: 40px;
+    width: 100%;
+    text-align: center;
+  }
+</style>
