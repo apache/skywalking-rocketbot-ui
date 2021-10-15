@@ -257,6 +257,7 @@ const m = {
   cacheModalTitle: 'Clear cache reminder',
   yes: 'Yes',
   no: 'No',
+  cacheReminderContent: 'SkyWalking detected dashboard template updates, do you want to update?',
 };
 
 export default m;

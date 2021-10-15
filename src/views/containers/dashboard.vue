@@ -41,7 +41,7 @@ limitations under the License. -->
       </div>
     </div>
     <rk-modal :show.sync="showCacheModal" :title="$t('cacheModalTitle')">
-      <div class="reminder-content">Do you need to update dashboard templates?</div>
+      <div class="reminder-content">{{ $t('cacheReminderContent') }}</div>
       <div class="reminder-btns">
         <a class="rk-cache-modal-btn bg-blue mr-10" @click="clearDashboardTemps">
           {{ $t('yes') }}
