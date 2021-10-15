@@ -55,7 +55,7 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Component, Vue, Watch } from 'vue-property-decorator';
+  import { Component, Vue } from 'vue-property-decorator';
   import { Action, Getter, State, Mutation } from 'vuex-class';
   import ToolBar from '@/views/components/dashboard/tool-bar/tool-bar.vue';
   import ToolGroup from '@/views/components/dashboard/tool-group.vue';
@@ -142,12 +142,13 @@ limitations under the License. -->
         this.checkCacheTime();
         this.intervalCache = setInterval(() => {
           this.checkCacheTime();
-        }, 180000); // 3min
+        }, 3600000); // 1h
       });
     }
     private checkCacheTime() {
       const templatesCacheTime = localStorage.getItem('templatesCacheTime');
       if (templatesCacheTime) {
+        this.showCacheModal = true;
         const diffTime = new Date().getTime() - Number(templatesCacheTime);
         const diffDay = diffTime / 1000 / (60 * 60 * 24);
         if (diffDay >= 3) {
