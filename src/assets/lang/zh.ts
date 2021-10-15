@@ -252,6 +252,10 @@ const m = {
   addExcludingKeywordsOfContent: '请输入一个内容不包含的关键词',
   NoticeTag: '请输入一个标签之后回车',
   conditionNotice: '请输入一个标签、内容关键词或者内容不包含的关键词之后回车',
+  cacheModalTitle: '清除缓存提醒',
+  yes: '是的',
+  no: '不',
+  cacheReminderContent: 'SkyWalking检测到仪表板模板更新，是否需要更新？',
 };
 
 export default m;
