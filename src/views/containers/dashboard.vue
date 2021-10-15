@@ -148,7 +148,6 @@ limitations under the License. -->
     private checkCacheTime() {
       const templatesCacheTime = localStorage.getItem('templatesCacheTime');
       if (templatesCacheTime) {
-        this.showCacheModal = true;
         const diffTime = new Date().getTime() - Number(templatesCacheTime);
         const diffDay = diffTime / 1000 / (60 * 60 * 24);
         if (diffDay >= 3) {
@@ -158,6 +157,7 @@ limitations under the License. -->
           }
         }
       } else {
+        this.showCacheModal = true;
         localStorage.setItem('templatesCacheTime', String(new Date().getTime()));
       }
     }
