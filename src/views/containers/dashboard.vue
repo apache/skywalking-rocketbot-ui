@@ -46,7 +46,7 @@ limitations under the License. -->
         <a class="rk-cache-modal-btn bg-blue mr-10" @click="clearDashboardTemps">
           {{ $t('yes') }}
         </a>
-        <a class="rk-cache-modal-btn mr-10" @click="closeCacheModal">
+        <a class="rk-cache-modal-btn" @click="closeCacheModal">
           {{ $t('no') }}
         </a>
       </div>
