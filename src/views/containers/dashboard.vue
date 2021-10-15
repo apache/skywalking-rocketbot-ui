@@ -170,6 +170,7 @@ limitations under the License. -->
     }
     private closeCacheModal() {
       this.showCacheModal = false;
+      localStorage.setItem('templatesCacheTime', String(new Date().getTime()));
     }
     private beforeDestroy() {
       this.SET_EDIT(false);
