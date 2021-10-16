@@ -74,19 +74,17 @@ limitations under the License. -->
             <span class="g-sm-4 grey">{{ $t('maxSamplingCount') }}:</span>
             <span class="g-sm-8 wba">{{ selectedTask.maxSamplingCount }}</span>
           </div>
-          <h5 class="mb-10" v-if="selectedTask.logs" v-show="selectedTask.logs.length">{{ $t('logs') }}.</h5>
-          <div class="log-item" v-for="(i, index) in selectedTask.logs" :key="index">
+          <h5 class="mb-10" v-show="selectedTask.logs && selectedTask.logs.length">{{ $t('logs') }}.</h5>
+          <div class="log-item" v-for="(i, index) in Object.keys(instanceLogs)" :key="index">
             <div class="mb-10 sm">
               <span class="mr-10 grey">{{ $t('instance') }}:</span>
-              <span>{{ i.instanceName }}</span>
+              <span>{{ i }}</span>
             </div>
-            <div class="mb-10 sm">
+            <div v-for="(d, index) in instanceLogs[i]" :key="index">
               <span class="mr-10 grey">{{ $t('operationType') }}:</span>
-              <span>{{ i.operationType }}</span>
-            </div>
-            <div class="mb-10 sm">
-              <span class="mr-10 grey">{{ $t('operationTime') }}:</span>
-              <span>{{ i.operationTime | dateformat }}</span>
+              <span class="mr-20">{{ d.operationType }}</span>
+              <span class="mr-10 grey">{{ $t('time') }}:</span>
+              <span>{{ d.operationTime | dateformat }}</span>
             </div>
           </div>
         </div>
@@ -142,9 +140,17 @@ limitations under the License. -->
     private selectedTask: any = {};
     private viewDetail: boolean = false;
     private selectedTaskService: any = {};
+    private instanceLogs: any = {};
 
-    private selectTask(item: { id: string; serviceId: string }) {
+    private selectTask(item: { id: string; serviceId: string; logs: any[] }) {
       this.selectedTask = item;
+      for (const d of item.logs) {
+        if (this.instanceLogs[d.instanceName]) {
+          this.instanceLogs[d.instanceName].push({ operationType: d.operationType, operationTime: d.operationTime });
+        } else {
+          this.instanceLogs[d.instanceName] = [{ operationType: d.operationType, operationTime: d.operationTime }];
+        }
+      }
       this.selectedTaskService =
         this.headerSource.serviceSource.filter((service: any) => service.key === item.serviceId)[0] || {};
       this.GET_SEGMENT_LIST({ taskID: item.id });
