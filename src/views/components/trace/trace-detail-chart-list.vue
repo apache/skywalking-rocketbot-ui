@@ -340,12 +340,4 @@ limitations under the License. -->
     overflow: auto;
     font-family: monospace;
   }
-  .rk-popup-btn {
-    color: #fff;
-    padding: 10px 9px;
-    border-radius: 4px;
-    margin-top: 40px;
-    width: 100%;
-    text-align: center;
-  }
 </style>
