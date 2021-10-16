@@ -127,6 +127,7 @@ limitations under the License. -->
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator';
   import { Action, Mutation } from 'vuex-class';
+  import { TaskLog, TaskListItem } from '@/types/profile';
 
   @Component
   export default class ProfileTaskList extends Vue {
@@ -137,12 +138,12 @@ limitations under the License. -->
     @Action('profileStore/GET_SEGMENT_LIST') private GET_SEGMENT_LIST: any;
     @Action('profileStore/GET_SEGMENT_SPANS') private GET_SEGMENT_SPANS: any;
     private selectedKey: string = '';
-    private selectedTask: any = {};
+    private selectedTask: TaskListItem | {} = {};
     private viewDetail: boolean = false;
     private selectedTaskService: any = {};
-    private instanceLogs: any = {};
+    private instanceLogs: TaskLog | any = {};
 
-    private selectTask(item: { id: string; serviceId: string; logs: any[] }) {
+    private selectTask(item: { id: string; serviceId: string; logs: TaskLog[] }) {
       this.selectedTask = item;
       for (const d of item.logs) {
         if (this.instanceLogs[d.instanceName]) {
