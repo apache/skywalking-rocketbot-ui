@@ -74,7 +74,6 @@ limitations under the License. -->
 
     private handleReload() {
       const gap = this.duration.end.getTime() - this.duration.start.getTime();
-      const utcCopy: any = -(new Date().getTimezoneOffset() / 60);
       const time: Date[] = [new Date(new Date().getTime() - gap), new Date()];
       this.SET_DURATION(timeFormat(time));
     }

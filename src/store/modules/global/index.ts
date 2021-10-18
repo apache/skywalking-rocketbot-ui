@@ -29,24 +29,23 @@ export interface State {
   chartStack: any;
   edit: boolean;
   lock: boolean;
-  utc: string | number;
+  utc: string;
 }
-
 const initState: State = {
   durationRow: getDurationRow(),
   eventStack: [],
   chartStack: [],
   edit: false,
   lock: true,
-  utc: window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60),
+  utc: '',
 };
 
 // getters
 const getters = {
   duration(state: State): Duration {
     return {
-      start: getLocalTime(parseInt(state.utc + '', 10), state.durationRow.start),
-      end: getLocalTime(parseInt(state.utc + '', 10), state.durationRow.end),
+      start: getLocalTime(state.utc, state.durationRow.start),
+      end: getLocalTime(state.utc, state.durationRow.end),
       step: state.durationRow.step,
     };
   },
@@ -71,7 +70,10 @@ const getters = {
             getter.duration.start.getMonth());
         break;
     }
-    const utcSpace = (parseInt(state.utc + '', 10) + new Date().getTimezoneOffset() / 60) * 3600000;
+    const utcArr = state.utc.split(':');
+    const utcHour = Number(utcArr[0]) || 0;
+    const utcMin = Number(utcArr[1]) || 0;
+    const utcSpace = (utcHour + new Date().getTimezoneOffset() / 60) * 3600000 + utcMin * 60000;
     const startUnix: number = getter.duration.start.getTime();
     const endUnix: number = getter.duration.end.getTime();
     const timeIntervals: string[] = [];
@@ -100,7 +102,7 @@ const mutations: MutationTree<State> = {
     localStorage.removeItem('durationRow');
     state.durationRow = getDurationRow();
   },
-  [types.SET_UTC](state: State, data: number): void {
+  [types.SET_UTC](state: State, data: string): void {
     state.utc = data;
   },
   [types.SET_EVENTS](state: State, data: any[]): void {
@@ -126,7 +128,7 @@ const mutations: MutationTree<State> = {
 
 // actions
 const actions: ActionTree<State, any> = {
-  SET_UTC(context: { commit: Commit }, data: number): void {
+  SET_UTC(context: { commit: Commit }, data: string): void {
     context.commit(types.SET_UTC, data);
     context.commit(types.RUN_EVENTS);
   },
