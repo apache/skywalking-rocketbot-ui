@@ -71,8 +71,8 @@ const getters = {
         break;
     }
     const utcArr = state.utc.split(':');
-    const utcHour = Number(utcArr[0]) || 0;
-    const utcMin = Number(utcArr[1]) || 0;
+    const utcHour = isNaN(Number(utcArr[0])) ? 0 : Number(utcArr[0]);
+    const utcMin = isNaN(Number(utcArr[1])) ? 0 : Number(utcArr[1]);
     const utcSpace = (utcHour + new Date().getTimezoneOffset() / 60) * 3600000 + utcMin * 60000;
     const startUnix: number = getter.duration.start.getTime();
     const endUnix: number = getter.duration.end.getTime();

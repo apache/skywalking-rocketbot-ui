@@ -48,8 +48,8 @@ limitations under the License. -->
         utc = (localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60)) + ':0';
       }
       const utcArr = (utc || '').split(':');
-      this.utcHour = Number(utcArr[0]);
-      this.utcMin = Number(utcArr[1]);
+      this.utcHour = isNaN(Number(utcArr[0])) ? 0 : Number(utcArr[0]);
+      this.utcMin = isNaN(Number(utcArr[1])) ? 0 : Number(utcArr[1]);
       this.SET_UTC(`${this.utcHour}:${this.utcMin}`);
       this.lang = window.localStorage.getItem('lang');
     }
@@ -74,7 +74,7 @@ limitations under the License. -->
       if (this.utcHour > 14) {
         this.utcHour = 14;
       }
-      if (!this.utcHour) {
+      if (isNaN(this.utcHour)) {
         this.utcHour = 0;
       }
       this.SET_UTC(`${this.utcHour}:${this.utcMin}`);
@@ -83,7 +83,13 @@ limitations under the License. -->
 
     @Watch('utcMin')
     private onUtcMinUpdate() {
-      if (!this.utcMin) {
+      if (this.utcMin < 0) {
+        this.utcMin = 0;
+      }
+      if (this.utcMin > 59) {
+        this.utcMin = 59;
+      }
+      if (isNaN(this.utcMin)) {
         this.utcMin = 0;
       }
       this.SET_UTC(`${this.utcHour}:${this.utcMin}`);
