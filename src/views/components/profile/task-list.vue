@@ -31,7 +31,7 @@ limitations under the License. -->
             >
               <div class="ell mb-5">
                 <span class="b">{{ i.endpointName }}</span>
-                <a class="profile-btn r" @click="viewTask(i)" v-tooltip:bottom="{ content: $t('taskView') }">
+                <a class="profile-btn r" @click="viewTask($event, i)" v-tooltip:bottom="{ content: $t('taskView') }">
                   <rk-icon icon="library_books" />
                 </a>
               </div>
@@ -145,6 +145,15 @@ limitations under the License. -->
 
     private selectTask(item: { id: string; serviceId: string; logs: TaskLog[] }) {
       this.selectedTask = item;
+      this.selectedTaskService =
+        this.headerSource.serviceSource.filter((service: any) => service.key === item.serviceId)[0] || {};
+      this.GET_SEGMENT_LIST({ taskID: item.id });
+    }
+
+    private viewTask(e: Event, item: any) {
+      this.viewDetail = true;
+      window.event ? (window.event.cancelBubble = true) : e.stopPropagation();
+      this.instanceLogs = {};
       for (const d of item.logs) {
         if (this.instanceLogs[d.instanceName]) {
           this.instanceLogs[d.instanceName].push({ operationType: d.operationType, operationTime: d.operationTime });
@@ -152,13 +161,6 @@ limitations under the License. -->
           this.instanceLogs[d.instanceName] = [{ operationType: d.operationType, operationTime: d.operationTime }];
         }
       }
-      this.selectedTaskService =
-        this.headerSource.serviceSource.filter((service: any) => service.key === item.serviceId)[0] || {};
-      this.GET_SEGMENT_LIST({ taskID: item.id });
-    }
-
-    private viewTask(item: any) {
-      this.viewDetail = true;
       this.selectedTask = item;
     }
 

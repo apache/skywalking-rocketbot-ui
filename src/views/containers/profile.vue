@@ -57,9 +57,6 @@ limitations under the License. -->
     private interval: any;
 
     private beforeMount() {
-      this.GET_SERVICES({
-        duration: this.durationTime,
-      });
       this.SET_EVENTS([
         () => {
           this.GET_SERVICES({ duration: this.durationTime });
