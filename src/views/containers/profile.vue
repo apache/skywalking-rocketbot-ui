@@ -57,9 +57,6 @@ limitations under the License. -->
     private interval: any;
 
     private beforeMount() {
-      this.GET_SERVICES({
-        duration: this.durationTime,
-      });
       this.SET_EVENTS([
         () => {
           this.GET_SERVICES({ duration: this.durationTime });
@@ -69,7 +66,7 @@ limitations under the License. -->
         this.GET_SERVICES({
           duration: this.durationTime,
         });
-      }, 300000);
+      }, 20000);
     }
     private beforeDestroy() {
       this.SET_EVENTS([]);
