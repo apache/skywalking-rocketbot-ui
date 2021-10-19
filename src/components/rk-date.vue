@@ -85,7 +85,6 @@ limitations under the License. -->
 
 <script lang="js">
   import RkCalendar from './rk-date-calendar.vue';
-  import getLocalTime from '@/utils/localtime';
   /* eslint-disable */
   /* tslint:disable */
   export default {

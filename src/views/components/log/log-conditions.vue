@@ -101,6 +101,7 @@ limitations under the License. -->
   import { State as logState } from '@/store/modules/log/index';
   import dateFormatStep from '@/utils/dateFormat';
   import { ConditionTags } from '../common/index';
+  import getLocalTime from '@/utils/localtime';
 
   @Component({
     components: { ConditionTags },
@@ -231,14 +232,8 @@ limitations under the License. -->
       this.SET_LOG_CONDITIONS({
         label: this.LogConditionsOpt.Date,
         key: this.globalTimeFormat([
-          new Date(
-            this.searchTime[0].getTime() +
-              (parseInt(String(this.rocketbotGlobal.utc), 10) + new Date().getTimezoneOffset() / 60) * 3600000,
-          ),
-          new Date(
-            this.searchTime[1].getTime() +
-              (parseInt(String(this.rocketbotGlobal.utc), 10) + new Date().getTimezoneOffset() / 60) * 3600000,
-          ),
+          getLocalTime(this.rocketbotGlobal.utc, this.searchTime[0]),
+          getLocalTime(this.rocketbotGlobal.utc, this.searchTime[1]),
         ]),
       });
     }

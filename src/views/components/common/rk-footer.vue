@@ -19,8 +19,11 @@ limitations under the License. -->
       <div class="sm flex-h">
         <RkFooterTime />
         <span class="mr-15 cp" @click="setLang">{{ lang === 'zh' ? '中' : 'En' }}</span>
-        <span>{{ $t('serverZone') }} UTC {{ utc >= 0 ? '+' : '' }}</span
-        ><input v-model="utc" min="-12" max="14" class="rk-footer-utc" type="number" />
+        <span>{{ $t('serverZone') }} UTC {{ utcHour >= 0 ? '+' : '' }}</span>
+        <input v-model="utcHour" min="-12" max="14" class="rk-footer-utc" type="number" />
+        <span>:&nbsp;</span>
+        <span class="utc-min">{{ utcMin > 9 ? null : 0 }}</span>
+        <input v-model="utcMin" min="0" max="59" class="rk-footer-utc" type="number" />
       </div>
     </div>
   </footer>
@@ -36,21 +39,21 @@ limitations under the License. -->
     @Action('SET_DURATION') private SET_DURATION: any;
     @Action('SET_UTC') private SET_UTC: any;
     private lang: string | null = '';
-    private utc: number = 0;
-    @Watch('utc')
-    private onUtcUpdate() {
-      if (this.utc < -12) {
-        this.utc = -12;
+    private utcHour: number = 0;
+    private utcMin: number = 0;
+
+    private beforeMount() {
+      let utc = localStorage.getItem('utc') || '';
+      if (!utc.includes(':')) {
+        utc = (localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60)) + ':0';
       }
-      if (this.utc > 14) {
-        this.utc = 14;
-      }
-      if (!this.utc) {
-        this.utc = 0;
-      }
-      this.SET_UTC(this.utc);
-      window.localStorage.setItem('utc', this.utc.toString());
+      const utcArr = (utc || '').split(':');
+      this.utcHour = isNaN(Number(utcArr[0])) ? 0 : Number(utcArr[0]);
+      this.utcMin = isNaN(Number(utcArr[1])) ? 0 : Number(utcArr[1]);
+      this.SET_UTC(`${this.utcHour}:${this.utcMin}`);
+      this.lang = window.localStorage.getItem('lang');
     }
+
     private setLang() {
       if (this.lang === 'zh') {
         this.$i18n.locale = 'en';
@@ -62,9 +65,35 @@ limitations under the License. -->
         this.lang = 'zh';
       }
     }
-    private beforeMount() {
-      this.utc = Number(window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60));
-      this.lang = window.localStorage.getItem('lang');
+
+    @Watch('utcHour')
+    private onUtcUpdate() {
+      if (this.utcHour < -12) {
+        this.utcHour = -12;
+      }
+      if (this.utcHour > 14) {
+        this.utcHour = 14;
+      }
+      if (isNaN(this.utcHour)) {
+        this.utcHour = 0;
+      }
+      this.SET_UTC(`${this.utcHour}:${this.utcMin}`);
+      localStorage.setItem('utc', `${this.utcHour}:${this.utcMin}`);
+    }
+
+    @Watch('utcMin')
+    private onUtcMinUpdate() {
+      if (this.utcMin < 0) {
+        this.utcMin = 0;
+      }
+      if (this.utcMin > 59) {
+        this.utcMin = 59;
+      }
+      if (isNaN(this.utcMin)) {
+        this.utcMin = 0;
+      }
+      this.SET_UTC(`${this.utcHour}:${this.utcMin}`);
+      localStorage.setItem('utc', `${this.utcHour}:${this.utcMin}`);
     }
   }
 </script>
@@ -94,11 +123,15 @@ limitations under the License. -->
     background: 0;
     border: 0;
     outline: none;
-    width: auto;
+    width: 40px;
     padding-bottom: 0;
   }
   .rk-footer-inner {
     justify-content: space-between;
     display: flex;
+  }
+  .utc-min {
+    display: inline-block;
+    padding-top: 2px;
   }
 </style>

@@ -18,19 +18,19 @@
 import graph from '@/graph';
 import { AxiosResponse } from 'axios';
 
-const getLocalTime = (i: number, t: Date | number) => {
-  const d = new Date(t);
+const getLocalTime = (utc: string, time: Date | number) => {
+  const utcArr = utc.split(':');
+  const utcHour = isNaN(Number(utcArr[0])) ? 0 : Number(utcArr[0]);
+  const utcMin = isNaN(Number(utcArr[1])) ? 0 : Number(utcArr[1]);
+  const d = new Date(time);
   const len = d.getTime();
   const offset = d.getTimezoneOffset() * 60000;
   const utcTime = len + offset;
-  return new Date(utcTime + 3600000 * i);
+  return new Date(utcTime + 3600000 * utcHour + utcMin * 60000);
 };
 
 const setTimezoneOffset = () => {
-  window.localStorage.setItem(
-    'utc',
-    -(new Date().getTimezoneOffset() / 60) + '',
-  );
+  window.localStorage.setItem('utc', -(new Date().getTimezoneOffset() / 60) + ':0');
 };
 
 export const queryOAPTimeInfo = async () => {
@@ -41,7 +41,7 @@ export const queryOAPTimeInfo = async () => {
       setTimezoneOffset();
       return;
     }
-    utc = res.data.data.getTimeInfo.timezone / 100 + '';
+    utc = res.data.data.getTimeInfo.timezone / 100 + ':0';
     window.localStorage.setItem('utc', utc);
   }
 };
