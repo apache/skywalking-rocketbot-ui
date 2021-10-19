@@ -20,8 +20,8 @@ import { AxiosResponse } from 'axios';
 
 const getLocalTime = (utc: string, time: Date | number) => {
   const utcArr = utc.split(':');
-  const utcHour = Number(utcArr[0]) || 0;
-  const utcMin = Number(utcArr[1]) || 0;
+  const utcHour = isNaN(Number(utcArr[0])) ? 0 : Number(utcArr[0]);
+  const utcMin = isNaN(Number(utcArr[1])) ? 0 : Number(utcArr[1]);
   const d = new Date(time);
   const len = d.getTime();
   const offset = d.getTimezoneOffset() * 60000;
