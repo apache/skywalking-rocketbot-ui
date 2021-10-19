@@ -41,6 +41,31 @@ limitations under the License. -->
     private lang: string | null = '';
     private utcHour: number = 0;
     private utcMin: number = 0;
+
+    private beforeMount() {
+      let utc = localStorage.getItem('utc') || '';
+      if (!utc.includes(':')) {
+        utc = (localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60)) + ':0';
+      }
+      const utcArr = (utc || '').split(':');
+      this.utcHour = Number(utcArr[0]);
+      this.utcMin = Number(utcArr[1]);
+      this.SET_UTC(`${this.utcHour}:${this.utcMin}`);
+      this.lang = window.localStorage.getItem('lang');
+    }
+
+    private setLang() {
+      if (this.lang === 'zh') {
+        this.$i18n.locale = 'en';
+        window.localStorage.setItem('lang', 'en');
+        this.lang = 'en';
+      } else {
+        this.$i18n.locale = 'zh';
+        window.localStorage.setItem('lang', 'zh');
+        this.lang = 'zh';
+      }
+    }
+
     @Watch('utcHour')
     private onUtcUpdate() {
       if (this.utcHour < -12) {
@@ -55,27 +80,14 @@ limitations under the License. -->
       this.SET_UTC(`${this.utcHour}:${this.utcMin}`);
       localStorage.setItem('utc', `${this.utcHour}:${this.utcMin}`);
     }
-    private setLang() {
-      if (this.lang === 'zh') {
-        this.$i18n.locale = 'en';
-        window.localStorage.setItem('lang', 'en');
-        this.lang = 'en';
-      } else {
-        this.$i18n.locale = 'zh';
-        window.localStorage.setItem('lang', 'zh');
-        this.lang = 'zh';
+
+    @Watch('utcMin')
+    private onUtcMinUpdate() {
+      if (!this.utcMin) {
+        this.utcMin = 0;
       }
-    }
-    private beforeMount() {
-      let utc = localStorage.getItem('utc') || '';
-      if (!utc.includes(':')) {
-        utc = (localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60)) + ':0';
-      }
-      const utcArr = (utc || '').split(':');
-      this.utcHour = Number(utcArr[0]);
-      this.utcMin = Number(utcArr[1]);
       this.SET_UTC(`${this.utcHour}:${this.utcMin}`);
-      this.lang = window.localStorage.getItem('lang');
+      localStorage.setItem('utc', `${this.utcHour}:${this.utcMin}`);
     }
   }
 </script>
