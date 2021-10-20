@@ -436,7 +436,7 @@ limitations under the License. -->
   }
 
   .datepicker-range {
-    min-width: 280px;
+    min-width: 238px;
   }
 
   .datepicker-range .datepicker-popup {

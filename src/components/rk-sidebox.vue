@@ -82,12 +82,12 @@ limitations under the License. -->
     position: fixed;
     right: 0;
     top: 50px;
-    bottom: 30px;
+    bottom: 0;
     z-index: 200;
     background-color: #fff;
   }
   .rk-sidebox-inner {
-    padding: 20px;
+    padding: 0 20px;
   }
   .rk-sidebox-inner-fixed {
     height: 100%;

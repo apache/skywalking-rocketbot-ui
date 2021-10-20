@@ -180,7 +180,7 @@ const m = {
   logCategory: '日志类别',
   errorCatalog: '错误类目',
   logDetail: '日志详情',
-  timeReload: '时间间隔必须大于0',
+  timeReload: '注意：时间间隔必须大于0',
   errorInfo: '错误信息',
   stack: '堆栈',
   serviceVersion: '服务版本',

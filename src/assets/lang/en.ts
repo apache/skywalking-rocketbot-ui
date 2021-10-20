@@ -181,7 +181,7 @@ const m = {
   logCategory: 'Log Category',
   errorCatalog: 'Error Catalog',
   logDetail: 'Log Detail ',
-  timeReload: 'The time interval must be greater than 0',
+  timeReload: 'Notice: The time interval must be greater than 0',
   errorInfo: 'Error Info',
   stack: 'Stack',
   serviceVersion: 'Service Version',
