@@ -32,6 +32,7 @@ import RkButton from './rk-button.vue';
 import RkIcon from './rk-icon.vue';
 import RkRadio from './rk-radio.vue';
 import RkAlert from './rk-alert.vue';
+import RkSwitch from './rk-switch.vue';
 
 const components: any = {
   RkProgress,
@@ -50,6 +51,7 @@ const components: any = {
   RkIcon,
   RkRadio,
   RkAlert,
+  RkSwitch,
 };
 
 const componentsName: string[] = Object.keys(components);

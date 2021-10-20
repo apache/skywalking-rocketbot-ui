@@ -181,7 +181,7 @@ const m = {
   logCategory: 'Log Category',
   errorCatalog: 'Error Catalog',
   logDetail: 'Log Detail ',
-  timeReload: 'The time interval must be greater than 0',
+  timeReload: 'Notice: The time interval must be greater than 0',
   errorInfo: 'Error Info',
   stack: 'Stack',
   serviceVersion: 'Service Version',
@@ -258,6 +258,7 @@ const m = {
   yes: 'Yes',
   no: 'No',
   cacheReminderContent: 'SkyWalking detected dashboard template updates, do you want to update?',
+  language: 'Language',
 };
 
 export default m;

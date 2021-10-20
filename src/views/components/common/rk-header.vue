@@ -30,84 +30,28 @@ limitations under the License. -->
         <span class="vm hide-xs ml-5">{{ $t(menu.meta.title) }}</span>
       </router-link>
     </div>
-    <div class="flex-h">
-      <a
-        class="rk-btn mr-5 sm"
-        :class="auto ? 'blue' : 'ghost'"
-        @click="handleAuto"
-        v-tooltip:bottom="{ content: $t('timeReload') }"
-      >
-        <span class="vm">{{ $t('auto') }}</span>
-      </a>
-      <div class="auto-time">
-        <span class="rk-auto-select">
-          <input v-model="autoTime" type="number" @change="changeAutoTime" min="1" />
-        </span>
-        {{ $t('second') }}
-      </div>
-      <a class="rk-btn sm ghost" @click="handleReload">
-        <rk-icon icon="retry" :loading="auto" />
-        <span class="vm">{{ $t('reload') }}</span>
-      </a>
-    </div>
+    <PageToolBar />
   </header>
 </template>
 
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator';
-  import { Action, Getter } from 'vuex-class';
   import { routes } from '@/router';
-  import timeFormat from '@/utils/timeFormat';
+  import PageToolBar from './page-tool-bar.vue';
 
-  @Component
+  @Component({
+    components: {
+      PageToolBar,
+    },
+  })
   export default class Header extends Vue {
-    @Getter('duration') private duration: any;
-    @Action('SET_DURATION') private SET_DURATION: any;
-    private show: boolean = false;
-    private auto: boolean = false;
-    private autoTime: number = 6;
-    private timer: any = null;
-
     private get menus() {
       return routes[0].children;
     }
 
-    private handleReload() {
-      const gap = this.duration.end.getTime() - this.duration.start.getTime();
-      const time: Date[] = [new Date(new Date().getTime() - gap), new Date()];
-      this.SET_DURATION(timeFormat(time));
-    }
-    private handleAuto() {
-      if (this.autoTime < 1) {
-        return;
-      }
-      this.auto = !this.auto;
-      if (this.auto) {
-        this.handleReload();
-        this.timer = setInterval(this.handleReload, this.autoTime * 1000);
-      } else {
-        clearInterval(this.timer);
-      }
-    }
-    private handleHide() {
-      this.show = false;
-    }
-    private handleShow() {
-      this.show = !this.show;
-    }
     private handleSignout() {
       localStorage.removeItem('skywalking-authority');
       this.$router.push('/login');
-    }
-    private changeAutoTime() {
-      if (this.autoTime < 1) {
-        return;
-      }
-      clearInterval(this.timer);
-      if (this.auto) {
-        this.handleReload();
-        this.timer = setInterval(this.handleReload, this.autoTime * 1000);
-      }
     }
   }
 </script>
@@ -175,18 +119,6 @@ limitations under the License. -->
     transition: background-color 0.3s;
     &:hover {
       background-color: #dededf;
-    }
-  }
-  .rk-auto-select {
-    border-radius: 3px;
-    background-color: #fff;
-    padding: 1px;
-    border-radius: 3px;
-
-    input {
-      width: 38px;
-      border-style: unset;
-      outline: 0;
     }
   }
 </style>
