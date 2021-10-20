@@ -13,12 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
-  <div class="sm flex-h">
+  <div class="sm flex-h page-tools">
     <RkFooterTime />
     <!-- <span class="mr-10 cp" @click="openSettings">{{ lang === 'zh' ? '中' : 'En' }}</span> -->
-    <span class="mr-10 cp" @click="openSettings"
-      >UTC{{ utcHour >= 0 ? '+' : '' }}{{ `${this.utcHour}:${this.utcMin}` }}</span
-    >
+    <span class="mr-10 cp" @click="openSettings">
+      UTC{{ utcHour >= 0 ? '+' : '' }}{{ `${this.utcHour}:${this.utcMin}` }}
+    </span>
     <span class="mr-10 sm" :class="auto ? 'blue' : 'ghost'" @click="openSettings">
       <a>{{ $t('auto') }}</a>
     </span>
@@ -26,14 +26,7 @@ limitations under the License. -->
       <rk-icon icon="retry" :loading="auto" />
       <span>{{ $t('reload') }}</span>
     </a>
-    <rk-sidebox
-      class="tool-bar-setting"
-      width="800px"
-      :fixed="false"
-      :right="true"
-      title="Settings"
-      :show.sync="showSetting"
-    >
+    <div class="tool-bar-setting " v-show="showSetting">
       <div class="flex-h item">
         <span class="label">{{ $t('language') }}</span>
         <span>Zh</span>
@@ -44,10 +37,10 @@ limitations under the License. -->
         <span class="label">{{ $t('serverZone') }}</span>
         <div>
           <span>UTC{{ utcHour >= 0 ? '+' : '' }}</span>
-          <input v-model="utcHour" min="-12" max="14" class="rk-footer-utc" type="number" />
+          <input v-model="utcHour" min="-12" max="14" class="rk-utc" type="number" />
           <span>:</span>
           <span class="utc-min">{{ utcMin > 9 || utcMin === 0 ? null : 0 }}</span>
-          <input v-model="utcMin" min="0" max="59" class="rk-footer-utc" type="number" />
+          <input v-model="utcMin" min="0" max="59" class="rk-utc" type="number" />
         </div>
       </div>
       <div class="flex-h item">
@@ -61,7 +54,7 @@ limitations under the License. -->
           <i class="ml-10">{{ $t('timeReload') }}</i>
         </div>
       </div>
-    </rk-sidebox>
+    </div>
   </div>
 </template>
 
@@ -95,6 +88,10 @@ limitations under the License. -->
       this.utcMin = isNaN(Number(utcArr[1])) ? 0 : Number(utcArr[1]);
       this.SET_UTC(`${this.utcHour}:${this.utcMin}`);
       this.lang = window.localStorage.getItem('lang');
+    }
+
+    private mounted() {
+      document.addEventListener('click', this.closeSettings, true);
     }
 
     private openSettings() {
@@ -147,6 +144,10 @@ limitations under the License. -->
       }
     }
 
+    private closeSettings(e: any) {
+      this.showSetting = this.$el.contains(e.target) && !this.showSetting;
+    }
+
     @Watch('utcHour')
     private onUtcUpdate() {
       if (this.utcHour < -12) {
@@ -180,36 +181,16 @@ limitations under the License. -->
 </script>
 
 <style lang="scss" scoped>
-  .rk-footer {
-    color: #515a6e;
-    flex-shrink: 0;
-    padding-right: 15px;
-    padding-left: 15px;
-    padding-bottom: 1px;
-    box-shadow: 0 -1px 0px rgba(0, 0, 0, 0.08);
-    z-index: 2;
+  .page-tools {
+    position: relative;
   }
-  .rk-footer-dark {
-    color: #ddd;
-    background: #252a2f;
-    border-top: 1px solid #252a2f;
-  }
-  .rk-footer-edit {
-    color: #eee;
-    background: #448dfe;
-    border-top: 1px solid #448dfe;
-  }
-  .rk-footer-utc {
+  .rk-utc {
     color: inherit;
     background: 0;
     border: 0;
     outline: none;
     width: 40px;
     padding-bottom: 0;
-  }
-  .rk-footer-inner {
-    justify-content: space-between;
-    display: flex;
   }
   .utc-min {
     display: inline-block;
@@ -228,8 +209,18 @@ limitations under the License. -->
     }
   }
   .tool-bar-setting {
-    color: #252a2f;
-    font-size: 14px;
+    position: absolute;
+    top: 30px;
+    right: 0;
+    color: #666;
+    font-family: inherit;
+    font-size: 12px;
+    background: #fff;
+    z-index: 10000;
+    padding: 20px;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px #00230b33;
+    width: 550px;
     .item {
       margin-top: 10px;
     }
