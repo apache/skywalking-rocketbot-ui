@@ -258,6 +258,7 @@ const m = {
   yes: 'Yes',
   no: 'No',
   cacheReminderContent: 'SkyWalking detected dashboard template updates, do you want to update?',
+  language: 'Language',
 };
 
 export default m;

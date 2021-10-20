@@ -256,6 +256,7 @@ const m = {
   yes: '是的',
   no: '不',
   cacheReminderContent: 'SkyWalking检测到仪表板模板更新，是否需要更新？',
+  language: '语言',
 };
 
 export default m;

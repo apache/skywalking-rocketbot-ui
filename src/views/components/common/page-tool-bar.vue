@@ -15,7 +15,7 @@ limitations under the License. -->
 <template>
   <div class="sm flex-h">
     <RkFooterTime />
-    <span class="mr-10 cp" @click="setLang">{{ lang === 'zh' ? '中' : 'En' }}</span>
+    <!-- <span class="mr-10 cp" @click="openSettings">{{ lang === 'zh' ? '中' : 'En' }}</span> -->
     <span class="mr-10 cp" @click="openSettings"
       >UTC{{ utcHour >= 0 ? '+' : '' }}{{ `${this.utcHour}:${this.utcMin}` }}</span
     >
@@ -34,10 +34,12 @@ limitations under the License. -->
       title="Settings"
       :show.sync="showSetting"
     >
-      <!-- <div class="flex-h item">
-        <span class="b label">language</span>
-        <span class="cp" @click="setLang">{{ lang === 'zh' ? '中' : 'En' }}</span>
-      </div> -->
+      <div class="flex-h item">
+        <span class="b label">{{ $t('language') }}</span>
+        <span>Zh</span>
+        <rk-switch class="mr-5 ml-5" :checked="lang === 'en'" @onChange="setLang" />
+        <span>En</span>
+      </div>
       <div class="flex-h item">
         <span class="b label">{{ $t('serverZone') }}</span>
         <div>
@@ -50,10 +52,7 @@ limitations under the License. -->
       </div>
       <div class="flex-h item">
         <span class="b label">{{ $t('auto') }}</span>
-        <button type="button" class="mr-10 rk-switch" :class="auto ? 'switch-checked' : ''" @click="handleAuto">
-          <div class="switch-handle"></div>
-          <span class="switch-inner"></span>
-        </button>
+        <rk-switch class="mr-10" :checked="auto" @onChange="handleAuto" />
         <div class="auto-time">
           <span class="rk-auto-select">
             <input v-model="autoTime" type="number" @change="changeAutoTime" min="1" />
@@ -119,11 +118,11 @@ limitations under the License. -->
       const time: Date[] = [new Date(new Date().getTime() - gap), new Date()];
       this.SET_DURATION(timeFormat(time));
     }
-    private handleAuto() {
+    private handleAuto(status: boolean) {
       if (this.autoTime < 1) {
         return;
       }
-      this.auto = !this.auto;
+      this.auto = status;
       if (this.auto) {
         this.handleReload();
         this.timer = setInterval(this.handleReload, this.autoTime * 1000);
@@ -246,56 +245,5 @@ limitations under the License. -->
       width: 100px;
       display: inline-block;
     }
-  }
-  .rk-switch {
-    padding: 0;
-    color: #000000d9;
-    font-size: 14px;
-    line-height: 1.5715;
-    position: relative;
-    display: inline-block;
-    min-width: 44px;
-    height: 22px;
-    line-height: 22px;
-    background-color: #00000040;
-    border: 0;
-    border-radius: 100px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .switch-checked {
-    background-color: #448dfe;
-  }
-  .switch-inner {
-    margin: 0 25px 0 7px;
-    display: block;
-    margin: 0 7px 0 25px;
-    color: #fff;
-    font-size: 12px;
-    transition: all 0.2s;
-  }
-  .switch-handle {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 18px;
-    height: 18px;
-    transition: all 0.2s ease-in-out;
-    &:before {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background-color: #fff;
-      border-radius: 9px;
-      box-shadow: 0 2px 4px #00230b33;
-      transition: all 0.2s ease-in-out;
-      content: '';
-    }
-  }
-  .switch-checked .switch-handle {
-    left: calc(100% - 20px);
-    transition: all 0.2s;
   }
 </style>
