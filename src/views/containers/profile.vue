@@ -66,7 +66,7 @@ limitations under the License. -->
         this.GET_SERVICES({
           duration: this.durationTime,
         });
-      }, 300000);
+      }, 20000);
     }
     private beforeDestroy() {
       this.SET_EVENTS([]);
