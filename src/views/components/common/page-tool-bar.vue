@@ -35,13 +35,13 @@ limitations under the License. -->
       :show.sync="showSetting"
     >
       <div class="flex-h item">
-        <span class="b label">{{ $t('language') }}</span>
+        <span class="label">{{ $t('language') }}</span>
         <span>Zh</span>
         <rk-switch class="mr-5 ml-5" :checked="lang === 'en'" @onChange="setLang" />
         <span>En</span>
       </div>
       <div class="flex-h item">
-        <span class="b label">{{ $t('serverZone') }}</span>
+        <span class="label">{{ $t('serverZone') }}</span>
         <div>
           <span>UTC{{ utcHour >= 0 ? '+' : '' }}</span>
           <input v-model="utcHour" min="-12" max="14" class="rk-footer-utc" type="number" />
@@ -51,7 +51,7 @@ limitations under the License. -->
         </div>
       </div>
       <div class="flex-h item">
-        <span class="b label">{{ $t('auto') }}</span>
+        <span class="label">{{ $t('auto') }}</span>
         <rk-switch class="mr-10" :checked="auto" @onChange="handleAuto" />
         <div class="auto-time">
           <span class="rk-auto-select">
