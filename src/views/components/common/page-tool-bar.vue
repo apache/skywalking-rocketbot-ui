@@ -16,10 +16,10 @@ limitations under the License. -->
   <div class="sm flex-h page-tools">
     <RkFooterTime />
     <span class="mr-10 cp" id="utcVal"> UTC{{ utcHour >= 0 ? '+' : '' }}{{ `${this.utcHour}:${this.utcMin}` }} </span>
-    <span class="sm ghost mr-10 cp" @click="handleReload">
-      <rk-icon icon="retry" :loading="auto" class="xl" />
+    <span class="ghost mr-5 cp" @click="handleReload" title="refresh">
+      <rk-icon icon="retry" :loading="auto" class="lg" />
     </span>
-    <span class="sm ghost cp">
+    <span class="ghost cp">
       <rk-icon icon="keyboard_arrow_down" class="xll" id="settings" />
     </span>
     <div class="tool-bar-setting " v-show="showSetting" @click="markSettings">
