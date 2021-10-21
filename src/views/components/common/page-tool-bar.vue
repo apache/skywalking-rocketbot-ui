@@ -15,16 +15,14 @@ limitations under the License. -->
 <template>
   <div class="sm flex-h page-tools">
     <RkFooterTime />
-    <span class="mr-10 cp" id="utcVal" @click="openSettings">
-      UTC{{ utcHour >= 0 ? '+' : '' }}{{ `${this.utcHour}:${this.utcMin}` }}
+    <span class="mr-10 cp" id="utcVal"> UTC{{ utcHour >= 0 ? '+' : '' }}{{ `${this.utcHour}:${this.utcMin}` }} </span>
+    <span class="sm ghost mr-10 cp" @click="handleReload">
+      <rk-icon icon="retry" :loading="auto" class="xl" />
     </span>
-    <span class="sm ghost" @click="handleReload">
-      <rk-icon icon="retry" :loading="auto" class="xl cp mr-10" />
+    <span class="sm ghost cp">
+      <rk-icon icon="keyboard_arrow_down" class="xll" id="settings" />
     </span>
-    <span class="sm ghost" @click="openSettings" id="settings">
-      <rk-icon icon="keyboard_arrow_down" class="xll cp" />
-    </span>
-    <div id="settingsPopup" class="tool-bar-setting " v-show="showSetting">
+    <div class="tool-bar-setting " v-show="showSetting" @click="markSettings">
       <div class="flex-h item">
         <span class="label">{{ $t('language') }}</span>
         <span>Zh</span>
@@ -74,6 +72,7 @@ limitations under the License. -->
     private autoTime: number = 6;
     private timer: any = null;
     private showSetting: boolean = false;
+    private settingOpened: boolean = false;
 
     private beforeMount() {
       let utc = localStorage.getItem('utc') || '';
@@ -89,10 +88,6 @@ limitations under the License. -->
 
     private mounted() {
       document.addEventListener('click', this.closeSettings, false);
-    }
-
-    private openSettings() {
-      this.showSetting = true;
     }
 
     private setLang() {
@@ -136,15 +131,23 @@ limitations under the License. -->
     }
 
     private closeSettings(e: any) {
-      if (e.target.id === 'utcVal' || e.target.id === 'settings') {
+      if (this.settingOpened) {
+        this.settingOpened = false;
+        return;
+      }
+      if (e.target.id === 'utcVal' || e.target.id === 'settings' || e.target.parentElement.id === 'settings') {
         this.showSetting = true;
       } else {
         this.showSetting = false;
       }
     }
 
-    beforeDestroy() {
-      document.removeEventListener('click', this.closeSettings, true);
+    private markSettings() {
+      this.settingOpened = true;
+    }
+
+    private beforeDestroy() {
+      document.removeEventListener('click', this.closeSettings, false);
     }
 
     @Watch('utcHour')
