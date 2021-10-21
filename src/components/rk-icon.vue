@@ -47,7 +47,7 @@ limitations under the License. -->
     vertical-align: middle;
     fill: currentColor;
     &.sm {
-      width: 1px;
+      width: 13px;
       height: 13px;
     }
     &.lg {

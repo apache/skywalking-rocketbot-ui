@@ -15,18 +15,14 @@ limitations under the License. -->
 <template>
   <div class="sm flex-h page-tools">
     <RkFooterTime />
-    <!-- <span class="mr-10 cp" @click="openSettings">{{ lang === 'zh' ? '中' : 'En' }}</span> -->
-    <span class="mr-10 cp" @click="openSettings">
-      UTC{{ utcHour >= 0 ? '+' : '' }}{{ `${this.utcHour}:${this.utcMin}` }}
+    <span class="mr-10 cp" id="utcVal"> UTC{{ utcHour >= 0 ? '+' : '' }}{{ `${this.utcHour}:${this.utcMin}` }} </span>
+    <span class="ghost mr-5 cp" @click="handleReload" title="refresh">
+      <rk-icon icon="retry" :loading="auto" class="lg" />
     </span>
-    <span class="mr-10 sm" :class="auto ? 'blue' : 'ghost'" @click="openSettings">
-      <a>{{ $t('auto') }}</a>
+    <span class="ghost cp">
+      <rk-icon icon="keyboard_arrow_down" class="xll" id="settings" />
     </span>
-    <a class="sm ghost" @click="handleReload">
-      <rk-icon icon="retry" :loading="auto" />
-      <span>{{ $t('reload') }}</span>
-    </a>
-    <div class="tool-bar-setting " v-show="showSetting">
+    <div class="tool-bar-setting " v-show="showSetting" @click="markSettings">
       <div class="flex-h item">
         <span class="label">{{ $t('language') }}</span>
         <span>Zh</span>
@@ -72,11 +68,11 @@ limitations under the License. -->
     private lang: string | null = '';
     private utcHour: number = 0;
     private utcMin: number = 0;
-    private show: boolean = false;
     private auto: boolean = false;
     private autoTime: number = 6;
     private timer: any = null;
     private showSetting: boolean = false;
+    private settingOpened: boolean = false;
 
     private beforeMount() {
       let utc = localStorage.getItem('utc') || '';
@@ -91,11 +87,7 @@ limitations under the License. -->
     }
 
     private mounted() {
-      document.addEventListener('click', this.closeSettings, true);
-    }
-
-    private openSettings() {
-      this.showSetting = true;
+      document.addEventListener('click', this.closeSettings, false);
     }
 
     private setLang() {
@@ -127,12 +119,6 @@ limitations under the License. -->
         clearInterval(this.timer);
       }
     }
-    private handleHide() {
-      this.show = false;
-    }
-    private handleShow() {
-      this.show = !this.show;
-    }
     private changeAutoTime() {
       if (this.autoTime < 1) {
         return;
@@ -145,7 +131,23 @@ limitations under the License. -->
     }
 
     private closeSettings(e: any) {
-      this.showSetting = this.$el.contains(e.target) && !this.showSetting;
+      if (this.settingOpened) {
+        this.settingOpened = false;
+        return;
+      }
+      if (e.target.id === 'utcVal' || e.target.id === 'settings' || e.target.parentElement.id === 'settings') {
+        this.showSetting = true;
+      } else {
+        this.showSetting = false;
+      }
+    }
+
+    private markSettings() {
+      this.settingOpened = true;
+    }
+
+    private beforeDestroy() {
+      document.removeEventListener('click', this.closeSettings, false);
     }
 
     @Watch('utcHour')
@@ -211,7 +213,7 @@ limitations under the License. -->
   .tool-bar-setting {
     position: absolute;
     top: 30px;
-    right: 0;
+    right: -5px;
     color: #666;
     font-family: inherit;
     font-size: 12px;
@@ -221,6 +223,20 @@ limitations under the License. -->
     border-radius: 3px;
     box-shadow: 0 2px 4px #00230b33;
     width: 550px;
+    &:after {
+      bottom: 100%;
+      right: 8px;
+      border: solid transparent;
+      content: ' ';
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-color: rgba(0, 0, 0, 0);
+      border-bottom-color: #fff;
+      border-width: 8px;
+      margin-right: 0px;
+    }
     .item {
       margin-top: 10px;
     }
