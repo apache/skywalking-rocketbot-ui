@@ -210,7 +210,7 @@ limitations under the License. -->
   .tool-bar-setting {
     position: absolute;
     top: 30px;
-    right: 0;
+    right: -5px;
     color: #666;
     font-family: inherit;
     font-size: 12px;
@@ -222,7 +222,7 @@ limitations under the License. -->
     width: 550px;
     &:after {
       bottom: 100%;
-      right: 4px;
+      right: 8px;
       border: solid transparent;
       content: ' ';
       height: 0;
