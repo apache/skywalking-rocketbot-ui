@@ -15,18 +15,16 @@ limitations under the License. -->
 <template>
   <div class="sm flex-h page-tools">
     <RkFooterTime />
-    <!-- <span class="mr-10 cp" @click="openSettings">{{ lang === 'zh' ? '中' : 'En' }}</span> -->
-    <span class="mr-10 cp" @click="openSettings">
+    <span class="mr-10 cp" id="utcVal" @click="openSettings">
       UTC{{ utcHour >= 0 ? '+' : '' }}{{ `${this.utcHour}:${this.utcMin}` }}
     </span>
-    <span class="mr-10 sm" :class="auto ? 'blue' : 'ghost'" @click="openSettings">
-      <a>{{ $t('auto') }}</a>
+    <span class="sm ghost" @click="handleReload">
+      <rk-icon icon="retry" :loading="auto" class="xl cp mr-10" />
     </span>
-    <a class="sm ghost" @click="handleReload">
-      <rk-icon icon="retry" :loading="auto" />
-      <span>{{ $t('reload') }}</span>
-    </a>
-    <div class="tool-bar-setting " v-show="showSetting">
+    <span class="sm ghost" @click="openSettings" id="settings">
+      <rk-icon icon="keyboard_arrow_down" class="xll cp" />
+    </span>
+    <div id="settingsPopup" class="tool-bar-setting " v-show="showSetting">
       <div class="flex-h item">
         <span class="label">{{ $t('language') }}</span>
         <span>Zh</span>
@@ -72,7 +70,6 @@ limitations under the License. -->
     private lang: string | null = '';
     private utcHour: number = 0;
     private utcMin: number = 0;
-    private show: boolean = false;
     private auto: boolean = false;
     private autoTime: number = 6;
     private timer: any = null;
@@ -91,7 +88,7 @@ limitations under the License. -->
     }
 
     private mounted() {
-      document.addEventListener('click', this.closeSettings, true);
+      document.addEventListener('click', this.closeSettings, false);
     }
 
     private openSettings() {
@@ -127,12 +124,6 @@ limitations under the License. -->
         clearInterval(this.timer);
       }
     }
-    private handleHide() {
-      this.show = false;
-    }
-    private handleShow() {
-      this.show = !this.show;
-    }
     private changeAutoTime() {
       if (this.autoTime < 1) {
         return;
@@ -145,7 +136,15 @@ limitations under the License. -->
     }
 
     private closeSettings(e: any) {
-      this.showSetting = this.$el.contains(e.target) && !this.showSetting;
+      if (e.target.id === 'utcVal' || e.target.id === 'settings') {
+        this.showSetting = true;
+      } else {
+        this.showSetting = false;
+      }
+    }
+
+    beforeDestroy() {
+      document.removeEventListener('click', this.closeSettings, true);
     }
 
     @Watch('utcHour')
@@ -221,6 +220,20 @@ limitations under the License. -->
     border-radius: 3px;
     box-shadow: 0 2px 4px #00230b33;
     width: 550px;
+    &:after {
+      bottom: 100%;
+      right: 4px;
+      border: solid transparent;
+      content: ' ';
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-color: rgba(0, 0, 0, 0);
+      border-bottom-color: #fff;
+      border-width: 8px;
+      margin-right: 0px;
+    }
     .item {
       margin-top: 10px;
     }
