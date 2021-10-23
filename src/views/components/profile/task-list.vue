@@ -137,6 +137,7 @@ limitations under the License. -->
     @Mutation('profileStore/SET_CURRENT_SEGMENT') private SET_CURRENT_SEGMENT: any;
     @Action('profileStore/GET_SEGMENT_LIST') private GET_SEGMENT_LIST: any;
     @Action('profileStore/GET_SEGMENT_SPANS') private GET_SEGMENT_SPANS: any;
+    @Action('GET_TASK_LOGS') private GET_TASK_LOGS: any;
     private selectedKey: string = '';
     private selectedTask: TaskListItem | {} = {};
     private viewDetail: boolean = false;
@@ -150,18 +151,21 @@ limitations under the License. -->
       this.GET_SEGMENT_LIST({ taskID: item.id });
     }
 
-    private viewTask(e: Event, item: any) {
-      this.viewDetail = true;
+    private viewTask(e: Event, item: { id: string; serviceId: string; logs: TaskLog[] }) {
       window.event ? (window.event.cancelBubble = true) : e.stopPropagation();
-      this.instanceLogs = {};
-      for (const d of item.logs) {
-        if (this.instanceLogs[d.instanceName]) {
-          this.instanceLogs[d.instanceName].push({ operationType: d.operationType, operationTime: d.operationTime });
-        } else {
-          this.instanceLogs[d.instanceName] = [{ operationType: d.operationType, operationTime: d.operationTime }];
+      this.GET_TASK_LOGS({ taskID: item.id }).then((logs: TaskLog[]) => {
+        item.logs = logs;
+        this.viewDetail = true;
+        this.instanceLogs = {};
+        for (const d of item.logs) {
+          if (this.instanceLogs[d.instanceName]) {
+            this.instanceLogs[d.instanceName].push({ operationType: d.operationType, operationTime: d.operationTime });
+          } else {
+            this.instanceLogs[d.instanceName] = [{ operationType: d.operationType, operationTime: d.operationTime }];
+          }
         }
-      }
-      this.selectedTask = item;
+        this.selectedTask = item;
+      });
     }
 
     private selectTrace(item: { segmentId: string }) {
