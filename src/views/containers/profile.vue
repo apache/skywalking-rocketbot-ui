@@ -54,23 +54,15 @@ limitations under the License. -->
     @Action('profileStore/GET_SERVICES') private GET_SERVICES: any;
     @Mutation('SET_EVENTS') private SET_EVENTS: any;
 
-    private interval: any;
-
     private beforeMount() {
       this.SET_EVENTS([
         () => {
           this.GET_SERVICES({ duration: this.durationTime });
         },
       ]);
-      this.interval = setInterval(() => {
-        this.GET_SERVICES({
-          duration: this.durationTime,
-        });
-      }, 20000);
     }
     private beforeDestroy() {
       this.SET_EVENTS([]);
-      clearInterval(this.interval);
     }
   }
 </script>

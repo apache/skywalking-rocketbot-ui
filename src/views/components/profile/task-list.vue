@@ -153,9 +153,9 @@ limitations under the License. -->
 
     private viewTask(e: Event, item: { id: string; serviceId: string; logs: TaskLog[] }) {
       window.event ? (window.event.cancelBubble = true) : e.stopPropagation();
+      this.viewDetail = true;
       this.GET_TASK_LOGS({ taskID: item.id }).then((logs: TaskLog[]) => {
         item.logs = logs;
-        this.viewDetail = true;
         this.instanceLogs = {};
         for (const d of item.logs) {
           if (this.instanceLogs[d.instanceName]) {
