@@ -110,3 +110,15 @@ export const GetProfileAnalyze = {
   }
   `,
 };
+export const GetProfileTaskLogs = {
+  variable: '$taskID: String',
+  query: `
+  getProfileTaskLogs: getProfileTaskLogs(taskID: $taskID) {
+    id
+    instanceId
+    instanceName
+    operationTime
+    operationType
+  }
+  `,
+};
