@@ -113,7 +113,7 @@ export const GetProfileAnalyze = {
 export const GetProfileTaskLogs = {
   variable: '$taskID: String',
   query: `
-  getProfileTaskLog: ProfileTaskLog(taskID: $taskID) {
+  getProfileTaskLogs: getProfileTaskLogs(taskID: $taskID) {
     id
     instanceId
     instanceName

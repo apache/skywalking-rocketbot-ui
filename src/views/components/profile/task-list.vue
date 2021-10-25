@@ -137,7 +137,7 @@ limitations under the License. -->
     @Mutation('profileStore/SET_CURRENT_SEGMENT') private SET_CURRENT_SEGMENT: any;
     @Action('profileStore/GET_SEGMENT_LIST') private GET_SEGMENT_LIST: any;
     @Action('profileStore/GET_SEGMENT_SPANS') private GET_SEGMENT_SPANS: any;
-    @Action('GET_TASK_LOGS') private GET_TASK_LOGS: any;
+    @Action('profileStore/GET_TASK_LOGS') private GET_TASK_LOGS: any;
     private selectedKey: string = '';
     private selectedTask: TaskListItem | {} = {};
     private viewDetail: boolean = false;

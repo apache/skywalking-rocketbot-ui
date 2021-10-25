@@ -281,7 +281,7 @@ const actions = {
         if (res.data.errors) {
           return;
         }
-        return res.data.data;
+        return res.data.data.getProfileTaskLogs;
       });
   },
 };
