@@ -21,6 +21,8 @@ import getDurationRow from '@/utils/datetime';
 import getLocalTime from '@/utils/localtime';
 import dateFormatStep, { dateFormatTime } from '@/utils/dateFormat';
 import { ActionTree, Commit, MutationTree } from 'vuex';
+import graph from '@/graph';
+import { AxiosResponse } from 'axios';
 
 let timer: any = null;
 export interface State {
@@ -30,6 +32,7 @@ export interface State {
   edit: boolean;
   lock: boolean;
   utc: string;
+  version: string;
 }
 const initState: State = {
   durationRow: getDurationRow(),
@@ -38,6 +41,7 @@ const initState: State = {
   edit: false,
   lock: true,
   utc: '',
+  version: '',
 };
 
 // getters
@@ -124,6 +128,9 @@ const mutations: MutationTree<State> = {
   [types.SET_EDIT](state: State, status: boolean): void {
     state.edit = status;
   },
+  [types.SET_VERSION](state: State, version: string): void {
+    state.version = version;
+  },
 };
 
 // actions
@@ -166,6 +173,13 @@ const actions: ActionTree<State, any> = {
   },
   SET_LOCK(context: { commit: Commit }, status: boolean): void {
     context.commit(types.SET_LOCK, status);
+  },
+  async FETCH_VERSION(context: { commit: Commit }): Promise<void> {
+    const res: AxiosResponse = await graph.query('queryOAPVersion').params({});
+    if (!res.data.data) {
+      return;
+    }
+    context.commit(types.SET_VERSION, res.data.data.version);
   },
 };
 

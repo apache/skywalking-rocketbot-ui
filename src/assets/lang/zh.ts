@@ -250,7 +250,7 @@ const m = {
   addTraceID: '请输入一个Trace ID',
   addKeywordsOfContent: '请输入一个内容关键词',
   addExcludingKeywordsOfContent: '请输入一个内容不包含的关键词',
-  NoticeTag: '请输入一个标签之后回车',
+  noticeTag: '请输入一个标签之后回车',
   conditionNotice: '请输入一个标签、内容关键词或者内容不包含的关键词之后回车',
   cacheModalTitle: '清除缓存提醒',
   yes: '是的',
