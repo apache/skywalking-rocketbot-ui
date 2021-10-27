@@ -272,6 +272,18 @@ const actions = {
         return res.data.data.createTask;
       });
   },
+  GET_TASK_LOGS(context: { commit: Commit; state: State; dispatch: Dispatch }, param: { taskID: string }) {
+    return graph
+      .query('getProfileTaskLogs')
+      .params(param)
+      .then((res: AxiosResponse) => {
+        context.commit(types.SET_PROFILE_ERRORS, { msg: 'getProfileTaskLogs', desc: res.data.errors || '' });
+        if (res.data.errors) {
+          return;
+        }
+        return res.data.data.getProfileTaskLogs;
+      });
+  },
 };
 
 export default {

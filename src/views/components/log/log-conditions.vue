@@ -13,20 +13,27 @@ limitations under the License. -->
 
 <template>
   <div class="rk-search-conditions">
+    <div class="search-time">
+      <span class="sm b grey mr-5">{{ $t('timeRange') }}:</span>
+      <RkDate class="sm" v-model="searchTime" position="left" format="YYYY-MM-DD HH:mm:ss" />
+    </div>
+    <div class="condition-notice">
+      <b>{{ $t('conditionNotice') }}</b>
+    </div>
     <div class="flex-h">
-      <div class="mr-15" v-show="rocketLog.type.key === cateGoryService">
-        <span class="sm b grey mr-10">{{ $t('traceID') }}:</span>
+      <div class="mr-20" v-show="rocketLog.type.key === cateGoryService">
+        <span class="sm b grey traceID">{{ $t('traceID') }}:</span>
         <input
           type="text"
           class="rk-log-search-input dib"
+          :placeholder="$t('addTraceID')"
           v-model="traceId"
           @change="changeConditions($event, LogConditionsOpt.TraceID)"
         />
       </div>
-      <div class="search-time">
-        <span class="sm b grey mr-5">{{ $t('timeRange') }}:</span>
-        <RkDate class="sm" v-model="searchTime" position="left" format="YYYY-MM-DD HH:mm:ss" />
-      </div>
+      <ConditionTags :type="'LOG'" :clearTags="clearAllTags" @updateTags="updateTags" />
+    </div>
+    <div class="flex-h">
       <div class="mr-15" v-show="rocketLog.type.key === cateGoryService">
         <span class="sm b grey mr-10">{{ $t('keywordsOfContent') }}:</span>
         <span class="rk-log-tags" v-show="rocketLog.supportQueryLogsByKeywords">
@@ -43,6 +50,7 @@ limitations under the License. -->
           type="text"
           :disabled="!rocketLog.supportQueryLogsByKeywords"
           class="rk-log-search-input dib mr-5"
+          :placeholder="$t('addKeywordsOfContent')"
           v-model="keywordsOfContent"
           @keyup="addLabels($event, LogConditionsOpt.KeywordsOfContent)"
         />
@@ -70,6 +78,7 @@ limitations under the License. -->
           type="text"
           :disabled="!rocketLog.supportQueryLogsByKeywords"
           class="rk-log-search-input dib mr-5"
+          :placeholder="$t('addExcludingKeywordsOfContent')"
           v-model="excludingKeywordsOfContent"
           @keyup="addLabels($event, LogConditionsOpt.ExcludingKeywordsOfContent)"
         />
@@ -82,7 +91,6 @@ limitations under the License. -->
         </span>
       </div>
     </div>
-    <ConditionTags :type="'LOG'" :clearTags="clearAllTags" @updateTags="updateTags" />
   </div>
 </template>
 
@@ -93,6 +101,7 @@ limitations under the License. -->
   import { State as logState } from '@/store/modules/log/index';
   import dateFormatStep from '@/utils/dateFormat';
   import { ConditionTags } from '../common/index';
+  import getLocalTime from '@/utils/localtime';
 
   @Component({
     components: { ConditionTags },
@@ -223,14 +232,8 @@ limitations under the License. -->
       this.SET_LOG_CONDITIONS({
         label: this.LogConditionsOpt.Date,
         key: this.globalTimeFormat([
-          new Date(
-            this.searchTime[0].getTime() +
-              (parseInt(String(this.rocketbotGlobal.utc), 10) + new Date().getTimezoneOffset() / 60) * 3600000,
-          ),
-          new Date(
-            this.searchTime[1].getTime() +
-              (parseInt(String(this.rocketbotGlobal.utc), 10) + new Date().getTimezoneOffset() / 60) * 3600000,
-          ),
+          getLocalTime(this.rocketbotGlobal.utc, this.searchTime[0]),
+          getLocalTime(this.rocketbotGlobal.utc, this.searchTime[1]),
         ]),
       });
     }
@@ -241,11 +244,13 @@ limitations under the License. -->
   .rk-search-conditions {
     width: 100%;
     background-color: #484b55;
-    padding: 10px;
     border-radius: 3px;
-    margin-top: 4px;
     position: relative;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    > div {
+      margin-top: 5px;
+    }
 
     &:after {
       bottom: 100%;
@@ -299,6 +304,7 @@ limitations under the License. -->
       outline: 0;
       padding: 2px 5px;
       border-radius: 3px;
+      width: 280px;
     }
 
     .rk-log-tags {
@@ -316,6 +322,12 @@ limitations under the License. -->
       border-radius: 3px;
       width: 175px;
       margin-right: 3px;
+    }
+    .condition-notice {
+      color: #fff;
+    }
+    .traceID {
+      padding-right: 62px;
     }
   }
 </style>

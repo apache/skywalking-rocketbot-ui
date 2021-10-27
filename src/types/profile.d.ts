@@ -55,3 +55,23 @@ export interface IHeaderSource {
   currentService: IOption;
   endpointName: string;
 }
+
+export interface TaskListItem {
+  dumpPeriod?: number;
+  duration?: number;
+  endpointName?: string;
+  id: string;
+  logs: TaskLog[];
+  maxSamplingCount?: number;
+  minDurationThreshold?: number;
+  serviceId?: string;
+  startTime?: number;
+}
+
+export interface TaskLog {
+  id: string;
+  instanceId: string;
+  instanceName: string;
+  operationTime: number;
+  operationType: string;
+}

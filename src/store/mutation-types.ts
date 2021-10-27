@@ -39,6 +39,7 @@ export const CLEAR_CHARTS = 'CLEAR_CHARTS';
 export const SET_LOCK = 'SET_LOCK';
 export const SET_EDIT = 'SET_EDIT';
 export const SET_UTC = 'SET_UTC';
+export const SET_VERSION = 'SET_VERSION';
 
 // dashboard
 export const SET_GLOBAL = 'SET_GLOBAL';

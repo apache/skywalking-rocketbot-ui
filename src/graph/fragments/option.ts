@@ -79,3 +79,7 @@ export const OAPTimeInfo = {
     }
   `,
 };
+
+export const OAPVersion = {
+  query: `version { version }`,
+};

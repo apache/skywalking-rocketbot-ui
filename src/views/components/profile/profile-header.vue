@@ -46,7 +46,6 @@ limitations under the License. -->
 </template>
 
 <script lang="ts">
-  import { Duration, Option } from '@/types/global';
   import { Component, Prop, Vue } from 'vue-property-decorator';
   import { Mutation, Action } from 'vuex-class';
   import { CommonSelector } from '../common/index';

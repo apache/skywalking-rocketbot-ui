@@ -124,7 +124,7 @@ limitations under the License. -->
     private currentType: Option[] = [];
 
     private beforeMount() {
-      this.height = document.body.clientHeight - 133;
+      this.height = document.body.clientHeight - 103;
     }
 
     private addMetrics() {

@@ -31,7 +31,7 @@ limitations under the License. -->
             >
               <div class="ell mb-5">
                 <span class="b">{{ i.endpointName }}</span>
-                <a class="profile-btn r" @click="viewTask(i)" v-tooltip:bottom="{ content: $t('taskView') }">
+                <a class="profile-btn r" @click="viewTask($event, i)" v-tooltip:bottom="{ content: $t('taskView') }">
                   <rk-icon icon="library_books" />
                 </a>
               </div>
@@ -74,19 +74,17 @@ limitations under the License. -->
             <span class="g-sm-4 grey">{{ $t('maxSamplingCount') }}:</span>
             <span class="g-sm-8 wba">{{ selectedTask.maxSamplingCount }}</span>
           </div>
-          <h5 class="mb-10" v-if="selectedTask.logs" v-show="selectedTask.logs.length">{{ $t('logs') }}.</h5>
-          <div class="log-item" v-for="(i, index) in selectedTask.logs" :key="index">
+          <h5 class="mb-10" v-show="selectedTask.logs && selectedTask.logs.length">{{ $t('logs') }}.</h5>
+          <div class="log-item" v-for="(i, index) in Object.keys(instanceLogs)" :key="index">
             <div class="mb-10 sm">
               <span class="mr-10 grey">{{ $t('instance') }}:</span>
-              <span>{{ i.instanceName }}</span>
+              <span>{{ i }}</span>
             </div>
-            <div class="mb-10 sm">
+            <div v-for="(d, index) in instanceLogs[i]" :key="index">
               <span class="mr-10 grey">{{ $t('operationType') }}:</span>
-              <span>{{ i.operationType }}</span>
-            </div>
-            <div class="mb-10 sm">
-              <span class="mr-10 grey">{{ $t('operationTime') }}:</span>
-              <span>{{ i.operationTime | dateformat }}</span>
+              <span class="mr-20">{{ d.operationType }}</span>
+              <span class="mr-10 grey">{{ $t('time') }}:</span>
+              <span>{{ d.operationTime | dateformat }}</span>
             </div>
           </div>
         </div>
@@ -129,6 +127,7 @@ limitations under the License. -->
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator';
   import { Action, Mutation } from 'vuex-class';
+  import { TaskLog, TaskListItem } from '@/types/profile';
 
   @Component
   export default class ProfileTaskList extends Vue {
@@ -138,21 +137,35 @@ limitations under the License. -->
     @Mutation('profileStore/SET_CURRENT_SEGMENT') private SET_CURRENT_SEGMENT: any;
     @Action('profileStore/GET_SEGMENT_LIST') private GET_SEGMENT_LIST: any;
     @Action('profileStore/GET_SEGMENT_SPANS') private GET_SEGMENT_SPANS: any;
+    @Action('profileStore/GET_TASK_LOGS') private GET_TASK_LOGS: any;
     private selectedKey: string = '';
-    private selectedTask: any = {};
+    private selectedTask: TaskListItem | {} = {};
     private viewDetail: boolean = false;
     private selectedTaskService: any = {};
+    private instanceLogs: TaskLog | any = {};
 
-    private selectTask(item: { id: string; serviceId: string }) {
+    private selectTask(item: { id: string; serviceId: string; logs: TaskLog[] }) {
       this.selectedTask = item;
       this.selectedTaskService =
         this.headerSource.serviceSource.filter((service: any) => service.key === item.serviceId)[0] || {};
       this.GET_SEGMENT_LIST({ taskID: item.id });
     }
 
-    private viewTask(item: any) {
+    private viewTask(e: Event, item: { id: string; serviceId: string; logs: TaskLog[] }) {
+      window.event ? (window.event.cancelBubble = true) : e.stopPropagation();
       this.viewDetail = true;
-      this.selectedTask = item;
+      this.GET_TASK_LOGS({ taskID: item.id }).then((logs: TaskLog[]) => {
+        item.logs = logs;
+        this.instanceLogs = {};
+        for (const d of item.logs) {
+          if (this.instanceLogs[d.instanceName]) {
+            this.instanceLogs[d.instanceName].push({ operationType: d.operationType, operationTime: d.operationTime });
+          } else {
+            this.instanceLogs[d.instanceName] = [{ operationType: d.operationType, operationTime: d.operationTime }];
+          }
+        }
+        this.selectedTask = item;
+      });
     }
 
     private selectTrace(item: { segmentId: string }) {

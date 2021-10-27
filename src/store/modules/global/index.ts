@@ -21,6 +21,8 @@ import getDurationRow from '@/utils/datetime';
 import getLocalTime from '@/utils/localtime';
 import dateFormatStep, { dateFormatTime } from '@/utils/dateFormat';
 import { ActionTree, Commit, MutationTree } from 'vuex';
+import graph from '@/graph';
+import { AxiosResponse } from 'axios';
 
 let timer: any = null;
 export interface State {
@@ -29,24 +31,25 @@ export interface State {
   chartStack: any;
   edit: boolean;
   lock: boolean;
-  utc: string | number;
+  utc: string;
+  version: string;
 }
-
 const initState: State = {
   durationRow: getDurationRow(),
   eventStack: [],
   chartStack: [],
   edit: false,
   lock: true,
-  utc: window.localStorage.getItem('utc') || -(new Date().getTimezoneOffset() / 60),
+  utc: '',
+  version: '',
 };
 
 // getters
 const getters = {
   duration(state: State): Duration {
     return {
-      start: getLocalTime(parseInt(state.utc + '', 10), state.durationRow.start),
-      end: getLocalTime(parseInt(state.utc + '', 10), state.durationRow.end),
+      start: getLocalTime(state.utc, state.durationRow.start),
+      end: getLocalTime(state.utc, state.durationRow.end),
       step: state.durationRow.step,
     };
   },
@@ -71,7 +74,10 @@ const getters = {
             getter.duration.start.getMonth());
         break;
     }
-    const utcSpace = (parseInt(state.utc + '', 10) + new Date().getTimezoneOffset() / 60) * 3600000;
+    const utcArr = state.utc.split(':');
+    const utcHour = isNaN(Number(utcArr[0])) ? 0 : Number(utcArr[0]);
+    const utcMin = isNaN(Number(utcArr[1])) ? 0 : Number(utcArr[1]);
+    const utcSpace = (utcHour + new Date().getTimezoneOffset() / 60) * 3600000 + utcMin * 60000;
     const startUnix: number = getter.duration.start.getTime();
     const endUnix: number = getter.duration.end.getTime();
     const timeIntervals: string[] = [];
@@ -100,7 +106,7 @@ const mutations: MutationTree<State> = {
     localStorage.removeItem('durationRow');
     state.durationRow = getDurationRow();
   },
-  [types.SET_UTC](state: State, data: number): void {
+  [types.SET_UTC](state: State, data: string): void {
     state.utc = data;
   },
   [types.SET_EVENTS](state: State, data: any[]): void {
@@ -122,11 +128,14 @@ const mutations: MutationTree<State> = {
   [types.SET_EDIT](state: State, status: boolean): void {
     state.edit = status;
   },
+  [types.SET_VERSION](state: State, version: string): void {
+    state.version = version;
+  },
 };
 
 // actions
 const actions: ActionTree<State, any> = {
-  SET_UTC(context: { commit: Commit }, data: number): void {
+  SET_UTC(context: { commit: Commit }, data: string): void {
     context.commit(types.SET_UTC, data);
     context.commit(types.RUN_EVENTS);
   },
@@ -164,6 +173,13 @@ const actions: ActionTree<State, any> = {
   },
   SET_LOCK(context: { commit: Commit }, status: boolean): void {
     context.commit(types.SET_LOCK, status);
+  },
+  async FETCH_VERSION(context: { commit: Commit }): Promise<void> {
+    const res: AxiosResponse = await graph.query('queryOAPVersion').params({});
+    if (!res.data.data) {
+      return;
+    }
+    context.commit(types.SET_VERSION, res.data.data.version);
   },
 };
 

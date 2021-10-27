@@ -104,6 +104,7 @@ limitations under the License. -->
   import { State as traceState } from '@/store/modules/trace/index';
   import { State as globalState } from '@/store/modules/global/index';
   import dateFormatStep from '@/utils/dateFormat';
+  import getLocalTime from '@/utils/localtime';
   @Component({ components: { CommonSelector, ConditionTags } })
   export default class TraceSearch extends Vue {
     @State('rocketbot') private rocketbotGlobal!: globalState;
@@ -209,14 +210,8 @@ limitations under the License. -->
     private getTraceList() {
       const temp: any = {
         queryDuration: this.globalTimeFormat([
-          new Date(
-            this.time[0].getTime() +
-              (parseInt(String(this.rocketbotGlobal.utc), 10) + new Date().getTimezoneOffset() / 60) * 3600000,
-          ),
-          new Date(
-            this.time[1].getTime() +
-              (parseInt(String(this.rocketbotGlobal.utc), 10) + new Date().getTimezoneOffset() / 60) * 3600000,
-          ),
+          getLocalTime(this.rocketbotGlobal.utc, this.time[0]),
+          getLocalTime(this.rocketbotGlobal.utc, this.time[1]),
         ]),
         traceState: this.traceState.key,
         paging: { pageNum: 1, pageSize: 15, needTotal: true },

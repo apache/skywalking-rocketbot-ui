@@ -55,7 +55,8 @@ const mutations: MutationTree<State> = {
   },
   [types.IMPORT_TREE](state: State, data: CompsTree[]) {
     state.tree.push(...data);
-    window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
+    localStorage.setItem('dashboard', JSON.stringify(state.tree));
+    localStorage.setItem('isUpdatedTemplates', 'true');
   },
   [types.SET_GROUP_QUERY](state: State, params: any) {
     state.tree[state.group].query = params;
@@ -73,6 +74,7 @@ const mutations: MutationTree<State> = {
   [types.SET_CURRENT_SERVICE_GROUP](state: State, serviceGroup: string) {
     state.tree.splice(state.group, 1, Object.assign(state.tree[state.group], { serviceGroup }));
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
+    localStorage.setItem('isUpdatedTemplates', 'true');
   },
   [types.SET_CURRENT_GROUP_WITH_CURRENT](state: State, { index, current = 0 }: { index: number; current: number }) {
     state.group = index;
@@ -91,6 +93,7 @@ const mutations: MutationTree<State> = {
     state.tree.push(group);
 
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
+    localStorage.setItem('isUpdatedTemplates', 'true');
   },
   [types.ADD_COMPS_TREE](state: State, params: { name: string }) {
     if (!params.name) {
@@ -98,10 +101,12 @@ const mutations: MutationTree<State> = {
     }
     state.tree[state.group].children.push({ name: params.name, children: [] });
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
+    localStorage.setItem('isUpdatedTemplates', 'true');
   },
   [types.IMPORT_COMPS_TREE](state: State, params: any) {
     state.tree[state.group].children.push(params);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
+    localStorage.setItem('isUpdatedTemplates', 'true');
   },
   [types.DELETE_COMPS_GROUP](state: State, index: number) {
     state.tree.splice(index, 1);
@@ -109,6 +114,7 @@ const mutations: MutationTree<State> = {
       state.group--;
     }
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
+    localStorage.setItem('isUpdatedTemplates', 'true');
   },
   [types.DELETE_COMPS_TREE](state: State, index: number) {
     state.tree[state.group].children.splice(index, 1);
@@ -116,6 +122,7 @@ const mutations: MutationTree<State> = {
       state.current--;
     }
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
+    localStorage.setItem('isUpdatedTemplates', 'true');
   },
   [types.ADD_COMP](state: State) {
     const type = state.tree[state.group].type;
@@ -129,16 +136,19 @@ const mutations: MutationTree<State> = {
     };
     state.tree[state.group].children[state.current].children.push(comp);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
+    localStorage.setItem('isUpdatedTemplates', 'true');
   },
   [types.DELETE_COMP](state: State, index: number) {
     state.tree[state.group].children[state.current].children.splice(index, 1);
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
+    localStorage.setItem('isUpdatedTemplates', 'true');
   },
   [types.EDIT_COMP_CONFIG](state: State, params: { values: any; index: number }) {
     const temp = state.tree[state.group].children[state.current].children[params.index];
 
     state.tree[state.group].children[state.current].children[params.index] = { ...temp, ...params.values };
     window.localStorage.setItem('dashboard', JSON.stringify(state.tree));
+    localStorage.setItem('isUpdatedTemplates', 'true');
   },
   [types.SET_TEMPLATES](state: State, templates) {
     state.templates = templates;
