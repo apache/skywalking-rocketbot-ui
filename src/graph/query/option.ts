@@ -15,7 +15,15 @@
  * limitations under the License.
  */
 
-import { Services, BrowserServices, Endpoints, Instances, Database, OAPTimeInfo } from '../fragments/option';
+import {
+  Services,
+  BrowserServices,
+  Endpoints,
+  Instances,
+  Database,
+  OAPTimeInfo,
+  OAPVersion,
+} from '../fragments/option';
 
 export const queryServices = `query queryServices(${Services.variable}) {${Services.query}}`;
 
@@ -29,3 +37,5 @@ export const queryEndpoints = `query queryEndpoints(${Endpoints.variable}) {${En
 export const queryInstances = `query queryInstances(${Instances.variable}) {${Instances.query}}`;
 
 export const queryOAPTimeInfo = `query queryOAPTimeInfo {${OAPTimeInfo.query}}`;
+
+export const queryOAPVersion = `query ${OAPVersion.query}`;

@@ -24,6 +24,10 @@ limitations under the License. -->
     </span>
     <div class="tool-bar-setting " v-show="showSetting" @click="markSettings">
       <div class="flex-h item">
+        <span class="label">{{ $t('version') }}</span>
+        <span>{{ rocketbotGlobal.version }}</span>
+      </div>
+      <div class="flex-h item">
         <span class="label">{{ $t('language') }}</span>
         <span>Zh</span>
         <rk-switch class="mr-5 ml-5" :checked="lang === 'en'" @onChange="setLang" />
@@ -65,6 +69,7 @@ limitations under the License. -->
     @State('rocketbot') private rocketbotGlobal: any;
     @Action('SET_DURATION') private SET_DURATION: any;
     @Action('SET_UTC') private SET_UTC: any;
+    @Action('FETCH_VERSION') private FETCH_VERSION: any;
     private lang: string | null = '';
     private utcHour: number = 0;
     private utcMin: number = 0;
@@ -84,6 +89,7 @@ limitations under the License. -->
       this.utcMin = isNaN(Number(utcArr[1])) ? 0 : Number(utcArr[1]);
       this.SET_UTC(`${this.utcHour}:${this.utcMin}`);
       this.lang = window.localStorage.getItem('lang');
+      this.FETCH_VERSION();
     }
 
     private mounted() {

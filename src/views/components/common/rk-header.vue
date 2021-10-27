@@ -84,7 +84,7 @@ limitations under the License. -->
       margin-right: 50px;
     }
     .nav-link {
-      padding: 4px 10px;
+      padding: 5px;
       border-radius: 4px;
       opacity: 0.8;
       color: #efeff1;
