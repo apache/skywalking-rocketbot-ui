@@ -38,6 +38,7 @@ export interface State {
   destInstance: Option;
   destEndpoint: Option;
   selectorErrors: { [key: string]: string };
+  currentDependencyEndpoint: Option;
 }
 
 const initState: State = {
@@ -55,6 +56,7 @@ const initState: State = {
   destInstance: { key: '', label: '' },
   destEndpoint: { key: '', label: '' },
   selectorErrors: {},
+  currentDependencyEndpoint: { key: '', label: '' },
 };
 
 // mutations
@@ -81,13 +83,18 @@ const mutations: MutationTree<State> = {
     state.endpoints = pageTypes.includes(state.pageType) ? [{ label: 'All', key: '' }, ...data] : data;
     if (!state.endpoints.length) {
       state.currentEndpoint = { key: '', label: '' };
+      state.currentDependencyEndpoint = { key: '', label: '' };
       return;
     }
     state.currentEndpoint = state.endpoints[0];
+    state.currentDependencyEndpoint = state.endpoints[0];
   },
   [types.SET_CURRENT_ENDPOINT](state: State, endpoint: Option) {
     state.currentEndpoint = endpoint;
     state.updateDashboard = endpoint;
+  },
+  [types.SET_CURRENT_DEPENDENCY_ENDPOINT](state: State, endpoint: Option) {
+    state.currentDependencyEndpoint = endpoint;
   },
   [types.SET_INSTANCES](state: State, data: Option[]) {
     const pageTypes = [PageTypes.LOG, PageTypes.EVENT] as string[];

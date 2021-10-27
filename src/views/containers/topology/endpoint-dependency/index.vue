@@ -19,7 +19,7 @@ limitations under the License. -->
       <ToolBarEndpointSelect
         @onChoose="selectEndpoint"
         :title="$t('currentEndpoint')"
-        :current="stateDashboardOption.currentEndpoint"
+        :current="stateDashboardOption.currentDependencyEndpoint"
         :data="stateDashboardOption.endpoints"
         icon="code"
       />
@@ -39,6 +39,7 @@ limitations under the License. -->
   import Vue from 'vue';
   import { Component, Prop } from 'vue-property-decorator';
   import { Action, Getter, State, Mutation } from 'vuex-class';
+  import { Option } from '@/types/global';
   import ToolBarSelect from '@/views/components/dashboard/tool-bar/tool-bar-select.vue';
   import ToolBarEndpointSelect from '@/views/components/dashboard/tool-bar/tool-bar-endpoint-select.vue';
   import TopoEndpointDependency from '@/views/components/topology/dependency/topo-endpoint-dependency.vue';
@@ -59,30 +60,36 @@ limitations under the License. -->
     @Mutation('rocketTopo/SET_ENDPOINT_DEPTH') private SET_ENDPOINT_DEPTH: any;
     @Action('GET_SERVICE_ENDPOINTS') private GET_SERVICE_ENDPOINTS: any;
     @Action('MIXHANDLE_CHANGE_GROUP_WITH_CURRENT') private MIXHANDLE_CHANGE_GROUP_WITH_CURRENT: any;
-    @Action('SELECT_ENDPOINT') private SELECT_ENDPOINT: any;
+    @Mutation('SET_CURRENT_DEPENDENCY_ENDPOINT') private SET_CURRENT_DEPENDENCY_ENDPOINT: any;
     @Action('rocketTopo/GET_ALL_ENDPOINT_DEPENDENCY') private GET_ALL_ENDPOINT_DEPENDENCY: any;
     @Prop() private current!: { key: number | string; label: string };
 
     private depths: Array<{ key: number; label: string }> = [{ key: 2, label: '2' }];
 
     private beforeMount() {
+      this.depths = [1, 2, 3, 4, 5].map((item: number) => ({ key: item, label: String(item) }));
       this.SET_CURRENT_SERVICE(this.current);
       this.MIXHANDLE_CHANGE_GROUP_WITH_CURRENT({ index: 0, current: 2 });
       this.GET_SERVICE_ENDPOINTS({ duration: this.durationTime, serviceId: this.current.key, keyword: '' }).then(() => {
-        this.selectEndpoint(this.stateDashboardOption.endpoints[0] || {});
+        this.GET_ALL_ENDPOINT_DEPENDENCY({
+          endpointIds: [this.stateDashboardOption.currentDependencyEndpoint.key],
+          duration: this.durationTime,
+        });
       });
-      this.depths = [1, 2, 3, 4, 5].map((item: number) => ({ key: item, label: String(item) }));
     }
 
-    private selectEndpoint(i: any) {
-      this.SELECT_ENDPOINT({ endpoint: i, duration: this.durationTime });
-      this.GET_ALL_ENDPOINT_DEPENDENCY({ endpointIds: [i.key], duration: this.durationTime });
+    private selectEndpoint(i: Option) {
+      this.SET_CURRENT_DEPENDENCY_ENDPOINT(i);
+      this.GET_ALL_ENDPOINT_DEPENDENCY({
+        endpointIds: [this.stateDashboardOption.currentDependencyEndpoint.key],
+        duration: this.durationTime,
+      });
     }
 
     private selectDepth(i: { key: number; label: string }) {
       this.SET_ENDPOINT_DEPTH(i);
       this.GET_ALL_ENDPOINT_DEPENDENCY({
-        endpointIds: [this.stateDashboardOption.currentEndpoint.key],
+        endpointIds: [this.stateDashboardOption.currentDependencyEndpoint.key],
         duration: this.durationTime,
       });
     }

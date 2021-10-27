@@ -483,7 +483,24 @@ const mutations = {
     localStorage.setItem('topologyServicesInstanceDependency', JSON.stringify(state.topoServicesInstanceDependency));
   },
   [types.SET_ENDPOINT_DEPENDENCY](state: State, data: { calls: Call[]; nodes: Node[] }) {
-    state.endpointDependency = data;
+    const obj = {} as any;
+    let nodes = [];
+    let calls = [];
+    nodes = data.nodes.reduce((prev: Node[], next: Node) => {
+      if (!obj[next.id]) {
+        obj[next.id] = true;
+        prev.push(next);
+      }
+      return prev;
+    }, []);
+    calls = data.calls.reduce((prev: Call[], next: Call) => {
+      if (!obj[next.id]) {
+        obj[next.id] = true;
+        prev.push(next);
+      }
+      return prev;
+    }, []);
+    state.endpointDependency = { nodes, calls };
     state.selectedEndpointCall = null;
   },
   [types.SET_ENDPOINT_DEPTH](state: State, data: { key: number; label: string }) {
@@ -709,18 +726,31 @@ const actions: ActionTree<State, any> = {
         const endpointIds = res.nodes
           .map((item: Node) => item.id)
           .filter((d: string) => !params.endpointIds.includes(d));
-
+        if (!endpointIds.length) {
+          context.commit(types.SET_ENDPOINT_DEPENDENCY, res);
+          return;
+        }
         context.dispatch('GET_ENDPOINT_TOPO', { endpointIds, duration: params.duration }).then((json) => {
           if (context.state.currentEndpointDepth.key > 2) {
             const ids = json.nodes
               .map((item: Node) => item.id)
               .filter((d: string) => ![...endpointIds, ...params.endpointIds].includes(d));
-
+            if (!ids.length) {
+              const nodes = [...res.nodes, ...json.nodes];
+              const calls = [...res.calls, ...json.calls];
+              context.commit(types.SET_ENDPOINT_DEPENDENCY, { nodes, calls });
+              return;
+            }
             context.dispatch('GET_ENDPOINT_TOPO', { endpointIds: ids, duration: params.duration }).then((topo) => {
               if (context.state.currentEndpointDepth.key > 3) {
                 const endpoints = topo.nodes
                   .map((item: Node) => item.id)
                   .filter((d: string) => ![...ids, ...endpointIds, ...params.endpointIds].includes(d));
+                if (!endpoints.length) {
+                  const nodes = [...res.nodes, ...json.nodes, ...topo.nodes];
+                  const calls = [...res.calls, ...json.calls, ...topo.calls];
+                  context.commit(types.SET_ENDPOINT_DEPENDENCY, { nodes, calls });
+                }
                 context
                   .dispatch('GET_ENDPOINT_TOPO', { endpointIds: endpoints, duration: params.duration })
                   .then((data) => {
@@ -730,21 +760,35 @@ const actions: ActionTree<State, any> = {
                         .filter(
                           (d: string) => ![...endpoints, ...ids, ...endpointIds, ...params.endpointIds].includes(d),
                         );
+                      if (!nodeIds.length) {
+                        const nodes = [...res.nodes, ...json.nodes, ...topo.nodes, ...data.nodes];
+                        const calls = [...res.calls, ...json.calls, ...topo.calls, ...data.calls];
+                        context.commit(types.SET_ENDPOINT_DEPENDENCY, { nodes, calls });
+                        return;
+                      }
                       context
                         .dispatch('GET_ENDPOINT_TOPO', { endpointIds: nodeIds, duration: params.duration })
                         .then((toposObj) => {
-                          context.commit(types.SET_ENDPOINT_DEPENDENCY, toposObj);
+                          const nodes = [...res.nodes, ...json.nodes, ...topo.nodes, ...data.nodes, ...toposObj.nodes];
+                          const calls = [...res.calls, ...json.calls, ...topo.calls, ...data.calls, ...toposObj.calls];
+                          context.commit(types.SET_ENDPOINT_DEPENDENCY, { nodes, calls });
                         });
                     } else {
-                      context.commit(types.SET_ENDPOINT_DEPENDENCY, data);
+                      const nodes = [...res.nodes, ...json.nodes, ...topo.nodes, ...data.nodes];
+                      const calls = [...res.calls, ...json.calls, ...topo.calls, ...data.calls];
+                      context.commit(types.SET_ENDPOINT_DEPENDENCY, { nodes, calls });
                     }
                   });
               } else {
-                context.commit(types.SET_ENDPOINT_DEPENDENCY, topo);
+                const nodes = [...res.nodes, ...json.nodes, ...topo.nodes];
+                const calls = [...res.calls, ...json.calls, ...topo.calls];
+                context.commit(types.SET_ENDPOINT_DEPENDENCY, { nodes, calls });
               }
             });
           } else {
-            context.commit(types.SET_ENDPOINT_DEPENDENCY, json);
+            const nodes = [...res.nodes, ...json.nodes];
+            const calls = [...res.calls, ...json.calls];
+            context.commit(types.SET_ENDPOINT_DEPENDENCY, { nodes, calls });
           }
         });
       } else {
