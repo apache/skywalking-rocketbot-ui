@@ -54,10 +54,12 @@ limitations under the License. -->
 </script>
 <style lang="scss" scoped>
   .content {
-    max-width: 1000px;
-    min-height: 200px;
+    max-width: 700px;
+    min-width: 500px;
+    min-height: 500px;
     border: none;
     outline: none;
     color: #3d444f;
+    overflow: auto;
   }
 </style>

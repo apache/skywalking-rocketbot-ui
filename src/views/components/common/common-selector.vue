@@ -124,7 +124,7 @@ limitations under the License. -->
   }
   .rk-common-sel {
     position: absolute;
-    top: 45px;
+    top: 52px;
     box-shadow: 0 1px 6px rgba(99, 99, 99, 0.2);
     background-color: #252a2f;
     width: 100%;
