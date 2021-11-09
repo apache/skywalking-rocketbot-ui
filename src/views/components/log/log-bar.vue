@@ -14,7 +14,7 @@ limitations under the License. -->
 <template>
   <div class="rk-log-nav">
     <div class="rk-error-log-bar flex-h">
-      <div class="flex-h">
+      <div class="flex-h bar-selectors">
         <CommonSelector
           :hasSearch="true"
           :title="$t('logCategory')"
@@ -236,6 +236,9 @@ limitations under the License. -->
     width: 100%;
     height: 52px;
     justify-content: space-between;
+  }
+  .bar-selectors {
+    height: 100%;
   }
 
   .rk-right {
