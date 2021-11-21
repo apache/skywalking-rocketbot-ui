@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License. -->
 <template>
   <div class="rk-dashboard-item" :class="`g-sm-${width}`" :style="`height:${height}px;`" v-if="itemConfig.entityType">
-    <div class="rk-dashboard-item-title ell">
+    <div class="rk-dashboard-item-title">
       <span v-show="rocketGlobal.edit || stateTopo.editDependencyMetrics" @click="deleteItem(index, itemConfig.uuid)">
         <rk-icon class="r edit red" icon="file-deletion" />
       </span>
@@ -33,7 +33,10 @@ limitations under the License. -->
       >
         <rk-icon class="r cp" icon="review-list" />
       </span>
-      <rk-icon v-if="tips" class="r edit" icon="info_outline" v-tooltip:bottom="{ content: tips }" />
+      <span v-if="tips" class="r edit tipsContent" @mouseenter="showTips = true" @mouseleave="showTips = false">
+        <rk-icon icon="info_outline" />
+        <div v-show="showTips">{{ decodeURIComponent(tips) }}</div>
+      </span>
     </div>
     <div class="rk-dashboard-item-body" ref="chartBody">
       <div style="height:100%;width:100%">
@@ -133,11 +136,12 @@ limitations under the License. -->
       TopologyType.TOPOLOGY_SERVICE_INSTANCE_DEPENDENCY,
       TopologyType.TOPOLOGY_ENDPOINT_DEPENDENCY,
     ] as string[];
+    private showTips: boolean = false;
 
     private created() {
       this.status = this.item.metricType;
       this.title = this.item.title;
-      this.tips = this.item.tips;
+      this.tips = this.item.tips ? encodeURIComponent(this.item.tips) : '';
       this.width = this.item.width;
       this.height = this.item.height;
       this.unit = this.item.unit;
@@ -342,7 +346,7 @@ limitations under the License. -->
       if (type === 'unit') {
         this.unit = value;
       }
-      if (type === 'tips') {
+      if (type === 'tipsContent') {
         this.tips = value;
       }
     }
@@ -474,7 +478,7 @@ limitations under the License. -->
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scope>
   .rk-dashboard-item {
     display: flex;
     height: 100%;
@@ -502,6 +506,8 @@ limitations under the License. -->
     background-color: rgba(196, 200, 225, 0.2);
     color: #9da5b2;
     padding: 6px 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .rk-dashboard-item-title .hint {
     color: #fbb03b;
@@ -540,5 +546,24 @@ limitations under the License. -->
   }
   .config-box {
     padding: 40px 30px;
+  }
+  .tipsContent {
+    position: relative;
+    > div {
+      display: inline-block;
+      position: absolute;
+      top: 16px;
+      left: 10px;
+      background: #252a2f;
+      box-shadow: 1px 5px 1px #333;
+      color: #efefef;
+      border-radius: 3px;
+      z-index: 9999;
+      padding: 10px;
+      word-wrap: break-word;
+      word-break: break-all;
+      height: auto;
+      max-width: 300px;
+    }
   }
 </style>
