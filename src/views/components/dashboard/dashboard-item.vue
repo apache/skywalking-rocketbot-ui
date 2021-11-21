@@ -560,11 +560,10 @@ limitations under the License. -->
       border-radius: 3px;
       z-index: 9999;
       padding: 10px;
-      white-space: pre-wrap;
       word-wrap: break-word;
       word-break: break-all;
       height: auto;
-      width: 300px;
+      max-width: 300px;
     }
   }
 </style>
