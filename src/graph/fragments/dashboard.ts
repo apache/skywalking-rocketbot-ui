@@ -32,16 +32,6 @@ export const getAllTemplates = {
   `,
 };
 
-export const addTemplate = {
-  variable: '$setting: DashboardSetting!',
-  query: `
-    addTemplate(setting: $setting) {
-      status
-      message
-    }
-  `,
-};
-
 export const fetchEvents = {
   variable: ['$condition: EventQueryCondition'],
   query: `
