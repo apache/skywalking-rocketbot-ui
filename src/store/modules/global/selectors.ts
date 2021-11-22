@@ -237,7 +237,11 @@ const actions: ActionTree<State, any> = {
       params.callback({
         condition: {
           time: params.duration,
-          size: 20,
+          paging: {
+            pageNum: 1,
+            pageSize: 20,
+            needTotal: true,
+          },
           source: {
             service: params.service.label,
             endpoint: context.state.currentEndpoint.label,
@@ -257,7 +261,11 @@ const actions: ActionTree<State, any> = {
         .callback({
           condition: {
             time: params.duration,
-            size: 20,
+            paging: {
+              pageNum: 1,
+              pageSize: 20,
+              needTotal: true,
+            },
             source: {
               service: params.service.label,
               serviceInstance: context.state.currentInstance.label,
