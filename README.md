@@ -1,9 +1,11 @@
 Apache SkyWalking Rocketbot UI
 ===============
 
-<img src="http://skywalking.apache.org/assets/logo.svg" alt="Sky Walking logo" height="90px" align="right" />
+# Rocketbot UI is replaced by the new [Booster UI](https://github.com/apache/skywalking-booster-ui) since 9.0.0 release. 
 
-[Apache SkyWalking](https://github.com/apache/incubator-skywalking) UI.
+### No guarantee that Rocketbot UI will be compatible with OAP 9.x releases.
+
+<img src="http://skywalking.apache.org/assets/logo.svg" alt="Sky Walking logo" height="90px" align="right" />
 
 ![NPM BUILD](https://github.com/apache/skywalking-rocketbot-ui/workflows/Node%20CI/badge.svg)
 
