@@ -29,7 +29,8 @@ github:
     squash:  true
     merge:   false
     rebase:  false
-
+  features:
+    issues:  false
 notifications:
   commits:      notifications@skywalking.apache.org
   issues:       notifications@skywalking.apache.org
