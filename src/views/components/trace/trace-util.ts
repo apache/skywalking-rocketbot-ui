@@ -90,13 +90,13 @@ export default class TraceUtil {
         segmentHeaders.push(span);
       } else {
         const index = data.findIndex((patchSpan: Span) => {
-          return patchSpan.segmentId === span.segmentId && patchSpan.spanId === span.spanId - 1;
+          return patchSpan.segmentId === span.segmentId && patchSpan.spanId === span.parentSpanId;
         });
         const fixSpanKeyContent = {
           traceId: span.traceId,
           segmentId: span.segmentId,
-          spanId: span.spanId - 1,
-          parentSpanId: span.spanId - 2,
+          spanId: span.parentSpanId,
+          parentSpanId: span.parentSpanId - 1,
         };
         if (index === -1 && !lodash.find(fixSpans, fixSpanKeyContent)) {
           fixSpans.push({

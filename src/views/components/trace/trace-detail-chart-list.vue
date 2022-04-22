@@ -123,13 +123,13 @@ limitations under the License. -->
             const index = this.data.findIndex((i) => (
               i.segmentId === span.segmentId
               &&
-              i.spanId === (span.spanId - 1)
+              i.spanId === span.parentSpanId
             ));
             const fixSpanKeyContent = {
               traceId: span.traceId,
               segmentId: span.segmentId,
-              spanId: span.spanId - 1,
-              parentSpanId: span.spanId - 2,
+              spanId: span.parentSpanId,
+              parentSpanId: span.parentSpanId - 1,
             };
             if (index === -1 && !_.find(fixSpans, fixSpanKeyContent)) {
               fixSpans.push(
