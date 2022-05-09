@@ -47,14 +47,11 @@ limitations under the License. -->
     private showDetail: boolean = false;
     private list = [];
     private currentLog: any = {};
-    private logContent: string = '';
 
     private handleSelectLog(data: any[]) {
       this.currentLog = data;
       if (this.currentLog.contentType === 'JSON') {
-        this.logContent = formatJson(JSON.parse(this.currentLog.content));
-      } else {
-        this.logContent = this.currentLog.content;
+        this.currentLog.content = formatJson(JSON.parse(this.currentLog.content));
       }
       this.showDetail = true;
     }
